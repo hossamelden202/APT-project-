@@ -55,9 +55,17 @@ public class Indexer {
         Document doc = Jsoup.parse(html);
         String title = doc.title();
         String body = doc.body().text();
+        String url=doc.select("link[rel=canonical]").attr("href");
+if(url.isEmpty())url="http://"+docId;
 
-        InvertedIndex index = new InvertedIndex();
+List<String> anchors=new ArrayList<>();
+doc.select("a").forEach(a->{
+String text=a.text();
+if(!text.isEmpty())anchors.add(text);
+});
 
+String paragraph=doc.select("p").text();
+InvertedIndex index=new InvertedIndex();
         List<String> words = Utils.tokenize(title + " " + body);
         for (String word : words) {
             if (word.isEmpty() || stopWords.contains(word)) continue;
@@ -68,7 +76,7 @@ public class Indexer {
             String stemmed = stemmer.toString();
 
             String position = Utils.detectPosition(word, title, body);
-            index.add(stemmed, docId, position);
+            index.add(stemmed, docId, position,url,anchors,paragraph);
         }
 
         return index;
