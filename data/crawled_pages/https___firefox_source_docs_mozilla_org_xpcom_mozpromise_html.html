@@ -1,0 +1,606 @@
+<!doctype html>
+<html class="writer-html5" lang="en" data-content_root="../">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MozPromise: C++ promises in Gecko — Firefox Source Docs  documentation</title>
+  <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50">
+  <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094">
+  <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=fd3f3429">
+  <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b">
+  <link rel="stylesheet" type="text/css" href="../_static/custom_theme.css?v=dc5ed815">
+  <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7">
+  <link rel="shortcut icon" href="../_static/firefox.ico"><!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script src="../_static/jquery.js?v=5d32c60e"></script>
+  <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+  <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+  <script src="../_static/doctools.js?v=9a2dae69"></script>
+  <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+  <script src="../_static/copybutton.js?v=30646c52"></script>
+  <script src="../_static/design-tabs.js?v=36754332"></script>
+  <script src="../_static/js/theme.js"></script>
+  <link rel="index" title="Index" href="../genindex.html">
+  <link rel="search" title="Search" href="../search.html">
+  <link rel="next" title="Sorting and nsTArray" href="sorting.html">
+  <link rel="prev" title="XPCOM Hashtable Technical Details" href="hashtables_detailed.html">
+ </head>
+ <body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+   <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <div class="wy-side-scroll">
+     <div class="wy-side-nav-search">
+      <a href="../index.html" class="icon icon-home"> Firefox Source Docs <img src="../_static/firefox-wordmark.svg" class="logo" alt="Logo"> </a><!-- -- This code is governed by the BSD license ---->
+      <div>
+       <h3>Quick search</h3>
+       <script>
+    (function () {
+      var cx = "dd12886298f75dbef";
+      var gcse = document.createElement("script");
+      gcse.async = true;
+      gcse.src = "https://cse.google.com/cse.js?cx=" + cx;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(gcse, s);
+    })();
+  </script><gcse:search></gcse:search>
+      </div>
+     </div>
+     <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+      <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../glossary/index.html">A Glossary of Common Terms</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../overview/index.html">A Quick Guide to Mozilla Applications</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../setup/index.html">Getting Set Up To Work On The Firefox Codebase</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Working On Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../contributing/index.html">Working on Firefox</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../bug-mgmt/index.html">Bug Handling</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox User Guide</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../devtools-user/index.html">Firefox DevTools User Docs</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Source Code Documentation</span></p>
+      <ul class="current">
+       <li class="toctree-l1"><a class="reference internal" href="../mots/index.html">Governance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../browser/index.html">Firefox Front-end</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../dom/index.html">DOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../editor/index.html">Editor</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../layout/index.html">Style system (CSS) &amp; Layout</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../gfx/index.html">Graphics</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../ipc/index.html">Processes, Threads and IPC</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../devtools/index.html">Firefox DevTools Contributor Docs</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../toolkit/index.html">Toolkit</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../js/index.html">SpiderMonkey</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../jsloader/index.html">JS Loader</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mobile/android/geckoview/index.html">GeckoView</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mobile/android/fenix/index.html">Fenix</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mobile/android/focus-android/index.html">Focus for Android</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../dom/bindings/webidl/index.html">WebIDL</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../modules/libpref/index.html">libpref</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../networking/index.html">Networking</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../remote/index.html">Remote Protocols</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../services/index.html">Services</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../permissions/index.html">Permissions</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../uriloader/index.html">File Handling</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../widget/cocoa/index.html">Firefox on macOS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../widget/windows/index.html">Firefox on Windows</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../toolkit/components/ml/index.html">Firefox AI Runtime</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../accessible/index.html">Accessibility</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../media/index.html">Media Playback</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../code-quality/index.html">Code quality</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../writing-rust-code/index.html">Writing Rust Code</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../rust-components/index.html">Rust Components</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/profiler/index.html">Gecko Profiler</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../performance/index.html">Performance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../storage/index.html">Database bindings (SQLite, KV, …)</a></li>
+       <li class="toctree-l1 current"><a class="reference internal" href="index.html">XPCOM</a>
+        <ul class="current">
+         <li class="toctree-l2 current"><a class="reference internal" href="index.html#consuming-xpcom-functionality">Consuming XPCOM functionality</a>
+          <ul class="current">
+           <li class="toctree-l3"><a class="reference internal" href="logging.html">Gecko Logging</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="stringguide.html">String Guide</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="refptr.html">Reference Counting Helpers</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="thread-safety.html"><strong>Thread safety analysis in Gecko</strong></a></li>
+           <li class="toctree-l3"><a class="reference internal" href="collections.html">XPCOM Collections</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="hashtables.html">XPCOM Hashtable Guide</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="hashtables_detailed.html">XPCOM Hashtable Technical Details</a></li>
+           <li class="toctree-l3 current"><a class="current reference internal" href="#">MozPromise: C++ promises in Gecko</a>
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="#guarantees-of-mozpromise">Guarantees of MozPromise</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#typical-uses">Typical uses</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#concepts">Concepts</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#main-classes">Main classes</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#advanced-features">Advanced features</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#caveats">Caveats</a></li>
+            </ul></li>
+           <li class="toctree-l3"><a class="reference internal" href="sorting.html">Sorting and <code class="docutils literal notranslate"><span class="pre">nsTArray</span></code></a></li>
+           <li class="toctree-l3"><a class="reference internal" href="xpcomutils.html">XPCOMUtils module</a></li>
+          </ul></li>
+         <li class="toctree-l2"><a class="reference internal" href="index.html#tooling-around-xpcom">Tooling around XPCOM</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="index.html#writing-new-xpcom-interfaces-classes">Writing new XPCOM interfaces/classes</a></li>
+        </ul></li>
+       <li class="toctree-l1"><a class="reference internal" href="../nspr/index.html">NSPR</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../security/nss/index.html">Network Security Services (NSS)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../content-security/index.html">Web Security Checks in Gecko</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">The Firefox Build System</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../mach/index.html">Mach</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/try/index.html">Pushing to Try</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../build/buildsystem/index.html">Build System</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../taskcluster/index.html">Firefox CI and Taskgraph</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/moztreedocs/index.html">Managing Documentation</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mozbuild/vendor/index.html">Vendoring Third Party Components</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Testing &amp; Test Infrastructure</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/automated-testing/index.html">Automated Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/treeherder-try/index.html">Understanding Treeherder Results</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/sheriffed-intermittents/index.html">Sheriffed intermittent failures</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/tests-for-new-config/index.html">Turning on Firefox tests for a new configuration</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/intermittent/index.html">Avoiding intermittent tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/testing-policy/index.html">Testing Policy</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/ci-configs/index.html">Configuration Changes</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/browser-chrome/index.html">Browser chrome mochitests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/chrome-tests/index.html">Chrome Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/marionette/index.html">Marionette</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/geckodriver/index.html">geckodriver</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/test-verification/index.html">Test Verification</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/webrender/index.html">WebRender Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/mochitest-plain/index.html">Mochitest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/xpcshell/index.html">XPCShell tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/tps/index.html">TPS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../web-platform/index.html">web-platform-tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../gtest/index.html">GTest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/fuzzing/index.html">Fuzzing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/sanitizer/index.html">Sanitizer</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/perfdocs/index.html">Performance Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/code-coverage/index.html">Code coverage</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing-rust-code/index.html">Testing &amp; Debugging Rust Code</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Releases &amp; Updates</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../update-infrastructure/index.html">Mozilla Update Infrastructure</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../update-infrastructure/index.html#watershed-updates">Watershed Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../update-infrastructure/index.html#desupport-updates">Desupport Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/update-verify/index.html">Update Verify</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Localization &amp; Internationalization</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../intl/index.html">Internationalization</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../l10n/index.html">Localization</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox and Python</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../mozbase/index.html">mozbase</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../python/index.html">Using third-party Python packages</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Metrics Collected in Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../metrics/index.html">Metrics</a></li>
+      </ul>
+     </div>
+    </div>
+   </nav>
+   <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+    <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+     <i data-toggle="wy-nav-top" class="fa fa-bars"></i> <a href="../index.html">Firefox Source Docs</a>
+    </nav>
+    <div class="wy-nav-content">
+     <div class="rst-content">
+      <!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+      <div role="navigation" aria-label="Page navigation">
+       <ul class="wy-breadcrumbs">
+        <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+        <li class="breadcrumb-item"><a href="index.html">XPCOM</a></li>
+        <li class="breadcrumb-item active">MozPromise: C++ promises in Gecko</li>
+        <li class="wy-breadcrumbs-aside"><a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Developer+Infrastructure&amp;component=Firefox+Source+Docs%3A+Content&amp;short_desc=Documentation+issue+on+xpcom/mozpromise&amp;comment=URL+=+https://firefox-source-docs.mozilla.org/xpcom/mozpromise.html&amp;bug_file_loc=https://firefox-source-docs.mozilla.org/xpcom/mozpromise.html" rel="nofollow">Report an issue</a> / <a href="../_sources/xpcom/mozpromise.rst.txt" rel="nofollow"> View page source</a></li>
+       </ul>
+       <hr>
+      </div>
+      <div role="main" class="document" itemscope itemtype="http://schema.org/Article">
+       <div itemprop="articleBody">
+        <section id="mozpromise-c-promises-in-gecko">
+         <h1>MozPromise: C++ promises in Gecko<a class="headerlink" href="#mozpromise-c-promises-in-gecko" title="Link to this heading">?</a></h1>
+         <nav class="contents local" id="table-of-contents">
+          <p class="topic-title">Table of Contents</p>
+          <ul class="simple">
+           <li>
+            <p><a class="reference internal" href="#guarantees-of-mozpromise" id="id2">Guarantees of MozPromise</a></p></li>
+           <li>
+            <p><a class="reference internal" href="#typical-uses" id="id3">Typical uses</a></p></li>
+           <li>
+            <p><a class="reference internal" href="#concepts" id="id4">Concepts</a></p>
+            <ul>
+             <li>
+              <p><a class="reference internal" href="#threads-on-which-promises-run" id="id5">Threads on which Promises Run</a></p></li>
+             <li>
+              <p><a class="reference internal" href="#the-then-method" id="id6">The <code class="docutils literal notranslate"><span class="pre">Then(...)</span></code> method</a></p></li>
+             <li>
+              <p><a class="reference internal" href="#reference-counting" id="id7">Reference counting</a></p></li>
+             <li>
+              <p><a class="reference internal" href="#exclusivity" id="id8">Exclusivity</a></p></li>
+            </ul></li>
+           <li>
+            <p><a class="reference internal" href="#main-classes" id="id9">Main classes</a></p>
+            <ul>
+             <li>
+              <p><a class="reference internal" href="#mozpromise" id="id10">MozPromise</a></p></li>
+             <li>
+              <p><a class="reference internal" href="#mozpromiseholder" id="id11">MozPromiseHolder</a></p></li>
+             <li>
+              <p><a class="reference internal" href="#mozpromise-request-mozpromiserequestholder" id="id12">MozPromise::Request / MozPromiseRequestHolder</a></p></li>
+             <li>
+              <p><a class="reference internal" href="#the-invokeasync-function" id="id13">The InvokeAsync Function</a></p></li>
+            </ul></li>
+           <li>
+            <p><a class="reference internal" href="#advanced-features" id="id14">Advanced features</a></p>
+            <ul>
+             <li>
+              <p><a class="reference internal" href="#direct-task-dispatch" id="id15">Direct Task Dispatch</a></p></li>
+             <li>
+              <p><a class="reference internal" href="#synchronous-dispatch" id="id16">Synchronous Dispatch</a></p></li>
+            </ul></li>
+           <li>
+            <p><a class="reference internal" href="#caveats" id="id17">Caveats</a></p></li>
+          </ul>
+         </nav>
+         <p>MozPromise is a powerful and flexible promise implementation in C++ designed to manage asynchronous operations within Gecko. Its set of feature mirror the spirit of JavaScript promises, including the ability to attach resolve and reject callbacks, chain promises, and handle asynchronous tasks across different threads. <code class="docutils literal notranslate"><span class="pre">MozPromise</span></code> supports both exclusive and non-exclusive promises. Exclusive promises enforce that there is at most one call to either <code class="docutils literal notranslate"><span class="pre">Then(...)</span></code>, ensuring that the promise is used in a predictable and controlled manner. Non-exclusive promises, on the other hand, allow multiple resolve or reject operations, providing flexibility for more complex use cases.</p>
+         <p>Additionally, <code class="docutils literal notranslate"><span class="pre">MozPromise</span></code> offers mechanisms for disconnecting promises, allowing consumers to cancel the delivery of resolve or reject values when they are no longer needed. These features make <code class="docutils literal notranslate"><span class="pre">MozPromise</span></code> a versatile tool for managing asynchronous workflows spanning multiple threads, ensuring thread safety, and maintaining the correct sequence of operations in complex applications, in contrast to the usual pattern seen in the Gecko code base, which is dispatching <code class="docutils literal notranslate"><span class="pre">Runnable</span></code> manually.</p>
+         <p>Another option for syncing state across threads is to use <a class="reference external" href="https://searchfox.org/mozilla-central/source/xpcom/threads/StateMirroring.h">State Mirroring</a>.</p>
+         <p><code class="docutils literal notranslate"><span class="pre">MozPromise</span></code> aren’t really related to the DOM <code class="docutils literal notranslate"><span class="pre">Promise</span></code> class, but can be often used in conjunction. This is done manually by for example calling <code class="docutils literal notranslate"><span class="pre">dom::Promise::MaybeResolve</span></code> from a lambda passed to the <code class="docutils literal notranslate"><span class="pre">Then(...)</span></code> of a <code class="docutils literal notranslate"><span class="pre">MozPromise</span></code>, on the main thread.</p>
+         <p>Throughout this document, the <strong>producer</strong> is the piece of code that creates, then resolves or rejects a promise, and typically starts or does the work that needs to happen as part of the asynchronous operation. The <strong>consumer</strong> is the piece of code that will react to the promise being resolved or rejected, and therefore gets to know about the completion of the work.</p>
+         <section id="guarantees-of-mozpromise">
+          <h2>Guarantees of MozPromise<a class="headerlink" href="#guarantees-of-mozpromise" title="Link to this heading">?</a></h2>
+          <p><code class="docutils literal notranslate"><span class="pre">MozPromise</span></code> provides several guarantees to ensure predictable and reliable behavior. These include:</p>
+          <ul class="simple">
+           <li>
+            <p><strong>Ordering</strong>: <code class="docutils literal notranslate"><span class="pre">MozPromise</span></code> ensures that the resolve or reject callbacks are dispatched in the order they are attached, maintaining the correct sequence of operations. Attaching callbacks after a promise has completed will call them.</p></li>
+           <li>
+            <p><strong>Thread Safety</strong>: They are designed to be thread-safe, allowing promises to be created, chained, resolved, and rejected on different threads without causing race conditions. The resolve/reject handlers are always destroyed on their target threads. <code class="docutils literal notranslate"><span class="pre">MozPromiseHolder</span></code> and <code class="docutils literal notranslate"><span class="pre">MozPromiseRequestHolder</span></code> themselves need to be synchronized however.</p></li>
+           <li>
+            <p><strong>Completion</strong>: Once a promise is resolved or rejected, it cannot be changed, ensuring that the state of the promise is consistent and immutable. <code class="docutils literal notranslate"><span class="pre">*Holder</span></code> instances can be reused.</p></li>
+          </ul>
+         </section>
+         <section id="typical-uses">
+          <h2>Typical uses<a class="headerlink" href="#typical-uses" title="Link to this heading">?</a></h2>
+          <p>If the workload is synchronous:</p>
+          <dl class="simple">
+           <dt>
+            From the producer side:
+           </dt>
+           <dd>
+            <ul class="simple">
+             <li>
+              <p>Do the work</p></li>
+             <li>
+              <p>Return a resolved or rejected promise via <code class="docutils literal notranslate"><span class="pre">MozPromise::CreateAndResolve</span></code> or <code class="docutils literal notranslate"><span class="pre">MozPromise::CreateAndReject</span></code></p></li>
+            </ul>
+           </dd>
+           <dt>
+            From the consumer side:
+           </dt>
+           <dd>
+            <ul class="simple">
+             <li>
+              <p>Call the method returning a promise</p></li>
+             <li>
+              <p>Call <code class="docutils literal notranslate"><span class="pre">Then()</span></code> on the promise to set the actions to run on a given thread once the promise has settled.</p></li>
+            </ul>
+           </dd>
+          </dl>
+          <p>If the workload is asynchronous:</p>
+          <p>From the producer side: - Allocate a <code class="docutils literal notranslate"><span class="pre">MozPromise</span></code> (probably via a <code class="docutils literal notranslate"><span class="pre">MozPromiseHolder</span></code>) and return it to the consumer has a <code class="docutils literal notranslate"><span class="pre">RefPtr&lt;MozPromise&gt;</span></code> - Dispatch the async work to any thread with <code class="docutils literal notranslate"><span class="pre">InvokeAsync</span></code> forward its returned promise to the caller. - Once the work has been completed, return its result directly in the async task using <code class="docutils literal notranslate"><span class="pre">MozPromise::CreateAndResolve</span></code> or <code class="docutils literal notranslate"><span class="pre">MozPromise::CreateAndReject</span></code>.</p>
+          <p>From the consumer side: - Call the method returning a <code class="docutils literal notranslate"><span class="pre">MozPromise</span></code> - Call <code class="docutils literal notranslate"><span class="pre">Then()</span></code> on the promise to set the actions to run on a given thread once the promise has settled.</p>
+          <p>In both case, it is possible to <code class="docutils literal notranslate"><span class="pre">Track()</span></code> the promise, to cancel the delivery of the resolve/reject result and prevent callbacks to be run.</p>
+         </section>
+         <section id="concepts">
+          <h2>Concepts<a class="headerlink" href="#concepts" title="Link to this heading">?</a></h2>
+          <section id="threads-on-which-promises-run">
+           <h3>Threads on which Promises Run<a class="headerlink" href="#threads-on-which-promises-run" title="Link to this heading">?</a></h3>
+           <p>Promises in Mozilla’s <code class="docutils literal notranslate"><span class="pre">MozPromise</span></code> framework can run on various threads, depending on the context in which they are created and resolved. The <code class="docutils literal notranslate"><span class="pre">Then</span></code> method allows specifying the target thread on which the resolve or reject callbacks should be executed. <code class="docutils literal notranslate"><span class="pre">InvokeAsync</span></code> allows selecting the thread the work will happen on, which commonly also is where the promise gets rejected or resolved.</p>
+          </section>
+          <section id="the-then-method">
+           <h3>The <code class="docutils literal notranslate"><span class="pre">Then(...)</span></code> method<a class="headerlink" href="#the-then-method" title="Link to this heading">?</a></h3>
+           <p>This method is called to set reject/resolve callbacks to be called when a promise has settled. There are two ways of specifying those. The first style is to pass a single callback, using the type <code class="docutils literal notranslate"><span class="pre">MyPromise::ResolveOrRejectValue</span></code>, if <code class="docutils literal notranslate"><span class="pre">MyPromise</span></code> has been aliased to a particular type, and to handle rejection / resolution by checking the value itself:</p>
+           <div class="highlight-c++ notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="n">RefPtr</span><span class="o">&lt;</span><span class="n">MyPromise</span><span class="o">&gt;</span><span class="w"> </span><span class="n">promise</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="cm">/* from somehere */</span>
+
+<span class="n">promise</span><span class="o">-&gt;</span><span class="n">Then</span><span class="p">(</span><span class="n">mainThread</span><span class="p">,</span><span class="w"> </span><span class="n">__func__</span><span class="p">,</span>
+<span class="w">    </span><span class="p">[</span><span class="k">this</span><span class="p">,</span><span class="w"> </span><span class="n">self</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">RefPtr</span><span class="p">{</span><span class="k">this</span><span class="p">}]</span>
+<span class="w">    </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">MyPromise</span><span class="o">::</span><span class="n">ResolveOrRejectValue</span><span class="o">&amp;</span><span class="w"> </span><span class="n">aValue</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">aValue</span><span class="p">.</span><span class="n">IsResolve</span><span class="p">()))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="cm">/* HandleResolvedValue(value); */</span>
+<span class="w">        </span><span class="k">return</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="cm">/* HandleRejectedValue(); */</span>
+<span class="w">    </span><span class="p">});</span>
+</pre>
+            </div>
+           </div>
+           <p>The other style is by passing two callbacks, one for resolution (first parameter), and one for rejection (second parameter):</p>
+           <div class="highlight-c++ notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="n">RefPtr</span><span class="o">&lt;</span><span class="n">MyPromise</span><span class="o">&gt;</span><span class="w"> </span><span class="n">promise</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="cm">/* from somewhere */</span>
+
+<span class="c1">// Granted those functions have the correct parameters types.</span>
+<span class="n">promise</span><span class="o">-&gt;</span><span class="n">Then</span><span class="p">(</span>
+<span class="w">    </span><span class="n">mainThread</span><span class="p">,</span><span class="w"> </span><span class="n">__func__</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">HandleResolvedValue</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">HandleRejectedValue</span><span class="p">);</span>
+</pre>
+            </div>
+           </div>
+           <p>The exact argument type to use in those callback depends on the exclusivity of the promise, see section below.</p>
+           <p>When method pointers are passed in, a refcounted instance pointers is necessary in the capture list. Both function pointers and lambda can be used.</p>
+           <p>The <cite>Then(…)</cite> method returns an object that can be used to do two things:</p>
+           <ul class="simple">
+            <li>
+             <p>Convert it back to a <code class="docutils literal notranslate"><span class="pre">MozPromise</span></code>, that will be resolved once the resolve/reject of the first promise are called. This allow chaining multiple promises by in turn calling <code class="docutils literal notranslate"><span class="pre">Then(...)</span></code> on that converted promise.</p></li>
+            <li>
+             <p>Track the first promise, to be able to cancel the delivery of the callbacks, if they haven’t already been called. This is done by disconnecting a <code class="docutils literal notranslate"><span class="pre">MozPromiseRequestHolder</span></code>.</p></li>
+           </ul>
+          </section>
+          <section id="reference-counting">
+           <h3>Reference counting<a class="headerlink" href="#reference-counting" title="Link to this heading">?</a></h3>
+           <p>Since promises are by essence asynchronous, and can run on various threads, it is important to ensure that the objects that are going to be used in the callback functions are still alive when the promise is rejected or resolved. This is typically done by adding reference counting to a class, and by passing an addrefed copy of the <code class="docutils literal notranslate"><span class="pre">this</span></code> pointer into the lambdas, like so:</p>
+           <div class="highlight-c++ notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">SomeClass</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="c1">// Adding refcounting to a class:</span>
+<span class="w">    </span><span class="n">NS_INLINE_DECL_THREADSAFE_REFCOUNTING</span><span class="p">(</span><span class="n">SomeClass</span><span class="p">)</span>
+
+<span class="w">    </span><span class="n">RefPtr</span><span class="o">&lt;</span><span class="n">MyPromise</span><span class="o">&gt;</span><span class="w"> </span><span class="n">DoIt</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">RefPtr</span><span class="o">&lt;</span><span class="n">MyPromise</span><span class="o">&gt;</span><span class="w"> </span><span class="n">promise</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mHolder</span><span class="p">.</span><span class="n">Ensure</span><span class="p">(</span><span class="n">__func__</span><span class="p">);</span>
+
+<span class="w">        </span><span class="n">promise</span><span class="o">-&gt;</span><span class="n">Then</span><span class="p">(</span>
+<span class="w">            </span><span class="n">backgroundThread</span><span class="p">,</span><span class="w"> </span><span class="n">__func__</span><span class="p">,</span>
+<span class="w">            </span><span class="c1">// Make the lambda has keeping a reference to the class via</span>
+<span class="w">            </span><span class="c1">// the capture list, by creating a new RefPtr in the lambda's</span>
+<span class="w">            </span><span class="c1">// scope</span>
+<span class="w">            </span><span class="p">[</span><span class="k">this</span><span class="p">,</span><span class="w"> </span><span class="n">self</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">RefPtr</span><span class="p">{</span><span class="k">this</span><span class="p">}](</span><span class="kt">int</span><span class="w"> </span><span class="n">value</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="cm">/* handle resolution */</span>
+<span class="w">            </span><span class="p">},</span>
+<span class="w">            </span><span class="c1">// Reject and resolve have the same lifetime, no need</span>
+<span class="w">            </span><span class="c1">// to do anything here if we don't need a reference to this</span>
+<span class="w">            </span><span class="c1">// (e.g. we're just logging, etc.)</span>
+<span class="w">            </span><span class="p">[](</span><span class="n">nsresult</span><span class="w"> </span><span class="n">error</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="cm">/* HandleRejectedValue(error); */</span><span class="w"> </span><span class="p">});</span>
+
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">promise</span><span class="p">.</span><span class="n">forget</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="k">private</span><span class="o">:</span>
+<span class="w">    </span><span class="n">MozPromiseHolder</span><span class="o">&lt;</span><span class="n">MyPromise</span><span class="o">&gt;</span><span class="w"> </span><span class="n">mHolder</span><span class="p">;</span>
+<span class="p">};</span>
+</pre>
+            </div>
+           </div>
+          </section>
+          <section id="exclusivity">
+           <h3>Exclusivity<a class="headerlink" href="#exclusivity" title="Link to this heading">?</a></h3>
+           <p>Exclusivity in <code class="docutils literal notranslate"><span class="pre">MozPromise</span></code> refers to the ability to enforce that a promise resolves or rejects to a single set of callbacks. When the <code class="docutils literal notranslate"><span class="pre">IsExclusive</span></code> template argument is set to <code class="docutils literal notranslate"><span class="pre">true</span></code>, the promise prevents multiple resolution or rejection callbacks on a single promise when it is not a feature that is desirable for a particular use, for instance when that could lead to unexpected behavior.</p>
+           <p>This invariant is checked with an assertion, that is enabled in release builds, and will fail when attempting to install the second set of callbacks on an exclusive promise.</p>
+           <p>When a promise is exclusive, the result value is moved into the resolve callback using an rvalue reference. A typical signature is therefore:</p>
+           <div class="highlight-c++ notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="k">using</span><span class="w"> </span><span class="n">MyPromise</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">MozPromise</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="n">nsresult</span><span class="p">,</span><span class="w"> </span><span class="nb">true</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">Callback</span><span class="p">(</span><span class="n">MyPromise</span><span class="o">::</span><span class="n">ResolveOrRejectValue</span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">aResult</span><span class="p">);</span>
+</pre>
+            </div>
+           </div>
+           <p>This means that the callback is the sole owner of the value. The callback’s closure will be deleted on the thread they are called on. It follows that the types used for rejection/resolution values need to be movable or copiable.</p>
+           <p>If however the promise isn’t exclusive, the result is passed using a const lvalue reference:</p>
+           <div class="highlight-c++ notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">Callback</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">MyPromise</span><span class="o">::</span><span class="n">ResolveOrRejectValue</span><span class="o">&amp;</span><span class="w"> </span><span class="n">aResult</span><span class="p">);</span>
+</pre>
+            </div>
+           </div>
+           <p>This allows multiple callbacks to have a reference to the value.</p>
+          </section>
+         </section>
+         <section id="main-classes">
+          <h2>Main classes<a class="headerlink" href="#main-classes" title="Link to this heading">?</a></h2>
+          <section id="mozpromise">
+           <h3>MozPromise<a class="headerlink" href="#mozpromise" title="Link to this heading">?</a></h3>
+           <p><code class="docutils literal notranslate"><span class="pre">MozPromise</span></code> is a template class that represents a promise in C++, similar to JavaScript promises. It manages an asynchronous request that may or may not be able to be fulfilled immediately. The template arguments for <code class="docutils literal notranslate"><span class="pre">MozPromise</span></code> are:</p>
+           <ul class="simple">
+            <li>
+             <p><code class="docutils literal notranslate"><span class="pre">ResolveValueT</span></code>: The type of the value that the promise resolves to.</p></li>
+            <li>
+             <p><code class="docutils literal notranslate"><span class="pre">RejectValueT</span></code>: The type of the value that the promise rejects with.</p></li>
+            <li>
+             <dl class="simple">
+              <dt>
+               <code class="docutils literal notranslate"><span class="pre">IsExclusive</span></code>: A boolean flag indicating whether the promise is exclusive,
+              </dt>
+              <dd>
+               <p>meaning it can only be resolved or rejected once.</p>
+              </dd>
+             </dl></li>
+           </ul>
+           <p>Aliasing the promises types using <code class="docutils literal notranslate"><span class="pre">typedef</span></code> or <code class="docutils literal notranslate"><span class="pre">using</span></code> is a common practice to simplify the usage of <code class="docutils literal notranslate"><span class="pre">MozPromise</span></code> with specific resolve and reject types. For example:</p>
+           <div class="highlight-c++ notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="k">using</span><span class="w"> </span><span class="n">CustomBoolPromise</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">MozPromise</span><span class="o">&lt;</span><span class="kt">bool</span><span class="p">,</span><span class="w"> </span><span class="n">nsresult</span><span class="p">,</span><span class="w"> </span><span class="nb">true</span><span class="o">&gt;</span><span class="p">;</span>
+</pre>
+            </div>
+           </div>
+           <p>defines a generic exclusive promise type that resolves to a boolean and rejects with an <code class="docutils literal notranslate"><span class="pre">nsresult</span></code>.</p>
+           <p>This makes the code more readable and easier to maintain, as the specific types of the promises are clearly defined and can be reused throughout the codebase.</p>
+          </section>
+          <section id="mozpromiseholder">
+           <h3>MozPromiseHolder<a class="headerlink" href="#mozpromiseholder" title="Link to this heading">?</a></h3>
+           <p><code class="docutils literal notranslate"><span class="pre">MozPromiseHolder</span></code> is a template class designed to encapsulate a <code class="docutils literal notranslate"><span class="pre">MozPromise</span></code>. It is useful for classes whose methods return promises, i.e., the “inside” of the asynchronous request: the part that will eventually resolve or reject. It is suitable for advanced cases where <code class="docutils literal notranslate"><span class="pre">InvokeAsync</span></code> is not enough.</p>
+           <p>Typically, you store a <code class="docutils literal notranslate"><span class="pre">MozPromiseHolder</span></code> in a class that will return promises to callers and internally resolve those promises. For good measure a <code class="docutils literal notranslate"><span class="pre">MozPromiseHolder</span></code> shouldn’t be leaked outside its owner class or into nested classes, much like JS promise resolve/reject functions shouldn’t leak outside of the constructor scope.</p>
+           <p><code class="docutils literal notranslate"><span class="pre">MozPromiseHolder</span></code> provides methods to ensure a promise is created, check if it is empty, steal the private promise, resolve or reject the promise, and set task dispatching and priority. It allows managing promises <strong>within</strong> a class, ensuring that the promise is properly handled and can be resolved or rejected as needed. Note that <code class="docutils literal notranslate"><span class="pre">MozPromiseHolder</span></code> is not thread-safe in itself, although the promise it encapsulates is.</p>
+           <div class="highlight-c++ notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">SomeClass</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="n">RefPtr</span><span class="o">&lt;</span><span class="n">MyPromise</span><span class="o">&gt;</span><span class="w"> </span><span class="n">DoIt</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">RefPtr</span><span class="o">&lt;</span><span class="n">MyPromise</span><span class="o">&gt;</span><span class="w"> </span><span class="n">promise</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mHolder</span><span class="p">.</span><span class="n">Ensure</span><span class="p">(</span><span class="n">__func__</span><span class="p">);</span>
+<span class="w">        </span><span class="n">MOZ_ASSERT</span><span class="p">(</span><span class="o">!</span><span class="n">mHolder</span><span class="p">.</span><span class="n">IsEmpty</span><span class="p">());</span>
+
+<span class="w">        </span><span class="c1">// ... deep inside some async code, potentially on a different thread,</span>
+<span class="w">        </span><span class="c1">// resolve the promise via the holder:</span>
+<span class="w">        </span><span class="c1">// mHolder.Resolve(42, __func__);</span>
+<span class="w">        </span><span class="c1">// It is empty after resolving</span>
+<span class="w">        </span><span class="c1">// MOZ_ASSERT(mHolder.IsEmpty());</span>
+
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">promise</span><span class="p">.</span><span class="n">forget</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="k">private</span><span class="o">:</span>
+<span class="w">    </span><span class="n">MozPromiseHolder</span><span class="o">&lt;</span><span class="n">MyPromise</span><span class="o">&gt;</span><span class="w"> </span><span class="n">mHolder</span><span class="p">;</span>
+<span class="p">};</span>
+</pre>
+            </div>
+           </div>
+          </section>
+          <section id="mozpromise-request-mozpromiserequestholder">
+           <h3>MozPromise::Request / MozPromiseRequestHolder<a class="headerlink" href="#mozpromise-request-mozpromiserequestholder" title="Link to this heading">?</a></h3>
+           <p><code class="docutils literal notranslate"><span class="pre">MozPromiseRequestHolder</span></code> is a template class that encapsulates a <code class="docutils literal notranslate"><span class="pre">MozPromise::Request</span></code> reference, that is rarely use directly. It is used by classes which may want to disconnect from waiting on a <code class="docutils literal notranslate"><span class="pre">MozPromise</span></code>, i.e. the “outside” of the asynchronous request. This class provides methods to track a request, complete it, disconnect it, and check if it exists. It is useful for managing the lifecycle of a promise request, ensuring that the request can be properly tracked, completed, or disconnected as needed.</p>
+           <p>In essence, this is a handle on a particular request made with within the <code class="docutils literal notranslate"><span class="pre">MozPromise</span></code> framework.</p>
+           <p>Disconnecting a request <strong>must</strong> happen on the target thread of the resolve/reject handler it is tracking. This handler is released when <code class="docutils literal notranslate"><span class="pre">Disconnect()</span></code> is called.</p>
+           <p>When dealing with <code class="docutils literal notranslate"><span class="pre">MozPromise</span></code> close to the WebIDL binding layer, another option is <a class="reference external" href="https://searchfox.org/mozilla-central/source/dom/base/DOMMozPromiseRequestHolder.h">DOMMozPromiseRequestHolder</a>, that will disconnect promises appropriately when the global goes away. It works in the same way otherwise.</p>
+           <p>To associate a <code class="docutils literal notranslate"><span class="pre">MozPromiseRequestHolder</span></code> with a <code class="docutils literal notranslate"><span class="pre">MozPromise</span></code>, the <code class="docutils literal notranslate"><span class="pre">Track(...)</span></code> method is used:</p>
+           <div class="highlight-c++ notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">SomeClass</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="c1">// refcounting is mandatory</span>
+<span class="w">    </span><span class="n">NS_INLINE_DECL_THREADSAFE_REFCOUNTING</span><span class="p">(</span><span class="n">SomeClass</span><span class="p">)</span>
+<span class="w">    </span><span class="n">RefPtr</span><span class="o">&lt;</span><span class="n">MyPromise</span><span class="o">&gt;</span><span class="w"> </span><span class="n">DoIt</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">RefPtr</span><span class="o">&lt;</span><span class="n">MyPromise</span><span class="o">&gt;</span><span class="w"> </span><span class="n">promise</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mHolder</span><span class="p">.</span><span class="n">Ensure</span><span class="p">(</span><span class="n">__func__</span><span class="p">);</span>
+<span class="w">        </span><span class="n">MOZ_ASSERT</span><span class="p">(</span><span class="o">!</span><span class="n">mHolder</span><span class="p">.</span><span class="n">IsEmpty</span><span class="p">());</span>
+
+<span class="w">        </span><span class="n">promise</span><span class="o">-&gt;</span><span class="n">Then</span><span class="p">(</span>
+<span class="w">            </span><span class="n">backgroundThread</span><span class="p">,</span><span class="w"> </span><span class="n">__func__</span><span class="p">,</span>
+<span class="w">            </span><span class="p">[</span><span class="k">this</span><span class="p">,</span><span class="w"> </span><span class="n">self</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">RefPtr</span><span class="p">{</span><span class="k">this</span><span class="p">}](</span><span class="kt">int</span><span class="w"> </span><span class="n">value</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">              </span><span class="c1">// Resolved: mark as complete</span>
+<span class="w">              </span><span class="n">mRequestHandle</span><span class="p">.</span><span class="n">Complete</span><span class="p">();</span>
+<span class="w">              </span><span class="cm">/* do something with value */</span>
+<span class="w">            </span><span class="p">},</span>
+<span class="w">            </span><span class="p">[](</span><span class="n">nsresult</span><span class="w"> </span><span class="n">error</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">              </span><span class="c1">// Rejected: also mark as complete</span>
+<span class="w">              </span><span class="n">mRequestHandle</span><span class="p">.</span><span class="n">Complete</span><span class="p">();</span>
+<span class="w">              </span><span class="cm">/* HandleRejectedValue(error); */</span>
+<span class="w">        </span><span class="p">}).</span><span class="n">Track</span><span class="p">(</span><span class="n">mRequestHandle</span><span class="p">);</span>
+
+<span class="w">        </span><span class="c1">// ... deep inside some async code, potentially on a different thread,</span>
+<span class="w">        </span><span class="c1">// resolve the promise:</span>
+<span class="w">        </span><span class="c1">// promise.Resolve(42, __func__);</span>
+
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">promise</span><span class="p">.</span><span class="n">forget</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">CancelIt</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// Functions passed to Then() won't be called. This must</span>
+<span class="w">        </span><span class="c1">// be called on `backgroundThread`</span>
+<span class="w">        </span><span class="n">mRequestHandle</span><span class="p">.</span><span class="n">DisconnectIfExists</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="k">private</span><span class="o">:</span>
+<span class="w">    </span><span class="n">MozPromiseHolder</span><span class="o">&lt;</span><span class="n">MyPromise</span><span class="o">&gt;</span><span class="w"> </span><span class="n">mHolder</span><span class="p">;</span>
+<span class="w">    </span><span class="n">MozPromiseRequestHolder</span><span class="o">&lt;</span><span class="n">MyPromise</span><span class="o">&gt;</span><span class="w"> </span><span class="n">mRequestHandle</span><span class="p">;</span>
+<span class="p">};</span>
+</pre>
+            </div>
+           </div>
+          </section>
+          <section id="the-invokeasync-function">
+           <h3>The InvokeAsync Function<a class="headerlink" href="#the-invokeasync-function" title="Link to this heading">?</a></h3>
+           <p>The <code class="docutils literal notranslate"><span class="pre">InvokeAsync</span></code> function is used to invoke a promise-returning function asynchronously on a given thread. It dispatches a task to invoke the function on the proper thread and also chains the resulting promise to the one that the caller received, so that resolve/reject values are forwarded through. This function is useful for scheduling asynchronous tasks that return promises, ensuring that the tasks are executed on the correct thread and that the promises are properly chained.</p>
+           <div class="highlight-c++ notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">SomeClass</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="n">NS_INLINE_DECL_THREADSAFE_REFCOUNTING</span><span class="p">(</span><span class="n">SomeClass</span><span class="p">)</span>
+<span class="w">    </span><span class="n">RefPtr</span><span class="o">&lt;</span><span class="n">MyPromise</span><span class="o">&gt;</span><span class="w"> </span><span class="n">AsyncFunction</span><span class="p">(</span><span class="n">nsISerialEventTarget</span><span class="o">*</span><span class="w"> </span><span class="n">target</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">InvokeAsync</span><span class="p">(</span><span class="n">target</span><span class="p">,</span><span class="w"> </span><span class="n">__func__</span><span class="p">,</span><span class="w"> </span><span class="p">[]()</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">RefPtr</span><span class="o">&lt;</span><span class="n">MyPromise</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="c1">// ... some expensive async work is happening</span>
+<span class="w">            </span><span class="kt">int</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">42</span><span class="p">;</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">MyPromise</span><span class="o">::</span><span class="n">CreateAndResolve</span><span class="p">(</span><span class="n">result</span><span class="p">,</span><span class="w"> </span><span class="n">__func__</span><span class="p">);</span>
+<span class="w">        </span><span class="p">});</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">RefPtr</span><span class="o">&lt;</span><span class="n">MyPromise</span><span class="o">&gt;</span><span class="w"> </span><span class="n">DoItAsync</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">nsCOMPtr</span><span class="o">&lt;</span><span class="n">nsISerialEventTarget</span><span class="o">&gt;</span><span class="w"> </span><span class="n">backgroundThread</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="cm">/* from somewhere */</span><span class="p">;</span>
+<span class="w">        </span><span class="n">nsCOMPtr</span><span class="o">&lt;</span><span class="n">nsISerialEventTarget</span><span class="o">&gt;</span><span class="w"> </span><span class="n">mainThread</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">do_GetMainThread</span><span class="p">();</span>
+
+<span class="w">        </span><span class="c1">// Call the async function on the background task queue</span>
+<span class="w">        </span><span class="n">RefPtr</span><span class="o">&lt;</span><span class="n">MyPromise</span><span class="o">&gt;</span><span class="w"> </span><span class="n">promise</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">AsyncFunction</span><span class="p">(</span><span class="n">backgroundThread</span><span class="p">);</span>
+
+<span class="w">        </span><span class="c1">// But get the completion callbacks on the main thread</span>
+<span class="w">        </span><span class="n">promise</span><span class="o">-&gt;</span><span class="n">Then</span><span class="p">(</span>
+<span class="w">            </span><span class="n">mainThread</span><span class="p">,</span><span class="w"> </span><span class="n">__func__</span><span class="p">,</span>
+<span class="w">            </span><span class="p">[</span><span class="k">this</span><span class="p">,</span><span class="w"> </span><span class="n">self</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">RefPtr</span><span class="p">{</span><span class="k">this</span><span class="p">}](</span><span class="kt">int</span><span class="w"> </span><span class="n">value</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">              </span><span class="cm">/* HandleResolvedValue(value); */</span>
+<span class="w">            </span><span class="p">},</span>
+<span class="w">            </span><span class="p">[](</span><span class="n">nsresult</span><span class="w"> </span><span class="n">error</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">              </span><span class="cm">/* HandleRejectedValue(error); */</span>
+<span class="w">        </span><span class="p">});</span>
+
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">promise</span><span class="p">.</span><span class="n">forget</span><span class="p">());</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">};</span>
+</pre>
+            </div>
+           </div>
+          </section>
+         </section>
+         <section id="advanced-features">
+          <h2>Advanced features<a class="headerlink" href="#advanced-features" title="Link to this heading">?</a></h2>
+          <section id="direct-task-dispatch">
+           <h3>Direct Task Dispatch<a class="headerlink" href="#direct-task-dispatch" title="Link to this heading">?</a></h3>
+           <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/xpcom/threads/nsIDirectTaskDispatcher.idl">Direct task dispatch</a> is a feature in <code class="docutils literal notranslate"><span class="pre">MozPromise</span></code> that allows the resolve or reject callbacks to be executed on the direct task queue instead of the normal event loop. This is particularly useful for scenarios where multiple asynchronous steps are involved, as it avoids a full trip to the back of the event queue for each additional asynchronous step. By using direct task dispatch, the callbacks are executed more promptly, reducing latency and improving the overall responsiveness of the application.</p>
+           <p>This is only available when the callbacks are set to run on the same thread the caller is on.</p>
+           <p>In Web land, this would be akin to executing something in a microtask checkpoint, and not a regular event loop task. While it is the default for Web Promises, it is opt-in in <code class="docutils literal notranslate"><span class="pre">MozPromise</span></code>.</p>
+           <p>To enable direct task dispatch, the <code class="docutils literal notranslate"><span class="pre">UseDirectTaskDispatch</span></code> method is called on the <code class="docutils literal notranslate"><span class="pre">MozPromiseHolder</span></code> instance. This method sets the promise to use the direct event queue for dispatching the resolve or reject callbacks.</p>
+           <p>A related concept is <a class="reference external" href="https://searchfox.org/mozilla-central/rev/9fa446ad77af13847a7da250135fc58b1a1bd5b9/xpcom/threads/AbstractThread.h#72-76">“tail dispatching”</a> of <code class="docutils literal notranslate"><span class="pre">Runnable</span></code>.</p>
+          </section>
+          <section id="synchronous-dispatch">
+           <h3>Synchronous Dispatch<a class="headerlink" href="#synchronous-dispatch" title="Link to this heading">?</a></h3>
+           <p>Synchronous dispatch is another feature in MozPromise that allows the resolve or reject callbacks to be executed synchronously on the same thread, rather than being dispatched asynchronously. This is useful in scenarios where the callbacks need to be executed immediately, without waiting for the event loop to process them. Synchronous dispatch ensures that the callbacks are executed in a predictable and timely manner, which can be crucial for certain types of operations.</p>
+           <p>This is only available when the callbacks are set to run on the same thread the caller is on.</p>
+           <p>To enable synchronous dispatch, the UseSynchronousTaskDispatch method is called on the MozPromiseHolder instance. This method sets the promise to execute the resolve or reject callbacks synchronously on the same thread. When the promise is resolved or rejected, the callbacks are executed immediately, without being dispatched to the event loop.</p>
+           <p>However, synchronous dispatch can introduce potential issues, such as deadlocks. A deadlock occurs when two or more threads are waiting for each other to release resources, resulting in a situation where neither thread can proceed. In the context of MozPromise, a deadlock can occur if the resolve or reject callbacks are waiting for a resource that is held by the same thread, causing the thread to block indefinitely.</p>
+           <p>To mitigate the risk of deadlocks, it is important to use synchronous dispatch judiciously and ensure that the callbacks do not depend on resources that are held by the same thread.</p>
+          </section>
+         </section>
+         <section id="caveats">
+          <h2>Caveats<a class="headerlink" href="#caveats" title="Link to this heading">?</a></h2>
+          <p>It is an error to destroy a promise that hasn’t been resolved or rejected. Teardown of an object owning a <code class="docutils literal notranslate"><span class="pre">MozPromiseHolder</span></code> is therefore going to assert in this case.</p>
+          <p>When dealing with <code class="docutils literal notranslate"><span class="pre">MozPromise</span></code> (like most asynchronous constructs), the shutdown phase can be a problem. Since there’s no way to handle the failure to dispatch to a thread, it’s an error to have a promise chain set to run some handler on a thread that may have shut down. One way to fix this is to provide threading guarantees, by blocking shutdown, or to disconnect the promise via a <code class="docutils literal notranslate"><span class="pre">MozPromiseRequestHolder</span></code> when shutting down. Both can possibly be needed.</p>
+          <p>When using <code class="docutils literal notranslate"><span class="pre">MozPromiseHolder::Ensure</span></code>, a new <code class="docutils literal notranslate"><span class="pre">MozPromise</span></code> will be created even if the previous one was already settled. Sometimes external bookkeeping (for example keeping the <code class="docutils literal notranslate"><span class="pre">MozPromise</span></code> around to check if it’s the same) is necessary to ensure that the handlers are set on the correct <code class="docutils literal notranslate"><span class="pre">MozPromise</span></code>, and not potentially another one.</p>
+         </section>
+        </section>
+       </div>
+      </div>
+      <footer>
+       <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="hashtables_detailed.html" class="btn btn-neutral float-left" title="XPCOM Hashtable Technical Details" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a> <a href="sorting.html" class="btn btn-neutral float-right" title="Sorting and nsTArray" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+       </div>
+       <hr>
+       <div role="contentinfo">
+        <p></p>
+       </div> Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+      </footer>
+     </div>
+    </div>
+   </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ </body>
+</html>

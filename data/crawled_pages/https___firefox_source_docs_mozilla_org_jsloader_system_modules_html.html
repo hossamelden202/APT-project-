@@ -1,0 +1,547 @@
+<!doctype html>
+<html class="writer-html5" lang="en" data-content_root="../">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>System Modules — Firefox Source Docs  documentation</title>
+  <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50">
+  <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094">
+  <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=fd3f3429">
+  <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b">
+  <link rel="stylesheet" type="text/css" href="../_static/custom_theme.css?v=dc5ed815">
+  <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7">
+  <link rel="shortcut icon" href="../_static/firefox.ico"><!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script src="../_static/jquery.js?v=5d32c60e"></script>
+  <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+  <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+  <script src="../_static/doctools.js?v=9a2dae69"></script>
+  <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+  <script src="../_static/copybutton.js?v=30646c52"></script>
+  <script src="../_static/design-tabs.js?v=36754332"></script>
+  <script src="../_static/js/theme.js"></script>
+  <link rel="index" title="Index" href="../genindex.html">
+  <link rel="search" title="Search" href="../search.html">
+  <link rel="next" title="JS Loader APIs" href="jsloader-api.html">
+  <link rel="prev" title="JS Loader" href="index.html">
+ </head>
+ <body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+   <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <div class="wy-side-scroll">
+     <div class="wy-side-nav-search">
+      <a href="../index.html" class="icon icon-home"> Firefox Source Docs <img src="../_static/firefox-wordmark.svg" class="logo" alt="Logo"> </a><!-- -- This code is governed by the BSD license ---->
+      <div>
+       <h3>Quick search</h3>
+       <script>
+    (function () {
+      var cx = "dd12886298f75dbef";
+      var gcse = document.createElement("script");
+      gcse.async = true;
+      gcse.src = "https://cse.google.com/cse.js?cx=" + cx;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(gcse, s);
+    })();
+  </script><gcse:search></gcse:search>
+      </div>
+     </div>
+     <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+      <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../glossary/index.html">A Glossary of Common Terms</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../overview/index.html">A Quick Guide to Mozilla Applications</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../setup/index.html">Getting Set Up To Work On The Firefox Codebase</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Working On Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../contributing/index.html">Working on Firefox</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../bug-mgmt/index.html">Bug Handling</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox User Guide</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../devtools-user/index.html">Firefox DevTools User Docs</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Source Code Documentation</span></p>
+      <ul class="current">
+       <li class="toctree-l1"><a class="reference internal" href="../mots/index.html">Governance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../browser/index.html">Firefox Front-end</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../dom/index.html">DOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../editor/index.html">Editor</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../layout/index.html">Style system (CSS) &amp; Layout</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../gfx/index.html">Graphics</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../ipc/index.html">Processes, Threads and IPC</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../devtools/index.html">Firefox DevTools Contributor Docs</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../toolkit/index.html">Toolkit</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../js/index.html">SpiderMonkey</a></li>
+       <li class="toctree-l1 current"><a class="reference internal" href="index.html">JS Loader</a>
+        <ul class="current">
+         <li class="toctree-l2 current"><a class="current reference internal" href="#">System Modules</a>
+          <ul>
+           <li class="toctree-l3"><a class="reference internal" href="#shared-system-global">Shared System Global</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#defining-a-module">Defining a Module</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#importing-a-module">Importing a Module</a>
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="#immediate-import">Immediate Import</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#lazy-import">Lazy Import</a></li>
+            </ul></li>
+           <li class="toctree-l3"><a class="reference internal" href="#using-the-namespace-object">Using the Namespace Object</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#importing-from-unprivileged-testing-code">Importing from Unprivileged Testing Code</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#importing-from-c-code">Importing from C++ Code</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#lifetime">Lifetime</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#lifetime-of-the-global-variables">Lifetime of the Global Variables</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#utility-functions">Utility Functions</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#limitations">Limitations</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#devtools-distinct-system-global">DevTools Distinct System Global</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#integration-with-jsactors">Integration with JSActors</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#integration-with-xpcom-components">Integration with XPCOM Components</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#importing-into-current-global">Importing into Current Global</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#jsm">JSM</a></li>
+          </ul></li>
+         <li class="toctree-l2"><a class="reference internal" href="jsloader-api.html">JS Loader APIs</a></li>
+        </ul></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mobile/android/geckoview/index.html">GeckoView</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mobile/android/fenix/index.html">Fenix</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mobile/android/focus-android/index.html">Focus for Android</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../dom/bindings/webidl/index.html">WebIDL</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../modules/libpref/index.html">libpref</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../networking/index.html">Networking</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../remote/index.html">Remote Protocols</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../services/index.html">Services</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../permissions/index.html">Permissions</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../uriloader/index.html">File Handling</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../widget/cocoa/index.html">Firefox on macOS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../widget/windows/index.html">Firefox on Windows</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../toolkit/components/ml/index.html">Firefox AI Runtime</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../accessible/index.html">Accessibility</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../media/index.html">Media Playback</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../code-quality/index.html">Code quality</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../writing-rust-code/index.html">Writing Rust Code</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../rust-components/index.html">Rust Components</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/profiler/index.html">Gecko Profiler</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../performance/index.html">Performance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../storage/index.html">Database bindings (SQLite, KV, …)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../xpcom/index.html">XPCOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../nspr/index.html">NSPR</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../security/nss/index.html">Network Security Services (NSS)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../content-security/index.html">Web Security Checks in Gecko</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">The Firefox Build System</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../mach/index.html">Mach</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/try/index.html">Pushing to Try</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../build/buildsystem/index.html">Build System</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../taskcluster/index.html">Firefox CI and Taskgraph</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/moztreedocs/index.html">Managing Documentation</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mozbuild/vendor/index.html">Vendoring Third Party Components</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Testing &amp; Test Infrastructure</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/automated-testing/index.html">Automated Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/treeherder-try/index.html">Understanding Treeherder Results</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/sheriffed-intermittents/index.html">Sheriffed intermittent failures</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/tests-for-new-config/index.html">Turning on Firefox tests for a new configuration</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/intermittent/index.html">Avoiding intermittent tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/testing-policy/index.html">Testing Policy</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/ci-configs/index.html">Configuration Changes</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/browser-chrome/index.html">Browser chrome mochitests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/chrome-tests/index.html">Chrome Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/marionette/index.html">Marionette</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/geckodriver/index.html">geckodriver</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/test-verification/index.html">Test Verification</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/webrender/index.html">WebRender Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/mochitest-plain/index.html">Mochitest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/xpcshell/index.html">XPCShell tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/tps/index.html">TPS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../web-platform/index.html">web-platform-tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../gtest/index.html">GTest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/fuzzing/index.html">Fuzzing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/sanitizer/index.html">Sanitizer</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/perfdocs/index.html">Performance Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/code-coverage/index.html">Code coverage</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing-rust-code/index.html">Testing &amp; Debugging Rust Code</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Releases &amp; Updates</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../update-infrastructure/index.html">Mozilla Update Infrastructure</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../update-infrastructure/index.html#watershed-updates">Watershed Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../update-infrastructure/index.html#desupport-updates">Desupport Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/update-verify/index.html">Update Verify</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Localization &amp; Internationalization</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../intl/index.html">Internationalization</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../l10n/index.html">Localization</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox and Python</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../mozbase/index.html">mozbase</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../python/index.html">Using third-party Python packages</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Metrics Collected in Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../metrics/index.html">Metrics</a></li>
+      </ul>
+     </div>
+    </div>
+   </nav>
+   <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+    <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+     <i data-toggle="wy-nav-top" class="fa fa-bars"></i> <a href="../index.html">Firefox Source Docs</a>
+    </nav>
+    <div class="wy-nav-content">
+     <div class="rst-content">
+      <!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+      <div role="navigation" aria-label="Page navigation">
+       <ul class="wy-breadcrumbs">
+        <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+        <li class="breadcrumb-item"><a href="index.html">JS Loader</a></li>
+        <li class="breadcrumb-item active">System Modules</li>
+        <li class="wy-breadcrumbs-aside"><a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Developer+Infrastructure&amp;component=Firefox+Source+Docs%3A+Content&amp;short_desc=Documentation+issue+on+jsloader/system-modules&amp;comment=URL+=+https://firefox-source-docs.mozilla.org/jsloader/system-modules.html&amp;bug_file_loc=https://firefox-source-docs.mozilla.org/jsloader/system-modules.html" rel="nofollow">Report an issue</a> / <a href="../_sources/jsloader/system-modules.rst.txt" rel="nofollow"> View page source</a></li>
+       </ul>
+       <hr>
+      </div>
+      <div role="main" class="document" itemscope itemtype="http://schema.org/Article">
+       <div itemprop="articleBody">
+        <section id="system-modules">
+         <h1>System Modules<a class="headerlink" href="#system-modules" title="Link to this heading">?</a></h1>
+         <p>Gecko uses a variant of the standard ECMAScript module to implement the browser internals.</p>
+         <p>Each system module is a per-process singleton, shared among all consumers in the process.</p>
+         <section id="shared-system-global">
+          <h2>Shared System Global<a class="headerlink" href="#shared-system-global" title="Link to this heading">?</a></h2>
+          <p>The shared system global is a privileged global dedicated for the system modules.</p>
+          <p>All system modules are imported into the shared system global (except for modules loaded into the <a class="reference internal" href="#devtools-distinct-system-global">DevTools distinct system global</a>).</p>
+          <p>See <code class="docutils literal notranslate"><span class="pre">mozJSModuleLoader::CreateLoaderGlobal</span></code> in <a class="reference external" href="https://searchfox.org/mozilla-central/source/js/xpconnect/loader/mozJSModuleLoader.cpp">mozJSModuleLoader.cpp</a> for details about the global and built-in functions.</p>
+         </section>
+         <section id="defining-a-module">
+          <h2>Defining a Module<a class="headerlink" href="#defining-a-module" title="Link to this heading">?</a></h2>
+          <p>The system module is written as a subset of the standard ECMAScript module (see <a class="reference internal" href="#limitations">Limitations</a> below), and symbols can be exported with the standard <code class="docutils literal notranslate"><span class="pre">export</span></code> declarations.</p>
+          <p>The system module uses the <code class="docutils literal notranslate"><span class="pre">.sys.mjs</span></code> filename extension.</p>
+          <div class="highlight-JavaScript notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="c1">// Test.sys.mjs</span>
+
+<span class="k">export</span><span class="w"> </span><span class="kd">const</span><span class="w"> </span><span class="nx">TestUtils</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">hello</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"hello"</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">};</span>
+
+<span class="k">export</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">TestFunc</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"hi"</span><span class="p">);</span>
+<span class="p">}</span>
+</pre>
+           </div>
+          </div>
+          <p>System modules can use other extensions than <code class="docutils literal notranslate"><span class="pre">.sys.mjs</span></code>, but in that case make sure the right ESLint rules are applied to them.</p>
+         </section>
+         <section id="importing-a-module">
+          <h2>Importing a Module<a class="headerlink" href="#importing-a-module" title="Link to this heading">?</a></h2>
+          <section id="immediate-import">
+           <h3>Immediate Import<a class="headerlink" href="#immediate-import" title="Link to this heading">?</a></h3>
+           <p>Inside all privileged code, system modules can be imported with <code class="docutils literal notranslate"><span class="pre">ChromeUtils.importESModule</span></code>. The system module is imported synchronously, and the namespace object is returned.</p>
+           <div class="admonition note">
+            <p class="admonition-title">Note</p>
+            <p>At the script or module top-level, if the module is not going to be immediately and unconditionally used, please consider using <code class="docutils literal notranslate"><span class="pre">ChromeUtils.defineESModuleGetters</span></code> below instead, in order to improve the browser startup performance and the window open performance.</p>
+           </div>
+           <div class="highlight-JavaScript notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="c1">// Privileged code.</span>
+
+<span class="kd">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">TestUtils</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span>
+<span class="w">  </span><span class="nx">ChromeUtils</span><span class="p">.</span><span class="nx">importESModule</span><span class="p">(</span><span class="s2">"resource://gre/modules/Test.sys.mjs"</span><span class="p">);</span>
+
+<span class="nx">TestUtils</span><span class="p">.</span><span class="nx">hello</span><span class="p">();</span>
+</pre>
+            </div>
+           </div>
+           <p>Inside system modules, other system modules can be imported with the regular <code class="docutils literal notranslate"><span class="pre">import</span></code> declaration and the dynamic <code class="docutils literal notranslate"><span class="pre">import()</span></code>.</p>
+           <div class="highlight-JavaScript notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="c1">// System module top-level scope.</span>
+
+<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">TestUtils</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s2">"resource://gre/modules/Test.sys.mjs"</span><span class="p">;</span>
+
+<span class="nx">TestUtils</span><span class="p">.</span><span class="nx">hello</span><span class="p">();</span>
+</pre>
+            </div>
+           </div>
+           <div class="highlight-JavaScript notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="c1">// A function inside a system module.</span>
+
+<span class="k">async</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">f</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">TestUtils</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="k">import</span><span class="p">(</span><span class="s2">"resource://gre/modules/Test.sys.mjs"</span><span class="p">);</span>
+<span class="w">  </span><span class="nx">TestUtils</span><span class="p">.</span><span class="nx">hello</span><span class="p">();</span>
+<span class="p">}</span>
+</pre>
+            </div>
+           </div>
+           <div class="admonition note">
+            <p class="admonition-title">Note</p>
+            <p>The <code class="docutils literal notranslate"><span class="pre">import</span></code> declaration and the dynamic <code class="docutils literal notranslate"><span class="pre">import()</span></code> can be used only from system modules. If the system module is imported from regular modules in some random global with these ways, the module is imported into that global instead of the shared system global, and it becomes a different instance.</p>
+           </div>
+          </section>
+          <section id="lazy-import">
+           <h3>Lazy Import<a class="headerlink" href="#lazy-import" title="Link to this heading">?</a></h3>
+           <p>Modules can be lazily imported with <code class="docutils literal notranslate"><span class="pre">ChromeUtils.defineESModuleGetters</span></code>. <code class="docutils literal notranslate"><span class="pre">ChromeUtils.defineESModuleGetters</span></code> receives a target object, and a object that defines a map from the exported symbol name to the module URI. Those symbols are defined on the target object as a lazy getter. The module is imported on the first access, and the getter is replaced with a data property with the exported symbol’s value.</p>
+           <div class="admonition note">
+            <p class="admonition-title">Note</p>
+            <p><code class="docutils literal notranslate"><span class="pre">ChromeUtils.defineESModuleGetters</span></code> is applicable only to the exported symbol, and not to the namespace object. See the next section for how to define the lazy getter for the namespace object.</p>
+           </div>
+           <p>The convention for the target object’s name is <code class="docutils literal notranslate"><span class="pre">lazy</span></code>.</p>
+           <div class="highlight-JavaScript notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="c1">// Privileged code.</span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">lazy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{}</span>
+<span class="nx">ChromeUtils</span><span class="p">.</span><span class="nx">defineESModuleGetters</span><span class="p">(</span><span class="nx">lazy</span><span class="p">,</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">TestUtils</span><span class="o">:</span><span class="w"> </span><span class="s2">"resource://gre/modules/Test.sys.mjs"</span><span class="p">,</span>
+<span class="p">});</span>
+
+<span class="kd">function</span><span class="w"> </span><span class="nx">f</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="c1">// Test.sys.mjs is imported on the first access.</span>
+<span class="w">  </span><span class="nx">lazy</span><span class="p">.</span><span class="nx">TestUtils</span><span class="p">.</span><span class="nx">hello</span><span class="p">();</span>
+<span class="p">}</span>
+</pre>
+            </div>
+           </div>
+           <p>In order to import multiple symbols from the same module, add the corresponding property with the symbol name and the module URI for each.</p>
+           <div class="highlight-JavaScript notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="c1">// Privileged code.</span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">lazy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{}</span>
+<span class="nx">ChromeUtils</span><span class="p">.</span><span class="nx">defineESModuleGetters</span><span class="p">(</span><span class="nx">lazy</span><span class="p">,</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">TestUtils</span><span class="o">:</span><span class="w"> </span><span class="s2">"resource://gre/modules/Test.sys.mjs"</span><span class="p">,</span>
+<span class="w">  </span><span class="nx">TestFunc</span><span class="o">:</span><span class="w"> </span><span class="s2">"resource://gre/modules/Test.sys.mjs"</span><span class="p">,</span>
+<span class="p">});</span>
+</pre>
+            </div>
+           </div>
+           <p>See <a class="reference external" href="https://searchfox.org/mozilla-central/source/dom/chrome-webidl/ChromeUtils.webidl">ChromeUtils.webidl</a> for more details.</p>
+          </section>
+         </section>
+         <section id="using-the-namespace-object">
+          <h2>Using the Namespace Object<a class="headerlink" href="#using-the-namespace-object" title="Link to this heading">?</a></h2>
+          <p>The namespace object returned by the <code class="docutils literal notranslate"><span class="pre">ChromeUtils.importESModule</span></code> call can also be directly used.</p>
+          <div class="highlight-JavaScript notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="c1">// Privileged code.</span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">TestNS</span><span class="w"> </span><span class="o">=</span>
+<span class="w">  </span><span class="nx">ChromeUtils</span><span class="p">.</span><span class="nx">importESModule</span><span class="p">(</span><span class="s2">"resource://gre/modules/Test.sys.mjs"</span><span class="p">);</span>
+
+<span class="nx">TestNS</span><span class="p">.</span><span class="nx">TestUtils</span><span class="p">.</span><span class="nx">hello</span><span class="p">();</span>
+</pre>
+           </div>
+          </div>
+          <p>This is almost same as the following normal <code class="docutils literal notranslate"><span class="pre">import</span></code> declaration.</p>
+          <div class="highlight-JavaScript notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="c1">// System module top-level scope.</span>
+
+<span class="k">import</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="kr">as</span><span class="w"> </span><span class="nx">TestNS</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s2">"resource://gre/modules/Test.sys.mjs"</span><span class="p">;</span>
+
+<span class="nx">TestNS</span><span class="p">.</span><span class="nx">TestUtils</span><span class="p">.</span><span class="nx">hello</span><span class="p">();</span>
+</pre>
+           </div>
+          </div>
+          <p>or the dynamic import without the destructuring assignment.</p>
+          <div class="highlight-JavaScript notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="k">async</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">f</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">TestNS</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="k">import</span><span class="p">(</span><span class="s2">"resource://gre/modules/Test.sys.mjs"</span><span class="p">);</span>
+<span class="w">  </span><span class="nx">TestNS</span><span class="p">.</span><span class="nx">TestUtils</span><span class="p">.</span><span class="nx">hello</span><span class="p">();</span>
+<span class="p">}</span>
+</pre>
+           </div>
+          </div>
+          <p><code class="docutils literal notranslate"><span class="pre">ChromeUtils.defineESModuleGetters</span></code> does not support directly using the namespace object. Possible workaround is to use <code class="docutils literal notranslate"><span class="pre">ChromeUtils.defineLazyGetter</span></code> with <code class="docutils literal notranslate"><span class="pre">ChromeUtils.importESModule</span></code>.</p>
+          <div class="highlight-JavaScript notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="kd">const</span><span class="w"> </span><span class="nx">lazy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{}</span>
+<span class="nx">ChromeUtils</span><span class="p">.</span><span class="nx">defineLazyGetter</span><span class="p">(</span><span class="nx">lazy</span><span class="p">,</span><span class="w"> </span><span class="s2">"TestNS"</span><span class="p">,</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">=&gt;</span>
+<span class="w">  </span><span class="nx">ChromeUtils</span><span class="p">.</span><span class="nx">importESModule</span><span class="p">(</span><span class="s2">"resource://gre/modules/Test.sys.mjs"</span><span class="p">));</span>
+
+<span class="kd">function</span><span class="w"> </span><span class="nx">f</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="c1">// Test.sys.mjs is imported on the first access.</span>
+<span class="w">  </span><span class="nx">lazy</span><span class="p">.</span><span class="nx">TestNS</span><span class="p">.</span><span class="nx">TestUtils</span><span class="p">.</span><span class="nx">hello</span><span class="p">();</span>
+<span class="p">}</span>
+</pre>
+           </div>
+          </div>
+         </section>
+         <section id="importing-from-unprivileged-testing-code">
+          <h2>Importing from Unprivileged Testing Code<a class="headerlink" href="#importing-from-unprivileged-testing-code" title="Link to this heading">?</a></h2>
+          <p>In unprivileged testing code such as mochitest plain, <code class="docutils literal notranslate"><span class="pre">ChromeUtils.importESModule</span></code> is available as <code class="docutils literal notranslate"><span class="pre">SpecialPowers.ChromeUtils.importESModule</span></code>.</p>
+          <div class="highlight-JavaScript notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="c1">// Mochitest-plain testcase.</span>
+
+<span class="kd">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">TestUtils</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span>
+<span class="w">  </span><span class="nx">SpecialPowers</span><span class="p">.</span><span class="nx">ChromeUtils</span><span class="p">.</span><span class="nx">importESModule</span><span class="p">(</span>
+<span class="w">    </span><span class="s2">"resource://gre/modules/Test.sys.mjs"</span>
+<span class="w">  </span><span class="p">);</span>
+</pre>
+           </div>
+          </div>
+         </section>
+         <section id="importing-from-c-code">
+          <h2>Importing from C++ Code<a class="headerlink" href="#importing-from-c-code" title="Link to this heading">?</a></h2>
+          <p>C++ code can import ES modules with <code class="docutils literal notranslate"><span class="pre">do_ImportESModule</span></code> function. The exported object should follow the specified XPCOM interface.</p>
+          <div class="highlight-c++ notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="n">nsCOMPtr</span><span class="o">&lt;</span><span class="n">nsIUtils</span><span class="o">&gt;</span><span class="w"> </span><span class="n">utils</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">do_ImportESModule</span><span class="p">(</span>
+<span class="w">  </span><span class="s">"resource://gre/modules/Test.sys.mjs"</span><span class="p">,</span><span class="w"> </span><span class="s">"Utils"</span><span class="p">);</span>
+</pre>
+           </div>
+          </div>
+          <p>See <a class="reference external" href="https://searchfox.org/mozilla-central/source/js/xpconnect/loader/nsImportModule.h">nsImportModule.h</a> for more details.</p>
+         </section>
+         <section id="lifetime">
+          <h2>Lifetime<a class="headerlink" href="#lifetime" title="Link to this heading">?</a></h2>
+          <p>The shared system global has the almost same lifetime as the process, and the system modules are never unloaded until the end of the shared system global’s lifetime.</p>
+          <p>If a module need to be dynamically updated with the same URI, for example with privileged extensions getting updated, they can add query string to distinguish different versions.</p>
+         </section>
+         <section id="lifetime-of-the-global-variables">
+          <h2>Lifetime of the Global Variables<a class="headerlink" href="#lifetime-of-the-global-variables" title="Link to this heading">?</a></h2>
+          <p>Unlike the classic scripts, the ECMAScript’s module’s global variables are not properties of any objects.</p>
+          <p>If the all strong references to the document goes away, the objects held by the module global variables are ready to be GCed. This means, the module global variables don’t have the same lifetime as the module itself.</p>
+          <p>In privileged scripts, there can be multiple usage of weak-references and similar things, such as XPCOM <code class="docutils literal notranslate"><span class="pre">nsISupportsWeakReference</span></code>, or the window-less <code class="docutils literal notranslate"><span class="pre">browser</span></code> element and its content document.</p>
+          <p>If those objects needs to be kept alive longer, for example, if they need to have the same lifetime as the module itself, there should be another strong reference to them.</p>
+          <p>Possible options for those objects are the following:</p>
+          <blockquote>
+           <div>
+            <ul class="simple">
+             <li>
+              <p>Export the variable that holds the object</p></li>
+             <li>
+              <p>Store the object into the exported object’s property</p></li>
+             <li>
+              <p>Close over the variable from the function that’s reachable from the exported objects</p></li>
+             <li>
+              <p>Do not use weak reference</p></li>
+            </ul>
+           </div>
+          </blockquote>
+         </section>
+         <section id="utility-functions">
+          <h2>Utility Functions<a class="headerlink" href="#utility-functions" title="Link to this heading">?</a></h2>
+          <p><code class="docutils literal notranslate"><span class="pre">Cu.isESmoduleLoaded</span></code> is a function to query whether the module is already imported to the shared system global.</p>
+          <div class="highlight-JavaScript notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">Cu</span><span class="p">.</span><span class="nx">isESmoduleLoaded</span><span class="p">(</span><span class="s2">"resource://gre/modules/Test.sys.mjs"</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="c1">// ...</span>
+<span class="p">}</span>
+</pre>
+           </div>
+          </div>
+          <p><code class="docutils literal notranslate"><span class="pre">Cu.loadedESModules</span></code> returns a list of URLs of the already-imported modules. This is only for startup testing purpose, and this shouldn’t be used in the production code.</p>
+          <div class="highlight-JavaScript notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kd">const</span><span class="w"> </span><span class="nx">uri</span><span class="w"> </span><span class="k">of</span><span class="w"> </span><span class="nx">Cu</span><span class="p">.</span><span class="nx">loadedESModules</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="c1">// ...</span>
+<span class="p">}</span>
+</pre>
+           </div>
+          </div>
+          <p>If <code class="docutils literal notranslate"><span class="pre">browser.startup.record</span></code> preference is set to <code class="docutils literal notranslate"><span class="pre">true</span></code> at the point of importing modules, <code class="docutils literal notranslate"><span class="pre">Cu.getModuleImportStack</span></code> returns the call stack of the module import. This is only for the debugging purpose.</p>
+          <div class="highlight-JavaScript notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="nx">Services</span><span class="p">.</span><span class="nx">prefs</span><span class="p">.</span><span class="nx">setBoolPref</span><span class="p">(</span><span class="s2">"browser.startup.record"</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="p">);</span>
+
+<span class="kd">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">TestUtils</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span>
+<span class="w">  </span><span class="nx">ChromeUtils</span><span class="p">.</span><span class="nx">importESModule</span><span class="p">(</span><span class="s2">"resource://gre/modules/Test.sys.mjs"</span><span class="p">);</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span>
+<span class="w">  </span><span class="nx">Cu</span><span class="p">.</span><span class="nx">getModuleImportStack</span><span class="p">(</span><span class="s2">"resource://gre/modules/Test.sys.mjs"</span><span class="p">));</span>
+</pre>
+           </div>
+          </div>
+          <p>See <a class="reference external" href="https://searchfox.org/mozilla-central/source/js/xpconnect/idl/xpccomponents.idl">xpccomponents.idl</a> for more details.</p>
+         </section>
+         <section id="limitations">
+          <h2>Limitations<a class="headerlink" href="#limitations" title="Link to this heading">?</a></h2>
+          <p>Top-level <code class="docutils literal notranslate"><span class="pre">await</span></code> is not supported in the system module, due to the requirement for synchronous loading.</p>
+         </section>
+         <section id="devtools-distinct-system-global">
+          <h2>DevTools Distinct System Global<a class="headerlink" href="#devtools-distinct-system-global" title="Link to this heading">?</a></h2>
+          <p>DevTools-related system modules can be imported into a separate dedicate global, which is used when debugging the browser.</p>
+          <p>The target global can be controlled by the <code class="docutils literal notranslate"><span class="pre">global</span></code> property of the 2nd parameter of <code class="docutils literal notranslate"><span class="pre">ChromeUtils.importESModule</span></code>, or the 3rd parameter of <code class="docutils literal notranslate"><span class="pre">ChromeUtils.defineESModuleGetters</span></code>.</p>
+          <p>The <code class="docutils literal notranslate"><span class="pre">global</span></code> property defaults to <code class="docutils literal notranslate"><span class="pre">"shared"</span></code>, which is the shared system global. Passing <code class="docutils literal notranslate"><span class="pre">"devtools"</span></code> imports the module in the DevTools distinct system global.</p>
+          <div class="highlight-JavaScript notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="kd">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">TestUtils</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span>
+<span class="w">  </span><span class="nx">ChromeUtils</span><span class="p">.</span><span class="nx">importESModule</span><span class="p">(</span><span class="s2">"resource://gre/modules/Test.sys.mjs"</span><span class="p">,</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nb">global</span><span class="o">:</span><span class="w"> </span><span class="s2">"devtools"</span><span class="p">,</span>
+<span class="w">  </span><span class="p">});</span>
+
+<span class="nx">TestUtils</span><span class="p">.</span><span class="nx">hello</span><span class="p">();</span>
+</pre>
+           </div>
+          </div>
+          <div class="highlight-JavaScript notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="kd">const</span><span class="w"> </span><span class="nx">lazy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{}</span>
+<span class="nx">ChromeUtils</span><span class="p">.</span><span class="nx">defineESModuleGetters</span><span class="p">(</span><span class="nx">lazy</span><span class="p">,</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">TestUtils</span><span class="o">:</span><span class="w"> </span><span class="s2">"resource://gre/modules/Test.sys.mjs"</span><span class="p">,</span>
+<span class="p">},</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nb">global</span><span class="o">:</span><span class="w"> </span><span class="s2">"devtools"</span><span class="p">,</span>
+<span class="p">});</span>
+</pre>
+           </div>
+          </div>
+          <p>If the system module file is shared between both cases, <code class="docutils literal notranslate"><span class="pre">"contextual"</span></code> can be used. The module is imported into the DevTools distinct system global if the current global is the DevTools distinct system global. Otherwise the module is imported into the shared system global.</p>
+          <p>See <code class="docutils literal notranslate"><span class="pre">ImportESModuleTargetGlobal</span></code> in <a class="reference external" href="https://searchfox.org/mozilla-central/source/dom/chrome-webidl/ChromeUtils.webidl">ChromeUtils.webidl</a> for more details.</p>
+         </section>
+         <section id="integration-with-jsactors">
+          <h2>Integration with JSActors<a class="headerlink" href="#integration-with-jsactors" title="Link to this heading">?</a></h2>
+          <p><a class="reference internal" href="../dom/ipc/jsactors.html#jsactors"><span class="std std-ref">JSActors</span></a> are implemented with system modules.</p>
+          <p>See the <a class="reference internal" href="../dom/ipc/jsactors.html#jsactors"><span class="std std-ref">JSActors</span></a> document for more details.</p>
+         </section>
+         <section id="integration-with-xpcom-components">
+          <h2>Integration with XPCOM Components<a class="headerlink" href="#integration-with-xpcom-components" title="Link to this heading">?</a></h2>
+          <p><a class="reference internal" href="../build/buildsystem/defining-xpcom-components.html#defining-xpcom-components"><span class="std std-ref">XPCOM Components</span></a> can be implemented with system modules, by passing <code class="docutils literal notranslate"><span class="pre">esModule</span></code> option.</p>
+          <p>See the <a class="reference internal" href="../build/buildsystem/defining-xpcom-components.html#defining-xpcom-components"><span class="std std-ref">XPCOM Components</span></a> document for more details.</p>
+         </section>
+         <section id="importing-into-current-global">
+          <h2>Importing into Current Global<a class="headerlink" href="#importing-into-current-global" title="Link to this heading">?</a></h2>
+          <p><code class="docutils literal notranslate"><span class="pre">ChromeUtils.importESModule</span></code> can be used also for importing modules into the current global, by passing <code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">global:</span> <span class="pre">"current"</span> <span class="pre">}</span></code> option. In this case the imported module is not a system module.</p>
+          <p>See the <a class="reference internal" href="jsloader-api.html#js-loader-apis"><span class="std std-ref">JS Loader APIs</span></a> document for more details.</p>
+         </section>
+         <section id="jsm">
+          <h2>JSM<a class="headerlink" href="#jsm" title="Link to this heading">?</a></h2>
+          <p>Prior to the ECMAScript-module-based system modules, Firefox codebase had been using a Mozilla-specific module system called JSM.</p>
+          <p>The details around the migration is described in <a class="reference external" href="https://docs.google.com/document/d/1cpzIK-BdP7u6RJSar-Z955GV--2Rj8V4x2vl34m36Go/edit?usp=sharing">the migration document</a>.</p>
+         </section>
+        </section>
+       </div>
+      </div>
+      <footer>
+       <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="JS Loader" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a> <a href="jsloader-api.html" class="btn btn-neutral float-right" title="JS Loader APIs" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+       </div>
+       <hr>
+       <div role="contentinfo">
+        <p></p>
+       </div> Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+      </footer>
+     </div>
+    </div>
+   </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ </body>
+</html>

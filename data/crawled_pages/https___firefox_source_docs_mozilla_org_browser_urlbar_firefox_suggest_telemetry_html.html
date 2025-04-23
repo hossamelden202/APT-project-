@@ -1,0 +1,2369 @@
+<!doctype html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Firefox Suggest Telemetry — Firefox Source Docs  documentation</title>
+  <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50">
+  <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094">
+  <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=fd3f3429">
+  <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b">
+  <link rel="stylesheet" type="text/css" href="../../_static/custom_theme.css?v=dc5ed815">
+  <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7">
+  <link rel="shortcut icon" href="../../_static/firefox.ico"><!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script src="../../_static/jquery.js?v=5d32c60e"></script>
+  <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+  <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+  <script src="../../_static/doctools.js?v=9a2dae69"></script>
+  <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+  <script src="../../_static/copybutton.js?v=30646c52"></script>
+  <script src="../../_static/design-tabs.js?v=36754332"></script>
+  <script src="../../_static/js/theme.js"></script>
+  <link rel="index" title="Index" href="../../genindex.html">
+  <link rel="search" title="Search" href="../../search.html">
+  <link rel="next" title="Debugging &amp; Logging" href="debugging.html">
+  <link rel="prev" title="Telemetry" href="telemetry.html">
+ </head>
+ <body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+   <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <div class="wy-side-scroll">
+     <div class="wy-side-nav-search">
+      <a href="../../index.html" class="icon icon-home"> Firefox Source Docs <img src="../../_static/firefox-wordmark.svg" class="logo" alt="Logo"> </a><!-- -- This code is governed by the BSD license ---->
+      <div>
+       <h3>Quick search</h3>
+       <script>
+    (function () {
+      var cx = "dd12886298f75dbef";
+      var gcse = document.createElement("script");
+      gcse.async = true;
+      gcse.src = "https://cse.google.com/cse.js?cx=" + cx;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(gcse, s);
+    })();
+  </script><gcse:search></gcse:search>
+      </div>
+     </div>
+     <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+      <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../glossary/index.html">A Glossary of Common Terms</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../overview/index.html">A Quick Guide to Mozilla Applications</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../setup/index.html">Getting Set Up To Work On The Firefox Codebase</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Working On Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Working on Firefox</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../bug-mgmt/index.html">Bug Handling</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox User Guide</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../devtools-user/index.html">Firefox DevTools User Docs</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Source Code Documentation</span></p>
+      <ul class="current">
+       <li class="toctree-l1"><a class="reference internal" href="../../mots/index.html">Governance</a></li>
+       <li class="toctree-l1 current"><a class="reference internal" href="../index.html">Firefox Front-end</a>
+        <ul class="current">
+         <li class="toctree-l2 current"><a class="reference internal" href="index.html">Address Bar</a>
+          <ul class="current">
+           <li class="toctree-l3"><a class="reference internal" href="index.html#where-to-start">Where to Start</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="index.html#codebase">Codebase</a></li>
+           <li class="toctree-l3 current"><a class="reference internal" href="index.html#table-of-contents">Table of Contents</a>
+            <ul class="current">
+             <li class="toctree-l4"><a class="reference internal" href="nontechnical-overview.html">Nontechnical Overview</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="overview.html">Architecture Overview</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="lifetime.html">Search Lifecycle</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="utilities.html">Utilities</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="telemetry.html">Telemetry</a></li>
+             <li class="toctree-l4 current"><a class="current reference internal" href="#">Firefox Suggest Telemetry</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="debugging.html">Debugging &amp; Logging</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="ranking.html">Ranking</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="dynamic-result-types.html">Dynamic Result Types</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="preferences.html">Preferences</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="testing.html">Testing</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="contact.html">Getting in Touch</a></li>
+            </ul></li>
+           <li class="toctree-l3"><a class="reference internal" href="index.html#api-reference">API Reference</a></li>
+          </ul></li>
+         <li class="toctree-l2"><a class="reference internal" href="../BrowserUsageTelemetry.html">Browser Usage Telemetry</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../FrontendCodeReviewBestPractices.html">Frontend Code Review Best Practices</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../CommandLineParameters.html">Command Line Parameters</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../BrowserStartup.html">Browser Startup</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../CategoryManagerIndirection.html">Category manager indirection (callModulesFromCategory)</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../components/customizableui/docs/index.html">CustomizableUI Component</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../components/enterprisepolicies/docs/index.html">Enterprise Policies</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../extensions/formautofill/docs/index.html">Form Autofill</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../extensions/newtab/docs/index.html">Firefox Home (New Tab)</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../components/aboutwelcome/docs/index.html">Firefox Welcome Experience (about:welcome)</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../installer/windows/installer/index.html">Installer</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../components/attribution/docs/index.html">Installation Attribution</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../toolkit/mozapps/defaultagent/default-browser-agent/index.html">Default Browser Agent</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../components/migration/docs/index.html">Migration</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../components/pagedata/docs/index.html">PageDataService</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../places/index.html">Places</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../components/asrouter/docs/index.html">Messaging System</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../search/index.html">Search</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../base/tabbrowser/index.html">tabbrowser</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../touchbar/index.html">Touch Bar</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../components/uitour/docs/index.html">UITour</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../branding/docs/index.html">Firefox Branding</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../components/storybook/docs/README.storybook.stories.html">Storybook for Firefox</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../components/storybook/docs/README.reusable-widgets.stories.html">Reusable UI widgets</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../components/storybook/docs/README.other-widgets.stories.html">Other types of UI Widgets</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../components/storybook/docs/README.lit-guide.stories.html">Lit</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../components/storybook/docs/README.xul-and-html.stories.html">XUL and HTML</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../toolkit/themes/shared/design-system/docs/README.design-tokens.stories.html">Design tokens</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../toolkit/themes/shared/design-system/docs/README.json-design-tokens.stories.html">JSON design tokens</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../components/backup/docs/index.html">Backup Component</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../components/sidebar/docs/index.html">Sidebar</a></li>
+        </ul></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../dom/index.html">DOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../editor/index.html">Editor</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../layout/index.html">Style system (CSS) &amp; Layout</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../gfx/index.html">Graphics</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../ipc/index.html">Processes, Threads and IPC</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../devtools/index.html">Firefox DevTools Contributor Docs</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../toolkit/index.html">Toolkit</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../js/index.html">SpiderMonkey</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../jsloader/index.html">JS Loader</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/geckoview/index.html">GeckoView</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/fenix/index.html">Fenix</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/focus-android/index.html">Focus for Android</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../dom/bindings/webidl/index.html">WebIDL</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../modules/libpref/index.html">libpref</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../networking/index.html">Networking</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../remote/index.html">Remote Protocols</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../services/index.html">Services</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../permissions/index.html">Permissions</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../uriloader/index.html">File Handling</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../widget/cocoa/index.html">Firefox on macOS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../widget/windows/index.html">Firefox on Windows</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../toolkit/components/ml/index.html">Firefox AI Runtime</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../accessible/index.html">Accessibility</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../media/index.html">Media Playback</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../code-quality/index.html">Code quality</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../writing-rust-code/index.html">Writing Rust Code</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../rust-components/index.html">Rust Components</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/profiler/index.html">Gecko Profiler</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../performance/index.html">Performance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../storage/index.html">Database bindings (SQLite, KV, …)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../xpcom/index.html">XPCOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../nspr/index.html">NSPR</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../security/nss/index.html">Network Security Services (NSS)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../content-security/index.html">Web Security Checks in Gecko</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">The Firefox Build System</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mach/index.html">Mach</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/try/index.html">Pushing to Try</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../build/buildsystem/index.html">Build System</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../taskcluster/index.html">Firefox CI and Taskgraph</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/moztreedocs/index.html">Managing Documentation</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mozbuild/vendor/index.html">Vendoring Third Party Components</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Testing &amp; Test Infrastructure</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/automated-testing/index.html">Automated Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/treeherder-try/index.html">Understanding Treeherder Results</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/sheriffed-intermittents/index.html">Sheriffed intermittent failures</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/tests-for-new-config/index.html">Turning on Firefox tests for a new configuration</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/intermittent/index.html">Avoiding intermittent tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/testing-policy/index.html">Testing Policy</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/ci-configs/index.html">Configuration Changes</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/browser-chrome/index.html">Browser chrome mochitests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/chrome-tests/index.html">Chrome Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/marionette/index.html">Marionette</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/geckodriver/index.html">geckodriver</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/test-verification/index.html">Test Verification</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/webrender/index.html">WebRender Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/mochitest-plain/index.html">Mochitest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/xpcshell/index.html">XPCShell tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/tps/index.html">TPS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../web-platform/index.html">web-platform-tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../gtest/index.html">GTest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/fuzzing/index.html">Fuzzing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/sanitizer/index.html">Sanitizer</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/perfdocs/index.html">Performance Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/code-coverage/index.html">Code coverage</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing-rust-code/index.html">Testing &amp; Debugging Rust Code</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Releases &amp; Updates</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html">Mozilla Update Infrastructure</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html#watershed-updates">Watershed Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html#desupport-updates">Desupport Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/update-verify/index.html">Update Verify</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Localization &amp; Internationalization</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../intl/index.html">Internationalization</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../l10n/index.html">Localization</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox and Python</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mozbase/index.html">mozbase</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../python/index.html">Using third-party Python packages</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Metrics Collected in Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../metrics/index.html">Metrics</a></li>
+      </ul>
+     </div>
+    </div>
+   </nav>
+   <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+    <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+     <i data-toggle="wy-nav-top" class="fa fa-bars"></i> <a href="../../index.html">Firefox Source Docs</a>
+    </nav>
+    <div class="wy-nav-content">
+     <div class="rst-content">
+      <!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+      <div role="navigation" aria-label="Page navigation">
+       <ul class="wy-breadcrumbs">
+        <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+        <li class="breadcrumb-item"><a href="../index.html">Firefox Front-end</a></li>
+        <li class="breadcrumb-item"><a href="index.html">Address Bar</a></li>
+        <li class="breadcrumb-item active">Firefox Suggest Telemetry</li>
+        <li class="wy-breadcrumbs-aside"><a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Developer+Infrastructure&amp;component=Firefox+Source+Docs%3A+Content&amp;short_desc=Documentation+issue+on+browser/urlbar/firefox-suggest-telemetry&amp;comment=URL+=+https://firefox-source-docs.mozilla.org/browser/urlbar/firefox-suggest-telemetry.html&amp;bug_file_loc=https://firefox-source-docs.mozilla.org/browser/urlbar/firefox-suggest-telemetry.html" rel="nofollow">Report an issue</a> / <a href="../../_sources/browser/urlbar/firefox-suggest-telemetry.rst.txt" rel="nofollow"> View page source</a></li>
+       </ul>
+       <hr>
+      </div>
+      <div role="main" class="document" itemscope itemtype="http://schema.org/Article">
+       <div itemprop="articleBody">
+        <section id="firefox-suggest-telemetry">
+         <h1><a class="toc-backref" href="#id127" role="doc-backlink">Firefox Suggest Telemetry</a><a class="headerlink" href="#firefox-suggest-telemetry" title="Link to this heading">?</a></h1>
+         <p>This document describes the telemetry that Firefox records for the Firefox Suggest feature. That is, it describes Firefox Suggest telemetry recorded on the client. It also discusses the data that Firefox sends to the Merino service.</p>
+         <p>For information on other telemetry related to the address bar, see the general address bar <a class="reference internal" href="telemetry.html"><span class="doc">Telemetry</span></a> document. For information on all telemetry in Firefox, see the toolkit <a class="reference internal" href="../../toolkit/components/telemetry/index.html"><span class="doc">Telemetry</span></a> document.</p>
+         <nav class="contents" id="contents">
+          <p class="topic-title">Contents</p>
+          <ul class="simple">
+           <li>
+            <p><a class="reference internal" href="#firefox-suggest-telemetry" id="id127">Firefox Suggest Telemetry</a></p>
+            <ul>
+             <li>
+              <p><a class="reference internal" href="#histograms" id="id128">Histograms</a></p></li>
+             <li>
+              <p><a class="reference internal" href="#scalars" id="id129">Scalars</a></p></li>
+             <li>
+              <p><a class="reference internal" href="#events" id="id130">Events</a></p></li>
+             <li>
+              <p><a class="reference internal" href="#environment" id="id131">Environment</a></p></li>
+             <li>
+              <p><a class="reference internal" href="#the-quick-suggest-ping" id="id132">The “quick-suggest” Ping</a></p></li>
+             <li>
+              <p><a class="reference internal" href="#nimbus-exposure-event" id="id133">Nimbus Exposure Event</a></p></li>
+             <li>
+              <p><a class="reference internal" href="#merino-search-queries" id="id134">Merino Search Queries</a></p></li>
+            </ul></li>
+          </ul>
+         </nav>
+         <section id="histograms">
+          <h2><a class="toc-backref" href="#id128" role="doc-backlink">Histograms</a><a class="headerlink" href="#histograms" title="Link to this heading">?</a></h2>
+          <p>The following histograms are recorded for Firefox Suggest. For general information on histogram telemetry in Firefox, see the <a class="reference internal" href="../../toolkit/components/telemetry/collection/histograms.html"><span class="doc">Histograms</span></a> document.</p>
+          <section id="fx-urlbar-merino-latency-ms">
+           <h3>FX_URLBAR_MERINO_LATENCY_MS<a class="headerlink" href="#fx-urlbar-merino-latency-ms" title="Link to this heading">?</a></h3>
+           <p>This histogram records the latency in milliseconds of the Merino source for suggestions, or in other words, the time from Firefox’s request to the Merino server to the time Firefox receives a response. It is an exponential histogram with 50 buckets and values between 0 and 30000 (0s and 30s).</p>
+           <dl class="simple">
+            <dt>
+             Changelog
+            </dt>
+            <dd>
+             <dl class="simple">
+              <dt>
+               Firefox 93.0
+              </dt>
+              <dd>
+               <p>Introduced. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1727799">1727799</a>]</p>
+              </dd>
+              <dt>
+               Firefox 137.0
+              </dt>
+              <dd>
+               <p>Removed. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1946922">1946922</a>]</p>
+              </dd>
+             </dl>
+            </dd>
+           </dl>
+          </section>
+          <section id="fx-urlbar-merino-latency-weather-ms">
+           <h3>FX_URLBAR_MERINO_LATENCY_WEATHER_MS<a class="headerlink" href="#fx-urlbar-merino-latency-weather-ms" title="Link to this heading">?</a></h3>
+           <p>This histogram records the latency in milliseconds of weather suggestions from Merino. It is updated in addition to <code class="docutils literal notranslate"><span class="pre">FX_URLBAR_MERINO_LATENCY_MS</span></code> and has the same properties. It is an exponential histogram with 50 buckets and values between 0 and 30000 (0s and 30s).</p>
+           <dl class="simple">
+            <dt>
+             Changelog
+            </dt>
+            <dd>
+             <dl class="simple">
+              <dt>
+               Firefox 110.0
+              </dt>
+              <dd>
+               <p>Introduced. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1804536">1804536</a>]</p>
+              </dd>
+              <dt>
+               Firefox 137.0
+              </dt>
+              <dd>
+               <p>Removed. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1946922">1946922</a>]</p>
+              </dd>
+             </dl>
+            </dd>
+           </dl>
+          </section>
+          <section id="fx-urlbar-merino-response">
+           <h3>FX_URLBAR_MERINO_RESPONSE<a class="headerlink" href="#fx-urlbar-merino-response" title="Link to this heading">?</a></h3>
+           <p>This categorical histogram records a summary of each fetch from the Merino server. It has the following categories:</p>
+           <dl class="field-list simple">
+            <dt class="field-odd">
+             0 “success”<span class="colon">:</span>
+            </dt>
+            <dd class="field-odd">
+             <p>The fetch completed without any error before the timeout elapsed and it included at least one suggestion. (Before Firefox 110.0, this category meant simply that the fetch completed without any error before the timeout elapsed regardless of whether it included any suggestions.)</p>
+            </dd>
+            <dt class="field-even">
+             1 “timeout”<span class="colon">:</span>
+            </dt>
+            <dd class="field-even">
+             <p>The timeout elapsed before the fetch completed or otherwise failed.</p>
+            </dd>
+            <dt class="field-odd">
+             2 “network_error”<span class="colon">:</span>
+            </dt>
+            <dd class="field-odd">
+             <p>The fetch failed due to a network error before the timeout elapsed. e.g., the user’s network or the Merino server was down.</p>
+            </dd>
+            <dt class="field-even">
+             3 “http_error”<span class="colon">:</span>
+            </dt>
+            <dd class="field-even">
+             <p>The fetch completed before the timeout elapsed but the server returned an error.</p>
+            </dd>
+            <dt class="field-odd">
+             4 “no_suggestion”<span class="colon">:</span>
+            </dt>
+            <dd class="field-odd">
+             <p>The fetch completed without any error before the timeout elapsed and it did not include any suggestions.</p>
+            </dd>
+           </dl>
+           <dl class="simple">
+            <dt>
+             Changelog
+            </dt>
+            <dd>
+             <dl class="simple">
+              <dt>
+               Firefox 94.0.2
+              </dt>
+              <dd>
+               <p>Introduced. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1737923">1737923</a>]</p>
+              </dd>
+              <dt>
+               Firefox 110.0
+              </dt>
+              <dd>
+               <p>Added the <code class="docutils literal notranslate"><span class="pre">no_suggestion</span></code> category. The meaning of the <code class="docutils literal notranslate"><span class="pre">success</span></code> category was changed from “The fetch completed without any error before the timeout elapsed” to “The fetch completed without any error before the timeout elapsed and it included at least one suggestion.” [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1804536">1804536</a>]</p>
+              </dd>
+              <dt>
+               Firefox 137.0
+              </dt>
+              <dd>
+               <p>Removed. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1946922">1946922</a>]</p>
+              </dd>
+             </dl>
+            </dd>
+           </dl>
+          </section>
+          <section id="fx-urlbar-merino-response-weather">
+           <h3>FX_URLBAR_MERINO_RESPONSE_WEATHER<a class="headerlink" href="#fx-urlbar-merino-response-weather" title="Link to this heading">?</a></h3>
+           <p>This categorical histogram records a summary of each fetch for weather suggestions from the Merino server. It is updated in addition to <code class="docutils literal notranslate"><span class="pre">FX_URLBAR_MERINO_RESPONSE</span></code> and has the same categories.</p>
+           <dl class="field-list simple">
+            <dt class="field-odd">
+             0 “success”<span class="colon">:</span>
+            </dt>
+            <dd class="field-odd">
+             <p>The fetch completed without any error before the timeout elapsed and it included at least one suggestion.</p>
+            </dd>
+            <dt class="field-even">
+             1 “timeout”<span class="colon">:</span>
+            </dt>
+            <dd class="field-even">
+             <p>The timeout elapsed before the fetch completed or otherwise failed.</p>
+            </dd>
+            <dt class="field-odd">
+             2 “network_error”<span class="colon">:</span>
+            </dt>
+            <dd class="field-odd">
+             <p>The fetch failed due to a network error before the timeout elapsed. e.g., the user’s network or the Merino server was down.</p>
+            </dd>
+            <dt class="field-even">
+             3 “http_error”<span class="colon">:</span>
+            </dt>
+            <dd class="field-even">
+             <p>The fetch completed before the timeout elapsed but the server returned an error.</p>
+            </dd>
+            <dt class="field-odd">
+             4 “no_suggestion”<span class="colon">:</span>
+            </dt>
+            <dd class="field-odd">
+             <p>The fetch completed without any error before the timeout elapsed and it did not include any suggestions.</p>
+            </dd>
+           </dl>
+           <dl class="simple">
+            <dt>
+             Changelog
+            </dt>
+            <dd>
+             <dl class="simple">
+              <dt>
+               Firefox 110.0
+              </dt>
+              <dd>
+               <p>Introduced. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1804536">1804536</a>]</p>
+              </dd>
+              <dt>
+               Firefox 137.0
+              </dt>
+              <dd>
+               <p>Removed. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1946922">1946922</a>]</p>
+              </dd>
+             </dl>
+            </dd>
+           </dl>
+          </section>
+          <section id="fx-urlbar-quick-suggest-remote-settings-latency-ms">
+           <h3>FX_URLBAR_QUICK_SUGGEST_REMOTE_SETTINGS_LATENCY_MS<a class="headerlink" href="#fx-urlbar-quick-suggest-remote-settings-latency-ms" title="Link to this heading">?</a></h3>
+           <p>This histogram records the latency in milliseconds of the remote settings source for suggestions, or in other words, the time from when Firefox starts fetching a suggestion from remote settings to the time the suggestion is retrieved. It is an exponential histogram with 50 buckets and values between 0 and 30000 (0s and 30s).</p>
+           <p>Note that unlike Merino, fetches from remote settings happen entirely on the client, so remote settings latencies are expected to be much smaller than Merino latencies.</p>
+           <dl class="simple">
+            <dt>
+             Changelog
+            </dt>
+            <dd>
+             <dl class="simple">
+              <dt>
+               Firefox 94.0.2
+              </dt>
+              <dd>
+               <p>Introduced. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1737651">1737651</a>]</p>
+              </dd>
+              <dt>
+               Firefox 135.0
+              </dt>
+              <dd>
+               <p>Removed. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1932502">1932502</a>]</p>
+              </dd>
+             </dl>
+            </dd>
+           </dl>
+          </section>
+         </section>
+         <section id="scalars">
+          <h2><a class="toc-backref" href="#id129" role="doc-backlink">Scalars</a><a class="headerlink" href="#scalars" title="Link to this heading">?</a></h2>
+          <p>The following scalars are recorded for Firefox Suggest. For general information on scalar telemetry in Firefox, see the <a class="reference internal" href="../../toolkit/components/telemetry/collection/scalars.html"><span class="doc">Scalars</span></a> document.</p>
+          <section id="browser-ui-interaction-preferences-panesearch">
+           <h3>browser.ui.interaction.preferences_paneSearch<a class="headerlink" href="#browser-ui-interaction-preferences-panesearch" title="Link to this heading">?</a></h3>
+           <p>This keyed scalar is incremented each time the user clicks a Firefox Suggest checkbox or toggle switch in the preferences UI.</p>
+           <p>Note: These are also recorded in different forms under the <code class="docutils literal notranslate"><span class="pre">contextual.services.quicksuggest.*</span></code> telemetry described below.</p>
+           <p>Keys are the following:</p>
+           <dl class="field-list simple">
+            <dt class="field-odd">
+             firefoxSuggestBestMatch<span class="colon">:</span>
+            </dt>
+            <dd class="field-odd">
+             <p>This key is incremented when the “Top pick” checkbox is clicked. In 120 this UI was removed, so this key is no longer recorded.</p>
+            </dd>
+            <dt class="field-even">
+             firefoxSuggestBestMatchLearnMore<span class="colon">:</span>
+            </dt>
+            <dd class="field-even">
+             <p>This key is incremented when opening the learn more link for best match. In 120 this UI was removed, so this key is no longer recorded.</p>
+            </dd>
+            <dt class="field-odd">
+             firefoxSuggestDataCollectionToggle<span class="colon">:</span>
+            </dt>
+            <dd class="field-odd">
+             <p>This key is incremented when the toggle switch for data collection is clicked.</p>
+            </dd>
+            <dt class="field-even">
+             firefoxSuggestNonsponsored<span class="colon">:</span>
+            </dt>
+            <dd class="field-even">
+             <p>This key is incremented when the toggle switch for non-sponsored suggestions is clicked.</p>
+            </dd>
+            <dt class="field-odd">
+             firefoxSuggestSponsored<span class="colon">:</span>
+            </dt>
+            <dd class="field-odd">
+             <p>This key is incremented when the toggle switch for sponsored suggestions is clicked.</p>
+            </dd>
+           </dl>
+           <dl class="simple">
+            <dt>
+             Changelog
+            </dt>
+            <dd>
+             <dl class="simple">
+              <dt>
+               Firefox 94.0.2
+              </dt>
+              <dd>
+               <p>Introduced <code class="docutils literal notranslate"><span class="pre">firefoxSuggestDataCollectionToggle</span></code>, <code class="docutils literal notranslate"><span class="pre">firefoxSuggestNonsponsoredToggle</span></code> and <code class="docutils literal notranslate"><span class="pre">firefoxSuggestSponsoredToggle</span></code>. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1735976">1735976</a>]</p>
+              </dd>
+              <dt>
+               Firefox 99.0
+              </dt>
+              <dd>
+               <p>Introduced <code class="docutils literal notranslate"><span class="pre">firefoxSuggestBestMatch</span></code>. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1755100">1755100</a>] Introduced <code class="docutils literal notranslate"><span class="pre">firefoxSuggestBestMatchLearnMore</span></code>. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1756917">1756917</a>]</p>
+              </dd>
+              <dt>
+               Firefox 120.0
+              </dt>
+              <dd>
+               <p>Removed <code class="docutils literal notranslate"><span class="pre">firefoxSuggestBestMatch</span></code> and <code class="docutils literal notranslate"><span class="pre">firefoxSuggestBestMatchLearnMore</span></code>. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1857391">1857391</a>]</p>
+              </dd>
+              <dt>
+               Firefox 123.0
+              </dt>
+              <dd>
+               <p>Recording moved from <code class="docutils literal notranslate"><span class="pre">browser.ui.interaction.preferences_panePrivacy</span></code> to <code class="docutils literal notranslate"><span class="pre">browser.ui.interaction.preferences_paneSearch</span></code>. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1852048">1852048</a>] <code class="docutils literal notranslate"><span class="pre">firefoxSuggestNonsponsoredToggle</span></code> was renamed to <code class="docutils literal notranslate"><span class="pre">firefoxSuggestNonsponsored</span></code> <code class="docutils literal notranslate"><span class="pre">firefoxSuggestSponsoredToggle</span></code> was renamed to <code class="docutils literal notranslate"><span class="pre">firefoxSuggestSponsored</span></code> ``</p>
+              </dd>
+             </dl>
+            </dd>
+           </dl>
+          </section>
+          <section id="contextual-services-quicksuggest-block-dynamic-wikipedia">
+           <h3>contextual.services.quicksuggest.block_dynamic_wikipedia<a class="headerlink" href="#contextual-services-quicksuggest-block-dynamic-wikipedia" title="Link to this heading">?</a></h3>
+           <p>This keyed scalar is incremented each time the user dismisses (“blocks”) a dynamic wikipedia suggestion. Each key is the index at which a suggestion appeared in the results (1-based), and the corresponding value is the number of dismissals at that index.</p>
+           <dl class="simple">
+            <dt>
+             Changelog
+            </dt>
+            <dd>
+             <dl class="simple">
+              <dt>
+               Firefox 109.0
+              </dt>
+              <dd>
+               <p>Introduced. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1800993">1800993</a>]</p>
+              </dd>
+              <dt>
+               Firefox 133.0
+              </dt>
+              <dd>
+               <p>Removed. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1925355">1925355</a>]</p>
+              </dd>
+             </dl>
+            </dd>
+           </dl>
+          </section>
+          <section id="contextual-services-quicksuggest-block-nonsponsored">
+           <h3>contextual.services.quicksuggest.block_nonsponsored<a class="headerlink" href="#contextual-services-quicksuggest-block-nonsponsored" title="Link to this heading">?</a></h3>
+           <p>This keyed scalar is incremented each time the user dismisses (“blocks”) a non-sponsored suggestion, including both best matches and the usual non-best-match suggestions. Each key is the index at which a suggestion appeared in the results (1-based), and the corresponding value is the number of dismissals at that index.</p>
+           <dl class="simple">
+            <dt>
+             Changelog
+            </dt>
+            <dd>
+             <dl class="simple">
+              <dt>
+               Firefox 101.0
+              </dt>
+              <dd>
+               <p>Introduced. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1761059">1761059</a>]</p>
+              </dd>
+              <dt>
+               Firefox 133.0
+              </dt>
+              <dd>
+               <p>Removed. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1925355">1925355</a>]</p>
+              </dd>
+             </dl>
+            </dd>
+           </dl>
+          </section>
+          <section id="contextual-services-quicksuggest-block-nonsponsored-bestmatch">
+           <h3>contextual.services.quicksuggest.block_nonsponsored_bestmatch<a class="headerlink" href="#contextual-services-quicksuggest-block-nonsponsored-bestmatch" title="Link to this heading">?</a></h3>
+           <p>This keyed scalar was removed in Firefox 120. Prior to that, it is incremented each time the user dismisses (“blocks”) a non-sponsored best match. Each key is the index at which a suggestion appeared in the results (1-based), and the corresponding value is the number of dismissals at that index.</p>
+           <dl class="simple">
+            <dt>
+             Changelog
+            </dt>
+            <dd>
+             <dl class="simple">
+              <dt>
+               Firefox 101.0
+              </dt>
+              <dd>
+               <p>Introduced. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1761059">1761059</a>]</p>
+              </dd>
+              <dt>
+               Firefox 120.0
+              </dt>
+              <dd>
+               <p>Removed. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1857391">1857391</a>]</p>
+              </dd>
+             </dl>
+            </dd>
+           </dl>
+          </section>
+          <section id="contextual-services-quicksuggest-block-sponsored">
+           <h3>contextual.services.quicksuggest.block_sponsored<a class="headerlink" href="#contextual-services-quicksuggest-block-sponsored" title="Link to this heading">?</a></h3>
+           <p>This keyed scalar is incremented each time the user dismisses (“blocks”) a sponsored suggestion, including both best matches and the usual non-best-match suggestions. Each key is the index at which a suggestion appeared in the results (1-based), and the corresponding value is the number of dismissals at that index.</p>
+           <dl class="simple">
+            <dt>
+             Changelog
+            </dt>
+            <dd>
+             <dl class="simple">
+              <dt>
+               Firefox 101.0
+              </dt>
+              <dd>
+               <p>Introduced. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1761059">1761059</a>]</p>
+              </dd>
+              <dt>
+               Firefox 133.0
+              </dt>
+              <dd>
+               <p>Removed. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1925355">1925355</a>]</p>
+              </dd>
+             </dl>
+            </dd>
+           </dl>
+          </section>
+          <section id="contextual-services-quicksuggest-block-sponsored-bestmatch">
+           <h3>contextual.services.quicksuggest.block_sponsored_bestmatch<a class="headerlink" href="#contextual-services-quicksuggest-block-sponsored-bestmatch" title="Link to this heading">?</a></h3>
+           <p>This keyed scalar was removed in Firefox 120. Prior to that, it is incremented each time the user dismisses (“blocks”) a sponsored best match. Each key is the index at which a suggestion appeared in the results (1-based), and the corresponding value is the number of dismissals at that index.</p>
+           <dl class="simple">
+            <dt>
+             Changelog
+            </dt>
+            <dd>
+             <dl class="simple">
+              <dt>
+               Firefox 101.0
+              </dt>
+              <dd>
+               <p>Introduced. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1761059">1761059</a>]</p>
+              </dd>
+              <dt>
+               Firefox 120.0
+              </dt>
+              <dd>
+               <p>Removed. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1857391">1857391</a>]</p>
+              </dd>
+             </dl>
+            </dd>
+           </dl>
+          </section>
+          <section id="contextual-services-quicksuggest-block-weather">
+           <h3>contextual.services.quicksuggest.block_weather<a class="headerlink" href="#contextual-services-quicksuggest-block-weather" title="Link to this heading">?</a></h3>
+           <p>This keyed scalar is incremented each time the user dismisses (“blocks”) a Firefox Suggest weather suggestion. Each key is the index at which a suggestion appeared in the results (1-based), and the corresponding value is the number of dismissals at that index.</p>
+           <dl class="simple">
+            <dt>
+             Changelog
+            </dt>
+            <dd>
+             <dl class="simple">
+              <dt>
+               Firefox 110.0
+              </dt>
+              <dd>
+               <p>Introduced. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1804536">1804536</a>]</p>
+              </dd>
+              <dt>
+               Firefox 133.0
+              </dt>
+              <dd>
+               <p>Removed. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1925355">1925355</a>]</p>
+              </dd>
+             </dl>
+            </dd>
+           </dl>
+          </section>
+          <section id="contextual-services-quicksuggest-click">
+           <h3>contextual.services.quicksuggest.click<a class="headerlink" href="#contextual-services-quicksuggest-click" title="Link to this heading">?</a></h3>
+           <p>This keyed scalar is incremented each time the user picks a suggestion. Each key is the index at which a suggestion appeared in the results (1-based), and the corresponding value is the number of clicks at that index.</p>
+           <dl class="simple">
+            <dt>
+             Changelog
+            </dt>
+            <dd>
+             <dl class="simple">
+              <dt>
+               Firefox 87.0
+              </dt>
+              <dd>
+               <p>Introduced. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1693927">1693927</a>]</p>
+              </dd>
+              <dt>
+               Firefox 109.0
+              </dt>
+              <dd>
+               <p>Removed. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1800993">1800993</a>]</p>
+              </dd>
+             </dl>
+            </dd>
+           </dl>
+          </section>
+          <section id="contextual-services-quicksuggest-click-dynamic-wikipedia">
+           <h3>contextual.services.quicksuggest.click_dynamic_wikipedia<a class="headerlink" href="#contextual-services-quicksuggest-click-dynamic-wikipedia" title="Link to this heading">?</a></h3>
+           <p>This keyed scalar is incremented each time the user picks a dynamic wikipedia suggestion. Each key is the index at which a suggestion appeared in the results (1-based), and the corresponding value is the number of clicks at that index.</p>
+           <dl class="simple">
+            <dt>
+             Changelog
+            </dt>
+            <dd>
+             <dl class="simple">
+              <dt>
+               Firefox 109.0
+              </dt>
+              <dd>
+               <p>Introduced. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1800993">1800993</a>]</p>
+              </dd>
+              <dt>
+               Firefox 133.0
+              </dt>
+              <dd>
+               <p>Removed. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1925355">1925355</a>]</p>
+              </dd>
+             </dl>
+            </dd>
+           </dl>
+          </section>
+          <section id="contextual-services-quicksuggest-click-nav-notmatched">
+           <h3>contextual.services.quicksuggest.click_nav_notmatched<a class="headerlink" href="#contextual-services-quicksuggest-click-nav-notmatched" title="Link to this heading">?</a></h3>
+           <p>This keyed scalar records how many times a heuristic result was clicked while a navigational suggestion was absent. It is recorded only when the Nimbus variable <code class="docutils literal notranslate"><span class="pre">recordNavigationalSuggestionTelemetry</span></code> is true. (The variable is false by default.)</p>
+           <p>Each key is the type of heuristic result that was clicked. Key names are the same as the heuristic result type names recorded in Glean telemetry.</p>
+           <dl class="simple">
+            <dt>
+             Changelog
+            </dt>
+            <dd>
+             <dl class="simple">
+              <dt>
+               Firefox 112.0
+              </dt>
+              <dd>
+               <p>Introduced. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1819797">1819797</a>]</p>
+              </dd>
+              <dt>
+               Firefox 133.0
+              </dt>
+              <dd>
+               <p>Removed. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1925355">1925355</a>]</p>
+              </dd>
+             </dl>
+            </dd>
+           </dl>
+          </section>
+          <section id="contextual-services-quicksuggest-click-nav-shown-heuristic">
+           <h3>contextual.services.quicksuggest.click_nav_shown_heuristic<a class="headerlink" href="#contextual-services-quicksuggest-click-nav-shown-heuristic" title="Link to this heading">?</a></h3>
+           <p>This keyed scalar records how many times a heuristic result was clicked while a navigational suggestion was present. It is recorded only when the Nimbus variable <code class="docutils literal notranslate"><span class="pre">recordNavigationalSuggestionTelemetry</span></code> is true. (The variable is false by default.)</p>
+           <p>Each key is the type of heuristic result that was clicked. Key names are the same as the heuristic result type names recorded in Glean telemetry.</p>
+           <dl class="simple">
+            <dt>
+             Changelog
+            </dt>
+            <dd>
+             <dl class="simple">
+              <dt>
+               Firefox 112.0
+              </dt>
+              <dd>
+               <p>Introduced. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1819797">1819797</a>]</p>
+              </dd>
+              <dt>
+               Firefox 133.0
+              </dt>
+              <dd>
+               <p>Removed. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1925355">1925355</a>]</p>
+              </dd>
+             </dl>
+            </dd>
+           </dl>
+          </section>
+          <section id="contextual-services-quicksuggest-click-nav-shown-nav">
+           <h3>contextual.services.quicksuggest.click_nav_shown_nav<a class="headerlink" href="#contextual-services-quicksuggest-click-nav-shown-nav" title="Link to this heading">?</a></h3>
+           <p>This keyed scalar records how many times a navigational suggestion was clicked. It is recorded only when the Nimbus variable <code class="docutils literal notranslate"><span class="pre">recordNavigationalSuggestionTelemetry</span></code> is true. (The variable is false by default.)</p>
+           <p>Each key is the type of heuristic result that was present at the time of the engagement. Key names are the same as the heuristic result type names recorded in Glean telemetry.</p>
+           <dl class="simple">
+            <dt>
+             Changelog
+            </dt>
+            <dd>
+             <dl class="simple">
+              <dt>
+               Firefox 112.0
+              </dt>
+              <dd>
+               <p>Introduced. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1819797">1819797</a>]</p>
+              </dd>
+              <dt>
+               Firefox 133.0
+              </dt>
+              <dd>
+               <p>Removed. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1925355">1925355</a>]</p>
+              </dd>
+             </dl>
+            </dd>
+           </dl>
+          </section>
+          <section id="contextual-services-quicksuggest-click-nav-superceded">
+           <h3>contextual.services.quicksuggest.click_nav_superceded<a class="headerlink" href="#contextual-services-quicksuggest-click-nav-superceded" title="Link to this heading">?</a></h3>
+           <p>This keyed scalar records how many times a heuristic result was clicked when a navigational suggestion was matched but superseded by the heuristic. It is recorded only when the Nimbus variable <code class="docutils literal notranslate"><span class="pre">recordNavigationalSuggestionTelemetry</span></code> is true. (The variable is false by default.)</p>
+           <p>Each key is the type of heuristic result that was clicked. Key names are the same as the heuristic result type names recorded in Glean telemetry.</p>
+           <dl class="simple">
+            <dt>
+             Changelog
+            </dt>
+            <dd>
+             <dl class="simple">
+              <dt>
+               Firefox 112.0
+              </dt>
+              <dd>
+               <p>Introduced. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1819797">1819797</a>]</p>
+              </dd>
+              <dt>
+               Firefox 133.0
+              </dt>
+              <dd>
+               <p>Removed. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1925355">1925355</a>]</p>
+              </dd>
+             </dl>
+            </dd>
+           </dl>
+          </section>
+          <section id="contextual-services-quicksuggest-click-nonsponsored">
+           <h3>contextual.services.quicksuggest.click_nonsponsored<a class="headerlink" href="#contextual-services-quicksuggest-click-nonsponsored" title="Link to this heading">?</a></h3>
+           <p>This keyed scalar is incremented each time the user picks a non-sponsored suggestion. Each key is the index at which a suggestion appeared in the results (1-based), and the corresponding value is the number of clicks at that index.</p>
+           <dl class="simple">
+            <dt>
+             Changelog
+            </dt>
+            <dd>
+             <dl class="simple">
+              <dt>
+               Firefox 109.0
+              </dt>
+              <dd>
+               <p>Introduced. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1800993">1800993</a>]</p>
+              </dd>
+              <dt>
+               Firefox 133.0
+              </dt>
+              <dd>
+               <p>Removed. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1925355">1925355</a>]</p>
+              </dd>
+             </dl>
+            </dd>
+           </dl>
+          </section>
+          <section id="contextual-services-quicksuggest-click-nonsponsored-bestmatch">
+           <h3>contextual.services.quicksuggest.click_nonsponsored_bestmatch<a class="headerlink" href="#contextual-services-quicksuggest-click-nonsponsored-bestmatch" title="Link to this heading">?</a></h3>
+           <p>This keyed scalar was removed in Firefox 120. Prior to that, it is incremented each time the user picks a non-sponsored best match. Each key is the index at which a suggestion appeared in the results (1-based), and the corresponding value is the number of clicks at that index.</p>
+           <dl class="simple">
+            <dt>
+             Changelog
+            </dt>
+            <dd>
+             <dl class="simple">
+              <dt>
+               Firefox 99.0
+              </dt>
+              <dd>
+               <p>Introduced. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1752953">1752953</a>]</p>
+              </dd>
+              <dt>
+               Firefox 120.0
+              </dt>
+              <dd>
+               <p>Removed. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1857391">1857391</a>]</p>
+              </dd>
+             </dl>
+            </dd>
+           </dl>
+          </section>
+          <section id="contextual-services-quicksuggest-click-sponsored">
+           <h3>contextual.services.quicksuggest.click_sponsored<a class="headerlink" href="#contextual-services-quicksuggest-click-sponsored" title="Link to this heading">?</a></h3>
+           <p>This keyed scalar is incremented each time the user picks a sponsored suggestion. Each key is the index at which a suggestion appeared in the results (1-based), and the corresponding value is the number of clicks at that index.</p>
+           <dl class="simple">
+            <dt>
+             Changelog
+            </dt>
+            <dd>
+             <dl class="simple">
+              <dt>
+               Firefox 109.0
+              </dt>
+              <dd>
+               <p>Introduced. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1800993">1800993</a>]</p>
+              </dd>
+              <dt>
+               Firefox 133.0
+              </dt>
+              <dd>
+               <p>Removed. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1925355">1925355</a>]</p>
+              </dd>
+             </dl>
+            </dd>
+           </dl>
+          </section>
+          <section id="contextual-services-quicksuggest-click-sponsored-bestmatch">
+           <h3>contextual.services.quicksuggest.click_sponsored_bestmatch<a class="headerlink" href="#contextual-services-quicksuggest-click-sponsored-bestmatch" title="Link to this heading">?</a></h3>
+           <p>This keyed scalar was removed in Firefox 120. Prior to that, it is incremented each time the user picks a sponsored best match. Each key is the index at which a suggestion appeared in the results (1-based), and the corresponding value is the number of clicks at that index.</p>
+           <dl class="simple">
+            <dt>
+             Changelog
+            </dt>
+            <dd>
+             <dl class="simple">
+              <dt>
+               Firefox 99.0
+              </dt>
+              <dd>
+               <p>Introduced. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1752953">1752953</a>]</p>
+              </dd>
+              <dt>
+               Firefox 120.0
+              </dt>
+              <dd>
+               <p>Removed. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1857391">1857391</a>]</p>
+              </dd>
+             </dl>
+            </dd>
+           </dl>
+          </section>
+          <section id="contextual-services-quicksuggest-click-weather">
+           <h3>contextual.services.quicksuggest.click_weather<a class="headerlink" href="#contextual-services-quicksuggest-click-weather" title="Link to this heading">?</a></h3>
+           <p>This keyed scalar is incremented each time the user picks a weather suggestion. Each key is the index at which a suggestion appeared in the results (1-based), and the corresponding value is the number of clicks at that index.</p>
+           <dl class="simple">
+            <dt>
+             Changelog
+            </dt>
+            <dd>
+             <dl class="simple">
+              <dt>
+               Firefox 110.0
+              </dt>
+              <dd>
+               <p>Introduced. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1804536">1804536</a>]</p>
+              </dd>
+              <dt>
+               Firefox 133.0
+              </dt>
+              <dd>
+               <p>Removed. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1925355">1925355</a>]</p>
+              </dd>
+             </dl>
+            </dd>
+           </dl>
+          </section>
+          <section id="contextual-services-quicksuggest-exposure-weather">
+           <h3>contextual.services.quicksuggest.exposure_weather<a class="headerlink" href="#contextual-services-quicksuggest-exposure-weather" title="Link to this heading">?</a></h3>
+           <p>This keyed scalar records weather suggestion exposures. It is incremented each time the user is shown a weather suggestion. It can be compared to the <code class="docutils literal notranslate"><span class="pre">urlbar.zeroprefix.exposure</span></code> scalar (see <a class="reference internal" href="telemetry.html"><span class="doc">Telemetry</span></a>) to determine the percentage of zero-prefix exposures that included weather suggestions.</p>
+           <p>Each key is the index at which a suggestion appeared in the results (1-based), and the corresponding value is the number of exposures at that index.</p>
+           <dl class="simple">
+            <dt>
+             Changelog
+            </dt>
+            <dd>
+             <dl class="simple">
+              <dt>
+               Firefox 110.0
+              </dt>
+              <dd>
+               <p>Introduced. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1806765">1806765</a>]</p>
+              </dd>
+              <dt>
+               Firefox 114.0
+              </dt>
+              <dd>
+               <p>Removed since the weather suggestion is no longer triggered on zero prefix. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1831971">1831971</a>]</p>
+              </dd>
+             </dl>
+            </dd>
+           </dl>
+          </section>
+          <section id="contextual-services-quicksuggest-help">
+           <h3>contextual.services.quicksuggest.help<a class="headerlink" href="#contextual-services-quicksuggest-help" title="Link to this heading">?</a></h3>
+           <p>This keyed scalar is incremented each time the user picks the help button in a suggestion. Each key is the index at which a suggestion appeared in the results (1-based), and the corresponding value is the number of help button clicks at that index.</p>
+           <dl class="simple">
+            <dt>
+             Changelog
+            </dt>
+            <dd>
+             <dl class="simple">
+              <dt>
+               Firefox 87.0
+              </dt>
+              <dd>
+               <p>Introduced. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1693927">1693927</a>]</p>
+              </dd>
+              <dt>
+               Firefox 109.0
+              </dt>
+              <dd>
+               <p>Removed. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1800993">1800993</a>]</p>
+              </dd>
+             </dl>
+            </dd>
+           </dl>
+          </section>
+          <section id="contextual-services-quicksuggest-help-dynamic-wikipedia">
+           <h3>contextual.services.quicksuggest.help_dynamic_wikipedia<a class="headerlink" href="#contextual-services-quicksuggest-help-dynamic-wikipedia" title="Link to this heading">?</a></h3>
+           <p>This keyed scalar is incremented each time the user picks the help button in a dynamic wikipedia suggestion. Each key is the index at which a suggestion appeared in the results (1-based), and the corresponding value is the number of help button clicks at that index.</p>
+           <dl class="simple">
+            <dt>
+             Changelog
+            </dt>
+            <dd>
+             <dl class="simple">
+              <dt>
+               Firefox 109.0
+              </dt>
+              <dd>
+               <p>Introduced. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1800993">1800993</a>]</p>
+              </dd>
+              <dt>
+               Firefox 127.0
+              </dt>
+              <dd>
+               <p>Removed. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1891602">1891602</a>]</p>
+              </dd>
+             </dl>
+            </dd>
+           </dl>
+          </section>
+          <section id="contextual-services-quicksuggest-help-nonsponsored">
+           <h3>contextual.services.quicksuggest.help_nonsponsored<a class="headerlink" href="#contextual-services-quicksuggest-help-nonsponsored" title="Link to this heading">?</a></h3>
+           <p>This keyed scalar is incremented each time the user picks the help button in a non-sponsored suggestion. Each key is the index at which a suggestion appeared in the results (1-based), and the corresponding value is the number of help button clicks at that index.</p>
+           <dl class="simple">
+            <dt>
+             Changelog
+            </dt>
+            <dd>
+             <dl class="simple">
+              <dt>
+               Firefox 109.0
+              </dt>
+              <dd>
+               <p>Introduced. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1800993">1800993</a>]</p>
+              </dd>
+              <dt>
+               Firefox 133.0
+              </dt>
+              <dd>
+               <p>Removed. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1925355">1925355</a>]</p>
+              </dd>
+             </dl>
+            </dd>
+           </dl>
+          </section>
+          <section id="contextual-services-quicksuggest-help-nonsponsored-bestmatch">
+           <h3>contextual.services.quicksuggest.help_nonsponsored_bestmatch<a class="headerlink" href="#contextual-services-quicksuggest-help-nonsponsored-bestmatch" title="Link to this heading">?</a></h3>
+           <p>This keyed scalar was removed in Firefox 120. Prior to that, it is incremented each time the user picks the help button in a non-sponsored best match. Each key is the index at which a suggestion appeared in the results (1-based), and the corresponding value is the number of help button clicks at that index.</p>
+           <dl class="simple">
+            <dt>
+             Changelog
+            </dt>
+            <dd>
+             <dl class="simple">
+              <dt>
+               Firefox 99.0
+              </dt>
+              <dd>
+               <p>Introduced. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1752953">1752953</a>]</p>
+              </dd>
+              <dt>
+               Firefox 120.0
+              </dt>
+              <dd>
+               <p>Removed. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1857391">1857391</a>]</p>
+              </dd>
+             </dl>
+            </dd>
+           </dl>
+          </section>
+          <section id="contextual-services-quicksuggest-help-sponsored">
+           <h3>contextual.services.quicksuggest.help_sponsored<a class="headerlink" href="#contextual-services-quicksuggest-help-sponsored" title="Link to this heading">?</a></h3>
+           <p>This keyed scalar is incremented each time the user picks the help button in a sponsored suggestion. Each key is the index at which a suggestion appeared in the results (1-based), and the corresponding value is the number of help button clicks at that index.</p>
+           <dl class="simple">
+            <dt>
+             Changelog
+            </dt>
+            <dd>
+             <dl class="simple">
+              <dt>
+               Firefox 109.0
+              </dt>
+              <dd>
+               <p>Introduced. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1800993">1800993</a>]</p>
+              </dd>
+              <dt>
+               Firefox 133.0
+              </dt>
+              <dd>
+               <p>Removed. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1925355">1925355</a>]</p>
+              </dd>
+             </dl>
+            </dd>
+           </dl>
+          </section>
+          <section id="contextual-services-quicksuggest-help-sponsored-bestmatch">
+           <h3>contextual.services.quicksuggest.help_sponsored_bestmatch<a class="headerlink" href="#contextual-services-quicksuggest-help-sponsored-bestmatch" title="Link to this heading">?</a></h3>
+           <p>This keyed scalar was removed in Firefox 120. Prior to that, it is incremented each time the user picks the help button in a sponsored best match. Each key is the index at which a suggestion appeared in the results (1-based), and the corresponding value is the number of help button clicks at that index.</p>
+           <dl class="simple">
+            <dt>
+             Changelog
+            </dt>
+            <dd>
+             <dl class="simple">
+              <dt>
+               Firefox 99.0
+              </dt>
+              <dd>
+               <p>Introduced. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1752953">1752953</a>]</p>
+              </dd>
+              <dt>
+               Firefox 120.0
+              </dt>
+              <dd>
+               <p>Removed. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1857391">1857391</a>]</p>
+              </dd>
+             </dl>
+            </dd>
+           </dl>
+          </section>
+          <section id="contextual-services-quicksuggest-help-weather">
+           <h3>contextual.services.quicksuggest.help_weather<a class="headerlink" href="#contextual-services-quicksuggest-help-weather" title="Link to this heading">?</a></h3>
+           <p>This keyed scalar is incremented each time the user picks the help button in a weather suggestion. Each key is the index at which a suggestion appeared in the results (1-based), and the corresponding value is the number of help button clicks at that index.</p>
+           <dl class="simple">
+            <dt>
+             Changelog
+            </dt>
+            <dd>
+             <dl class="simple">
+              <dt>
+               Firefox 110.0
+              </dt>
+              <dd>
+               <p>Introduced. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1804536">1804536</a>]</p>
+              </dd>
+              <dt>
+               Firefox 127.0
+              </dt>
+              <dd>
+               <p>Removed. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1891602">1891602</a>]</p>
+              </dd>
+             </dl>
+            </dd>
+           </dl>
+          </section>
+          <section id="contextual-services-quicksuggest-impression">
+           <h3>contextual.services.quicksuggest.impression<a class="headerlink" href="#contextual-services-quicksuggest-impression" title="Link to this heading">?</a></h3>
+           <p>This keyed scalar records suggestion impressions. It is incremented each time the user is shown a suggestion and the following two conditions hold:</p>
+           <ul class="simple">
+            <li>
+             <p>The user has completed an engagement with the address bar by picking a result in it or by pressing the Enter key.</p></li>
+            <li>
+             <p>At the time the user completed the engagement, a suggestion was present in the results.</p></li>
+           </ul>
+           <p>Each key is the index at which a suggestion appeared in the results (1-based), and the corresponding value is the number of impressions at that index.</p>
+           <dl class="simple">
+            <dt>
+             Changelog
+            </dt>
+            <dd>
+             <dl class="simple">
+              <dt>
+               Firefox 87.0
+              </dt>
+              <dd>
+               <p>Introduced. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1693927">1693927</a>]</p>
+              </dd>
+              <dt>
+               Firefox 109.0
+              </dt>
+              <dd>
+               <p>Removed. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1800993">1800993</a>]</p>
+              </dd>
+             </dl>
+            </dd>
+           </dl>
+          </section>
+          <section id="contextual-services-quicksuggest-impression-dynamic-wikipedia">
+           <h3>contextual.services.quicksuggest.impression_dynamic_wikipedia<a class="headerlink" href="#contextual-services-quicksuggest-impression-dynamic-wikipedia" title="Link to this heading">?</a></h3>
+           <p>This keyed scalar records dynamic wikipedia impressions. It is incremented each time the user is shown a dynamic wikipedia suggestion and the following two conditions hold:</p>
+           <ul class="simple">
+            <li>
+             <p>The user has completed an engagement with the address bar by picking a result in it or by pressing the Enter key.</p></li>
+            <li>
+             <p>At the time the user completed the engagement, a dynamic wikipedia suggestion was present in the results.</p></li>
+           </ul>
+           <p>Each key is the index at which a suggestion appeared in the results (1-based), and the corresponding value is the number of impressions at that index.</p>
+           <dl class="simple">
+            <dt>
+             Changelog
+            </dt>
+            <dd>
+             <dl class="simple">
+              <dt>
+               Firefox 109.0
+              </dt>
+              <dd>
+               <p>Introduced. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1800993">1800993</a>]</p>
+              </dd>
+              <dt>
+               Firefox 133.0
+              </dt>
+              <dd>
+               <p>Removed. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1925355">1925355</a>]</p>
+              </dd>
+             </dl>
+            </dd>
+           </dl>
+          </section>
+          <section id="contextual-services-quicksuggest-impression-nav-notmatched">
+           <h3>contextual.services.quicksuggest.impression_nav_notmatched<a class="headerlink" href="#contextual-services-quicksuggest-impression-nav-notmatched" title="Link to this heading">?</a></h3>
+           <p>This keyed scalar records how many times a urlbar engagement occurred while a navigational suggestion was absent. It is recorded only when the Nimbus variable <code class="docutils literal notranslate"><span class="pre">recordNavigationalSuggestionTelemetry</span></code> is true. (The variable is false by default.)</p>
+           <p>Each key is the type of heuristic result that was present at the time of the engagement. Key names are the same as the heuristic result type names recorded in Glean telemetry.</p>
+           <dl class="simple">
+            <dt>
+             Changelog
+            </dt>
+            <dd>
+             <dl class="simple">
+              <dt>
+               Firefox 112.0
+              </dt>
+              <dd>
+               <p>Introduced. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1819797">1819797</a>]</p>
+              </dd>
+              <dt>
+               Firefox 133.0
+              </dt>
+              <dd>
+               <p>Removed. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1925355">1925355</a>]</p>
+              </dd>
+             </dl>
+            </dd>
+           </dl>
+          </section>
+          <section id="contextual-services-quicksuggest-impression-nav-shown">
+           <h3>contextual.services.quicksuggest.impression_nav_shown<a class="headerlink" href="#contextual-services-quicksuggest-impression-nav-shown" title="Link to this heading">?</a></h3>
+           <p>This keyed scalar records how many times a urlbar engagement occurred while a navigational suggestion was present. It is recorded only when the Nimbus variable <code class="docutils literal notranslate"><span class="pre">recordNavigationalSuggestionTelemetry</span></code> is true. (The variable is false by default.)</p>
+           <p>Each key is the type of heuristic result that was present at the time of the engagement. Key names are the same as the heuristic result type names recorded in Glean telemetry.</p>
+           <dl class="simple">
+            <dt>
+             Changelog
+            </dt>
+            <dd>
+             <dl class="simple">
+              <dt>
+               Firefox 112.0
+              </dt>
+              <dd>
+               <p>Introduced. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1819797">1819797</a>]</p>
+              </dd>
+              <dt>
+               Firefox 133.0
+              </dt>
+              <dd>
+               <p>Removed. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1925355">1925355</a>]</p>
+              </dd>
+             </dl>
+            </dd>
+           </dl>
+          </section>
+          <section id="contextual-services-quicksuggest-impression-nav-superceded">
+           <h3>contextual.services.quicksuggest.impression_nav_superceded<a class="headerlink" href="#contextual-services-quicksuggest-impression-nav-superceded" title="Link to this heading">?</a></h3>
+           <p>This keyed scalar records how many times a urlbar engagement occurred when a navigational suggestion was matched but superseded by a heuristic result. It is recorded only when the Nimbus variable <code class="docutils literal notranslate"><span class="pre">recordNavigationalSuggestionTelemetry</span></code> is true. (The variable is false by default.)</p>
+           <p>Each key is the type of heuristic result that was present at the time of the engagement. Key names are the same as the heuristic result type names recorded in Glean telemetry.</p>
+           <dl class="simple">
+            <dt>
+             Changelog
+            </dt>
+            <dd>
+             <dl class="simple">
+              <dt>
+               Firefox 112.0
+              </dt>
+              <dd>
+               <p>Introduced. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1819797">1819797</a>]</p>
+              </dd>
+              <dt>
+               Firefox 133.0
+              </dt>
+              <dd>
+               <p>Removed. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1925355">1925355</a>]</p>
+              </dd>
+             </dl>
+            </dd>
+           </dl>
+          </section>
+          <section id="contextual-services-quicksuggest-impression-nonsponsored">
+           <h3>contextual.services.quicksuggest.impression_nonsponsored<a class="headerlink" href="#contextual-services-quicksuggest-impression-nonsponsored" title="Link to this heading">?</a></h3>
+           <p>This keyed scalar records suggestion impressions. It is incremented each time the user is shown a non-sponsored suggestion and the following two conditions hold:</p>
+           <ul class="simple">
+            <li>
+             <p>The user has completed an engagement with the address bar by picking a result in it or by pressing the Enter key.</p></li>
+            <li>
+             <p>At the time the user completed the engagement, a suggestion was present in the results.</p></li>
+           </ul>
+           <p>Each key is the index at which a suggestion appeared in the results (1-based), and the corresponding value is the number of impressions at that index.</p>
+           <dl class="simple">
+            <dt>
+             Changelog
+            </dt>
+            <dd>
+             <dl class="simple">
+              <dt>
+               Firefox 109.0
+              </dt>
+              <dd>
+               <p>Introduced. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1800993">1800993</a>]</p>
+              </dd>
+              <dt>
+               Firefox 133.0
+              </dt>
+              <dd>
+               <p>Removed. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1925355">1925355</a>]</p>
+              </dd>
+             </dl>
+            </dd>
+           </dl>
+          </section>
+          <section id="contextual-services-quicksuggest-impression-nonsponsored-bestmatch">
+           <h3>contextual.services.quicksuggest.impression_nonsponsored_bestmatch<a class="headerlink" href="#contextual-services-quicksuggest-impression-nonsponsored-bestmatch" title="Link to this heading">?</a></h3>
+           <p>This keyed scalar was removed in Firefox 120. Prior to that, it records non-sponsored best match impressions. It is incremented each time the user is shown a non-sponsored best match and the following two conditions hold:</p>
+           <ul class="simple">
+            <li>
+             <p>The user has completed an engagement with the address bar by picking a result in it or by pressing the Enter key.</p></li>
+            <li>
+             <p>At the time the user completed the engagement, a non-sponsored best match was present in the results.</p></li>
+           </ul>
+           <p>Each key is the index at which a suggestion appeared in the results (1-based), and the corresponding value is the number of impressions at that index.</p>
+           <dl class="simple">
+            <dt>
+             Changelog
+            </dt>
+            <dd>
+             <dl class="simple">
+              <dt>
+               Firefox 99.0
+              </dt>
+              <dd>
+               <p>Introduced. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1752953">1752953</a>]</p>
+              </dd>
+              <dt>
+               Firefox 120.0
+              </dt>
+              <dd>
+               <p>Removed. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1857391">1857391</a>]</p>
+              </dd>
+             </dl>
+            </dd>
+           </dl>
+          </section>
+          <section id="contextual-services-quicksuggest-impression-sponsored">
+           <h3>contextual.services.quicksuggest.impression_sponsored<a class="headerlink" href="#contextual-services-quicksuggest-impression-sponsored" title="Link to this heading">?</a></h3>
+           <p>This keyed scalar records suggestion impressions. It is incremented each time the user is shown a sponsored suggestion and the following two conditions hold:</p>
+           <ul class="simple">
+            <li>
+             <p>The user has completed an engagement with the address bar by picking a result in it or by pressing the Enter key.</p></li>
+            <li>
+             <p>At the time the user completed the engagement, a suggestion was present in the results.</p></li>
+           </ul>
+           <p>Each key is the index at which a suggestion appeared in the results (1-based), and the corresponding value is the number of impressions at that index.</p>
+           <dl class="simple">
+            <dt>
+             Changelog
+            </dt>
+            <dd>
+             <dl class="simple">
+              <dt>
+               Firefox 109.0
+              </dt>
+              <dd>
+               <p>Introduced. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1800993">1800993</a>]</p>
+              </dd>
+              <dt>
+               Firefox 133.0
+              </dt>
+              <dd>
+               <p>Removed. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1925355">1925355</a>]</p>
+              </dd>
+             </dl>
+            </dd>
+           </dl>
+          </section>
+          <section id="contextual-services-quicksuggest-impression-sponsored-bestmatch">
+           <h3>contextual.services.quicksuggest.impression_sponsored_bestmatch<a class="headerlink" href="#contextual-services-quicksuggest-impression-sponsored-bestmatch" title="Link to this heading">?</a></h3>
+           <p>This keyed scalar was removed in Firefox 120. Prior to that, it records sponsored best match impressions. It is incremented each time the user is shown a sponsored best match and the following two conditions hold:</p>
+           <ul class="simple">
+            <li>
+             <p>The user has completed an engagement with the address bar by picking a result in it or by pressing the Enter key.</p></li>
+            <li>
+             <p>At the time the user completed the engagement, a sponsored best match was present in the results.</p></li>
+           </ul>
+           <p>Each key is the index at which a suggestion appeared in the results (1-based), and the corresponding value is the number of impressions at that index.</p>
+           <dl class="simple">
+            <dt>
+             Changelog
+            </dt>
+            <dd>
+             <dl class="simple">
+              <dt>
+               Firefox 99.0
+              </dt>
+              <dd>
+               <p>Introduced. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1752953">1752953</a>]</p>
+              </dd>
+              <dt>
+               Firefox 120.0
+              </dt>
+              <dd>
+               <p>Removed. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1857391">1857391</a>]</p>
+              </dd>
+             </dl>
+            </dd>
+           </dl>
+          </section>
+          <section id="contextual-services-quicksuggest-impression-weather">
+           <h3>contextual.services.quicksuggest.impression_weather<a class="headerlink" href="#contextual-services-quicksuggest-impression-weather" title="Link to this heading">?</a></h3>
+           <p>This keyed scalar records weather suggestion impressions. It is incremented each time the user is shown a weather suggestion and the following two conditions hold:</p>
+           <ul class="simple">
+            <li>
+             <p>The user has completed an engagement with the address bar by picking a result in it or by pressing the Enter key.</p></li>
+            <li>
+             <p>At the time the user completed the engagement, a weather suggestion was present in the results.</p></li>
+           </ul>
+           <p>Each key is the index at which a suggestion appeared in the results (1-based), and the corresponding value is the number of impressions at that index.</p>
+           <dl class="simple">
+            <dt>
+             Changelog
+            </dt>
+            <dd>
+             <dl class="simple">
+              <dt>
+               Firefox 110.0
+              </dt>
+              <dd>
+               <p>Introduced. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1804536">1804536</a>]</p>
+              </dd>
+              <dt>
+               Firefox 133.0
+              </dt>
+              <dd>
+               <p>Removed. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1925355">1925355</a>]</p>
+              </dd>
+             </dl>
+            </dd>
+           </dl>
+          </section>
+         </section>
+         <section id="events">
+          <h2><a class="toc-backref" href="#id130" role="doc-backlink">Events</a><a class="headerlink" href="#events" title="Link to this heading">?</a></h2>
+          <p>The following Firefox Suggest events are recorded in the <code class="docutils literal notranslate"><span class="pre">contextservices.quicksuggest</span></code> category. For general information on event telemetry in Firefox, see the <a class="reference internal" href="../../toolkit/components/telemetry/collection/events.html"><span class="doc">Events</span></a> document.</p>
+          <section id="contextservices-quicksuggest-data-collect-toggled">
+           <h3>contextservices.quicksuggest.data_collect_toggled<a class="headerlink" href="#contextservices-quicksuggest-data-collect-toggled" title="Link to this heading">?</a></h3>
+           <p>This event is recorded when the <code class="docutils literal notranslate"><span class="pre">browser.urlbar.quicksuggest.dataCollection.enabled</span></code> pref is toggled. The pref can be toggled in the following ways:</p>
+           <ul class="simple">
+            <li>
+             <p>The user can toggle it in the preferences UI.</p></li>
+            <li>
+             <p>The user can toggle it in <a class="reference external" href="about:config">about:config</a>.</p></li>
+           </ul>
+           <p>The event is also recorded when the user opts in to the online modal dialog, with one exception: If the user has already enabled data collection using the preferences UI or <a class="reference external" href="about:config">about:config</a>, then the pref’s user value is already true. Opting in doesn’t change the user value, so no event is recorded.</p>
+           <p>The event’s objects are the following:</p>
+           <dl class="field-list simple">
+            <dt class="field-odd">
+             enabled<span class="colon">:</span>
+            </dt>
+            <dd class="field-odd">
+             <p>Recorded when the pref is flipped from false to true.</p>
+            </dd>
+            <dt class="field-even">
+             disabled<span class="colon">:</span>
+            </dt>
+            <dd class="field-even">
+             <p>Recorded when the pref is flipped from true to false.</p>
+            </dd>
+           </dl>
+           <dl class="simple">
+            <dt>
+             Changelog
+            </dt>
+            <dd>
+             <dl class="simple">
+              <dt>
+               Firefox 94.0.2
+              </dt>
+              <dd>
+               <p>Introduced. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1735976">1735976</a>]</p>
+              </dd>
+              <dt>
+               Firefox 133.0
+              </dt>
+              <dd>
+               <p>Removed. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1921748">1921748</a>]</p>
+              </dd>
+             </dl>
+            </dd>
+           </dl>
+          </section>
+          <section id="contextservices-quicksuggest-enable-toggled">
+           <h3>contextservices.quicksuggest.enable_toggled<a class="headerlink" href="#contextservices-quicksuggest-enable-toggled" title="Link to this heading">?</a></h3>
+           <p>This event is recorded when the <code class="docutils literal notranslate"><span class="pre">browser.urlbar.suggest.quicksuggest.nonsponsored</span></code> pref is toggled. The pref can be toggled in the following ways:</p>
+           <ul class="simple">
+            <li>
+             <p>The user can toggle it in the preferences UI.</p></li>
+            <li>
+             <p>The user can toggle it in <a class="reference external" href="about:config">about:config</a>.</p></li>
+           </ul>
+           <p>The event’s objects are the following:</p>
+           <dl class="field-list simple">
+            <dt class="field-odd">
+             enabled<span class="colon">:</span>
+            </dt>
+            <dd class="field-odd">
+             <p>Recorded when the pref is flipped from false to true.</p>
+            </dd>
+            <dt class="field-even">
+             disabled<span class="colon">:</span>
+            </dt>
+            <dd class="field-even">
+             <p>Recorded when the pref is flipped from true to false.</p>
+            </dd>
+           </dl>
+           <dl class="simple">
+            <dt>
+             Changelog
+            </dt>
+            <dd>
+             <dl class="simple">
+              <dt>
+               Firefox 87.0:
+              </dt>
+              <dd>
+               <p>Introduced. The event corresponds to the <code class="docutils literal notranslate"><span class="pre">browser.urlbar.suggest.quicksuggest</span></code> pref. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1693126">1693126</a>]</p>
+              </dd>
+              <dt>
+               Firefox 94.0.2:
+              </dt>
+              <dd>
+               <p><code class="docutils literal notranslate"><span class="pre">browser.urlbar.suggest.quicksuggest</span></code> is replaced with <code class="docutils literal notranslate"><span class="pre">browser.urlbar.suggest.quicksuggest.nonsponsored</span></code>, and this event now corresponds to the latter pref. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1735976">1735976</a>]</p>
+              </dd>
+              <dt>
+               Firefox 96.0:
+              </dt>
+              <dd>
+               <p>The event is no longer recorded when the user interacts with the online modal dialog since the <code class="docutils literal notranslate"><span class="pre">browser.urlbar.suggest.quicksuggest.nonsponsored</span></code> pref is no longer set when the user opts in or out. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1740965">1740965</a>]</p>
+              </dd>
+              <dt>
+               Firefox 133.0
+              </dt>
+              <dd>
+               <p>Removed. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1921748">1921748</a>]</p>
+              </dd>
+             </dl>
+            </dd>
+           </dl>
+          </section>
+          <section id="contextservices-quicksuggest-engagement">
+           <h3>contextservices.quicksuggest.engagement<a class="headerlink" href="#contextservices-quicksuggest-engagement" title="Link to this heading">?</a></h3>
+           <p>This event is recorded when an engagement occurs in the address bar while a Firefox Suggest suggestion is present. In other words, it is recorded in two cases:</p>
+           <ul class="simple">
+            <li>
+             <p>The user picks a Firefox Suggest suggestion or a related UI element like its help button.</p></li>
+            <li>
+             <p>While a Firefox Suggest suggestion is present in the address bar, the user picks some other row.</p></li>
+           </ul>
+           <p>The event’s objects are the following possible values:</p>
+           <dl class="field-list simple">
+            <dt class="field-odd">
+             block<span class="colon">:</span>
+            </dt>
+            <dd class="field-odd">
+             <p>The user dismissed (“blocked”) the suggestion.</p>
+            </dd>
+            <dt class="field-even">
+             click<span class="colon">:</span>
+            </dt>
+            <dd class="field-even">
+             <p>The user picked the suggestion.</p>
+            </dd>
+            <dt class="field-odd">
+             help<span class="colon">:</span>
+            </dt>
+            <dd class="field-odd">
+             <p>The user picked the suggestion’s help button.</p>
+            </dd>
+            <dt class="field-even">
+             impression_only<span class="colon">:</span>
+            </dt>
+            <dd class="field-even">
+             <p>The user picked some other row.</p>
+            </dd>
+            <dt class="field-odd">
+             other<span class="colon">:</span>
+            </dt>
+            <dd class="field-odd">
+             <p>The user engaged with the suggestion in some other way, for example by picking a command in the result menu. This is a catch-all category and going forward Glean telemetry should be preferred.</p>
+            </dd>
+           </dl>
+           <p>The event’s <code class="docutils literal notranslate"><span class="pre">extra</span></code> contains the following properties:</p>
+           <dl class="field-list simple">
+            <dt class="field-odd">
+             match_type<span class="colon">:</span>
+            </dt>
+            <dd class="field-odd">
+             <p>“best-match” if the suggestion was a best match or “firefox-suggest” if it was a non-best-match suggestion.</p>
+            </dd>
+            <dt class="field-even">
+             position<span class="colon">:</span>
+            </dt>
+            <dd class="field-even">
+             <p>The index of the suggestion in the list of results (1-based).</p>
+            </dd>
+            <dt class="field-odd">
+             suggestion_type<span class="colon">:</span>
+            </dt>
+            <dd class="field-odd">
+             <p>The type of suggestion, one of: “sponsored”, “nonsponsored”, “dynamic-wikipedia”, “navigational”</p>
+            </dd>
+            <dt class="field-even">
+             source<span class="colon">:</span>
+            </dt>
+            <dd class="field-even">
+             <p>The source of suggestion, one of: “remote-settings”, “merino”</p>
+            </dd>
+           </dl>
+           <dl class="simple">
+            <dt>
+             Changelog
+            </dt>
+            <dd>
+             <dl class="simple">
+              <dt>
+               Firefox 101.0
+              </dt>
+              <dd>
+               <p>Introduced. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1761059">1761059</a>]</p>
+              </dd>
+              <dt>
+               Firefox 109.0
+              </dt>
+              <dd>
+               <p><code class="docutils literal notranslate"><span class="pre">source</span></code> is added. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1800993">1800993</a>] <code class="docutils literal notranslate"><span class="pre">dynamic-wikipedia</span></code> is added as a value of <code class="docutils literal notranslate"><span class="pre">suggestion_type</span></code>. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1800993">1800993</a>]</p>
+              </dd>
+              <dt>
+               Firefox 112.0
+              </dt>
+              <dd>
+               <p><code class="docutils literal notranslate"><span class="pre">navigational</span></code> is added as a value of <code class="docutils literal notranslate"><span class="pre">suggestion_type</span></code>. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1819797">1819797</a>]</p>
+              </dd>
+              <dt>
+               Firefox 114.0
+              </dt>
+              <dd>
+               <p><code class="docutils literal notranslate"><span class="pre">other</span></code> is added as a value of the event object. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1827943">1827943</a>]</p>
+              </dd>
+              <dt>
+               Firefox 133.0
+              </dt>
+              <dd>
+               <p>Removed. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1921748">1921748</a>]</p>
+              </dd>
+             </dl>
+            </dd>
+           </dl>
+          </section>
+          <section id="contextservices-quicksuggest-impression-cap">
+           <h3>contextservices.quicksuggest.impression_cap<a class="headerlink" href="#contextservices-quicksuggest-impression-cap" title="Link to this heading">?</a></h3>
+           <p>This event is recorded when an event related to an impression cap occurs. The event’s objects are the following possible values:</p>
+           <dl class="field-list simple">
+            <dt class="field-odd">
+             hit<span class="colon">:</span>
+            </dt>
+            <dd class="field-odd">
+             <p>Recorded when an impression cap is hit.</p>
+            </dd>
+            <dt class="field-even">
+             reset<span class="colon">:</span>
+            </dt>
+            <dd class="field-even">
+             <p>Recorded when a cap’s counter is reset because its interval period has elapsed. The implementation may batch multiple consecutive reset events for a cap in a single telemetry event; see the <code class="docutils literal notranslate"><span class="pre">eventCount</span></code> discussion below. Reset events are reported only when a cap’s interval period elapses while Firefox is running.</p>
+            </dd>
+           </dl>
+           <p>The event’s <code class="docutils literal notranslate"><span class="pre">extra</span></code> contains the following properties:</p>
+           <dl class="field-list simple">
+            <dt class="field-odd">
+             count<span class="colon">:</span>
+            </dt>
+            <dd class="field-odd">
+             <p>The number of impressions during the cap’s interval period.</p>
+            </dd>
+            <dt class="field-even">
+             eventCount<span class="colon">:</span>
+            </dt>
+            <dd class="field-even">
+             <p>The number of impression cap events reported in the telemetry event. This is necessary because the implementation may batch multiple consecutive “reset” events for a cap in a single telemetry event. When that occurs, this value will be greater than 1, <code class="docutils literal notranslate"><span class="pre">startDate</span></code> will be the timestamp at which the first event’s interval period started, <code class="docutils literal notranslate"><span class="pre">eventDate</span></code> will be the timestamp at which the last event’s interval period ended, and <code class="docutils literal notranslate"><span class="pre">count</span></code> will be the number of impressions during the first event’s interval period. (The implementation guarantees that reset events are batched only when the number of impressions for all subsequent interval periods is zero.) For “hit” events, <code class="docutils literal notranslate"><span class="pre">eventCount</span></code> will always be 1.</p>
+            </dd>
+            <dt class="field-odd">
+             eventDate<span class="colon">:</span>
+            </dt>
+            <dd class="field-odd">
+             <p>The event’s timestamp, in number of milliseconds since Unix epoch. For “reset” events, this is the timestamp at which the cap’s interval period ended. If <code class="docutils literal notranslate"><span class="pre">eventCount</span></code> is greater than 1, it’s the timestamp at which the last interval period ended. For “hit” events, this is the timestamp at which the cap was hit.</p>
+            </dd>
+            <dt class="field-even">
+             impressionDate<span class="colon">:</span>
+            </dt>
+            <dd class="field-even">
+             <p>The timestamp of the most recent impression, in number of milliseconds since Unix epoch.</p>
+            </dd>
+            <dt class="field-odd">
+             intervalSeconds<span class="colon">:</span>
+            </dt>
+            <dd class="field-odd">
+             <p>The number of seconds in the cap’s interval period. For lifetime caps, this value will be “Infinity”.</p>
+            </dd>
+            <dt class="field-even">
+             maxCount<span class="colon">:</span>
+            </dt>
+            <dd class="field-even">
+             <p>The maximum number of impressions allowed in the cap’s interval period.</p>
+            </dd>
+            <dt class="field-odd">
+             startDate<span class="colon">:</span>
+            </dt>
+            <dd class="field-odd">
+             <p>The timestamp at which the cap’s interval period started, in number of milliseconds since Unix epoch.</p>
+            </dd>
+            <dt class="field-even">
+             type<span class="colon">:</span>
+            </dt>
+            <dd class="field-even">
+             <p>The type of cap, one of: “sponsored”, “nonsponsored”</p>
+            </dd>
+           </dl>
+           <dl class="simple">
+            <dt>
+             Changelog
+            </dt>
+            <dd>
+             <dl class="simple">
+              <dt>
+               Firefox 101.0
+              </dt>
+              <dd>
+               <p>Introduced. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1761058">1761058</a>, <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1765881">1765881</a>]</p>
+              </dd>
+              <dt>
+               Firefox 133.0
+              </dt>
+              <dd>
+               <p>Removed. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1921748">1921748</a>]</p>
+              </dd>
+             </dl>
+            </dd>
+           </dl>
+          </section>
+          <section id="contextservices-quicksuggest-opt-in-dialog">
+           <h3>contextservices.quicksuggest.opt_in_dialog<a class="headerlink" href="#contextservices-quicksuggest-opt-in-dialog" title="Link to this heading">?</a></h3>
+           <p>This event is recorded when the user interacts with the online modal dialog. The event’s objects are the following:</p>
+           <dl class="field-list simple">
+            <dt class="field-odd">
+             accept<span class="colon">:</span>
+            </dt>
+            <dd class="field-odd">
+             <p>The user accepted the dialog and opted in. This object was removed in Firefox 96.0.2.</p>
+            </dd>
+            <dt class="field-even">
+             accept_2<span class="colon">:</span>
+            </dt>
+            <dd class="field-even">
+             <p>The user accepted the dialog and opted in.</p>
+            </dd>
+            <dt class="field-odd">
+             close_1<span class="colon">:</span>
+            </dt>
+            <dd class="field-odd">
+             <p>The user clicked close button or something similar link on the introduction section. The user remains opted out in this case.</p>
+            </dd>
+            <dt class="field-even">
+             dismiss_1<span class="colon">:</span>
+            </dt>
+            <dd class="field-even">
+             <p>The user dismissed the dialog by pressing the Escape key or some unknown way on the introduction section. The user remains opted out in this case.</p>
+            </dd>
+            <dt class="field-odd">
+             dismiss_2<span class="colon">:</span>
+            </dt>
+            <dd class="field-odd">
+             <p>The user dismissed the dialog by pressing the Escape key or some unknown way on main section. The user remains opted out in this case.</p>
+            </dd>
+            <dt class="field-even">
+             dismissed_escape_key<span class="colon">:</span>
+            </dt>
+            <dd class="field-even">
+             <p>The user dismissed the dialog by pressing the Escape key. The user remains opted out in this case. This object was removed in Firefox 96.0.2.</p>
+            </dd>
+            <dt class="field-odd">
+             dismissed_other<span class="colon">:</span>
+            </dt>
+            <dd class="field-odd">
+             <p>The dialog was dismissed in some unknown way. One case where this can happen is when the dialog is replaced with another higher priority dialog like the one shown when quitting the app. The user remains opted out in this case. This object was removed in Firefox 96.0.2.</p>
+            </dd>
+            <dt class="field-even">
+             learn_more<span class="colon">:</span>
+            </dt>
+            <dd class="field-even">
+             <p>The user clicked “Learn more”. The user remains opted out in this case. This object was removed in Firefox 96.0.2.</p>
+            </dd>
+            <dt class="field-odd">
+             learn_more_1<span class="colon">:</span>
+            </dt>
+            <dd class="field-odd">
+             <p>The user clicked “Learn more” on the introduction section. The user remains opted out in this case.</p>
+            </dd>
+            <dt class="field-even">
+             learn_more_2<span class="colon">:</span>
+            </dt>
+            <dd class="field-even">
+             <p>The user clicked “Learn more” on the main section. The user remains opted out in this case.</p>
+            </dd>
+            <dt class="field-odd">
+             not_now<span class="colon">:</span>
+            </dt>
+            <dd class="field-odd">
+             <p>The dialog was dismissed in some way without opting in. This object was removed in Firefox 94.0.</p>
+            </dd>
+            <dt class="field-even">
+             not_now_2<span class="colon">:</span>
+            </dt>
+            <dd class="field-even">
+             <p>The user clicked “Not now” link on main section. The user remains opted out in this case.</p>
+            </dd>
+            <dt class="field-odd">
+             not_now_link<span class="colon">:</span>
+            </dt>
+            <dd class="field-odd">
+             <p>The user clicked “Not now”. The user remains opted out in this case. This object was removed in Firefox 96.0.2.</p>
+            </dd>
+            <dt class="field-even">
+             reject_2<span class="colon">:</span>
+            </dt>
+            <dd class="field-even">
+             <p>The user rejected the dialog and opted out.</p>
+            </dd>
+            <dt class="field-odd">
+             settings<span class="colon">:</span>
+            </dt>
+            <dd class="field-odd">
+             <p>The user clicked the “Customize” button. The user remains opted out in this case. This object was removed in Firefox 96.0.2.</p>
+            </dd>
+           </dl>
+           <dl class="simple">
+            <dt>
+             Changelog
+            </dt>
+            <dd>
+             <dl class="simple">
+              <dt>
+               Firefox 92.0.1
+              </dt>
+              <dd>
+               <p>Introduced. Objects are: <code class="docutils literal notranslate"><span class="pre">accept</span></code>, <code class="docutils literal notranslate"><span class="pre">settings</span></code>, <code class="docutils literal notranslate"><span class="pre">learn_more</span></code>, and <code class="docutils literal notranslate"><span class="pre">not_now</span></code>. <code class="docutils literal notranslate"><span class="pre">not_now</span></code> is recorded when the dialog is dismissed in any manner not covered by the other objects. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1723860">1723860</a>]</p>
+              </dd>
+              <dt>
+               Firefox 94.0
+              </dt>
+              <dd>
+               <p>Objects changed to: <code class="docutils literal notranslate"><span class="pre">accept</span></code>, <code class="docutils literal notranslate"><span class="pre">dismissed_escape_key</span></code>, <code class="docutils literal notranslate"><span class="pre">dismissed_other</span></code>, <code class="docutils literal notranslate"><span class="pre">learn_more</span></code>, <code class="docutils literal notranslate"><span class="pre">not_now_link</span></code>, and <code class="docutils literal notranslate"><span class="pre">settings</span></code>. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1733687">1733687</a>]</p>
+              </dd>
+              <dt>
+               Firefox 96.0.2
+              </dt>
+              <dd>
+               <p>Objects changed to: <code class="docutils literal notranslate"><span class="pre">accept_2</span></code>, <code class="docutils literal notranslate"><span class="pre">reject_2</span></code>, <code class="docutils literal notranslate"><span class="pre">learn_more_2</span></code>, <code class="docutils literal notranslate"><span class="pre">close_1</span></code>, <code class="docutils literal notranslate"><span class="pre">not_now_2</span></code>, <code class="docutils literal notranslate"><span class="pre">dismiss_1</span></code> and <code class="docutils literal notranslate"><span class="pre">dismiss_2</span></code>. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1745026">1745026</a>]</p>
+              </dd>
+              <dt>
+               Firefox 100.0
+              </dt>
+              <dd>
+               <p>Objects changed to: <code class="docutils literal notranslate"><span class="pre">accept_2</span></code>, <code class="docutils literal notranslate"><span class="pre">reject_2</span></code>, <code class="docutils literal notranslate"><span class="pre">learn_more_1</span></code>, <code class="docutils literal notranslate"><span class="pre">learn_more_2</span></code>, <code class="docutils literal notranslate"><span class="pre">close_1</span></code>, <code class="docutils literal notranslate"><span class="pre">not_now_2</span></code>, <code class="docutils literal notranslate"><span class="pre">dismiss_1</span></code> and <code class="docutils literal notranslate"><span class="pre">dismiss_2</span></code>. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1761171">1761171</a>]</p>
+              </dd>
+              <dt>
+               Firefox 133.0
+              </dt>
+              <dd>
+               <p>Removed. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1921748">1921748</a>]</p>
+              </dd>
+             </dl>
+            </dd>
+           </dl>
+          </section>
+          <section id="contextservices-quicksuggest-sponsored-toggled">
+           <h3>contextservices.quicksuggest.sponsored_toggled<a class="headerlink" href="#contextservices-quicksuggest-sponsored-toggled" title="Link to this heading">?</a></h3>
+           <p>This event is recorded when the <code class="docutils literal notranslate"><span class="pre">browser.urlbar.suggest.quicksuggest.sponsored</span></code> pref is toggled. The pref can be toggled in the following ways:</p>
+           <ul class="simple">
+            <li>
+             <p>The user can toggle it in the preferences UI.</p></li>
+            <li>
+             <p>The user can toggle it in <a class="reference external" href="about:config">about:config</a>.</p></li>
+           </ul>
+           <p>The event’s objects are the following:</p>
+           <dl class="field-list simple">
+            <dt class="field-odd">
+             enabled<span class="colon">:</span>
+            </dt>
+            <dd class="field-odd">
+             <p>Recorded when the pref is flipped from false to true.</p>
+            </dd>
+            <dt class="field-even">
+             disabled<span class="colon">:</span>
+            </dt>
+            <dd class="field-even">
+             <p>Recorded when the pref is flipped from true to false.</p>
+            </dd>
+           </dl>
+           <dl class="simple">
+            <dt>
+             Changelog
+            </dt>
+            <dd>
+             <dl class="simple">
+              <dt>
+               Firefox 92.0.1
+              </dt>
+              <dd>
+               <p>Introduced. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1728430">1728430</a>]</p>
+              </dd>
+              <dt>
+               Firefox 96.0:
+              </dt>
+              <dd>
+               <p>The event is no longer recorded when the user interacts with the online modal dialog since the <code class="docutils literal notranslate"><span class="pre">browser.urlbar.suggest.quicksuggest.sponsored</span></code> pref is no longer set when the user opts in or out. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1740965">1740965</a>]</p>
+              </dd>
+              <dt>
+               Firefox 133.0
+              </dt>
+              <dd>
+               <p>Removed. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1921748">1921748</a>]</p>
+              </dd>
+             </dl>
+            </dd>
+           </dl>
+          </section>
+         </section>
+         <section id="environment">
+          <h2><a class="toc-backref" href="#id131" role="doc-backlink">Environment</a><a class="headerlink" href="#environment" title="Link to this heading">?</a></h2>
+          <p>The following preferences are recorded in telemetry environment data. For general information on telemetry environment data in Firefox, see the <a class="reference internal" href="../../toolkit/components/telemetry/data/environment.html"><span class="doc">Environment</span></a> document.</p>
+          <section id="browser-urlbar-quicksuggest-onboardingdialogchoice">
+           <h3>browser.urlbar.quicksuggest.onboardingDialogChoice<a class="headerlink" href="#browser-urlbar-quicksuggest-onboardingdialogchoice" title="Link to this heading">?</a></h3>
+           <p>This pref records the user’s choice in the online modal dialog. If the dialog was shown multiple times, it records the user’s most recent choice. It is a string-valued pref with the following possible values:</p>
+           <dl class="field-list simple">
+            <dt class="field-odd">
+             &lt;empty string&gt;<span class="colon">:</span>
+            </dt>
+            <dd class="field-odd">
+             <p>The user has not made a choice (e.g., because the dialog hasn’t been shown).</p>
+            </dd>
+            <dt class="field-even">
+             accept<span class="colon">:</span>
+            </dt>
+            <dd class="field-even">
+             <p>The user accepted the dialog and opted in. This object was removed in Firefox 96.0.2.</p>
+            </dd>
+            <dt class="field-odd">
+             accept_2<span class="colon">:</span>
+            </dt>
+            <dd class="field-odd">
+             <p>The user accepted the dialog and opted in.</p>
+            </dd>
+            <dt class="field-even">
+             close_1<span class="colon">:</span>
+            </dt>
+            <dd class="field-even">
+             <p>The user clicked close button or something similar link on the introduction section. The user remains opted out in this case.</p>
+            </dd>
+            <dt class="field-odd">
+             dismiss_1<span class="colon">:</span>
+            </dt>
+            <dd class="field-odd">
+             <p>The user dismissed the dialog by pressing the Escape key or some unknown way on the introduction section. The user remains opted out in this case.</p>
+            </dd>
+            <dt class="field-even">
+             dismiss_2<span class="colon">:</span>
+            </dt>
+            <dd class="field-even">
+             <p>The user dismissed the dialog by pressing the Escape key or some unknown way on main section. The user remains opted out in this case.</p>
+            </dd>
+            <dt class="field-odd">
+             dismissed_escape_key<span class="colon">:</span>
+            </dt>
+            <dd class="field-odd">
+             <p>The user dismissed the dialog by pressing the Escape key. The user remains opted out in this case. This object was removed in Firefox 96.0.2.</p>
+            </dd>
+            <dt class="field-even">
+             dismissed_other<span class="colon">:</span>
+            </dt>
+            <dd class="field-even">
+             <p>The dialog was dismissed in some unknown way. One case where this can happen is when the dialog is replaced with another higher priority dialog like the one shown when quitting the app. The user remains opted out in this case. This object was removed in Firefox 96.0.2.</p>
+            </dd>
+            <dt class="field-odd">
+             learn_more<span class="colon">:</span>
+            </dt>
+            <dd class="field-odd">
+             <p>The user clicked “Learn more”. The user remains opted out in this case. This object was removed in Firefox 96.0.2.</p>
+            </dd>
+            <dt class="field-even">
+             learn_more_1<span class="colon">:</span>
+            </dt>
+            <dd class="field-even">
+             <p>The user clicked “Learn more” on the introduction section. The user remains opted out in this case.</p>
+            </dd>
+            <dt class="field-odd">
+             learn_more_2<span class="colon">:</span>
+            </dt>
+            <dd class="field-odd">
+             <p>The user clicked “Learn more” on the main section. The user remains opted out in this case.</p>
+            </dd>
+            <dt class="field-even">
+             not_now_2<span class="colon">:</span>
+            </dt>
+            <dd class="field-even">
+             <p>The user clicked “Not now” link on main section. The user remains opted out in this case.</p>
+            </dd>
+            <dt class="field-odd">
+             not_now_link<span class="colon">:</span>
+            </dt>
+            <dd class="field-odd">
+             <p>The user clicked “Not now”. The user remains opted out in this case. This object was removed in Firefox 96.0.2.</p>
+            </dd>
+            <dt class="field-even">
+             reject_2<span class="colon">:</span>
+            </dt>
+            <dd class="field-even">
+             <p>The user rejected the dialog and opted out.</p>
+            </dd>
+            <dt class="field-odd">
+             settings<span class="colon">:</span>
+            </dt>
+            <dd class="field-odd">
+             <p>The user clicked the “Customize” button. The user remains opted out in this case. This object was removed in Firefox 96.0.2.</p>
+            </dd>
+           </dl>
+           <dl class="simple">
+            <dt>
+             Changelog
+            </dt>
+            <dd>
+             <dl class="simple">
+              <dt>
+               Firefox 94.0
+              </dt>
+              <dd>
+               <p>Introduced. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1734447">1734447</a>]</p>
+              </dd>
+              <dt>
+               Firefox 96.0.2
+              </dt>
+              <dd>
+               <p>Added <code class="docutils literal notranslate"><span class="pre">accept_2</span></code>, <code class="docutils literal notranslate"><span class="pre">reject_2</span></code>, <code class="docutils literal notranslate"><span class="pre">learn_more_2</span></code>, <code class="docutils literal notranslate"><span class="pre">close_1</span></code>, <code class="docutils literal notranslate"><span class="pre">not_now_2</span></code>, <code class="docutils literal notranslate"><span class="pre">dismiss_1</span></code>, <code class="docutils literal notranslate"><span class="pre">dismiss_2</span></code> and removed <code class="docutils literal notranslate"><span class="pre">accept</span></code>, <code class="docutils literal notranslate"><span class="pre">dismissed_escape_key</span></code>, <code class="docutils literal notranslate"><span class="pre">dismissed_other</span></code>, <code class="docutils literal notranslate"><span class="pre">learn_more</span></code>, <code class="docutils literal notranslate"><span class="pre">not_now_link</span></code>, <code class="docutils literal notranslate"><span class="pre">settings</span></code>. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1745026">1745026</a>]</p>
+              </dd>
+              <dt>
+               Firefox 100.0
+              </dt>
+              <dd>
+               <p>Added <code class="docutils literal notranslate"><span class="pre">learn_more_1</span></code>. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1761171">1761171</a>]</p>
+              </dd>
+              <dt>
+               Firefox 137.0
+              </dt>
+              <dd>
+               <p>Removed. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1936455">1936455</a>]</p>
+              </dd>
+             </dl>
+            </dd>
+           </dl>
+          </section>
+          <section id="browser-urlbar-quicksuggest-datacollection-enabled">
+           <h3>browser.urlbar.quicksuggest.dataCollection.enabled<a class="headerlink" href="#browser-urlbar-quicksuggest-datacollection-enabled" title="Link to this heading">?</a></h3>
+           <p>This boolean pref records whether the user has opted in to data collection for Firefox Suggest. It is false by default. It is set to true when the user opts in to the online modal dialog. The user can also toggle it in the preferences UI and <a class="reference external" href="about:config">about:config</a>.</p>
+           <dl class="simple">
+            <dt>
+             Changelog
+            </dt>
+            <dd>
+             <dl class="simple">
+              <dt>
+               Firefox 94.0.2
+              </dt>
+              <dd>
+               <p>Introduced. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1735976">1735976</a>]</p>
+              </dd>
+             </dl>
+            </dd>
+           </dl>
+          </section>
+          <section id="browser-urlbar-suggest-quicksuggest">
+           <h3>browser.urlbar.suggest.quicksuggest<a class="headerlink" href="#browser-urlbar-suggest-quicksuggest" title="Link to this heading">?</a></h3>
+           <p>This pref no longer exists and is not recorded. It was replaced with <code class="docutils literal notranslate"><span class="pre">browser.urlbar.suggest.quicksuggest.nonsponsored</span></code> in Firefox 94.0.2. Prior to 94.0.2, this boolean pref recorded whether suggestions in general were enabled.</p>
+           <dl class="simple">
+            <dt>
+             Changelog
+            </dt>
+            <dd>
+             <dl class="simple">
+              <dt>
+               Firefox 92.0.1
+              </dt>
+              <dd>
+               <p>Introduced. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1730721">1730721</a>]</p>
+              </dd>
+              <dt>
+               Firefox 94.0.2
+              </dt>
+              <dd>
+               <p>Replaced with <code class="docutils literal notranslate"><span class="pre">browser.urlbar.suggest.quicksuggest.nonsponsored</span></code>. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1735976">1735976</a>]</p>
+              </dd>
+             </dl>
+            </dd>
+           </dl>
+          </section>
+          <section id="browser-urlbar-suggest-quicksuggest-nonsponsored">
+           <h3>browser.urlbar.suggest.quicksuggest.nonsponsored<a class="headerlink" href="#browser-urlbar-suggest-quicksuggest-nonsponsored" title="Link to this heading">?</a></h3>
+           <p>This boolean pref records whether non-sponsored suggestions are enabled. In both the offline and online scenarios it is true by default. The user can also toggle it in the preferences UI and <a class="reference external" href="about:config">about:config</a>.</p>
+           <dl class="simple">
+            <dt>
+             Changelog
+            </dt>
+            <dd>
+             <dl class="simple">
+              <dt>
+               Firefox 94.0.2
+              </dt>
+              <dd>
+               <p>Introduced. It replaces <code class="docutils literal notranslate"><span class="pre">browser.urlbar.suggest.quicksuggest</span></code>. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1735976">1735976</a>]</p>
+              </dd>
+              <dt>
+               Firefox 96.0:
+              </dt>
+              <dd>
+               <p>The pref is now true by default in the online scenario. Previously it was false by default in online. For users who were enrolled in the online scenario in older versions and who did not opt in or otherwise enable non-sponsored suggestions, the pref will remain false when upgrading. For all other users, it will default to true when/if they are enrolled in online. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1740965">1740965</a>]</p>
+              </dd>
+             </dl>
+            </dd>
+           </dl>
+          </section>
+          <section id="browser-urlbar-suggest-quicksuggest-sponsored">
+           <h3>browser.urlbar.suggest.quicksuggest.sponsored<a class="headerlink" href="#browser-urlbar-suggest-quicksuggest-sponsored" title="Link to this heading">?</a></h3>
+           <p>This boolean pref records whether sponsored suggestions are enabled. In both the offline and online scenarios it is true by default. The user can also toggle it in the preferences UI and <a class="reference external" href="about:config">about:config</a>.</p>
+           <dl class="simple">
+            <dt>
+             Changelog
+            </dt>
+            <dd>
+             <dl class="simple">
+              <dt>
+               Firefox 92.0.1
+              </dt>
+              <dd>
+               <p>Introduced. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1730721">1730721</a>]</p>
+              </dd>
+              <dt>
+               Firefox 96.0:
+              </dt>
+              <dd>
+               <p>The pref is now true by default in the online scenario. Previously it was false by default in online. For users who were enrolled in the online scenario in older versions and who did not opt in or otherwise enable sponsored suggestions, the pref will remain false when upgrading. For all other users, it will default to true when/if they are enrolled in online. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1740965">1740965</a>]</p>
+              </dd>
+             </dl>
+            </dd>
+           </dl>
+          </section>
+         </section>
+         <section id="the-quick-suggest-ping">
+          <h2><a class="toc-backref" href="#id132" role="doc-backlink">The “quick-suggest” Ping</a><a class="headerlink" href="#the-quick-suggest-ping" title="Link to this heading">?</a></h2>
+          <p>Firefox Suggest suggestions record telemetry via the <a class="reference external" href="https://dictionary.telemetry.mozilla.org/apps/firefox_desktop/pings/quick-suggest">“quick-suggest” ping</a>, which is detailed in the linked Glean Dictionary page.</p>
+          <dl class="simple">
+           <dt>
+            Changelog
+           </dt>
+           <dd>
+            <dl class="simple">
+             <dt>
+              Firefox 116.0
+             </dt>
+             <dd>
+              <p>Introduced. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1836283">1836283</a>]</p>
+             </dd>
+             <dt>
+              Firefox 122.0
+             </dt>
+             <dd>
+              <p>PingCentre-sent custom pings removed. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1868580">1868580</a>]</p>
+             </dd>
+            </dl>
+           </dd>
+          </dl>
+         </section>
+         <section id="nimbus-exposure-event">
+          <h2><a class="toc-backref" href="#id133" role="doc-backlink">Nimbus Exposure Event</a><a class="headerlink" href="#nimbus-exposure-event" title="Link to this heading">?</a></h2>
+          <div class="admonition note">
+           <p class="admonition-title">Note</p>
+           <p>This section is historical and describes how older versions of Firefox recorded Nimbus exposure events for Firefox Suggest. Recent Firefox versions no longer record Nimbus exposure events for Firefox Suggest.</p>
+          </div>
+          <p>A Nimbus exposure event is recorded once per app session when the user first encounters the UI of an experiment in which they’re enrolled. The timing of the event depends on the experiment and branch.</p>
+          <p>There are two Nimbus variables that determine the timing of the event: <code class="docutils literal notranslate"><span class="pre">experimentType</span></code> and the deprecated <code class="docutils literal notranslate"><span class="pre">isBestMatchExperiment</span></code>. To determine when the exposure event is recorded for a specific experiment and branch, examine the experiment’s recipe and look for one of these variables.</p>
+          <p>Listed below are the supported values of <code class="docutils literal notranslate"><span class="pre">experimentType</span></code> and <code class="docutils literal notranslate"><span class="pre">isBestMatchExperiment</span></code> along with details on when their corresponding exposure events are recorded.</p>
+          <dl class="field-list simple">
+           <dt class="field-odd">
+            experimentType = “best-match”<span class="colon">:</span>
+           </dt>
+           <dd class="field-odd">
+            <p>If the user is in a treatment branch and they did not disable best match, the event is recorded the first time they trigger a best match; if the user is in a treatment branch and they did disable best match, the event is not recorded at all. If the user is in the control branch, the event is recorded the first time they would have triggered a best match. (Users in the control branch cannot “disable” best match since the feature is totally hidden from them.) NOTE: The “Top pick” checkbox, which allowed the user to disable best batch, was removed in 120.</p>
+           </dd>
+           <dt class="field-even">
+            experimentType = “modal”<span class="colon">:</span>
+           </dt>
+           <dd class="field-even">
+            <p>If the user is in a treatment branch, the event is recorded when they are shown an opt-in modal. If the user is in the control branch, the event is recorded every time they would have been shown a modal, which is on every startup where another non-Suggest modal does not appear. NOTE: This has been removed in Firefox 124.</p>
+           </dd>
+           <dt class="field-odd">
+            isBestMatchExperiment = true<span class="colon">:</span>
+           </dt>
+           <dd class="field-odd">
+            <p>This is a deprecated version of <code class="docutils literal notranslate"><span class="pre">experimentType</span> <span class="pre">==</span> <span class="pre">"best-match"</span></code>.</p>
+           </dd>
+           <dt class="field-even">
+            All other experiments<span class="colon">:</span>
+           </dt>
+           <dd class="field-even">
+            <p>For all other experiments not listed above, the event is recorded the first time the user triggers a Firefox Suggest suggestion.</p>
+           </dd>
+          </dl>
+          <dl class="simple">
+           <dt>
+            Changelog
+           </dt>
+           <dd>
+            <dl class="simple">
+             <dt>
+              Firefox 92.0
+             </dt>
+             <dd>
+              <p>Introduced. The event is always recorded the first time the user triggers a Firefox Suggest suggestion regardless of the experiment they are enrolled in. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1724076">1724076</a>, <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1727392">1727392</a>]</p>
+             </dd>
+             <dt>
+              Firefox 99.0
+             </dt>
+             <dd>
+              <p>The <code class="docutils literal notranslate"><span class="pre">isBestMatchExperiment</span> <span class="pre">=</span> <span class="pre">true</span></code> case is added. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1752953">1752953</a>]</p>
+             </dd>
+             <dt>
+              Firefox 100.0
+             </dt>
+             <dd>
+              <p>The <code class="docutils literal notranslate"><span class="pre">experimentType</span> <span class="pre">=</span> <span class="pre">"modal"</span></code> case is added. <code class="docutils literal notranslate"><span class="pre">isBestMatchExperiment</span> <span class="pre">=</span> <span class="pre">true</span></code> is deprecated in favor of <code class="docutils literal notranslate"><span class="pre">experimentType</span> <span class="pre">=</span> <span class="pre">"best-match"</span></code>. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1760596">1760596</a>]</p>
+             </dd>
+             <dt>
+              Firefox 124.0
+             </dt>
+             <dd>
+              <p>The <code class="docutils literal notranslate"><span class="pre">experimentType</span> <span class="pre">=</span> <span class="pre">"modal"</span></code> case is removed.</p>
+             </dd>
+             <dt>
+              Firefox 135.0
+             </dt>
+             <dd>
+              <p>The <code class="docutils literal notranslate"><span class="pre">experimentType</span></code> Nimbus variable is removed. By this time it already not been referenced in Firefox code for quite a while. [Bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1932502">1932502</a>]</p>
+             </dd>
+            </dl>
+           </dd>
+          </dl>
+         </section>
+         <section id="merino-search-queries">
+          <h2><a class="toc-backref" href="#id134" role="doc-backlink">Merino Search Queries</a><a class="headerlink" href="#merino-search-queries" title="Link to this heading">?</a></h2>
+          <p>Merino is a Mozilla service that provides Firefox Suggest suggestions. Along with remote settings on the client, it is one of two possible sources for Firefox Suggest. When Merino integration is enabled on the client and the user has opted in to Firefox Suggest data collection, Firefox sends everything the user types in the address bar to the Merino server. In response, Merino finds relevant search results from its search providers and sends them to Firefox, where they are shown to the user in the address bar.</p>
+          <p>The user opts in to Firefox Suggest data collection when they either opt in to the online modal dialog or they enable Firefox Suggest data collection in the preferences UI.</p>
+          <p>Merino queries are not telemetry per se but we include them in this document since they necessarily involve data collection.</p>
+          <section id="merino-api">
+           <h3>Merino API<a class="headerlink" href="#merino-api" title="Link to this heading">?</a></h3>
+           <p>Data that Firefox sends to the Merino server is summarized below. When Merino integration is enabled on the client and the user has opted in to Firefox Suggest data collection, this data is sent with every user keystroke in the address bar.</p>
+           <p>For details on the Merino API, see the <a class="reference external" href="https://mozilla-services.github.io/merino/api.html#suggest">Merino documentation</a>.</p>
+           <dl>
+            <dt>
+             Search Query
+            </dt>
+            <dd>
+             <p>The user’s search query typed in the address bar.</p>
+             <p>API parameter name: <code class="docutils literal notranslate"><span class="pre">q</span></code></p>
+            </dd>
+            <dt>
+             Session ID
+            </dt>
+            <dd>
+             <p>A UUID that identifies the user’s current search session in the address bar. This ID is unique per search session. A search session ends when the focus leaves the address bar or a timeout of 5 minutes elapses, whichever comes first.</p>
+             <p>API parameter name: <code class="docutils literal notranslate"><span class="pre">sid</span></code></p>
+            </dd>
+            <dt>
+             Sequence Number
+            </dt>
+            <dd>
+             <p>A zero-based integer that is incremented after a response is received from Merino. It is reset at the end of each search session along with the session ID.</p>
+             <p>API parameter name: <code class="docutils literal notranslate"><span class="pre">seq</span></code></p>
+            </dd>
+            <dt>
+             Client Variants
+            </dt>
+            <dd>
+             <p>Optional. A list of experiments or rollouts that are affecting the Firefox Suggest user experience. If Merino recognizes any of them, it will modify its behavior accordingly.</p>
+             <p>API parameter name: <code class="docutils literal notranslate"><span class="pre">client_variants</span></code></p>
+            </dd>
+            <dt>
+             Providers
+            </dt>
+            <dd>
+             <p>Optional. A list of providers to use for this request. If specified, only suggestions from the listed providers will be returned. Otherwise Merino will use a default set of providers.</p>
+             <p>API parameter name: <code class="docutils literal notranslate"><span class="pre">providers</span></code></p>
+            </dd>
+           </dl>
+          </section>
+         </section>
+        </section>
+       </div>
+      </div>
+      <footer>
+       <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="telemetry.html" class="btn btn-neutral float-left" title="Telemetry" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a> <a href="debugging.html" class="btn btn-neutral float-right" title="Debugging &amp; Logging" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+       </div>
+       <hr>
+       <div role="contentinfo">
+        <p></p>
+       </div> Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+      </footer>
+     </div>
+    </div>
+   </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ </body>
+</html>

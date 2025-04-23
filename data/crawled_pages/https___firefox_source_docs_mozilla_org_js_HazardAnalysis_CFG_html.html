@@ -1,0 +1,787 @@
+<!doctype html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>sixgill CFG format — Firefox Source Docs  documentation</title>
+  <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50">
+  <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094">
+  <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=fd3f3429">
+  <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b">
+  <link rel="stylesheet" type="text/css" href="../../_static/custom_theme.css?v=dc5ed815">
+  <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7">
+  <link rel="shortcut icon" href="../../_static/firefox.ico"><!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script src="../../_static/jquery.js?v=5d32c60e"></script>
+  <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+  <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+  <script src="../../_static/doctools.js?v=9a2dae69"></script>
+  <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+  <script src="../../_static/copybutton.js?v=30646c52"></script>
+  <script src="../../_static/design-tabs.js?v=36754332"></script>
+  <script src="../../_static/js/theme.js"></script>
+  <link rel="index" title="Index" href="../../genindex.html">
+  <link rel="search" title="Search" href="../../search.html">
+ </head>
+ <body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+   <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <div class="wy-side-scroll">
+     <div class="wy-side-nav-search">
+      <a href="../../index.html" class="icon icon-home"> Firefox Source Docs <img src="../../_static/firefox-wordmark.svg" class="logo" alt="Logo"> </a><!-- -- This code is governed by the BSD license ---->
+      <div>
+       <h3>Quick search</h3>
+       <script>
+    (function () {
+      var cx = "dd12886298f75dbef";
+      var gcse = document.createElement("script");
+      gcse.async = true;
+      gcse.src = "https://cse.google.com/cse.js?cx=" + cx;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(gcse, s);
+    })();
+  </script><gcse:search></gcse:search>
+      </div>
+     </div>
+     <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+      <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../glossary/index.html">A Glossary of Common Terms</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../overview/index.html">A Quick Guide to Mozilla Applications</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../setup/index.html">Getting Set Up To Work On The Firefox Codebase</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Working On Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Working on Firefox</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../bug-mgmt/index.html">Bug Handling</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox User Guide</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../devtools-user/index.html">Firefox DevTools User Docs</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Source Code Documentation</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mots/index.html">Governance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../browser/index.html">Firefox Front-end</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../dom/index.html">DOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../editor/index.html">Editor</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../layout/index.html">Style system (CSS) &amp; Layout</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../gfx/index.html">Graphics</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../ipc/index.html">Processes, Threads and IPC</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../devtools/index.html">Firefox DevTools Contributor Docs</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../toolkit/index.html">Toolkit</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../index.html">SpiderMonkey</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../jsloader/index.html">JS Loader</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/geckoview/index.html">GeckoView</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/fenix/index.html">Fenix</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/focus-android/index.html">Focus for Android</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../dom/bindings/webidl/index.html">WebIDL</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../modules/libpref/index.html">libpref</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../networking/index.html">Networking</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../remote/index.html">Remote Protocols</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../services/index.html">Services</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../permissions/index.html">Permissions</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../uriloader/index.html">File Handling</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../widget/cocoa/index.html">Firefox on macOS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../widget/windows/index.html">Firefox on Windows</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../toolkit/components/ml/index.html">Firefox AI Runtime</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../accessible/index.html">Accessibility</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../media/index.html">Media Playback</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../code-quality/index.html">Code quality</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../writing-rust-code/index.html">Writing Rust Code</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../rust-components/index.html">Rust Components</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/profiler/index.html">Gecko Profiler</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../performance/index.html">Performance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../storage/index.html">Database bindings (SQLite, KV, …)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../xpcom/index.html">XPCOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../nspr/index.html">NSPR</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../security/nss/index.html">Network Security Services (NSS)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../content-security/index.html">Web Security Checks in Gecko</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">The Firefox Build System</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mach/index.html">Mach</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/try/index.html">Pushing to Try</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../build/buildsystem/index.html">Build System</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../taskcluster/index.html">Firefox CI and Taskgraph</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/moztreedocs/index.html">Managing Documentation</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mozbuild/vendor/index.html">Vendoring Third Party Components</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Testing &amp; Test Infrastructure</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/automated-testing/index.html">Automated Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/treeherder-try/index.html">Understanding Treeherder Results</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/sheriffed-intermittents/index.html">Sheriffed intermittent failures</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/tests-for-new-config/index.html">Turning on Firefox tests for a new configuration</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/intermittent/index.html">Avoiding intermittent tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/testing-policy/index.html">Testing Policy</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/ci-configs/index.html">Configuration Changes</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/browser-chrome/index.html">Browser chrome mochitests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/chrome-tests/index.html">Chrome Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/marionette/index.html">Marionette</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/geckodriver/index.html">geckodriver</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/test-verification/index.html">Test Verification</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/webrender/index.html">WebRender Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/mochitest-plain/index.html">Mochitest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/xpcshell/index.html">XPCShell tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/tps/index.html">TPS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../web-platform/index.html">web-platform-tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../gtest/index.html">GTest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/fuzzing/index.html">Fuzzing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/sanitizer/index.html">Sanitizer</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/perfdocs/index.html">Performance Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/code-coverage/index.html">Code coverage</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing-rust-code/index.html">Testing &amp; Debugging Rust Code</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Releases &amp; Updates</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html">Mozilla Update Infrastructure</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html#watershed-updates">Watershed Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html#desupport-updates">Desupport Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/update-verify/index.html">Update Verify</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Localization &amp; Internationalization</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../intl/index.html">Internationalization</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../l10n/index.html">Localization</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox and Python</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mozbase/index.html">mozbase</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../python/index.html">Using third-party Python packages</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Metrics Collected in Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../metrics/index.html">Metrics</a></li>
+      </ul>
+     </div>
+    </div>
+   </nav>
+   <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+    <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+     <i data-toggle="wy-nav-top" class="fa fa-bars"></i> <a href="../../index.html">Firefox Source Docs</a>
+    </nav>
+    <div class="wy-nav-content">
+     <div class="rst-content">
+      <!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+      <div role="navigation" aria-label="Page navigation">
+       <ul class="wy-breadcrumbs">
+        <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+        <li class="breadcrumb-item active">sixgill CFG format</li>
+        <li class="wy-breadcrumbs-aside"><a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Developer+Infrastructure&amp;component=Firefox+Source+Docs%3A+Content&amp;short_desc=Documentation+issue+on+js/HazardAnalysis/CFG&amp;comment=URL+=+https://firefox-source-docs.mozilla.org/js/HazardAnalysis/CFG.html&amp;bug_file_loc=https://firefox-source-docs.mozilla.org/js/HazardAnalysis/CFG.html" rel="nofollow">Report an issue</a> / <a href="../../_sources/js/HazardAnalysis/CFG.md.txt" rel="nofollow"> View page source</a></li>
+       </ul>
+       <hr>
+      </div>
+      <div role="main" class="document" itemscope itemtype="http://schema.org/Article">
+       <div itemprop="articleBody">
+        <section id="sixgill-cfg-format">
+         <h1>sixgill CFG format<a class="headerlink" href="#sixgill-cfg-format" title="Link to this heading">?</a></h1>
+         <p>The main output of the sixgill plugin is what is loosely labeled a control flow graph (CFG) associated with each function compiled. These are stored in the file src_body.xdb, which contains a mapping from function names (“mangled$unmangled”) to function data.</p>
+         <p>The graph is really a set of directed acyclic data flow graphs, stitched together via “loops” that imply back edges in the control flow graph.</p>
+         <p>Function data is an array of “bodies”, one body for the toplevel code in the function, and another body for each loop. A body is <em>not</em> a basic block, since they can contain interior branches. (The nodes in a body do not necessarily dominate the following nodes.) A body is a DAG, and thus has no back edges or cross edges. Flow starts only at the entry point and ends only at the exit point, though (1) a loop body’s entry point implicitly follows its exit point and (2) <code class="docutils literal notranslate"><span class="pre">Call</span></code> nodes will cause the actual program counter to go to another (possibly recursive) body. A body really describes data flow, not dynamic control flow.</p>
+         <section id="function-body">
+          <h2>Function Body<a class="headerlink" href="#function-body" title="Link to this heading">?</a></h2>
+          <p>A body (whether toplevel or loop) contains:</p>
+          <ul class="simple">
+           <li>
+            <p>.BlockId</p>
+            <ul>
+             <li>
+              <p><code class="docutils literal notranslate"><span class="pre">.Kind</span></code>: “Function” for the toplevel function or “Loop” for a (possibly nested) loop within it.</p></li>
+             <li>
+              <p><code class="docutils literal notranslate"><span class="pre">.Loop</span></code>: if .Kind == “Loop”, then a string identifier distinguishing the loop, in the format “loop#n” where n is the index of the loop in the body. Nested loops will extend this to “loop#n#m”.</p></li>
+             <li>
+              <p><code class="docutils literal notranslate"><span class="pre">.Variable</span></code>:</p>
+              <ul>
+               <li>
+                <p><code class="docutils literal notranslate"><span class="pre">.Kind</span></code>: “Func”</p></li>
+               <li>
+                <p><code class="docutils literal notranslate"><span class="pre">.Name[]</span></code>: the function <code class="docutils literal notranslate"><span class="pre">Name</span></code> (see below)</p></li>
+              </ul></li>
+            </ul></li>
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">.Version</span></code>: always zero</p></li>
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">.Command</span></code>: the command used to compile this function, if recorded. This command will <em>not</em> include the -fplugin parameters.</p></li>
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">.Location[]</span></code>: a length-2 array of the source positions of the first and last line of the function definition. Hopefully it will be in the same file. Note that this Location is different from a <code class="docutils literal notranslate"><span class="pre">PPoint.Location</span></code> (see below), which will have a single source position. Each source position is:</p>
+            <ul>
+             <li>
+              <p><code class="docutils literal notranslate"><span class="pre">.CacheString</span></code>: the filename</p></li>
+             <li>
+              <p><code class="docutils literal notranslate"><span class="pre">.Line</span></code>: the line number</p></li>
+            </ul></li>
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">.DefineVariable[]</span></code>: a list of variables defined in the body. The first one is for the function itself. Each variable has:</p>
+            <ul>
+             <li>
+              <p><code class="docutils literal notranslate"><span class="pre">.Type</span></code>: the type of the variable. See <code class="docutils literal notranslate"><span class="pre">Type</span></code>, below.</p></li>
+             <li>
+              <p><code class="docutils literal notranslate"><span class="pre">.Variable</span></code>:</p>
+              <ul>
+               <li>
+                <p><code class="docutils literal notranslate"><span class="pre">.Kind</span></code>: one of</p>
+                <ul>
+                 <li>
+                  <p>“Func” for the function itself</p></li>
+                 <li>
+                  <p>“This” for the C++ <code class="docutils literal notranslate"><span class="pre">this</span></code> parameter</p></li>
+                 <li>
+                  <p>“Arg” for parameters</p></li>
+                 <li>
+                  <p>“Temp” for temporaries</p></li>
+                </ul></li>
+               <li>
+                <p><code class="docutils literal notranslate"><span class="pre">.Name[]</span></code>: the variable <code class="docutils literal notranslate"><span class="pre">Name</span></code> (see below)</p></li>
+              </ul></li>
+            </ul></li>
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">.Index[]</span></code>: a 2-tuple of the first and last index in the body.</p></li>
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">.PPoint[]</span></code>: the filename and line number of each point in the body</p>
+            <ul>
+             <li>
+              <p><code class="docutils literal notranslate"><span class="pre">.Location</span></code>: a single source point (see above).</p></li>
+            </ul></li>
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">.PEdge[]</span></code>: the bulk of the body. See Edges, below.</p></li>
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">.LoopIsomorphic[]</span></code>: a list of <code class="docutils literal notranslate"><span class="pre">{"Index":</span> <span class="pre">point}</span></code> points in the body that are cloned in loop bodies. See the edge Kind <code class="docutils literal notranslate"><span class="pre">Loop</span></code>, below.</p></li>
+          </ul>
+          <p>A loop body (a body with BlockId.Kind == “Loop”) will additionally have:</p>
+          <ul class="simple">
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">.BlockPPoint</span></code>: an array of full references to points within parent bodies that represent the entry point of this loop. Each has:</p>
+            <ul>
+             <li>
+              <p><code class="docutils literal notranslate"><span class="pre">.BlockId</span></code>: the BlockId of the parent body</p></li>
+             <li>
+              <p><code class="docutils literal notranslate"><span class="pre">.Index</span></code>: the index of the point within the parent body</p></li>
+             <li>
+              <p><code class="docutils literal notranslate"><span class="pre">.Version</span></code>: the value zero, intended for incremental analyses but unused in the GC hazard analysis.</p></li>
+            </ul></li>
+          </ul>
+          <p>Note that a loop may appear in more than one parent body. I believe this will not be used for regular structured code, but could be necessary to properly disentangle loops when using <code class="docutils literal notranslate"><span class="pre">goto</span></code>.</p>
+          <p><code class="docutils literal notranslate"><span class="pre">Name</span></code>: a 2-tuple containing a variable or function name. The first element is a raw, internal name, and the second is a more user-facing name. For non-functions, both elements are normally the same, but <code class="docutils literal notranslate"><span class="pre">.Name[0]</span></code> could have a <code class="docutils literal notranslate"><span class="pre">:&lt;n&gt;</span></code> suffix if there are multiple variables of that name in different scopes within the same function, or a <code class="docutils literal notranslate"><span class="pre">&lt;file&gt;:</span></code> prefix for static variables. For functions, <code class="docutils literal notranslate"><span class="pre">.Name[0]</span></code> is the full name of the function (in format “mangled$unmangled”) and .Name[1] is the base name of the function (unqualified, with no type or parameters):</p>
+          <div class="highlight-none notranslate">
+           <div class="highlight">
+            <pre><span></span>"Variable": {
+  "Kind": "Func",
+  "Name": [
+    "_Z12refptr_test9v$Cell* refptr_test9()",
+    "refptr_test9"
+  ]
+}
+</pre>
+           </div>
+          </div>
+          <p>Bodies are an array of “edges” between “points”. All behavior is described as happening on these edges. <code class="docutils literal notranslate"><span class="pre">body.Index[0]</span></code> gives the first point in the body. Each edge has a source and destination point. So eg if <code class="docutils literal notranslate"><span class="pre">body.Index[0]</span></code> is 1, then (unless the body is empty) there will be at least one edge with <code class="docutils literal notranslate"><span class="pre">edge.Index</span> <span class="pre">=</span> <span class="pre">[1,</span> <span class="pre">2]</span></code>. The code <code class="docutils literal notranslate"><span class="pre">if</span> <span class="pre">(C)</span> <span class="pre">{</span> <span class="pre">x</span> <span class="pre">=</span> <span class="pre">1;</span> <span class="pre">}</span> <span class="pre">else</span> <span class="pre">{</span> <span class="pre">x</span> <span class="pre">=</span> <span class="pre">2;</span> <span class="pre">};</span> <span class="pre">f();</span></code>, will have two edges sharing a common destination:</p>
+          <div class="highlight-none notranslate">
+           <div class="highlight">
+            <pre><span></span>Assume(1,2, C*, true)
+Assign(2,4, x := 1)
+Assume(1,3, C*, false)
+Assign(3,4, x := 2)
+Call(4,5, f())
+</pre>
+           </div>
+          </div>
+          <p>Note that the above syntax is part of the default output of <code class="docutils literal notranslate"><span class="pre">xdbfind</span> <span class="pre">src_body.xdb</span> <span class="pre">&lt;functionName&gt;</span></code>. It is a much-simplified version of the full JSON output from <code class="docutils literal notranslate"><span class="pre">xdbfind</span> <span class="pre">-json</span> <span class="pre">src_body.xdb</span> <span class="pre">&lt;functionName&gt;</span></code>. It will be used in this document to describe examples because the JSON output is much too verbose.</p>
+          <p>Every body is a directed acyclic graph (DAG), stored as a set of edges with source,destination point tuples. Any cycles in the original flow graph are replaced with Loop edges (see below).</p>
+         </section>
+         <section id="edges">
+          <h2>Edges<a class="headerlink" href="#edges" title="Link to this heading">?</a></h2>
+          <p>The edges are stored in an array named <code class="docutils literal notranslate"><span class="pre">PEdge</span></code>, with properties:</p>
+          <ul class="simple">
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">.Index[]</span></code>: a 2-tuple giving the source and destination points.</p></li>
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">.Kind</span></code>: One of 7 different Kinds. The rest of the attributes will depend on this Kind.</p></li>
+          </ul>
+          <p>Sixgill boils the control flow graph down to a small set of edge Kinds:</p>
+          <section id="assign">
+           <h3>Assign<a class="headerlink" href="#assign" title="Link to this heading">?</a></h3>
+           <ul class="simple">
+            <li>
+             <p><code class="docutils literal notranslate"><span class="pre">.Exp[]</span></code>: a 2-tuple of [lhs, rhs] of the assignment, each an expression (see <code class="docutils literal notranslate"><span class="pre">Expressions</span></code>, below.)</p></li>
+            <li>
+             <p><code class="docutils literal notranslate"><span class="pre">.Type</span></code>: the overall type of the expression, which I believe is the type of the lhs? (See <code class="docutils literal notranslate"><span class="pre">Types</span></code>, below.)</p></li>
+           </ul>
+           <p>Note that <code class="docutils literal notranslate"><span class="pre">Call</span></code> is also used for assignments, when the result of the function call is being assigned to a variable.</p>
+          </section>
+          <section id="call">
+           <h3>Call<a class="headerlink" href="#call" title="Link to this heading">?</a></h3>
+           <ul class="simple">
+            <li>
+             <p><code class="docutils literal notranslate"><span class="pre">.Exp[0]</span></code>: an expression representing the function being called (the “callee”). The callee might be a simple function, in which case <code class="docutils literal notranslate"><span class="pre">exp.Kind</span> <span class="pre">==</span> <span class="pre">"Var"</span></code>. Or it could be a computed function pointer or whatever. The expression evaluates to the function being called.</p></li>
+            <li>
+             <p><code class="docutils literal notranslate"><span class="pre">.Exp[1]</span></code> (optional): where to assign the return value.</p></li>
+            <li>
+             <p><code class="docutils literal notranslate"><span class="pre">.PEdgeCallArguments[]</span></code>: an array of expressions, one for each argument being passed. This does not include the <code class="docutils literal notranslate"><span class="pre">this</span></code> argument.</p></li>
+            <li>
+             <p><code class="docutils literal notranslate"><span class="pre">.PEdgeCallInstance</span></code>: the expression for the object to call the method on, which will be passed as the <code class="docutils literal notranslate"><span class="pre">this</span></code> argument.</p></li>
+           </ul>
+          </section>
+          <section id="assume">
+           <h3>Assume<a class="headerlink" href="#assume" title="Link to this heading">?</a></h3>
+           <p>The destination of an <code class="docutils literal notranslate"><span class="pre">Assume</span></code> node can rely on the given value assumption, eg <code class="docutils literal notranslate"><span class="pre">Assume(1,2,</span> <span class="pre">__temp_1*</span> <span class="pre">==</span> <span class="pre">7)</span></code> means that <code class="docutils literal notranslate"><span class="pre">__temp_1</span></code> will be 7 at point 2.</p>
+           <p>A conditional branch will be represented as a pair of <code class="docutils literal notranslate"><span class="pre">Assume</span></code> edges coming off of the expression for the branch condition. These edges produce a data flow graph where you can know the value of a variable if it has passed through an <code class="docutils literal notranslate"><span class="pre">Assume</span></code> edge (at least, until it reaches an <code class="docutils literal notranslate"><span class="pre">Assign</span></code> or <code class="docutils literal notranslate"><span class="pre">Call</span></code> edge.)</p>
+           <ul class="simple">
+            <li>
+             <p><code class="docutils literal notranslate"><span class="pre">.Exp</span></code>: the expression being tested.</p></li>
+            <li>
+             <p><code class="docutils literal notranslate"><span class="pre">.PEdgeAssumeNonZero</span></code>: if present, this will be set to true, and means we are on the edge where <code class="docutils literal notranslate"><span class="pre">Exp</span></code> is <code class="docutils literal notranslate"><span class="pre">!=</span> <span class="pre">0</span></code>. If this is not present, then <code class="docutils literal notranslate"><span class="pre">Exp</span></code> is <code class="docutils literal notranslate"><span class="pre">0</span></code>.</p></li>
+           </ul>
+           <p>Example: the C++ function body</p>
+           <div class="highlight-none notranslate">
+            <div class="highlight">
+             <pre><span></span>SomeRAIIType raii;
+if (flipcoin()) {
+  return 1;
+} else {
+  return 2;
+}
+</pre>
+            </div>
+           </div>
+           <p>could produce something like:</p>
+           <div class="highlight-none notranslate">
+            <div class="highlight">
+             <pre><span></span>Call(3,4, __temp_1 := flipcoin())
+Assume(4,5, __temp_1*, true)
+Assume(4,6, __temp_1*, false)
+Assign(5,7, return := 1)
+Assign(6,7, return := 2)
+Call(7,8, raii.~__dt_comp ())
+</pre>
+            </div>
+           </div>
+          </section>
+          <section id="loop">
+           <h3>Loop<a class="headerlink" href="#loop" title="Link to this heading">?</a></h3>
+           <p>The edge corresponds to an entire loop. The meaning of a “loop” is subtle. It is mainly what is required to convert a general graph into a set of acyclic DAGs by finding back edges, and creating a “loop body” from the subgraph between the entry point (the destination of the back edge) and the source of the back edge. (Multiple back edges with a common destination will be a single loop.) Only the main body nodes that are necessary for (postdominated by) one of the back edges will be removed. Shared nodes will be cloned and will appear in both the main body and the loop body. The cloned nodes are described as “isomorphic”.</p>
+           <ul class="simple">
+            <li>
+             <p><code class="docutils literal notranslate"><span class="pre">.BlockId</span></code> : the <code class="docutils literal notranslate"><span class="pre">BlockId</span></code> of the loop body.</p></li>
+            <li>
+             <p><code class="docutils literal notranslate"><span class="pre">.Loop</span></code> : an id like “loop#0” that will match up with the .BlockId.Loop property of the corresponding loop body.</p></li>
+           </ul>
+           <p>Example: consider the C++ code</p>
+           <div class="highlight-none notranslate">
+            <div class="highlight">
+             <pre><span></span>float testfunc(int val) {
+  int x = val;
+  x++;
+loophead:
+  int y = x + 2;
+  if (y == 8) goto loophead;
+  y++;
+  if (y == 10) return 2.4;
+  if (y == 12) goto loophead;
+  return 3.6;
+}
+</pre>
+            </div>
+           </div>
+           <p>This will produce the loop body:</p>
+           <div class="highlight-none notranslate">
+            <div class="highlight">
+             <pre><span></span>block: float32 testfunc(int32):loop#0
+parent: float32 testfunc(int32):3
+pentry: 1
+pexit:  6
+Assign(1,2, y := (x* + 2))
+Assume(2,6, (y* == 8), true)  /* 6 is the exit point, so loops back to the entry point 1 */
+Assume(2,3, (y* == 8), false)
+Assign(3,4, y := (y* + 1))
+Assume(4,5, (y* == 10), false)
+Assume(5,6, (y* == 12), true) /* 6 is the exit point, so loops back to the entry point 1 */
+</pre>
+            </div>
+           </div>
+           <p>and the main body:</p>
+           <div class="highlight-none notranslate">
+            <div class="highlight">
+             <pre><span></span>block: float32 testfunc(int32)
+pentry: 1
+pexit:  11
+isomorphic: [4,5,6,7,9]
+Assign(1,2, x := val*)
+Assign(2,3, x := (x* + 1))
+Loop(3,4, loop#0)
+Assign(4,5, y := (x* + 2))       /* edge is also in the loop */
+Assume(5,6, (y* == 8), false)    /* edge is also in the loop */
+Assign(6,7, y := (y* + 1))       /* edge is also in the loop */
+Assume(7,8, (y* == 10), true)
+Assume(7,9, (y* == 10), false)   /* edge is also in the loop */
+Assign(8,11, return := 2.4)
+Assume(9,10, (y* == 12), false)
+Assign(10,11, return := 3.6)
+</pre>
+            </div>
+           </div>
+           <p>The isomorphic points correspond to the C++ code:</p>
+           <div class="highlight-none notranslate">
+            <div class="highlight">
+             <pre><span></span>y = x + 2;
+if (y == 8) /* when y != 8 */
+y++;
+if (y == 10) /* when y != 10 */
+</pre>
+            </div>
+           </div>
+           <p>which is the code that will execute in order to reach the post-loop edge <code class="docutils literal notranslate"><span class="pre">Assume(9,10,</span> <span class="pre">(y*</span> <span class="pre">==</span> <span class="pre">12),</span> <span class="pre">false)</span></code>. (If point 9 in the main body is reached and y <em>is</em> equal to 12, then the <code class="docutils literal notranslate"><span class="pre">Assume(9,10,...)</span></code> edge will not be taken. Point 9 in the main body corresponds to point 5 in the loop body, so the edge <code class="docutils literal notranslate"><span class="pre">Assume(5,6,</span> <span class="pre">(y*</span> <span class="pre">==</span> <span class="pre">12),</span> <span class="pre">true)</span></code> will be taken instead.) When “control flow” is at an isomorphic point, it can be considered to be at all “instantiations” of that point at the same time. Really, though, these are acyclic data flow graphs where a loop’s exit point is externally known to flow into the entry point, and the main body lacks any <code class="docutils literal notranslate"><span class="pre">Assume</span></code> or other back edges that would make it cyclic.</p>
+           <p>For a <code class="docutils literal notranslate"><span class="pre">while</span></code> loop, the isomorphic points will evaluate the conditional expression.</p>
+           <p>Another example: the C++ code</p>
+           <div class="highlight-none notranslate">
+            <div class="highlight">
+             <pre><span></span>void testfunc() {
+  static Cell cell;
+  RefPtr&lt;float&gt; v10;
+  v10.assign_with_AddRef(&amp;somefloat);
+  while (flipcoin()) {
+    v10.forget();
+  }
+}
+</pre>
+            </div>
+           </div>
+           <p>generates</p>
+           <div class="highlight-none notranslate">
+            <div class="highlight">
+             <pre><span></span>block: void testfunc():loop#0
+parent: void testfunc():3
+pentry: 1
+pexit:  4
+Call(1,2, __temp_1 := flipcoin())
+Assume(2,3, __temp_1*, true)
+Call(3,4, v10.forget())
+
+block: void testfunc()
+pentry: 1
+pexit:  7
+isomorphic: [3,4]
+Call(1,2, v10.assign_with_AddRef(somefloat))
+Loop(2,3, loop#0)
+Call(3,4, __temp_1 := flipcoin())
+Assume(4,5, __temp_1*, false)
+Call(5,6, v10.~__dt_comp ())
+</pre>
+            </div>
+           </div>
+           <p>The first block is the loop body, the second is the main body. Points 3 and 4 of the main body are equivalent to points 1 and 2 of the loop body. Notice the “parent” field of the loop body, which gives the equivalent point (3) of the loop’s entry point in the body main.</p>
+          </section>
+          <section id="assembly">
+           <h3>Assembly<a class="headerlink" href="#assembly" title="Link to this heading">?</a></h3>
+           <p>An opaque wad of assembly code.</p>
+          </section>
+          <section id="annotation">
+           <h3>Annotation<a class="headerlink" href="#annotation" title="Link to this heading">?</a></h3>
+           <p>I’m not sure if I’ve seen these? They might be for the old annotation mechanism.</p>
+          </section>
+          <section id="skip">
+           <h3>Skip<a class="headerlink" href="#skip" title="Link to this heading">?</a></h3>
+           <p>These appear to be internal “epsilon” edges to simplify graph building and loop splitting. They are removed before the final CFG is emitted.</p>
+          </section>
+         </section>
+         <section id="expressions">
+          <h2>Expressions<a class="headerlink" href="#expressions" title="Link to this heading">?</a></h2>
+          <p>Expressions are the bulk of the CFG.</p>
+          <ul class="simple">
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">.Width</span></code> (optional) : width in bits. I’m not sure when this is used. It is much more common for a Type to have a width.</p></li>
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">.Unsigned</span></code> (optional) : boolean saying that this expression is unsigned.</p></li>
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">.Kind</span></code> : one of the following values</p></li>
+          </ul>
+          <section id="program-lvalues">
+           <h3>Program lvalues<a class="headerlink" href="#program-lvalues" title="Link to this heading">?</a></h3>
+           <ul class="simple">
+            <li>
+             <p>“Empty” : used in limited contexts when nothing is needed.</p></li>
+            <li>
+             <p>“Var” : expression referring to a variable</p>
+             <ul>
+              <li>
+               <p><code class="docutils literal notranslate"><span class="pre">.Type</span></code></p></li>
+             </ul></li>
+            <li>
+             <p>“Drf” : dereference (as in, *foo or foo-&gt;… or something implicit)</p>
+             <ul>
+              <li>
+               <p><code class="docutils literal notranslate"><span class="pre">.Exp[0]</span></code> : target being dereferenced</p></li>
+              <li>
+               <p><code class="docutils literal notranslate"><span class="pre">.Type</span></code></p></li>
+             </ul></li>
+            <li>
+             <p>“Fld”</p>
+             <ul>
+              <li>
+               <p><code class="docutils literal notranslate"><span class="pre">.Exp[0]</span></code> : target object containing the field</p></li>
+              <li>
+               <p><code class="docutils literal notranslate"><span class="pre">.Field</span></code></p>
+               <ul>
+                <li>
+                 <p><code class="docutils literal notranslate"><span class="pre">.Name[]</span></code> : 2-tuple of [qualified name, unqualified name]</p>
+                 <ul>
+                  <li>
+                   <p>can be unnamed, in which case the name will be “field:<number>
+                     ”. This is used for base classes.
+                    </number></p></li>
+                 </ul></li>
+                <li>
+                 <p><code class="docutils literal notranslate"><span class="pre">.FieldCSU</span></code> : type of the CSU that the field is a member of</p></li>
+                <li>
+                 <p><code class="docutils literal notranslate"><span class="pre">.Type</span></code> : type of the field</p></li>
+                <li>
+                 <p><code class="docutils literal notranslate"><span class="pre">.FieldInstanceFunction</span></code> : “whether this is a virtual instance function rather than data field of the containing CSU”. Presence or absence is what matters. All examples I have seen are for pure virtual functions (<code class="docutils literal notranslate"><span class="pre">virtual</span> <span class="pre">void</span> <span class="pre">foo()</span> <span class="pre">=</span> <span class="pre">0</span></code>).</p></li>
+                <li>
+                 <p><code class="docutils literal notranslate"><span class="pre">.Annotation[]</span></code> : any annotations on the specific field</p></li>
+               </ul></li>
+             </ul></li>
+            <li>
+             <p>“Rfld” : ? some kind of “reverse” field access</p>
+             <ul>
+              <li>
+               <p>same children as Fld</p></li>
+             </ul></li>
+            <li>
+             <p>“Index” : array element access</p>
+             <ul>
+              <li>
+               <p><code class="docutils literal notranslate"><span class="pre">.Exp[0]</span></code> : the target array</p></li>
+              <li>
+               <p><code class="docutils literal notranslate"><span class="pre">.Index</span></code> : the index being accessed (an Exp)</p></li>
+              <li>
+               <p><code class="docutils literal notranslate"><span class="pre">.Type</span></code> : the type of the element</p></li>
+             </ul></li>
+            <li>
+             <p>“String” : string constant</p>
+             <ul>
+              <li>
+               <p><code class="docutils literal notranslate"><span class="pre">.Type</span></code> : the type of the string</p></li>
+              <li>
+               <p><code class="docutils literal notranslate"><span class="pre">.Count</span></code> : number of elements (chars) in the string</p></li>
+              <li>
+               <p><code class="docutils literal notranslate"><span class="pre">.String</span></code> : the actual data in the string</p></li>
+             </ul></li>
+            <li>
+             <p>“Clobber” : “additional lvalue generated by the memory model” (?)</p>
+             <ul>
+              <li>
+               <p>callee</p></li>
+              <li>
+               <p>overwrite</p></li>
+              <li>
+               <p>optional value kind</p></li>
+              <li>
+               <p>point</p></li>
+              <li>
+               <p>optional location</p></li>
+             </ul></li>
+           </ul>
+          </section>
+          <section id="program-rvalues">
+           <h3>Program rvalues<a class="headerlink" href="#program-rvalues" title="Link to this heading">?</a></h3>
+           <ul class="simple">
+            <li>
+             <p>“Int”, “Float” : constant values</p>
+             <ul>
+              <li>
+               <p><code class="docutils literal notranslate"><span class="pre">.String</span></code> : the string form of the value (this is the only way the value is stored)</p></li>
+             </ul></li>
+            <li>
+             <p>“Unop”, “Binop” : operators</p>
+             <ul>
+              <li>
+               <p><code class="docutils literal notranslate"><span class="pre">.OpCode</span></code> : the various opcodes</p></li>
+              <li>
+               <p><code class="docutils literal notranslate"><span class="pre">.Exp[0]</span></code> and <code class="docutils literal notranslate"><span class="pre">.Exp[1]</span></code> (the latter for Binop only) : parameters</p></li>
+              <li>
+               <p>stride type (optional)</p></li>
+             </ul></li>
+           </ul>
+          </section>
+          <section id="expression-modifiers">
+           <h3>Expression modifiers<a class="headerlink" href="#expression-modifiers" title="Link to this heading">?</a></h3>
+           <ul class="simple">
+            <li>
+             <p>“Exit”, “Initial” : ?</p>
+             <ul>
+              <li>
+               <p><code class="docutils literal notranslate"><span class="pre">.Exp[0]</span></code> : target expression</p></li>
+              <li>
+               <p>value kind (optional)</p></li>
+             </ul></li>
+            <li>
+             <p>“Val” : ?</p>
+             <ul>
+              <li>
+               <p>lvalue</p></li>
+              <li>
+               <p>value kind (optional)</p></li>
+              <li>
+               <p>index (body point)</p></li>
+              <li>
+               <p>boolean saying whether it is relative (?)</p></li>
+             </ul></li>
+            <li>
+             <p>“Frame” : (unused)</p></li>
+           </ul>
+          </section>
+          <section id="immutable-properties">
+           <h3>Immutable properties<a class="headerlink" href="#immutable-properties" title="Link to this heading">?</a></h3>
+           <p>These appear to be synthetic properties intended for the built-in analyses that we are not using.</p>
+           <ul class="simple">
+            <li>
+             <p>“NullTest” : ?</p>
+             <ul>
+              <li>
+               <p><code class="docutils literal notranslate"><span class="pre">.Exp[0]</span></code> : target being tested</p></li>
+             </ul></li>
+            <li>
+             <p>“Bound” : ? appears to be bounds-checked index access</p>
+             <ul>
+              <li>
+               <p>bound kind</p></li>
+              <li>
+               <p>stride type</p></li>
+              <li>
+               <p><code class="docutils literal notranslate"><span class="pre">.Exp[0]</span></code> (optional) : target that the bound applies to</p></li>
+             </ul></li>
+            <li>
+             <p>“Directive” : ?</p>
+             <ul>
+              <li>
+               <p>directive kind</p></li>
+             </ul></li>
+           </ul>
+          </section>
+          <section id="mutable-properties">
+           <h3>Mutable properties<a class="headerlink" href="#mutable-properties" title="Link to this heading">?</a></h3>
+           <p>These appear to be synthetic properties intended for the built-in analyses that we are not using.</p>
+           <ul class="simple">
+            <li>
+             <p>“Terminate”</p>
+             <ul>
+              <li>
+               <p>stride type</p></li>
+              <li>
+               <p>terminate test (Exp)</p></li>
+              <li>
+               <p>terminate int (Exp)</p></li>
+              <li>
+               <p><code class="docutils literal notranslate"><span class="pre">.Exp[0]</span></code> (optional) : target</p></li>
+             </ul></li>
+            <li>
+             <p>“GCSafe” : (unused)</p>
+             <ul>
+              <li>
+               <p><code class="docutils literal notranslate"><span class="pre">.Exp[0]</span></code> (optional) : target</p></li>
+             </ul></li>
+           </ul>
+          </section>
+         </section>
+         <section id="types">
+          <h2>Types<a class="headerlink" href="#types" title="Link to this heading">?</a></h2>
+          <ul class="simple">
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">.Kind</span></code> : the kind of type being described, one of:</p></li>
+          </ul>
+          <p>Possible Type Kinds:</p>
+          <ul class="simple">
+           <li>
+            <p>“Void” : the C/C++ void type</p></li>
+           <li>
+            <p>“Int”</p>
+            <ul>
+             <li>
+              <p><code class="docutils literal notranslate"><span class="pre">.Width</span></code> : width in bits</p></li>
+             <li>
+              <p><code class="docutils literal notranslate"><span class="pre">.Sign</span></code> (optional) : whether the type is signed</p></li>
+             <li>
+              <p><code class="docutils literal notranslate"><span class="pre">.Variant</span></code> (optional) : ?</p></li>
+            </ul></li>
+           <li>
+            <p>“Float”</p>
+            <ul>
+             <li>
+              <p><code class="docutils literal notranslate"><span class="pre">.Width</span></code> : width in bits</p></li>
+            </ul></li>
+           <li>
+            <p>“Pointer” : pointer or reference type</p>
+            <ul>
+             <li>
+              <p><code class="docutils literal notranslate"><span class="pre">.Width</span></code> : width in bits</p></li>
+             <li>
+              <p><code class="docutils literal notranslate"><span class="pre">.Reference</span></code> : 0 for pointer, 1 for regular reference, 2 for rvalue reference</p></li>
+             <li>
+              <p><code class="docutils literal notranslate"><span class="pre">.Type</span></code> : type of the target</p></li>
+            </ul></li>
+           <li>
+            <p>“Array”</p>
+            <ul>
+             <li>
+              <p><code class="docutils literal notranslate"><span class="pre">.Type</span></code> : type of the elements</p></li>
+             <li>
+              <p><code class="docutils literal notranslate"><span class="pre">.Count</span></code> : number of elements, given as a plain constant integer</p></li>
+            </ul></li>
+           <li>
+            <p>“CSU” : class, structured, or union</p>
+            <ul>
+             <li>
+              <p><code class="docutils literal notranslate"><span class="pre">.Name</span></code> : qualified name, as a plain string</p></li>
+            </ul></li>
+           <li>
+            <p>“Function”</p>
+            <ul>
+             <li>
+              <p><code class="docutils literal notranslate"><span class="pre">.TypeFunctionCSU</span></code> (optional) : if present, the type of the CSU containing the function</p></li>
+             <li>
+              <p><code class="docutils literal notranslate"><span class="pre">.FunctionVarArgs</span></code> (?) (optional) : if this is present, the function is varargs (eg f(…))</p></li>
+             <li>
+              <p><code class="docutils literal notranslate"><span class="pre">.TypeFunctionArgument</span></code> : array of argument types. Present if at least one parameter.</p>
+              <ul>
+               <li>
+                <p><code class="docutils literal notranslate"><span class="pre">.Type</span></code> : type of argument</p></li>
+               <li>
+                <p><code class="docutils literal notranslate"><span class="pre">.Annotation</span></code> (optional) : any explicit annotations (<strong>attribute</strong>((foo))) for this parameter</p></li>
+              </ul></li>
+             <li>
+              <p><code class="docutils literal notranslate"><span class="pre">.Variable</span></code> : the variable representing the function</p></li>
+             <li>
+              <p><code class="docutils literal notranslate"><span class="pre">.Annotation</span></code> (optional) : any explicit annotation for this function</p></li>
+            </ul></li>
+           <li>
+            <p>“Error” : there was an error handling this type in sixgill. Probably something unimplemented.</p></li>
+          </ul>
+         </section>
+        </section>
+       </div>
+      </div>
+      <footer>
+       <hr>
+       <div role="contentinfo">
+        <p></p>
+       </div> Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+      </footer>
+     </div>
+    </div>
+   </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ </body>
+</html>

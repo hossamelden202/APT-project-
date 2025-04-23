@@ -1,0 +1,1087 @@
+<!doctype html>
+<html class="writer-html5" lang="en" data-content_root="../">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IOUtils Migration Guide — Firefox Source Docs  documentation</title>
+  <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50">
+  <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094">
+  <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=fd3f3429">
+  <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b">
+  <link rel="stylesheet" type="text/css" href="../_static/custom_theme.css?v=dc5ed815">
+  <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7">
+  <link rel="shortcut icon" href="../_static/firefox.ico"><!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script src="../_static/jquery.js?v=5d32c60e"></script>
+  <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+  <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+  <script src="../_static/doctools.js?v=9a2dae69"></script>
+  <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+  <script src="../_static/copybutton.js?v=30646c52"></script>
+  <script src="../_static/design-tabs.js?v=36754332"></script>
+  <script src="../_static/js/theme.js"></script>
+  <link rel="index" title="Index" href="../genindex.html">
+  <link rel="search" title="Search" href="../search.html">
+  <link rel="next" title="Federated Credential Management" href="fedcm.html">
+  <link rel="prev" title="Web IDL bindings" href="webIdlBindings/index.html">
+ </head>
+ <body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+   <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <div class="wy-side-scroll">
+     <div class="wy-side-nav-search">
+      <a href="../index.html" class="icon icon-home"> Firefox Source Docs <img src="../_static/firefox-wordmark.svg" class="logo" alt="Logo"> </a><!-- -- This code is governed by the BSD license ---->
+      <div>
+       <h3>Quick search</h3>
+       <script>
+    (function () {
+      var cx = "dd12886298f75dbef";
+      var gcse = document.createElement("script");
+      gcse.async = true;
+      gcse.src = "https://cse.google.com/cse.js?cx=" + cx;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(gcse, s);
+    })();
+  </script><gcse:search></gcse:search>
+      </div>
+     </div>
+     <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+      <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../glossary/index.html">A Glossary of Common Terms</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../overview/index.html">A Quick Guide to Mozilla Applications</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../setup/index.html">Getting Set Up To Work On The Firefox Codebase</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Working On Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../contributing/index.html">Working on Firefox</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../bug-mgmt/index.html">Bug Handling</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox User Guide</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../devtools-user/index.html">Firefox DevTools User Docs</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Source Code Documentation</span></p>
+      <ul class="current">
+       <li class="toctree-l1"><a class="reference internal" href="../mots/index.html">Governance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../browser/index.html">Firefox Front-end</a></li>
+       <li class="toctree-l1 current"><a class="reference internal" href="index.html">DOM</a>
+        <ul class="current">
+         <li class="toctree-l2"><a class="reference internal" href="ipc/index.html">DOM IPC</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="navigation/index.html">DOM Navigation</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="push/index.html">Push</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="scriptSecurity/index.html">Script Security</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="scriptSecurity/xray_vision.html">Xray Vision</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="workersAndStorage/index.html">DOM Workers &amp; Storage</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="webIdlBindings/index.html">Web IDL bindings</a></li>
+         <li class="toctree-l2 current"><a class="current reference internal" href="#">IOUtils Migration Guide</a>
+          <ul>
+           <li class="toctree-l3"><a class="reference internal" href="#what-is-ioutils">What is IOUtils?</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#differences-from-os-file">Differences from <code class="docutils literal notranslate"><span class="pre">OS.File</span></code></a>
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="#no-file-instances-except-syncreadfile-in-workers">No <code class="docutils literal notranslate"><span class="pre">File</span></code> instances (except <code class="docutils literal notranslate"><span class="pre">SyncReadFile</span></code> in workers)</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#webidl-has-no-date-type">WebIDL has no <code class="docutils literal notranslate"><span class="pre">Date</span></code> type</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#some-methods-are-not-implemented">Some methods are not implemented</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#errors-are-reported-as-domexceptions">Errors are reported as <code class="docutils literal notranslate"><span class="pre">DOMException</span></code>s</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#ioutils-is-mostly-async-only"><code class="docutils literal notranslate"><span class="pre">IOUtils</span></code> is mostly async-only</a></li>
+            </ul></li>
+           <li class="toctree-l3"><a class="reference internal" href="#os-file-vs-ioutils"><code class="docutils literal notranslate"><span class="pre">OS.File</span></code> vs <code class="docutils literal notranslate"><span class="pre">IOUtils</span></code></a>
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="#reading-a-file">Reading a file</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#writing-to-a-file">Writing to a file</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#move-a-file">Move a file</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#remove-a-file">Remove a file</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#make-a-directory">Make a directory</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#update-a-files-modification-time">Update a file’s modification time</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#get-file-metadata">Get file metadata</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#copy-a-file">Copy a file</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#iterate-a-directory">Iterate a directory</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#check-if-a-file-exists">Check if a file exists</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#set-the-permissions-of-a-file">Set the permissions of a file</a></li>
+            </ul></li>
+           <li class="toctree-l3"><a class="reference internal" href="#faqs">FAQs</a></li>
+          </ul></li>
+         <li class="toctree-l2"><a class="reference internal" href="fedcm.html">Federated Credential Management</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="streams.html">Implementing specifications using WHATWG Streams API</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="use-counters.html">Use Counters</a></li>
+        </ul></li>
+       <li class="toctree-l1"><a class="reference internal" href="../editor/index.html">Editor</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../layout/index.html">Style system (CSS) &amp; Layout</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../gfx/index.html">Graphics</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../ipc/index.html">Processes, Threads and IPC</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../devtools/index.html">Firefox DevTools Contributor Docs</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../toolkit/index.html">Toolkit</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../js/index.html">SpiderMonkey</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../jsloader/index.html">JS Loader</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mobile/android/geckoview/index.html">GeckoView</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mobile/android/fenix/index.html">Fenix</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mobile/android/focus-android/index.html">Focus for Android</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="bindings/webidl/index.html">WebIDL</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../modules/libpref/index.html">libpref</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../networking/index.html">Networking</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../remote/index.html">Remote Protocols</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../services/index.html">Services</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../permissions/index.html">Permissions</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../uriloader/index.html">File Handling</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../widget/cocoa/index.html">Firefox on macOS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../widget/windows/index.html">Firefox on Windows</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../toolkit/components/ml/index.html">Firefox AI Runtime</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../accessible/index.html">Accessibility</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../media/index.html">Media Playback</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../code-quality/index.html">Code quality</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../writing-rust-code/index.html">Writing Rust Code</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../rust-components/index.html">Rust Components</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/profiler/index.html">Gecko Profiler</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../performance/index.html">Performance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../storage/index.html">Database bindings (SQLite, KV, …)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../xpcom/index.html">XPCOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../nspr/index.html">NSPR</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../security/nss/index.html">Network Security Services (NSS)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../content-security/index.html">Web Security Checks in Gecko</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">The Firefox Build System</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../mach/index.html">Mach</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/try/index.html">Pushing to Try</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../build/buildsystem/index.html">Build System</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../taskcluster/index.html">Firefox CI and Taskgraph</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/moztreedocs/index.html">Managing Documentation</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mozbuild/vendor/index.html">Vendoring Third Party Components</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Testing &amp; Test Infrastructure</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/automated-testing/index.html">Automated Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/treeherder-try/index.html">Understanding Treeherder Results</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/sheriffed-intermittents/index.html">Sheriffed intermittent failures</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/tests-for-new-config/index.html">Turning on Firefox tests for a new configuration</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/intermittent/index.html">Avoiding intermittent tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/testing-policy/index.html">Testing Policy</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/ci-configs/index.html">Configuration Changes</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/browser-chrome/index.html">Browser chrome mochitests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/chrome-tests/index.html">Chrome Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/marionette/index.html">Marionette</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/geckodriver/index.html">geckodriver</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/test-verification/index.html">Test Verification</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/webrender/index.html">WebRender Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/mochitest-plain/index.html">Mochitest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/xpcshell/index.html">XPCShell tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/tps/index.html">TPS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../web-platform/index.html">web-platform-tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../gtest/index.html">GTest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/fuzzing/index.html">Fuzzing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/sanitizer/index.html">Sanitizer</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/perfdocs/index.html">Performance Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/code-coverage/index.html">Code coverage</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing-rust-code/index.html">Testing &amp; Debugging Rust Code</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Releases &amp; Updates</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../update-infrastructure/index.html">Mozilla Update Infrastructure</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../update-infrastructure/index.html#watershed-updates">Watershed Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../update-infrastructure/index.html#desupport-updates">Desupport Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/update-verify/index.html">Update Verify</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Localization &amp; Internationalization</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../intl/index.html">Internationalization</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../l10n/index.html">Localization</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox and Python</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../mozbase/index.html">mozbase</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../python/index.html">Using third-party Python packages</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Metrics Collected in Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../metrics/index.html">Metrics</a></li>
+      </ul>
+     </div>
+    </div>
+   </nav>
+   <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+    <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+     <i data-toggle="wy-nav-top" class="fa fa-bars"></i> <a href="../index.html">Firefox Source Docs</a>
+    </nav>
+    <div class="wy-nav-content">
+     <div class="rst-content">
+      <!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+      <div role="navigation" aria-label="Page navigation">
+       <ul class="wy-breadcrumbs">
+        <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+        <li class="breadcrumb-item"><a href="index.html">DOM</a></li>
+        <li class="breadcrumb-item active">IOUtils Migration Guide</li>
+        <li class="wy-breadcrumbs-aside"><a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Developer+Infrastructure&amp;component=Firefox+Source+Docs%3A+Content&amp;short_desc=Documentation+issue+on+dom/ioutils_migration&amp;comment=URL+=+https://firefox-source-docs.mozilla.org/dom/ioutils_migration.html&amp;bug_file_loc=https://firefox-source-docs.mozilla.org/dom/ioutils_migration.html" rel="nofollow">Report an issue</a> / <a href="../_sources/dom/ioutils_migration.md.txt" rel="nofollow"> View page source</a></li>
+       </ul>
+       <hr>
+      </div>
+      <div role="main" class="document" itemscope itemtype="http://schema.org/Article">
+       <div itemprop="articleBody">
+        <section id="ioutils-migration-guide">
+         <h1>IOUtils Migration Guide<a class="headerlink" href="#ioutils-migration-guide" title="Link to this heading">?</a></h1>
+         <p><strong>Improving performance through a new file API</strong></p>
+         <hr class="docutils">
+         <section id="what-is-ioutils">
+          <h2>What is IOUtils?<a class="headerlink" href="#what-is-ioutils" title="Link to this heading">?</a></h2>
+          <p><code class="docutils literal notranslate"><span class="pre">IOUtils</span></code> is a privileged JavaScript API for performing file I/O in the Firefox frontend. It was developed as a replacement for <code class="docutils literal notranslate"><span class="pre">OS.File</span></code>, addressing <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1231711">bug 1231711</a>. It is <em>not to be confused</em> with the unprivileged <a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/API/File">DOM File API</a>.</p>
+          <p><code class="docutils literal notranslate"><span class="pre">IOUtils</span></code> provides a minimal API surface to perform common I/O tasks via a collection of static methods inspired from <code class="docutils literal notranslate"><span class="pre">OS.File</span></code>. It is implemented in C++, and exposed to JavaScript via WebIDL bindings.</p>
+          <p>The most up-to-date API can always be found in <a class="reference external" href="https://searchfox.org/mozilla-central/source/dom/chrome-webidl/IOUtils.webidl">IOUtils.webidl</a>.</p>
+         </section>
+         <section id="differences-from-os-file">
+          <h2>Differences from <code class="docutils literal notranslate"><span class="pre">OS.File</span></code><a class="headerlink" href="#differences-from-os-file" title="Link to this heading">?</a></h2>
+          <p><code class="docutils literal notranslate"><span class="pre">IOUtils</span></code> has a similar API to <code class="docutils literal notranslate"><span class="pre">OS.File</span></code>, but one should keep in mind some key differences.</p>
+          <section id="no-file-instances-except-syncreadfile-in-workers">
+           <h3>No <code class="docutils literal notranslate"><span class="pre">File</span></code> instances (except <code class="docutils literal notranslate"><span class="pre">SyncReadFile</span></code> in workers)<a class="headerlink" href="#no-file-instances-except-syncreadfile-in-workers" title="Link to this heading">?</a></h3>
+           <p>Most of the <code class="docutils literal notranslate"><span class="pre">IOUtils</span></code> methods only operate on absolute path strings, and don’t expose a file handle to the caller. The exception to this rule is the <code class="docutils literal notranslate"><span class="pre">openFileForSyncReading</span></code> API, which is only available in workers.</p>
+           <p>Furthermore, <code class="docutils literal notranslate"><span class="pre">OS.File</span></code> was exposing platform-specific file descriptors through the <a class="reference external" href="https://developer.mozilla.org/en-US/docs/Mozilla/JavaScript_code_modules/OSFile.jsm/OS.File_for_workers#Attributes"><code class="docutils literal notranslate"><span class="pre">fd</span></code></a> attribute. <code class="docutils literal notranslate"><span class="pre">IOUtils</span></code> does not expose file descriptors.</p>
+          </section>
+          <section id="webidl-has-no-date-type">
+           <h3>WebIDL has no <code class="docutils literal notranslate"><span class="pre">Date</span></code> type<a class="headerlink" href="#webidl-has-no-date-type" title="Link to this heading">?</a></h3>
+           <p><code class="docutils literal notranslate"><span class="pre">IOUtils</span></code> is written in C++ and exposed to JavaScript through WebIDL. Many uses of <code class="docutils literal notranslate"><span class="pre">OS.File</span></code> concern themselves with obtaining or manipulating file metadata, like the last modified time, however the <code class="docutils literal notranslate"><span class="pre">Date</span></code> type does not exist in WebIDL. Using <code class="docutils literal notranslate"><span class="pre">IOUtils</span></code>, these values are returned to the caller as the number of milliseconds since <code class="docutils literal notranslate"><span class="pre">1970-01-01T00:00:00Z</span></code>. <code class="docutils literal notranslate"><span class="pre">Date</span></code>s can be safely constructed from these values if needed.</p>
+           <p>For example, to obtain the last modification time of a file and update it to the current time:</p>
+           <div class="highlight-js notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="kd">let</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">lastModified</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">IOUtils</span><span class="p">.</span><span class="nx">stat</span><span class="p">(</span><span class="nx">path</span><span class="p">);</span>
+
+<span class="kd">let</span><span class="w"> </span><span class="nx">lastModifiedDate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nb">Date</span><span class="p">(</span><span class="nx">lastModified</span><span class="p">);</span>
+
+<span class="kd">let</span><span class="w"> </span><span class="nx">now</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nb">Date</span><span class="p">();</span>
+
+<span class="k">await</span><span class="w"> </span><span class="nx">IOUtils</span><span class="p">.</span><span class="nx">touch</span><span class="p">(</span><span class="nx">path</span><span class="p">,</span><span class="w"> </span><span class="nx">now</span><span class="p">.</span><span class="nx">valueOf</span><span class="p">());</span>
+</pre>
+            </div>
+           </div>
+          </section>
+          <section id="some-methods-are-not-implemented">
+           <h3>Some methods are not implemented<a class="headerlink" href="#some-methods-are-not-implemented" title="Link to this heading">?</a></h3>
+           <p>For various reasons (complexity, safety, availability of underlying system calls, usefulness, etc.) the following <code class="docutils literal notranslate"><span class="pre">OS.File</span></code> methods have no analogue in IOUtils. They also will <strong>not</strong> be implemented.</p>
+           <ul class="simple">
+            <li>
+             <p>void unixSymlink(in string targetPath, in string createPath)</p></li>
+            <li>
+             <p>string getCurrentDirectory(void)</p></li>
+            <li>
+             <p>void setCurrentDirectory(in string path)</p></li>
+            <li>
+             <p>object open(in string path)</p></li>
+            <li>
+             <p>object openUnique(in string path)</p></li>
+           </ul>
+          </section>
+          <section id="errors-are-reported-as-domexceptions">
+           <h3>Errors are reported as <code class="docutils literal notranslate"><span class="pre">DOMException</span></code>s<a class="headerlink" href="#errors-are-reported-as-domexceptions" title="Link to this heading">?</a></h3>
+           <p>When an <code class="docutils literal notranslate"><span class="pre">OS.File</span></code> method runs into an error, it will throw/reject with a custom <a class="reference external" href="https://developer.mozilla.org/en-US/docs/Mozilla/JavaScript_code_modules/OSFile.jsm/OS.File.Error"><code class="docutils literal notranslate"><span class="pre">OS.File.Error</span></code></a>. These objects have custom attributes that can be checked for common error cases.</p>
+           <p><code class="docutils literal notranslate"><span class="pre">IOUtils</span></code> has similar behaviour, however its methods consistently reject with a <a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/API/DOMException"><code class="docutils literal notranslate"><span class="pre">DOMException</span></code></a> whose name depends on the failure:</p>
+           <table border="1" class="docutils">
+            <thead>
+             <tr>
+              <th>Exception Name</th>
+              <th>Reason for exception</th>
+             </tr>
+            </thead>
+            <tbody>
+             <tr>
+              <td><code>NotFoundError</code></td>
+              <td>A file at the specified path could not be found on disk.</td>
+             </tr>
+             <tr>
+              <td><code>NotAllowedError</code></td>
+              <td>Access to a file at the specified path was denied by the operating system.</td>
+             </tr>
+             <tr>
+              <td><code>NotReadableError</code></td>
+              <td>A file at the specified path could not be read for some reason. It may have been too big to read, or it was corrupt, or some other reason. The exception message should have more details.</td>
+             </tr>
+             <tr>
+              <td><code>ReadOnlyError</code></td>
+              <td>A file at the specified path is read only and could not be modified.</td>
+             </tr>
+             <tr>
+              <td><code>NoModificationAllowedError</code></td>
+              <td>A file already exists at the specified path and could not be overwritten according to the specified options. The exception message should have more details.</td>
+             </tr>
+             <tr>
+              <td><code>OperationError</code></td>
+              <td>Something went wrong during the I/O operation. E.g. failed to allocate a buffer. The exception message should have more details.</td>
+             </tr>
+             <tr>
+              <td><code>UnknownError</code></td>
+              <td>An unknown error occurred in the implementation. An nsresult error code should be included in the exception message to assist with debugging and improving <code>IOUtils</code> internal error handling.</td>
+             </tr>
+            </tbody>
+           </table>
+          </section>
+          <section id="ioutils-is-mostly-async-only">
+           <h3><code class="docutils literal notranslate"><span class="pre">IOUtils</span></code> is mostly async-only<a class="headerlink" href="#ioutils-is-mostly-async-only" title="Link to this heading">?</a></h3>
+           <p><code class="docutils literal notranslate"><span class="pre">OS.File</span></code> provided an asynchronous front-end for main-thread consumers, and a synchronous front-end for workers. <code class="docutils literal notranslate"><span class="pre">IOUtils</span></code> only provides an asynchronous API for the vast majority of its API surface. These asynchronous methods can be called from both the main thread and from chrome-privileged worker threads.</p>
+           <p>The one exception to this rule is <code class="docutils literal notranslate"><span class="pre">openFileForSyncReading</span></code>, which allows synchronous file reading in workers.</p>
+          </section>
+         </section>
+         <section id="os-file-vs-ioutils">
+          <h2><code class="docutils literal notranslate"><span class="pre">OS.File</span></code> vs <code class="docutils literal notranslate"><span class="pre">IOUtils</span></code><a class="headerlink" href="#os-file-vs-ioutils" title="Link to this heading">?</a></h2>
+          <p>Some methods and options of <code class="docutils literal notranslate"><span class="pre">OS.File</span></code> keep the same name and underlying behaviour in <code class="docutils literal notranslate"><span class="pre">IOUtils</span></code>, but others have been renamed. The following is a detailed comparison with examples of the methods and options in each API.</p>
+          <section id="reading-a-file">
+           <h3>Reading a file<a class="headerlink" href="#reading-a-file" title="Link to this heading">?</a></h3>
+           <p><code class="docutils literal notranslate"><span class="pre">IOUtils</span></code> provides the following methods to read data from a file. Like <code class="docutils literal notranslate"><span class="pre">OS.File</span></code>, they accept an <code class="docutils literal notranslate"><span class="pre">options</span></code> dictionary.</p>
+           <p>Note: The maximum file size that can be read is <code class="docutils literal notranslate"><span class="pre">UINT32_MAX</span></code> bytes. Attempting to read a file larger will result in a <code class="docutils literal notranslate"><span class="pre">NotReadableError</span></code>.</p>
+           <div class="highlight-idl notranslate">
+            <div class="highlight">
+             <pre><span></span>Promise<span class="o">&lt;</span>Uint8Array<span class="o">&gt;</span><span class="w"> </span><span class="nb">read</span>(DOMString<span class="w"> </span>path,<span class="w"> </span>...);
+
+Promise<span class="o">&lt;</span>DOMString<span class="o">&gt;</span><span class="w"> </span>readUTF8(DOMString<span class="w"> </span>path,<span class="w"> </span>...);
+
+Promise<span class="o">&lt;</span>any<span class="o">&gt;</span><span class="w"> </span>readJSON(DOMString<span class="w"> </span>path,<span class="w"> </span>...);
+
+<span class="o">//</span><span class="w"> </span>Workers<span class="w"> </span>only<span class="o">:</span>
+SyncReadFile<span class="w"> </span>openFileForSyncReading(DOMString<span class="w"> </span>path);
+</pre>
+            </div>
+           </div>
+           <section id="options">
+            <h4>Options<a class="headerlink" href="#options" title="Link to this heading">?</a></h4>
+            <table border="1" class="docutils">
+             <thead>
+              <tr>
+               <th><code>OS.File</code> option</th>
+               <th><code>IOUtils</code> option</th>
+               <th>Description</th>
+              </tr>
+             </thead>
+             <tbody>
+              <tr>
+               <td>bytes: number?</td>
+               <td>maxBytes: number?</td>
+               <td>If specified, read only up to this number of bytes. Otherwise, read the entire file. Default is null.</td>
+              </tr>
+              <tr>
+               <td>compression: 'lz4'</td>
+               <td>decompress: boolean</td>
+               <td>If true, read the file and return the decompressed LZ4 stream. Otherwise, just read the file byte-for-byte. Default is false.</td>
+              </tr>
+              <tr>
+               <td>encoding: 'utf-8'</td>
+               <td>N/A; use <code>readUTF8</code> instead.</td>
+               <td>Interprets the file as UTF-8 encoded text, and returns a string to the caller.</td>
+              </tr>
+             </tbody>
+            </table>
+           </section>
+           <section id="examples">
+            <h4>Examples<a class="headerlink" href="#examples" title="Link to this heading">?</a></h4>
+            <section id="read-raw-unsigned-byte-values">
+             <h5>Read raw (unsigned) byte values<a class="headerlink" href="#read-raw-unsigned-byte-values" title="Link to this heading">?</a></h5>
+             <p><strong><code class="docutils literal notranslate"><span class="pre">OS.File</span></code></strong></p>
+             <div class="highlight-js notranslate">
+              <div class="highlight">
+               <pre><span></span><span class="kd">let</span><span class="w"> </span><span class="nx">bytes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">OS</span><span class="p">.</span><span class="nx">File</span><span class="p">.</span><span class="nx">read</span><span class="p">(</span><span class="nx">path</span><span class="p">);</span><span class="w"> </span><span class="c1">// Uint8Array</span>
+</pre>
+              </div>
+             </div>
+             <p><strong><code class="docutils literal notranslate"><span class="pre">IOUtils</span></code></strong></p>
+             <div class="highlight-js notranslate">
+              <div class="highlight">
+               <pre><span></span><span class="kd">let</span><span class="w"> </span><span class="nx">bytes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">IOUtils</span><span class="p">.</span><span class="nx">read</span><span class="p">(</span><span class="nx">path</span><span class="p">);</span><span class="w"> </span><span class="c1">// Uint8Array</span>
+</pre>
+              </div>
+             </div>
+            </section>
+            <section id="read-utf-8-encoded-text">
+             <h5>Read UTF-8 encoded text<a class="headerlink" href="#read-utf-8-encoded-text" title="Link to this heading">?</a></h5>
+             <p><strong><code class="docutils literal notranslate"><span class="pre">OS.File</span></code></strong></p>
+             <div class="highlight-js notranslate">
+              <div class="highlight">
+               <pre><span></span><span class="kd">let</span><span class="w"> </span><span class="nx">utf8</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">OS</span><span class="p">.</span><span class="nx">File</span><span class="p">.</span><span class="nx">read</span><span class="p">(</span><span class="nx">path</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">encoding</span><span class="o">:</span><span class="w"> </span><span class="s1">'utf-8'</span><span class="w"> </span><span class="p">});</span><span class="w"> </span><span class="c1">// string</span>
+</pre>
+              </div>
+             </div>
+             <p><strong><code class="docutils literal notranslate"><span class="pre">IOUtils</span></code></strong></p>
+             <div class="highlight-js notranslate">
+              <div class="highlight">
+               <pre><span></span><span class="kd">let</span><span class="w"> </span><span class="nx">utf8</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">IOUtils</span><span class="p">.</span><span class="nx">readUTF8</span><span class="p">(</span><span class="nx">path</span><span class="p">);</span><span class="w"> </span><span class="c1">// string</span>
+</pre>
+              </div>
+             </div>
+            </section>
+            <section id="read-json-file">
+             <h5>Read JSON file<a class="headerlink" href="#read-json-file" title="Link to this heading">?</a></h5>
+             <p><strong><code class="docutils literal notranslate"><span class="pre">IOUtils</span></code></strong></p>
+             <div class="highlight-js notranslate">
+              <div class="highlight">
+               <pre><span></span><span class="kd">let</span><span class="w"> </span><span class="nx">obj</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">IOUtils</span><span class="p">.</span><span class="nx">readJSON</span><span class="p">(</span><span class="nx">path</span><span class="p">);</span><span class="w"> </span><span class="c1">// object</span>
+</pre>
+              </div>
+             </div>
+            </section>
+            <section id="read-lz4-compressed-file-contents">
+             <h5>Read LZ4 compressed file contents<a class="headerlink" href="#read-lz4-compressed-file-contents" title="Link to this heading">?</a></h5>
+             <p><strong><code class="docutils literal notranslate"><span class="pre">OS.File</span></code></strong></p>
+             <div class="highlight-js notranslate">
+              <div class="highlight">
+               <pre><span></span><span class="c1">// Uint8Array</span>
+<span class="kd">let</span><span class="w"> </span><span class="nx">bytes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">OS</span><span class="p">.</span><span class="nx">File</span><span class="p">.</span><span class="nx">read</span><span class="p">(</span><span class="nx">path</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">compression</span><span class="o">:</span><span class="w"> </span><span class="s1">'lz4'</span><span class="w"> </span><span class="p">});</span>
+<span class="c1">// string</span>
+<span class="kd">let</span><span class="w"> </span><span class="nx">utf8</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">OS</span><span class="p">.</span><span class="nx">File</span><span class="p">.</span><span class="nx">read</span><span class="p">(</span><span class="nx">path</span><span class="p">,</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">encoding</span><span class="o">:</span><span class="w"> </span><span class="s1">'utf-8'</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">compression</span><span class="o">:</span><span class="w"> </span><span class="s1">'lz4'</span><span class="p">,</span>
+<span class="p">});</span>
+</pre>
+              </div>
+             </div>
+             <p><strong><code class="docutils literal notranslate"><span class="pre">IOUtils</span></code></strong></p>
+             <div class="highlight-js notranslate">
+              <div class="highlight">
+               <pre><span></span><span class="kd">let</span><span class="w"> </span><span class="nx">bytes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">IOUtils</span><span class="p">.</span><span class="nx">read</span><span class="p">(</span><span class="nx">path</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">decompress</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="w"> </span><span class="p">});</span><span class="w"> </span><span class="c1">// Uint8Array</span>
+<span class="kd">let</span><span class="w"> </span><span class="nx">utf8</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">IOUtils</span><span class="p">.</span><span class="nx">readUTF8</span><span class="p">(</span><span class="nx">path</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">decompress</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="w"> </span><span class="p">});</span><span class="w"> </span><span class="c1">// string</span>
+</pre>
+              </div>
+             </div>
+            </section>
+            <section id="synchronously-read-a-fragment-of-a-file-into-a-buffer-from-a-worker">
+             <h5>Synchronously read a fragment of a file into a buffer, from a worker<a class="headerlink" href="#synchronously-read-a-fragment-of-a-file-into-a-buffer-from-a-worker" title="Link to this heading">?</a></h5>
+             <p><strong><code class="docutils literal notranslate"><span class="pre">OS.File</span></code></strong></p>
+             <div class="highlight-js notranslate">
+              <div class="highlight">
+               <pre><span></span><span class="c1">// Read 64 bytes at offset 128, workers only:</span>
+<span class="kd">let</span><span class="w"> </span><span class="nx">file</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">OS</span><span class="p">.</span><span class="nx">File</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="nx">path</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">read</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="w"> </span><span class="p">});</span>
+<span class="nx">file</span><span class="p">.</span><span class="nx">setPosition</span><span class="p">(</span><span class="mf">128</span><span class="p">);</span>
+<span class="kd">let</span><span class="w"> </span><span class="nx">bytes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">file</span><span class="p">.</span><span class="nx">read</span><span class="p">({</span><span class="w"> </span><span class="nx">bytes</span><span class="o">:</span><span class="w"> </span><span class="mf">64</span><span class="w"> </span><span class="p">});</span><span class="w"> </span><span class="c1">// Uint8Array</span>
+<span class="nx">file</span><span class="p">.</span><span class="nx">close</span><span class="p">();</span>
+</pre>
+              </div>
+             </div>
+             <p><strong><code class="docutils literal notranslate"><span class="pre">IOUtils</span></code></strong></p>
+             <div class="highlight-js notranslate">
+              <div class="highlight">
+               <pre><span></span><span class="c1">// Read 64 bytes at offset 128, workers only:</span>
+<span class="kd">let</span><span class="w"> </span><span class="nx">file</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">IOUtils</span><span class="p">.</span><span class="nx">openFileForSyncReading</span><span class="p">(</span><span class="nx">path</span><span class="p">);</span>
+<span class="kd">let</span><span class="w"> </span><span class="nx">bytes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nb">Uint8Array</span><span class="p">(</span><span class="mf">64</span><span class="p">);</span>
+<span class="nx">file</span><span class="p">.</span><span class="nx">readBytesInto</span><span class="p">(</span><span class="nx">bytes</span><span class="p">,</span><span class="w"> </span><span class="mf">128</span><span class="p">);</span>
+<span class="nx">file</span><span class="p">.</span><span class="nx">close</span><span class="p">();</span>
+</pre>
+              </div>
+             </div>
+            </section>
+           </section>
+          </section>
+          <section id="writing-to-a-file">
+           <h3>Writing to a file<a class="headerlink" href="#writing-to-a-file" title="Link to this heading">?</a></h3>
+           <p>IOUtils provides the following methods to write data to a file. Like OS.File, they accept an options dictionary.</p>
+           <div class="highlight-idl notranslate">
+            <div class="highlight">
+             <pre><span></span>Promise<span class="o">&lt;</span>unsigned<span class="w"> </span><span class="nb">long</span><span class="w"> </span><span class="nb">long</span><span class="o">&gt;</span><span class="w"> </span>write(DOMString<span class="w"> </span>path,<span class="w"> </span>Uint8Array<span class="w"> </span>data,<span class="w"> </span>...);
+
+Promise<span class="o">&lt;</span>unsigned<span class="w"> </span><span class="nb">long</span><span class="w"> </span><span class="nb">long</span><span class="o">&gt;</span><span class="w"> </span>writeUTF8(DOMString<span class="w"> </span>path,<span class="w"> </span>DOMString<span class="w"> </span><span class="nb">string</span>,<span class="w"> </span>...);
+
+Promise<span class="o">&lt;</span>unsigned<span class="w"> </span><span class="nb">long</span><span class="w"> </span><span class="nb">long</span><span class="o">&gt;</span><span class="w"> </span>writeJSON(DOMString<span class="w"> </span>path,<span class="w"> </span>any<span class="w"> </span>value,<span class="w"> </span>...);
+</pre>
+            </div>
+           </div>
+           <section id="id1">
+            <h4>Options<a class="headerlink" href="#id1" title="Link to this heading">?</a></h4>
+            <table border="1" class="docutils">
+             <thead>
+              <tr>
+               <th><code>OS.File</code> option</th>
+               <th><code>IOUtils</code> option</th>
+               <th>Description</th>
+              </tr>
+             </thead>
+             <tbody>
+              <tr>
+               <td>backupTo: string?</td>
+               <td>backupFile: string?</td>
+               <td>Identifies the path to backup the target file to before performing the write operation. If unspecified, no backup will be performed. Default is null.</td>
+              </tr>
+              <tr>
+               <td>tmpPath: string?</td>
+               <td>tmpPath: string?</td>
+               <td>Identifies a path to write to first, before performing a move to overwrite the target file. If unspecified, the target file will be written to directly. Default is null.</td>
+              </tr>
+              <tr>
+               <td>noOverwrite: boolean</td>
+               <td>mode: 'overwrite' or 'create'</td>
+               <td>'create' mode will refuse to overwrite an existing file. Default is 'overwrite'.</td>
+              </tr>
+              <tr>
+               <td>flush: boolean</td>
+               <td>flush: boolean</td>
+               <td>If true, force the OS to flush its internal buffers to disk. Default is false.</td>
+              </tr>
+              <tr>
+               <td>encoding: 'utf-8'</td>
+               <td>N/A; use <code>writeUTF8</code> instead.</td>
+               <td>Allows the caller to supply a string to be encoded as utf-8 text on disk.</td>
+              </tr>
+             </tbody>
+            </table>
+           </section>
+           <section id="id2">
+            <h4>Examples<a class="headerlink" href="#id2" title="Link to this heading">?</a></h4>
+            <section id="write-raw-unsigned-byte-values">
+             <h5>Write raw (unsigned) byte values<a class="headerlink" href="#write-raw-unsigned-byte-values" title="Link to this heading">?</a></h5>
+             <p><strong><code class="docutils literal notranslate"><span class="pre">OS.File</span></code></strong></p>
+             <div class="highlight-js notranslate">
+              <div class="highlight">
+               <pre><span></span><span class="kd">let</span><span class="w"> </span><span class="nx">bytes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nb">Uint8Array</span><span class="p">();</span>
+<span class="k">await</span><span class="w"> </span><span class="nx">OS</span><span class="p">.</span><span class="nx">File</span><span class="p">.</span><span class="nx">writeAtomic</span><span class="p">(</span><span class="nx">path</span><span class="p">,</span><span class="w"> </span><span class="nx">bytes</span><span class="p">);</span>
+</pre>
+              </div>
+             </div>
+             <p><strong><code class="docutils literal notranslate"><span class="pre">IOUtils</span></code></strong></p>
+             <div class="highlight-js notranslate">
+              <div class="highlight">
+               <pre><span></span><span class="kd">let</span><span class="w"> </span><span class="nx">bytes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nb">Uint8Array</span><span class="p">();</span>
+<span class="k">await</span><span class="w"> </span><span class="nx">IOUtils</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="nx">path</span><span class="p">,</span><span class="w"> </span><span class="nx">bytes</span><span class="p">);</span>
+</pre>
+              </div>
+             </div>
+            </section>
+            <section id="write-utf-8-encoded-text">
+             <h5>Write UTF-8 encoded text<a class="headerlink" href="#write-utf-8-encoded-text" title="Link to this heading">?</a></h5>
+             <p><strong><code class="docutils literal notranslate"><span class="pre">OS.File</span></code></strong></p>
+             <div class="highlight-js notranslate">
+              <div class="highlight">
+               <pre><span></span><span class="kd">let</span><span class="w"> </span><span class="nx">str</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">""</span><span class="p">;</span>
+<span class="k">await</span><span class="w"> </span><span class="nx">OS</span><span class="p">.</span><span class="nx">File</span><span class="p">.</span><span class="nx">writeAtomic</span><span class="p">(</span><span class="nx">path</span><span class="p">,</span><span class="w"> </span><span class="nx">str</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">encoding</span><span class="o">:</span><span class="w"> </span><span class="s1">'utf-8'</span><span class="w"> </span><span class="p">});</span>
+</pre>
+              </div>
+             </div>
+             <p><strong><code class="docutils literal notranslate"><span class="pre">IOUtils</span></code></strong></p>
+             <div class="highlight-js notranslate">
+              <div class="highlight">
+               <pre><span></span><span class="kd">let</span><span class="w"> </span><span class="nx">str</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">""</span><span class="p">;</span>
+<span class="k">await</span><span class="w"> </span><span class="nx">IOUtils</span><span class="p">.</span><span class="nx">writeUTF8</span><span class="p">(</span><span class="nx">path</span><span class="p">,</span><span class="w"> </span><span class="nx">str</span><span class="p">);</span>
+</pre>
+              </div>
+             </div>
+            </section>
+            <section id="write-a-json-object">
+             <h5>Write A JSON object<a class="headerlink" href="#write-a-json-object" title="Link to this heading">?</a></h5>
+             <p><strong><code class="docutils literal notranslate"><span class="pre">IOUtils</span></code></strong></p>
+             <div class="highlight-js notranslate">
+              <div class="highlight">
+               <pre><span></span><span class="kd">let</span><span class="w"> </span><span class="nx">obj</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{};</span>
+<span class="k">await</span><span class="w"> </span><span class="nx">IOUtils</span><span class="p">.</span><span class="nx">writeJSON</span><span class="p">(</span><span class="nx">path</span><span class="p">,</span><span class="w"> </span><span class="nx">obj</span><span class="p">);</span>
+</pre>
+              </div>
+             </div>
+            </section>
+            <section id="write-with-lz4-compression">
+             <h5>Write with LZ4 compression<a class="headerlink" href="#write-with-lz4-compression" title="Link to this heading">?</a></h5>
+             <p><strong><code class="docutils literal notranslate"><span class="pre">OS.File</span></code></strong></p>
+             <div class="highlight-js notranslate">
+              <div class="highlight">
+               <pre><span></span><span class="kd">let</span><span class="w"> </span><span class="nx">bytes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nb">Uint8Array</span><span class="p">();</span>
+<span class="k">await</span><span class="w"> </span><span class="nx">OS</span><span class="p">.</span><span class="nx">File</span><span class="p">.</span><span class="nx">writeAtomic</span><span class="p">(</span><span class="nx">path</span><span class="p">,</span><span class="w"> </span><span class="nx">bytes</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">compression</span><span class="o">:</span><span class="w"> </span><span class="s1">'lz4'</span><span class="w"> </span><span class="p">});</span>
+<span class="kd">let</span><span class="w"> </span><span class="nx">str</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">""</span><span class="p">;</span>
+<span class="k">await</span><span class="w"> </span><span class="nx">OS</span><span class="p">.</span><span class="nx">File</span><span class="p">.</span><span class="nx">writeAtomic</span><span class="p">(</span><span class="nx">path</span><span class="p">,</span><span class="w"> </span><span class="nx">str</span><span class="p">,</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">compression</span><span class="o">:</span><span class="w"> </span><span class="s1">'lz4'</span><span class="p">,</span>
+<span class="p">});</span>
+</pre>
+              </div>
+             </div>
+             <p><strong><code class="docutils literal notranslate"><span class="pre">IOUtils</span></code></strong></p>
+             <div class="highlight-js notranslate">
+              <div class="highlight">
+               <pre><span></span><span class="kd">let</span><span class="w"> </span><span class="nx">bytes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nb">Uint8Array</span><span class="p">();</span>
+<span class="k">await</span><span class="w"> </span><span class="nx">IOUtils</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="nx">path</span><span class="p">,</span><span class="w"> </span><span class="nx">bytes</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">compress</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="w"> </span><span class="p">});</span>
+<span class="kd">let</span><span class="w"> </span><span class="nx">str</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">""</span><span class="p">;</span>
+<span class="k">await</span><span class="w"> </span><span class="nx">IOUtils</span><span class="p">.</span><span class="nx">writeUTF8</span><span class="p">(</span><span class="nx">path</span><span class="p">,</span><span class="w"> </span><span class="nx">str</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">compress</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="w"> </span><span class="p">});</span>
+</pre>
+              </div>
+             </div>
+            </section>
+           </section>
+          </section>
+          <section id="move-a-file">
+           <h3>Move a file<a class="headerlink" href="#move-a-file" title="Link to this heading">?</a></h3>
+           <p><code class="docutils literal notranslate"><span class="pre">IOUtils</span></code> provides the following method to move files on disk. Like <code class="docutils literal notranslate"><span class="pre">OS.File</span></code>, it accepts an options dictionary.</p>
+           <div class="highlight-idl notranslate">
+            <div class="highlight">
+             <pre><span></span>Promise<span class="o">&lt;</span>void<span class="o">&gt;</span><span class="w"> </span>move(DOMString<span class="w"> </span>sourcePath,<span class="w"> </span>DOMString<span class="w"> </span>destPath,<span class="w"> </span>...);
+</pre>
+            </div>
+           </div>
+           <section id="id3">
+            <h4>Options<a class="headerlink" href="#id3" title="Link to this heading">?</a></h4>
+            <table border="1" class="docutils">
+             <thead>
+              <tr>
+               <th><code>OS.File</code> option</th>
+               <th><code>IOUtils</code> option</th>
+               <th>Description</th>
+              </tr>
+             </thead>
+             <tbody>
+              <tr>
+               <td>noOverwrite: boolean</td>
+               <td>noOverwrite: boolean</td>
+               <td>If true, fail if the destination already exists. Default is false.</td>
+              </tr>
+              <tr>
+               <td>noCopy: boolean</td>
+               <td>N/A; will not be implemented</td>
+               <td>This option is not implemented in <code>IOUtils</code>, and will be ignored if provided</td>
+              </tr>
+             </tbody>
+            </table>
+           </section>
+           <section id="example">
+            <h4>Example<a class="headerlink" href="#example" title="Link to this heading">?</a></h4>
+            <p><strong><code class="docutils literal notranslate"><span class="pre">OS.File</span></code></strong></p>
+            <div class="highlight-js notranslate">
+             <div class="highlight">
+              <pre><span></span><span class="k">await</span><span class="w"> </span><span class="nx">OS</span><span class="p">.</span><span class="nx">File</span><span class="p">.</span><span class="nx">move</span><span class="p">(</span><span class="nx">srcPath</span><span class="p">,</span><span class="w"> </span><span class="nx">destPath</span><span class="p">);</span>
+</pre>
+             </div>
+            </div>
+            <p><strong><code class="docutils literal notranslate"><span class="pre">IOUtils</span></code></strong></p>
+            <div class="highlight-js notranslate">
+             <div class="highlight">
+              <pre><span></span><span class="k">await</span><span class="w"> </span><span class="nx">IOUtils</span><span class="p">.</span><span class="nx">move</span><span class="p">(</span><span class="nx">srcPath</span><span class="p">,</span><span class="w"> </span><span class="nx">destPath</span><span class="p">);</span>
+</pre>
+             </div>
+            </div>
+           </section>
+          </section>
+          <section id="remove-a-file">
+           <h3>Remove a file<a class="headerlink" href="#remove-a-file" title="Link to this heading">?</a></h3>
+           <p><code class="docutils literal notranslate"><span class="pre">IOUtils</span></code> provides <em>one</em> method to remove files from disk. <code class="docutils literal notranslate"><span class="pre">OS.File</span></code> provides several methods.</p>
+           <div class="highlight-idl notranslate">
+            <div class="highlight">
+             <pre><span></span>Promise<span class="o">&lt;</span>void<span class="o">&gt;</span><span class="w"> </span>remove(DOMString<span class="w"> </span>path,<span class="w"> </span>...);
+</pre>
+            </div>
+           </div>
+           <section id="id4">
+            <h4>Options<a class="headerlink" href="#id4" title="Link to this heading">?</a></h4>
+            <table border="1" class="docutils">
+             <thead>
+              <tr>
+               <th><code>OS.File</code> option</th>
+               <th><code>IOUtils</code> option</th>
+               <th>Description</th>
+              </tr>
+             </thead>
+             <tbody>
+              <tr>
+               <td>ignoreAbsent: boolean</td>
+               <td>ignoreAbsent: boolean</td>
+               <td>If true, and the destination does not exist, then do not raise an error. Default is true.</td>
+              </tr>
+              <tr>
+               <td>N/A; <code>OS.File</code> has dedicated methods for directory removal</td>
+               <td>recursive: boolean</td>
+               <td>If true, and the target is a directory, recursively remove the directory and all its children. Default is false.</td>
+              </tr>
+             </tbody>
+            </table>
+           </section>
+           <section id="id5">
+            <h4>Examples<a class="headerlink" href="#id5" title="Link to this heading">?</a></h4>
+            <section id="id6">
+             <h5>Remove a file<a class="headerlink" href="#id6" title="Link to this heading">?</a></h5>
+             <p><strong><code class="docutils literal notranslate"><span class="pre">OS.File</span></code></strong></p>
+             <div class="highlight-js notranslate">
+              <div class="highlight">
+               <pre><span></span><span class="k">await</span><span class="w"> </span><span class="nx">OS</span><span class="p">.</span><span class="nx">File</span><span class="p">.</span><span class="nx">remove</span><span class="p">(</span><span class="nx">path</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">ignoreAbsent</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="w"> </span><span class="p">});</span>
+</pre>
+              </div>
+             </div>
+             <p><strong><code class="docutils literal notranslate"><span class="pre">IOUtils</span></code></strong></p>
+             <div class="highlight-js notranslate">
+              <div class="highlight">
+               <pre><span></span><span class="k">await</span><span class="w"> </span><span class="nx">IOUtils</span><span class="p">.</span><span class="nx">remove</span><span class="p">(</span><span class="nx">path</span><span class="p">);</span>
+</pre>
+              </div>
+             </div>
+            </section>
+            <section id="remove-a-directory-and-all-its-contents">
+             <h5>Remove a directory and all its contents<a class="headerlink" href="#remove-a-directory-and-all-its-contents" title="Link to this heading">?</a></h5>
+             <p><strong><code class="docutils literal notranslate"><span class="pre">OS.File</span></code></strong></p>
+             <div class="highlight-js notranslate">
+              <div class="highlight">
+               <pre><span></span><span class="k">await</span><span class="w"> </span><span class="nx">OS</span><span class="p">.</span><span class="nx">File</span><span class="p">.</span><span class="nx">removeDir</span><span class="p">(</span><span class="nx">path</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">ignoreAbsent</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="w"> </span><span class="p">});</span>
+</pre>
+              </div>
+             </div>
+             <p><strong><code class="docutils literal notranslate"><span class="pre">IOUtils</span></code></strong></p>
+             <div class="highlight-js notranslate">
+              <div class="highlight">
+               <pre><span></span><span class="k">await</span><span class="w"> </span><span class="nx">IOUtils</span><span class="p">.</span><span class="nx">remove</span><span class="p">(</span><span class="nx">path</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">recursive</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="w"> </span><span class="p">});</span>
+</pre>
+              </div>
+             </div>
+            </section>
+            <section id="remove-an-empty-directory">
+             <h5>Remove an empty directory<a class="headerlink" href="#remove-an-empty-directory" title="Link to this heading">?</a></h5>
+             <p><strong><code class="docutils literal notranslate"><span class="pre">OS.File</span></code></strong></p>
+             <div class="highlight-js notranslate">
+              <div class="highlight">
+               <pre><span></span><span class="k">await</span><span class="w"> </span><span class="nx">OS</span><span class="p">.</span><span class="nx">File</span><span class="p">.</span><span class="nx">removeEmptyDir</span><span class="p">(</span><span class="nx">path</span><span class="p">);</span><span class="w"> </span><span class="c1">// Will throw an exception if `path` is not empty.</span>
+</pre>
+              </div>
+             </div>
+             <p><strong><code class="docutils literal notranslate"><span class="pre">IOUtils</span></code></strong></p>
+             <div class="highlight-js notranslate">
+              <div class="highlight">
+               <pre><span></span><span class="k">await</span><span class="w"> </span><span class="nx">IOUtils</span><span class="p">.</span><span class="nx">remove</span><span class="p">(</span><span class="nx">path</span><span class="p">);</span><span class="w"> </span><span class="c1">// Will throw an exception if `path` is not empty.</span>
+</pre>
+              </div>
+             </div>
+            </section>
+           </section>
+          </section>
+          <section id="make-a-directory">
+           <h3>Make a directory<a class="headerlink" href="#make-a-directory" title="Link to this heading">?</a></h3>
+           <p><code class="docutils literal notranslate"><span class="pre">IOUtils</span></code> provides the following method to create directories on disk. Like <code class="docutils literal notranslate"><span class="pre">OS.File</span></code>, it accepts an options dictionary.</p>
+           <div class="highlight-idl notranslate">
+            <div class="highlight">
+             <pre><span></span>Promise<span class="o">&lt;</span>void<span class="o">&gt;</span><span class="w"> </span>makeDirectory(DOMString<span class="w"> </span>path,<span class="w"> </span>...);
+</pre>
+            </div>
+           </div>
+           <section id="id7">
+            <h4>Options<a class="headerlink" href="#id7" title="Link to this heading">?</a></h4>
+            <table border="1" class="docutils">
+             <thead>
+              <tr>
+               <th><code>OS.File</code> option</th>
+               <th><code>IOUtils</code> option</th>
+               <th>Description</th>
+              </tr>
+             </thead>
+             <tbody>
+              <tr>
+               <td>ignoreExisting: boolean</td>
+               <td>ignoreExisting: boolean</td>
+               <td>If true, succeed even if the target directory already exists. Default is true.</td>
+              </tr>
+              <tr>
+               <td>from: string</td>
+               <td>createAncestors: boolean</td>
+               <td>If true, <code>IOUtils</code> will create all missing ancestors in a path. Default is true. This option differs from <code>OS.File</code>, which requires the caller to specify a root path from which to create missing directories.</td>
+              </tr>
+              <tr>
+               <td>unixMode: number</td>
+               <td>permissions: unsigned long</td>
+               <td>The file mode to create the directory with. Ignored on Windows. Default is 0755.</td>
+              </tr>
+              <tr>
+               <td>winSecurity</td>
+               <td>N/A</td>
+               <td><code>IOUtils</code> does not support setting custom directory security settings on Windows.</td>
+              </tr>
+             </tbody>
+            </table>
+           </section>
+           <section id="id8">
+            <h4>Example<a class="headerlink" href="#id8" title="Link to this heading">?</a></h4>
+            <p><strong><code class="docutils literal notranslate"><span class="pre">OS.File</span></code></strong></p>
+            <div class="highlight-js notranslate">
+             <div class="highlight">
+              <pre><span></span><span class="k">await</span><span class="w"> </span><span class="nx">OS</span><span class="p">.</span><span class="nx">File</span><span class="p">.</span><span class="nx">makeDir</span><span class="p">(</span><span class="nx">srcPath</span><span class="p">,</span><span class="w"> </span><span class="nx">destPath</span><span class="p">);</span>
+</pre>
+             </div>
+            </div>
+            <p><strong><code class="docutils literal notranslate"><span class="pre">IOUtils</span></code></strong></p>
+            <div class="highlight-js notranslate">
+             <div class="highlight">
+              <pre><span></span><span class="k">await</span><span class="w"> </span><span class="nx">IOUtils</span><span class="p">.</span><span class="nx">makeDirectory</span><span class="p">(</span><span class="nx">srcPath</span><span class="p">,</span><span class="w"> </span><span class="nx">destPath</span><span class="p">);</span>
+</pre>
+             </div>
+            </div>
+           </section>
+          </section>
+          <section id="update-a-files-modification-time">
+           <h3>Update a file’s modification time<a class="headerlink" href="#update-a-files-modification-time" title="Link to this heading">?</a></h3>
+           <p><code class="docutils literal notranslate"><span class="pre">IOUtils</span></code> provides the following method to update a file’s modification time.</p>
+           <div class="highlight-idl notranslate">
+            <div class="highlight">
+             <pre><span></span>Promise<span class="o">&lt;</span>void<span class="o">&gt;</span><span class="w"> </span>setModificationTime(DOMString<span class="w"> </span>path,<span class="w"> </span>optional<span class="w"> </span><span class="nb">long</span><span class="w"> </span><span class="nb">long</span><span class="w"> </span>modification);
+</pre>
+            </div>
+           </div>
+           <section id="id9">
+            <h4>Example<a class="headerlink" href="#id9" title="Link to this heading">?</a></h4>
+            <p><strong><code class="docutils literal notranslate"><span class="pre">OS.File</span></code></strong></p>
+            <div class="highlight-js notranslate">
+             <div class="highlight">
+              <pre><span></span><span class="k">await</span><span class="w"> </span><span class="nx">OS</span><span class="p">.</span><span class="nx">File</span><span class="p">.</span><span class="nx">setDates</span><span class="p">(</span><span class="nx">path</span><span class="p">,</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nb">Date</span><span class="p">(),</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nb">Date</span><span class="p">());</span>
+</pre>
+             </div>
+            </div>
+            <p><strong><code class="docutils literal notranslate"><span class="pre">IOUtils</span></code></strong></p>
+            <div class="highlight-js notranslate">
+             <div class="highlight">
+              <pre><span></span><span class="k">await</span><span class="w"> </span><span class="nx">IOUtils</span><span class="p">.</span><span class="nx">setModificationTime</span><span class="p">(</span><span class="nx">path</span><span class="p">,</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nb">Date</span><span class="p">().</span><span class="nx">valueOf</span><span class="p">());</span>
+</pre>
+             </div>
+            </div>
+           </section>
+          </section>
+          <section id="get-file-metadata">
+           <h3>Get file metadata<a class="headerlink" href="#get-file-metadata" title="Link to this heading">?</a></h3>
+           <p><code class="docutils literal notranslate"><span class="pre">IOUtils</span></code> provides the following method to query file metadata.</p>
+           <div class="highlight-idl notranslate">
+            <div class="highlight">
+             <pre><span></span>Promise<span class="o">&lt;</span>void<span class="o">&gt;</span><span class="w"> </span>stat(DOMString<span class="w"> </span>path);
+</pre>
+            </div>
+           </div>
+           <section id="id10">
+            <h4>Example<a class="headerlink" href="#id10" title="Link to this heading">?</a></h4>
+            <p><strong><code class="docutils literal notranslate"><span class="pre">OS.File</span></code></strong></p>
+            <div class="highlight-js notranslate">
+             <div class="highlight">
+              <pre><span></span><span class="kd">let</span><span class="w"> </span><span class="nx">fileInfo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">OS</span><span class="p">.</span><span class="nx">File</span><span class="p">.</span><span class="nx">stat</span><span class="p">(</span><span class="nx">path</span><span class="p">);</span>
+</pre>
+             </div>
+            </div>
+            <p><strong><code class="docutils literal notranslate"><span class="pre">IOUtils</span></code></strong></p>
+            <div class="highlight-js notranslate">
+             <div class="highlight">
+              <pre><span></span><span class="kd">let</span><span class="w"> </span><span class="nx">fileInfo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">IOUtils</span><span class="p">.</span><span class="nx">stat</span><span class="p">(</span><span class="nx">path</span><span class="p">);</span>
+</pre>
+             </div>
+            </div>
+           </section>
+          </section>
+          <section id="copy-a-file">
+           <h3>Copy a file<a class="headerlink" href="#copy-a-file" title="Link to this heading">?</a></h3>
+           <p><code class="docutils literal notranslate"><span class="pre">IOUtils</span></code> provides the following method to copy a file on disk. Like <code class="docutils literal notranslate"><span class="pre">OS.File</span></code>, it accepts an options dictionary.</p>
+           <div class="highlight-idl notranslate">
+            <div class="highlight">
+             <pre><span></span>Promise<span class="o">&lt;</span>void<span class="o">&gt;</span><span class="w"> </span>copy(DOMString<span class="w"> </span>path,<span class="w"> </span>...);
+</pre>
+            </div>
+           </div>
+           <section id="id11">
+            <h4>Options<a class="headerlink" href="#id11" title="Link to this heading">?</a></h4>
+            <table border="1" class="docutils">
+             <thead>
+              <tr>
+               <th><code>OS.File</code> option</th>
+               <th><code>IOUtils</code> option</th>
+               <th>Description</th>
+              </tr>
+             </thead>
+             <tbody>
+              <tr>
+               <td>noOverwrite: boolean</td>
+               <td>noOverwrite: boolean</td>
+               <td>If true, fail if the destination already exists. Default is false.</td>
+              </tr>
+              <tr>
+               <td>N/A; <code>OS.File</code> does not appear to support recursively copying files</td>
+               <td>recursive: boolean</td>
+               <td>If true, copy the source recursively.</td>
+              </tr>
+             </tbody>
+            </table>
+           </section>
+           <section id="id12">
+            <h4>Examples<a class="headerlink" href="#id12" title="Link to this heading">?</a></h4>
+            <section id="id13">
+             <h5>Copy a file<a class="headerlink" href="#id13" title="Link to this heading">?</a></h5>
+             <p><strong><code class="docutils literal notranslate"><span class="pre">OS.File</span></code></strong></p>
+             <div class="highlight-js notranslate">
+              <div class="highlight">
+               <pre><span></span><span class="k">await</span><span class="w"> </span><span class="nx">OS</span><span class="p">.</span><span class="nx">File</span><span class="p">.</span><span class="nx">copy</span><span class="p">(</span><span class="nx">srcPath</span><span class="p">,</span><span class="w"> </span><span class="nx">destPath</span><span class="p">);</span>
+</pre>
+              </div>
+             </div>
+             <p><strong><code class="docutils literal notranslate"><span class="pre">IOUtils</span></code></strong></p>
+             <div class="highlight-js notranslate">
+              <div class="highlight">
+               <pre><span></span><span class="k">await</span><span class="w"> </span><span class="nx">IOUtils</span><span class="p">.</span><span class="nx">copy</span><span class="p">(</span><span class="nx">srcPath</span><span class="p">,</span><span class="w"> </span><span class="nx">destPath</span><span class="p">);</span>
+</pre>
+              </div>
+             </div>
+            </section>
+            <section id="copy-a-directory-recursively">
+             <h5>Copy a directory recursively<a class="headerlink" href="#copy-a-directory-recursively" title="Link to this heading">?</a></h5>
+             <p><strong><code class="docutils literal notranslate"><span class="pre">OS.File</span></code></strong></p>
+             <div class="highlight-js notranslate">
+              <div class="highlight">
+               <pre><span></span><span class="c1">// Not easy to do.</span>
+</pre>
+              </div>
+             </div>
+             <p><strong><code class="docutils literal notranslate"><span class="pre">IOUtils</span></code></strong></p>
+             <div class="highlight-js notranslate">
+              <div class="highlight">
+               <pre><span></span><span class="k">await</span><span class="w"> </span><span class="nx">IOUtils</span><span class="p">.</span><span class="nx">copy</span><span class="p">(</span><span class="nx">srcPath</span><span class="p">,</span><span class="w"> </span><span class="nx">destPath</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">recursive</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="w"> </span><span class="p">});</span>
+</pre>
+              </div>
+             </div>
+            </section>
+           </section>
+          </section>
+          <section id="iterate-a-directory">
+           <h3>Iterate a directory<a class="headerlink" href="#iterate-a-directory" title="Link to this heading">?</a></h3>
+           <p>At the moment, <code class="docutils literal notranslate"><span class="pre">IOUtils</span></code> does not have a way to expose an iterator for directories. This is blocked by <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1577383">bug 1577383</a>. As a stop-gap for this functionality, one can get all the children of a directory and iterate through the returned path array using the following method.</p>
+           <div class="highlight-idl notranslate">
+            <div class="highlight">
+             <pre><span></span>Promise<span class="o">&lt;</span>sequence<span class="o">&lt;</span>DOMString<span class="o">&gt;&gt;</span><span class="w"> </span>getChildren(DOMString<span class="w"> </span>path);
+</pre>
+            </div>
+           </div>
+           <section id="id14">
+            <h4>Example<a class="headerlink" href="#id14" title="Link to this heading">?</a></h4>
+            <p><strong><code class="docutils literal notranslate"><span class="pre">OS.File</span></code></strong></p>
+            <div class="highlight-js notranslate">
+             <div class="highlight">
+              <pre><span></span><span class="k">for</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="p">(</span><span class="kd">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">path</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="k">of</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">OS</span><span class="p">.</span><span class="nx">FileDirectoryIterator</span><span class="p">(</span><span class="nx">dirName</span><span class="p">))</span><span class="w"> </span><span class="p">{</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+<span class="w">  </span><span class="p">...</span>
+<span class="p">}</span>
+</pre>
+             </div>
+            </div>
+            <p><strong><code class="docutils literal notranslate"><span class="pre">IOUtils</span></code></strong></p>
+            <div class="highlight-js notranslate">
+             <div class="highlight">
+              <pre><span></span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kd">const</span><span class="w"> </span><span class="nx">path</span><span class="w"> </span><span class="k">of</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">IOUtils</span><span class="p">.</span><span class="nx">getChildren</span><span class="p">(</span><span class="nx">dirName</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="p">...</span>
+<span class="p">}</span>
+</pre>
+             </div>
+            </div>
+           </section>
+          </section>
+          <section id="check-if-a-file-exists">
+           <h3>Check if a file exists<a class="headerlink" href="#check-if-a-file-exists" title="Link to this heading">?</a></h3>
+           <p><code class="docutils literal notranslate"><span class="pre">IOUtils</span></code> provides the following method analogous to the <code class="docutils literal notranslate"><span class="pre">OS.File</span></code> method of the same name.</p>
+           <div class="highlight-idl notranslate">
+            <div class="highlight">
+             <pre><span></span>Promise<span class="o">&lt;</span>boolean<span class="o">&gt;</span><span class="w"> </span>exists(DOMString<span class="w"> </span>path);
+</pre>
+            </div>
+           </div>
+           <section id="id15">
+            <h4>Example<a class="headerlink" href="#id15" title="Link to this heading">?</a></h4>
+            <p><strong><code class="docutils literal notranslate"><span class="pre">OS.File</span></code></strong></p>
+            <div class="highlight-js notranslate">
+             <div class="highlight">
+              <pre><span></span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="k">await</span><span class="w"> </span><span class="nx">OS</span><span class="p">.</span><span class="nx">File</span><span class="p">.</span><span class="nx">exists</span><span class="p">(</span><span class="nx">path</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="p">...</span>
+<span class="p">}</span>
+</pre>
+             </div>
+            </div>
+            <p><strong><code class="docutils literal notranslate"><span class="pre">IOUtils</span></code></strong></p>
+            <div class="highlight-js notranslate">
+             <div class="highlight">
+              <pre><span></span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="k">await</span><span class="w"> </span><span class="nx">IOUtils</span><span class="p">.</span><span class="nx">exists</span><span class="p">(</span><span class="nx">path</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="p">...</span>
+<span class="p">}</span>
+</pre>
+             </div>
+            </div>
+           </section>
+          </section>
+          <section id="set-the-permissions-of-a-file">
+           <h3>Set the permissions of a file<a class="headerlink" href="#set-the-permissions-of-a-file" title="Link to this heading">?</a></h3>
+           <p><code class="docutils literal notranslate"><span class="pre">IOUtils</span></code> provides the following method analogous to the <code class="docutils literal notranslate"><span class="pre">OS.File</span></code> method of the same name.</p>
+           <div class="highlight-idl notranslate">
+            <div class="highlight">
+             <pre><span></span>Promise<span class="o">&lt;</span>void<span class="o">&gt;</span><span class="w"> </span>setPermissions(DOMString<span class="w"> </span>path,<span class="w"> </span>unsigned<span class="w"> </span><span class="nb">long</span><span class="w"> </span>permissions,<span class="w"> </span>optional<span class="w"> </span>boolean<span class="w"> </span>honorUmask<span class="w"> </span><span class="o">=</span><span class="w"> </span>true);
+</pre>
+            </div>
+           </div>
+           <section id="id16">
+            <h4>Options<a class="headerlink" href="#id16" title="Link to this heading">?</a></h4>
+            <table border="1" class="docutils">
+             <thead>
+              <tr>
+               <th><code>OS.File</code> option</th>
+               <th><code>IOUtils</code> option</th>
+               <th>Description</th>
+              </tr>
+             </thead>
+             <tbody>
+              <tr>
+               <td>unixMode: number</td>
+               <td>permissions: unsigned long</td>
+               <td>The UNIX file mode representing the permissions. Required in IOUtils.</td>
+              </tr>
+              <tr>
+               <td>unixHonorUmask: boolean</td>
+               <td>honorUmask: boolean</td>
+               <td>If omitted or true, any UNIX file mode is modified by the permissions. Otherwise the exact value of the permissions will be applied.</td>
+              </tr>
+             </tbody>
+            </table>
+           </section>
+           <section id="id17">
+            <h4>Example<a class="headerlink" href="#id17" title="Link to this heading">?</a></h4>
+            <p><strong><code class="docutils literal notranslate"><span class="pre">OS.File</span></code></strong></p>
+            <div class="highlight-js notranslate">
+             <div class="highlight">
+              <pre><span></span><span class="k">await</span><span class="w"> </span><span class="nx">OS</span><span class="p">.</span><span class="nx">File</span><span class="p">.</span><span class="nx">setPermissions</span><span class="p">(</span><span class="nx">path</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">unixMode</span><span class="o">:</span><span class="w"> </span><span class="mo">0o600</span><span class="w"> </span><span class="p">});</span>
+</pre>
+             </div>
+            </div>
+            <p><strong><code class="docutils literal notranslate"><span class="pre">IOUtils</span></code></strong></p>
+            <div class="highlight-js notranslate">
+             <div class="highlight">
+              <pre><span></span><span class="k">await</span><span class="w"> </span><span class="nx">IOUtils</span><span class="p">.</span><span class="nx">setPermissions</span><span class="p">(</span><span class="nx">path</span><span class="p">,</span><span class="w"> </span><span class="mo">0o600</span><span class="p">);</span>
+</pre>
+             </div>
+            </div>
+           </section>
+          </section>
+         </section>
+         <section id="faqs">
+          <h2>FAQs<a class="headerlink" href="#faqs" title="Link to this heading">?</a></h2>
+          <p><strong>Why should I use <code class="docutils literal notranslate"><span class="pre">IOUtils</span></code> instead of <code class="docutils literal notranslate"><span class="pre">OS.File</span></code>?</strong></p>
+          <p><a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1231711">Bug 1231711</a> provides some good context, but some reasons include:</p>
+          <ul class="simple">
+           <li>
+            <p>reduced cache-contention,</p></li>
+           <li>
+            <p>faster startup, and</p></li>
+           <li>
+            <p>less memory usage.</p></li>
+          </ul>
+          <p>Additionally, <code class="docutils literal notranslate"><span class="pre">IOUtils</span></code> benefits from a native implementation, which assists in performance-related work for <a class="reference external" href="https://hacks.mozilla.org/2021/05/introducing-firefox-new-site-isolation-security-architecture/">Project Fission</a>.</p>
+          <p>We are actively working to migrate old code usages of <code class="docutils literal notranslate"><span class="pre">OS.File</span></code> to analogous <code class="docutils literal notranslate"><span class="pre">IOUtils</span></code> calls, so new usages of <code class="docutils literal notranslate"><span class="pre">OS.File</span></code> should not be introduced at this time.</p>
+          <p><strong>Do I need to import anything to use this API?</strong></p>
+          <p>Nope! It’s available via the <code class="docutils literal notranslate"><span class="pre">IOUtils</span></code> global in JavaScript (<code class="docutils literal notranslate"><span class="pre">ChromeOnly</span></code> context).</p>
+          <p><strong>Can I use this API from C++ or Rust?</strong></p>
+          <p>Currently usage is geared exclusively towards JavaScript callers, and all C++ methods are private except for the Web IDL bindings. However given sufficient interest, it should be easy to expose ergonomic public methods for C++ and/or Rust.</p>
+          <p><strong>Why isn’t <code class="docutils literal notranslate"><span class="pre">IOUtils</span></code> written in Rust?</strong></p>
+          <p>At the time of writing, support for Web IDL bindings was more mature for C++ oriented tooling than it was for Rust.</p>
+          <p><strong>Is <code class="docutils literal notranslate"><span class="pre">IOUtils</span></code> feature complete? When will it be available?</strong></p>
+          <p><code class="docutils literal notranslate"><span class="pre">IOUtils</span></code> is considered feature complete as of Firefox 83.</p>
+         </section>
+        </section>
+       </div>
+      </div>
+      <footer>
+       <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="webIdlBindings/index.html" class="btn btn-neutral float-left" title="Web IDL bindings" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a> <a href="fedcm.html" class="btn btn-neutral float-right" title="Federated Credential Management" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+       </div>
+       <hr>
+       <div role="contentinfo">
+        <p></p>
+       </div> Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+      </footer>
+     </div>
+    </div>
+   </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ </body>
+</html>

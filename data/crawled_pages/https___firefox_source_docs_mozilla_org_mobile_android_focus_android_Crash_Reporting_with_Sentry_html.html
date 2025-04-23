@@ -1,0 +1,401 @@
+<!doctype html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crash Reporting with Sentry — Firefox Source Docs  documentation</title>
+  <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50">
+  <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094">
+  <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=fd3f3429">
+  <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b">
+  <link rel="stylesheet" type="text/css" href="../../../_static/custom_theme.css?v=dc5ed815">
+  <link rel="stylesheet" type="text/css" href="../../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7">
+  <link rel="shortcut icon" href="../../../_static/firefox.ico"><!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+  <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+  <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+  <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+  <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+  <script src="../../../_static/copybutton.js?v=30646c52"></script>
+  <script src="../../../_static/design-tabs.js?v=36754332"></script>
+  <script src="../../../_static/js/theme.js"></script>
+  <link rel="index" title="Index" href="../../../genindex.html">
+  <link rel="search" title="Search" href="../../../search.html">
+  <link rel="next" title="Development with Custom GeckoView" href="Development-Custom-GeckoView.html">
+  <link rel="prev" title="Content blocking" href="Content-blocking.html">
+ </head>
+ <body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+   <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <div class="wy-side-scroll">
+     <div class="wy-side-nav-search">
+      <a href="../../../index.html" class="icon icon-home"> Firefox Source Docs <img src="../../../_static/firefox-wordmark.svg" class="logo" alt="Logo"> </a><!-- -- This code is governed by the BSD license ---->
+      <div>
+       <h3>Quick search</h3>
+       <script>
+    (function () {
+      var cx = "dd12886298f75dbef";
+      var gcse = document.createElement("script");
+      gcse.async = true;
+      gcse.src = "https://cse.google.com/cse.js?cx=" + cx;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(gcse, s);
+    })();
+  </script><gcse:search></gcse:search>
+      </div>
+     </div>
+     <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+      <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../glossary/index.html">A Glossary of Common Terms</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../overview/index.html">A Quick Guide to Mozilla Applications</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../setup/index.html">Getting Set Up To Work On The Firefox Codebase</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Working On Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../contributing/index.html">Working on Firefox</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../bug-mgmt/index.html">Bug Handling</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox User Guide</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../devtools-user/index.html">Firefox DevTools User Docs</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Source Code Documentation</span></p>
+      <ul class="current">
+       <li class="toctree-l1"><a class="reference internal" href="../../../mots/index.html">Governance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../browser/index.html">Firefox Front-end</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../dom/index.html">DOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../editor/index.html">Editor</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../layout/index.html">Style system (CSS) &amp; Layout</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../gfx/index.html">Graphics</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../ipc/index.html">Processes, Threads and IPC</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../devtools/index.html">Firefox DevTools Contributor Docs</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../toolkit/index.html">Toolkit</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../js/index.html">SpiderMonkey</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../jsloader/index.html">JS Loader</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../geckoview/index.html">GeckoView</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../fenix/index.html">Fenix</a></li>
+       <li class="toctree-l1 current"><a class="reference internal" href="index.html">Focus for Android</a>
+        <ul class="current">
+         <li class="toctree-l2"><a class="reference internal" href="Architecture-Decisions.html">Architecture Decisions</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Battery-Debugging.html">Battery Debugging</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Content-blocking.html">Content blocking</a></li>
+         <li class="toctree-l2 current"><a class="current reference internal" href="#">Crash Reporting with Sentry</a>
+          <ul>
+           <li class="toctree-l3"><a class="reference internal" href="#high-level-summary">High-Level Summary</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#sentry-reports">Sentry Reports</a>
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="#device-information">Device Information</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#application-information">Application Information</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#crash-information">Crash Information</a></li>
+            </ul></li>
+           <li class="toctree-l3"><a class="reference internal" href="#for-developers">For developers</a></li>
+          </ul></li>
+         <li class="toctree-l2"><a class="reference internal" href="Development-Custom-GeckoView.html">Development Custom GeckoView</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Feature-%26-Issue-workflow.html">Feature &amp; Issue workflow</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="GeckoView-%28In-Progress%29.html">Running GeckoView in a debug environment</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Home.html">Home</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Homescreen-Tips.html">Homescreen Tips</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Multisession-architecture.html">Multisession architecture</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Recommended-pre-push-hook.html">Recommended pre-push hook</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Release-Process.html">Release Process</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Release-tracks.html">Release tracks</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Removing-strings.html">Removing strings</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Sprint-Process.html">Sprint Process</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Telemetry.html">Telemetry</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="UI-Test.html">UI Test</a></li>
+        </ul></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../dom/bindings/webidl/index.html">WebIDL</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../modules/libpref/index.html">libpref</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../networking/index.html">Networking</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../remote/index.html">Remote Protocols</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../services/index.html">Services</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../permissions/index.html">Permissions</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../uriloader/index.html">File Handling</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../widget/cocoa/index.html">Firefox on macOS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../widget/windows/index.html">Firefox on Windows</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../toolkit/components/ml/index.html">Firefox AI Runtime</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../accessible/index.html">Accessibility</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../media/index.html">Media Playback</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../code-quality/index.html">Code quality</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../writing-rust-code/index.html">Writing Rust Code</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../rust-components/index.html">Rust Components</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../tools/profiler/index.html">Gecko Profiler</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../performance/index.html">Performance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../storage/index.html">Database bindings (SQLite, KV, …)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../xpcom/index.html">XPCOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../nspr/index.html">NSPR</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../security/nss/index.html">Network Security Services (NSS)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../content-security/index.html">Web Security Checks in Gecko</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">The Firefox Build System</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../mach/index.html">Mach</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../tools/try/index.html">Pushing to Try</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../build/buildsystem/index.html">Build System</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../taskcluster/index.html">Firefox CI and Taskgraph</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../tools/moztreedocs/index.html">Managing Documentation</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../mozbuild/vendor/index.html">Vendoring Third Party Components</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Testing &amp; Test Infrastructure</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/automated-testing/index.html">Automated Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/treeherder-try/index.html">Understanding Treeherder Results</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/sheriffed-intermittents/index.html">Sheriffed intermittent failures</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/tests-for-new-config/index.html">Turning on Firefox tests for a new configuration</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/intermittent/index.html">Avoiding intermittent tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/testing-policy/index.html">Testing Policy</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/ci-configs/index.html">Configuration Changes</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/browser-chrome/index.html">Browser chrome mochitests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/chrome-tests/index.html">Chrome Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/marionette/index.html">Marionette</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/geckodriver/index.html">geckodriver</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/test-verification/index.html">Test Verification</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/webrender/index.html">WebRender Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/mochitest-plain/index.html">Mochitest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/xpcshell/index.html">XPCShell tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/tps/index.html">TPS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../web-platform/index.html">web-platform-tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../gtest/index.html">GTest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../tools/fuzzing/index.html">Fuzzing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../tools/sanitizer/index.html">Sanitizer</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/perfdocs/index.html">Performance Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../tools/code-coverage/index.html">Code coverage</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing-rust-code/index.html">Testing &amp; Debugging Rust Code</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Releases &amp; Updates</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../update-infrastructure/index.html">Mozilla Update Infrastructure</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../update-infrastructure/index.html#watershed-updates">Watershed Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../update-infrastructure/index.html#desupport-updates">Desupport Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../tools/update-verify/index.html">Update Verify</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Localization &amp; Internationalization</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../intl/index.html">Internationalization</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../l10n/index.html">Localization</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox and Python</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../mozbase/index.html">mozbase</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../python/index.html">Using third-party Python packages</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Metrics Collected in Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../metrics/index.html">Metrics</a></li>
+      </ul>
+     </div>
+    </div>
+   </nav>
+   <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+    <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+     <i data-toggle="wy-nav-top" class="fa fa-bars"></i> <a href="../../../index.html">Firefox Source Docs</a>
+    </nav>
+    <div class="wy-nav-content">
+     <div class="rst-content">
+      <!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+      <div role="navigation" aria-label="Page navigation">
+       <ul class="wy-breadcrumbs">
+        <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+        <li class="breadcrumb-item"><a href="index.html">Focus for Android</a></li>
+        <li class="breadcrumb-item active">Crash Reporting with Sentry</li>
+        <li class="wy-breadcrumbs-aside"><a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Developer+Infrastructure&amp;component=Firefox+Source+Docs%3A+Content&amp;short_desc=Documentation+issue+on+mobile/android/focus-android/Crash-Reporting-with-Sentry&amp;comment=URL+=+https://firefox-source-docs.mozilla.org/mobile/android/focus-android/Crash-Reporting-with-Sentry.html&amp;bug_file_loc=https://firefox-source-docs.mozilla.org/mobile/android/focus-android/Crash-Reporting-with-Sentry.html" rel="nofollow">Report an issue</a> / <a href="../../../_sources/mobile/android/focus-android/Crash-Reporting-with-Sentry.md.txt" rel="nofollow"> View page source</a></li>
+       </ul>
+       <hr>
+      </div>
+      <div role="main" class="document" itemscope itemtype="http://schema.org/Article">
+       <div itemprop="articleBody">
+        <section id="crash-reporting-with-sentry">
+         <h1>Crash Reporting with Sentry<a class="headerlink" href="#crash-reporting-with-sentry" title="Link to this heading">?</a></h1>
+         <blockquote>
+          <div>
+           <p><strong>If there is anything in this document that is not clear, is incorrect, or that requires more detail, please file a request through a <a class="reference external" href="https://github.com/mozilla-mobile/focus-android/issues">Github</a>.</strong></p>
+          </div>
+         </blockquote>
+         <p>Focus Android uses <a class="reference external" href="https://sentry.io">Sentry</a> for crash and exception reporting. This kind of reporting gives Mozilla invaluable insight as to why Focus crashes or incorrectly behaves. It is one of the key methods we use to improve the product in terms of stability.</p>
+         <p>This page explains how Sentry works, how the various parts interact and what kind of data it sends back to Mozilla.</p>
+         <section id="high-level-summary">
+          <h2>High-Level Summary<a class="headerlink" href="#high-level-summary" title="Link to this heading">?</a></h2>
+          <p><a class="reference external" href="https://sentry.io">Sentry</a> is an open source crash reporting and aggregation platform. Both the client SDK, <a class="reference external" href="https://github.com/getsentry/sentry-java">github.com/getsentry/sentry-java</a>, and the server, <a class="reference external" href="https://github.com/getsentry/sentry">github.com/getsentry/sentry</a>, are open source.</p>
+          <p>The server is hosted and maintained by Mozilla. There are no third-parties involved, all crash reports to directly from Focus Android to the Sentry server hosted by Mozilla.</p>
+          <p>On the client side Sentry is invisible. There are no parts to interact with. It reports crashes and fatal errors back to Mozilla in the background. Sentry is enabled when the <em>Send Usage Data</em> switch in the <em>Focus</em> settings is enabled by the user. By default this switch is enabled in Focus and is an <em>opt-out</em> mechanism. In Klar, by default this switch is disabled and is an <em>opt-in</em> mechanism.</p>
+          <p>On the server side there is a dashboard that the Focus team uses to look at incoming crash reports. The dashboard lets us inspect the crash report in detail and for example see where in the application the crash happened, what version of the application was used and what version of Android OS was active. Below is an overview of all the attributes that are part of a crash report.</p>
+         </section>
+         <section id="sentry-reports">
+          <h2>Sentry Reports<a class="headerlink" href="#sentry-reports" title="Link to this heading">?</a></h2>
+          <p>A typical Sentry crash report contains three categories of data: device, application, crash. It also contains some metadata about the crash report:</p>
+          <div class="highlight-default notranslate">
+           <div class="highlight">
+            <pre><span></span> <span class="s2">"id"</span><span class="p">:</span> <span class="s2">"6ae18611d6c649529a5eda0e48f42cb4"</span><span class="p">,</span>
+<span class="o">//</span> <span class="o">...</span>
+ <span class="s2">"datetime"</span><span class="p">:</span> <span class="s2">"2018-03-30T23:55:03.000000Z"</span><span class="p">,</span>
+<span class="o">//</span> <span class="o">...</span>
+ <span class="s2">"received"</span><span class="p">:</span> <span class="mf">1522454183.0</span><span class="p">,</span>
+</pre>
+           </div>
+          </div>
+          <p>To clarify, <code class="docutils literal notranslate"><span class="pre">id</span></code> is a unique identifier for this crash report, <em>not a unique identifier for the user sending the report.</em> We explicitly disable the ability to uniquely identify users from their crash reports.</p>
+          <section id="device-information">
+           <h3>Device Information<a class="headerlink" href="#device-information" title="Link to this heading">?</a></h3>
+           <p>Sentry collects basic information about the device the application is running on. Both static (device type) and dynamic (memory in use, device orientation).</p>
+           <div class="highlight-default notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="s2">"contexts"</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">"device"</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s2">"screen_resolution"</span><span class="p">:</span> <span class="s2">"1920x1080"</span><span class="p">,</span>
+      <span class="s2">"battery_level"</span><span class="p">:</span> <span class="mf">100.0</span><span class="p">,</span>
+      <span class="s2">"orientation"</span><span class="p">:</span> <span class="s2">"landscape"</span><span class="p">,</span>
+      <span class="s2">"family"</span><span class="p">:</span> <span class="s2">"AFTN"</span><span class="p">,</span>
+      <span class="s2">"model_id"</span><span class="p">:</span> <span class="s2">"NS6212"</span><span class="p">,</span>
+      <span class="s2">"type"</span><span class="p">:</span> <span class="s2">"device"</span><span class="p">,</span>
+      <span class="s2">"low_memory"</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+      <span class="s2">"simulator"</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+      <span class="s2">"free_storage"</span><span class="p">:</span> <span class="mi">3967590400</span><span class="p">,</span>
+      <span class="s2">"storage_size"</span><span class="p">:</span> <span class="mi">5735825408</span><span class="p">,</span>
+      <span class="s2">"screen_dpi"</span><span class="p">:</span> <span class="mi">320</span><span class="p">,</span>
+      <span class="s2">"free_memory"</span><span class="p">:</span> <span class="mi">543588352</span><span class="p">,</span>
+      <span class="s2">"memory_size"</span><span class="p">:</span> <span class="mi">1392164864</span><span class="p">,</span>
+      <span class="s2">"online"</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
+      <span class="s2">"charging"</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
+      <span class="s2">"model"</span><span class="p">:</span> <span class="s2">"AFTN"</span><span class="p">,</span>
+      <span class="s2">"screen_density"</span><span class="p">:</span> <span class="mf">2.0</span><span class="p">,</span>
+      <span class="s2">"arch"</span><span class="p">:</span> <span class="s2">"armeabi-v7a"</span><span class="p">,</span>
+      <span class="s2">"brand"</span><span class="p">:</span> <span class="s2">"Amazon"</span><span class="p">,</span>
+      <span class="s2">"manufacturer"</span><span class="p">:</span> <span class="s2">"Amazon"</span>
+    <span class="p">},</span>
+<span class="o">//</span> <span class="o">...</span>
+    <span class="s2">"os"</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s2">"rooted"</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+      <span class="s2">"kernel_version"</span><span class="p">:</span> <span class="s2">"Linux version 3.14.29 (build@14-use1b-b-42) (gcc version 4.9.2 20140904 (prerelease) (crosstool-NG linaro-1.13.1-4.9-2014.09 - Linaro GCC 4.9-2014.09) ) #1 SMP PREEMPT Fri Jan 19 00:36:45 UTC 2018"</span><span class="p">,</span>
+      <span class="s2">"version"</span><span class="p">:</span> <span class="s2">"7.1.2"</span><span class="p">,</span>
+      <span class="s2">"build"</span><span class="p">:</span> <span class="s2">"NS6212"</span><span class="p">,</span>
+      <span class="s2">"type"</span><span class="p">:</span> <span class="s2">"os"</span><span class="p">,</span>
+      <span class="s2">"name"</span><span class="p">:</span> <span class="s2">"Android"</span>
+    <span class="p">}</span>
+<span class="p">},</span>
+</pre>
+            </div>
+           </div>
+          </section>
+          <section id="application-information">
+           <h3>Application Information<a class="headerlink" href="#application-information" title="Link to this heading">?</a></h3>
+           <p>Sentry collects basic information about the Focus app.</p>
+           <div class="highlight-default notranslate">
+            <div class="highlight">
+             <pre><span></span>    <span class="s2">"app"</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s2">"app_identifier"</span><span class="p">:</span> <span class="s2">"org.mozilla.focus"</span><span class="p">,</span>
+      <span class="s2">"app_name"</span><span class="p">:</span> <span class="s2">"Focus"</span><span class="p">,</span>
+      <span class="s2">"app_start_time"</span><span class="p">:</span> <span class="s2">"2018-03-30T16:55:03Z"</span><span class="p">,</span>
+      <span class="s2">"app_version"</span><span class="p">:</span> <span class="s2">"2.1"</span><span class="p">,</span>
+      <span class="s2">"type"</span><span class="p">:</span> <span class="s2">"app"</span><span class="p">,</span>
+      <span class="s2">"app_build"</span><span class="p">:</span> <span class="mi">11</span>
+<span class="o">//</span> <span class="o">...</span>
+  <span class="s2">"sdk"</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">"client_ip"</span><span class="p">:</span> <span class="s2">"63.245.222.193"</span><span class="p">,</span>
+    <span class="s2">"version"</span><span class="p">:</span> <span class="s2">"1.7.2-02be9"</span><span class="p">,</span>
+    <span class="s2">"name"</span><span class="p">:</span> <span class="s2">"sentry-java"</span>
+</pre>
+            </div>
+           </div>
+          </section>
+          <section id="crash-information">
+           <h3>Crash Information<a class="headerlink" href="#crash-information" title="Link to this heading">?</a></h3>
+           <section id="stack-trace">
+            <h4>Stack trace<a class="headerlink" href="#stack-trace" title="Link to this heading">?</a></h4>
+            <p>Every crash report contains a <em>stack trace</em>, which shows what functions in the Focus code led to this crash. It includes names of Android framework functions and Focus functions. Here’s an excerpt of three lines from the stack trace:</p>
+            <div class="highlight-default notranslate">
+             <div class="highlight">
+              <pre><span></span>  <span class="s2">"sentry.interfaces.Exception"</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">"exc_omitted"</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+    <span class="s2">"values"</span><span class="p">:</span> <span class="p">[</span>
+      <span class="p">{</span>
+        <span class="s2">"stacktrace"</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">"frames"</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+              <span class="s2">"function"</span><span class="p">:</span> <span class="s2">"main"</span><span class="p">,</span>
+              <span class="s2">"abs_path"</span><span class="p">:</span> <span class="s2">"ZygoteInit.java"</span><span class="p">,</span>
+              <span class="s2">"module"</span><span class="p">:</span> <span class="s2">"com.android.internal.os.ZygoteInit"</span><span class="p">,</span>
+              <span class="s2">"in_app"</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+              <span class="s2">"lineno"</span><span class="p">:</span> <span class="mi">801</span><span class="p">,</span>
+              <span class="s2">"filename"</span><span class="p">:</span> <span class="s2">"ZygoteInit.java"</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+              <span class="s2">"function"</span><span class="p">:</span> <span class="s2">"run"</span><span class="p">,</span>
+              <span class="s2">"abs_path"</span><span class="p">:</span> <span class="s2">"ZygoteInit.java"</span><span class="p">,</span>
+              <span class="s2">"module"</span><span class="p">:</span> <span class="s2">"com.android.internal.os.ZygoteInit$MethodAndArgsCaller"</span><span class="p">,</span>
+              <span class="s2">"in_app"</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+              <span class="s2">"lineno"</span><span class="p">:</span> <span class="mi">911</span><span class="p">,</span>
+              <span class="s2">"filename"</span><span class="p">:</span> <span class="s2">"ZygoteInit.java"</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+              <span class="s2">"function"</span><span class="p">:</span> <span class="s2">"invoke"</span><span class="p">,</span>
+              <span class="s2">"abs_path"</span><span class="p">:</span> <span class="s2">"Method.java"</span><span class="p">,</span>
+              <span class="s2">"in_app"</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+              <span class="s2">"module"</span><span class="p">:</span> <span class="s2">"java.lang.reflect.Method"</span><span class="p">,</span>
+              <span class="s2">"filename"</span><span class="p">:</span> <span class="s2">"Method.java"</span>
+<span class="p">},</span>
+</pre>
+             </div>
+            </div>
+           </section>
+           <section id="exception-message">
+            <h4>Exception message<a class="headerlink" href="#exception-message" title="Link to this heading">?</a></h4>
+            <p>The first line of every stack trace in every crash report contains a <em>reason</em> - why did this crash happen. This reason is provided by the developers who wrote the code that decide the app is in an error state. These developers include the Focus team at Mozilla, the Android framework, the Java programming language, and any libraries Mozilla bundles to develop Focus.</p>
+            <p>Java, the Android framework, and Mozilla are diligent about making sure that no personally identifiable information is put in any of these messages. We keep them technical and to the point. We at Mozilla stay on top of our dependencies to ensure they’re not including personally identifiable information as well.</p>
+            <p>Here’s an example message generated by Java:</p>
+            <div class="highlight-default notranslate">
+             <div class="highlight">
+              <pre><span></span><span class="n">java</span><span class="o">.</span><span class="n">lang</span><span class="o">.</span><span class="n">StringIndexOutOfBoundsException</span><span class="p">:</span> <span class="n">length</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">regionStart</span><span class="o">=</span><span class="mi">20</span><span class="p">;</span> <span class="n">regionLength</span><span class="o">=</span><span class="mi">20</span>
+</pre>
+             </div>
+            </div>
+            <p>Example of a Focus generated message:</p>
+            <div class="highlight-default notranslate">
+             <div class="highlight">
+              <pre><span></span><span class="n">java</span><span class="o">.</span><span class="n">lang</span><span class="o">.</span><span class="n">StringIndexOutOfBoundsException</span><span class="p">:</span> <span class="n">Cannot</span> <span class="n">create</span> <span class="n">negative</span><span class="o">-</span><span class="n">length</span> <span class="n">String</span>
+</pre>
+             </div>
+            </div>
+           </section>
+           <section id="raw-data-dump">
+            <h4>Raw data dump<a class="headerlink" href="#raw-data-dump" title="Link to this heading">?</a></h4>
+            <p>In the explanations above, some redundant fields and field considered less important were omitted for brevity. To review these omissions, <a class="reference external" href="https://gist.github.com/mcomella/50622aef817b40a20714b8550fb19991">this is an example of the raw data the server receives</a>. This is up-to-date as of March 30, 2018.</p>
+           </section>
+          </section>
+         </section>
+         <section id="for-developers">
+          <h2>For developers<a class="headerlink" href="#for-developers" title="Link to this heading">?</a></h2>
+          <p>For developer documentation such as how to enable Sentry in your builds, see <a class="reference external" href="https://github.com/mozilla-mobile/focus-android/blob/master/app/src/main/java/org/mozilla/focus/telemetry/SentryWrapper.kt"><code class="docutils literal notranslate"><span class="pre">SentryWrapper.kt</span></code></a> in the code base.</p>
+         </section>
+        </section>
+       </div>
+      </div>
+      <footer>
+       <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Content-blocking.html" class="btn btn-neutral float-left" title="Content blocking" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a> <a href="Development-Custom-GeckoView.html" class="btn btn-neutral float-right" title="Development with Custom GeckoView" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+       </div>
+       <hr>
+       <div role="contentinfo">
+        <p></p>
+       </div> Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+      </footer>
+     </div>
+    </div>
+   </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ </body>
+</html>

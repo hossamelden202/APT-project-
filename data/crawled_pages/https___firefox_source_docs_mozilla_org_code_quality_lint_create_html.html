@@ -1,0 +1,670 @@
+<!doctype html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Adding a New Linter to the Tree — Firefox Source Docs  documentation</title>
+  <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50">
+  <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094">
+  <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=fd3f3429">
+  <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b">
+  <link rel="stylesheet" type="text/css" href="../../_static/custom_theme.css?v=dc5ed815">
+  <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7">
+  <link rel="shortcut icon" href="../../_static/firefox.ico"><!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script src="../../_static/jquery.js?v=5d32c60e"></script>
+  <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+  <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+  <script src="../../_static/doctools.js?v=9a2dae69"></script>
+  <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+  <script src="../../_static/copybutton.js?v=30646c52"></script>
+  <script src="../../_static/design-tabs.js?v=36754332"></script>
+  <script src="../../_static/js/theme.js"></script>
+  <link rel="index" title="Index" href="../../genindex.html">
+  <link rel="search" title="Search" href="../../search.html">
+  <link rel="next" title="Coding style" href="../coding-style/index.html">
+  <link rel="prev" title="MozLint" href="mozlint.html">
+ </head>
+ <body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+   <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <div class="wy-side-scroll">
+     <div class="wy-side-nav-search">
+      <a href="../../index.html" class="icon icon-home"> Firefox Source Docs <img src="../../_static/firefox-wordmark.svg" class="logo" alt="Logo"> </a><!-- -- This code is governed by the BSD license ---->
+      <div>
+       <h3>Quick search</h3>
+       <script>
+    (function () {
+      var cx = "dd12886298f75dbef";
+      var gcse = document.createElement("script");
+      gcse.async = true;
+      gcse.src = "https://cse.google.com/cse.js?cx=" + cx;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(gcse, s);
+    })();
+  </script><gcse:search></gcse:search>
+      </div>
+     </div>
+     <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+      <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../glossary/index.html">A Glossary of Common Terms</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../overview/index.html">A Quick Guide to Mozilla Applications</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../setup/index.html">Getting Set Up To Work On The Firefox Codebase</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Working On Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Working on Firefox</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../bug-mgmt/index.html">Bug Handling</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox User Guide</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../devtools-user/index.html">Firefox DevTools User Docs</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Source Code Documentation</span></p>
+      <ul class="current">
+       <li class="toctree-l1"><a class="reference internal" href="../../mots/index.html">Governance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../browser/index.html">Firefox Front-end</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../dom/index.html">DOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../editor/index.html">Editor</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../layout/index.html">Style system (CSS) &amp; Layout</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../gfx/index.html">Graphics</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../ipc/index.html">Processes, Threads and IPC</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../devtools/index.html">Firefox DevTools Contributor Docs</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../toolkit/index.html">Toolkit</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../js/index.html">SpiderMonkey</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../jsloader/index.html">JS Loader</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/geckoview/index.html">GeckoView</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/fenix/index.html">Fenix</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/focus-android/index.html">Focus for Android</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../dom/bindings/webidl/index.html">WebIDL</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../modules/libpref/index.html">libpref</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../networking/index.html">Networking</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../remote/index.html">Remote Protocols</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../services/index.html">Services</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../permissions/index.html">Permissions</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../uriloader/index.html">File Handling</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../widget/cocoa/index.html">Firefox on macOS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../widget/windows/index.html">Firefox on Windows</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../toolkit/components/ml/index.html">Firefox AI Runtime</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../accessible/index.html">Accessibility</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../media/index.html">Media Playback</a></li>
+       <li class="toctree-l1 current"><a class="reference internal" href="../index.html">Code quality</a>
+        <ul class="current">
+         <li class="toctree-l2"><a class="reference internal" href="../static-analysis/index.html">Static Analysis</a></li>
+         <li class="toctree-l2 current"><a class="reference internal" href="index.html">Linting</a>
+          <ul class="current">
+           <li class="toctree-l3 current"><a class="reference internal" href="index.html#getting-help">Getting Help</a>
+            <ul class="current">
+             <li class="toctree-l4"><a class="reference internal" href="usage.html">Running Linters Locally</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="linters/android-format.html">Spotless</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="linters/black.html">Black</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="linters/clang-format.html">clang-format</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="linters/clippy.html">clippy</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="linters/codespell.html">Codespell</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="linters/condprof-addons.html">CondProf Addons</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="linters/eslint.html">ESLint</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="linters/eslint-plugin-mozilla.html">Mozilla ESLint Plugin</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="linters/eslint-plugin-spidermonkey-js.html">Mozilla ESLint SpiderMonkey JS</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="linters/file-perm.html">File permission</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="linters/file-whitespace.html">Trailing whitespaces</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="linters/fluent-lint.html">Fluent Lint</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="linters/ignorefile.html">Ignorefile Lint</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="linters/l10n.html">L10n</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="linters/license.html">License</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="linters/lintpref.html">Lintpref</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="linters/mingw-capitalization.html">MinGW capitalization</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="linters/node-package-names.html">Node Package Names</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="linters/perfdocs.html">PerfDocs</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="linters/rejected-words.html">Rejected words</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="linters/rstlinter.html">RST Linter</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="linters/ruff.html">Ruff</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="linters/rustfmt.html">Rustfmt</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="linters/stylelint.html">Stylelint</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="linters/stylelint-plugin-mozilla.html">Mozilla Stylelint Plugin</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="linters/test-manifest-toml.html">Test Manifest TOML</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="linters/trojan-source.html">Trojan Source</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="linters/yamllint.html">yamllint</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="mozlint.html">MozLint</a></li>
+             <li class="toctree-l4 current"><a class="current reference internal" href="#">Adding a New Linter to the Tree</a></li>
+            </ul></li>
+          </ul></li>
+         <li class="toctree-l2"><a class="reference internal" href="../coding-style/index.html">Coding style</a></li>
+        </ul></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../writing-rust-code/index.html">Writing Rust Code</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../rust-components/index.html">Rust Components</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/profiler/index.html">Gecko Profiler</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../performance/index.html">Performance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../storage/index.html">Database bindings (SQLite, KV, …)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../xpcom/index.html">XPCOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../nspr/index.html">NSPR</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../security/nss/index.html">Network Security Services (NSS)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../content-security/index.html">Web Security Checks in Gecko</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">The Firefox Build System</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mach/index.html">Mach</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/try/index.html">Pushing to Try</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../build/buildsystem/index.html">Build System</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../taskcluster/index.html">Firefox CI and Taskgraph</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/moztreedocs/index.html">Managing Documentation</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mozbuild/vendor/index.html">Vendoring Third Party Components</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Testing &amp; Test Infrastructure</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/automated-testing/index.html">Automated Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/treeherder-try/index.html">Understanding Treeherder Results</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/sheriffed-intermittents/index.html">Sheriffed intermittent failures</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/tests-for-new-config/index.html">Turning on Firefox tests for a new configuration</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/intermittent/index.html">Avoiding intermittent tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/testing-policy/index.html">Testing Policy</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/ci-configs/index.html">Configuration Changes</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/browser-chrome/index.html">Browser chrome mochitests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/chrome-tests/index.html">Chrome Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/marionette/index.html">Marionette</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/geckodriver/index.html">geckodriver</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/test-verification/index.html">Test Verification</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/webrender/index.html">WebRender Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/mochitest-plain/index.html">Mochitest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/xpcshell/index.html">XPCShell tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/tps/index.html">TPS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../web-platform/index.html">web-platform-tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../gtest/index.html">GTest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/fuzzing/index.html">Fuzzing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/sanitizer/index.html">Sanitizer</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/perfdocs/index.html">Performance Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/code-coverage/index.html">Code coverage</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing-rust-code/index.html">Testing &amp; Debugging Rust Code</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Releases &amp; Updates</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html">Mozilla Update Infrastructure</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html#watershed-updates">Watershed Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html#desupport-updates">Desupport Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/update-verify/index.html">Update Verify</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Localization &amp; Internationalization</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../intl/index.html">Internationalization</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../l10n/index.html">Localization</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox and Python</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mozbase/index.html">mozbase</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../python/index.html">Using third-party Python packages</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Metrics Collected in Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../metrics/index.html">Metrics</a></li>
+      </ul>
+     </div>
+    </div>
+   </nav>
+   <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+    <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+     <i data-toggle="wy-nav-top" class="fa fa-bars"></i> <a href="../../index.html">Firefox Source Docs</a>
+    </nav>
+    <div class="wy-nav-content">
+     <div class="rst-content">
+      <!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+      <div role="navigation" aria-label="Page navigation">
+       <ul class="wy-breadcrumbs">
+        <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+        <li class="breadcrumb-item"><a href="../index.html">Code quality</a></li>
+        <li class="breadcrumb-item"><a href="index.html">Linting</a></li>
+        <li class="breadcrumb-item active">Adding a New Linter to the Tree</li>
+        <li class="wy-breadcrumbs-aside"><a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Developer+Infrastructure&amp;component=Firefox+Source+Docs%3A+Content&amp;short_desc=Documentation+issue+on+code-quality/lint/create&amp;comment=URL+=+https://firefox-source-docs.mozilla.org/code-quality/lint/create.html&amp;bug_file_loc=https://firefox-source-docs.mozilla.org/code-quality/lint/create.html" rel="nofollow">Report an issue</a> / <a href="../../_sources/code-quality/lint/create.rst.txt" rel="nofollow"> View page source</a></li>
+       </ul>
+       <hr>
+      </div>
+      <div role="main" class="document" itemscope itemtype="http://schema.org/Article">
+       <div itemprop="articleBody">
+        <section id="adding-a-new-linter-to-the-tree">
+         <h1>Adding a New Linter to the Tree<a class="headerlink" href="#adding-a-new-linter-to-the-tree" title="Link to this heading">?</a></h1>
+         <section id="linter-requirements">
+          <h2>Linter Requirements<a class="headerlink" href="#linter-requirements" title="Link to this heading">?</a></h2>
+          <p>For a linter to be integrated into the mozilla-central tree, it needs to have:</p>
+          <ul class="simple">
+           <li>
+            <p>Any required dependencies should be installed as part of <code class="docutils literal notranslate"><span class="pre">./mach</span> <span class="pre">bootstrap</span></code></p></li>
+           <li>
+            <p>A <code class="docutils literal notranslate"><span class="pre">./mach</span> <span class="pre">lint</span></code> interface</p></li>
+           <li>
+            <p>Running <code class="docutils literal notranslate"><span class="pre">./mach</span> <span class="pre">lint</span></code> command must pass (note, linters can be disabled for individual directories)</p></li>
+           <li>
+            <p>Taskcluster/Treeherder integration</p></li>
+           <li>
+            <p>In tree documentation (under <code class="docutils literal notranslate"><span class="pre">docs/code-quality/lint</span></code>) to give a basic summary, links and any other useful information</p></li>
+           <li>
+            <p>Unit tests (under <code class="docutils literal notranslate"><span class="pre">tools/lint/test</span></code>) to make sure that the linter works as expected and we don’t regress.</p></li>
+          </ul>
+          <p>The review group in Phabricator is <code class="docutils literal notranslate"><span class="pre">#linter-reviewers</span></code>.</p>
+         </section>
+         <section id="linter-basics">
+          <h2>Linter Basics<a class="headerlink" href="#linter-basics" title="Link to this heading">?</a></h2>
+          <p>A linter is a yaml file with a <code class="docutils literal notranslate"><span class="pre">.yml</span></code> extension. Depending on how the type of linter, there may be python code alongside the definition, pointed to by the ‘payload’ attribute.</p>
+          <p>Here’s a trivial example:</p>
+          <p>no-eval.yml</p>
+          <div class="highlight-yaml notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="nt">EvalLinter</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Ensures the string eval doesn't show up.</span>
+<span class="w">    </span><span class="nt">extensions</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">'js'</span><span class="p p-Indicator">]</span>
+<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span>
+<span class="w">    </span><span class="nt">payload</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">eval</span>
+</pre>
+           </div>
+          </div>
+          <p>Now <code class="docutils literal notranslate"><span class="pre">no-eval.yml</span></code> gets passed into <code class="xref py py-func docutils literal notranslate"><span class="pre">LintRoller.read()</span></code>.</p>
+         </section>
+         <section id="linter-types">
+          <h2>Linter Types<a class="headerlink" href="#linter-types" title="Link to this heading">?</a></h2>
+          <p>There are four types of linters, though more may be added in the future.</p>
+          <ol class="arabic simple">
+           <li>
+            <p>string - fails if substring is found</p></li>
+           <li>
+            <p>regex - fails if regex matches</p></li>
+           <li>
+            <p>external - fails if a python function returns a non-empty result list</p></li>
+           <li>
+            <p>structured_log - fails if a mozlog logger emits any lint_error or lint_warning log messages</p></li>
+          </ol>
+          <p>As seen from the example above, string and regex linters are very easy to create, but they should be avoided if possible. It is much better to use a context aware linter for the language you are trying to lint. For example, use eslint to lint JavaScript files, use ruff to lint Python files, etc.</p>
+          <p>Which brings us to the third and most interesting type of linter, external. External linters call an arbitrary python function which is responsible for not only running the linter, but ensuring the results are structured properly. For example, an external type could shell out to a 3rd party linter, collect the output and format it into a list of <code class="xref py py-class docutils literal notranslate"><span class="pre">Issue</span></code> objects. The signature for this python function is <code class="docutils literal notranslate"><span class="pre">lint(files,</span> <span class="pre">config,</span> <span class="pre">**kwargs)</span></code>, where <code class="docutils literal notranslate"><span class="pre">files</span></code> is a list of files to lint and <code class="docutils literal notranslate"><span class="pre">config</span></code> is the linter definition defined in the <code class="docutils literal notranslate"><span class="pre">.yml</span></code> file.</p>
+          <p>Structured log linters are much like external linters, but suitable for cases where the linter code is using mozlog and emits <code class="docutils literal notranslate"><span class="pre">lint_error</span></code> or <code class="docutils literal notranslate"><span class="pre">lint_warning</span></code> logging messages when the lint fails. This is recommended for writing novel gecko-specific lints. In this case the signature for lint functions is <code class="docutils literal notranslate"><span class="pre">lint(files,</span> <span class="pre">config,</span> <span class="pre">logger,</span> <span class="pre">**kwargs)</span></code>.</p>
+         </section>
+         <section id="linter-definition">
+          <h2>Linter Definition<a class="headerlink" href="#linter-definition" title="Link to this heading">?</a></h2>
+          <p>Each <code class="docutils literal notranslate"><span class="pre">.yml</span></code> file must have at least one linter defined in it. Here are the supported keys:</p>
+          <ul class="simple">
+           <li>
+            <p>description - A brief description of the linter’s purpose (required)</p></li>
+           <li>
+            <p>type - One of ‘string’, ‘regex’ or ‘external’ (required)</p></li>
+           <li>
+            <p>payload - The actual linting logic, depends on the type (required)</p></li>
+           <li>
+            <p>include - A list of file paths that will be considered (optional)</p></li>
+           <li>
+            <p>exclude - A list of file paths or glob patterns that must not be matched (optional)</p></li>
+           <li>
+            <p>extensions - A list of file extensions to be considered (optional)</p></li>
+           <li>
+            <p>exclude_extensions - A list of file extensions to be excluded (optional)</p></li>
+           <li>
+            <p>setup - A function that sets up external dependencies (optional)</p></li>
+           <li>
+            <p>support-files - A list of glob patterns matching configuration files (optional)</p></li>
+           <li>
+            <p>find-dotfiles - If set to <code class="docutils literal notranslate"><span class="pre">true</span></code>, run on dot files (.*) (optional)</p></li>
+           <li>
+            <p>ignore-case - If set to <code class="docutils literal notranslate"><span class="pre">true</span></code> and <code class="docutils literal notranslate"><span class="pre">type</span></code> is regex, ignore the case (optional)</p></li>
+          </ul>
+          <p>Note that a linter may not have both <code class="docutils literal notranslate"><span class="pre">extensions</span></code> and <code class="docutils literal notranslate"><span class="pre">exclude_extensions</span></code> specified at the same time.</p>
+          <p>In addition to the above, some <code class="docutils literal notranslate"><span class="pre">.yml</span></code> files correspond to a single lint rule. For these, the following additional keys may be specified:</p>
+          <ul class="simple">
+           <li>
+            <p>message - A string to print on infraction (optional)</p></li>
+           <li>
+            <p>hint - A string with a clue on how to fix the infraction (optional)</p></li>
+           <li>
+            <p>rule - An id string for the lint rule (optional)</p></li>
+           <li>
+            <p>level - The severity of the infraction, either ‘error’ or ‘warning’ (optional)</p></li>
+          </ul>
+          <p>For structured_log lints the following additional keys apply:</p>
+          <ul class="simple">
+           <li>
+            <p>logger - A StructuredLog object to use for logging. If not supplied one will be created (optional)</p></li>
+          </ul>
+         </section>
+         <section id="example">
+          <h2>Example<a class="headerlink" href="#example" title="Link to this heading">?</a></h2>
+          <p>Here is an example of an external linter that shells out to the Python ruff linter, let’s call the file <code class="docutils literal notranslate"><span class="pre">ruff_lint.py</span></code> (<a class="reference external" href="https://searchfox.org/mozilla-central/source/tools/lint/python/ruff.py">in-tree version</a>):</p>
+          <div class="highlight-python notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">subprocess</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
+<span class="kn">from</span> <span class="nn">shutil</span> <span class="kn">import</span> <span class="n">which</span>
+
+<span class="kn">from</span> <span class="nn">mozlint</span> <span class="kn">import</span> <span class="n">result</span>
+
+
+<span class="n">RUFF_NOT_FOUND</span> <span class="o">=</span> <span class="s2">"""</span>
+<span class="s2">Could not find ruff! Install ruff and try again.</span>
+<span class="s2">"""</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+
+<span class="k">def</span> <span class="nf">lint</span><span class="p">(</span><span class="n">paths</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="o">**</span><span class="n">lintargs</span><span class="p">):</span>
+    <span class="n">binary</span> <span class="o">=</span> <span class="n">which</span><span class="p">(</span><span class="s1">'ruff'</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">binary</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">RUFF_NOT_FOUND</span><span class="p">)</span>
+        <span class="k">return</span> <span class="mi">1</span>
+
+
+    <span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"ruff"</span><span class="p">,</span> <span class="s2">"check"</span><span class="p">,</span> <span class="s2">"--force-exclude"</span><span class="p">,</span> <span class="s2">"--format=json"</span><span class="p">]</span> <span class="o">+</span> <span class="n">paths</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">stdout</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">)</span><span class="o">.</span><span class="n">output</span>
+
+    <span class="c1"># all passed</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">output</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[]</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">issues</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">json</span><span class="o">.</span><span class="n">JSONDecodeError</span><span class="p">:</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Could not parse output: </span><span class="si">{</span><span class="n">output</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+    <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">issue</span> <span class="ow">in</span> <span class="n">issues</span><span class="p">:</span>
+        <span class="c1"># convert ruff's format to mozlint's format</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">"path"</span><span class="p">:</span> <span class="n">issue</span><span class="p">[</span><span class="s2">"filename"</span><span class="p">],</span>
+            <span class="s2">"lineno"</span><span class="p">:</span> <span class="n">issue</span><span class="p">[</span><span class="s2">"location"</span><span class="p">][</span><span class="s2">"row"</span><span class="p">],</span>
+            <span class="s2">"column"</span><span class="p">:</span> <span class="n">issue</span><span class="p">[</span><span class="s2">"location"</span><span class="p">][</span><span class="s2">"column"</span><span class="p">],</span>
+            <span class="s2">"lineoffset"</span><span class="p">:</span> <span class="n">issue</span><span class="p">[</span><span class="s2">"end_location"</span><span class="p">][</span><span class="s2">"row"</span><span class="p">]</span> <span class="o">-</span> <span class="n">issue</span><span class="p">[</span><span class="s2">"location"</span><span class="p">][</span><span class="s2">"row"</span><span class="p">],</span>
+            <span class="s2">"message"</span><span class="p">:</span> <span class="n">issue</span><span class="p">[</span><span class="s2">"message"</span><span class="p">],</span>
+            <span class="s2">"rule"</span><span class="p">:</span> <span class="n">issue</span><span class="p">[</span><span class="s2">"code"</span><span class="p">],</span>
+            <span class="s2">"level"</span><span class="p">:</span> <span class="s2">"error"</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="n">issue</span><span class="p">[</span><span class="s2">"fix"</span><span class="p">]:</span>
+            <span class="n">res</span><span class="p">[</span><span class="s2">"hint"</span><span class="p">]</span> <span class="o">=</span> <span class="n">issue</span><span class="p">[</span><span class="s2">"fix"</span><span class="p">][</span><span class="s2">"message"</span><span class="p">]</span>
+
+        <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">from_config</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="o">**</span><span class="n">res</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="p">{</span><span class="s2">"results"</span><span class="p">:</span> <span class="n">results</span><span class="p">,</span> <span class="s2">"fixed"</span><span class="p">:</span> <span class="n">fixed</span><span class="p">}</span>
+</pre>
+           </div>
+          </div>
+          <p>Now here is the linter definition that would call it:</p>
+          <div class="highlight-yaml notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="nt">ruff</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Python Linter</span>
+<span class="w">    </span><span class="nt">include</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">"."</span><span class="p p-Indicator">]</span>
+<span class="w">    </span><span class="nt">extensions</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">"py"</span><span class="p p-Indicator">]</span>
+<span class="w">    </span><span class="nt">support-files</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"**/.ruff.toml"</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"**/ruff.toml"</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"**/pyproject.toml"</span>
+<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">external</span>
+<span class="w">    </span><span class="nt">payload</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">py.ruff:lint</span>
+</pre>
+           </div>
+          </div>
+          <p>Notice the payload has two parts, delimited by ‘:’. The first is the module path, which <code class="docutils literal notranslate"><span class="pre">mozlint</span></code> will attempt to import. The second is the object path within that module (e.g, the name of a function to call). It is up to consumers of <code class="docutils literal notranslate"><span class="pre">mozlint</span></code> to ensure the module is in <code class="docutils literal notranslate"><span class="pre">sys.path</span></code>. Structured log linters use the same import mechanism.</p>
+          <p>The <code class="docutils literal notranslate"><span class="pre">support-files</span></code> key is used to list configuration files or files related to the running of the linter itself. If using <code class="docutils literal notranslate"><span class="pre">--outgoing</span></code> or <code class="docutils literal notranslate"><span class="pre">--workdir</span></code> and one of these files was modified, the entire tree will be linted instead of just the modified files.</p>
+         </section>
+         <section id="result-definition">
+          <h2>Result definition<a class="headerlink" href="#result-definition" title="Link to this heading">?</a></h2>
+          <p>When generating the list of results, the following values are available.</p>
+          <table class="docutils align-default">
+           <colgroup>
+            <col style="width: 28.6%">
+            <col style="width: 57.1%">
+            <col style="width: 14.3%">
+           </colgroup>
+           <thead>
+            <tr class="row-odd">
+             <th class="head">
+              <p>Name</p></th>
+             <th class="head">
+              <p>Description</p></th>
+             <th class="head">
+              <p>Optional</p></th>
+            </tr>
+           </thead>
+           <tbody>
+            <tr class="row-even">
+             <td>
+              <p>linter</p></td>
+             <td>
+              <p>Name of the linter that flagged this error</p></td>
+             <td></td>
+            </tr>
+            <tr class="row-odd">
+             <td>
+              <p>path</p></td>
+             <td>
+              <p>Path to the file containing the error</p></td>
+             <td></td>
+            </tr>
+            <tr class="row-even">
+             <td>
+              <p>message</p></td>
+             <td>
+              <p>Text describing the error</p></td>
+             <td></td>
+            </tr>
+            <tr class="row-odd">
+             <td>
+              <p>lineno</p></td>
+             <td>
+              <p>Line number that contains the error</p></td>
+             <td></td>
+            </tr>
+            <tr class="row-even">
+             <td>
+              <p>column</p></td>
+             <td>
+              <p>Column containing the error</p></td>
+             <td></td>
+            </tr>
+            <tr class="row-odd">
+             <td>
+              <p>level</p></td>
+             <td>
+              <p>Severity of the error, either ‘warning’ or ‘error’ (default ‘error’)</p></td>
+             <td>
+              <p>Yes</p></td>
+            </tr>
+            <tr class="row-even">
+             <td>
+              <p>hint</p></td>
+             <td>
+              <p>Suggestion for fixing the error</p></td>
+             <td>
+              <p>Yes</p></td>
+            </tr>
+            <tr class="row-odd">
+             <td>
+              <p>source</p></td>
+             <td>
+              <p>Source code context of the error</p></td>
+             <td>
+              <p>Yes</p></td>
+            </tr>
+            <tr class="row-even">
+             <td>
+              <p>rule</p></td>
+             <td>
+              <p>Name of the rule that was violated</p></td>
+             <td>
+              <p>Yes</p></td>
+            </tr>
+            <tr class="row-odd">
+             <td>
+              <p>lineoffset</p></td>
+             <td>
+              <p>Denotes an error spans multiple lines, of the form (&lt;lineno offset&gt;, &lt;num lines&gt;)</p></td>
+             <td>
+              <p>Yes</p></td>
+            </tr>
+            <tr class="row-even">
+             <td>
+              <p>diff</p></td>
+             <td>
+              <p>A diff describing the changes that need to be made to the code</p></td>
+             <td>
+              <p>Yes</p></td>
+            </tr>
+           </tbody>
+          </table>
+         </section>
+         <section id="automated-testing">
+          <h2>Automated testing<a class="headerlink" href="#automated-testing" title="Link to this heading">?</a></h2>
+          <p>Every new checker must have associated tests. If your linter is <code class="docutils literal notranslate"><span class="pre">mylinter</span></code> then the test file should be named <code class="docutils literal notranslate"><span class="pre">tools/lint/test/test_mylinter.py</span></code> and any example files named like <code class="docutils literal notranslate"><span class="pre">tools/lint/test/files/mylinter/my-example-file</span></code>. Be sure that your test has been added as a section <code class="docutils literal notranslate"><span class="pre">["test_mylinter.py"]</span></code> in the manifest <code class="docutils literal notranslate"><span class="pre">tools/lint/test/python.toml</span></code>.</p>
+          <p>They should be pretty easy to write as most of the work is managed by the Mozlint framework. The key declaration is the <code class="docutils literal notranslate"><span class="pre">LINTER</span></code> variable which must match the linker declaration.</p>
+          <p>As an example, the <a class="reference external" href="https://searchfox.org/mozilla-central/source/tools/lint/test/test_ruff.py">ruff test</a> looks like the following snippet:</p>
+          <div class="highlight-python notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="kn">import</span> <span class="nn">mozunit</span>
+<span class="n">LINTER</span> <span class="o">=</span> <span class="s1">'ruff'</span>
+
+<span class="k">def</span> <span class="nf">test_lint_ruff</span><span class="p">(</span><span class="n">lint</span><span class="p">,</span> <span class="n">paths</span><span class="p">):</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="n">lint</span><span class="p">(</span><span class="n">paths</span><span class="p">(</span><span class="s1">'bad.py'</span><span class="p">))</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">results</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span>
+    <span class="k">assert</span> <span class="n">results</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">rule</span> <span class="o">==</span> <span class="s1">'F401'</span>
+    <span class="k">assert</span> <span class="n">results</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">rule</span> <span class="o">==</span> <span class="s1">'E501'</span>
+    <span class="k">assert</span> <span class="n">results</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">lineno</span> <span class="o">==</span> <span class="mi">5</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">'__main__'</span><span class="p">:</span>
+    <span class="n">mozunit</span><span class="o">.</span><span class="n">main</span><span class="p">()</span>
+</pre>
+           </div>
+          </div>
+          <p>As always with tests, please make sure that enough positive and negative cases are covered.</p>
+          <p>To run the tests:</p>
+          <div class="highlight-shell notranslate">
+           <div class="highlight">
+            <pre><span></span>$<span class="w"> </span>./mach<span class="w"> </span>python-test<span class="w"> </span>--subsuite<span class="w"> </span>mozlint
+</pre>
+           </div>
+          </div>
+          <p>To run a specific test:</p>
+          <div class="highlight-shell notranslate">
+           <div class="highlight">
+            <pre><span></span>./mach<span class="w"> </span>python-test<span class="w"> </span>--subsuite<span class="w"> </span>mozlint<span class="w"> </span>tools/lint/test/test_black.py
+</pre>
+           </div>
+          </div>
+          <p>More tests can be <a class="reference external" href="https://searchfox.org/mozilla-central/source/tools/lint/test">found in-tree</a>.</p>
+         </section>
+         <section id="tracking-fixed-issues">
+          <h2>Tracking fixed issues<a class="headerlink" href="#tracking-fixed-issues" title="Link to this heading">?</a></h2>
+          <p>All the linters that provide <code class="docutils literal notranslate"><span class="pre">fix</span> <span class="pre">support</span></code> returns a dictionary instead of a list.</p>
+          <p><code class="docutils literal notranslate"><span class="pre">{"results":result,"fixed":fixed}</span></code></p>
+          <ul class="simple">
+           <li>
+            <p>results - All the linting errors it was not able to fix</p></li>
+           <li>
+            <p>fixed - Count of fixed errors (for <code class="docutils literal notranslate"><span class="pre">fix=False</span></code> this is 0)</p></li>
+          </ul>
+          <p>Some linters (example: <a class="reference external" href="https://searchfox.org/mozilla-central/rev/0379f315c75a2875d716b4f5e1a18bf27188f1e6/tools/lint/spell/__init__.py#145-163">codespell</a>) might require two passes to count the number of fixed issues. Others might just need <a class="reference external" href="https://searchfox.org/mozilla-central/rev/0379f315c75a2875d716b4f5e1a18bf27188f1e6/tools/lint/file-whitespace/__init__.py#28,60,85,112">some tuning</a>.</p>
+          <p>For adding tests to check your fixed count, add a global variable <code class="docutils literal notranslate"><span class="pre">fixed</span> <span class="pre">=</span> <span class="pre">0</span></code> and write a function to add your test as mentioned under <code class="docutils literal notranslate"><span class="pre">Automated</span> <span class="pre">testing</span></code> section.</p>
+          <p>Here’s an example</p>
+          <div class="highlight-python notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="n">fixed</span> <span class="o">=</span> <span class="mi">0</span>
+
+
+<span class="k">def</span> <span class="nf">test_lint_codespell_fix</span><span class="p">(</span><span class="n">lint</span><span class="p">,</span> <span class="n">create_temp_file</span><span class="p">):</span>
+<span class="c1"># Typo has been fixed in the contents to avoid triggering warning</span>
+<span class="c1"># 'informations' ----&gt; 'information'</span>
+    <span class="n">contents</span> <span class="o">=</span> <span class="s2">"""This is a file with some typos and information.</span>
+<span class="s2">But also testing false positive like optin (because this isn't always option)</span>
+<span class="s2">or stuff related to our coding style like:</span>
+<span class="s2">aparent (aParent).</span>
+<span class="s2">but detects mistakes like mozilla</span>
+<span class="s2">"""</span><span class="o">.</span><span class="n">lstrip</span><span class="p">()</span>
+
+    <span class="n">path</span> <span class="o">=</span> <span class="n">create_temp_file</span><span class="p">(</span><span class="n">contents</span><span class="p">,</span> <span class="s2">"ignore.rst"</span><span class="p">)</span>
+    <span class="n">lint</span><span class="p">([</span><span class="n">path</span><span class="p">],</span> <span class="n">fix</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">assert</span> <span class="n">fixed</span> <span class="o">==</span> <span class="mi">2</span>
+</pre>
+           </div>
+          </div>
+         </section>
+         <section id="bootstrapping-dependencies">
+          <h2>Bootstrapping Dependencies<a class="headerlink" href="#bootstrapping-dependencies" title="Link to this heading">?</a></h2>
+          <p>Many linters, especially 3rd party ones, will require a set of dependencies. It could be as simple as installing a binary from a package manager, or as complicated as pulling a whole graph of tools, plugins and their dependencies.</p>
+          <p>Either way, to reduce the burden on users, linters should strive to provide automated bootstrapping of all their dependencies. To help with this, <code class="docutils literal notranslate"><span class="pre">mozlint</span></code> allows linters to define a <code class="docutils literal notranslate"><span class="pre">setup</span></code> config, which has the same path object format as an external payload. For example (<a class="reference external" href="https://searchfox.org/mozilla-central/source/tools/lint/ruff.yml">in-tree version</a>):</p>
+          <div class="highlight-yaml notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="nt">ruff</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Python linter</span>
+<span class="w">    </span><span class="nt">include</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">'.'</span><span class="p p-Indicator">]</span>
+<span class="w">    </span><span class="nt">extensions</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">'py'</span><span class="p p-Indicator">]</span>
+<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">external</span>
+<span class="w">    </span><span class="nt">payload</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">py.ruff:lint</span>
+<span class="w">    </span><span class="nt">setup</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">py.ruff:setup</span>
+</pre>
+           </div>
+          </div>
+          <p>The setup function takes a single argument, the root of the repository being linted. In the case of <code class="docutils literal notranslate"><span class="pre">ruff</span></code>, it might look like:</p>
+          <div class="highlight-python notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="kn">import</span> <span class="nn">subprocess</span>
+<span class="kn">from</span> <span class="nn">shutil</span> <span class="kn">import</span> <span class="n">which</span>
+
+<span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="o">**</span><span class="n">lintargs</span><span class="p">):</span>
+    <span class="c1"># This is a simple example. Please look at the actual source for better examples.</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">which</span><span class="p">(</span><span class="s2">"ruff"</span><span class="p">):</span>
+        <span class="n">subprocess</span><span class="o">.</span><span class="n">call</span><span class="p">([</span><span class="s2">"pip"</span><span class="p">,</span> <span class="s2">"install"</span><span class="p">,</span> <span class="s2">"ruff"</span><span class="p">])</span>
+</pre>
+           </div>
+          </div>
+          <p>The setup function will be called implicitly before running the linter. This means it should return fast and not produce any output if there is no setup to be performed.</p>
+          <p>The setup functions can also be called explicitly by running <code class="docutils literal notranslate"><span class="pre">mach</span> <span class="pre">lint</span> <span class="pre">--setup</span></code>. This will only perform setup and not perform any linting. It is mainly useful for other tools like <code class="docutils literal notranslate"><span class="pre">mach</span> <span class="pre">bootstrap</span></code> to call into.</p>
+         </section>
+         <section id="adding-the-linter-to-the-ci">
+          <h2>Adding the linter to the CI<a class="headerlink" href="#adding-the-linter-to-the-ci" title="Link to this heading">?</a></h2>
+          <p>First, the job will have to be declared in Taskcluster.</p>
+          <p>This should be done in the <a class="reference external" href="https://searchfox.org/mozilla-central/source/taskcluster/kinds/source-test/mozlint.yml">mozlint Taskcluster configuration</a>. You will need to define a symbol, how it is executed and on what kind of change.</p>
+          <p>For example, for ruff, the configuration is the following:</p>
+          <div class="highlight-yaml notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="nt">py-ruff</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">run ruff over the gecko codebase</span>
+<span class="w">    </span><span class="nt">treeherder</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">symbol</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">py(ruff)</span>
+<span class="w">    </span><span class="nt">run</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">mach</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lint -l ruff -f treeherder -f json:/builds/worker/mozlint.json .</span>
+<span class="w">    </span><span class="nt">when</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">files-changed</span><span class="p">:</span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">'**/*.py'</span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">'**/.ruff.toml'</span>
+</pre>
+           </div>
+          </div>
+          <p>If the linter requires an external program, you will have to install it in the <a class="reference external" href="https://searchfox.org/mozilla-central/source/taskcluster/docker/lint/system-setup.sh">setup script</a> and maybe install the necessary files in the <a class="reference external" href="https://searchfox.org/mozilla-central/source/taskcluster/docker/lint/Dockerfile">Docker configuration</a>.</p>
+          <div class="admonition note">
+           <p class="admonition-title">Note</p>
+           <p>If the defect found by the linter is minor, make sure that it is logged as a warning by setting <cite>{“level”: “warning”}</cite> in the <a class="reference internal" href="../../python/mozlint.html#mozlint.result.Issue" title="mozlint.result.Issue"><code class="xref py py-class docutils literal notranslate"><span class="pre">Issue</span></code></a>. This means the defect will not cause a backout if landed, but will still be surfaced by reviewbot at review time, or when using <cite>-W/–warnings</cite> locally.</p>
+          </div>
+         </section>
+        </section>
+       </div>
+      </div>
+      <footer>
+       <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="mozlint.html" class="btn btn-neutral float-left" title="MozLint" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a> <a href="../coding-style/index.html" class="btn btn-neutral float-right" title="Coding style" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+       </div>
+       <hr>
+       <div role="contentinfo">
+        <p></p>
+       </div> Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+      </footer>
+     </div>
+    </div>
+   </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ </body>
+</html>

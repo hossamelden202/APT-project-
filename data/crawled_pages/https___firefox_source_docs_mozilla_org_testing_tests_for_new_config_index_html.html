@@ -1,0 +1,327 @@
+<!doctype html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Turning on Firefox tests for a new configuration — Firefox Source Docs  documentation</title>
+  <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50">
+  <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094">
+  <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=fd3f3429">
+  <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b">
+  <link rel="stylesheet" type="text/css" href="../../_static/custom_theme.css?v=dc5ed815">
+  <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7">
+  <link rel="shortcut icon" href="../../_static/firefox.ico"><!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script src="../../_static/jquery.js?v=5d32c60e"></script>
+  <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+  <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+  <script src="../../_static/doctools.js?v=9a2dae69"></script>
+  <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+  <script src="../../_static/copybutton.js?v=30646c52"></script>
+  <script src="../../_static/design-tabs.js?v=36754332"></script>
+  <script src="../../_static/js/theme.js"></script>
+  <link rel="index" title="Index" href="../../genindex.html">
+  <link rel="search" title="Search" href="../../search.html">
+  <link rel="next" title="Avoiding intermittent tests" href="../intermittent/index.html">
+  <link rel="prev" title="Sheriffed intermittent failures" href="../sheriffed-intermittents/index.html">
+ </head>
+ <body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+   <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <div class="wy-side-scroll">
+     <div class="wy-side-nav-search">
+      <a href="../../index.html" class="icon icon-home"> Firefox Source Docs <img src="../../_static/firefox-wordmark.svg" class="logo" alt="Logo"> </a><!-- -- This code is governed by the BSD license ---->
+      <div>
+       <h3>Quick search</h3>
+       <script>
+    (function () {
+      var cx = "dd12886298f75dbef";
+      var gcse = document.createElement("script");
+      gcse.async = true;
+      gcse.src = "https://cse.google.com/cse.js?cx=" + cx;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(gcse, s);
+    })();
+  </script><gcse:search></gcse:search>
+      </div>
+     </div>
+     <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+      <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../glossary/index.html">A Glossary of Common Terms</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../overview/index.html">A Quick Guide to Mozilla Applications</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../setup/index.html">Getting Set Up To Work On The Firefox Codebase</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Working On Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Working on Firefox</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../bug-mgmt/index.html">Bug Handling</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox User Guide</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../devtools-user/index.html">Firefox DevTools User Docs</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Source Code Documentation</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mots/index.html">Governance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../browser/index.html">Firefox Front-end</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../dom/index.html">DOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../editor/index.html">Editor</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../layout/index.html">Style system (CSS) &amp; Layout</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../gfx/index.html">Graphics</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../ipc/index.html">Processes, Threads and IPC</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../devtools/index.html">Firefox DevTools Contributor Docs</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../toolkit/index.html">Toolkit</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../js/index.html">SpiderMonkey</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../jsloader/index.html">JS Loader</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/geckoview/index.html">GeckoView</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/fenix/index.html">Fenix</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/focus-android/index.html">Focus for Android</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../dom/bindings/webidl/index.html">WebIDL</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../modules/libpref/index.html">libpref</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../networking/index.html">Networking</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../remote/index.html">Remote Protocols</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../services/index.html">Services</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../permissions/index.html">Permissions</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../uriloader/index.html">File Handling</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../widget/cocoa/index.html">Firefox on macOS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../widget/windows/index.html">Firefox on Windows</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../toolkit/components/ml/index.html">Firefox AI Runtime</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../accessible/index.html">Accessibility</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../media/index.html">Media Playback</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../code-quality/index.html">Code quality</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../writing-rust-code/index.html">Writing Rust Code</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../rust-components/index.html">Rust Components</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/profiler/index.html">Gecko Profiler</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../performance/index.html">Performance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../storage/index.html">Database bindings (SQLite, KV, …)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../xpcom/index.html">XPCOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../nspr/index.html">NSPR</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../security/nss/index.html">Network Security Services (NSS)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../content-security/index.html">Web Security Checks in Gecko</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">The Firefox Build System</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mach/index.html">Mach</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/try/index.html">Pushing to Try</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../build/buildsystem/index.html">Build System</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../taskcluster/index.html">Firefox CI and Taskgraph</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/moztreedocs/index.html">Managing Documentation</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mozbuild/vendor/index.html">Vendoring Third Party Components</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Testing &amp; Test Infrastructure</span></p>
+      <ul class="current">
+       <li class="toctree-l1"><a class="reference internal" href="../automated-testing/index.html">Automated Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../treeherder-try/index.html">Understanding Treeherder Results</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../sheriffed-intermittents/index.html">Sheriffed intermittent failures</a></li>
+       <li class="toctree-l1 current"><a class="current reference internal" href="#">Turning on Firefox tests for a new configuration</a>
+        <ul>
+         <li class="toctree-l2"><a class="reference internal" href="#create-meta-bug">Create Meta Bug</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="#push-to-try-server">Push to Try Server</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="#run-skip-fails">Run skip-fails</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="#repeat-2-more-times">Repeat 2 More Times</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="#land-changes-and-turn-on-tests">Land Changes and Turn on Tests</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="#turn-on-run-only-failures">Turn on Run Only Failures</a></li>
+        </ul></li>
+       <li class="toctree-l1"><a class="reference internal" href="../intermittent/index.html">Avoiding intermittent tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing-policy/index.html">Testing Policy</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../ci-configs/index.html">Configuration Changes</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../browser-chrome/index.html">Browser chrome mochitests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../chrome-tests/index.html">Chrome Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../marionette/index.html">Marionette</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../geckodriver/index.html">geckodriver</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../test-verification/index.html">Test Verification</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../webrender/index.html">WebRender Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mochitest-plain/index.html">Mochitest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../xpcshell/index.html">XPCShell tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tps/index.html">TPS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../web-platform/index.html">web-platform-tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../gtest/index.html">GTest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/fuzzing/index.html">Fuzzing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/sanitizer/index.html">Sanitizer</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../perfdocs/index.html">Performance Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/code-coverage/index.html">Code coverage</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing-rust-code/index.html">Testing &amp; Debugging Rust Code</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Releases &amp; Updates</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html">Mozilla Update Infrastructure</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html#watershed-updates">Watershed Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html#desupport-updates">Desupport Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/update-verify/index.html">Update Verify</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Localization &amp; Internationalization</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../intl/index.html">Internationalization</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../l10n/index.html">Localization</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox and Python</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mozbase/index.html">mozbase</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../python/index.html">Using third-party Python packages</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Metrics Collected in Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../metrics/index.html">Metrics</a></li>
+      </ul>
+     </div>
+    </div>
+   </nav>
+   <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+    <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+     <i data-toggle="wy-nav-top" class="fa fa-bars"></i> <a href="../../index.html">Firefox Source Docs</a>
+    </nav>
+    <div class="wy-nav-content">
+     <div class="rst-content">
+      <!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+      <div role="navigation" aria-label="Page navigation">
+       <ul class="wy-breadcrumbs">
+        <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+        <li class="breadcrumb-item active">Turning on Firefox tests for a new configuration</li>
+        <li class="wy-breadcrumbs-aside"><a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Developer+Infrastructure&amp;component=Firefox+Source+Docs%3A+Content&amp;short_desc=Documentation+issue+on+testing/tests-for-new-config/index&amp;comment=URL+=+https://firefox-source-docs.mozilla.org/testing/tests-for-new-config/index.html&amp;bug_file_loc=https://firefox-source-docs.mozilla.org/testing/tests-for-new-config/index.html" rel="nofollow">Report an issue</a> / <a href="../../_sources/testing/tests-for-new-config/index.rst.txt" rel="nofollow"> View page source</a></li>
+       </ul>
+       <hr>
+      </div>
+      <div role="main" class="document" itemscope itemtype="http://schema.org/Article">
+       <div itemprop="articleBody">
+        <section id="turning-on-firefox-tests-for-a-new-configuration">
+         <h1>Turning on Firefox tests for a new configuration<a class="headerlink" href="#turning-on-firefox-tests-for-a-new-configuration" title="Link to this heading">?</a></h1>
+         <p>You are ready to go with turning on Firefox tests for a new config. Once you get to this stage, you will have seen a try push with all the tests running (many not green) to verify some tests pass and there are enough machines available to run tests.</p>
+         <p>For the purpose of this document, assume you are tasked with upgrading Windows 10 OS from version 1803 -&gt; 1903. To simplify this we can call this <cite>windows_1903</cite>, and we need to:</p>
+         <blockquote>
+          <div>
+           <ul class="simple">
+            <li>
+             <p>create meta bug</p></li>
+            <li>
+             <p>push to try</p></li>
+            <li>
+             <p>run skip-fails</p></li>
+            <li>
+             <p>repeat 2 more times</p></li>
+            <li>
+             <p>land changes and turn on tests</p></li>
+            <li>
+             <p>turn on run only failures</p></li>
+           </ul>
+          </div>
+         </blockquote>
+         <p>If you are running this manually or on configs/tests that are not supported with <cite>./mach try –new-test-config</cite>, then please follow the steps <a class="reference external" href="manual.html">here</a></p>
+         <section id="create-meta-bug">
+          <h2>Create Meta Bug<a class="headerlink" href="#create-meta-bug" title="Link to this heading">?</a></h2>
+          <p>This is a simple step where you create a meta bug to track the failures associated with the tests you are greening up. If this is a test suite (i.e. <cite>devtools</cite>), it is ok to have a meta bug just for the test suite and the new platform.</p>
+          <p>All bugs related to tests skipped or failing will be blocking this meta bug.</p>
+         </section>
+         <section id="push-to-try-server">
+          <h2>Push to Try Server<a class="headerlink" href="#push-to-try-server" title="Link to this heading">?</a></h2>
+          <p>Now that you have a configuration setup and machines available via try server, it is time to run try. If you are migrating mochitest or xpcshell, then you can do:</p>
+          <blockquote>
+           <div>
+            <p><code class="docutils literal notranslate"><span class="pre">./mach</span> <span class="pre">try</span> <span class="pre">fuzzy</span> <span class="pre">--no-artifact</span> <span class="pre">--full</span> <span class="pre">--rebuild</span> <span class="pre">10</span> <span class="pre">--new-test-config</span> <span class="pre">-q</span> <span class="pre">'test-windows10-64-1903</span> <span class="pre">mochitest-browser-chrome</span> <span class="pre">!ccov</span> <span class="pre">!ship</span> <span class="pre">!browsertime</span> <span class="pre">!talos</span> <span class="pre">!asan'</span></code></p>
+           </div>
+          </blockquote>
+          <p>This will run many tests (thanks to –full and –rebuild 10), but will give plenty of useful data.</p>
+          <dl>
+           <dt>
+            In the scenario you are migrating tests such as:
+           </dt>
+           <dd>
+            <ul class="simple">
+             <li>
+              <p>performance</p></li>
+             <li>
+              <p>web-platform-tests</p></li>
+             <li>
+              <p>reftest / crashtest / jsreftest</p></li>
+             <li>
+              <p>mochitest-webgl (has a different process for test skipping)</p></li>
+             <li>
+              <p>cppunittest / gtest / junit</p></li>
+             <li>
+              <p>marionette / firefox-ui / telemetry</p></li>
+            </ul>
+            <p>then please follow the steps <a class="reference external" href="manual.html">here</a></p>
+            <p>If you are migrating to a small machine pool, it is best to avoid <cite>–rebuild 10</cite> and instead do <cite>–rebuild 3</cite>. Likewise please limit your jobs to be the specific test suite and variant. The size of a worker pool is shown at the Workers page of the Taskcluster instance.</p>
+           </dd>
+          </dl>
+         </section>
+         <section id="run-skip-fails">
+          <h2>Run skip-fails<a class="headerlink" href="#run-skip-fails" title="Link to this heading">?</a></h2>
+          <p>When the try push is completed it is time to run skip-fails. Skip-fails will look at all the test results and automatically create a set of local changes with skip-if conditions to green up the tests faster.</p>
+          <p><code class="docutils literal notranslate"><span class="pre">./mach</span> <span class="pre">manifest</span> <span class="pre">skip-fails</span> <span class="pre">--b</span> <span class="pre">bugzilla.mozilla.org</span> <span class="pre">-m</span> <span class="pre">&lt;meta_bug_id&gt;</span> <span class="pre">--turbo</span> <span class="pre">"https://treeherder.mozilla.org/jobs?repo=try&amp;revision=&lt;rev&gt;"</span></code></p>
+          <p>Please input the proper <cite>meta_bug_id</cite> and <cite>rev</cite> into the above command.</p>
+          <p>The first time running this, you will need to get a <a class="reference external" href="https://bugzilla.mozilla.org/userprefs.cgi?tab=apikey">bugzilla api key</a>. copy this key and add it to your <cite>~/.config/python-bugzilla/bugzillarc</cite> file:</p>
+          <div class="highlight-none notranslate">
+           <div class="highlight">
+            <pre><span></span>cat bugzillarc
+[DEFAULT]
+url = https://bugzilla.mozilla.org
+[bugzilla.mozilla.org]
+api_key = &lt;key&gt;
+</pre>
+           </div>
+          </div>
+          <p>When the command finishes, you will have new bugs created that are blocking the meta bug. In addition you will have many changes to manifests adding skip-if conditions. For tests than fail 40% of the time or for entire manifests that take &gt;20 minutes to run on opt or &gt;40 minutes on debug.</p>
+          <p>You will need to create a commit (or <cite>–amend</cite> your previous commit if this is round 2 or 3):</p>
+          <p><code class="docutils literal notranslate"><span class="pre">hg</span> <span class="pre">commit</span> <span class="pre">-m</span> <span class="pre">"Bug</span> <span class="pre">&lt;meta_bug_id&gt;</span> <span class="pre">-</span> <span class="pre">Green</span> <span class="pre">up</span> <span class="pre">tests</span> <span class="pre">for</span> <span class="pre">&lt;suite&gt;</span> <span class="pre">on</span> <span class="pre">&lt;platform&gt;"</span></code></p>
+         </section>
+         <section id="repeat-2-more-times">
+          <h2>Repeat 2 More Times<a class="headerlink" href="#repeat-2-more-times" title="Link to this heading">?</a></h2>
+          <p>In 3 rounds this should be complete and ready to submit for review and turn on the new tests.</p>
+          <p>There will be additional failures, those will follow the normal process of intermittents.</p>
+         </section>
+         <section id="land-changes-and-turn-on-tests">
+          <h2>Land Changes and Turn on Tests<a class="headerlink" href="#land-changes-and-turn-on-tests" title="Link to this heading">?</a></h2>
+          <p>After you have a green test run, it is time to land the patches. There could be changes needed to the taskgraph in order to add the new hardware type and duplicate tests to run on both the old and the new, or create a new variant and denote which tests to run on that variant.</p>
+          <p>Using our example of <code class="docutils literal notranslate"><span class="pre">windows_1903</span></code>, this would be a new worker type that would require these edits:</p>
+          <blockquote>
+           <div>
+            <ul class="simple">
+             <li>
+              <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/taskcluster/taskgraph/transforms/tests.py#97">transforms/tests.py</a> (duplicate windows 10 entries)</p></li>
+             <li>
+              <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/taskcluster/kinds/test/test-platforms.yml#229">test-platforms.py</a> (copy windows10 debug/opt/shippable/asan entries and make win10_1903)</p></li>
+             <li>
+              <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/taskcluster/kinds/test/test-sets.yml#293">test-sets.py</a> (ideally you need nothing, otherwise copy <code class="docutils literal notranslate"><span class="pre">windows-tests</span></code> and edit the test list)</p></li>
+            </ul>
+           </div>
+          </blockquote>
+          <p>In general this should allow you to have tests scheduled with no custom flags in try server and all of these will be scheduled by default on <code class="docutils literal notranslate"><span class="pre">mozilla-central</span></code>, <code class="docutils literal notranslate"><span class="pre">autoland</span></code>, and <code class="docutils literal notranslate"><span class="pre">release-branches</span></code>.</p>
+         </section>
+         <section id="turn-on-run-only-failures">
+          <h2>Turn on Run Only Failures<a class="headerlink" href="#turn-on-run-only-failures" title="Link to this heading">?</a></h2>
+          <p>Now that we have tests running regularly, the next step is to take all the disabled tests and run them in the special failures job.</p>
+          <p>We have a basic framework created, but for every test harness (i.e. xpcshell, mochitest-gpu, browser-chrome, devtools, web-platform-tests, crashtest, etc.), there will need to be a corresponding tier-3 job that is created.</p>
+          <p>TODO: point to examples of how to add this after we get our first jobs running.</p>
+         </section>
+        </section>
+       </div>
+      </div>
+      <footer>
+       <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../sheriffed-intermittents/index.html" class="btn btn-neutral float-left" title="Sheriffed intermittent failures" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a> <a href="../intermittent/index.html" class="btn btn-neutral float-right" title="Avoiding intermittent tests" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+       </div>
+       <hr>
+       <div role="contentinfo">
+        <p></p>
+       </div> Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+      </footer>
+     </div>
+    </div>
+   </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ </body>
+</html>

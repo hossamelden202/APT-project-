@@ -1,0 +1,544 @@
+<!doctype html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Windows DLL Blocklisting — Firefox Source Docs  documentation</title>
+  <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50">
+  <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094">
+  <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=fd3f3429">
+  <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b">
+  <link rel="stylesheet" type="text/css" href="../../_static/custom_theme.css?v=dc5ed815">
+  <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7">
+  <link rel="shortcut icon" href="../../_static/firefox.ico"><!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script src="../../_static/jquery.js?v=5d32c60e"></script>
+  <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+  <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+  <script src="../../_static/doctools.js?v=9a2dae69"></script>
+  <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+  <script src="../../_static/copybutton.js?v=30646c52"></script>
+  <script src="../../_static/design-tabs.js?v=36754332"></script>
+  <script src="../../_static/js/theme.js"></script>
+  <link rel="index" title="Index" href="../../genindex.html">
+  <link rel="search" title="Search" href="../../search.html">
+  <link rel="next" title="Windows Pointing Device Support in Firefox" href="windows-pointing-device/index.html">
+  <link rel="prev" title="Firefox on Windows" href="index.html">
+ </head>
+ <body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+   <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <div class="wy-side-scroll">
+     <div class="wy-side-nav-search">
+      <a href="../../index.html" class="icon icon-home"> Firefox Source Docs <img src="../../_static/firefox-wordmark.svg" class="logo" alt="Logo"> </a><!-- -- This code is governed by the BSD license ---->
+      <div>
+       <h3>Quick search</h3>
+       <script>
+    (function () {
+      var cx = "dd12886298f75dbef";
+      var gcse = document.createElement("script");
+      gcse.async = true;
+      gcse.src = "https://cse.google.com/cse.js?cx=" + cx;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(gcse, s);
+    })();
+  </script><gcse:search></gcse:search>
+      </div>
+     </div>
+     <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+      <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../glossary/index.html">A Glossary of Common Terms</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../overview/index.html">A Quick Guide to Mozilla Applications</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../setup/index.html">Getting Set Up To Work On The Firefox Codebase</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Working On Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Working on Firefox</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../bug-mgmt/index.html">Bug Handling</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox User Guide</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../devtools-user/index.html">Firefox DevTools User Docs</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Source Code Documentation</span></p>
+      <ul class="current">
+       <li class="toctree-l1"><a class="reference internal" href="../../mots/index.html">Governance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../browser/index.html">Firefox Front-end</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../dom/index.html">DOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../editor/index.html">Editor</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../layout/index.html">Style system (CSS) &amp; Layout</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../gfx/index.html">Graphics</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../ipc/index.html">Processes, Threads and IPC</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../devtools/index.html">Firefox DevTools Contributor Docs</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../toolkit/index.html">Toolkit</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../js/index.html">SpiderMonkey</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../jsloader/index.html">JS Loader</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/geckoview/index.html">GeckoView</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/fenix/index.html">Fenix</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/focus-android/index.html">Focus for Android</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../dom/bindings/webidl/index.html">WebIDL</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../modules/libpref/index.html">libpref</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../networking/index.html">Networking</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../remote/index.html">Remote Protocols</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../services/index.html">Services</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../permissions/index.html">Permissions</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../uriloader/index.html">File Handling</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../cocoa/index.html">Firefox on macOS</a></li>
+       <li class="toctree-l1 current"><a class="reference internal" href="index.html">Firefox on Windows</a>
+        <ul class="current">
+         <li class="toctree-l2 current"><a class="current reference internal" href="#">Windows DLL Blocklisting</a>
+          <ul>
+           <li class="toctree-l3"><a class="reference internal" href="#overview">Overview</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#two-types-of-blocklists">Two types of blocklists</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#process-for-blocking-a-dll-in-the-static-blocklist">Process for blocking a DLL in the static blocklist</a>
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="#but-wait-should-we-really-block-it">But wait, should we really block it?</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#how-to-request-to-block-a-dll">How to request to block a DLL</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#how-to-edit-windowsdllblocklistdefs-in">How to edit WindowsDllBlocklistDefs.in</a></li>
+            </ul></li>
+           <li class="toctree-l3"><a class="reference internal" href="#technical-details">Technical details</a>
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="#how-the-blocklist-blocks-a-dll">How the blocklist blocks a DLL</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#cases-where-we-should-not-block-a-module">Cases where we should not block a module</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#third-party-module-ping">Third-party-module ping</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#initialization">Initialization</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#dynamic-blocklist-file-location">Dynamic blocklist file location</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#adding-to-and-removing-from-the-dynamic-blocklist">Adding to and removing from the dynamic blocklist</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#disabling-the-dynamic-blocklist">Disabling the dynamic blocklist</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#enterprise-policy">Enterprise policy</a></li>
+            </ul></li>
+           <li class="toctree-l3"><a class="reference internal" href="#contact">Contact</a></li>
+          </ul></li>
+         <li class="toctree-l2"><a class="reference internal" href="windows-pointing-device/index.html">Windows Pointing Device Support in Firefox</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="LimitedAccessFeature.html">Windows Limited Access Features</a></li>
+        </ul></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../toolkit/components/ml/index.html">Firefox AI Runtime</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../accessible/index.html">Accessibility</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../media/index.html">Media Playback</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../code-quality/index.html">Code quality</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../writing-rust-code/index.html">Writing Rust Code</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../rust-components/index.html">Rust Components</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/profiler/index.html">Gecko Profiler</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../performance/index.html">Performance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../storage/index.html">Database bindings (SQLite, KV, …)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../xpcom/index.html">XPCOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../nspr/index.html">NSPR</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../security/nss/index.html">Network Security Services (NSS)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../content-security/index.html">Web Security Checks in Gecko</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">The Firefox Build System</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mach/index.html">Mach</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/try/index.html">Pushing to Try</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../build/buildsystem/index.html">Build System</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../taskcluster/index.html">Firefox CI and Taskgraph</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/moztreedocs/index.html">Managing Documentation</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mozbuild/vendor/index.html">Vendoring Third Party Components</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Testing &amp; Test Infrastructure</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/automated-testing/index.html">Automated Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/treeherder-try/index.html">Understanding Treeherder Results</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/sheriffed-intermittents/index.html">Sheriffed intermittent failures</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/tests-for-new-config/index.html">Turning on Firefox tests for a new configuration</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/intermittent/index.html">Avoiding intermittent tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/testing-policy/index.html">Testing Policy</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/ci-configs/index.html">Configuration Changes</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/browser-chrome/index.html">Browser chrome mochitests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/chrome-tests/index.html">Chrome Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/marionette/index.html">Marionette</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/geckodriver/index.html">geckodriver</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/test-verification/index.html">Test Verification</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/webrender/index.html">WebRender Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/mochitest-plain/index.html">Mochitest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/xpcshell/index.html">XPCShell tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/tps/index.html">TPS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../web-platform/index.html">web-platform-tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../gtest/index.html">GTest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/fuzzing/index.html">Fuzzing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/sanitizer/index.html">Sanitizer</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/perfdocs/index.html">Performance Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/code-coverage/index.html">Code coverage</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing-rust-code/index.html">Testing &amp; Debugging Rust Code</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Releases &amp; Updates</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html">Mozilla Update Infrastructure</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html#watershed-updates">Watershed Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html#desupport-updates">Desupport Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/update-verify/index.html">Update Verify</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Localization &amp; Internationalization</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../intl/index.html">Internationalization</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../l10n/index.html">Localization</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox and Python</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mozbase/index.html">mozbase</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../python/index.html">Using third-party Python packages</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Metrics Collected in Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../metrics/index.html">Metrics</a></li>
+      </ul>
+     </div>
+    </div>
+   </nav>
+   <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+    <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+     <i data-toggle="wy-nav-top" class="fa fa-bars"></i> <a href="../../index.html">Firefox Source Docs</a>
+    </nav>
+    <div class="wy-nav-content">
+     <div class="rst-content">
+      <!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+      <div role="navigation" aria-label="Page navigation">
+       <ul class="wy-breadcrumbs">
+        <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+        <li class="breadcrumb-item"><a href="index.html">Firefox on Windows</a></li>
+        <li class="breadcrumb-item active">Windows DLL Blocklisting</li>
+        <li class="wy-breadcrumbs-aside"><a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Developer+Infrastructure&amp;component=Firefox+Source+Docs%3A+Content&amp;short_desc=Documentation+issue+on+widget/windows/blocklist&amp;comment=URL+=+https://firefox-source-docs.mozilla.org/widget/windows/blocklist.html&amp;bug_file_loc=https://firefox-source-docs.mozilla.org/widget/windows/blocklist.html" rel="nofollow">Report an issue</a> / <a href="../../_sources/widget/windows/blocklist.rst.txt" rel="nofollow"> View page source</a></li>
+       </ul>
+       <hr>
+      </div>
+      <div role="main" class="document" itemscope itemtype="http://schema.org/Article">
+       <div itemprop="articleBody">
+        <section id="windows-dll-blocklisting">
+         <h1>Windows DLL Blocklisting<a class="headerlink" href="#windows-dll-blocklisting" title="Link to this heading">?</a></h1>
+         <section id="overview">
+          <h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">?</a></h2>
+          <p>There are many applications which interact with another application, which means they run their code as a DLL in a different process. This technique is used, for example, when an antivirus software tries to monitor/block navigation to a malicious website, or a screen reader tries to access UI parts. If such an application injects their code into Firefox, and if there is a bug in their code running in our firefox.exe, it will emerge as Firefox’s bug even though it’s not.</p>
+          <p>Firefox for Windows has a feature to prevent DLLs from being loaded into our processes. If we are aware that a particular DLL causes a problem in our processes such as a crash or performance degradation, we can stop the problem by blocking the DLL from being loaded.</p>
+          <p>This blocklist is about a third-party application which runs outside Firefox but interacts with Firefox. For add-ons, there is <a class="reference external" href="https://extensionworkshop.com/documentation/publish/add-ons-blocking-process/">a different process</a>.</p>
+          <p>This page explains how to request to block a DLL which you think we should block it as well as technical details about the feature.</p>
+         </section>
+         <section id="two-types-of-blocklists">
+          <h2>Two types of blocklists<a class="headerlink" href="#two-types-of-blocklists" title="Link to this heading">?</a></h2>
+          <p>There are two types of blocklists in Firefox:</p>
+          <ol class="arabic simple">
+           <li>
+            <p>A static blocklist that is compiled in to Firefox. This consists of DLLs known to cause problems with Firefox, and this blocklist cannot be disabled by the user. For more information and instructions on how to add a new DLL to this list, see <a class="reference internal" href="#how-to-block-dll-in-static-blocklist"><span class="std std-ref">Process for blocking a DLL in the static blocklist</span></a> below.</p></li>
+           <li>
+            <p>A dynamic blocklist that users can use to block DLLs that are giving them problems. This was added in <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1744362">bug 1744362</a>.</p></li>
+          </ol>
+          <p>The static blocklist has ways to specify if only certain versions of a DLL should be blocked, or only for certain Firefox processes, etc. The dynamic blocklist does not have this capability; if a DLL is on the list it will always be blocked.</p>
+          <p>Regardless of which blocklist the DLL is on, if it meets the criteria for being blocked Firefox uses the same mechanism to block it. There are more details below in <a class="reference internal" href="#how-the-blocklist-blocks-a-dll"><span class="std std-ref">How the blocklist blocks a DLL</span></a>.</p>
+         </section>
+         <section id="process-for-blocking-a-dll-in-the-static-blocklist">
+          <span id="how-to-block-dll-in-static-blocklist"></span>
+          <h2>Process for blocking a DLL in the static blocklist<a class="headerlink" href="#process-for-blocking-a-dll-in-the-static-blocklist" title="Link to this heading">?</a></h2>
+          <section id="but-wait-should-we-really-block-it">
+           <h3>But wait, should we really block it?<a class="headerlink" href="#but-wait-should-we-really-block-it" title="Link to this heading">?</a></h3>
+           <p>Blocking a DLL with the static blocklist should be our last resort to fix a problem because doing it normally breaks functionality of an application which installed the DLL. If there is another option, we should always go for it. Sometimes we can safely bypass a third-party’s problem by changing our code even though its root cause is not on our side.</p>
+           <p>When we decide to block it, we must be certain that the issue at hand is so great that it outweighs the user’s choice to install the software, the utility it provides, and the vendor’s freedom to distribute and control their software.</p>
+          </section>
+          <section id="how-to-request-to-block-a-dll">
+           <h3>How to request to block a DLL<a class="headerlink" href="#how-to-request-to-block-a-dll" title="Link to this heading">?</a></h3>
+           <p>Our codebase has the file named <a class="reference external" href="https://searchfox.org/mozilla-central/source/toolkit/xre/dllservices/mozglue/WindowsDllBlocklistDefs.in">WindowsDllBlocklistDefs.in</a> from which our build process generates DLL blocklists as C++ header files and compiles them. To block a new DLL, you create a patch to update WindowsDllBlocklistDefs.in and land it on our codebase, following our standard development process. Moreover, you need to fill out a form specific to the DLL blockling request so that reviewers can review the impact and risk as well as the patch itself.</p>
+           <p>Here are the steps:</p>
+           <ol class="arabic simple">
+            <li>
+             <p>File <a class="reference external" href="https://bugzilla.mozilla.org/enter_bug.cgi?format=__default__&amp;bug_type=defect&amp;product=Toolkit&amp;component=Blocklist%20Policy%20Requests&amp;op_sys=Windows&amp;short_desc=DLL%20block%20request%3A%20%3CDLL%20name%3E&amp;comment=Please%20go%20through%20https%3A%2F%2Fwiki.mozilla.org%2FBlocklisting%2FDLL%20before%20filing%20a%20new%20bug.">a bug</a> if it does not exist.</p></li>
+            <li>
+             <p>Answer all the questions in <a class="reference external" href="https://msmania.github.io/assets/mozilla/third-party-modules/questionnaire.txt">this questionnaire</a>, and attach it to the bug as a plaintext.</p></li>
+            <li>
+             <p>Make a patch and start a code review via Phabricator as usual.</p></li>
+           </ol>
+          </section>
+          <section id="how-to-edit-windowsdllblocklistdefs-in">
+           <h3>How to edit WindowsDllBlocklistDefs.in<a class="headerlink" href="#how-to-edit-windowsdllblocklistdefs-in" title="Link to this heading">?</a></h3>
+           <p>WindowsDllBlocklistDefs.in defines several variables as a Python Array. When you add a new entry in the blocklists, you pick one of the variables and add an entry in the following syntax:</p>
+           <section id="syntax">
+            <h4>Syntax<a class="headerlink" href="#syntax" title="Link to this heading">?</a></h4>
+            <div class="highlight-default notranslate">
+             <div class="highlight">
+              <pre><span></span><span class="n">Variable</span> <span class="o">+=</span> <span class="p">[</span>
+<span class="o">...</span>
+    <span class="c1"># One-liner comment including a bug number</span>
+    <span class="n">EntryType</span><span class="p">(</span><span class="n">Name</span><span class="p">,</span> <span class="n">Version</span><span class="p">,</span> <span class="n">Flags</span><span class="p">),</span>
+<span class="o">...</span>
+<span class="p">]</span>
+</pre>
+             </div>
+            </div>
+           </section>
+           <section id="parameters">
+            <h4>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">?</a></h4>
+            <table class="docutils align-default">
+             <thead>
+              <tr class="row-odd">
+               <th class="head">
+                <p>Parameter</p></th>
+               <th class="head">
+                <p>Value</p></th>
+              </tr>
+             </thead>
+             <tbody>
+              <tr class="row-even">
+               <td>
+                <p>Variable</p></td>
+               <td>
+                <p>ALL_PROCESSES | BROWSER_PROCESS | CHILD_PROCESSES | GMPLUGIN_PROCESSES | GPU_PROCESSES | SOCKET_PROCESSES | UTILITY_PROCESSES</p></td>
+              </tr>
+              <tr class="row-odd">
+               <td>
+                <p>EntryType</p></td>
+               <td>
+                <p>DllBlocklistEntry | A11yBlocklistEntry | RedirectToNoOpEntryPoint</p></td>
+              </tr>
+              <tr class="row-even">
+               <td>
+                <p>Name</p></td>
+               <td>
+                <p>A case-insensitive string representing a DLL’s filename to block</p></td>
+              </tr>
+              <tr class="row-odd">
+               <td>
+                <p>Version</p></td>
+               <td>
+                <p>One of the following formats:</p>
+                <blockquote>
+                 <div>
+                  <ul class="simple">
+                   <li>
+                    <p>ALL_VERSIONS | UNVERSIONED</p></li>
+                   <li>
+                    <p>A tuple consisting of four digits</p></li>
+                   <li>
+                    <p>A 32-bit integer representing a Unix timestamp with PETimeStamp</p></li>
+                  </ul>
+                 </div>
+                </blockquote></td>
+              </tr>
+             </tbody>
+            </table>
+           </section>
+           <section id="variable">
+            <h4>Variable<a class="headerlink" href="#variable" title="Link to this heading">?</a></h4>
+            <p>Choose one of the following predefined variables.</p>
+            <ul class="simple">
+             <li>
+              <p><strong>ALL_PROCESSES</strong>: DLLs defined here are blocked in BROWSER_PROCESS + CHILD_PROCESSES</p></li>
+             <li>
+              <p><strong>BROWSER_PROCESS</strong>: DLLs defined here are blocked in the browser process</p></li>
+             <li>
+              <p><strong>CHILD_PROCESSES</strong>: DLLs defined here are blocked in non-browser processes</p></li>
+             <li>
+              <p><strong>GMPLUGIN_PROCESSES</strong>: DLLs defined here are blocked in GMPlugin processes</p></li>
+             <li>
+              <p><strong>GPU_PROCESSES</strong>: DLLs defined here are blocked in GPU processes</p></li>
+             <li>
+              <p><strong>SOCKET_PROCESSES</strong>: DLLs defined here are blocked in socket processes</p></li>
+             <li>
+              <p><strong>UTILITY_PROCESSES</strong>: DLLs defined here are blocked in utility processes</p></li>
+            </ul>
+           </section>
+           <section id="entrytype">
+            <h4>EntryType<a class="headerlink" href="#entrytype" title="Link to this heading">?</a></h4>
+            <p>Choose one of the following predefined EntryTypes.</p>
+            <ul class="simple">
+             <li>
+              <p><strong>DllBlocklistEntry</strong>: Use this EntryType unless your case matches the other EntryTypes.</p></li>
+             <li>
+              <p><strong>A11yBlocklistEntry</strong>: If you want to block a module only when it’s loaded by an accessibility application such as a screen reader, you can use this EntryType.</p></li>
+             <li>
+              <p><strong>RedirectToNoOpEntryPoint</strong>: If a modules is injected via Import Directory Table, adding the module as DllBlocklistEntry breaks process launch, meaning DllBlocklistEntry is not an option. You can use RedirectToNoOpEntryPoint instead.</p></li>
+            </ul>
+           </section>
+           <section id="name">
+            <h4>Name<a class="headerlink" href="#name" title="Link to this heading">?</a></h4>
+            <p>A case-insensitive string representing a DLL’s filename to block. Don’t include a directory name.</p>
+           </section>
+           <section id="version">
+            <h4>Version<a class="headerlink" href="#version" title="Link to this heading">?</a></h4>
+            <p>A maximum version to be blocked. If you specify a value, a module with the specified version, older versions, and a module with no version are blocked.</p>
+            <div class="line-block">
+             <div class="line">
+              If you want to block a module regardless of its version, use ALL_VERSIONS.
+             </div>
+             <div class="line">
+              If you want to block a module with no version, use UNVERSIONED.
+             </div>
+            </div>
+            <p>To specify a version, you can use either of the following formats:</p>
+            <ul>
+             <li>
+              <div class="line-block">
+               <div class="line">
+                A tuple consisting of four digits. This is compared to the version that is embedded in a DLL as a version resource.
+               </div>
+               <div class="line">
+                Example: (1, 2, 3, 4)
+               </div>
+              </div></li>
+             <li>
+              <div class="line-block">
+               <div class="line">
+                A 32-bit integer representing a Unix timestamp with PETimeStamp. This is compared to an integer of IMAGE_FILE_HEADER::TimeDateStamp.
+               </div>
+               <div class="line">
+                Example: PETimeStamp(0x12345678)
+               </div>
+              </div></li>
+            </ul>
+           </section>
+          </section>
+         </section>
+         <section id="technical-details">
+          <h2>Technical details<a class="headerlink" href="#technical-details" title="Link to this heading">?</a></h2>
+          <section id="how-the-blocklist-blocks-a-dll">
+           <span id="id1"></span>
+           <h3>How the blocklist blocks a DLL<a class="headerlink" href="#how-the-blocklist-blocks-a-dll" title="Link to this heading">?</a></h3>
+           <p>Briefly speaking, we make ntdll!NtMapViewOfSection return <code class="docutils literal notranslate"><span class="pre">STATUS_ACCESS_DENIED</span></code> if a given module is on the blocklist, thereby a third-party’s code, or even Firefox’s legitimate code, which tries to load a DLL in our processes in any way such as LoadLibrary API fails and receives an access-denied error.</p>
+          </section>
+          <section id="cases-where-we-should-not-block-a-module">
+           <h3>Cases where we should not block a module<a class="headerlink" href="#cases-where-we-should-not-block-a-module" title="Link to this heading">?</a></h3>
+           <p>As our blocklist works as explained above, there are the cases where we should not block a module.</p>
+           <ul>
+            <li>
+             <div class="line-block">
+              <div class="line">
+               A module is loaded via <a class="reference external" href="https://docs.microsoft.com/en-us/windows/win32/debug/pe-format#import-directory-table">Import Directory Table</a>
+              </div>
+              <div class="line">
+               Blocking this type of module blocks even a process from launching. You may be able to block this type of module with RedirectToNoOpEntryPoint.
+              </div>
+             </div></li>
+            <li>
+             <div class="line-block">
+              <div class="line">
+               A module is loaded as a <a class="reference external" href="https://docs.microsoft.com/en-us/windows/win32/winsock/categorizing-layered-service-providers-and-applications">Layered Service Provider</a>
+              </div>
+              <div class="line">
+               Blocking this type of module on Windows 8 or newer breaks networking. Blocking a LSP on Windows 7 is ok.
+              </div>
+             </div></li>
+           </ul>
+           <p>(we used to have to avoid blocking modules loaded via a <a class="reference external" href="https://docs.microsoft.com/en-us/windows/win32/winmsg/hooks">Window hook</a> because blocking this type of module would cause repetitive attempts to load a module, resulting in slow performance like <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1633718">Bug 1633718</a>, but this should be fixed as of <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1823412">Bug 1823412</a>.)</p>
+          </section>
+          <section id="third-party-module-ping">
+           <h3>Third-party-module ping<a class="headerlink" href="#third-party-module-ping" title="Link to this heading">?</a></h3>
+           <p>We’re collecting the <a class="reference internal" href="../../toolkit/components/telemetry/data/third-party-modules-ping.html#third-party-modules-ping"><span class="std std-ref">third-party-module ping</span></a> which captures a moment when a third-party module is loaded into the Browser/Tab/RDD process. As it’s asked in the request form, it’s important to check the third-party-module ping and see whether a module we want to block appears in the ping or not. If it appears, you may be able to know how a module is loaded by looking at a callstack in the ping.</p>
+           <section id="how-to-view-callstacks-in-the-ping">
+            <h4>How to view callstacks in the ping<a class="headerlink" href="#how-to-view-callstacks-in-the-ping" title="Link to this heading">?</a></h4>
+            <ol class="arabic">
+             <li>
+              <p>You can run a query on BigQuery console or STMO. (BigQuery console is much faster and can handle larger data.)</p>
+              <ul class="simple">
+               <li>
+                <p>BigQuery console (visit <a class="reference external" href="https://docs.telemetry.mozilla.org/cookbooks/bigquery.html#gcp-bigquery-console">here</a> to request access): <a class="reference external" href="https://console.cloud.google.com/bigquery">https://console.cloud.google.com/bigquery</a></p></li>
+               <li>
+                <p>STMO: <a class="reference external" href="https://sql.telemetry.mozilla.org/">https://sql.telemetry.mozilla.org/</a></p></li>
+              </ul></li>
+             <li>
+              <p>Make your own query based on <a class="reference external" href="https://msmania.github.io/assets/mozilla/third-party-modules/query-template.txt">this template</a>.</p></li>
+             <li>
+              <p>Run the query.</p></li>
+             <li>
+              <p>Save the result as a JSON file.</p>
+              <ul class="simple">
+               <li>
+                <p>In BigQuery console, click [SAVE RESULTS] and choose [JSON (local file)].</p></li>
+               <li>
+                <p>In STMO, click […] at the right-top corner and select [Show API Key], then you can download a JSON from a URL shown in the [Results in JSON format].</p></li>
+              </ul></li>
+             <li>
+              <div class="line-block">
+               <div class="line">
+                Go to <a class="reference external" href="https://msmania.github.io/assets/mozilla/third-party-modules/">https://msmania.github.io/assets/mozilla/third-party-modules/</a>
+               </div>
+               <div class="line-block">
+                <div class="line">
+                 (A temporal link. Need to find a permanent place.)
+                </div>
+               </div>
+              </div></li>
+             <li>
+              <p>Click [Upload JSON] and select the file you saved at the step 4.</p></li>
+             <li>
+              <p>Click a row in the table to view a callstack</p></li>
+            </ol>
+           </section>
+           <section id="how-to-see-the-versions-of-a-specific-module-in-the-ping">
+            <h4>How to see the versions of a specific module in the ping<a class="headerlink" href="#how-to-see-the-versions-of-a-specific-module-in-the-ping" title="Link to this heading">?</a></h4>
+            <p>You can use <a class="reference external" href="https://msmania.github.io/assets/mozilla/third-party-modules/query-groupby-template.txt">this template query</a> to query which versions of a specific module are captured in the ping. This tells the product versions which are actively used including the crashing versions and the working versions.</p>
+            <p>You can also get the crashing versions by querying the crash reports or the Socorro table. Having two version lists, you can decide whether you can specify the Version parameter in a blocklist entry.</p>
+           </section>
+          </section>
+          <section id="initialization">
+           <h3>Initialization<a class="headerlink" href="#initialization" title="Link to this heading">?</a></h3>
+           <p>In order to have the most effective blocking of DLLs, the blocklist is initialized very early during browser startup. If the <a class="reference internal" href="../../dom/ipc/process_model.html#launcher-process"><span class="std std-ref">launcher process</span></a> is available, the steps are:</p>
+           <ul class="simple">
+            <li>
+             <p>Launcher process loads dynamic blocklist from disk (see <a class="reference external" href="https://searchfox.org/mozilla-central/search?q=DynamicBlocklist%3A%3ALoadFile&amp;path=&amp;case=false&amp;regexp=false">DynamicBlocklist::LoadFile()</a>)</p></li>
+            <li>
+             <p>Launcher process puts dynamic blocklist data in shared section (see <a class="reference external" href="https://searchfox.org/mozilla-central/search?q=SharedSection%3A%3AAddBlocklist&amp;path=&amp;case=false&amp;regexp=false">SharedSection::AddBlocklist()</a>)</p></li>
+            <li>
+             <p>Launcher process creates the browser process in a suspended mode, sets up its dynamic blocklist, then starts it. (see <a class="reference external" href="https://searchfox.org/mozilla-central/search?q=LauncherMain&amp;path=&amp;case=false&amp;regexp=false">LauncherMain()</a>)</p>
+             <ul>
+              <li>
+               <p>This is so (ideally) no DLLs can be injected before the blocklist is set up.</p></li>
+             </ul></li>
+           </ul>
+           <p>If the launcher process is not available, a different blocklist is used, defined in <a class="reference external" href="https://searchfox.org/mozilla-central/source/toolkit/xre/dllservices/mozglue/WindowsDllBlocklist.cpp">mozglue/WindowsDllBlocklist.cpp</a>. This code does not currently support the dynamic blocklist. This is intended to only be used in testing and other non-deployed scenarios, so this shouldn’t be a problem for users.</p>
+           <p>Note that the mozglue blocklist also has a feature to block threads that start in <code class="docutils literal notranslate"><span class="pre">LoadLibrary</span></code> and variants. This code is currently only turned on in Nightly builds because it breaks some third-party DLP products.</p>
+          </section>
+          <section id="dynamic-blocklist-file-location">
+           <h3>Dynamic blocklist file location<a class="headerlink" href="#dynamic-blocklist-file-location" title="Link to this heading">?</a></h3>
+           <p>Because the blocklist is loaded so early during startup, we don’t have access to what profile is going to be loaded, so the blocklist file can’t be stored there. Instead, by default the blocklist file is stored in the Windows user’s roaming app data directory, specifically</p>
+           <p><code class="docutils literal notranslate"><span class="pre">&lt;Roaming</span> <span class="pre">AppData</span> <span class="pre">directory&gt;\Mozilla\Firefox\blocklist-&lt;install</span> <span class="pre">hash&gt;</span></code></p>
+           <p>Note that the install hash here is what is returned by <a class="reference external" href="https://searchfox.org/mozilla-central/source/toolkit/mozapps/update/common/commonupdatedir.cpp#404">GetInstallHash()</a>, and is suitable for uniquely identifying the particular Firefox installation that is running.</p>
+           <p>On first launch, this location will be written to the registry, and can be overriden by setting that key to a different file location. The registry key is <code class="docutils literal notranslate"><span class="pre">HKEY_CURRENT_USER\Software\Mozilla\Firefox\Launcher</span></code>, and the name is the full path to firefox.exe with “|Blocklist” appended. This code is in <a class="reference external" href="https://searchfox.org/mozilla-central/source/toolkit/xre/LauncherRegistryInfo.cpp">LauncherRegistryInfo</a>.</p>
+          </section>
+          <section id="adding-to-and-removing-from-the-dynamic-blocklist">
+           <h3>Adding to and removing from the dynamic blocklist<a class="headerlink" href="#adding-to-and-removing-from-the-dynamic-blocklist" title="Link to this heading">?</a></h3>
+           <p>Users can add or remove DLLs from the dynamic blocklist by navigating to <code class="docutils literal notranslate"><span class="pre">about:third-party</span></code>, finding the entry for the DLL they are interested in, and clicking on the dash icon. They will then be prompted to restart the browser, as the change will only take effect after the browser restarts.</p>
+          </section>
+          <section id="disabling-the-dynamic-blocklist">
+           <h3>Disabling the dynamic blocklist<a class="headerlink" href="#disabling-the-dynamic-blocklist" title="Link to this heading">?</a></h3>
+           <p>It is possible that users can get Firefox into a bad state by putting a DLL on the dynamic blocklist. One possibility is that the user blocks only one of a set of DLLs that interact, which could make Firefox behave in unpredictable ways or crash.</p>
+           <p>By launching Firefox with <code class="docutils literal notranslate"><span class="pre">--disableDynamicBlocklist</span></code>, the dynamic blocklist will be loaded but not used to block DLLs. This lets the user go to <code class="docutils literal notranslate"><span class="pre">about:third-party</span></code> and attempt to fix the problem by unblocking or blocking DLLs.</p>
+           <p>Similarly, in safe mode the dynamic blocklist is also disabled.</p>
+          </section>
+          <section id="enterprise-policy">
+           <h3>Enterprise policy<a class="headerlink" href="#enterprise-policy" title="Link to this heading">?</a></h3>
+           <p>The dynamic blocklist can be disabled by setting a registry key at <code class="docutils literal notranslate"><span class="pre">HKEY_CURRENT_USER\Software\Policies\Mozilla\Firefox</span></code> with a name of DisableThirdPartyModuleBlocking and a DWORD value of 1. This will have the effect of not loading the dynamic blocklist, and no icons will show up in <code class="docutils literal notranslate"><span class="pre">about:third-party</span></code> to allow blocking DLLs.</p>
+          </section>
+         </section>
+         <section id="contact">
+          <h2>Contact<a class="headerlink" href="#contact" title="Link to this heading">?</a></h2>
+          <p>Any questions or feedback are welcome!</p>
+          <p><strong>Matrix</strong>: <a class="reference external" href="https://app.element.io/#/room/#hardening:mozilla.org">#hardening</a></p>
+         </section>
+        </section>
+       </div>
+      </div>
+      <footer>
+       <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Firefox on Windows" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a> <a href="windows-pointing-device/index.html" class="btn btn-neutral float-right" title="Windows Pointing Device Support in Firefox" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+       </div>
+       <hr>
+       <div role="contentinfo">
+        <p></p>
+       </div> Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+      </footer>
+     </div>
+    </div>
+   </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ </body>
+</html>

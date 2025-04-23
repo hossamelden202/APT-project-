@@ -1,0 +1,631 @@
+<!doctype html>
+<html class="writer-html5" lang="en" data-content_root="../">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Frontend Code Review Best Practices — Firefox Source Docs  documentation</title>
+  <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50">
+  <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094">
+  <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=fd3f3429">
+  <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b">
+  <link rel="stylesheet" type="text/css" href="../_static/custom_theme.css?v=dc5ed815">
+  <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7">
+  <link rel="shortcut icon" href="../_static/firefox.ico"><!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script src="../_static/jquery.js?v=5d32c60e"></script>
+  <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+  <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+  <script src="../_static/doctools.js?v=9a2dae69"></script>
+  <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+  <script src="../_static/copybutton.js?v=30646c52"></script>
+  <script src="../_static/design-tabs.js?v=36754332"></script>
+  <script src="../_static/js/theme.js"></script>
+  <link rel="index" title="Index" href="../genindex.html">
+  <link rel="search" title="Search" href="../search.html">
+  <link rel="next" title="Command Line Parameters" href="CommandLineParameters.html">
+  <link rel="prev" title="Browser Usage Telemetry" href="BrowserUsageTelemetry.html">
+ </head>
+ <body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+   <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <div class="wy-side-scroll">
+     <div class="wy-side-nav-search">
+      <a href="../index.html" class="icon icon-home"> Firefox Source Docs <img src="../_static/firefox-wordmark.svg" class="logo" alt="Logo"> </a><!-- -- This code is governed by the BSD license ---->
+      <div>
+       <h3>Quick search</h3>
+       <script>
+    (function () {
+      var cx = "dd12886298f75dbef";
+      var gcse = document.createElement("script");
+      gcse.async = true;
+      gcse.src = "https://cse.google.com/cse.js?cx=" + cx;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(gcse, s);
+    })();
+  </script><gcse:search></gcse:search>
+      </div>
+     </div>
+     <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+      <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../glossary/index.html">A Glossary of Common Terms</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../overview/index.html">A Quick Guide to Mozilla Applications</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../setup/index.html">Getting Set Up To Work On The Firefox Codebase</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Working On Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../contributing/index.html">Working on Firefox</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../bug-mgmt/index.html">Bug Handling</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox User Guide</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../devtools-user/index.html">Firefox DevTools User Docs</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Source Code Documentation</span></p>
+      <ul class="current">
+       <li class="toctree-l1"><a class="reference internal" href="../mots/index.html">Governance</a></li>
+       <li class="toctree-l1 current"><a class="reference internal" href="index.html">Firefox Front-end</a>
+        <ul class="current">
+         <li class="toctree-l2"><a class="reference internal" href="urlbar/index.html">Address Bar</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="BrowserUsageTelemetry.html">Browser Usage Telemetry</a></li>
+         <li class="toctree-l2 current"><a class="current reference internal" href="#">Frontend Code Review Best Practices</a>
+          <ul>
+           <li class="toctree-l3"><a class="reference internal" href="#introduction">Introduction</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#intended-audience-and-outcomes">Intended audience and outcomes</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#what-is-expected-from-a-frontend-code-review">What is expected from a frontend code review?</a>
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="#the-basics">The basics</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#is-this-necessary-and-sufficient">Is this necessary and sufficient?</a></li>
+            </ul></li>
+           <li class="toctree-l3"><a class="reference internal" href="#expectations-for-the-reviewer">Expectations for the Reviewer</a>
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="#progress-perfection">Progress &gt; Perfection</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#language-and-tone-in-review-comments">Language and tone in review comments</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#turnaround-time-for-reviews">Turnaround time for reviews</a></li>
+            </ul></li>
+           <li class="toctree-l3"><a class="reference internal" href="#expectations-for-the-patch-author">Expectations for the patch author</a>
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="#communication">Communication</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#addressing-review-comments">Addressing review comments</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#code-quality">Code quality</a></li>
+            </ul></li>
+           <li class="toctree-l3"><a class="reference internal" href="#technologies-and-specifics">Technologies and Specifics</a>
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="#js-dom">JS/DOM</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#styling-and-css-and-svgs">Styling and CSS, and SVGs</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#localization">Localization</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#accessibility-accessibility">Accessibility {#accessibility}</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#performance">Performance</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#security">Security</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#testing">Testing</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#documentation">Documentation</a></li>
+            </ul></li>
+           <li class="toctree-l3"><a class="reference internal" href="#commandeering-patches">Commandeering patches</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#community-participation-guidelines">Community Participation Guidelines</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#faq">FAQ</a>
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="#what-is-a-nit">What is a Nit?</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#how-do-i-file-a-bug-for-new-lint-rules">How do I file a bug for new lint rules?</a></li>
+            </ul></li>
+           <li class="toctree-l3"><a class="reference internal" href="#further-reading">Further Reading</a></li>
+          </ul></li>
+         <li class="toctree-l2"><a class="reference internal" href="CommandLineParameters.html">Command Line Parameters</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="BrowserStartup.html">Browser Startup</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="CategoryManagerIndirection.html">Category manager indirection (callModulesFromCategory)</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="components/customizableui/docs/index.html">CustomizableUI Component</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="components/enterprisepolicies/docs/index.html">Enterprise Policies</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="extensions/formautofill/docs/index.html">Form Autofill</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="extensions/newtab/docs/index.html">Firefox Home (New Tab)</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="components/aboutwelcome/docs/index.html">Firefox Welcome Experience (about:welcome)</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="installer/windows/installer/index.html">Installer</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="components/attribution/docs/index.html">Installation Attribution</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../toolkit/mozapps/defaultagent/default-browser-agent/index.html">Default Browser Agent</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="components/migration/docs/index.html">Migration</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="components/pagedata/docs/index.html">PageDataService</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="places/index.html">Places</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="components/asrouter/docs/index.html">Messaging System</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="search/index.html">Search</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="base/tabbrowser/index.html">tabbrowser</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="touchbar/index.html">Touch Bar</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="components/uitour/docs/index.html">UITour</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="branding/docs/index.html">Firefox Branding</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="components/storybook/docs/README.storybook.stories.html">Storybook for Firefox</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="components/storybook/docs/README.reusable-widgets.stories.html">Reusable UI widgets</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="components/storybook/docs/README.other-widgets.stories.html">Other types of UI Widgets</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="components/storybook/docs/README.lit-guide.stories.html">Lit</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="components/storybook/docs/README.xul-and-html.stories.html">XUL and HTML</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../toolkit/themes/shared/design-system/docs/README.design-tokens.stories.html">Design tokens</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../toolkit/themes/shared/design-system/docs/README.json-design-tokens.stories.html">JSON design tokens</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="components/backup/docs/index.html">Backup Component</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="components/sidebar/docs/index.html">Sidebar</a></li>
+        </ul></li>
+       <li class="toctree-l1"><a class="reference internal" href="../dom/index.html">DOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../editor/index.html">Editor</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../layout/index.html">Style system (CSS) &amp; Layout</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../gfx/index.html">Graphics</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../ipc/index.html">Processes, Threads and IPC</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../devtools/index.html">Firefox DevTools Contributor Docs</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../toolkit/index.html">Toolkit</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../js/index.html">SpiderMonkey</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../jsloader/index.html">JS Loader</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mobile/android/geckoview/index.html">GeckoView</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mobile/android/fenix/index.html">Fenix</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mobile/android/focus-android/index.html">Focus for Android</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../dom/bindings/webidl/index.html">WebIDL</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../modules/libpref/index.html">libpref</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../networking/index.html">Networking</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../remote/index.html">Remote Protocols</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../services/index.html">Services</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../permissions/index.html">Permissions</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../uriloader/index.html">File Handling</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../widget/cocoa/index.html">Firefox on macOS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../widget/windows/index.html">Firefox on Windows</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../toolkit/components/ml/index.html">Firefox AI Runtime</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../accessible/index.html">Accessibility</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../media/index.html">Media Playback</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../code-quality/index.html">Code quality</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../writing-rust-code/index.html">Writing Rust Code</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../rust-components/index.html">Rust Components</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/profiler/index.html">Gecko Profiler</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../performance/index.html">Performance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../storage/index.html">Database bindings (SQLite, KV, …)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../xpcom/index.html">XPCOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../nspr/index.html">NSPR</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../security/nss/index.html">Network Security Services (NSS)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../content-security/index.html">Web Security Checks in Gecko</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">The Firefox Build System</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../mach/index.html">Mach</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/try/index.html">Pushing to Try</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../build/buildsystem/index.html">Build System</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../taskcluster/index.html">Firefox CI and Taskgraph</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/moztreedocs/index.html">Managing Documentation</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mozbuild/vendor/index.html">Vendoring Third Party Components</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Testing &amp; Test Infrastructure</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/automated-testing/index.html">Automated Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/treeherder-try/index.html">Understanding Treeherder Results</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/sheriffed-intermittents/index.html">Sheriffed intermittent failures</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/tests-for-new-config/index.html">Turning on Firefox tests for a new configuration</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/intermittent/index.html">Avoiding intermittent tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/testing-policy/index.html">Testing Policy</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/ci-configs/index.html">Configuration Changes</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/browser-chrome/index.html">Browser chrome mochitests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/chrome-tests/index.html">Chrome Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/marionette/index.html">Marionette</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/geckodriver/index.html">geckodriver</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/test-verification/index.html">Test Verification</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/webrender/index.html">WebRender Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/mochitest-plain/index.html">Mochitest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/xpcshell/index.html">XPCShell tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/tps/index.html">TPS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../web-platform/index.html">web-platform-tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../gtest/index.html">GTest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/fuzzing/index.html">Fuzzing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/sanitizer/index.html">Sanitizer</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/perfdocs/index.html">Performance Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/code-coverage/index.html">Code coverage</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing-rust-code/index.html">Testing &amp; Debugging Rust Code</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Releases &amp; Updates</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../update-infrastructure/index.html">Mozilla Update Infrastructure</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../update-infrastructure/index.html#watershed-updates">Watershed Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../update-infrastructure/index.html#desupport-updates">Desupport Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/update-verify/index.html">Update Verify</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Localization &amp; Internationalization</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../intl/index.html">Internationalization</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../l10n/index.html">Localization</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox and Python</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../mozbase/index.html">mozbase</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../python/index.html">Using third-party Python packages</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Metrics Collected in Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../metrics/index.html">Metrics</a></li>
+      </ul>
+     </div>
+    </div>
+   </nav>
+   <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+    <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+     <i data-toggle="wy-nav-top" class="fa fa-bars"></i> <a href="../index.html">Firefox Source Docs</a>
+    </nav>
+    <div class="wy-nav-content">
+     <div class="rst-content">
+      <!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+      <div role="navigation" aria-label="Page navigation">
+       <ul class="wy-breadcrumbs">
+        <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+        <li class="breadcrumb-item"><a href="index.html">Firefox Front-end</a></li>
+        <li class="breadcrumb-item active">Frontend Code Review Best Practices</li>
+        <li class="wy-breadcrumbs-aside"><a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Developer+Infrastructure&amp;component=Firefox+Source+Docs%3A+Content&amp;short_desc=Documentation+issue+on+browser/FrontendCodeReviewBestPractices&amp;comment=URL+=+https://firefox-source-docs.mozilla.org/browser/FrontendCodeReviewBestPractices.html&amp;bug_file_loc=https://firefox-source-docs.mozilla.org/browser/FrontendCodeReviewBestPractices.html" rel="nofollow">Report an issue</a> / <a href="../_sources/browser/FrontendCodeReviewBestPractices.md.txt" rel="nofollow"> View page source</a></li>
+       </ul>
+       <hr>
+      </div>
+      <div role="main" class="document" itemscope itemtype="http://schema.org/Article">
+       <div itemprop="articleBody">
+        <section id="frontend-code-review-best-practices">
+         <h1>Frontend Code Review Best Practices<a class="headerlink" href="#frontend-code-review-best-practices" title="Link to this heading">?</a></h1>
+         <section id="introduction">
+          <h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">?</a></h2>
+          <p>Code reviews help ensure that the code solves a specific problem, doesn’t have bugs or regress other functionality, and has adequate test coverage. It also provides an opportunity to ensure correct documentation is added, whether through code comments or documentation of changes. The process of reviewing code also helps spread knowledge about how the code works amongst developers, both as a patch author and as a reviewer.</p>
+          <p>A review is required before code or tests are added to Mozilla’s repository. Once approved, code is merged to autoland and once tests pass, sheriffs will merge it with other commits to mozilla-central. This guide outlines a set of standards for both patch author and reviewer.</p>
+         </section>
+         <section id="intended-audience-and-outcomes">
+          <h2>Intended audience and outcomes<a class="headerlink" href="#intended-audience-and-outcomes" title="Link to this heading">?</a></h2>
+          <p>This document is primarily intended for engineers on the Firefox Desktop Front end team. The aim of this guide is to align the team around an agreed set of expectations for patch reviews that will reduce confusion, prevent misunderstandings, help land patches more efficiently and to help onboard new team members.</p>
+          <p>As an engineer, you’ll be in the position of being both a patch author and a reviewer, so having a good understanding of the expectations of both roles is recommended.</p>
+         </section>
+         <section id="what-is-expected-from-a-frontend-code-review">
+          <h2>What is expected from a frontend code review?<a class="headerlink" href="#what-is-expected-from-a-frontend-code-review" title="Link to this heading">?</a></h2>
+          <p>The sections below outline some of the high level expectations when reviewing code. See also the <a class="reference internal" href="#technologies-and-specifics">Technologies and Specifics sections for more details on what to look for that are specific to Frontend code</a>.</p>
+          <section id="the-basics">
+           <h3>The basics<a class="headerlink" href="#the-basics" title="Link to this heading">?</a></h3>
+           <p>A code review and automation will check if this patch:</p>
+           <ul class="simple">
+            <li>
+             <p>applies cleanly to mozilla-central and can be built.</p></li>
+            <li>
+             <p>has a <a class="reference internal" href="../contributing/contribution_quickref.html#commit-message"><span class="std std-ref">good commit message</span></a> that describes the changes as well as the reason for them where that is not obvious.</p>
+             <ul>
+              <li>
+               <p>Adding a longer description in a commit message will be used as the summary in Phabricator.</p></li>
+             </ul></li>
+            <li>
+             <p>fixes the issue at hand.</p></li>
+            <li>
+             <p>has automated test coverage where appropriate. <a class="reference external" href="https://firefox-source-docs.mozilla.org/testing/testing-policy/index.html#exceptions">Exceptions to this are covered by using the test-exception-* tags in Phabricator</a>. Here are some common exceptions in frontend where [new] test coverage isn’t needed:</p>
+             <ul>
+              <li>
+               <p>style/image/l10n-only changes</p></li>
+              <li>
+               <p>Code that interacts directly with the OS in ways we can’t mock in automated tests.</p></li>
+              <li>
+               <p>Code that requires very specific external circumstances (OS settings, wall clock time, actions by other programs, etc.) we can’t mock reliably.</p></li>
+              <li>
+               <p>Refactorings of existing code (where existing test coverage exists)</p></li>
+              <li>
+               <p>Removing code</p></li>
+             </ul></li>
+            <li>
+             <p>passes linting and/or automated tests.</p></li>
+           </ul>
+           <p><strong>If any of these is missing/broken, a reviewer is likely to stop then and there.</strong> Before submitting patches, code authors should ensure they have these covered.</p>
+          </section>
+          <section id="is-this-necessary-and-sufficient">
+           <h3>Is this necessary and sufficient?<a class="headerlink" href="#is-this-necessary-and-sufficient" title="Link to this heading">?</a></h3>
+           <p>Two useful ways of looking at patches are “is this necessary?” and “is this sufficient?”:</p>
+           <ul class="simple">
+            <li>
+             <p><strong>Necessary</strong>: are all the changes in the patch required? It’s common to find other issues when fixing a bug, but code not necessary to fix this specific bug should be moved to a separate bug. Reviewers will usually flag up:</p>
+             <ul>
+              <li>
+               <p>Unrelated code changes</p></li>
+              <li>
+               <p>Changing unrelated whitespace etc. (mind your editor’s autoformat)</p></li>
+              <li>
+               <p>Unnecessarily complex or hacky fixes</p></li>
+             </ul></li>
+            <li>
+             <p><strong>Sufficient</strong>: does this fix the issue completely? That is, have we looked at edge cases and is the patch/patchset definitely fixing all of the issue, not just parts of it or a symptom of it?</p>
+             <ul>
+              <li>
+               <p>This also means <strong>considering what is not in the patch</strong>. So e.g. when renaming a method, patch authors and reviewers should not just check if all the replacements in the patch are correct, but also if all occurrences were actually touched in the patch (searchfox should make this relatively straightforward, or you can apply the patch locally and use <code class="docutils literal notranslate"><span class="pre">grep</span></code>/<code class="docutils literal notranslate"><span class="pre">ack</span></code>/<code class="docutils literal notranslate"><span class="pre">ag</span></code> etc).</p></li>
+             </ul></li>
+           </ul>
+          </section>
+         </section>
+         <section id="expectations-for-the-reviewer">
+          <h2>Expectations for the Reviewer<a class="headerlink" href="#expectations-for-the-reviewer" title="Link to this heading">?</a></h2>
+          <section id="progress-perfection">
+           <h3>Progress &gt; Perfection<a class="headerlink" href="#progress-perfection" title="Link to this heading">?</a></h3>
+           <p>As noted above, the context for the patch should be provided by the author, however it’s important to try to strike a balance between ensuring we maintain high standards and being able to make progress. If you identify issues that are routinely cropping up that could be covered by automated linting, please file issues for new rules to be added. This helps us to ensure that the time engineers dedicate to review is primarily spent on efficiently ensuring a change addresses what it sets out to and is both a maintainable and safe addition to Firefox.</p>
+          </section>
+          <section id="language-and-tone-in-review-comments">
+           <h3>Language and tone in review comments<a class="headerlink" href="#language-and-tone-in-review-comments" title="Link to this heading">?</a></h3>
+           <ul class="simple">
+            <li>
+             <p>Take the time to thank and point out good code changes.</p></li>
+            <li>
+             <p>Focus on the code, not the patch author (avoid wording that sounds like it’s criticizing the author, for example “this doesn’t make sense, why did you do it this way?” versus “I’m curious why you took this approach. Could you please provide some context?”).</p></li>
+            <li>
+             <p>Framing comments as questions rather than statements can help create an environment conducive to collaboration. Rather than “This doesn’t work when <code class="docutils literal notranslate"><span class="pre">bar</span></code> is <code class="docutils literal notranslate"><span class="pre">undefined</span></code>”, “Could you please check if this code is properly handling the case of <code class="docutils literal notranslate"><span class="pre">bar</span></code> being <code class="docutils literal notranslate"><span class="pre">undefined</span></code>?” .</p></li>
+            <li>
+             <p>Using “please” and “what do you think?” goes a long way in making others feel like colleagues, and not subordinates. As a reviewer, double-check your comments. Assume the code author has spent more time thinking about this part of the code than you have and might actually be right, even if you originally thought something was wrong.</p></li>
+            <li>
+             <p>Be clear about what changes are required to be changed in order to land the patch versus those that are optional.</p></li>
+            <li>
+             <p>For things that aren’t <a class="reference internal" href="#what-is-a-nit">nits</a> or trivially understood to be improvements, explain <em>why</em> you are requesting a change. Understanding the reasoning behind requested changes helps make sure that you and the patch author share an understanding of what the patch is doing, and helps the patch author learn.</p></li>
+            <li>
+             <p>Minimize the number of passes required for review and addressing review comments. Where possible provide your review comments in a single pass rather than multiple iterations. This helps to reduce the number of cycles needed to get something through review and any associated context switching for both the reviewer and the patch author. In a case where you don’t have time for a full review, mention that your review is currently incomplete and set expectations for when it will be so the author can plan accordingly.</p></li>
+            <li>
+             <p>When reviewing code on behalf of additional review groups added to a patch, your review should primarily focus on the areas that the review-group is responsible for or interfaces that your group is using. However, if you do spot a non-trivial issue that falls outside this during review, then it would be reasonable to flag it. .</p></li>
+           </ul>
+          </section>
+          <section id="turnaround-time-for-reviews">
+           <h3>Turnaround time for reviews<a class="headerlink" href="#turnaround-time-for-reviews" title="Link to this heading">?</a></h3>
+           <ul class="simple">
+            <li>
+             <p>Aim for a response within 1 business day. This need not be a full review, but could be a comment setting expectations about when you’ll be able to review the patch, pointing to other folks who might be able to review it sooner or would be more appropriate to review the patch.</p></li>
+            <li>
+             <p>If you’re explicitly asked for review and can’t get to it due to time constraints, it’s always helpful to set expectations for the patch author.</p></li>
+           </ul>
+          </section>
+         </section>
+         <section id="expectations-for-the-patch-author">
+          <h2>Expectations for the patch author<a class="headerlink" href="#expectations-for-the-patch-author" title="Link to this heading">?</a></h2>
+          <section id="communication">
+           <h3>Communication<a class="headerlink" href="#communication" title="Link to this heading">?</a></h3>
+           <p>There is often more than one way to address an issue, and reviewers and patch authors may disagree about the “right” approach to a bug. What is “complex” or “hacky” to one person may be “correctly architectured” or “efficient” to another. If when working on a bug, you’re unsure about what the “right” approach is (e.g. “just add a nullcheck here and move on” vs. “refactor the calling code so we don’t ever pass null”), talk to your prospective reviewer or other people familiar with the code before deciding, to avoid repeated work when your reviewer suggests an alternative, perhaps because they have other context you weren’t aware of, or to fit the general architecture of the component you’re changing.</p>
+           <p>When you haven’t talked to your reviewer because you think the approach you chose is obviously correct, it is usually still helpful to outline your reasoning/choices in the extended commit message, a phabricator comment, and/or bugzilla. It doesn’t need to be an essay, but ideally the reviewer should be able to understand the patch and its reasoning from reading the patch and commit message.</p>
+           <p>Make use of the commit message to offer both a brief, and where necessary a longer explanation of what the change is doing. Reviewers often review dozens of patches each week. Ensuring that the patch contains all the information they need to review the change helps speed up reviews and avoids confusion about what a patch is trying to achieve.</p>
+           <p>If the patch needs a shorter turnaround time of the review cycle due to a release or uplift deadline (which should also be reflected in the bug priority and severity that’s been set), you should ping blocking reviewers on slack or matrix to raise awareness of this deadline and to confirm they can review your patch as soon as possible. If they are unable to do so, you’ll need to find another reviewer who can. Where possible ask the existing reviewer for a suggestion, or ask someone else in the same review group. If that’s not possible, ask for input from your team/project lead or manager.</p>
+           <p>When making changes to revisions, using the ‘plan-changes’ action in Phabricator <a class="reference external" href="https://moz-conduit.readthedocs.io/en/latest/phabricator-user.html#other-revision-actions">“removes revisions from reviewers’ queues, meaning that they will no longer be visible under “Ready to Review” on their “Active Revisions” dashboards, until a new diff is uploaded”</a></p>
+           <p>When making non-trivial changes to patches which are already on Phabricator, use <code class="docutils literal notranslate"><span class="pre">--message</span></code> (or <code class="docutils literal notranslate"><span class="pre">-m</span></code>) with your <code class="docutils literal notranslate"><span class="pre">moz-phab</span></code> submission to explain what you’re changing.</p>
+           <p>Leave questions or comments in Phabricator about things you were not sure about. Your reviewer might be able to offer answers, or you might have stumbled on deeper underlying problems that need addressing elsewhere. Either way, everyone learns.</p>
+          </section>
+          <section id="addressing-review-comments">
+           <h3>Addressing review comments<a class="headerlink" href="#addressing-review-comments" title="Link to this heading">?</a></h3>
+           <p>Except for very small patches it is extremely common for a reviewer to request changes to a patch after their first review. Reviewers are expected to be courteous and clear about what they’re asking you to change and why. While reviewers <em>do</em> have the final sign-off, code review should be considered to be a conversation. Reviewers are not expected to be perfect. If you don’t understand what a reviewer has asked or disagree with their suggestions then respond with your reasoning or ask for clarification. Usually this happens in the code review itself but it is not uncommon to talk with the reviewer directly where that is faster. In this case it is helpful to add a summary of your discussion to the review comment in Phabricator for future code historians.</p>
+           <p>If you have requested reviews from multiple reviewers and one of them requests changes, the patch is removed from all reviewers’ queues until you re-submit the patch with the requested changes, questions for clarification or comments.</p>
+           <p>Once you’ve addressed everything the reviewer requested, push your patch up for review again and expect that the reviewer will be verifying that you changed everything requested. To help save unnecessary review iterations, where possible avoid putting the patch back into review until you’ve made all the necessary changes.</p>
+           <p>Occasionally the reviewer may ask for a small number of changes but still approve the patch. You are expected to make those changes before the patch can land, the reviewer is just indicating that they trust you to make those changes and don’t need to re-review the patch. If those changes turn out to be larger than the reviewer would have reasonably expected then you should re-request review.</p>
+           <p>You’re within your rights to suggest that some review feedback can be fixed in follow-up bugs and patches, so long as you ensure to get those follow-ups filed in Bugzilla and that they’re addressed in a timely manner. This is particularly true for in-progress features that are being held to Nightly. Features still being developed and held to Nightly should not be expected to land in a perfect state all in one patch.</p>
+          </section>
+          <section id="code-quality">
+           <h3>Code quality<a class="headerlink" href="#code-quality" title="Link to this heading">?</a></h3>
+           <p>Make sure before submitting a patch that it compiles cleanly and that the tests included all pass.</p>
+           <p>Consider re-reading the patch you’ve just submitted to Phabricator once you submit it the first time. Often Phabricator’s clear diff view will highlight things to you that you might have missed, especially if you’ve worked on the patch a long time. It can also help highlight changes that aren’t immediately obvious to someone reading the patch for the first time, and might need an explanation.</p>
+           <p>Avoid whitespace or other trivial changes to code that you don’t need to change to accomplish your goal. Making other, unrelated changes makes the patch harder to review, and makes it difficult to later to find the origin of a change.</p>
+           <p>Several small patches are easier to review than one monolith that changes lots of files.</p>
+           <p>Talk to your peers and prospective reviewer(s) before starting big refactors. Firefox’s code base is huge and refactors carry risk, so reviewers are wary of big changes like that and they are usually difficult to review.</p>
+          </section>
+         </section>
+         <section id="technologies-and-specifics">
+          <h2>Technologies and Specifics<a class="headerlink" href="#technologies-and-specifics" title="Link to this heading">?</a></h2>
+          <p>This section covers some frontend-specific aspects of patches that reviewers are likely to look at.</p>
+          <section id="js-dom">
+           <h3>JS/DOM<a class="headerlink" href="#js-dom" title="Link to this heading">?</a></h3>
+           <ul class="simple">
+            <li>
+             <p>Use existing components to implement feature designs. Do not reimplement custom button/card/toggle/… styling based on the design and vanilla HTML, as it doesn’t scale, is hard to maintain, and will likely miss edge-cases for accessibility, RTL, etc.</p>
+             <ul>
+              <li>
+               <p>The inverse is also true: not every new bit of code you work on has to be factored out as a generic, reusable component immediately. When you are the first/only consumer of a bit of code, it is usually not possible to predict what aspects of your code will need to be “generic”, where API boundaries should be, and so on. Trying to do it immediately is doomed to failure, so don’t spend time on it - save it for when the second potential consumer comes along.</p></li>
+             </ul></li>
+            <li>
+             <p>Lines of code is a flawed metric, and we’re not code golfing - but don’t write several 10-line functions when 2 lines of inline code will do. Balance brevity and readability appropriately.</p></li>
+            <li>
+             <p>Use DOM properties over attributes where possible.</p>
+             <ul>
+              <li>
+               <p>Where it isn’t, <code class="docutils literal notranslate"><span class="pre">toggleAttribute</span></code> and <code class="docutils literal notranslate"><span class="pre">classList.toggle</span></code> are often helpful to avoid repetitive if/else blocks.</p></li>
+             </ul></li>
+           </ul>
+          </section>
+          <section id="styling-and-css-and-svgs">
+           <h3>Styling and CSS, and SVGs<a class="headerlink" href="#styling-and-css-and-svgs" title="Link to this heading">?</a></h3>
+           <ul class="simple">
+            <li>
+             <p>Use existing components/classes to implement feature designs (see JS/DOM section).</p></li>
+            <li>
+             <p>Keep in mind all CSS needs to work in RTL languages. Use logical properties (<code class="docutils literal notranslate"><span class="pre">margin-inline-start</span></code> and friends) rather than physical ones (<code class="docutils literal notranslate"><span class="pre">margin-left</span></code>).</p>
+             <ul>
+              <li>
+               <p>See <a class="reference internal" href="../code-quality/coding-style/rtl_guidelines.html"><span class="std std-doc">Firefox RTL (right-to-left) guidelines</span></a> for more detailed information.</p></li>
+             </ul></li>
+            <li>
+             <p>See the <a class="reference internal" href="../accessible/index.html#accessibility"><span class="std std-ref">Accessibility</span></a> section on use of colours, HCM, etc.</p></li>
+            <li>
+             <p>See detailed <a class="reference internal" href="../code-quality/coding-style/css_guidelines.html"><span class="std std-doc">CSS authoring guidelines</span></a>.</p></li>
+            <li>
+             <p>See the <a class="reference internal" href="../code-quality/coding-style/svg_guidelines.html"><span class="std std-doc">Firefox SVG Guidelines</span></a>.</p></li>
+           </ul>
+          </section>
+          <section id="localization">
+           <h3>Localization<a class="headerlink" href="#localization" title="Link to this heading">?</a></h3>
+           <ul class="simple">
+            <li>
+             <p>For anything user-facing, use localised strings. <strong>Do NOT</strong> hardcode English strings in markup.</p></li>
+            <li>
+             <p>For new code, use fluent. For modifying older code, use what the old code uses (but consider switching to fluent if it’s straightforward, as it provides better translation primitives in other languages).</p></li>
+            <li>
+             <p>When writing experimental features that need strings for en-US only that are not final yet, use fluent and put the ftl file in a <code class="docutils literal notranslate"><span class="pre">content</span></code> rather than <code class="docutils literal notranslate"><span class="pre">locale</span></code> directory and package it accordingly. When strings are final, move them to a regular <code class="docutils literal notranslate"><span class="pre">locale</span></code> directory and include them as normal but make sure to do so outside string freeze and while allowing reasonable time for our (largely volunteer) localisers to submit translations - don’t just dump dozens of strings into <code class="docutils literal notranslate"><span class="pre">locale</span></code> a day before string freeze.</p></li>
+            <li>
+             <p>If the meaning of a string changes, or [in fluent] you add/remove attributes, <strong>you must update the message identifier</strong>.</p></li>
+            <li>
+             <p>More detailed <a class="reference internal" href="../l10n/fluent/review.html#guidelines-for-fluent-reviewers"><span class="std std-ref">fluent review guidelines</span></a> are available separately.</p></li>
+           </ul>
+          </section>
+          <section id="accessibility-accessibility">
+           <h3>Accessibility {#accessibility}<a class="headerlink" href="#accessibility-accessibility" title="Link to this heading">?</a></h3>
+           <ul class="simple">
+            <li>
+             <p>Write semantic HTML.</p></li>
+            <li>
+             <p>Anything mouse-accessible should be keyboard-accessible or have a keyboard-accessible equivalent.</p></li>
+            <li>
+             <p>Ensure things work in high contrast mode and that there is sufficient colour contrast between foreground and background items in non-high-contrast mode and with different themes.</p></li>
+            <li>
+             <p>Any images that <strong>aren’t purely decorative</strong> (e.g. toolbar button icons where there is no visible text label) need an <code class="docutils literal notranslate"><span class="pre">alt</span></code> attribute or <code class="docutils literal notranslate"><span class="pre">aria-label</span></code> or similar to give it an accessible name, as well as a tooltip for sighted users who might not understand icons.</p></li>
+            <li>
+             <p>Any images that <strong>are</strong> purely <strong>decorative</strong> (e.g. illustrations next to text) should be implemented using one of these options:</p>
+             <ul>
+              <li>
+               <p>CSS background images, which have no representation in the accessibility tree</p></li>
+              <li>
+               <p>HTML <code class="docutils literal notranslate"><span class="pre">img</span></code> elements that use <code class="docutils literal notranslate"><span class="pre">role=presentation</span></code> to remove them from the accessibility tree, and do not have an alt attribute.</p></li>
+             </ul></li>
+            <li>
+             <p>If implementing animations or transitions, do so behind a <code class="docutils literal notranslate"><span class="pre">prefers-reduced-motion</span></code> media query to ensure people who have epilepsy or other motion-triggered sensitivities are not hurt by our attempts to make things beautiful.</p></li>
+            <li>
+             <p>The first rule of ARIA is “don’t use ARIA” (see also “Write semantic HTML”) - but it can be a tool where semantic markup is insufficient (e.g. live regions, complex labeling structures).</p></li>
+           </ul>
+          </section>
+          <section id="performance">
+           <h3>Performance<a class="headerlink" href="#performance" title="Link to this heading">?</a></h3>
+           <ul class="simple">
+            <li>
+             <p>Avoid <a class="reference external" href="https://firefox-source-docs.mozilla.org/performance/bestpractices.html#detecting-and-avoiding-synchronous-style-flushes">style</a> and <a class="reference external" href="https://firefox-source-docs.mozilla.org/performance/bestpractices.html#detecting-and-avoiding-synchronous-reflow">layout</a> flushes.</p></li>
+            <li>
+             <p>Use <code class="docutils literal notranslate"><span class="pre">requestIdleCallback</span></code> and/or workers for anything on the startup path and/or CPU or disk-intensive work that doesn’t actually need to happen immediately.</p></li>
+            <li>
+             <p>Use <code class="docutils literal notranslate"><span class="pre">IOUtils</span></code> to do async File IO, rather than nsIFile for synchronous access.</p></li>
+            <li>
+             <p>Keep complexity in mind and use reasonable data structures</p>
+             <ul>
+              <li>
+               <p>e.g. use a Set rather than arrays if they’re big, unordered, and you need to look items up in the collection</p></li>
+              <li>
+               <p>Bear in mind that some collections/loops may be reasonably sized in the common case, but have pathological edge cases (that person with 3652 tabs is looking at you. You know who I mean!). You shouldn’t need to jump through too many hoops, but use memoization or association (which are O(1) or O(log n)) rather than “just” looping through the list (which is O(n)).</p></li>
+             </ul></li>
+            <li>
+             <p>Other than that, don’t over-optimize things unless the code is known to be hot/performance-sensitive.</p>
+             <ul>
+              <li>
+               <p>As an example, we don’t, as a rule, use <code class="docutils literal notranslate"><span class="pre">for</span> <span class="pre">(var</span> <span class="pre">i;</span> <span class="pre">i</span> <span class="pre">&lt;</span> <span class="pre">ary.length;</span> <span class="pre">i++)</span></code> style “raw” array loops, instead preferring the more readable <code class="docutils literal notranslate"><span class="pre">for</span> <span class="pre">(let</span> <span class="pre">item</span> <span class="pre">of</span> <span class="pre">ary)</span></code>, even though that is slightly less performant.</p></li>
+             </ul></li>
+           </ul>
+          </section>
+          <section id="security">
+           <h3>Security<a class="headerlink" href="#security" title="Link to this heading">?</a></h3>
+           <ul class="simple">
+            <li>
+             <p>When in doubt, ask the security team, and/or <code class="docutils literal notranslate"><span class="pre">#security</span></code> on slack.</p></li>
+            <li>
+             <p>Take care when communicating between processes or with web content. Specifically:</p>
+             <ul>
+              <li>
+               <p>We can’t trust web content.</p></li>
+              <li>
+               <p>We can’t trust web content processes (!). Any information you get via IPC (JSActor messages or similar) could be completely bogus. Use information from the parent process (the CanonicalBrowsingContext and so on) to make security decisions wherever possible.</p></li>
+              <li>
+               <p>As a corollary, if you have code that wants to navigate or interact with web content, do it entirely within the content process, rather than passing e.g. URIs or similar information to the parent and expecting it to navigate for you. This avoids exposing APIs to (potentially compromised) content processes that let them navigate arbitrarily - the “basic” APIs for that (<code class="docutils literal notranslate"><span class="pre">document.location</span></code> and so on) will be secured by Gecko itself, and we want to reuse that infrastructure as much as possible.</p></li>
+              <li>
+               <p>Do not load untrusted content (ie content from the web) in the parent process.</p></li>
+             </ul></li>
+            <li>
+             <p>XSS and markup related advice:</p>
+             <ul>
+              <li>
+               <p>Avoid inline event handlers wherever possible.</p></li>
+              <li>
+               <p>All <code class="docutils literal notranslate"><span class="pre">about:</span></code> pages must have a Content Security Policy (CSP). Use one that prevents inline styles and inline script.</p></li>
+              <li>
+               <p>Do not use <code class="docutils literal notranslate"><span class="pre">innerHTML</span></code>.</p></li>
+              <li>
+               <p>Gecko has built in sanitizer APIs - if you have to deal with untrusted HTML, see <a class="reference external" href="https://searchfox.org/mozilla-central/source/parser/html/nsIParserUtils.idl">nsIParserUtils</a>. Do NOT hand-roll sanitizing inputs.</p></li>
+             </ul></li>
+            <li>
+             <p>Other vectors to take into account:</p>
+             <ul>
+              <li>
+               <p>URLs are malleable and not a good way of identifying an origin. Use nsIPrincipal objects. You’ll need this to deal correctly with <code class="docutils literal notranslate"><span class="pre">blob</span></code> URIs, <code class="docutils literal notranslate"><span class="pre">about:blank</span></code>, and data URIs.</p></li>
+              <li>
+               <p>We can’t assume that for <code class="docutils literal notranslate"><span class="pre">something.foo.sometld</span></code>, <code class="docutils literal notranslate"><span class="pre">something</span></code> is a subdomain of <code class="docutils literal notranslate"><span class="pre">foo</span></code>, or that <code class="docutils literal notranslate"><span class="pre">foo.sometld</span></code> is the “top” domain. Some TLDs (<code class="docutils literal notranslate"><span class="pre">.co.uk</span></code> and <code class="docutils literal notranslate"><span class="pre">.org.uk</span></code> and so on are an obvious example, but <code class="docutils literal notranslate"><span class="pre">github.io</span></code> and <code class="docutils literal notranslate"><span class="pre">s3.dualstack.ap-northeast-1.amazonaws.com</span></code>, too!) have individually controlled subdomains. Use <a class="reference external" href="https://searchfox.org/mozilla-central/source/netwerk/dns/nsIEffectiveTLDService.idl">nsIEffectiveTLDService</a> to work out what the “top” domain is. Do not use manual string manipulation.</p></li>
+              <li>
+               <p>Spoofing: where an attacker tries to pretend to the user they’re on a different website, usually by overlaying content or markup over the address bar or other trusted UI, or using full screen or similar tricks.</p></li>
+              <li>
+               <p>Clickjacking/keyjacking: where an attacker encourages users to click or hit keys repeatedly (“win $50 if you <a class="reference external" href="https://en.wikipedia.org/wiki/Hook-a-duck">hook a duck</a> by clicking this button really fast”), and uses that to bypass security warnings. Typical defence: delay enabling buttons on security-critical dialogs - there’s even a <a class="reference external" href="https://searchfox.org/mozilla-central/rev/d00845a44a8d1bf3f472ff36fd3f22a03af30a76/toolkit/components/prompts/src/PromptUtils.sys.mjs#49-61">helper</a> for this.</p></li>
+              <li>
+               <p>Crypto: do not make up your own cryptography, random number generator, password/key management or similar. Talk to experts (some of them work at Mozilla)!</p></li>
+             </ul></li>
+           </ul>
+          </section>
+          <section id="testing">
+           <h3>Testing<a class="headerlink" href="#testing" title="Link to this heading">?</a></h3>
+           <ul class="simple">
+            <li>
+             <p>All patches must have automated tests where possible and practical.</p>
+             <ul>
+              <li>
+               <p>When writing tests, be sure to see that you’ve seen your test fail. This helps to avoid scenarios where a test always passes even when it shouldn’t.</p></li>
+              <li>
+               <p>There are some patches where it may be appropriate not to have tests, particularly ones that only touch documentation, styling (CSS/images), or test-only changes.</p></li>
+              <li>
+               <p>For situations where you can’t write tests, such as with features that interact with the operating system in ways we can’t verify automatically, leave a comment explaining why to the reviewer. It is likely going to be the first question they ask and they should know when one of these situations applies or may know alternate ways to write the test.</p></li>
+             </ul></li>
+            <li>
+             <p>If you’ve pushed to try, leaving a link to the try push on Phabricator can help avoid duplicating effort (Note: reviewers are not expected to create try pushes by default). If there are unclear test failures that may or may not be intermittent, your reviewer can help work out what is happening.</p></li>
+           </ul>
+          </section>
+          <section id="documentation">
+           <h3>Documentation<a class="headerlink" href="#documentation" title="Link to this heading">?</a></h3>
+           <ul class="simple">
+            <li>
+             <p>Ideally, code should be readable without explanation. Where documentation is required, use code comments for individual pieces of code, and the extended commit message (i.e. the second/third/nth lines of the commit message) to describe the high-level goal of your change.</p></li>
+            <li>
+             <p>A guideline for code comments is to add them in cases where they provide additional context for <em>why</em> a change is being made, but to avoid adding them if the comment only restates <em>what</em> the code is doing.</p></li>
+            <li>
+             <p>If the reviewer asks for explanations, this is often a sign that the code should be simplified, it needs more code comments, or the approach in the patch is not right. Prefer code and/or comment changes over communicating only in Phabricator - so that future readers of the code have the same context.</p></li>
+            <li>
+             <p>Ensure that any existing Firefox Source Docs material is also updated to reflect the change.</p></li>
+           </ul>
+          </section>
+         </section>
+         <section id="commandeering-patches">
+          <h2>Commandeering patches<a class="headerlink" href="#commandeering-patches" title="Link to this heading">?</a></h2>
+          <p>Patches should only be commandeered by agreement with the original patch author or if the author cannot be expected to respond in a timely fashion (on vacation or sick leave or no longer active in the project).</p>
+          <p>If you do need to commandeer a patch you can use the following to maintain the original author. Use <code class="docutils literal notranslate"><span class="pre">hg</span> <span class="pre">commit</span> <span class="pre">--amend</span> <span class="pre">--user</span> <span class="pre">"Other</span> <span class="pre">Person</span> <span class="pre">&lt;person@mozilla.com&gt;"</span></code> or <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">commit</span> <span class="pre">--amend</span> <span class="pre">--author="Other</span> <span class="pre">Person</span> <span class="pre">&lt;person@mozilla.com&gt;"</span></code> when amending the original commit.</p>
+         </section>
+         <section id="community-participation-guidelines">
+          <h2>Community Participation Guidelines<a class="headerlink" href="#community-participation-guidelines" title="Link to this heading">?</a></h2>
+          <p>Please remember to always abide by <a class="reference external" href="https://www.mozilla.org/en-US/about/governance/policies/participation/">the Community Participation Guidelines</a>.</p>
+          <p>Be generous and inclusive. Always assume good intentions, even where there is a disagreement during the course of the review.</p>
+         </section>
+         <section id="faq">
+          <h2>FAQ<a class="headerlink" href="#faq" title="Link to this heading">?</a></h2>
+          <section id="what-is-a-nit">
+           <h3>What is a Nit?<a class="headerlink" href="#what-is-a-nit" title="Link to this heading">?</a></h3>
+           <p>A nit is a minor defect. This could be a typo or a small issue. These are usually the kind of things that would <em>not result in a “request for changes”</em>, but they should be called out and it’s expected that they would be addressed by the patch author before the patch lands.</p>
+          </section>
+          <section id="how-do-i-file-a-bug-for-new-lint-rules">
+           <h3>How do I file a bug for new lint rules?<a class="headerlink" href="#how-do-i-file-a-bug-for-new-lint-rules" title="Link to this heading">?</a></h3>
+           <p><a class="reference external" href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Developer%20Infrastructure&amp;amp;component=Lint%20and%20Formatting">If you have an idea for an eslint (JS) or stylelint (CSS) rule you can file a bug here</a> if a more specific component isn’t a better fit.</p>
+          </section>
+         </section>
+         <section id="further-reading">
+          <h2>Further Reading<a class="headerlink" href="#further-reading" title="Link to this heading">?</a></h2>
+          <ul class="simple">
+           <li>
+            <p><a class="reference external" href="https://www.chiark.greenend.org.uk/~sgtatham/quasiblog/code-review-antipatterns/">Code review antipatterns</a> an article by Simon Tatham outlining common anti-patterns in code review.</p></li>
+          </ul>
+         </section>
+        </section>
+       </div>
+      </div>
+      <footer>
+       <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="BrowserUsageTelemetry.html" class="btn btn-neutral float-left" title="Browser Usage Telemetry" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a> <a href="CommandLineParameters.html" class="btn btn-neutral float-right" title="Command Line Parameters" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+       </div>
+       <hr>
+       <div role="contentinfo">
+        <p></p>
+       </div> Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+      </footer>
+     </div>
+    </div>
+   </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ </body>
+</html>

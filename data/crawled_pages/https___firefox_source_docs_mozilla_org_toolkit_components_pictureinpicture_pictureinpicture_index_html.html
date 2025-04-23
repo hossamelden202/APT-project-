@@ -1,0 +1,571 @@
+<!doctype html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Picture-in-Picture — Firefox Source Docs  documentation</title>
+  <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=fa44fd50">
+  <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=19f00094">
+  <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css?v=fd3f3429">
+  <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css?v=76b2166b">
+  <link rel="stylesheet" type="text/css" href="../../../../_static/custom_theme.css?v=dc5ed815">
+  <link rel="stylesheet" type="text/css" href="../../../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7">
+  <link rel="shortcut icon" href="../../../../_static/firefox.ico"><!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+  <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+  <script src="../../../../_static/documentation_options.js?v=5929fcd5"></script>
+  <script src="../../../../_static/doctools.js?v=9a2dae69"></script>
+  <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
+  <script src="../../../../_static/copybutton.js?v=30646c52"></script>
+  <script src="../../../../_static/design-tabs.js?v=36754332"></script>
+  <script src="../../../../_static/js/theme.js"></script>
+  <link rel="index" title="Index" href="../../../../genindex.html">
+  <link rel="search" title="Search" href="../../../../search.html">
+  <link rel="next" title="PictureInPicture Reference" href="picture-in-picture-api.html">
+  <link rel="prev" title="Trigger Listeners" href="../../messaging-system/docs/TriggerActionSchemas/index.html">
+ </head>
+ <body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+   <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <div class="wy-side-scroll">
+     <div class="wy-side-nav-search">
+      <a href="../../../../index.html" class="icon icon-home"> Firefox Source Docs <img src="../../../../_static/firefox-wordmark.svg" class="logo" alt="Logo"> </a><!-- -- This code is governed by the BSD license ---->
+      <div>
+       <h3>Quick search</h3>
+       <script>
+    (function () {
+      var cx = "dd12886298f75dbef";
+      var gcse = document.createElement("script");
+      gcse.async = true;
+      gcse.src = "https://cse.google.com/cse.js?cx=" + cx;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(gcse, s);
+    })();
+  </script><gcse:search></gcse:search>
+      </div>
+     </div>
+     <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+      <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../glossary/index.html">A Glossary of Common Terms</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../overview/index.html">A Quick Guide to Mozilla Applications</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../setup/index.html">Getting Set Up To Work On The Firefox Codebase</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Working On Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../contributing/index.html">Working on Firefox</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../bug-mgmt/index.html">Bug Handling</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox User Guide</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../devtools-user/index.html">Firefox DevTools User Docs</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Source Code Documentation</span></p>
+      <ul class="current">
+       <li class="toctree-l1"><a class="reference internal" href="../../../../mots/index.html">Governance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../browser/index.html">Firefox Front-end</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../dom/index.html">DOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../editor/index.html">Editor</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../layout/index.html">Style system (CSS) &amp; Layout</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../gfx/index.html">Graphics</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../ipc/index.html">Processes, Threads and IPC</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../devtools/index.html">Firefox DevTools Contributor Docs</a></li>
+       <li class="toctree-l1 current"><a class="reference internal" href="../../../index.html">Toolkit</a>
+        <ul class="current">
+         <li class="toctree-l2"><a class="reference internal" href="../../../javascript-logging.html">JavaScript Logging</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../mozapps/extensions/addon-manager/index.html">Add-on Manager</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../backgroundtasks/index.html">Background Task Mode</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../crashes/crash-manager/index.html">Crash Manager</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../crashreporter/crashreporter/index.html">Crash Reporter</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../internal-urls.html">Internal URLs</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../search/index.html">Search Service</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../normandy/normandy/index.html">Shield Recipe Client</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../nimbus/docs/index.html">Nimbus</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../messaging-system/docs/index.html">Messaging System Schemas</a></li>
+         <li class="toctree-l2 current"><a class="current reference internal" href="#">Picture-in-Picture</a>
+          <ul>
+           <li class="toctree-l3"><a class="reference internal" href="#high-level-overview">High-level overview</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#the-picture-in-picture-toggle">The Picture-in-Picture toggle</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#video-registration">Video registration</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#docstate"><code class="docutils literal notranslate"><span class="pre">docState</span></code></a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#clicking-on-the-toggle">Clicking on the toggle</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#pictureinpicturelauncherchild">PictureInPictureLauncherChild</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#pictureinpicturechild">PictureInPictureChild</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#pictureinpicture-sys-mjs">PictureInPicture.sys.mjs</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#the-picture-in-picture-player-window">The Picture-in-Picture player window</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#cloning-the-video-frames">Cloning the video frames</a>
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="#cloneelementvisually"><code class="docutils literal notranslate"><span class="pre">cloneElementVisually</span></code></a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#stopcloningelementvisually"><code class="docutils literal notranslate"><span class="pre">stopCloningElementVisually</span></code></a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#iscloningelementvisually"><code class="docutils literal notranslate"><span class="pre">isCloningElementVisually</span></code></a></li>
+            </ul></li>
+           <li class="toctree-l3"><a class="reference internal" href="#site-specific-video-wrappers">Site-specific video wrappers</a>
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="#pictureinpicturechildvideowrapper-and-videowrapperscriptpath"><code class="docutils literal notranslate"><span class="pre">PictureInPictureChildVideoWrapper</span></code> and <code class="docutils literal notranslate"><span class="pre">videoWrapperScriptPath</span></code></a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#adding-a-new-site-specific-video-wrapper">Adding a new site-specific video wrapper</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#adding-a-new-video-control-method">Adding a new video control method</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#testing-site-specific-video-wrappers">Testing site-specific video wrappers</a></li>
+            </ul></li>
+           <li class="toctree-l3"><a class="reference internal" href="#id3">API References</a>
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="#toolkit-components-pictureinpicture"><code class="docutils literal notranslate"><span class="pre">toolkit/components/pictureinpicture</span></code></a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#toolkit-actors-pictureinpicturechild-sys-mjs"><code class="docutils literal notranslate"><span class="pre">toolkit/actors/PictureInPictureChild.sys.mjs</span></code></a></li>
+            </ul></li>
+          </ul></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../prompts/prompts/index.html">Prompts</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../modules/subprocess/toolkit_modules/subprocess/index.html">Subprocess Module</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../telemetry/index.html">Telemetry</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../glean/index.html">Firefox on Glean (FOG)</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../modules/toolkit_modules/index.html">Toolkit Modules</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../content/toolkit_widgets/index.html">Toolkit Widgets</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../resistfingerprinting/resistfingerprinting/index.html">Fingerprinting Resistance</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../url-classifier/url-classifier/index.html">URL Classifier</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../extensions/webextensions/index.html">WebExtensions API Development</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../../extensions/spellcheck/index.html">Managing the built-in en-US dictionary</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../mozapps/update/docs/index.html">Application Update</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../antitracking/anti-tracking/index.html">Anti-Tracking</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../translations/index.html">Translations</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../sessionstore/index.html">Session Store</a></li>
+        </ul></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../js/index.html">SpiderMonkey</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../jsloader/index.html">JS Loader</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../mobile/android/geckoview/index.html">GeckoView</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../mobile/android/fenix/index.html">Fenix</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../mobile/android/focus-android/index.html">Focus for Android</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../dom/bindings/webidl/index.html">WebIDL</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../modules/libpref/index.html">libpref</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../networking/index.html">Networking</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../remote/index.html">Remote Protocols</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../services/index.html">Services</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../permissions/index.html">Permissions</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../uriloader/index.html">File Handling</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../widget/cocoa/index.html">Firefox on macOS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../widget/windows/index.html">Firefox on Windows</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../ml/index.html">Firefox AI Runtime</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../accessible/index.html">Accessibility</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../media/index.html">Media Playback</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../code-quality/index.html">Code quality</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../writing-rust-code/index.html">Writing Rust Code</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../rust-components/index.html">Rust Components</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../tools/profiler/index.html">Gecko Profiler</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../performance/index.html">Performance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../storage/index.html">Database bindings (SQLite, KV, …)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../xpcom/index.html">XPCOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../nspr/index.html">NSPR</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../security/nss/index.html">Network Security Services (NSS)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../content-security/index.html">Web Security Checks in Gecko</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">The Firefox Build System</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../mach/index.html">Mach</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../tools/try/index.html">Pushing to Try</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../build/buildsystem/index.html">Build System</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../taskcluster/index.html">Firefox CI and Taskgraph</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../tools/moztreedocs/index.html">Managing Documentation</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../mozbuild/vendor/index.html">Vendoring Third Party Components</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Testing &amp; Test Infrastructure</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/automated-testing/index.html">Automated Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/treeherder-try/index.html">Understanding Treeherder Results</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/sheriffed-intermittents/index.html">Sheriffed intermittent failures</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/tests-for-new-config/index.html">Turning on Firefox tests for a new configuration</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/intermittent/index.html">Avoiding intermittent tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/testing-policy/index.html">Testing Policy</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/ci-configs/index.html">Configuration Changes</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/browser-chrome/index.html">Browser chrome mochitests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/chrome-tests/index.html">Chrome Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/marionette/index.html">Marionette</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/geckodriver/index.html">geckodriver</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/test-verification/index.html">Test Verification</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/webrender/index.html">WebRender Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/mochitest-plain/index.html">Mochitest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/xpcshell/index.html">XPCShell tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/tps/index.html">TPS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../web-platform/index.html">web-platform-tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../gtest/index.html">GTest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../tools/fuzzing/index.html">Fuzzing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../tools/sanitizer/index.html">Sanitizer</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/perfdocs/index.html">Performance Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../tools/code-coverage/index.html">Code coverage</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing-rust-code/index.html">Testing &amp; Debugging Rust Code</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Releases &amp; Updates</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../update-infrastructure/index.html">Mozilla Update Infrastructure</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../update-infrastructure/index.html#watershed-updates">Watershed Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../update-infrastructure/index.html#desupport-updates">Desupport Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../tools/update-verify/index.html">Update Verify</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Localization &amp; Internationalization</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../intl/index.html">Internationalization</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../l10n/index.html">Localization</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox and Python</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../mozbase/index.html">mozbase</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../python/index.html">Using third-party Python packages</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Metrics Collected in Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../metrics/index.html">Metrics</a></li>
+      </ul>
+     </div>
+    </div>
+   </nav>
+   <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+    <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+     <i data-toggle="wy-nav-top" class="fa fa-bars"></i> <a href="../../../../index.html">Firefox Source Docs</a>
+    </nav>
+    <div class="wy-nav-content">
+     <div class="rst-content">
+      <!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+      <div role="navigation" aria-label="Page navigation">
+       <ul class="wy-breadcrumbs">
+        <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+        <li class="breadcrumb-item"><a href="../../../index.html">Toolkit</a></li>
+        <li class="breadcrumb-item active">Picture-in-Picture</li>
+        <li class="wy-breadcrumbs-aside"><a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Developer+Infrastructure&amp;component=Firefox+Source+Docs%3A+Content&amp;short_desc=Documentation+issue+on+toolkit/components/pictureinpicture/pictureinpicture/index&amp;comment=URL+=+https://firefox-source-docs.mozilla.org/toolkit/components/pictureinpicture/pictureinpicture/index.html&amp;bug_file_loc=https://firefox-source-docs.mozilla.org/toolkit/components/pictureinpicture/pictureinpicture/index.html" rel="nofollow">Report an issue</a> / <a href="../../../../_sources/toolkit/components/pictureinpicture/pictureinpicture/index.rst.txt" rel="nofollow"> View page source</a></li>
+       </ul>
+       <hr>
+      </div>
+      <div role="main" class="document" itemscope itemtype="http://schema.org/Article">
+       <div itemprop="articleBody">
+        <section id="picture-in-picture">
+         <span id="components-pictureinpicture"></span>
+         <h1>Picture-in-Picture<a class="headerlink" href="#picture-in-picture" title="Link to this heading">?</a></h1>
+         <p>This component makes it possible for a <code class="docutils literal notranslate"><span class="pre">&lt;video&gt;</span></code> element on a web page to be played within an always-on-top video player.</p>
+         <p>This documentation covers the architecture and inner workings of both the mechanism that displays the <code class="docutils literal notranslate"><span class="pre">&lt;video&gt;</span></code> in the always-on-top video player, as well as the mechanism that displays the Picture-in-Picture toggle that overlays <code class="docutils literal notranslate"><span class="pre">&lt;video&gt;</span></code> elements, which is the primary method for launching the feature.</p>
+         <section id="high-level-overview">
+          <h2>High-level overview<a class="headerlink" href="#high-level-overview" title="Link to this heading">?</a></h2>
+          <p>The following diagram tries to illustrate the subcomponents, and how they interact with one another.</p><img alt="../../../../_images/PiP-diagram.svg" src="../../../../_images/PiP-diagram.svg">
+          <p>Let’s suppose that the user has loaded a document with a <code class="docutils literal notranslate"><span class="pre">&lt;video&gt;</span></code> in it, and they decide to open it in a Picture-in-Picture window. What happens?</p>
+          <p>First the <code class="docutils literal notranslate"><span class="pre">PictureInPictureToggleChild</span></code> component notices when <code class="docutils literal notranslate"><span class="pre">&lt;video&gt;</span></code> elements are added to the DOM, and monitors the mouse as it moves around the document. Once the mouse intersects a <code class="docutils literal notranslate"><span class="pre">&lt;video&gt;</span></code>, <code class="docutils literal notranslate"><span class="pre">PictureInPictureToggleChild</span></code> causes the Picture-in-Picture toggle to appear on that element.</p>
+          <p>If the user clicks on that toggle, then the <code class="docutils literal notranslate"><span class="pre">PictureInPictureToggleChild</span></code> dispatches a chrome-only <code class="docutils literal notranslate"><span class="pre">MozTogglePictureInPicture</span></code> event on the video, which is handled by the <code class="docutils literal notranslate"><span class="pre">PictureInPictureLauncherChild</span></code> actor for that document. The reason for the indirection via the event is that the media context menu can also trigger Picture-in-Picture by dispatching the same event on the video. Upon handling the event, the <code class="docutils literal notranslate"><span class="pre">PictureInPictureLauncherChild</span></code> actor then sends a <code class="docutils literal notranslate"><span class="pre">PictureInPicture:Request</span></code> message to the parent process. The parent process opens up the always-on-top player window, with a remote <code class="docutils literal notranslate"><span class="pre">&lt;xul:browser&gt;</span></code> that runs in the same content process as the original <code class="docutils literal notranslate"><span class="pre">&lt;video&gt;</span></code>. The parent then sends a message to the player window’s remote <code class="docutils literal notranslate"><span class="pre">&lt;xul:browser&gt;</span></code> loaded in the player window. A <code class="docutils literal notranslate"><span class="pre">PictureInPictureChild</span></code> actor is instantiated for the empty document loaded inside of the player window browser. This <code class="docutils literal notranslate"><span class="pre">PictureInPictureChild</span></code> actor constructs its own <code class="docutils literal notranslate"><span class="pre">&lt;video&gt;</span></code> element, and then tells Gecko to clone the frames from the original <code class="docutils literal notranslate"><span class="pre">&lt;video&gt;</span></code> to the newly created <code class="docutils literal notranslate"><span class="pre">&lt;video&gt;</span></code>.</p>
+          <p>At this point, the video is displaying in the Picture-in-Picture player window.</p>
+          <p>Next, we’ll discuss the individual subcomponents, and how they operate at a more detailed level.</p>
+         </section>
+         <section id="the-picture-in-picture-toggle">
+          <h2>The Picture-in-Picture toggle<a class="headerlink" href="#the-picture-in-picture-toggle" title="Link to this heading">?</a></h2>
+          <p>One of the primary challenges faced when developing this feature was the fact that, in practice, mouse events tend not to reach <code class="docutils literal notranslate"><span class="pre">&lt;video&gt;</span></code> elements. This is usually because the <code class="docutils literal notranslate"><span class="pre">&lt;video&gt;</span></code> element is contained within a hierarchy of other DOM elements that are capturing and handling any events that come down. This often occurs on sites that construct their own video controls. This is why we cannot simply use a <code class="docutils literal notranslate"><span class="pre">mouseover</span></code> event handler on the <code class="docutils literal notranslate"><span class="pre">&lt;video&gt;</span></code> UAWidget - on sites that do the event capturing, we’ll never receive those events and the toggle will not be accessible.</p>
+          <p>Other times, the problem is that the video is overlaid with a semi or fully transparent element which captures any mouse events that would normally be dispatched to the underlying <code class="docutils literal notranslate"><span class="pre">&lt;video&gt;</span></code>. This can occur, for example, on sites that want to display an overlay when the video is paused.</p>
+          <p>To work around this problem, the <cite>PictureInPictureToggleChild</cite> actor class samples the latest <code class="docutils literal notranslate"><span class="pre">mousemove</span></code> event every <code class="docutils literal notranslate"><span class="pre">MOUSEMOVE_PROCESSING_DELAY_MS</span></code> milliseconds, and then calls <code class="docutils literal notranslate"><span class="pre">nsIDOMWindowUtils.nodesFromRect</span></code> with the <code class="docutils literal notranslate"><span class="pre">aOnlyVisible</span></code> argument to get the full list of visible nodes that exist underneath a 1x1 rect positioned at the mouse cursor.</p>
+          <p>If a <code class="docutils literal notranslate"><span class="pre">&lt;video&gt;</span></code> is in that list, then we reach into its shadow root, and update some attributes to tell it to maybe show the toggle.</p>
+          <p>The underlying <code class="docutils literal notranslate"><span class="pre">UAWidget</span></code> for the video is defined in <code class="docutils literal notranslate"><span class="pre">videocontrols.js</span></code>, and ultimately chooses whether or not to display the toggle based on the following heuristics:</p>
+          <ol class="arabic simple">
+           <li>
+            <p>Is the video less than 45 seconds?</p></li>
+           <li>
+            <p>Is either the width or the height of the video less than 160px?</p></li>
+           <li>
+            <p>Is the video silent?</p></li>
+          </ol>
+          <p>If any of the above is true, the underlying <code class="docutils literal notranslate"><span class="pre">UAWidget</span></code> will hide the toggle, since it’s unlikely that the user will want to pop the video out into an always-on-top player window.</p>
+         </section>
+         <section id="video-registration">
+          <h2>Video registration<a class="headerlink" href="#video-registration" title="Link to this heading">?</a></h2>
+          <p>Sampling the latest <code class="docutils literal notranslate"><span class="pre">mousemove</span></code> event every <code class="docutils literal notranslate"><span class="pre">MOUSEMOVE_PROCESSING_DELAY_MS</span></code> is not free, computationally speaking, so we only do this if there are one or more <code class="docutils literal notranslate"><span class="pre">&lt;video&gt;</span></code> elements visible on the page. We use an <code class="docutils literal notranslate"><span class="pre">IntersectionObserver</span></code> to notice when there is a <code class="docutils literal notranslate"><span class="pre">&lt;video&gt;</span></code> within the viewport, and if there are 1 or more <code class="docutils literal notranslate"><span class="pre">&lt;video&gt;</span></code> elements visible, then we start sampling the <code class="docutils literal notranslate"><span class="pre">mousemove</span></code> event.</p>
+          <p>Videos are added to the <code class="docutils literal notranslate"><span class="pre">IntersectionObserver</span></code> when they are added to the DOM by listening for the <code class="docutils literal notranslate"><span class="pre">UAWidgetSetupOrChange</span></code> event. This is considered being “registered”.</p>
+         </section>
+         <section id="docstate">
+          <h2><code class="docutils literal notranslate"><span class="pre">docState</span></code><a class="headerlink" href="#docstate" title="Link to this heading">?</a></h2>
+          <p><code class="docutils literal notranslate"><span class="pre">PictureInPictureChild.sys.mjs</span></code> contains a <code class="docutils literal notranslate"><span class="pre">WeakMap</span></code> mapping <code class="docutils literal notranslate"><span class="pre">document</span></code>’s to various information that <code class="docutils literal notranslate"><span class="pre">PictureInPictureToggleChild</span></code> wants to retain for the lifetime of that <code class="docutils literal notranslate"><span class="pre">document</span></code>. For example, whether or not we’re in the midst of handling the user clicking down on their pointer device. Any state that needs to be remembered should be added to the <code class="docutils literal notranslate"><span class="pre">docState</span></code> <code class="docutils literal notranslate"><span class="pre">WeakMap</span></code>.</p>
+         </section>
+         <section id="clicking-on-the-toggle">
+          <h2>Clicking on the toggle<a class="headerlink" href="#clicking-on-the-toggle" title="Link to this heading">?</a></h2>
+          <p>If the user clicks on the Picture-in-Picture toggle, we don’t want the underlying webpage to know that this happened, since this could result in unexpected behaviour, like a page navigation (for example, if the <code class="docutils literal notranslate"><span class="pre">&lt;video&gt;</span></code> is a long-running advertisement that navigates upon click).</p>
+          <p>To accomplish this, we listen for all events fired on a mouse click on the root window during the capturing phase. This allows us to handle the events before they are dispatched to content.</p>
+          <p>The first event that is fired, <code class="docutils literal notranslate"><span class="pre">pointerdown</span></code>, is captured, and we check the <code class="docutils literal notranslate"><span class="pre">docState</span></code> to see whether or not we’re showing a toggle on any videos. If so, we check the coordinates of that toggle against the coordinates of the <code class="docutils literal notranslate"><span class="pre">pointerdown</span></code> event to determine if the user is clicking on the toggle. If so, we set a flag in the <code class="docutils literal notranslate"><span class="pre">docState</span></code> so that any subsequent events from the click (like <code class="docutils literal notranslate"><span class="pre">mousedown</span></code>, <code class="docutils literal notranslate"><span class="pre">mouseup</span></code>, <code class="docutils literal notranslate"><span class="pre">pointerup</span></code>, <code class="docutils literal notranslate"><span class="pre">click</span></code>) are captured and suppressed. If the <code class="docutils literal notranslate"><span class="pre">pointerdown</span></code> event didn’t occur within a toggle, we let the events pass through as normal.</p>
+          <p>If we determine that the click has occurred on the toggle, a <code class="docutils literal notranslate"><span class="pre">MozTogglePictureInPicture</span></code> event is dispatched on the underlying <code class="docutils literal notranslate"><span class="pre">&lt;video&gt;</span></code>. This event is handled by the separate <code class="docutils literal notranslate"><span class="pre">PictureInPictureLauncherChild</span></code> class.</p>
+         </section>
+         <section id="pictureinpicturelauncherchild">
+          <h2>PictureInPictureLauncherChild<a class="headerlink" href="#pictureinpicturelauncherchild" title="Link to this heading">?</a></h2>
+          <p>A small actor class whose only responsibility is to tell the parent process to open an always-on-top-window by sending a <code class="docutils literal notranslate"><span class="pre">PictureInPicture:Request</span></code> message to its parent actor.</p>
+          <p>Currently, this only occurs when a chrome-only <code class="docutils literal notranslate"><span class="pre">MozTogglePictureInPicture</span></code> event is dispatched by the <code class="docutils literal notranslate"><span class="pre">PictureInPictureToggleChild</span></code> when the user clicks the Picture-in-Picture toggle button or uses the context-menu.</p>
+         </section>
+         <section id="pictureinpicturechild">
+          <h2>PictureInPictureChild<a class="headerlink" href="#pictureinpicturechild" title="Link to this heading">?</a></h2>
+          <p>The <code class="docutils literal notranslate"><span class="pre">PictureInPictureChild</span></code> actor class will run in a content process containing a video, and is instantiated when the player window’s <cite>player.js</cite> script runs its initialization. A <code class="docutils literal notranslate"><span class="pre">PictureInPictureChild</span></code> maps an individual <code class="docutils literal notranslate"><span class="pre">&lt;video&gt;</span></code> to a player window instance. It creates an always-on-top window, and sets up a new <code class="docutils literal notranslate"><span class="pre">&lt;video&gt;</span></code> inside of this window to clone frames from another <code class="docutils literal notranslate"><span class="pre">&lt;video&gt;</span></code> (which will be in the same process, and have its own <code class="docutils literal notranslate"><span class="pre">PictureInPictureChild</span></code>). Creating this window also causes the new <code class="docutils literal notranslate"><span class="pre">PictureInPictureChild</span></code> to be created. This instance will monitor the originating <code class="docutils literal notranslate"><span class="pre">&lt;video&gt;</span></code> for changes, and to receive commands from the player window if the user wants to control the <code class="docutils literal notranslate"><span class="pre">&lt;video&gt;</span></code>.</p>
+         </section>
+         <section id="pictureinpicture-sys-mjs">
+          <h2>PictureInPicture.sys.mjs<a class="headerlink" href="#pictureinpicture-sys-mjs" title="Link to this heading">?</a></h2>
+          <p>This module runs in the parent process, and is also the scope where all <code class="docutils literal notranslate"><span class="pre">PictureInPictureParent</span></code> instances reside. <code class="docutils literal notranslate"><span class="pre">PictureInPicture.sys.mjs</span></code>’s job is to send and receive messages from <code class="docutils literal notranslate"><span class="pre">PictureInPictureChild</span></code> instances, and to react appropriately.</p>
+          <p>Critically, <code class="docutils literal notranslate"><span class="pre">PictureInPicture.sys.mjs</span></code> is responsible for opening up the always-on-top player window, and passing the relevant information about the <code class="docutils literal notranslate"><span class="pre">&lt;video&gt;</span></code> to be displayed to it.</p>
+         </section>
+         <section id="the-picture-in-picture-player-window">
+          <h2>The Picture-in-Picture player window<a class="headerlink" href="#the-picture-in-picture-player-window" title="Link to this heading">?</a></h2>
+          <p>The Picture-in-Picture player window is a chrome-privileged window that loads an XHTML document. That document contains a remote <code class="docutils literal notranslate"><span class="pre">&lt;browser&gt;</span></code> element which is repurposed during window initialization to load in the same content process as the originating <code class="docutils literal notranslate"><span class="pre">&lt;video&gt;</span></code>.</p>
+          <p>The player window is where the player controls are defined, like “Play” and “Pause”. When the user interacts with the player controls, a message is sent down to the appropriate <code class="docutils literal notranslate"><span class="pre">PictureInPictureChild</span></code> to call the appropriate method on the underlying <code class="docutils literal notranslate"><span class="pre">&lt;video&gt;</span></code> element in the originating tab.</p>
+         </section>
+         <section id="cloning-the-video-frames">
+          <h2>Cloning the video frames<a class="headerlink" href="#cloning-the-video-frames" title="Link to this heading">?</a></h2>
+          <p>While it appears as if the video is moving from the original <code class="docutils literal notranslate"><span class="pre">&lt;video&gt;</span></code> element to the player window, what’s actually occurring is that the video frames are being <em>cloned</em> to the player window <code class="docutils literal notranslate"><span class="pre">&lt;video&gt;</span></code> element. This cloning is done at the platform level using a privileged method on the <code class="docutils literal notranslate"><span class="pre">&lt;video&gt;</span></code> element: <code class="docutils literal notranslate"><span class="pre">cloneElementVisually</span></code>.</p>
+          <section id="cloneelementvisually">
+           <h3><code class="docutils literal notranslate"><span class="pre">cloneElementVisually</span></code><a class="headerlink" href="#cloneelementvisually" title="Link to this heading">?</a></h3>
+           <div class="highlight-js notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="nb">Promise</span><span class="o">&lt;</span><span class="ow">void</span><span class="o">&gt;</span><span class="w"> </span><span class="nx">video</span><span class="p">.</span><span class="nx">cloneElementVisually</span><span class="p">(</span><span class="nx">otherVideo</span><span class="p">);</span>
+</pre>
+            </div>
+           </div>
+           <p>This will clone the frames being decoded for <code class="docutils literal notranslate"><span class="pre">video</span></code> and display them on the <code class="docutils literal notranslate"><span class="pre">otherVideo</span></code> element as well. The returned Promise resolves once the cloning has successfully started.</p>
+          </section>
+          <section id="stopcloningelementvisually">
+           <h3><code class="docutils literal notranslate"><span class="pre">stopCloningElementVisually</span></code><a class="headerlink" href="#stopcloningelementvisually" title="Link to this heading">?</a></h3>
+           <div class="highlight-js notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="ow">void</span><span class="w"> </span><span class="nx">video</span><span class="p">.</span><span class="nx">stopCloningElementVisually</span><span class="p">();</span>
+</pre>
+            </div>
+           </div>
+           <p>If <code class="docutils literal notranslate"><span class="pre">video</span></code> is being cloned visually to another element, calling this method will stop the cloning.</p>
+          </section>
+          <section id="iscloningelementvisually">
+           <h3><code class="docutils literal notranslate"><span class="pre">isCloningElementVisually</span></code><a class="headerlink" href="#iscloningelementvisually" title="Link to this heading">?</a></h3>
+           <div class="highlight-js notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="kr">boolean</span><span class="w"> </span><span class="nx">video</span><span class="p">.</span><span class="nx">isCloningElementVisually</span><span class="p">;</span>
+</pre>
+            </div>
+           </div>
+           <p>A read-only value that returns <code class="docutils literal notranslate"><span class="pre">true</span></code> if <code class="docutils literal notranslate"><span class="pre">video</span></code> is being cloned visually.</p>
+          </section>
+         </section>
+         <section id="site-specific-video-wrappers">
+          <h2>Site-specific video wrappers<a class="headerlink" href="#site-specific-video-wrappers" title="Link to this heading">?</a></h2>
+          <p>A site-specific video wrapper allows for the creation of custom scripts that the Picture-in-Picture component can utilize when videos are loaded in specific domains. Currently, some uses of video wrappers include:</p>
+          <ul class="simple">
+           <li>
+            <p>Integration of captions and subtitles support on certain video streaming sites</p></li>
+           <li>
+            <p>Fixing inconsistent video behaviour when using Picture-in-Picture controls</p></li>
+           <li>
+            <p>Hiding the Picture-in-Picture toggle for videos on particular areas of a page, given a URL (rather than hiding the toggle for all videos on a page)</p></li>
+          </ul>
+          <section id="pictureinpicturechildvideowrapper-and-videowrapperscriptpath">
+           <h3><code class="docutils literal notranslate"><span class="pre">PictureInPictureChildVideoWrapper</span></code> and <code class="docutils literal notranslate"><span class="pre">videoWrapperScriptPath</span></code><a class="headerlink" href="#pictureinpicturechildvideowrapper-and-videowrapperscriptpath" title="Link to this heading">?</a></h3>
+           <p><code class="docutils literal notranslate"><span class="pre">PictureInPictureChildVideoWrapper</span></code> is a special class that represents a video wrapper. It is defined in <code class="docutils literal notranslate"><span class="pre">PictureInPictureChild.sys.mjs</span></code> and maps to a <code class="docutils literal notranslate"><span class="pre">videoWrapperScriptPath</span></code>, which is the path of the custom wrapper script to use. <code class="docutils literal notranslate"><span class="pre">videoWrapperScriptPath</span></code> is defined in <a class="reference external" href="https://searchfox.org/mozilla-central/source/browser/extensions/pictureinpicture/data/picture_in_picture_overrides.js">browser/extensions/pictureinpicture/data/picture_in_picture_overrides.js</a> for a domain, and custom wrapper scripts are defined in <a class="reference external" href="https://searchfox.org/mozilla-central/source/browser/extensions/pictureinpicture/video-wrappers">browser/extensions/pictureinpicture/video-wrappers</a>.</p>
+           <p>If a <code class="docutils literal notranslate"><span class="pre">videoWrapperScriptPath</span></code> is detected while initializing the Picture-in-Picture toggle or window, we immediately create a new instance of <code class="docutils literal notranslate"><span class="pre">PictureInPictureChildVideoWrapper</span></code> based on the given path, allowing us to run our custom scripts.</p>
+           <section id="api">
+            <h4>API<a class="headerlink" href="#api" title="Link to this heading">?</a></h4>
+            <p>See the full list of methods at <a class="reference external" href="#toolkit-actors-pictureinpicturechild-jsm">API References</a>.</p>
+           </section>
+           <section id="sandbox">
+            <h4>Sandbox<a class="headerlink" href="#sandbox" title="Link to this heading">?</a></h4>
+            <p>Performing video control operations on the originating video requires executing code in the browser content. For security reasons, we utilize a <em>sandbox</em> to isolate these operations and prevent direct access to <code class="docutils literal notranslate"><span class="pre">PictureInPictureChild</span></code>. In other words, we run content code within the sandbox itself. However, it is necessary to waive <a class="reference internal" href="../../../../dom/scriptSecurity/xray_vision.html#waiving-xray-vision"><span class="std std-ref">xray vision</span></a> so that we can execute the video control operations. This is done by reading the wrapper’s <code class="docutils literal notranslate"><span class="pre">.wrappedJSObject</span></code> property.</p>
+           </section>
+          </section>
+          <section id="adding-a-new-site-specific-video-wrapper">
+           <h3>Adding a new site-specific video wrapper<a class="headerlink" href="#adding-a-new-site-specific-video-wrapper" title="Link to this heading">?</a></h3>
+           <section id="creating-a-new-wrapper-script-file">
+            <h4>Creating a new wrapper script file<a class="headerlink" href="#creating-a-new-wrapper-script-file" title="Link to this heading">?</a></h4>
+            <p>Add a new JS file for the new video wrapper in <a class="reference external" href="https://searchfox.org/mozilla-central/source/browser/extensions/pictureinpicture/video-wrappers">browser/extensions/pictureinpicture/video-wrappers</a>. The file must meet several requirements to get the wrapper working.</p>
+            <p><strong>Script file requirements</strong>:</p>
+            <ul class="simple">
+             <li>
+              <p>Defined class <code class="docutils literal notranslate"><span class="pre">PictureInPictureVideoWrapper</span></code></p></li>
+             <li>
+              <p>Assigned <code class="docutils literal notranslate"><span class="pre">this.PictureInPictureVideoWrapper</span> <span class="pre">=</span> <span class="pre">PictureInPictureVideoWrapper</span></code></p></li>
+            </ul>
+            <p><strong>PictureInPictureVideoWrapper class requirements</strong>:</p>
+            <ul class="simple">
+             <li>
+              <p>Implementation of at least one overridable method (see <a class="reference internal" href="../../../actors/actors/picture-in-picture-child-video-wrapper-api.html#picture-in-picture-child-video-wrapper-api"><span class="std std-ref">PictureInPictureChildVideoWrapper Reference</span></a>)</p></li>
+            </ul>
+            <p><strong>Overriden method requirements</strong>:</p>
+            <ul class="simple">
+             <li>
+              <p>Return value with a type that corresponds to <code class="docutils literal notranslate"><span class="pre">validateRetVal</span></code> in <code class="docutils literal notranslate"><span class="pre">PictureInPictureChildVideoWrapper.#callWrapperMethod()</span></code></p></li>
+            </ul>
+            <p>Below is an example of a script file <code class="docutils literal notranslate"><span class="pre">mock-wrapper.js</span></code> that overrides an existing method <code class="docutils literal notranslate"><span class="pre">setMuted()</span></code> in <code class="docutils literal notranslate"><span class="pre">PictureInPictureChildVideoWrapper</span></code>:</p>
+            <div class="highlight-js notranslate">
+             <div class="highlight">
+              <pre><span></span><span class="c1">// sample file `mock-wrapper.js`</span>
+<span class="kd">class</span><span class="w"> </span><span class="nx">PictureInPictureVideoWrapper</span><span class="w"> </span><span class="p">{</span>
+<span class="w">   </span><span class="nx">setMuted</span><span class="p">(</span><span class="nx">video</span><span class="p">,</span><span class="w"> </span><span class="nx">shouldMute</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">video</span><span class="p">.</span><span class="nx">muted</span><span class="w"> </span><span class="o">!==</span><span class="w"> </span><span class="nx">shouldMute</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">         </span><span class="kd">let</span><span class="w"> </span><span class="nx">muteButton</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s2">"#player .mute-button"</span><span class="p">);</span>
+<span class="w">         </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">muteButton</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nx">muteButton</span><span class="p">.</span><span class="nx">click</span><span class="p">();</span>
+<span class="w">         </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nx">video</span><span class="p">.</span><span class="nx">muted</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">shouldMute</span><span class="p">;</span>
+<span class="w">         </span><span class="p">}</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">   </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">this</span><span class="p">.</span><span class="nx">PictureInPictureVideoWrapper</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">PictureInPictureVideoWrapper</span>
+</pre>
+             </div>
+            </div>
+            <div class="admonition note">
+             <p class="admonition-title">Note</p>
+             <p>If a new <code class="docutils literal notranslate"><span class="pre">PictureInPictureChildVideoWrapper</span></code> video control method is needed, see <a class="reference internal" href="#adding-a-new-video-control-method">Adding a new video control method</a>.</p>
+            </div>
+           </section>
+           <section id="declaring-videowrapperscriptpath">
+            <h4>Declaring <code class="docutils literal notranslate"><span class="pre">videoWrapperScriptPath</span></code><a class="headerlink" href="#declaring-videowrapperscriptpath" title="Link to this heading">?</a></h4>
+            <p>Declare a property <code class="docutils literal notranslate"><span class="pre">videoWrapperScriptPath</span></code> for the site at <a class="reference external" href="https://searchfox.org/mozilla-central/source/browser/extensions/pictureinpicture/data/picture_in_picture_overrides.js">browser/extensions/pictureinpicture/data/picture_in_picture_overrides.js</a>:</p>
+            <div class="highlight-js notranslate">
+             <div class="highlight">
+              <pre><span></span><span class="nx">someWebsite</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="s2">"https://*.somewebsite.com/*"</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">videoWrapperScriptPath</span><span class="o">:</span><span class="w"> </span><span class="s2">"video-wrappers/mock-wrapper.js"</span><span class="p">,</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="p">}</span>
+</pre>
+             </div>
+            </div>
+            <p>In this example, the URL pattern <code class="docutils literal notranslate"><span class="pre">https://*.somewebsite.com/*</span></code> is provided for a site named <code class="docutils literal notranslate"><span class="pre">someWebsite</span></code>. Picture-in-Picture checks for any overrides upon initialization, and it will load scripts specified by <code class="docutils literal notranslate"><span class="pre">videoWrapperScriptPath</span></code>. The scripts located at <code class="docutils literal notranslate"><span class="pre">video-wrappers/mock-wrapper.js</span></code> will therefore run whenever we view a video from a URL matching <code class="docutils literal notranslate"><span class="pre">somewebsite.com</span></code>.</p>
+           </section>
+           <section id="registering-the-new-wrapper-in-moz-build">
+            <h4>Registering the new wrapper in <code class="docutils literal notranslate"><span class="pre">moz.build</span></code><a class="headerlink" href="#registering-the-new-wrapper-in-moz-build" title="Link to this heading">?</a></h4>
+            <p>Any wrapper in the <cite>video-wrappers</cite> folder will be automatically included.</p>
+           </section>
+          </section>
+          <section id="adding-a-new-video-control-method">
+           <h3>Adding a new video control method<a class="headerlink" href="#adding-a-new-video-control-method" title="Link to this heading">?</a></h3>
+           <p>If none of the existing overridable methods in <code class="docutils literal notranslate"><span class="pre">PictureInPictureChildVideoWrapper</span></code> are applicable for a bug fix or feature enhancement, we can create a new one by calling <code class="docutils literal notranslate"><span class="pre">#callWrapperMethod()</span></code>. Below is an example of how we would define a new overridable method <code class="docutils literal notranslate"><span class="pre">setMuted()</span></code>:</p>
+           <div class="highlight-js notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="c1">// class PictureInPictureChildVideoWrapper in PictureInPictureChild.sys.mjs</span>
+<span class="nx">setMuted</span><span class="p">(</span><span class="nx">video</span><span class="p">,</span><span class="w"> </span><span class="nx">shouldMute</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="err">#</span><span class="nx">callWrapperMethod</span><span class="p">({</span>
+<span class="w">        </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s2">"setMuted"</span><span class="p">,</span>
+<span class="w">        </span><span class="nx">args</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="nx">video</span><span class="p">,</span><span class="w"> </span><span class="nx">shouldMute</span><span class="p">],</span>
+<span class="w">        </span><span class="nx">fallback</span><span class="o">:</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nx">video</span><span class="p">.</span><span class="nx">muted</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">shouldMute</span><span class="p">;</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="nx">validateRetVal</span><span class="o">:</span><span class="w"> </span><span class="nx">retVal</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">retVal</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">    </span><span class="p">});</span>
+<span class="p">}</span>
+</pre>
+            </div>
+           </div>
+           <p>The new method passes to <code class="docutils literal notranslate"><span class="pre">#callWrapperMethod()</span></code>:</p>
+           <ol class="arabic simple">
+            <li>
+             <p>The method name</p></li>
+            <li>
+             <p>The expected arguments that a wrapper script may use</p></li>
+            <li>
+             <p>A fallback function</p></li>
+            <li>
+             <p>A conditional expression that validates the return value</p></li>
+           </ol>
+           <p>The fallback function only executes if a wrapper script fails or if the method is not overriden. <code class="docutils literal notranslate"><span class="pre">validateRetVal</span></code> checks the type of the return value and ensures it matches the expected type. If there is no return value, simply validate if type is <code class="docutils literal notranslate"><span class="pre">null</span></code>.</p>
+           <div class="admonition note">
+            <p class="admonition-title">Note</p>
+            <p>Generic method names are preferred so that they can be used for any video wrapper. For example: instead of naming a method <code class="docutils literal notranslate"><span class="pre">updateCaptionsContainerForSiteA()</span></code>, use <code class="docutils literal notranslate"><span class="pre">updateCaptionsContainer()</span></code>.</p>
+           </div>
+           <section id="using-the-new-video-control-method">
+            <h4>Using the new video control method<a class="headerlink" href="#using-the-new-video-control-method" title="Link to this heading">?</a></h4>
+            <p>Once the new method is defined, it can be used throughout <code class="docutils literal notranslate"><span class="pre">PictureInPictureChild.sys.mjs</span></code>. In the current example, we call <code class="docutils literal notranslate"><span class="pre">PictureInPictureChildVideoWrapper.setMuted()</span></code> to mute or unmute a video. <code class="docutils literal notranslate"><span class="pre">this.videoWrapper</span></code> is an instance of <code class="docutils literal notranslate"><span class="pre">PictureInPictureChildVideoWrapper</span></code>:</p>
+            <div class="highlight-js notranslate">
+             <div class="highlight">
+              <pre><span></span><span class="c1">// class PictureInPictureChild in PictureInPictureChild.sys.mjs</span>
+<span class="nx">mute</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="nx">video</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">getWeakVideo</span><span class="p">();</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">video</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">videoWrapper</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="nx">videoWrapper</span><span class="p">.</span><span class="nx">setMuted</span><span class="p">(</span><span class="nx">video</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nx">unmute</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="nx">video</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">getWeakVideo</span><span class="p">();</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">video</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">videoWrapper</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="nx">videoWrapper</span><span class="p">.</span><span class="nx">setMuted</span><span class="p">(</span><span class="nx">video</span><span class="p">,</span><span class="w"> </span><span class="kc">false</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre>
+             </div>
+            </div>
+           </section>
+          </section>
+          <section id="testing-site-specific-video-wrappers">
+           <h3>Testing site-specific video wrappers<a class="headerlink" href="#testing-site-specific-video-wrappers" title="Link to this heading">?</a></h3>
+           <section id="automated-tests">
+            <h4>Automated Tests<a class="headerlink" href="#automated-tests" title="Link to this heading">?</a></h4>
+            <p>Automated tests for site specific wrappers are currently limited. New tests can be made in <a class="reference external" href="https://searchfox.org/mozilla-central/source/browser/extensions/pictureinpicture/tests/browser">browser/extensions/pictureinpicture/tests/browser</a> to ensure general functionality, but these are restricted to Firefox Nightly and do not test functionality on specific sites.</p>
+            <p>Some challenges with writing tests include:</p>
+            <ul class="simple">
+             <li>
+              <p>Accessing DRM content</p></li>
+             <li>
+              <p>Log-in credentials if a site requires a user account</p></li>
+             <li>
+              <p>Detecting modifications to a web page or video player that render a wrapper script obsolete</p></li>
+            </ul>
+           </section>
+           <section id="manual-tests">
+            <h4>Manual Tests<a class="headerlink" href="#manual-tests" title="Link to this heading">?</a></h4>
+            <p>The go-to approach right now is to test video wrappers manually, in tandem with reviews provided by the phabricator group <a class="reference external" href="https://phabricator.services.mozilla.com/project/profile/163/">#pip-reviewers</a>. Below are some questions that reviewers will consider:</p>
+            <ul class="simple">
+             <li>
+              <p>Does Picture-in-Picture crash or freeze?</p></li>
+             <li>
+              <p>Does the wrapper work on Windows, MacOS, and Linux?</p></li>
+             <li>
+              <p>Do Picture-in-Picture features work as expected? (Picture-in-Picture toggle, text tracks, video controls, etc.)</p></li>
+             <li>
+              <p>Do existing automated tests work as they should?</p></li>
+            </ul>
+            <div class="admonition warning">
+             <p class="admonition-title">Warning</p>
+             <p>DRM content may not load for all local Firefox builds. One possible solution is to test the video wrapper in a try build (ex. Linux). Depending on the changes made, we may also require the script to run under a temporary pref such as <code class="docutils literal notranslate"><span class="pre">media.videocontrols.picture-in-picture.WIP.someWebsiteWrapper</span></code> for the purpose of testing changes in Firefox Nightly.</p>
+            </div>
+           </section>
+          </section>
+         </section>
+         <section id="id3">
+          <h2>API References<a class="headerlink" href="#id3" title="Link to this heading">?</a></h2>
+          <section id="toolkit-components-pictureinpicture">
+           <h3><code class="docutils literal notranslate"><span class="pre">toolkit/components/pictureinpicture</span></code><a class="headerlink" href="#toolkit-components-pictureinpicture" title="Link to this heading">?</a></h3>
+           <div class="toctree-wrapper compound">
+            <ul>
+             <li class="toctree-l1"><a class="reference internal" href="picture-in-picture-api.html">PictureInPicture Reference</a></li>
+             <li class="toctree-l1"><a class="reference internal" href="player-api.html">Player Reference</a></li>
+            </ul>
+           </div>
+          </section>
+          <section id="toolkit-actors-pictureinpicturechild-sys-mjs">
+           <h3><code class="docutils literal notranslate"><span class="pre">toolkit/actors/PictureInPictureChild.sys.mjs</span></code><a class="headerlink" href="#toolkit-actors-pictureinpicturechild-sys-mjs" title="Link to this heading">?</a></h3>
+           <ul class="simple">
+            <li>
+             <p><a class="reference internal" href="../../../actors/actors/picture-in-picture-child-video-wrapper-api.html#picture-in-picture-child-video-wrapper-api"><span class="std std-ref">PictureInPictureChildVideoWrapper Reference</span></a></p></li>
+           </ul>
+          </section>
+         </section>
+        </section>
+       </div>
+      </div>
+      <footer>
+       <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../../messaging-system/docs/TriggerActionSchemas/index.html" class="btn btn-neutral float-left" title="Trigger Listeners" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a> <a href="picture-in-picture-api.html" class="btn btn-neutral float-right" title="PictureInPicture Reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+       </div>
+       <hr>
+       <div role="contentinfo">
+        <p></p>
+       </div> Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+      </footer>
+     </div>
+    </div>
+   </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ </body>
+</html>

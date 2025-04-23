@@ -1,0 +1,541 @@
+<!doctype html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Performance Testing in a Nutshell — Firefox Source Docs  documentation</title>
+  <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50">
+  <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094">
+  <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=fd3f3429">
+  <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b">
+  <link rel="stylesheet" type="text/css" href="../../_static/custom_theme.css?v=dc5ed815">
+  <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7">
+  <link rel="stylesheet" type="text/css" href="../../_static/sphinx_design.css?v=13ab780c">
+  <link rel="shortcut icon" href="../../_static/firefox.ico"><!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script src="../../_static/jquery.js?v=5d32c60e"></script>
+  <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+  <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+  <script src="../../_static/doctools.js?v=9a2dae69"></script>
+  <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+  <script src="../../_static/copybutton.js?v=30646c52"></script>
+  <script src="../../_static/design-tabs.js?v=36754332"></script>
+  <script src="../../_static/sphinx_design.js?v=be0337e6"></script>
+  <script src="../../_static/js/theme.js"></script>
+  <link rel="index" title="Index" href="../../genindex.html">
+  <link rel="search" title="Search" href="../../search.html">
+  <link rel="next" title="Raptor" href="raptor.html">
+  <link rel="prev" title="Performance Infrastructure" href="performance-infrastructure.html">
+ </head>
+ <body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+   <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <div class="wy-side-scroll">
+     <div class="wy-side-nav-search">
+      <a href="../../index.html" class="icon icon-home"> Firefox Source Docs <img src="../../_static/firefox-wordmark.svg" class="logo" alt="Logo"> </a><!-- -- This code is governed by the BSD license ---->
+      <div>
+       <h3>Quick search</h3>
+       <script>
+    (function () {
+      var cx = "dd12886298f75dbef";
+      var gcse = document.createElement("script");
+      gcse.async = true;
+      gcse.src = "https://cse.google.com/cse.js?cx=" + cx;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(gcse, s);
+    })();
+  </script><gcse:search></gcse:search>
+      </div>
+     </div>
+     <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+      <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../glossary/index.html">A Glossary of Common Terms</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../overview/index.html">A Quick Guide to Mozilla Applications</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../setup/index.html">Getting Set Up To Work On The Firefox Codebase</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Working On Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Working on Firefox</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../bug-mgmt/index.html">Bug Handling</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox User Guide</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../devtools-user/index.html">Firefox DevTools User Docs</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Source Code Documentation</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mots/index.html">Governance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../browser/index.html">Firefox Front-end</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../dom/index.html">DOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../editor/index.html">Editor</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../layout/index.html">Style system (CSS) &amp; Layout</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../gfx/index.html">Graphics</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../ipc/index.html">Processes, Threads and IPC</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../devtools/index.html">Firefox DevTools Contributor Docs</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../toolkit/index.html">Toolkit</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../js/index.html">SpiderMonkey</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../jsloader/index.html">JS Loader</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/geckoview/index.html">GeckoView</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/fenix/index.html">Fenix</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/focus-android/index.html">Focus for Android</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../dom/bindings/webidl/index.html">WebIDL</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../modules/libpref/index.html">libpref</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../networking/index.html">Networking</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../remote/index.html">Remote Protocols</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../services/index.html">Services</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../permissions/index.html">Permissions</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../uriloader/index.html">File Handling</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../widget/cocoa/index.html">Firefox on macOS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../widget/windows/index.html">Firefox on Windows</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../toolkit/components/ml/index.html">Firefox AI Runtime</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../accessible/index.html">Accessibility</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../media/index.html">Media Playback</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../code-quality/index.html">Code quality</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../writing-rust-code/index.html">Writing Rust Code</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../rust-components/index.html">Rust Components</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/profiler/index.html">Gecko Profiler</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../performance/index.html">Performance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../storage/index.html">Database bindings (SQLite, KV, …)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../xpcom/index.html">XPCOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../nspr/index.html">NSPR</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../security/nss/index.html">Network Security Services (NSS)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../content-security/index.html">Web Security Checks in Gecko</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">The Firefox Build System</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mach/index.html">Mach</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/try/index.html">Pushing to Try</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../build/buildsystem/index.html">Build System</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../taskcluster/index.html">Firefox CI and Taskgraph</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/moztreedocs/index.html">Managing Documentation</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mozbuild/vendor/index.html">Vendoring Third Party Components</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Testing &amp; Test Infrastructure</span></p>
+      <ul class="current">
+       <li class="toctree-l1"><a class="reference internal" href="../automated-testing/index.html">Automated Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../treeherder-try/index.html">Understanding Treeherder Results</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../sheriffed-intermittents/index.html">Sheriffed intermittent failures</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tests-for-new-config/index.html">Turning on Firefox tests for a new configuration</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../intermittent/index.html">Avoiding intermittent tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing-policy/index.html">Testing Policy</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../ci-configs/index.html">Configuration Changes</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../browser-chrome/index.html">Browser chrome mochitests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../chrome-tests/index.html">Chrome Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../marionette/index.html">Marionette</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../geckodriver/index.html">geckodriver</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../test-verification/index.html">Test Verification</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../webrender/index.html">WebRender Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mochitest-plain/index.html">Mochitest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../xpcshell/index.html">XPCShell tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tps/index.html">TPS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../web-platform/index.html">web-platform-tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../gtest/index.html">GTest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/fuzzing/index.html">Fuzzing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/sanitizer/index.html">Sanitizer</a></li>
+       <li class="toctree-l1 current"><a class="reference internal" href="index.html">Performance Testing</a>
+        <ul class="current">
+         <li class="toctree-l2"><a class="reference internal" href="DAMP.html">DAMP Performance Tests</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="IndexedDB.html">IndexedDB Performance Testing</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="awsy.html">AWSY</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="mach-try-perf.html">Mach Try Perf</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="mozperftest.html">Mozperftest</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="perf-sheriffing.html">Performance Sheriffing</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="perfcompare.html">PerfCompare</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="performance-infrastructure.html">Performance Infrastructure</a></li>
+         <li class="toctree-l2 current"><a class="current reference internal" href="#">Performance Testing in a Nutshell</a>
+          <ul>
+           <li class="toctree-l3"><a class="reference internal" href="#help-i-have-a-regression-what-do-i-do">Help! I have a regression. What do I do?</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#alert-resolution">Alert Resolution</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#alert-monitoring-and-the-regression-policy">Alert Monitoring, and the Regression Policy</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#perfherder-alerts-view">Perfherder Alerts View</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#running-performance-tests">Running Performance Tests</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#performance-comparisons">Performance Comparisons</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#using-the-firefox-profiler">Using the Firefox Profiler</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#side-by-side">Side-by-Side</a>
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="#generate-a-side-by-side-job">Generate a Side-by-Side Job</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#viewing-results">Viewing Results</a></li>
+            </ul></li>
+           <li class="toctree-l3"><a class="reference internal" href="#adding-performance-tests">Adding Performance Tests</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#additional-help">Additional Help</a></li>
+          </ul></li>
+         <li class="toctree-l2"><a class="reference internal" href="raptor.html">Raptor</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="talos.html">Talos</a></li>
+        </ul></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/code-coverage/index.html">Code coverage</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing-rust-code/index.html">Testing &amp; Debugging Rust Code</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Releases &amp; Updates</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html">Mozilla Update Infrastructure</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html#watershed-updates">Watershed Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html#desupport-updates">Desupport Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/update-verify/index.html">Update Verify</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Localization &amp; Internationalization</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../intl/index.html">Internationalization</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../l10n/index.html">Localization</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox and Python</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mozbase/index.html">mozbase</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../python/index.html">Using third-party Python packages</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Metrics Collected in Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../metrics/index.html">Metrics</a></li>
+      </ul>
+     </div>
+    </div>
+   </nav>
+   <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+    <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+     <i data-toggle="wy-nav-top" class="fa fa-bars"></i> <a href="../../index.html">Firefox Source Docs</a>
+    </nav>
+    <div class="wy-nav-content">
+     <div class="rst-content">
+      <!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+      <div role="navigation" aria-label="Page navigation">
+       <ul class="wy-breadcrumbs">
+        <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+        <li class="breadcrumb-item"><a href="index.html">Performance Testing</a></li>
+        <li class="breadcrumb-item active">Performance Testing in a Nutshell</li>
+        <li class="wy-breadcrumbs-aside"><a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Developer+Infrastructure&amp;component=Firefox+Source+Docs%3A+Content&amp;short_desc=Documentation+issue+on+testing/perfdocs/perftest-in-a-nutshell&amp;comment=URL+=+https://firefox-source-docs.mozilla.org/testing/perfdocs/perftest-in-a-nutshell.html&amp;bug_file_loc=https://firefox-source-docs.mozilla.org/testing/perfdocs/perftest-in-a-nutshell.html" rel="nofollow">Report an issue</a> / <a href="../../_sources/testing/perfdocs/perftest-in-a-nutshell.rst.txt" rel="nofollow"> View page source</a></li>
+       </ul>
+       <hr>
+      </div>
+      <div role="main" class="document" itemscope itemtype="http://schema.org/Article">
+       <div itemprop="articleBody">
+        <section id="performance-testing-in-a-nutshell">
+         <h1><a class="toc-backref" href="#id2" role="doc-backlink">Performance Testing in a Nutshell</a><a class="headerlink" href="#performance-testing-in-a-nutshell" title="Link to this heading">?</a></h1>
+         <nav class="contents" id="contents">
+          <p class="topic-title">Contents</p>
+          <ul class="simple">
+           <li>
+            <p><a class="reference internal" href="#performance-testing-in-a-nutshell" id="id2">Performance Testing in a Nutshell</a></p>
+            <ul>
+             <li>
+              <p><a class="reference internal" href="#help-i-have-a-regression-what-do-i-do" id="id3">Help! I have a regression. What do I do?</a></p></li>
+             <li>
+              <p><a class="reference internal" href="#alert-resolution" id="id4">Alert Resolution</a></p></li>
+             <li>
+              <p><a class="reference internal" href="#alert-monitoring-and-the-regression-policy" id="id5">Alert Monitoring, and the Regression Policy</a></p></li>
+             <li>
+              <p><a class="reference internal" href="#perfherder-alerts-view" id="id6">Perfherder Alerts View</a></p></li>
+             <li>
+              <p><a class="reference internal" href="#running-performance-tests" id="id7">Running Performance Tests</a></p></li>
+             <li>
+              <p><a class="reference internal" href="#performance-comparisons" id="id8">Performance Comparisons</a></p></li>
+             <li>
+              <p><a class="reference internal" href="#using-the-firefox-profiler" id="id9">Using the Firefox Profiler</a></p></li>
+             <li>
+              <p><a class="reference internal" href="#side-by-side" id="id10">Side-by-Side</a></p>
+              <ul>
+               <li>
+                <p><a class="reference internal" href="#generate-a-side-by-side-job" id="id11">Generate a Side-by-Side Job</a></p></li>
+               <li>
+                <p><a class="reference internal" href="#viewing-results" id="id12">Viewing Results</a></p></li>
+              </ul></li>
+             <li>
+              <p><a class="reference internal" href="#adding-performance-tests" id="id13">Adding Performance Tests</a></p></li>
+             <li>
+              <p><a class="reference internal" href="#additional-help" id="id14">Additional Help</a></p></li>
+            </ul></li>
+          </ul>
+         </nav>
+         <div class="admonition note">
+          <p class="admonition-title">Note</p>
+          <p>This page is still under construction, and is missing the videos.</p>
+         </div>
+         <p>This document provides all the information needed regarding the basics of performance testing our products. A set of videos, and instructions can be found to guide you across the various subjects related to performance testing. If you’re new to performance testing, starting from the first section would be the most helpful for you.</p>
+         <section id="help-i-have-a-regression-what-do-i-do">
+          <h2><a class="toc-backref" href="#id3" role="doc-backlink">Help! I have a regression. What do I do?</a><a class="headerlink" href="#help-i-have-a-regression-what-do-i-do" title="Link to this heading">?</a></h2>
+          <p>Most people will first be introduced to performance testing at Mozilla through a bug like this:</p>
+          <blockquote>
+           <div>
+            <a class="reference internal image-reference" href="../../_images/perf_alert_bug.png"><img alt="Performance Alert Bug" class="align-center" src="../../_images/perf_alert_bug.png" style="width: 834.75px; height: 531.75px;"></a>
+           </div>
+          </blockquote>
+          <p>The title of the bug will include the tests, and subtests that caused the largest change, the platform(s) the changes were detected on, and the date. It will also be prefixed with a range of the size (in percentage) of the changes. In the bug details, the bug which triggered the alert will also be found in the <code class="docutils literal notranslate"><span class="pre">Regressed</span> <span class="pre">by</span></code> field, and there will be a needinfo for the patch author.</p>
+          <p><strong>Bug overview and the first comment (aka comment 0):</strong></p>
+          <p>An alert summary table will always be found in the first comment (comment 0) of a performance regression bug, it provides all the information required to understand what regressed.</p>
+          <blockquote>
+           <div>
+            <a class="reference internal image-reference" href="../../_images/perf_alert_comment_zero.png"><img alt="Comment Zero from a Performance Alert Bug" class="align-center" src="../../_images/perf_alert_comment_zero.png" style="width: 837.75px; height: 357.0px;"></a>
+            <ul>
+             <li>
+              <p>In the first sentence of the alert, a link to the actual push/commit that caused it is provided.</p></li>
+             <li>
+              <p>Below that, a table that summarizes the regressions, and improvements is shown.</p></li>
+             <li>
+              <p>Each row in the table represents a detected regression or improvement.</p>
+              <blockquote>
+               <div>
+                <ul class="simple">
+                 <li>
+                  <p><code class="docutils literal notranslate"><span class="pre">Ratio</span></code>: Provides the size of the change, and links to a graph for the metric.</p></li>
+                 <li>
+                  <p><code class="docutils literal notranslate"><span class="pre">Test</span></code>: The name of the test, and metric that changed. It links to the documentation for the test.</p></li>
+                 <li>
+                  <p><code class="docutils literal notranslate"><span class="pre">Platform</span></code>: The name of the platform that the change was detected on.</p></li>
+                 <li>
+                  <p><code class="docutils literal notranslate"><span class="pre">Options</span></code>: Specify the conditions in which the test was run (e.g. cold, warm, bytecode-cached).</p></li>
+                 <li>
+                  <p><code class="docutils literal notranslate"><span class="pre">Absolute</span> <span class="pre">Values</span></code>: The absolute values of the change.</p></li>
+                 <li>
+                  <p><code class="docutils literal notranslate"><span class="pre">Performance</span> <span class="pre">Profiles</span></code>: Before, and after Gecko profiles of the test (this is not available for all test frameworks yet).</p></li>
+                </ul>
+               </div>
+              </blockquote></li>
+             <li>
+              <p>Below the table, an <code class="docutils literal notranslate"><span class="pre">alert</span> <span class="pre">summary</span></code> link can be found which provides a different view of this table, a full in-depth explanation of the alert summary link can be found here <a class="reference internal" href="#perfherder-alerts-view">Perfherder Alerts View</a>. Some additional debugging information such as <code class="docutils literal notranslate"><span class="pre">side-by-side</span></code> videos can be found here. It will also include any additional tests that triggered alerts after this bug was filed.</p></li>
+             <li>
+              <p>Then some information on what we expect from the patch author is provided regarding how long they have to respond to the alert before it gets backed out along with links to the guidelines for handling regressions.</p></li>
+             <li>
+              <p>Finally, a helpful command to run these tests on try is provided using <code class="docutils literal notranslate"><span class="pre">./mach</span> <span class="pre">try</span> <span class="pre">perf</span> <span class="pre">--alert</span> <span class="pre">&lt;ALERT-NUM&gt;</span></code>. <a class="reference internal" href="mach-try-perf.html#mach-try-perf"><span class="std std-ref">See here for more information about mach try perf</span></a>.</p></li>
+            </ul>
+           </div>
+          </blockquote>
+          <dl class="simple">
+           <dt>
+            <strong>From the alert summary comment, there are multiple things that could be verified:</strong>
+           </dt>
+           <dd>
+            <ul class="simple">
+             <li>
+              <p>Check the graphs to ensure that the regression/improvements are very visible.</p></li>
+             <li>
+              <p>Look at the alert summary to see if there are any available side-by-side videos to visualize.</p></li>
+             <li>
+              <p>Check the test description to see what the test is doing, as well as what the metrics that changed are measuring.</p></li>
+             <li>
+              <p>Compare the before/after performance profiles to see what might have changed. See the section on <a class="reference internal" href="#using-the-firefox-profiler">Using the Firefox Profiler</a> for more information on this.</p></li>
+            </ul>
+           </dd>
+          </dl>
+          <p>With all of the information found from those, there are two main things that can be done. The first is investigating the profiles (or using some other tools), and finding an issue that needs to be fixed. During the process of investigating and verifying the fix, it will become necessary to verify the fix by running the test. Proceed to the <a class="reference internal" href="#running-performance-tests">Running Performance Tests</a> section for information about this, and then the <a class="reference internal" href="#performance-comparisons">Performance Comparisons</a> section for help with doing performance comparisons in CI which is needed for verifying if a fix will resolve the alert.</p>
+          <p>The second is requesting a confirmation from the performance sheriff that the patch which caused the alert is definitely the correct one. This can happen when the metric is very noisy, and the change is small (in the area of 2-3%, our threshold of detection). The sheriff will conduct more retriggers on the test, and may ask some clarifying questions about the patch.</p>
+          <p>If there are any questions about the alert, or additional help is needed with debugging the alert feel free to needinfo the performance sheriff that reported the bug. The performance sheriff most suitable for adding a needinfo to can be identified on the regression bug via the user who added a <code class="docutils literal notranslate"><span class="pre">status-firefox</span> <span class="pre">[X]:</span> <span class="pre">---</span> <span class="pre">?</span> <span class="pre">affected</span></code> comment. In the future, this person <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1914174">will be identified in comment zero</a>.</p>
+         </section>
+         <section id="alert-resolution">
+          <h2><a class="toc-backref" href="#id4" role="doc-backlink">Alert Resolution</a><a class="headerlink" href="#alert-resolution" title="Link to this heading">?</a></h2>
+          <dl class="simple">
+           <dt>
+            <strong>There are 3 main resolutions for these alert bugs which depend on what you find in your investigations:</strong>
+           </dt>
+           <dd>
+            <ol class="arabic simple">
+             <li>
+              <p>A <code class="docutils literal notranslate"><span class="pre">WONTFIX</span></code> resolution which implies that a change was detected, but it won’t be fixed. It’s possible to have this resolution on a bug which produces regressions, but the improvements outweigh those regressions. Harness-related changes are often resolved this way as well since we consider them baseline changes.</p></li>
+             <li>
+              <p>An <code class="docutils literal notranslate"><span class="pre">INVALID</span></code> resolution which implies that the detection was invalid, and there wasn’t a change to performance metrics. These are generally rare, as performance sheriffs tend to invalidate the alerts before a bug is produced, and tend to be related to infrastructure changes or very noisy tests where a culprit can’t be determined accurately.</p></li>
+             <li>
+              <p>A <code class="docutils literal notranslate"><span class="pre">FIXED</span></code> resolution which implies that a change was detected, and a fix was made to resolve it.</p></li>
+            </ol>
+           </dd>
+          </dl>
+          <p>If it’s unclear when an alert may be resolved, it’s recommended to file a follow-up bug, and close the alert as <code class="docutils literal notranslate"><span class="pre">INCOMPLETE</span></code>. If this cannot be done, then it’s strongly recommended to reach out to the performance sheriff.</p>
+         </section>
+         <section id="alert-monitoring-and-the-regression-policy">
+          <h2><a class="toc-backref" href="#id5" role="doc-backlink">Alert Monitoring, and the Regression Policy</a><a class="headerlink" href="#alert-monitoring-and-the-regression-policy" title="Link to this heading">?</a></h2>
+          <p>There is a bugbot rule that monitors the activity of performance alerts. After 1 week of inactivity in the bug, a needinfo will be made for the regressor author to provide an update on any progress. This also notifies performance sheriffs.</p>
+          <p>If an alert is flagged in one of these notifications, and performance sheriffs find that there has been absolutely no activity on the alert since it was filed, then <strong>it will become a candidate for a backout</strong> in accordance with our <a class="reference external" href="https://www.mozilla.org/en-US/about/governance/policies/regressions/">regression policy</a>. Otherwise, if there has been some activity, we will simply request an update on any progress that has been made.</p>
+          <dl class="simple">
+           <dt>
+            The full process for performance sheriffs who handle these notifications proceeds as follows (<a class="reference external" href="perf-sheriffing.html#how-to-handle-inactive-alerts">more detailed information can be found here</a>):
+           </dt>
+           <dd>
+            <ol class="arabic simple">
+             <li>
+              <p>A daily email of alert bugs with no activity is obtained.</p></li>
+             <li>
+              <p>We check if the developer (regressor author) has previously responded to the bug.</p></li>
+             <li>
+              <p><strong>If they have responded in the past</strong>, we reach out to ask them to provide an update on the progress that has been made.</p></li>
+             <li>
+              <p><strong>If they have not responded in the past</strong>, we reach out to ask them to provide an update and mention that the regressor patch has been <strong>added as a candidate for backout</strong> due to lack of activity.</p></li>
+             <li>
+              <p>If the developer is not responding in either of these cases, after 24 hours, we reach out to their manager with similar messages.</p></li>
+             <li>
+              <p>If the patch is a candidate for backout, and neither the regressor author or their manager responds after 24 hours, we will request a backout of the regressor patch.</p></li>
+            </ol>
+           </dd>
+          </dl>
+          <p>Closing the bug with an <a class="reference internal" href="#alert-resolution">Alert Resolution</a> would be the ideal way to get the Bugbot to stop setting needinfos. Otherwise, it expects some activity there on a weekly basis if it’s being actively investigated. If the alert should be investigated some day, it could be closed as <code class="docutils literal notranslate"><span class="pre">INCOMPLETE</span></code> with a follow-up bug. There’s also a keyword you can add if you absolutely want to keep it open though. The keyword is <code class="docutils literal notranslate"><span class="pre">backlog-deferred</span></code> but please only use it sparingly otherwise these kinds of bugs often end up sitting around for years and then get closed when they can no longer be reproduced in our CI (due to machine, test, platform changes).</p>
+         </section>
+         <section id="perfherder-alerts-view">
+          <h2><a class="toc-backref" href="#id6" role="doc-backlink">Perfherder Alerts View</a><a class="headerlink" href="#perfherder-alerts-view" title="Link to this heading">?</a></h2>
+          <p>When you click on the “Alerts Summary” hyperlink it will take you to an alert summary table on Perfherder which looks like the following screenshot:</p>
+          <blockquote>
+           <div>
+            <a class="reference internal image-reference" href="../../_images/perfherder_alertsview.png"><img alt="Sample Perfherder Alert Summary" class="align-center" src="../../_images/perfherder_alertsview.png" style="width: 1786.5px; height: 436.5px;"></a>
+            <ul>
+             <li>
+              <p>The table has 1 performance metric per row that has either improved or regressed a metric.</p></li>
+             <li>
+              <p>From left to right, the columns and icons you need to be concerned about as a developer are:</p>
+              <blockquote>
+               <div>
+                <ul class="simple">
+                 <li>
+                  <p><code class="docutils literal notranslate"><span class="pre">Graph</span> <span class="pre">icon</span></code>: Takes you to a graph that shows the history of the metric.</p></li>
+                 <li>
+                  <p><code class="docutils literal notranslate"><span class="pre">Test</span></code>: A hyperlink to all the test settings, test owner, and their contact information. As well as the name of the subtest (in our case SpeedIndex, and loadtime).</p></li>
+                 <li>
+                  <p><code class="docutils literal notranslate"><span class="pre">Platform</span></code>: Platform of metric which regressed.</p></li>
+                 <li>
+                  <p><code class="docutils literal notranslate"><span class="pre">Debug</span> <span class="pre">Tools</span></code>: Tools available to help visualize and debug regressions.</p></li>
+                 <li>
+                  <p><code class="docutils literal notranslate"><span class="pre">Information</span></code>: Historical data distribution (multimodal data, ok, or n/a if not enough information is available).</p></li>
+                 <li>
+                  <p><code class="docutils literal notranslate"><span class="pre">Tags</span> <span class="pre">&amp;</span> <span class="pre">Options</span></code>: Specify the conditions in which the test was run (e.g. cold, warm, bytecode-cached).</p></li>
+                 <li>
+                  <p><code class="docutils literal notranslate"><span class="pre">Magnitude</span> <span class="pre">of</span> <span class="pre">Change</span></code>: How much the metric improved or regressed (green colour indicates an improvement and red indicates a regression).</p></li>
+                 <li>
+                  <p><code class="docutils literal notranslate"><span class="pre">Confidence</span></code>: Confidence value of metric (number is not out of 100) higher number means higher confidence.</p></li>
+                </ul>
+               </div>
+              </blockquote></li>
+            </ul>
+           </div>
+          </blockquote>
+         </section>
+         <section id="running-performance-tests">
+          <h2><a class="toc-backref" href="#id7" role="doc-backlink">Running Performance Tests</a><a class="headerlink" href="#running-performance-tests" title="Link to this heading">?</a></h2>
+          <p>Performance tests can either be run locally, or in CI using try runs. In general, it’s recommended to use try runs to verify the performance changes your patch produces (if any). This is because the hardware that we run tests on may not have the same characteristics as local machines so local testing may not always produce the same performance differences. Using try runs also allows you to use our performance comparison tooling such as <a class="reference external" href="https://treeherder.mozilla.org/perfherder/comparechooser">Compare View</a> and <a class="reference external" href="https://perf.compare/">PerfCompare</a>. See the <a class="reference internal" href="#performance-comparisons">Performance Comparisons</a> section for more information on that.</p>
+          <p>It’s still possible that a local test can reproduce a change found in CI though, but it’s not guaranteed. To run a test locally, refer to the harness documentation test lists, such as this one for <a class="reference external" href="raptor.html#raptor-tests">Raptor tests</a>. There are four main ways that you’ll find to run these tests:</p>
+          <blockquote>
+           <div>
+            <ul class="simple">
+             <li>
+              <p><code class="docutils literal notranslate"><span class="pre">./mach</span> <span class="pre">raptor</span></code> for <a class="reference internal" href="raptor.html#raptor"><span class="std std-ref">Raptor</span></a></p></li>
+             <li>
+              <p><code class="docutils literal notranslate"><span class="pre">./mach</span> <span class="pre">talos-test</span></code> for <a class="reference internal" href="talos.html#talos"><span class="std std-ref">Talos</span></a></p></li>
+             <li>
+              <p><code class="docutils literal notranslate"><span class="pre">./mach</span> <span class="pre">perftest</span></code> for <a class="reference internal" href="mozperftest.html#mozperftest"><span class="std std-ref">Mozperftest</span></a></p></li>
+             <li>
+              <p><code class="docutils literal notranslate"><span class="pre">./mach</span> <span class="pre">awsy</span></code> for <a class="reference internal" href="awsy.html#awsy"><span class="std std-ref">AWSY</span></a></p></li>
+            </ul>
+           </div>
+          </blockquote>
+          <p>It’s also possible to run all the alerting tests using <code class="docutils literal notranslate"><span class="pre">./mach</span> <span class="pre">perftest</span></code>. To do this, find the alert summary ID/number, then use it in the following command:</p>
+          <div class="highlight-default notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="o">./</span><span class="n">mach</span> <span class="n">perftest</span> <span class="o">&lt;</span><span class="n">ALERT</span><span class="o">-</span><span class="n">NUMBER</span><span class="o">&gt;</span>
+</pre>
+           </div>
+          </div>
+          <p>To run the exact same commands as what is run in CI, add the <code class="docutils literal notranslate"><span class="pre">--alert-exact</span></code> option. The test(s) to run can also be specified by using the <code class="docutils literal notranslate"><span class="pre">--alert-tests</span></code> option.</p>
+         </section>
+         <section id="performance-comparisons">
+          <h2><a class="toc-backref" href="#id8" role="doc-backlink">Performance Comparisons</a><a class="headerlink" href="#performance-comparisons" title="Link to this heading">?</a></h2>
+          <p>Comparing performance metrics across multiple try runs is an important step in the performance testing process. It’s used to ensure that changes don’t regress our metrics, to determine if a performance improvement is produced from a patch, and among other things, used to verify that a fix resolves a performance alert.</p>
+          <p>We currently use PerfCompare for comparing performance numbers. Landing on PerfCompare, two search comparison workflows are available: Compare with a base or Compare over time. Compare with a base allows up to three new revisions to compare against a base revision. Although talos is set at the default, any other testing framework or harness can also be selected before clicking the Compare button. <a class="reference internal" href="perfcompare.html#perfcompare"><span class="std std-ref">You can find more information about using PerfCompare here</span></a>.</p>
+          <blockquote>
+           <div>
+            <a class="reference internal image-reference" href="../../_images/perfcomparehomescreen.png"><img alt="PerfCompare Selection Interface for Revisions/Pushes to Compare" class="align-center" src="../../_images/perfcomparehomescreen.png" style="width: 919.0px; height: 835.0px;"></a>
+           </div>
+          </blockquote>
+          <p>Our old tool for comparing performance numbers, <a class="reference external" href="https://treeherder.mozilla.org/perfherder/comparechooser">Compare View</a>, will be replaced by PerfCompare early next year. The first interface that’s seen in that process is the following which is used to select two pushes (based on the revisions) to compare.</p>
+          <blockquote>
+           <div>
+            <a class="reference internal image-reference" href="../../_images/compare_view_selection.png"><img alt="Selection Interface for Revisions/Pushes to Compare" class="align-center" src="../../_images/compare_view_selection.png" style="width: 960.0px; height: 474.0px;"></a>
+           </div>
+          </blockquote>
+          <p>At the same time, the framework to compare will need to be selected. By default, the Talos framework is selected, but this can be changed after the Compare button is pressed.</p>
+          <p>After the compare button is pressed, a visualization of the comparisons is shown. More information on what the various columns in the comparison mean can be found in <a class="reference external" href="standard-workflow.html#compareview">this documentation</a>.</p>
+         </section>
+         <section id="using-the-firefox-profiler">
+          <h2><a class="toc-backref" href="#id9" role="doc-backlink">Using the Firefox Profiler</a><a class="headerlink" href="#using-the-firefox-profiler" title="Link to this heading">?</a></h2>
+          <p>The Firefox Profiler can be used to help with debugging performance issues in your code. <a class="reference external" href="https://profiler.firefox.com/docs/#/">See here for documentation</a> on how it can be used to better understand where the regressing code is, and what might be causing the regression. Profiles are provided on most alert summary bugs from before, and after the regression (see first section above).</p>
+          <p>If those are not provided in the alert summary, they can always be generated for a test by clicking on the graphs link (the percent-change ratio in an alert summary), selecting a dot in the graph from before or after a change, and clicking the job link. Then, once the job panel opens up in Treeherder, select <code class="docutils literal notranslate"><span class="pre">Generate</span> <span class="pre">performance</span> <span class="pre">profile</span></code> to start a new task that produces a performance profile. See the following graphic illustrating this process:</p>
+          <blockquote>
+           <div>
+            <a class="reference internal image-reference" href="../../_images/perf_alert_profile_from_graph.png"><img alt="Getting a Profile from an Alerting Test" class="align-center" src="../../_images/perf_alert_profile_from_graph.png" style="width: 1131.75px; height: 853.5px;"></a>
+           </div>
+          </blockquote>
+          <p>Additionally, you can also use the overflow menu and generate a profile:</p>
+          <blockquote>
+           <div>
+            <a class="reference internal image-reference" href="../../_images/create_profile_triple_dot.png"><img alt="Creating a profile through the overflow menu" class="align-center" src="../../_images/create_profile_triple_dot.png" style="width: 175.0px; height: 214.0px;"></a>
+           </div>
+          </blockquote>
+          <p>Most Raptor/Browsertime tests produce a performance profile by default at the end of their test run, but Talos, MozPerftest, and AWSY tests do not. As previously mentioned, for regression/improvement alerts, you can find a before and after link of these profiles in Comment 0:</p>
+          <blockquote>
+           <div>
+            <a class="reference internal image-reference" href="../../_images/perf_alert_comment_zero_before-after.png"><img alt="View before/after profiles from alerts" class="align-center" src="../../_images/perf_alert_comment_zero_before-after.png" style="width: 281.0px; height: 205.0px;"></a>
+           </div>
+          </blockquote>
+          <p>You can also find the profiles in the artifacts tab of the Raptor test:</p>
+          <blockquote>
+           <div>
+            <a class="reference internal image-reference" href="../../_images/raptor_extra_profiler_run.png"><img alt="Find extra profiler run profiles in treeherder task" class="align-center" src="../../_images/raptor_extra_profiler_run.png" style="width: 667.0px; height: 224.0px;"></a>
+           </div>
+          </blockquote>
+          <p>To generate the profiles locally, you can pass the flags <code class="docutils literal notranslate"><span class="pre">--extra-profiler-run</span></code> or <code class="docutils literal notranslate"><span class="pre">--gecko-profile</span></code> which repeat the test for an extra iteration with the profiler enabled, or run the test from the beginning with the profiler enabled for three iterations, respectively. It’s also possible to specify more configuration such as the profiled threads, the sampling interval or the profiler features being enabled. The parameters used in a profiling run can be copied directly from the <a class="reference external" href="about:profiling">about:profiling</a> page in any Nightly build: click the button at the top of the page, then pick the option “Copy parameters for performance tests”.</p>
+         </section>
+         <section id="side-by-side">
+          <h2><a class="toc-backref" href="#id10" role="doc-backlink">Side-by-Side</a><a class="headerlink" href="#side-by-side" title="Link to this heading">?</a></h2>
+          <p>Side-by-Side is a job that compares the visual metrics provided by Browsertime for two consecutive pushes. This job is only applicable to pageload-type jobs, and both revisions must run on the same platform with identical configuration.</p>
+          <section id="generate-a-side-by-side-job">
+           <h3><a class="toc-backref" href="#id11" role="doc-backlink">Generate a Side-by-Side Job</a><a class="headerlink" href="#generate-a-side-by-side-job" title="Link to this heading">?</a></h3>
+           <p>To generate a side-by-side job, follow these steps:</p>
+           <blockquote>
+            <div>
+             <ul class="simple">
+              <li>
+               <p>Select the desired job.</p></li>
+              <li>
+               <p>Navigate to the “Performance” tab and press the “Generate side-by-side” button.</p></li>
+             </ul><a class="reference internal image-reference" href="../../_images/generate-side-by-side.png"><img alt="Generate side-by-side task" class="align-center" src="../../_images/generate-side-by-side.png" style="width: 579.0px; height: 580.0px;"></a>
+            </div>
+           </blockquote>
+           <p>Once the process is initiated, a new job will appear in the format <cite>side-by-side-*job-name*</cite>.</p>
+          </section>
+          <section id="viewing-results">
+           <h3><a class="toc-backref" href="#id12" role="doc-backlink">Viewing Results</a><a class="headerlink" href="#viewing-results" title="Link to this heading">?</a></h3>
+           <p>Once the newly generated job is complete, you can view the result by selecting the job. This type of job provides two types of video (<a class="reference external" href="raptor-metrics.html#warm-pageload">cold and warm</a>). For each set, there are 2 viewing modes (normal and slow-motion).</p>
+           <p>Each video includes an annotated description containing the visual metrics provided by Browsertime.</p>
+          </section>
+         </section>
+         <section id="adding-performance-tests">
+          <h2><a class="toc-backref" href="#id13" role="doc-backlink">Adding Performance Tests</a><a class="headerlink" href="#adding-performance-tests" title="Link to this heading">?</a></h2>
+          <p>This section is under construction.</p>
+         </section>
+         <section id="additional-help">
+          <h2><a class="toc-backref" href="#id14" role="doc-backlink">Additional Help</a><a class="headerlink" href="#additional-help" title="Link to this heading">?</a></h2>
+          <p>Reach out to the Performance Testing, and Tooling team in the <a class="reference external" href="https://matrix.to/#/#perftest:mozilla.org">#perftest channel on Matrix</a>, or the #perf-help channel on Slack.</p>
+         </section>
+        </section>
+       </div>
+      </div>
+      <footer>
+       <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="performance-infrastructure.html" class="btn btn-neutral float-left" title="Performance Infrastructure" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a> <a href="raptor.html" class="btn btn-neutral float-right" title="Raptor" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+       </div>
+       <hr>
+       <div role="contentinfo">
+        <p></p>
+       </div> Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+      </footer>
+     </div>
+    </div>
+   </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ </body>
+</html>

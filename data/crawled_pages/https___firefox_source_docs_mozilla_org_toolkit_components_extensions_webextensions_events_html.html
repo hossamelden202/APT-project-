@@ -1,0 +1,769 @@
+<!doctype html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Implementing an event — Firefox Source Docs  documentation</title>
+  <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=fa44fd50">
+  <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=19f00094">
+  <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css?v=fd3f3429">
+  <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css?v=76b2166b">
+  <link rel="stylesheet" type="text/css" href="../../../../_static/custom_theme.css?v=dc5ed815">
+  <link rel="stylesheet" type="text/css" href="../../../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7">
+  <link rel="shortcut icon" href="../../../../_static/firefox.ico"><!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+  <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+  <script src="../../../../_static/documentation_options.js?v=5929fcd5"></script>
+  <script src="../../../../_static/doctools.js?v=9a2dae69"></script>
+  <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
+  <script src="../../../../_static/copybutton.js?v=30646c52"></script>
+  <script src="../../../../_static/design-tabs.js?v=36754332"></script>
+  <script src="../../../../_static/js/theme.js"></script>
+  <link rel="index" title="Index" href="../../../../genindex.html">
+  <link rel="search" title="Search" href="../../../../search.html">
+  <link rel="next" title="Implementing a manifest property" href="manifest.html">
+  <link rel="prev" title="Implementing a function" href="functions.html">
+ </head>
+ <body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+   <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <div class="wy-side-scroll">
+     <div class="wy-side-nav-search">
+      <a href="../../../../index.html" class="icon icon-home"> Firefox Source Docs <img src="../../../../_static/firefox-wordmark.svg" class="logo" alt="Logo"> </a><!-- -- This code is governed by the BSD license ---->
+      <div>
+       <h3>Quick search</h3>
+       <script>
+    (function () {
+      var cx = "dd12886298f75dbef";
+      var gcse = document.createElement("script");
+      gcse.async = true;
+      gcse.src = "https://cse.google.com/cse.js?cx=" + cx;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(gcse, s);
+    })();
+  </script><gcse:search></gcse:search>
+      </div>
+     </div>
+     <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+      <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../glossary/index.html">A Glossary of Common Terms</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../overview/index.html">A Quick Guide to Mozilla Applications</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../setup/index.html">Getting Set Up To Work On The Firefox Codebase</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Working On Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../contributing/index.html">Working on Firefox</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../bug-mgmt/index.html">Bug Handling</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox User Guide</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../devtools-user/index.html">Firefox DevTools User Docs</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Source Code Documentation</span></p>
+      <ul class="current">
+       <li class="toctree-l1"><a class="reference internal" href="../../../../mots/index.html">Governance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../browser/index.html">Firefox Front-end</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../dom/index.html">DOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../editor/index.html">Editor</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../layout/index.html">Style system (CSS) &amp; Layout</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../gfx/index.html">Graphics</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../ipc/index.html">Processes, Threads and IPC</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../devtools/index.html">Firefox DevTools Contributor Docs</a></li>
+       <li class="toctree-l1 current"><a class="reference internal" href="../../../index.html">Toolkit</a>
+        <ul class="current">
+         <li class="toctree-l2"><a class="reference internal" href="../../../javascript-logging.html">JavaScript Logging</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../mozapps/extensions/addon-manager/index.html">Add-on Manager</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../backgroundtasks/index.html">Background Task Mode</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../crashes/crash-manager/index.html">Crash Manager</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../crashreporter/crashreporter/index.html">Crash Reporter</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../internal-urls.html">Internal URLs</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../search/index.html">Search Service</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../normandy/normandy/index.html">Shield Recipe Client</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../nimbus/docs/index.html">Nimbus</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../messaging-system/docs/index.html">Messaging System Schemas</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../pictureinpicture/pictureinpicture/index.html">Picture-in-Picture</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../prompts/prompts/index.html">Prompts</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../modules/subprocess/toolkit_modules/subprocess/index.html">Subprocess Module</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../telemetry/index.html">Telemetry</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../glean/index.html">Firefox on Glean (FOG)</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../modules/toolkit_modules/index.html">Toolkit Modules</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../content/toolkit_widgets/index.html">Toolkit Widgets</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../resistfingerprinting/resistfingerprinting/index.html">Fingerprinting Resistance</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../url-classifier/url-classifier/index.html">URL Classifier</a></li>
+         <li class="toctree-l2 current"><a class="reference internal" href="index.html">WebExtensions API Development</a>
+          <ul class="current">
+           <li class="toctree-l3"><a class="reference internal" href="background.html">Background</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="basics.html">API Implementation Basics</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="schema.html">API Schemas</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="functions.html">Implementing a function</a></li>
+           <li class="toctree-l3 current"><a class="current reference internal" href="#">Implementing an event</a>
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="#declaring-an-event-in-the-api-schema">Declaring an event in the API schema</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#id1">Implementing an event</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#handling-extra-arguments-to-addlistener">Handling extra arguments to addListener()</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#handling-listener-return-values">Handling listener return values</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#implementing-an-event-in-the-child-process">Implementing an event in the child process</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#event-listeners-persistence">Event Listeners Persistence</a></li>
+            </ul></li>
+           <li class="toctree-l3"><a class="reference internal" href="manifest.html">Implementing a manifest property</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="lifecycle.html">Managing the Extension Lifecycle</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="incognito.html">Incognito Implementation</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="webidl_bindings.html">WebIDL WebExtensions API Bindings</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="webext-storage.html">How webext storage works</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="other.html">Utilities for implementing APIs</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="reference.html">WebExtensions Javascript Component Reference</a></li>
+          </ul></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../../extensions/spellcheck/index.html">Managing the built-in en-US dictionary</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../mozapps/update/docs/index.html">Application Update</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../antitracking/anti-tracking/index.html">Anti-Tracking</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../translations/index.html">Translations</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../sessionstore/index.html">Session Store</a></li>
+        </ul></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../js/index.html">SpiderMonkey</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../jsloader/index.html">JS Loader</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../mobile/android/geckoview/index.html">GeckoView</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../mobile/android/fenix/index.html">Fenix</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../mobile/android/focus-android/index.html">Focus for Android</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../dom/bindings/webidl/index.html">WebIDL</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../modules/libpref/index.html">libpref</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../networking/index.html">Networking</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../remote/index.html">Remote Protocols</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../services/index.html">Services</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../permissions/index.html">Permissions</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../uriloader/index.html">File Handling</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../widget/cocoa/index.html">Firefox on macOS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../widget/windows/index.html">Firefox on Windows</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../ml/index.html">Firefox AI Runtime</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../accessible/index.html">Accessibility</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../media/index.html">Media Playback</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../code-quality/index.html">Code quality</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../writing-rust-code/index.html">Writing Rust Code</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../rust-components/index.html">Rust Components</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../tools/profiler/index.html">Gecko Profiler</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../performance/index.html">Performance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../storage/index.html">Database bindings (SQLite, KV, …)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../xpcom/index.html">XPCOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../nspr/index.html">NSPR</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../security/nss/index.html">Network Security Services (NSS)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../content-security/index.html">Web Security Checks in Gecko</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">The Firefox Build System</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../mach/index.html">Mach</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../tools/try/index.html">Pushing to Try</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../build/buildsystem/index.html">Build System</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../taskcluster/index.html">Firefox CI and Taskgraph</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../tools/moztreedocs/index.html">Managing Documentation</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../mozbuild/vendor/index.html">Vendoring Third Party Components</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Testing &amp; Test Infrastructure</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/automated-testing/index.html">Automated Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/treeherder-try/index.html">Understanding Treeherder Results</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/sheriffed-intermittents/index.html">Sheriffed intermittent failures</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/tests-for-new-config/index.html">Turning on Firefox tests for a new configuration</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/intermittent/index.html">Avoiding intermittent tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/testing-policy/index.html">Testing Policy</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/ci-configs/index.html">Configuration Changes</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/browser-chrome/index.html">Browser chrome mochitests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/chrome-tests/index.html">Chrome Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/marionette/index.html">Marionette</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/geckodriver/index.html">geckodriver</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/test-verification/index.html">Test Verification</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/webrender/index.html">WebRender Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/mochitest-plain/index.html">Mochitest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/xpcshell/index.html">XPCShell tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/tps/index.html">TPS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../web-platform/index.html">web-platform-tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../gtest/index.html">GTest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../tools/fuzzing/index.html">Fuzzing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../tools/sanitizer/index.html">Sanitizer</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/perfdocs/index.html">Performance Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../tools/code-coverage/index.html">Code coverage</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing-rust-code/index.html">Testing &amp; Debugging Rust Code</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Releases &amp; Updates</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../update-infrastructure/index.html">Mozilla Update Infrastructure</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../update-infrastructure/index.html#watershed-updates">Watershed Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../update-infrastructure/index.html#desupport-updates">Desupport Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../tools/update-verify/index.html">Update Verify</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Localization &amp; Internationalization</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../intl/index.html">Internationalization</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../l10n/index.html">Localization</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox and Python</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../mozbase/index.html">mozbase</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../python/index.html">Using third-party Python packages</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Metrics Collected in Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../metrics/index.html">Metrics</a></li>
+      </ul>
+     </div>
+    </div>
+   </nav>
+   <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+    <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+     <i data-toggle="wy-nav-top" class="fa fa-bars"></i> <a href="../../../../index.html">Firefox Source Docs</a>
+    </nav>
+    <div class="wy-nav-content">
+     <div class="rst-content">
+      <!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+      <div role="navigation" aria-label="Page navigation">
+       <ul class="wy-breadcrumbs">
+        <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+        <li class="breadcrumb-item"><a href="../../../index.html">Toolkit</a></li>
+        <li class="breadcrumb-item"><a href="index.html">WebExtensions API Development</a></li>
+        <li class="breadcrumb-item active">Implementing an event</li>
+        <li class="wy-breadcrumbs-aside"><a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Developer+Infrastructure&amp;component=Firefox+Source+Docs%3A+Content&amp;short_desc=Documentation+issue+on+toolkit/components/extensions/webextensions/events&amp;comment=URL+=+https://firefox-source-docs.mozilla.org/toolkit/components/extensions/webextensions/events.html&amp;bug_file_loc=https://firefox-source-docs.mozilla.org/toolkit/components/extensions/webextensions/events.html" rel="nofollow">Report an issue</a> / <a href="../../../../_sources/toolkit/components/extensions/webextensions/events.rst.txt" rel="nofollow"> View page source</a></li>
+       </ul>
+       <hr>
+      </div>
+      <div role="main" class="document" itemscope itemtype="http://schema.org/Article">
+       <div itemprop="articleBody">
+        <section id="implementing-an-event">
+         <h1>Implementing an event<a class="headerlink" href="#implementing-an-event" title="Link to this heading">?</a></h1>
+         <p>Like a function, an event requires a definition in the schema and an implementation in Javascript inside an instance of ExtensionAPI.</p>
+         <section id="declaring-an-event-in-the-api-schema">
+          <h2>Declaring an event in the API schema<a class="headerlink" href="#declaring-an-event-in-the-api-schema" title="Link to this heading">?</a></h2>
+          <p>The definition for a simple event looks like this:</p>
+          <div class="highlight-json notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="p">[</span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"namespace"</span><span class="p">:</span><span class="w"> </span><span class="s2">"myapi"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"events"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"onSomething"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"function"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Description of the event"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"parameters"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">          </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"param1"</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Description of the first callback parameter"</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"number"</span>
+<span class="w">          </span><span class="p">}</span>
+<span class="w">        </span><span class="p">]</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">]</span>
+</pre>
+           </div>
+          </div>
+          <p>This fragment defines an event that is used from an extension with code such as:</p>
+          <div class="highlight-js notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="nx">browser</span><span class="p">.</span><span class="nx">myapi</span><span class="p">.</span><span class="nx">onSomething</span><span class="p">.</span><span class="nx">addListener</span><span class="p">(</span><span class="nx">param1</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="sb">`Something happened: </span><span class="si">${</span><span class="nx">param1</span><span class="si">}</span><span class="sb">`</span><span class="p">);</span>
+<span class="p">});</span>
+</pre>
+           </div>
+          </div>
+          <p>Note that the schema syntax looks similar to that for a function, but for an event, the <code class="docutils literal notranslate"><span class="pre">parameters</span></code> property specifies the arguments that will be passed to a listener.</p>
+         </section>
+         <section id="id1">
+          <h2>Implementing an event<a class="headerlink" href="#id1" title="Link to this heading">?</a></h2>
+          <p>Just like with functions, defining an event in the schema causes wrappers to be automatically created and exposed to an extensions’ appropriate Javascript contexts. An event appears to an extension as an object with three standard function properties: <code class="docutils literal notranslate"><span class="pre">addListener()</span></code>, <code class="docutils literal notranslate"><span class="pre">removeListener()</span></code>, and <code class="docutils literal notranslate"><span class="pre">hasListener()</span></code>. Also like functions, if an API defines an event but does not implement it in a child process, the wrapper in the child process effectively proxies these calls to the implementation in the main process.</p>
+          <p>A helper class called <a class="reference external" href="reference.html#eventmanager-class">EventManager</a> makes implementing events relatively simple. A simple event implementation looks like:</p>
+          <div class="highlight-js notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="k">this</span><span class="p">.</span><span class="nx">myapi</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kd">class</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nx">ExtensionAPI</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">getAPI</span><span class="p">(</span><span class="nx">context</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nx">myapi</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">onSomething</span><span class="o">:</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">EventManager</span><span class="p">({</span>
+<span class="w">          </span><span class="nx">context</span><span class="p">,</span>
+<span class="w">          </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s2">"myapi.onSomething"</span><span class="p">,</span>
+<span class="w">          </span><span class="nx">register</span><span class="o">:</span><span class="w"> </span><span class="nx">fire</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="kd">const</span><span class="w"> </span><span class="nx">callback</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">value</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">              </span><span class="nx">fire</span><span class="p">.</span><span class="k">async</span><span class="p">(</span><span class="nx">value</span><span class="p">);</span>
+<span class="w">            </span><span class="p">};</span>
+<span class="w">            </span><span class="nx">RegisterSomeInternalCallback</span><span class="p">(</span><span class="nx">callback</span><span class="p">);</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">              </span><span class="nx">UnregisterInternalCallback</span><span class="p">(</span><span class="nx">callback</span><span class="p">);</span>
+<span class="w">            </span><span class="p">};</span>
+<span class="w">          </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}).</span><span class="nx">api</span><span class="p">(),</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre>
+           </div>
+          </div>
+          <p>The <code class="docutils literal notranslate"><span class="pre">EventManager</span></code> class is usually just used directly as in this example. The first argument to the constructor is an <code class="docutils literal notranslate"><span class="pre">ExtensionContext</span></code> instance, typically just the object passed to the API’s <code class="docutils literal notranslate"><span class="pre">getAPI()</span></code> function. The second argument is a name, it is used only for debugging. The third argument is the important piece, it is a function that is called the first time a listener is added for this event. This function is passed an object (<code class="docutils literal notranslate"><span class="pre">fire</span></code> in the example) that is used to invoke the extension’s listener whenever the event occurs. The <code class="docutils literal notranslate"><span class="pre">fire</span></code> object has several different methods for invoking listeners, but for events implemented in the main process, the only valid method is <code class="docutils literal notranslate"><span class="pre">async()</span></code> which executes the listener asynchronously.</p>
+          <p>The event setup function (the function passed to the <code class="docutils literal notranslate"><span class="pre">EventManager</span></code> constructor) must return a cleanup function, which will be called when the listener is removed either explicitly by the extension by calling <code class="docutils literal notranslate"><span class="pre">removeListener()</span></code> or implicitly when the extension Javascript context from which the listener was added is destroyed.</p>
+          <p>In this example, <code class="docutils literal notranslate"><span class="pre">RegisterSomeInternalCallback()</span></code> and <code class="docutils literal notranslate"><span class="pre">UnregisterInternalCallback()</span></code> represent methods for listening for some internal browser event from chrome privileged code. This is typically something like adding an observer using <code class="docutils literal notranslate"><span class="pre">Services.obs</span></code> or attaching a listener to an <code class="docutils literal notranslate"><span class="pre">EventEmitter</span></code>.</p>
+          <p>After constructing an instance of <code class="docutils literal notranslate"><span class="pre">EventManager</span></code>, its <code class="docutils literal notranslate"><span class="pre">api()</span></code> method returns an object with with <code class="docutils literal notranslate"><span class="pre">addListener()</span></code>, <code class="docutils literal notranslate"><span class="pre">removeListener()</span></code>, and <code class="docutils literal notranslate"><span class="pre">hasListener()</span></code> methods. This is the standard extension event interface, this object is suitable for returning from the extension’s <code class="docutils literal notranslate"><span class="pre">getAPI()</span></code> method as in the example above.</p>
+         </section>
+         <section id="handling-extra-arguments-to-addlistener">
+          <h2>Handling extra arguments to addListener()<a class="headerlink" href="#handling-extra-arguments-to-addlistener" title="Link to this heading">?</a></h2>
+          <p>The standard <code class="docutils literal notranslate"><span class="pre">addListener()</span></code> method for events may accept optional addition parameters to allow extra information to be passed when registering an event listener. One common application of this parameter is for filtering, so that extensions that only care about a small subset of the instances of some event can avoid the overhead of receiving the ones they don’t care about.</p>
+          <p>Extra parameters to <code class="docutils literal notranslate"><span class="pre">addListener()</span></code> are defined in the schema with the the <code class="docutils literal notranslate"><span class="pre">extraParameters</span></code> property. For example:</p>
+          <div class="highlight-json notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="p">[</span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"namespace"</span><span class="p">:</span><span class="w"> </span><span class="s2">"myapi"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"events"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"onSomething"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"function"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Description of the event"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"parameters"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">          </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"param1"</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Description of the first callback parameter"</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"number"</span>
+<span class="w">          </span><span class="p">}</span>
+<span class="w">        </span><span class="p">],</span>
+<span class="w">        </span><span class="nt">"extraParameters"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">          </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"minValue"</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Only call the listener for values of param1 at least as large as this value."</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"number"</span>
+<span class="w">          </span><span class="p">}</span>
+<span class="w">        </span><span class="p">]</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">]</span>
+</pre>
+           </div>
+          </div>
+          <p>Extra parameters defined in this way are passed to the event setup function (the last parameter to the <code class="docutils literal notranslate"><span class="pre">EventManager</span></code> constructor. For example, extending our example above:</p>
+          <div class="highlight-js notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="k">this</span><span class="p">.</span><span class="nx">myapi</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kd">class</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nx">ExtensionAPI</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">getAPI</span><span class="p">(</span><span class="nx">context</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nx">myapi</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">onSomething</span><span class="o">:</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">EventManager</span><span class="p">({</span>
+<span class="w">          </span><span class="nx">context</span><span class="p">,</span>
+<span class="w">          </span><span class="nx">module</span><span class="o">:</span><span class="w"> </span><span class="s2">"myapi"</span><span class="p">,</span>
+<span class="w">          </span><span class="nx">event</span><span class="o">:</span><span class="w"> </span><span class="s2">"onSomething"</span><span class="p">,</span>
+<span class="w">          </span><span class="nx">register</span><span class="o">:</span><span class="w"> </span><span class="p">(</span><span class="nx">fire</span><span class="p">,</span><span class="w"> </span><span class="nx">minValue</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="kd">const</span><span class="w"> </span><span class="nx">callback</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">value</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">              </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">value</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="nx">minValue</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="nx">fire</span><span class="p">.</span><span class="k">async</span><span class="p">(</span><span class="nx">value</span><span class="p">);</span>
+<span class="w">              </span><span class="p">}</span>
+<span class="w">            </span><span class="p">};</span>
+<span class="w">            </span><span class="nx">RegisterSomeInternalCallback</span><span class="p">(</span><span class="nx">callback</span><span class="p">);</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">              </span><span class="nx">UnregisterInternalCallback</span><span class="p">(</span><span class="nx">callback</span><span class="p">);</span>
+<span class="w">            </span><span class="p">};</span>
+<span class="w">          </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}).</span><span class="nx">api</span><span class="p">()</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre>
+           </div>
+          </div>
+         </section>
+         <section id="handling-listener-return-values">
+          <h2>Handling listener return values<a class="headerlink" href="#handling-listener-return-values" title="Link to this heading">?</a></h2>
+          <p>Some event APIs allow extensions to affect event handling in some way by returning values from event listeners that are processed by the API. This can be defined in the schema with the <code class="docutils literal notranslate"><span class="pre">returns</span></code> property:</p>
+          <div class="highlight-json notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="p">[</span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"namespace"</span><span class="p">:</span><span class="w"> </span><span class="s2">"myapi"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"events"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"onSomething"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"function"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Description of the event"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"parameters"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">          </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"param1"</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Description of the first callback parameter"</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"number"</span>
+<span class="w">          </span><span class="p">}</span>
+<span class="w">        </span><span class="p">],</span>
+<span class="w">        </span><span class="nt">"returns"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">          </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Description of how the listener return value is processed."</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">]</span>
+</pre>
+           </div>
+          </div>
+          <p>And the implementation of the event uses the return value from <code class="docutils literal notranslate"><span class="pre">fire.async()</span></code> which is a Promise that resolves to the listener’s return value:</p>
+          <div class="highlight-js notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="k">this</span><span class="p">.</span><span class="nx">myapi</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kd">class</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nx">ExtensionAPI</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">getAPI</span><span class="p">(</span><span class="nx">context</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nx">myapi</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">onSomething</span><span class="o">:</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">EventManager</span><span class="p">({</span>
+<span class="w">          </span><span class="nx">context</span><span class="p">,</span>
+<span class="w">          </span><span class="nx">module</span><span class="o">:</span><span class="w"> </span><span class="s2">"myapi"</span><span class="p">,</span>
+<span class="w">          </span><span class="nx">event</span><span class="o">:</span><span class="w"> </span><span class="s2">"onSomething"</span><span class="p">,</span>
+<span class="w">          </span><span class="nx">register</span><span class="o">:</span><span class="w"> </span><span class="nx">fire</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="kd">const</span><span class="w"> </span><span class="nx">callback</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">async</span><span class="w"> </span><span class="p">(</span><span class="nx">value</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">              </span><span class="kd">let</span><span class="w"> </span><span class="nx">rv</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">fire</span><span class="p">.</span><span class="k">async</span><span class="p">(</span><span class="nx">value</span><span class="p">);</span>
+<span class="w">              </span><span class="nx">log</span><span class="p">(</span><span class="sb">`The onSomething listener returned the string </span><span class="si">${</span><span class="nx">rv</span><span class="si">}</span><span class="sb">`</span><span class="p">);</span>
+<span class="w">            </span><span class="p">};</span>
+<span class="w">            </span><span class="nx">RegisterSomeInternalCallback</span><span class="p">(</span><span class="nx">callback</span><span class="p">);</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">              </span><span class="nx">UnregisterInternalCallback</span><span class="p">(</span><span class="nx">callback</span><span class="p">);</span>
+<span class="w">            </span><span class="p">};</span>
+<span class="w">          </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}).</span><span class="nx">api</span><span class="p">()</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre>
+           </div>
+          </div>
+          <p>Note that the schema <code class="docutils literal notranslate"><span class="pre">returns</span></code> definition is optional and serves only for documentation. That is, <code class="docutils literal notranslate"><span class="pre">fire.async()</span></code> always returns a Promise that resolves to the listener return value, the implementation of an event can just ignore this Promise if it doesn’t care about the return value.</p>
+         </section>
+         <section id="implementing-an-event-in-the-child-process">
+          <h2>Implementing an event in the child process<a class="headerlink" href="#implementing-an-event-in-the-child-process" title="Link to this heading">?</a></h2>
+          <p>The reasons for implementing events in the child process are similar to the reasons for implementing functions in the child process:</p>
+          <ul class="simple">
+           <li>
+            <p>Listeners for the event return a value that the API implementation must act on synchronously.</p></li>
+           <li>
+            <p>Either <code class="docutils literal notranslate"><span class="pre">addListener()</span></code> or the listener function has one or more parameters of a type that cannot be sent between processes.</p></li>
+           <li>
+            <p>The implementation of the event interacts with code that is only accessible from a child process.</p></li>
+           <li>
+            <p>The event can be implemented substantially more efficiently in a child process.</p></li>
+          </ul>
+          <p>The process for implementing an event in the child process is the same as for functions – simply implement the event in an ExtensionAPI subclass that is loaded in a child process. And just as a function in a child process can call a function in the main process with <cite>callParentAsyncFunction()</cite>, events in a child process may subscribe to events implemented in the main process with a similar <cite>getParentEvent()</cite>. For example, the automatically generated event proxy in a child process could be written explicitly as:</p>
+          <div class="highlight-js notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="k">this</span><span class="p">.</span><span class="nx">myapi</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kd">class</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nx">ExtensionAPI</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">getAPI</span><span class="p">(</span><span class="nx">context</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nx">myapi</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">onSomething</span><span class="o">:</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">EventManager</span><span class="p">(</span>
+<span class="w">          </span><span class="nx">context</span><span class="p">,</span>
+<span class="w">          </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s2">"myapi.onSomething"</span><span class="p">,</span>
+<span class="w">          </span><span class="nx">register</span><span class="o">:</span><span class="w"> </span><span class="nx">fire</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="kd">const</span><span class="w"> </span><span class="nx">listener</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="nx">value</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">              </span><span class="nx">fire</span><span class="p">.</span><span class="k">async</span><span class="p">(</span><span class="nx">value</span><span class="p">);</span>
+<span class="w">            </span><span class="p">};</span>
+
+<span class="w">            </span><span class="kd">let</span><span class="w"> </span><span class="nx">parentEvent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">context</span><span class="p">.</span><span class="nx">childManager</span><span class="p">.</span><span class="nx">getParentEvent</span><span class="p">(</span><span class="s2">"myapi.onSomething"</span><span class="p">);</span>
+<span class="w">            </span><span class="nx">parent</span><span class="p">.</span><span class="nx">addListener</span><span class="p">(</span><span class="nx">listener</span><span class="p">);</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">              </span><span class="nx">parent</span><span class="p">.</span><span class="nx">removeListener</span><span class="p">(</span><span class="nx">listener</span><span class="p">);</span>
+<span class="w">            </span><span class="p">};</span>
+<span class="w">          </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}).</span><span class="nx">api</span><span class="p">()</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre>
+           </div>
+          </div>
+          <p>Events implemented in a child process have some additional methods available to dispatch listeners:</p>
+          <ul class="simple">
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">fire.sync()</span></code> This runs the listener synchronously and returns the value returned by the listener</p></li>
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">fire.raw()</span></code> This runs the listener synchronously without cloning the listener arguments into the extension’s Javascript compartment. This is used as a performance optimization, it should not be used unless you have a detailed understanding of Javascript compartments and cross-compartment wrappers.</p></li>
+          </ul>
+         </section>
+         <section id="event-listeners-persistence">
+          <h2>Event Listeners Persistence<a class="headerlink" href="#event-listeners-persistence" title="Link to this heading">?</a></h2>
+          <p>Event listeners are persisted in some circumstances. Persisted event listeners can either block startup, and/or cause an Event Page or Background Service Worker to be started.</p>
+          <p>The event listener must be registered synchronously in the top level scope of the background. Event listeners registered later, or asynchronously, are not persisted.</p>
+          <p>Currently only WebRequestBlocking and Proxy events are able to block at startup, causing an addon to start earlier in Firefox startup. Whether a module can block startup is defined by a <code class="docutils literal notranslate"><span class="pre">startupBlocking</span></code> flag in the module definition files (<code class="docutils literal notranslate"><span class="pre">ext-toolkit.json</span></code> or <code class="docutils literal notranslate"><span class="pre">ext-browser.json</span></code>). As well, these are the only events persisted for persistent background scripts.</p>
+          <p>Events implemented only in a child process, without a parent process counterpart, cannot be persisted.</p>
+          <section id="persisted-and-primed-event-listeners">
+           <h3>Persisted and Primed Event Listeners<a class="headerlink" href="#persisted-and-primed-event-listeners" title="Link to this heading">?</a></h3>
+           <p>In terms of terminology:</p>
+           <ul class="simple">
+            <li>
+             <p><strong>Persisted Event Listener</strong> is the set of data (in particular API module, API event name and the parameters passed along with addListener call if any) related to an event listener that has been registered by an Event Page (or Background Service Worker) in a previous run and being stored in the StartupCache data</p></li>
+            <li>
+             <p><strong>Primed Event Listener</strong> is a “placeholder” event listener created, from the <strong>Persisted Event Listener</strong> data found in the StartupCache, while the Event Page (or Background Service Worker) is not running (either not started yet or suspended after the idle timeout was hit)</p></li>
+           </ul>
+          </section>
+          <section id="extensionapipersistent-and-persistent-events">
+           <h3>ExtensionAPIPersistent and PERSISTENT_EVENTS<a class="headerlink" href="#extensionapipersistent-and-persistent-events" title="Link to this heading">?</a></h3>
+           <p>Most of the WebExtensions APIs promise some API events, and it is likely that most of those events are also expected to be waking up the Event Page (or Background Service Worker) when emitted while the background extension context has not been started yet (or it was suspended after the idle timeout was hit).</p>
+           <p>As part of implementing a WebExtensions API that is meant to persist all or some of its API event listeners:</p>
+           <ul class="simple">
+            <li>
+             <p>the WebExtensions API namespace class should extend <code class="docutils literal notranslate"><span class="pre">ExtensionAPIPersistent</span></code> (instead of extending the <code class="docutils literal notranslate"><span class="pre">ExtensionAPI</span></code> class)</p></li>
+            <li>
+             <p>the WebExtensions API namespace should have a <code class="docutils literal notranslate"><span class="pre">PERSISTENT_EVENTS</span></code> property, which is expected to be set to an object defining methods. Each method should be named after the related API event name, which are going to be called internally:</p>
+             <ul>
+              <li>
+               <p>while the extension Event Page (or Background Service Worker) isn’t running (either never started yet or suspended after the idle timeout). These methods are called by the WebExtensions internals to create placeholder API event listeners in the parent process for each of the API event listeners persisted for that extension. These placeholder listeners are internally referred to as <code class="docutils literal notranslate"><span class="pre">primed</span> <span class="pre">listeners</span></code>).</p></li>
+              <li>
+               <p>while the extension Event Page (or Background Service Worker) is running (as well as for any other extension context types they may have been created for the extension). These methods are called by the WebExtensions internals to create the parent process callback that will be responsible for forwarding the API events to the extension callbacks in the child processes.</p></li>
+             </ul></li>
+            <li>
+             <p>in the <code class="docutils literal notranslate"><span class="pre">getAPI</span></code> method. For all the API namespace properties that represent API events returned by this method, the <code class="docutils literal notranslate"><span class="pre">EventManager</span></code> instances created for each of the API events that is expected to persist its listeners should include following options:</p>
+             <ul>
+              <li>
+               <p><code class="docutils literal notranslate"><span class="pre">module</span></code>, to be set to the API module name as listed in <code class="docutils literal notranslate"><span class="pre">"ext-toolkit.json"</span></code> / <code class="docutils literal notranslate"><span class="pre">"ext-browser.json"</span></code> / <code class="docutils literal notranslate"><span class="pre">"ext-android.json"</span></code> (which, in most cases, is the same as the API namespace name string).</p></li>
+              <li>
+               <p><code class="docutils literal notranslate"><span class="pre">event</span></code>, to be set to the API event name string.</p></li>
+              <li>
+               <p><code class="docutils literal notranslate"><span class="pre">extensionApi</span></code>, to be set to the <code class="docutils literal notranslate"><span class="pre">ExtensionAPIPersistent</span></code> class instance.</p></li>
+             </ul></li>
+           </ul>
+           <p>Taking a look to some of the patches landed to introduce API event listener persistency on some of the existing API as part of introducing support for the Event Page may also be useful:</p>
+           <ul class="simple">
+            <li>
+             <p><a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1748546">Bug-1748546</a> ported the browserAction and pageAction API namespace implementations to <code class="docutils literal notranslate"><span class="pre">ExtensionAPIPersistent</span></code> and, in particular, the changes applied to:</p>
+             <ul>
+              <li>
+               <p>ext-browserAction.js: <a class="reference external" href="https://hg.mozilla.org/integration/autoland/rev/08a3eaa8bce7">https://hg.mozilla.org/integration/autoland/rev/08a3eaa8bce7</a></p></li>
+              <li>
+               <p>ext-pageAction.js: <a class="reference external" href="https://hg.mozilla.org/integration/autoland/rev/ed616e2e0abb">https://hg.mozilla.org/integration/autoland/rev/ed616e2e0abb</a></p></li>
+             </ul></li>
+           </ul>
+           <p>Follows an example of what has been described previously in a code snippet form:</p>
+           <div class="highlight-js notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="k">this</span><span class="p">.</span><span class="nx">myApiName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kd">class</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nx">ExtensionAPIPersistent</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">PERSISTENT_EVENTS</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// @param {object}             options</span>
+<span class="w">    </span><span class="c1">// @param {object}             options.fire</span>
+<span class="w">    </span><span class="c1">// @param {function}           options.fire.async</span>
+<span class="w">    </span><span class="c1">// @param {function}           options.fire.sync</span>
+<span class="w">    </span><span class="c1">// @param {function}           options.fire.raw</span>
+<span class="w">    </span><span class="c1">//        For primed listeners `fire.async`/`fire.sync`/`fire.raw` will</span>
+<span class="w">    </span><span class="c1">//        collect the pending events to be send to the background context</span>
+<span class="w">    </span><span class="c1">//        and implicitly wake up the background context (Event Page or</span>
+<span class="w">    </span><span class="c1">//        Background Service Worker), or forward the event right away if</span>
+<span class="w">    </span><span class="c1">//        the background context is running.</span>
+<span class="w">    </span><span class="c1">// @param {function}           [options.fire.wakeup = undefined]</span>
+<span class="w">    </span><span class="c1">//        For primed listeners, the `fire` object also provide a `wakeup` method</span>
+<span class="w">    </span><span class="c1">//        which can be used by the primed listener to explicitly `wakeup` the</span>
+<span class="w">    </span><span class="c1">//        background context (Event Page or Background Service Worker) and wait for</span>
+<span class="w">    </span><span class="c1">//        it to be running (by awaiting on the Promise returned by wakeup to be</span>
+<span class="w">    </span><span class="c1">//        resolved).</span>
+<span class="w">    </span><span class="c1">// @param {ProxyContextParent} [options.context=undefined]</span>
+<span class="w">    </span><span class="c1">//        This property is expected to be undefined for primed listeners (which</span>
+<span class="w">    </span><span class="c1">//        are created while the background extension context does not exist) and</span>
+<span class="w">    </span><span class="c1">//        to be set to a ProxyContextParent instance (the same got by the getAPI</span>
+<span class="w">    </span><span class="c1">//        method) when the method is called for a listener registered by a</span>
+<span class="w">    </span><span class="c1">//        running extension context.</span>
+<span class="w">    </span><span class="c1">//</span>
+<span class="w">    </span><span class="c1">// @param {object}            [apiEventsParams=undefined]</span>
+<span class="w">    </span><span class="c1">//        The additional addListener parameter if any (some API events are allowing</span>
+<span class="w">    </span><span class="c1">//        the extensions to pass some parameters along with the extension callback).</span>
+<span class="w">    </span><span class="nx">onMyEventName</span><span class="p">({</span><span class="w"> </span><span class="nx">context</span><span class="p">,</span><span class="w"> </span><span class="nx">fire</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="nx">apiEventParams</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">undefined</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="kd">const</span><span class="w"> </span><span class="nx">listener</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(...)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// Wake up the EventPage (or Background ServiceWorker).</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">fire</span><span class="p">.</span><span class="nx">wakeup</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">          </span><span class="k">await</span><span class="w"> </span><span class="nx">fire</span><span class="p">.</span><span class="nx">wakeup</span><span class="p">();</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="nx">fire</span><span class="p">.</span><span class="k">async</span><span class="p">(...);</span>
+<span class="w">      </span><span class="p">}</span>
+
+<span class="w">      </span><span class="c1">// Subscribe a listener to an internal observer or event which will be notified</span>
+<span class="w">      </span><span class="c1">// when we need to call fire to either send the event to an extension context</span>
+<span class="w">      </span><span class="c1">// already running or wake up a suspended event page and accumulate the events</span>
+<span class="w">      </span><span class="c1">// to be fired once the extension context is running again and a callback registered</span>
+<span class="w">      </span><span class="c1">// back (which will be used to convert the primed listener created while</span>
+<span class="w">      </span><span class="c1">// the non persistent background extension context was not running yet)</span>
+<span class="w">      </span><span class="p">...</span>
+<span class="w">      </span><span class="k">return</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">unregister</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">          </span><span class="c1">// Unsubscribe a listener from an internal observer or event.</span>
+<span class="w">          </span><span class="p">...</span>
+<span class="w">         </span><span class="p">}</span>
+<span class="w">        </span><span class="nx">convert</span><span class="p">(</span><span class="nx">fireToExtensionCallback</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">          </span><span class="c1">// Convert gets called once the primed API event listener,</span>
+<span class="w">          </span><span class="c1">// created while the extension background context has been</span>
+<span class="w">          </span><span class="c1">// suspended, is being converted to a parent process API</span>
+<span class="w">          </span><span class="c1">// event listener callback that is responsible for forwarding the</span>
+<span class="w">          </span><span class="c1">// events to the child processes.</span>
+<span class="w">          </span><span class="c1">//</span>
+<span class="w">          </span><span class="c1">// The `fireToExtensionCallback` parameter is going to be the</span>
+<span class="w">          </span><span class="c1">// one that will emit the event to the extension callback (while</span>
+<span class="w">          </span><span class="c1">// the one got from the API event registrar method may be the one</span>
+<span class="w">          </span><span class="c1">// that is collecting the events to emit up until the background</span>
+<span class="w">          </span><span class="c1">// context got started up again).</span>
+<span class="w">          </span><span class="nx">fire</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">fireToExtensionCallback</span><span class="p">;</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">      </span><span class="p">};</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="p">...</span>
+<span class="w">  </span><span class="p">};</span>
+
+<span class="w">  </span><span class="nx">getAPI</span><span class="p">(</span><span class="nx">context</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="p">...</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nx">myAPIName</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="p">...</span>
+<span class="w">        </span><span class="nx">onMyEventName</span><span class="o">:</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">EventManager</span><span class="p">({</span>
+<span class="w">          </span><span class="nx">context</span><span class="p">,</span>
+<span class="w">          </span><span class="c1">// NOTE: module is expected to be the API module name as listed in</span>
+<span class="w">          </span><span class="c1">// ext-toolkit.json / ext-browser.json / ext-android.json.</span>
+<span class="w">          </span><span class="nx">module</span><span class="o">:</span><span class="w"> </span><span class="s2">"myAPIName"</span><span class="p">,</span>
+<span class="w">          </span><span class="nx">event</span><span class="o">:</span><span class="w"> </span><span class="s2">"onMyEventNAme"</span><span class="p">,</span>
+<span class="w">          </span><span class="nx">extensionApi</span><span class="o">:</span><span class="w"> </span><span class="k">this</span><span class="p">,</span>
+<span class="w">        </span><span class="p">}),</span>
+<span class="w">      </span><span class="p">},</span>
+<span class="w">    </span><span class="p">};</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">};</span>
+</pre>
+            </div>
+           </div>
+          </section>
+          <section id="testing-persisted-api-event-listeners">
+           <h3>Testing Persisted API Event Listeners<a class="headerlink" href="#testing-persisted-api-event-listeners" title="Link to this heading">?</a></h3>
+           <ul class="simple">
+            <li>
+             <p><code class="docutils literal notranslate"><span class="pre">extension.terminateBackground({</span> <span class="pre">expectStopped:</span> <span class="pre">true,</span> <span class="pre">disableResetIdleForTest:</span> <span class="pre">false</span> <span class="pre">}</span> <span class="pre">=</span> <span class="pre">{})</span></code>:</p>
+             <ul>
+              <li>
+               <p>The wrapper object returned by <code class="docutils literal notranslate"><span class="pre">ExtensionTestUtils.loadExtension</span></code> provides a <code class="docutils literal notranslate"><span class="pre">terminateBackground</span></code> method which can be used to simulate an idle timeout, by explicitly triggering the same logic handling the idle timeout.</p></li>
+              <li>
+               <p>By default this helper will also implicitly assert that <code class="docutils literal notranslate"><span class="pre">extension.backgroundState</span></code> is set to <code class="docutils literal notranslate"><span class="pre">"stopped"</span></code> once the terminateBackground async logic has been fully executed</p></li>
+              <li>
+               <p>This method also accept a few optional parameters:</p>
+               <ul>
+                <li>
+                 <p>if <code class="docutils literal notranslate"><span class="pre">expectStopped</span></code> is set to <code class="docutils literal notranslate"><span class="pre">false</span></code>, the helper will assert that <code class="docutils literal notranslate"><span class="pre">extension.backgroundState</span></code> is set to “running” once the terminateBackground async logic has been fully executed, which is meant to be used in specific tests that covers the reset idle timeout logic and conditions.</p></li>
+                <li>
+                 <p>if <code class="docutils literal notranslate"><span class="pre">disableResetIdleForTest</span></code> is set to <code class="docutils literal notranslate"><span class="pre">true</span></code>, the helper will ignore all the conditions that would reset the idle timeout due to some work still pending (e.g. a <code class="docutils literal notranslate"><span class="pre">NativeMessaging</span></code>’s <code class="docutils literal notranslate"><span class="pre">Port</span></code> still open, a <code class="docutils literal notranslate"><span class="pre">StreamFilter</span></code> instance still active or a <code class="docutils literal notranslate"><span class="pre">Promise</span></code> from an API event listener call not yet resolved)</p></li>
+               </ul></li>
+             </ul></li>
+            <li>
+             <p><code class="docutils literal notranslate"><span class="pre">ExtensionTestUtils.testAssertions.assertPersistentListeners</span></code>:</p>
+             <ul>
+              <li>
+               <p>This test assertion helper can be used to more easily assert what should be the persisted state of a given API event (e.g. assert it to not be persisted, or to be persisted and/or primed)</p></li>
+             </ul></li>
+           </ul>
+           <div class="highlight-js notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="nx">assertPersistentListeners</span><span class="p">(</span><span class="nx">extension</span><span class="p">,</span><span class="w"> </span><span class="s2">"browserAction"</span><span class="p">,</span><span class="w"> </span><span class="s2">"onClicked"</span><span class="p">,</span><span class="w"> </span><span class="p">{</span>
+<span class="w">   </span><span class="nx">primed</span><span class="o">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w"> </span><span class="p">});</span>
+<span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">extension</span><span class="p">.</span><span class="nx">terminateBackground</span><span class="p">();</span>
+<span class="w"> </span><span class="nx">assertPersistentListeners</span><span class="p">(</span><span class="nx">extension</span><span class="p">,</span><span class="w"> </span><span class="s2">"browserAction"</span><span class="p">,</span><span class="w"> </span><span class="s2">"onClicked"</span><span class="p">,</span><span class="w"> </span><span class="p">{</span>
+<span class="w">   </span><span class="nx">primed</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w"> </span><span class="p">});</span>
+</pre>
+            </div>
+           </div>
+           <ul class="simple">
+            <li>
+             <p><code class="docutils literal notranslate"><span class="pre">extensions.background.idle.timeout</span></code> preference determines how long to wait (between API events being notified to the extension event page) before considering the Event Page in the idle state and suspend it, in some xpcshell test this pref may be set to 0 to reduce the amount of time the test will have to wait for the Event Page to be suspended automatically</p></li>
+            <li>
+             <p><code class="docutils literal notranslate"><span class="pre">extension.eventPage.enabled</span></code> pref is responsible for enabling/disabling Event Page support for manifest_version 2 extension, technically it is now set to <code class="docutils literal notranslate"><span class="pre">true</span></code> on all channels, but it would still be worth flipping it to <code class="docutils literal notranslate"><span class="pre">true</span></code> explicitly in tests that are meant to cover Event Page behaviors for manifest_version 2 test extension until the pref is completely removed (mainly to make sure that if the pref would need to be flipped to false for any reason, the tests will still be passing)</p></li>
+           </ul>
+          </section>
+          <section id="persisted-event-listeners-internals">
+           <h3>Persisted Event listeners internals<a class="headerlink" href="#persisted-event-listeners-internals" title="Link to this heading">?</a></h3>
+           <p>The <code class="docutils literal notranslate"><span class="pre">ExtensionAPIPersistent</span></code> class provides a way to quickly introduce API event listener persistency to a new WebExtensions API, and reduce the number of code duplication, the following section provide some more details about what the abstractions are doing internally in practice.</p>
+           <p>WebExtensions APIs classes that extend the <code class="docutils literal notranslate"><span class="pre">ExtensionAPIPersistent</span></code> base class are still able to support non persisted listeners along with persisted ones (e.g. events that are persisting the listeners registered from an event page are already not persisting listeners registered from other extension contexts) and can mix persisted and non-persisted events.</p>
+           <p>As an example in <code class="docutils literal notranslate"><span class="pre">toolkit/components/extensions/parent/ext-runtime.js`</span></code> the two events <code class="docutils literal notranslate"><span class="pre">onSuspend</span></code> and <code class="docutils literal notranslate"><span class="pre">onSuspendCanceled</span></code> are expected to be never persisted nor primed (even for an event page) and so their <code class="docutils literal notranslate"><span class="pre">EventManager</span></code> instances receive the following options:</p>
+           <ul class="simple">
+            <li>
+             <p>a <code class="docutils literal notranslate"><span class="pre">register</span></code> callback (instead of the one part of <code class="docutils literal notranslate"><span class="pre">PERSISTED_EVENTS</span></code>)</p></li>
+            <li>
+             <p>a <code class="docutils literal notranslate"><span class="pre">name</span></code> string property (instead of the two separate <code class="docutils literal notranslate"><span class="pre">module</span></code> and <code class="docutils literal notranslate"><span class="pre">event</span></code> string properties that are used for <code class="docutils literal notranslate"><span class="pre">EventManager</span></code> instances from persisted ones</p></li>
+            <li>
+             <p>no <code class="docutils literal notranslate"><span class="pre">extensionApi</span></code> property (because that is only needed for events that are expected to persist event page listeners)</p></li>
+           </ul>
+           <p>In practice <code class="docutils literal notranslate"><span class="pre">ExtensionAPIPersistent</span></code> extends the <code class="docutils literal notranslate"><span class="pre">ExtensionAPI</span></code> class to provide a generic <code class="docutils literal notranslate"><span class="pre">primeListeners</span></code> method, which is the method responsible for priming a persisted listener when the event page has been suspended or not started yet.</p>
+           <p>The <code class="docutils literal notranslate"><span class="pre">primeListener</span></code> method is expected to return an object with an <code class="docutils literal notranslate"><span class="pre">unregister</span></code> and <code class="docutils literal notranslate"><span class="pre">convert</span></code> method, while the <code class="docutils literal notranslate"><span class="pre">register</span></code> callback passed to the <code class="docutils literal notranslate"><span class="pre">EventManager</span></code> constructor is expected to return the <code class="docutils literal notranslate"><span class="pre">unregister</span></code> method.</p>
+           <div class="highlight-js notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="kd">function</span><span class="w"> </span><span class="nx">somethingListener</span><span class="p">(</span><span class="nx">fire</span><span class="p">,</span><span class="w"> </span><span class="nx">minValue</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">callback</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">value</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">value</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="nx">minValue</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nx">fire</span><span class="p">.</span><span class="k">async</span><span class="p">(</span><span class="nx">value</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">};</span>
+<span class="w">  </span><span class="nx">RegisterSomeInternalCallback</span><span class="p">(</span><span class="nx">callback</span><span class="p">);</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">unregister</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nx">UnregisterInternalCallback</span><span class="p">(</span><span class="nx">callback</span><span class="p">);</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="nx">convert</span><span class="p">(</span><span class="nx">_fire</span><span class="p">,</span><span class="w"> </span><span class="nx">context</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nx">fire</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">_fire</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">};</span>
+<span class="p">}</span>
+
+<span class="k">this</span><span class="p">.</span><span class="nx">myapi</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kd">class</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nx">ExtensionAPI</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">primeListener</span><span class="p">(</span><span class="nx">extension</span><span class="p">,</span><span class="w"> </span><span class="nx">event</span><span class="p">,</span><span class="w"> </span><span class="nx">fire</span><span class="p">,</span><span class="w"> </span><span class="nx">params</span><span class="p">,</span><span class="w"> </span><span class="nx">isInStartup</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">event</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s2">"onSomething"</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="c1">// Note that we return the object with unregister and convert here.</span>
+<span class="w">      </span><span class="k">return</span><span class="w"> </span><span class="nx">somethingListener</span><span class="p">(</span><span class="nx">fire</span><span class="p">,</span><span class="w"> </span><span class="p">...</span><span class="nx">params</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="c1">// If an event other than onSomething was requested, we are not returning</span>
+<span class="w">    </span><span class="c1">// anything for it, thus it would not be persistable.</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="nx">getAPI</span><span class="p">(</span><span class="nx">context</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nx">myapi</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">onSomething</span><span class="o">:</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">EventManager</span><span class="p">({</span>
+<span class="w">          </span><span class="nx">context</span><span class="p">,</span>
+<span class="w">          </span><span class="nx">module</span><span class="o">:</span><span class="w"> </span><span class="s2">"myapi"</span><span class="p">,</span>
+<span class="w">          </span><span class="nx">event</span><span class="o">:</span><span class="w"> </span><span class="s2">"onSomething"</span><span class="p">,</span>
+<span class="w">          </span><span class="nx">register</span><span class="o">:</span><span class="w"> </span><span class="p">(</span><span class="nx">fire</span><span class="p">,</span><span class="w"> </span><span class="nx">minValue</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="c1">// Note that we return unregister here.</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="nx">somethingListener</span><span class="p">(</span><span class="nx">fire</span><span class="p">,</span><span class="w"> </span><span class="nx">minValue</span><span class="p">).</span><span class="nx">unregister</span><span class="p">;</span>
+<span class="w">          </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}).</span><span class="nx">api</span><span class="p">()</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre>
+            </div>
+           </div>
+          </section>
+         </section>
+        </section>
+       </div>
+      </div>
+      <footer>
+       <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="functions.html" class="btn btn-neutral float-left" title="Implementing a function" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a> <a href="manifest.html" class="btn btn-neutral float-right" title="Implementing a manifest property" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+       </div>
+       <hr>
+       <div role="contentinfo">
+        <p></p>
+       </div> Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+      </footer>
+     </div>
+    </div>
+   </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ </body>
+</html>

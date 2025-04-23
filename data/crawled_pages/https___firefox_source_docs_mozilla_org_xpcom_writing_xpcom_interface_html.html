@@ -1,0 +1,511 @@
+<!doctype html>
+<html class="writer-html5" lang="en" data-content_root="../">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tutorial for Writing a New XPCOM Interface — Firefox Source Docs  documentation</title>
+  <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50">
+  <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094">
+  <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=fd3f3429">
+  <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b">
+  <link rel="stylesheet" type="text/css" href="../_static/custom_theme.css?v=dc5ed815">
+  <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7">
+  <link rel="shortcut icon" href="../_static/firefox.ico"><!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script src="../_static/jquery.js?v=5d32c60e"></script>
+  <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+  <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+  <script src="../_static/doctools.js?v=9a2dae69"></script>
+  <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+  <script src="../_static/copybutton.js?v=30646c52"></script>
+  <script src="../_static/design-tabs.js?v=36754332"></script>
+  <script src="../_static/js/theme.js"></script>
+  <link rel="index" title="Index" href="../genindex.html">
+  <link rel="search" title="Search" href="../search.html">
+  <link rel="next" title="How to make a C++ class cycle collected" href="cc-macros.html">
+  <link rel="prev" title="XPIDL" href="xpidl.html">
+ </head>
+ <body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+   <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <div class="wy-side-scroll">
+     <div class="wy-side-nav-search">
+      <a href="../index.html" class="icon icon-home"> Firefox Source Docs <img src="../_static/firefox-wordmark.svg" class="logo" alt="Logo"> </a><!-- -- This code is governed by the BSD license ---->
+      <div>
+       <h3>Quick search</h3>
+       <script>
+    (function () {
+      var cx = "dd12886298f75dbef";
+      var gcse = document.createElement("script");
+      gcse.async = true;
+      gcse.src = "https://cse.google.com/cse.js?cx=" + cx;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(gcse, s);
+    })();
+  </script><gcse:search></gcse:search>
+      </div>
+     </div>
+     <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+      <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../glossary/index.html">A Glossary of Common Terms</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../overview/index.html">A Quick Guide to Mozilla Applications</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../setup/index.html">Getting Set Up To Work On The Firefox Codebase</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Working On Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../contributing/index.html">Working on Firefox</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../bug-mgmt/index.html">Bug Handling</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox User Guide</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../devtools-user/index.html">Firefox DevTools User Docs</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Source Code Documentation</span></p>
+      <ul class="current">
+       <li class="toctree-l1"><a class="reference internal" href="../mots/index.html">Governance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../browser/index.html">Firefox Front-end</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../dom/index.html">DOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../editor/index.html">Editor</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../layout/index.html">Style system (CSS) &amp; Layout</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../gfx/index.html">Graphics</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../ipc/index.html">Processes, Threads and IPC</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../devtools/index.html">Firefox DevTools Contributor Docs</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../toolkit/index.html">Toolkit</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../js/index.html">SpiderMonkey</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../jsloader/index.html">JS Loader</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mobile/android/geckoview/index.html">GeckoView</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mobile/android/fenix/index.html">Fenix</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mobile/android/focus-android/index.html">Focus for Android</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../dom/bindings/webidl/index.html">WebIDL</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../modules/libpref/index.html">libpref</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../networking/index.html">Networking</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../remote/index.html">Remote Protocols</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../services/index.html">Services</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../permissions/index.html">Permissions</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../uriloader/index.html">File Handling</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../widget/cocoa/index.html">Firefox on macOS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../widget/windows/index.html">Firefox on Windows</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../toolkit/components/ml/index.html">Firefox AI Runtime</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../accessible/index.html">Accessibility</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../media/index.html">Media Playback</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../code-quality/index.html">Code quality</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../writing-rust-code/index.html">Writing Rust Code</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../rust-components/index.html">Rust Components</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/profiler/index.html">Gecko Profiler</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../performance/index.html">Performance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../storage/index.html">Database bindings (SQLite, KV, …)</a></li>
+       <li class="toctree-l1 current"><a class="reference internal" href="index.html">XPCOM</a>
+        <ul class="current">
+         <li class="toctree-l2"><a class="reference internal" href="index.html#consuming-xpcom-functionality">Consuming XPCOM functionality</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="index.html#tooling-around-xpcom">Tooling around XPCOM</a></li>
+         <li class="toctree-l2 current"><a class="reference internal" href="index.html#writing-new-xpcom-interfaces-classes">Writing new XPCOM interfaces/classes</a>
+          <ul class="current">
+           <li class="toctree-l3"><a class="reference internal" href="xpidl.html">XPIDL</a></li>
+           <li class="toctree-l3 current"><a class="current reference internal" href="#">Tutorial for Writing a New XPCOM Interface</a>
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="#high-level-overview">High Level Overview</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#writing-an-xpidl">Writing an XPIDL</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#writing-the-c-implementation">Writing the C++ implementation</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#registering-the-component">Registering the component</a></li>
+            </ul></li>
+           <li class="toctree-l3"><a class="reference internal" href="cc-macros.html">How to make a C++ class cycle collected</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="fmt-in-gecko.html"><code class="docutils literal notranslate"><span class="pre">{fmt}</span></code> in Gecko</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="fmt-in-gecko.html#user-defined-types">User-defined types</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="fmt-in-gecko.html#formatting-sequences">Formatting sequences</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="fmt-in-gecko.html#moz-log-integration"><code class="docutils literal notranslate"><span class="pre">MOZ_LOG</span></code> integration</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="fmt-in-gecko.html#ns-string-integration"><code class="docutils literal notranslate"><span class="pre">ns*String</span></code> integration</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="fmt-in-gecko.html#firefox-profiler-marker-integration">Firefox Profiler marker integration</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="fmt-in-gecko.html#useful-links">Useful links</a></li>
+          </ul></li>
+        </ul></li>
+       <li class="toctree-l1"><a class="reference internal" href="../nspr/index.html">NSPR</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../security/nss/index.html">Network Security Services (NSS)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../content-security/index.html">Web Security Checks in Gecko</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">The Firefox Build System</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../mach/index.html">Mach</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/try/index.html">Pushing to Try</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../build/buildsystem/index.html">Build System</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../taskcluster/index.html">Firefox CI and Taskgraph</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/moztreedocs/index.html">Managing Documentation</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mozbuild/vendor/index.html">Vendoring Third Party Components</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Testing &amp; Test Infrastructure</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/automated-testing/index.html">Automated Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/treeherder-try/index.html">Understanding Treeherder Results</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/sheriffed-intermittents/index.html">Sheriffed intermittent failures</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/tests-for-new-config/index.html">Turning on Firefox tests for a new configuration</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/intermittent/index.html">Avoiding intermittent tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/testing-policy/index.html">Testing Policy</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/ci-configs/index.html">Configuration Changes</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/browser-chrome/index.html">Browser chrome mochitests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/chrome-tests/index.html">Chrome Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/marionette/index.html">Marionette</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/geckodriver/index.html">geckodriver</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/test-verification/index.html">Test Verification</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/webrender/index.html">WebRender Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/mochitest-plain/index.html">Mochitest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/xpcshell/index.html">XPCShell tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/tps/index.html">TPS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../web-platform/index.html">web-platform-tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../gtest/index.html">GTest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/fuzzing/index.html">Fuzzing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/sanitizer/index.html">Sanitizer</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/perfdocs/index.html">Performance Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/code-coverage/index.html">Code coverage</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing-rust-code/index.html">Testing &amp; Debugging Rust Code</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Releases &amp; Updates</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../update-infrastructure/index.html">Mozilla Update Infrastructure</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../update-infrastructure/index.html#watershed-updates">Watershed Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../update-infrastructure/index.html#desupport-updates">Desupport Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/update-verify/index.html">Update Verify</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Localization &amp; Internationalization</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../intl/index.html">Internationalization</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../l10n/index.html">Localization</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox and Python</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../mozbase/index.html">mozbase</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../python/index.html">Using third-party Python packages</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Metrics Collected in Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../metrics/index.html">Metrics</a></li>
+      </ul>
+     </div>
+    </div>
+   </nav>
+   <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+    <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+     <i data-toggle="wy-nav-top" class="fa fa-bars"></i> <a href="../index.html">Firefox Source Docs</a>
+    </nav>
+    <div class="wy-nav-content">
+     <div class="rst-content">
+      <!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+      <div role="navigation" aria-label="Page navigation">
+       <ul class="wy-breadcrumbs">
+        <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+        <li class="breadcrumb-item"><a href="index.html">XPCOM</a></li>
+        <li class="breadcrumb-item active">Tutorial for Writing a New XPCOM Interface</li>
+        <li class="wy-breadcrumbs-aside"><a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Developer+Infrastructure&amp;component=Firefox+Source+Docs%3A+Content&amp;short_desc=Documentation+issue+on+xpcom/writing-xpcom-interface&amp;comment=URL+=+https://firefox-source-docs.mozilla.org/xpcom/writing-xpcom-interface.html&amp;bug_file_loc=https://firefox-source-docs.mozilla.org/xpcom/writing-xpcom-interface.html" rel="nofollow">Report an issue</a> / <a href="../_sources/xpcom/writing-xpcom-interface.rst.txt" rel="nofollow"> View page source</a></li>
+       </ul>
+       <hr>
+      </div>
+      <div role="main" class="document" itemscope itemtype="http://schema.org/Article">
+       <div itemprop="articleBody">
+        <section id="tutorial-for-writing-a-new-xpcom-interface">
+         <span id="writing-xpcom-interface"></span>
+         <h1>Tutorial for Writing a New XPCOM Interface<a class="headerlink" href="#tutorial-for-writing-a-new-xpcom-interface" title="Link to this heading">?</a></h1>
+         <section id="high-level-overview">
+          <h2>High Level Overview<a class="headerlink" href="#high-level-overview" title="Link to this heading">?</a></h2>
+          <p>In order to write code that works in native code (C++, Rust), and JavaScript contexts, it’s necessary to have a mechanism to do so. For chrome privileged contexts, this is the XPCOM Interface Class.</p>
+          <p>This mechanism starts with an <a class="reference internal" href="xpidl.html#xpidl"><span class="std std-ref">XPIDL</span></a> file to define the shape of the interface. In the <a class="reference external" href="https://searchfox.org/mozilla-central/source/xpcom/idl-parser/xpidl">build system</a>, this file is processed, and <a class="reference external" href="https://searchfox.org/mozilla-central/source/__GENERATED__/dist/xpcrs/rt">Rust</a> and <a class="reference external" href="https://searchfox.org/mozilla-central/source/__GENERATED__/dist/include">C++</a> code is automatically generated.</p>
+          <p>Next, the interface’s methods and attributes must be implemented. This can be done through either a JSM module, or through a C++ interface class. Once these steps are done, the new files must be added to the appropriate <code class="code docutils literal notranslate"><span class="pre">moz.build</span></code> files to ensure the build system knows how to find them and process them.</p>
+          <p>Often these XPCOM components are wired into the <code class="code docutils literal notranslate"><span class="pre">Services</span></code> JavaScript object to allow for ergonomic access to the interface. For example, open the <a class="reference external" href="https://developer.mozilla.org/en-US/docs/Tools/Browser_Console">Browser Console</a> and type <code class="code docutils literal notranslate"><span class="pre">Services.</span></code> to interactively access these components.</p>
+          <p>From C++, components can be accessed via <code class="code docutils literal notranslate"><span class="pre">mozilla::components::ComponentName::Create()</span></code> using the <code class="code docutils literal notranslate"><span class="pre">name</span></code> option in the <code class="code docutils literal notranslate"><span class="pre">components.conf</span></code>.</p>
+          <p>While <code class="code docutils literal notranslate"><span class="pre">Services</span></code> and <code class="code docutils literal notranslate"><span class="pre">mozilla::components</span></code> are the preferred means of accessing components, many are accessed through the historical (and somewhat arcane) <code class="code docutils literal notranslate"><span class="pre">createInstance</span></code> mechanism. New usage of these mechanisms should be avoided if possible.</p>
+          <div class="highlight-javascript notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="kd">let</span><span class="w"> </span><span class="nx">component</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">Cc</span><span class="p">[</span><span class="s2">"@mozilla.org/component-name;1"</span><span class="p">].</span><span class="nx">createInstance</span><span class="p">(</span>
+<span class="w">  </span><span class="nx">Ci</span><span class="p">.</span><span class="nx">nsIComponentName</span>
+<span class="p">);</span>
+</pre>
+           </div>
+          </div>
+          <div class="highlight-c++ notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="n">nsCOMPtr</span><span class="o">&lt;</span><span class="n">nsIComponentName</span><span class="o">&gt;</span><span class="w"> </span><span class="n">component</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">do_CreateInstance</span><span class="p">(</span>
+<span class="w">  </span><span class="s">"@mozilla.org/component-name;1"</span><span class="p">);</span>
+</pre>
+           </div>
+          </div>
+         </section>
+         <section id="writing-an-xpidl">
+          <h2>Writing an XPIDL<a class="headerlink" href="#writing-an-xpidl" title="Link to this heading">?</a></h2>
+          <p>First decide on a name. Conventionally the interfaces are prefixed with <code class="code docutils literal notranslate"><span class="pre">nsI</span></code> (historically Netscape) or <code class="code docutils literal notranslate"><span class="pre">mozI</span></code> as they are defined in the global namespace. While the interface is global, the implementation of an interface can be defined in a namespace with no prefix. Historically many component implementations still use the <code class="code docutils literal notranslate"><span class="pre">ns</span></code> prefixes (notice that the <code class="code docutils literal notranslate"><span class="pre">I</span></code> was dropped), but this convention is no longer needed.</p>
+          <p>This tutorial assumes the component is located at <code class="code docutils literal notranslate"><span class="pre">path/to</span></code> with the name <code class="code docutils literal notranslate"><span class="pre">ComponentName</span></code>. The interface name will be <code class="code docutils literal notranslate"><span class="pre">nsIComponentName</span></code>, while the implementation will be <code class="code docutils literal notranslate"><span class="pre">mozilla::ComponentName</span></code>.</p>
+          <p>To start, create an <a class="reference internal" href="xpidl.html#xpidl"><span class="std std-ref">XPIDL</span></a> file:</p>
+          <div class="highlight-bash notranslate">
+           <div class="highlight">
+            <pre><span></span>touch<span class="w"> </span>path/to/nsIComponentName.idl
+</pre>
+           </div>
+          </div>
+          <p>And hook it up to the <code class="code docutils literal notranslate"><span class="pre">path/to/moz.build</span></code></p>
+          <div class="highlight-python notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="n">XPIDL_SOURCES</span> <span class="o">+=</span> <span class="p">[</span>
+    <span class="s2">"nsIComponentName.idl"</span><span class="p">,</span>
+<span class="p">]</span>
+</pre>
+           </div>
+          </div>
+          <p>Next write the initial <code class="code docutils literal notranslate"><span class="pre">.idl</span></code> file: <code class="code docutils literal notranslate"><span class="pre">path/to/nsIComponentName.idl</span></code></p>
+          <div class="highlight-c++ notranslate" id="contract-ids">
+           <div class="highlight">
+            <pre><span></span><span class="cm">/* This Source Code Form is subject to the terms of the Mozilla Public</span>
+<span class="cm"> * License, v. 2.0. If a copy of the MPL was not distributed with this</span>
+<span class="cm"> * file, You can obtain one at http://mozilla.org/MPL/2.0/. */</span>
+
+<span class="c1">// This is the base include which defines nsISupports. This class defines</span>
+<span class="c1">// the QueryInterface method.</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"nsISupports.idl"</span>
+
+<span class="c1">// `scriptable` designates that this object will be used with JavaScript</span>
+<span class="c1">// `uuid`       The example below uses a UUID with all Xs. Replace the Xs with</span>
+<span class="c1">//              your own UUID generated with `mach gen-uuid`, `uuidgen`, or</span>
+<span class="c1">//              https://mozilla.pettay.fi/uuidgen.html</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * Make sure to document your interface.</span>
+<span class="cm"> */</span>
+<span class="p">[</span><span class="n">scriptable</span><span class="p">,</span><span class="w"> </span><span class="n">uuid</span><span class="p">(</span><span class="n">xxxxxxxx</span><span class="o">-</span><span class="n">xxxx</span><span class="o">-</span><span class="n">xxxx</span><span class="o">-</span><span class="n">xxxx</span><span class="o">-</span><span class="n">xxxxxxxxxxxx</span><span class="p">)]</span>
+<span class="n">interface</span><span class="w"> </span><span class="n">nsIComponentName</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">nsISupports</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">  </span><span class="c1">// Fill out your definition here. This example attribute only returns a bool.</span>
+
+<span class="w">  </span><span class="cm">/**</span>
+<span class="cm">   * Make sure to document your attributes.</span>
+<span class="cm">   */</span>
+<span class="w">  </span><span class="n">readonly</span><span class="w"> </span><span class="n">attribute</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">isAlive</span><span class="p">;</span>
+<span class="p">};</span>
+</pre>
+           </div>
+          </div>
+          <p>This definition only includes one attribute, <code class="code docutils literal notranslate"><span class="pre">isAlive</span></code>, which will demonstrate that we’ve done our work correctly at the end. For a more comprehensive guide for this syntax, see the <a class="reference internal" href="xpidl.html#xpidl"><span class="std std-ref">XPIDL</span></a> docs.</p>
+          <p>Once <code class="code docutils literal notranslate"><span class="pre">./mach</span> <span class="pre">build</span></code> is run, the XPIDL parser will read this file, and give any warnings if the syntax is wrong. It will then auto-generate the C++ (or Rust) code for us. For this example the generated <code class="code docutils literal notranslate"><span class="pre">nsIComponentName</span></code> class will be located in:</p>
+          <p><code class="code docutils literal notranslate"><span class="pre">{obj-directory}/dist/include/nsIComponentName.h</span></code></p>
+          <p>It might be useful to check out what was automatically generated here, or see the existing <a class="reference external" href="https://searchfox.org/mozilla-central/source/__GENERATED__/dist/">generated C++ header files on SearchFox</a>.</p>
+         </section>
+         <section id="writing-the-c-implementation">
+          <h2>Writing the C++ implementation<a class="headerlink" href="#writing-the-c-implementation" title="Link to this heading">?</a></h2>
+          <p>Now we have a definition for an interface, but no implementation. The interface could be backed by a JavaScript implementation using a JSM, but for this example we’ll use a C++ implementation.</p>
+          <p>Add the C++ sources to <code class="code docutils literal notranslate"><span class="pre">path/to/moz.build</span></code></p>
+          <div class="highlight-python notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="n">EXPORTS</span><span class="o">.</span><span class="n">mozilla</span> <span class="o">+=</span> <span class="p">[</span>
+    <span class="s2">"ComponentName.h"</span><span class="p">,</span>
+<span class="p">]</span>
+
+<span class="n">UNIFIED_SOURCES</span> <span class="o">+=</span> <span class="p">[</span>
+    <span class="s2">"ComponentName.cpp"</span><span class="p">,</span>
+<span class="p">]</span>
+</pre>
+           </div>
+          </div>
+          <p>Now write the header: <code class="code docutils literal notranslate"><span class="pre">path/to/ComponentName.h</span></code></p>
+          <div class="highlight-c++ notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="cm">/* This Source Code Form is subject to the terms of the Mozilla Public</span>
+<span class="cm"> * License, v. 2.0. If a copy of the MPL was not distributed with this</span>
+<span class="cm"> * file, You can obtain one at http://mozilla.org/MPL/2.0/. */</span>
+<span class="cp">#ifndef mozilla_nsComponentName_h__</span>
+<span class="cp">#define mozilla_nsComponentName_h__</span>
+
+<span class="c1">// This will pull in the header auto-generated by the .idl file:</span>
+<span class="c1">// {obj-directory}/dist/include/nsIComponentName.h</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"nsIComponentName.h"</span>
+
+<span class="c1">// The implementation can be namespaced, while the XPCOM interface is globally namespaced.</span>
+<span class="k">namespace</span><span class="w"> </span><span class="nn">mozilla</span><span class="w"> </span><span class="p">{</span>
+
+<span class="c1">// Notice how the class name does not need to be prefixed, as it is defined in the</span>
+<span class="c1">// `mozilla` namespace.</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ComponentName</span><span class="w"> </span><span class="k">final</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">nsIComponentName</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="c1">// This first macro includes the necessary information to use the base nsISupports.</span>
+<span class="w">  </span><span class="c1">// This includes the QueryInterface method.</span>
+<span class="w">  </span><span class="n">NS_DECL_ISUPPORTS</span>
+
+<span class="w">  </span><span class="c1">// This second macro includes the declarations for the attributes. There is</span>
+<span class="w">  </span><span class="c1">// no need to duplicate these declarations.</span>
+<span class="w">  </span><span class="c1">//</span>
+<span class="w">  </span><span class="c1">// In our case it includes a declaration for the isAlive attribute:</span>
+<span class="w">  </span><span class="c1">//   GetIsAlive(bool *aIsAlive)</span>
+<span class="w">  </span><span class="n">NS_DECL_NSICOMPONENTNAME</span>
+
+<span class="w"> </span><span class="k">public</span><span class="o">:</span>
+<span class="w">  </span><span class="n">ComponentName</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">default</span><span class="p">;</span>
+
+<span class="w"> </span><span class="k">private</span><span class="o">:</span>
+<span class="w">  </span><span class="c1">// A private destructor must be declared.</span>
+<span class="w">  </span><span class="o">~</span><span class="n">ComponentName</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">default</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="p">}</span><span class="w">  </span><span class="c1">// namespace mozilla</span>
+
+<span class="cp">#endif</span>
+</pre>
+           </div>
+          </div>
+          <p>Now write the definitions: <code class="code docutils literal notranslate"><span class="pre">path/to/ComponentName.cpp</span></code></p>
+          <div class="highlight-c++ notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="cm">/* This Source Code Form is subject to the terms of the Mozilla Public</span>
+<span class="cm"> * License, v. 2.0. If a copy of the MPL was not distributed with this</span>
+<span class="cm"> * file, You can obtain one at http://mozilla.org/MPL/2.0/. */</span>
+
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"ComponentName.h"</span>
+
+<span class="k">namespace</span><span class="w"> </span><span class="nn">mozilla</span><span class="w"> </span><span class="p">{</span>
+
+<span class="c1">// Use the macro to inject all of the definitions for nsISupports.</span>
+<span class="n">NS_IMPL_ISUPPORTS</span><span class="p">(</span><span class="n">ComponentName</span><span class="p">,</span><span class="w"> </span><span class="n">nsIComponentName</span><span class="p">)</span>
+
+<span class="c1">// This is the actual implementation of the `isAlive` attribute. Note that the</span>
+<span class="c1">// method name is somewhat different than the attribute. We specified "read-only"</span>
+<span class="c1">// in the attribute, so only a getter, not a setter was defined for us. Here</span>
+<span class="c1">// the name was adjusted to be `GetIsAlive`.</span>
+<span class="c1">//</span>
+<span class="c1">// Another common detail of implementing an XPIDL interface is that the return values</span>
+<span class="c1">// are passed as out parameters. The methods are treated as fallible, and the return</span>
+<span class="c1">// value is an `nsresult`. See the XPIDL documentation for the full nitty gritty</span>
+<span class="c1">// details.</span>
+<span class="c1">//</span>
+<span class="c1">// A common way to know the exact function signature for a method implementation is</span>
+<span class="c1">// to copy and paste from existing examples, or inspecting the generated file</span>
+<span class="c1">// directly: {obj-directory}/dist/include/nsIComponentName.h</span>
+<span class="n">NS_IMETHODIMP</span>
+<span class="n">ComponentName</span><span class="o">::</span><span class="n">GetIsAlive</span><span class="p">(</span><span class="kt">bool</span><span class="o">*</span><span class="w"> </span><span class="n">aIsAlive</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="o">*</span><span class="n">aIsAlive</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">NS_OK</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="p">}</span><span class="w"> </span><span class="c1">// namespace: mozilla</span>
+</pre>
+           </div>
+          </div>
+         </section>
+         <section id="registering-the-component">
+          <h2>Registering the component<a class="headerlink" href="#registering-the-component" title="Link to this heading">?</a></h2>
+          <p>At this point, the component should be correctly written, but it’s not registered with the component system. In order to this, we’ll need to create or modify the <code class="code docutils literal notranslate"><span class="pre">components.conf</span></code>.</p>
+          <div class="highlight-bash notranslate">
+           <div class="highlight">
+            <pre><span></span>touch<span class="w"> </span>path/to/components.conf
+</pre>
+           </div>
+          </div>
+          <p>Now update the <code class="code docutils literal notranslate"><span class="pre">moz.build</span></code> to point to it.</p>
+          <div class="highlight-python notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="n">XPCOM_MANIFESTS</span> <span class="o">+=</span> <span class="p">[</span>
+    <span class="s2">"components.conf"</span><span class="p">,</span>
+<span class="p">]</span>
+</pre>
+           </div>
+          </div>
+          <p>It is probably worth reading over <a class="reference internal" href="../build/buildsystem/defining-xpcom-components.html#defining-xpcom-components"><span class="std std-ref">Defining XPCOM Components</span></a>, but the following config will be sufficient to hook up our component to the <code class="code docutils literal notranslate"><span class="pre">Services</span></code> object. Services should also be added to <code class="docutils literal notranslate"><span class="pre">tools/lint/eslint/eslint-plugin-mozilla/lib/services.json</span></code>. The easiest way to do that is to copy from <code class="docutils literal notranslate"><span class="pre">&lt;objdir&gt;/xpcom/components/services.json</span></code>.</p>
+          <div class="highlight-python notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="n">Classes</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span>
+        <span class="c1"># This CID is the ID for component entries, and needs a separate UUID from</span>
+        <span class="c1"># the .idl file. Replace the Xs with a uuid from `mach gen-uuid`,</span>
+        <span class="c1"># `uuidgen`, or https://mozilla.pettay.fi/uuidgen.html</span>
+        <span class="s1">'cid'</span><span class="p">:</span> <span class="s1">'{xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx}'</span><span class="p">,</span>
+        <span class="s1">'interfaces'</span><span class="p">:</span> <span class="p">[</span><span class="s1">'nsIComponentName'</span><span class="p">],</span>
+
+        <span class="c1"># A contract ID is a human-readable identifier for an _implementation_ of</span>
+        <span class="c1"># an XPCOM interface.</span>
+        <span class="c1">#</span>
+        <span class="c1"># "@mozilla.org/process/environment;1"</span>
+        <span class="c1">#  ^^^^^^^^^^^^ ^^^^^^^ ^^^^^^^^^^^ ^</span>
+        <span class="c1">#  |            |       |           |</span>
+        <span class="c1">#  |            |       |           The version number, usually just 1.</span>
+        <span class="c1">#  |            |       Component name</span>
+        <span class="c1">#  |            Module</span>
+        <span class="c1">#  Domain</span>
+        <span class="c1">#</span>
+        <span class="c1"># This design goes back to a time when XPCOM was intended to be a generalized</span>
+        <span class="c1"># solution for the Gecko Runtime Environment (GRE). At this point most (if</span>
+        <span class="c1"># not all) of mozilla-central has an @mozilla domain.</span>
+        <span class="s1">'contract_ids'</span><span class="p">:</span> <span class="p">[</span><span class="s1">'@mozilla.org/component-name;1'</span><span class="p">],</span>
+
+        <span class="c1"># This is the name of the C++ type that implements the interface.</span>
+        <span class="s1">'type'</span><span class="p">:</span> <span class="s1">'mozilla::ComponentName'</span><span class="p">,</span>
+
+        <span class="c1"># The header file to pull in for the implementation of the interface.</span>
+        <span class="s1">'headers'</span><span class="p">:</span> <span class="p">[</span><span class="s1">'path/to/ComponentName.h'</span><span class="p">],</span>
+
+        <span class="c1"># In order to hook up this interface to the `Services` object, we can</span>
+        <span class="c1"># provide the "js_name" parameter. This is an ergonomic way to access</span>
+        <span class="c1"># the component.</span>
+        <span class="s1">'js_name'</span><span class="p">:</span> <span class="s1">'componentName'</span><span class="p">,</span>
+    <span class="p">},</span>
+<span class="p">]</span>
+</pre>
+           </div>
+          </div>
+          <p>At this point the full <code class="code docutils literal notranslate"><span class="pre">moz.build</span></code> file should look like:</p>
+          <div class="highlight-python notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="c1"># -*- Mode: python; indent-tabs-mode: nil; tab-width: 40 -*-</span>
+<span class="c1"># vim: set filetype=python:</span>
+<span class="c1"># This Source Code Form is subject to the terms of the Mozilla Public</span>
+<span class="c1"># License, v. 2.0. If a copy of the MPL was not distributed with this</span>
+<span class="c1"># file, You can obtain one at http://mozilla.org/MPL/2.0/.</span>
+
+<span class="n">XPIDL_SOURCES</span> <span class="o">+=</span> <span class="p">[</span>
+    <span class="s2">"nsIComponentName.idl"</span><span class="p">,</span>
+<span class="p">]</span>
+
+<span class="n">XPCOM_MANIFESTS</span> <span class="o">+=</span> <span class="p">[</span>
+    <span class="s2">"components.conf"</span><span class="p">,</span>
+<span class="p">]</span>
+
+<span class="n">EXPORTS</span><span class="o">.</span><span class="n">mozilla</span> <span class="o">+=</span> <span class="p">[</span>
+    <span class="s2">"ComponentName.h"</span><span class="p">,</span>
+<span class="p">]</span>
+
+<span class="n">UNIFIED_SOURCES</span> <span class="o">+=</span> <span class="p">[</span>
+    <span class="s2">"ComponentName.cpp"</span><span class="p">,</span>
+<span class="p">]</span>
+</pre>
+           </div>
+          </div>
+          <p>This completes the implementation of a basic XPCOM Interface using C++. The component should be available via the <a class="reference external" href="https://developer.mozilla.org/en-US/docs/Tools/Browser_Console">Browser Console</a> or other chrome contexts.</p>
+          <div class="highlight-javascript notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">Services</span><span class="p">.</span><span class="nx">componentName</span><span class="p">.</span><span class="nx">isAlive</span><span class="p">);</span>
+<span class="o">&gt;</span><span class="w"> </span><span class="kc">true</span>
+</pre>
+           </div>
+          </div>
+         </section>
+        </section>
+       </div>
+      </div>
+      <footer>
+       <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="xpidl.html" class="btn btn-neutral float-left" title="XPIDL" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a> <a href="cc-macros.html" class="btn btn-neutral float-right" title="How to make a C++ class cycle collected" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+       </div>
+       <hr>
+       <div role="contentinfo">
+        <p></p>
+       </div> Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+      </footer>
+     </div>
+    </div>
+   </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ </body>
+</html>

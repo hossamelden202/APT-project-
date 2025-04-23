@@ -1,0 +1,471 @@
+<!doctype html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Allocation tests — Firefox Source Docs  documentation</title>
+  <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50">
+  <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094">
+  <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=fd3f3429">
+  <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b">
+  <link rel="stylesheet" type="text/css" href="../../../_static/custom_theme.css?v=dc5ed815">
+  <link rel="stylesheet" type="text/css" href="../../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7">
+  <link rel="shortcut icon" href="../../../_static/firefox.ico"><!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+  <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+  <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+  <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+  <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+  <script src="../../../_static/copybutton.js?v=30646c52"></script>
+  <script src="../../../_static/design-tabs.js?v=36754332"></script>
+  <script src="../../../_static/js/theme.js"></script>
+  <link rel="index" title="Index" href="../../../genindex.html">
+  <link rel="search" title="Search" href="../../../search.html">
+  <link rel="next" title="Automated tests: writing tests" href="../writing-tests.html">
+  <link rel="prev" title="DevTools node tests" href="../node-tests.html">
+ </head>
+ <body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+   <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <div class="wy-side-scroll">
+     <div class="wy-side-nav-search">
+      <a href="../../../index.html" class="icon icon-home"> Firefox Source Docs <img src="../../../_static/firefox-wordmark.svg" class="logo" alt="Logo"> </a><!-- -- This code is governed by the BSD license ---->
+      <div>
+       <h3>Quick search</h3>
+       <script>
+    (function () {
+      var cx = "dd12886298f75dbef";
+      var gcse = document.createElement("script");
+      gcse.async = true;
+      gcse.src = "https://cse.google.com/cse.js?cx=" + cx;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(gcse, s);
+    })();
+  </script><gcse:search></gcse:search>
+      </div>
+     </div>
+     <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+      <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../glossary/index.html">A Glossary of Common Terms</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../overview/index.html">A Quick Guide to Mozilla Applications</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../setup/index.html">Getting Set Up To Work On The Firefox Codebase</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Working On Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../contributing/index.html">Working on Firefox</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../bug-mgmt/index.html">Bug Handling</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox User Guide</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../devtools-user/index.html">Firefox DevTools User Docs</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Source Code Documentation</span></p>
+      <ul class="current">
+       <li class="toctree-l1"><a class="reference internal" href="../../../mots/index.html">Governance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../browser/index.html">Firefox Front-end</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../dom/index.html">DOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../editor/index.html">Editor</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../layout/index.html">Style system (CSS) &amp; Layout</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../gfx/index.html">Graphics</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../ipc/index.html">Processes, Threads and IPC</a></li>
+       <li class="toctree-l1 current"><a class="reference internal" href="../../index.html">Firefox DevTools Contributor Docs</a>
+        <ul class="current">
+         <li class="toctree-l2"><a class="reference internal" href="../../index.html#getting-started">Getting Started</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../index.html#contributing">Contributing</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../index.html#recurring-tasks">Recurring tasks</a></li>
+         <li class="toctree-l2 current"><a class="reference internal" href="../../index.html#automated-tests">Automated tests</a>
+          <ul class="current">
+           <li class="toctree-l3"><a class="reference internal" href="../README.html">Automated tests</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="../xpcshell.html">xpcshell</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="../mochitest-chrome.html">Chrome mochitests</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="../mochitest-devtools.html">DevTools mochitests</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="../node-tests.html">Node tests</a></li>
+           <li class="toctree-l3 current"><a class="current reference internal" href="#">Allocation tests</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#test-example">Test example</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#how-to-run-them-locally">How to run them locally</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#debug-leaks">Debug leaks</a>
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="#example">Example</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#debug-leaks-via-dominators">Debug leaks via dominators</a></li>
+            </ul></li>
+           <li class="toctree-l3"><a class="reference internal" href="#how-to-easily-get-data-from-try-run">How to easily get data from try run</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#following-trends-for-these-tests">Following trends for these tests</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="../writing-tests.html">Writing tests</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="../debugging-intermittents.html">Debugging intermittent failures</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="../performance-tests-overview.html">Performance tests overview</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="../performance-tests-damp.html">DAMP Performance tests</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="../writing-perf-tests.html">Writing new DAMP performance tests</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="../writing-perf-tests.html#how-to-name-your-test-and-register-it">How to name your test and register it?</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="../writing-perf-tests.html#how-to-run-your-new-test">How to run your new test?</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="../writing-perf-tests-example.html">Example</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="../writing-perf-tests-tips.html">Advanced tips</a></li>
+          </ul></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../index.html#files-and-directories">Files and directories</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../index.html#tool-architectures">Tool Architectures</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../index.html#frontend">Frontend</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../index.html#backend">Backend</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../index.html#preferences">Preferences</a></li>
+        </ul></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../toolkit/index.html">Toolkit</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../js/index.html">SpiderMonkey</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../jsloader/index.html">JS Loader</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../mobile/android/geckoview/index.html">GeckoView</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../mobile/android/fenix/index.html">Fenix</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../mobile/android/focus-android/index.html">Focus for Android</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../dom/bindings/webidl/index.html">WebIDL</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../modules/libpref/index.html">libpref</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../networking/index.html">Networking</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../remote/index.html">Remote Protocols</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../services/index.html">Services</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../permissions/index.html">Permissions</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../uriloader/index.html">File Handling</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../widget/cocoa/index.html">Firefox on macOS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../widget/windows/index.html">Firefox on Windows</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../toolkit/components/ml/index.html">Firefox AI Runtime</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../accessible/index.html">Accessibility</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../media/index.html">Media Playback</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../code-quality/index.html">Code quality</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../writing-rust-code/index.html">Writing Rust Code</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../rust-components/index.html">Rust Components</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../tools/profiler/index.html">Gecko Profiler</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../performance/index.html">Performance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../storage/index.html">Database bindings (SQLite, KV, …)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../xpcom/index.html">XPCOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../nspr/index.html">NSPR</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../security/nss/index.html">Network Security Services (NSS)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../content-security/index.html">Web Security Checks in Gecko</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">The Firefox Build System</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../mach/index.html">Mach</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../tools/try/index.html">Pushing to Try</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../build/buildsystem/index.html">Build System</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../taskcluster/index.html">Firefox CI and Taskgraph</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../tools/moztreedocs/index.html">Managing Documentation</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../mozbuild/vendor/index.html">Vendoring Third Party Components</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Testing &amp; Test Infrastructure</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/automated-testing/index.html">Automated Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/treeherder-try/index.html">Understanding Treeherder Results</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/sheriffed-intermittents/index.html">Sheriffed intermittent failures</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/tests-for-new-config/index.html">Turning on Firefox tests for a new configuration</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/intermittent/index.html">Avoiding intermittent tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/testing-policy/index.html">Testing Policy</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/ci-configs/index.html">Configuration Changes</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/browser-chrome/index.html">Browser chrome mochitests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/chrome-tests/index.html">Chrome Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/marionette/index.html">Marionette</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/geckodriver/index.html">geckodriver</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/test-verification/index.html">Test Verification</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/webrender/index.html">WebRender Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/mochitest-plain/index.html">Mochitest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/xpcshell/index.html">XPCShell tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/tps/index.html">TPS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../web-platform/index.html">web-platform-tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../gtest/index.html">GTest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../tools/fuzzing/index.html">Fuzzing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../tools/sanitizer/index.html">Sanitizer</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/perfdocs/index.html">Performance Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../tools/code-coverage/index.html">Code coverage</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing-rust-code/index.html">Testing &amp; Debugging Rust Code</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Releases &amp; Updates</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../update-infrastructure/index.html">Mozilla Update Infrastructure</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../update-infrastructure/index.html#watershed-updates">Watershed Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../update-infrastructure/index.html#desupport-updates">Desupport Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../tools/update-verify/index.html">Update Verify</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Localization &amp; Internationalization</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../intl/index.html">Internationalization</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../l10n/index.html">Localization</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox and Python</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../mozbase/index.html">mozbase</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../python/index.html">Using third-party Python packages</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Metrics Collected in Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../metrics/index.html">Metrics</a></li>
+      </ul>
+     </div>
+    </div>
+   </nav>
+   <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+    <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+     <i data-toggle="wy-nav-top" class="fa fa-bars"></i> <a href="../../../index.html">Firefox Source Docs</a>
+    </nav>
+    <div class="wy-nav-content">
+     <div class="rst-content">
+      <!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+      <div role="navigation" aria-label="Page navigation">
+       <ul class="wy-breadcrumbs">
+        <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+        <li class="breadcrumb-item"><a href="../../index.html">Firefox DevTools Contributor Docs</a></li>
+        <li class="breadcrumb-item active">Allocation tests</li>
+        <li class="wy-breadcrumbs-aside"><a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Developer+Infrastructure&amp;component=Firefox+Source+Docs%3A+Content&amp;short_desc=Documentation+issue+on+devtools/tests/memory/index&amp;comment=URL+=+https://firefox-source-docs.mozilla.org/devtools/tests/memory/index.html&amp;bug_file_loc=https://firefox-source-docs.mozilla.org/devtools/tests/memory/index.html" rel="nofollow">Report an issue</a> / <a href="../../../_sources/devtools/tests/memory/index.md.txt" rel="nofollow"> View page source</a></li>
+       </ul>
+       <hr>
+      </div>
+      <div role="main" class="document" itemscope itemtype="http://schema.org/Article">
+       <div itemprop="articleBody">
+        <section id="allocation-tests">
+         <h1>Allocation tests<a class="headerlink" href="#allocation-tests" title="Link to this heading">?</a></h1>
+         <p>The <a class="reference external" href="https://searchfox.org/mozilla-central/source/devtools/client/framework/test/allocations">allocations</a> folder contains special mochitests which are meant to record data about the memory usage of DevTools. This uses Spidermonkey’s Memory API implemented next to the debugger API. For more info, see the following doc: <a class="reference external" href="https://searchfox.org/mozilla-central/source/js/src/doc/Debugger/Debugger.Memory.md">https://searchfox.org/mozilla-central/source/js/src/doc/Debugger/Debugger.Memory.md</a></p>
+        </section>
+        <section id="test-example">
+         <h1>Test example<a class="headerlink" href="#test-example" title="Link to this heading">?</a></h1>
+         <div class="highlight-javascript notranslate">
+          <div class="highlight">
+           <pre><span></span><span class="nx">add_task</span><span class="p">(</span><span class="k">async</span><span class="w"> </span><span class="kd">function</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="c1">// Execute preliminary setup in order to be able to run your scenario</span>
+<span class="w">  </span><span class="c1">// You would typicaly load modules, open a tab, a toolbox, ...</span>
+<span class="w">  </span><span class="p">...</span>
+
+<span class="w">  </span><span class="c1">// Run the test scenario first before recording in order to load all the</span>
+<span class="w">  </span><span class="c1">// modules. Otherwise they get reported as "still allocated" objects,</span>
+<span class="w">  </span><span class="c1">// whereas we do expect them to be kept in memory as they are loaded via</span>
+<span class="w">  </span><span class="c1">// the main DevTools loader, which keeps the module loaded until the</span>
+<span class="w">  </span><span class="c1">// shutdown of Firefox</span>
+<span class="w">  </span><span class="k">await</span><span class="w"> </span><span class="nx">testScript</span><span class="p">();</span>
+
+<span class="w">  </span><span class="c1">// Pass alsoRecordContentProcess if you want to record the content process</span>
+<span class="w">  </span><span class="c1">// of the current tab. Otherwise it will only record parent process objects.</span>
+<span class="w">  </span><span class="k">await</span><span class="w"> </span><span class="nx">startRecordingAllocations</span><span class="p">({</span><span class="w"> </span><span class="nx">alsoRecordContentProcess</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="w"> </span><span class="p">});</span>
+
+<span class="w">  </span><span class="c1">// Now, run the test script. This time, we record this run.</span>
+<span class="w">  </span><span class="k">await</span><span class="w"> </span><span class="nx">testScript</span><span class="p">(</span><span class="nx">toolbox</span><span class="p">);</span>
+
+<span class="w">  </span><span class="c1">// This will stop the record and also publish the results to Talos database</span>
+<span class="w">  </span><span class="c1">// Second argument will be the name of the test displayed in Talos.</span>
+<span class="w">  </span><span class="c1">// Many tests will be recorded, but all of them will be prefixed with this string.</span>
+<span class="w">  </span><span class="k">await</span><span class="w"> </span><span class="nx">stopRecordingAllocations</span><span class="p">(</span><span class="s2">"reload"</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">alsoRecordContentProcess</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="w"> </span><span class="p">});</span>
+
+<span class="w">  </span><span class="c1">// Then, here you can execute cleanup.</span>
+<span class="w">  </span><span class="c1">// You would typically close the tab, toolbox, ...</span>
+<span class="p">});</span>
+</pre>
+          </div>
+         </div>
+        </section>
+        <section id="how-to-run-them-locally">
+         <h1>How to run them locally<a class="headerlink" href="#how-to-run-them-locally" title="Link to this heading">?</a></h1>
+         <div class="highlight-bash notranslate">
+          <div class="highlight">
+           <pre><span></span>$<span class="w"> </span>./mach<span class="w"> </span>mochitest<span class="w"> </span>--headless<span class="w"> </span>devtools/client/framework/test/allocations/
+</pre>
+          </div>
+         </div>
+         <p>And to only see the results:</p>
+         <div class="highlight-bash notranslate">
+          <div class="highlight">
+           <pre><span></span>$<span class="w"> </span>./mach<span class="w"> </span>mochitest<span class="w"> </span>--headless<span class="w"> </span>devtools/client/framework/test/allocations/<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s2">" test leaked "</span>
+</pre>
+          </div>
+         </div>
+        </section>
+        <section id="debug-leaks">
+         <h1>Debug leaks<a class="headerlink" href="#debug-leaks" title="Link to this heading">?</a></h1>
+         <p>If you are seeing a regression or an improvement, only seeing the number of objects being leaked isn’t super helpful. The tests includes some special debug modes which are printing lots of data to figure out what is leaking and why.</p>
+         <p>You may run the test with the following env variable to turn debug mode on:</p>
+         <div class="highlight-bash notranslate">
+          <div class="highlight">
+           <pre><span></span><span class="nv">DEBUG_DEVTOOLS_ALLOCATIONS</span><span class="o">=</span>leak<span class="p">|</span>allocations<span class="w"> </span>$<span class="w"> </span>./mach<span class="w"> </span>mochitest<span class="w"> </span>--headless<span class="w"> </span>devtools/client/framework/test/allocations/the-fault-test.js
+</pre>
+          </div>
+         </div>
+         <p><strong>DEBUG_DEVTOOLS_ALLOCATIONS</strong> can enable two distinct debug output. (Only one can be enabled at a given time)</p>
+         <p><strong>DEBUG_DEVTOOLS_ALLOCATIONS=allocations</strong> will report all allocation sites that have been made while running your test. This will include allocations which has been freed. This view is especially useful if you want to reduce allocations in order to reduce GC overload.</p>
+         <p><strong>DEBUG_DEVTOOLS_ALLOCATIONS=leak</strong> will report only the allocations which are still allocated at the end of your test. Sometimes it will only report allocations with missing stack trace. Thus making the preview view helpful.</p>
+         <section id="example">
+          <h2>Example<a class="headerlink" href="#example" title="Link to this heading">?</a></h2>
+          <p>Let’s assume we have the following code:</p>
+          <div class="highlight-javascript notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="w"> </span><span class="mf">1</span><span class="o">:</span><span class="w">  </span><span class="nx">exports</span><span class="p">.</span><span class="nx">MyModule</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w"> </span><span class="mf">2</span><span class="o">:</span><span class="w">    </span><span class="nx">globalArray</span><span class="o">:</span><span class="w"> </span><span class="p">[],</span>
+<span class="w"> </span><span class="mf">3</span><span class="o">:</span><span class="w">    </span><span class="nx">test</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w"> </span><span class="mf">3</span><span class="o">:</span><span class="w">      </span><span class="c1">// The following object will be allocated but not leaked,</span>
+<span class="w"> </span><span class="mf">5</span><span class="o">:</span><span class="w">      </span><span class="c1">// as we keep no reference to it anywhere</span>
+<span class="w"> </span><span class="mf">6</span><span class="o">:</span><span class="w">      </span><span class="kd">const</span><span class="w"> </span><span class="nx">transientObject</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{};</span>
+<span class="w"> </span><span class="mf">7</span><span class="o">:</span>
+<span class="w"> </span><span class="mf">8</span><span class="o">:</span><span class="w">      </span><span class="c1">// The following object will be allocated on this line,</span>
+<span class="w"> </span><span class="mf">9</span><span class="o">:</span><span class="w">      </span><span class="c1">// but leaked on the following one. By storing a reference</span>
+<span class="mf">10</span><span class="o">:</span><span class="w">      </span><span class="c1">// to it in the global array which is never cleared.</span>
+<span class="mf">11</span><span class="o">:</span><span class="w">      </span><span class="kd">const</span><span class="w"> </span><span class="nx">leakedObject</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{};</span>
+<span class="mf">12</span><span class="o">:</span><span class="w">      </span><span class="k">this</span><span class="p">.</span><span class="nx">globalArray</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">leakedObject</span><span class="p">);</span>
+<span class="mf">13</span><span class="o">:</span><span class="w">    </span><span class="p">},</span>
+<span class="mf">14</span><span class="o">:</span><span class="w">  </span><span class="p">};</span>
+</pre>
+           </div>
+          </div>
+          <p>And that, we have a memory test doing this:</p>
+          <div class="highlight-javascript notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">MyModule</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s2">"devtools/my-module"</span><span class="p">);</span>
+
+<span class="w">  </span><span class="k">await</span><span class="w"> </span><span class="nx">startRecordingAllocations</span><span class="p">();</span>
+
+<span class="w">  </span><span class="nx">MyModule</span><span class="p">.</span><span class="nx">test</span><span class="p">();</span>
+
+<span class="w">  </span><span class="k">await</span><span class="w"> </span><span class="nx">stopRecordingAllocations</span><span class="p">(</span><span class="s2">"target"</span><span class="p">);</span>
+</pre>
+           </div>
+          </div>
+          <p>We can first review all the allocations by running:</p>
+          <div class="highlight-bash notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="nv">DEBUG_DEVTOOLS_ALLOCATIONS</span><span class="o">=</span>allocations<span class="w"> </span>$<span class="w"> </span>./mach<span class="w"> </span>mochitest<span class="w"> </span>--headless<span class="w"> </span>devtools/client/framework/test/allocations/browser_allocation_myTest.js
+</pre>
+           </div>
+          </div>
+          <p>which will print at the end:</p>
+          <div class="highlight-javascript notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="nx">DEVTOOLS</span><span class="w"> </span><span class="nx">ALLOCATION</span><span class="o">:</span><span class="w"> </span><span class="nx">all</span><span class="w"> </span><span class="nx">allocations</span><span class="w"> </span><span class="p">(</span><span class="nx">which</span><span class="w"> </span><span class="nx">may</span><span class="w"> </span><span class="nx">be</span><span class="w"> </span><span class="nx">freed</span><span class="w"> </span><span class="nx">or</span><span class="w"> </span><span class="nx">are</span><span class="w"> </span><span class="nx">still</span><span class="w"> </span><span class="nx">allocated</span><span class="p">)</span><span class="o">:</span>
+<span class="p">[</span>
+<span class="w">   </span><span class="p">{</span>
+<span class="w">     </span><span class="s2">"src"</span><span class="o">:</span><span class="w"> </span><span class="s2">"UNKNOWN"</span><span class="p">,</span>
+<span class="w">     </span><span class="s2">"count"</span><span class="o">:</span><span class="w"> </span><span class="mf">80</span><span class="p">,</span>
+<span class="w">     </span><span class="s2">"lines"</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">       </span><span class="s2">"?: 80"</span>
+<span class="w">     </span><span class="p">]</span>
+<span class="w">   </span><span class="p">},</span>
+<span class="w">   </span><span class="p">{</span>
+<span class="w">     </span><span class="s2">"src"</span><span class="o">:</span><span class="w"> </span><span class="s2">"resource://devtools/my-module.js"</span><span class="p">,</span>
+<span class="w">     </span><span class="s2">"count"</span><span class="o">:</span><span class="w"> </span><span class="mf">2</span><span class="p">,</span>
+<span class="w">     </span><span class="s2">"lines"</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">       </span><span class="s2">"11: 1"</span>
+<span class="w">       </span><span class="s2">"6: 1"</span>
+<span class="w">     </span><span class="p">]</span>
+<span class="w">   </span><span class="p">}</span>
+<span class="p">]</span>
+</pre>
+           </div>
+          </div>
+          <p>The first part, with <code class="docutils literal notranslate"><span class="pre">UNKNOWN</span></code> can be ignored. This is about objects with missing allocation sites. The second part of this logs tells us that 2 objects were allocated from my-module.js when running the test. One has been allocated at line 6, it is <code class="docutils literal notranslate"><span class="pre">transcientObject</span></code>. Another one has been allocated at line 11, it is <code class="docutils literal notranslate"><span class="pre">leakedObject</span></code>.</p>
+          <p>Now, we can use the second view to focus only on objects that have been kept allocated:</p>
+          <div class="highlight-bash notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="nv">DEBUG_DEVTOOLS_ALLOCATIONS</span><span class="o">=</span>leaks<span class="w"> </span>$<span class="w"> </span>./mach<span class="w"> </span>mochitest<span class="w"> </span>--headless<span class="w"> </span>devtools/client/framework/test/allocations/browser_allocation_myTest.js
+</pre>
+           </div>
+          </div>
+          <p>which will print at the end:</p>
+          <div class="highlight-javascript notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="nx">DEVTOOLS</span><span class="w"> </span><span class="nx">ALLOCATION</span><span class="o">:</span><span class="w"> </span><span class="nx">allocations</span><span class="w"> </span><span class="nx">which</span><span class="w"> </span><span class="nx">leaked</span><span class="o">:</span>
+<span class="p">[</span>
+<span class="w">   </span><span class="p">{</span>
+<span class="w">     </span><span class="s2">"src"</span><span class="o">:</span><span class="w"> </span><span class="s2">"UNKNOWN"</span><span class="p">,</span>
+<span class="w">     </span><span class="s2">"count"</span><span class="o">:</span><span class="w"> </span><span class="mf">80</span><span class="p">,</span>
+<span class="w">     </span><span class="s2">"lines"</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">       </span><span class="s2">"?: 80"</span>
+<span class="w">     </span><span class="p">]</span>
+<span class="w">   </span><span class="p">},</span>
+<span class="w">   </span><span class="p">{</span>
+<span class="w">     </span><span class="s2">"src"</span><span class="o">:</span><span class="w"> </span><span class="s2">"resource://devtools/shared/commands/commands-factory.js"</span><span class="p">,</span>
+<span class="w">     </span><span class="s2">"count"</span><span class="o">:</span><span class="w"> </span><span class="mf">1</span><span class="p">,</span>
+<span class="w">     </span><span class="s2">"lines"</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">       </span><span class="s2">"11: 1"</span>
+<span class="w">     </span><span class="p">]</span>
+<span class="w">   </span><span class="p">}</span>
+<span class="p">]</span>
+</pre>
+           </div>
+          </div>
+          <p>Similarly, we can focus only on the second part, which tells us that only one object is being leaked and this object has been originally created from line 11, this is <code class="docutils literal notranslate"><span class="pre">leakedObject</span></code>. This doesn’t tell us why the object is being kept allocated, but at least we know which one is being kept in memory.</p>
+         </section>
+         <section id="debug-leaks-via-dominators">
+          <h2>Debug leaks via dominators<a class="headerlink" href="#debug-leaks-via-dominators" title="Link to this heading">?</a></h2>
+          <p>This last feature might be the most powerful and isn’t bound to DEBUG_DEVTOOLS_ALLOCATIONS. This is always enabled. Also, it requires to know which particular object is being leaked and also require to hack the codebase in order to pass a reference of the suspicious object to the test helper.</p>
+          <p>You can instruct the test helper to track a given object by doing this:</p>
+          <div class="highlight-javascript notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="w"> </span><span class="mf">1</span><span class="o">:</span><span class="w"> </span><span class="c1">// Let's say it is some code running from "my-module.js"</span>
+<span class="w"> </span><span class="mf">2</span><span class="o">:</span>
+<span class="w"> </span><span class="mf">3</span><span class="o">:</span><span class="w"> </span><span class="c1">// From a DevTools CommonJS module:</span>
+<span class="w"> </span><span class="mf">4</span><span class="o">:</span><span class="w"> </span><span class="kd">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">track</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s2">"devtools/shared/test-helpers/tracked-objects.sys.mjs"</span><span class="p">);</span>
+<span class="w"> </span><span class="mf">5</span><span class="o">:</span><span class="w"> </span><span class="c1">// From anything else, JSM, XPCOM module,...:</span>
+<span class="w"> </span><span class="mf">6</span><span class="o">:</span><span class="w"> </span><span class="kd">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">track</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ChromeUtils</span><span class="p">.</span><span class="nx">importESModule</span><span class="p">(</span><span class="s2">"resource://devtools/shared/test-helpers/tracked-objects.sys.mjs"</span><span class="p">);</span>
+<span class="w"> </span><span class="mf">7</span><span class="o">:</span>
+<span class="w"> </span><span class="mf">8</span><span class="o">:</span><span class="w"> </span><span class="kd">const</span><span class="w"> </span><span class="nx">g</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[];</span>
+<span class="w"> </span><span class="mf">9</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">someFunctionInDevToolsCalledBySomething</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="mf">10</span><span class="o">:</span><span class="w">   </span><span class="kd">const</span><span class="w"> </span><span class="nx">myLeakedObject</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{};</span>
+<span class="mf">11</span><span class="o">:</span><span class="w">   </span><span class="nx">track</span><span class="p">(</span><span class="nx">myLeakedObject</span><span class="p">);</span>
+<span class="mf">12</span><span class="o">:</span>
+<span class="mf">13</span><span class="o">:</span><span class="w">   </span><span class="c1">// Simulate a leak by holding a reference to the object in a global `g` array</span>
+<span class="mf">14</span><span class="o">:</span><span class="w">   </span><span class="nx">g</span><span class="p">.</span><span class="nx">push</span><span class="p">({</span><span class="w"> </span><span class="nx">seeMyCustomAttributeHere</span><span class="o">:</span><span class="w"> </span><span class="nx">myLeakedObject</span><span class="w"> </span><span class="p">});</span>
+<span class="mf">15</span><span class="o">:</span><span class="w"> </span><span class="p">}</span>
+</pre>
+           </div>
+          </div>
+          <p>Then, when running the test you will get such output:</p>
+          <div class="highlight-bash notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="w"> </span><span class="m">0</span>:41.26<span class="w"> </span>GECKO<span class="o">(</span><span class="m">644653</span><span class="o">)</span><span class="w">  </span><span class="c1"># Tracing: Object@my-module:10</span>
+<span class="w"> </span><span class="m">0</span>:40.65<span class="w"> </span>GECKO<span class="o">(</span><span class="m">644653</span><span class="o">)</span><span class="w"> </span><span class="c1">### Path(s) from root:</span>
+<span class="w"> </span><span class="m">0</span>:41.26<span class="w"> </span>GECKO<span class="o">(</span><span class="m">644653</span><span class="o">)</span><span class="w"> </span>-<span class="w"> </span>other@no-stack:undefined.WeakMap<span class="w"> </span>entry<span class="w"> </span>value
+<span class="w"> </span><span class="m">0</span>:41.26<span class="w"> </span>GECKO<span class="o">(</span><span class="m">644653</span><span class="o">)</span><span class="w">  </span><span class="se">\-</span>-&gt;<span class="w"> </span>LexicalEnvironment@base-loader.sys.mjs:160.**UNKNOWN<span class="w"> </span>SLOT<span class="w"> </span><span class="m">1</span>**
+<span class="w"> </span><span class="m">0</span>:41.26<span class="w"> </span>GECKO<span class="o">(</span><span class="m">644653</span><span class="o">)</span><span class="w">  </span><span class="se">\-</span>-&gt;<span class="w"> </span>Object@base-loader.sys.mjs:155.g
+<span class="w"> </span><span class="m">0</span>:41.26<span class="w"> </span>GECKO<span class="o">(</span><span class="m">644653</span><span class="o">)</span><span class="w">  </span><span class="se">\-</span>-&gt;<span class="w"> </span>Array@my-module.js:8.objectElements<span class="o">[</span><span class="m">0</span><span class="o">]</span>
+<span class="w"> </span><span class="m">0</span>:41.26<span class="w"> </span>GECKO<span class="o">(</span><span class="m">644653</span><span class="o">)</span><span class="w">  </span><span class="se">\-</span>-&gt;<span class="w"> </span>Object@my-module.js:14.seeMyCustomAttributeHere
+<span class="w"> </span><span class="m">0</span>:41.26<span class="w"> </span>GECKO<span class="o">(</span><span class="m">644653</span><span class="o">)</span><span class="w">  </span><span class="se">\-</span>-&gt;<span class="w"> </span>Object@my-module.js:10
+</pre>
+           </div>
+          </div>
+          <p>This output means that <code class="docutils literal notranslate"><span class="pre">myLeakedObject</span></code> was originally allocated from my-module.js at line 10. And is being held allocated because it is kept in an Object allocated from my-module.js at line 14. This is our custom object we stored in <code class="docutils literal notranslate"><span class="pre">g</span></code> global Array. This custom object it hold by the Array allocated at line 8 of my-module.js. And this array is held allocated from an Object, itself allocated by base-loader.sys.mjs at line 155. This is the global of the my-module.js’s module, created by DevTools loader. Then we see some more low level object up to another global object, which misses its allocation site.</p>
+         </section>
+        </section>
+        <section id="how-to-easily-get-data-from-try-run">
+         <h1>How to easily get data from try run<a class="headerlink" href="#how-to-easily-get-data-from-try-run" title="Link to this heading">?</a></h1>
+         <div class="highlight-bash notranslate">
+          <div class="highlight">
+           <pre><span></span>$<span class="w"> </span>./mach<span class="w"> </span>try<span class="w"> </span>fuzzy<span class="w"> </span>devtools/client/framework/test/allocations/<span class="w"> </span>--query<span class="w"> </span><span class="s2">"'linux 'chrome-e10s 'opt '64-qr/opt"</span>
+</pre>
+          </div>
+         </div>
+         <p>You might also pass <code class="docutils literal notranslate"><span class="pre">--rebuild</span> <span class="pre">3</span></code> if the test result is having some noise and you want more test runs.</p>
+        </section>
+        <section id="following-trends-for-these-tests">
+         <h1>Following trends for these tests<a class="headerlink" href="#following-trends-for-these-tests" title="Link to this heading">?</a></h1>
+         <p>You may try looking at: <a class="reference external" href="https://firefox-dev.tools/performance-dashboard/tools/memory.html">https://firefox-dev.tools/performance-dashboard/tools/memory.html</a></p>
+         <p>Or at: <a class="reference external" href="https://treeherder.mozilla.org/perfherder/graphs?highlightAlerts=1&amp;amp;highlightChangelogData=1&amp;amp;series=autoland,3887143,1,12&amp;amp;series=mozilla-central,3887737,1,12&amp;amp;series=mozilla-central,3887740,1,12&amp;amp;series=mozilla-central,3887743,1,12&amp;amp;series=mozilla-central,3896204,1,12&amp;amp;timerange=2592000&amp;amp;zoom=1630504360002,1632239562424,0,123469.11111111111">https://treeherder.mozilla.org/perfherder/graphs?highlightAlerts=1&amp;highlightChangelogData=1&amp;series=autoland,3887143,1,12&amp;series=mozilla-central,3887737,1,12&amp;series=mozilla-central,3887740,1,12&amp;series=mozilla-central,3887743,1,12&amp;series=mozilla-central,3896204,1,12&amp;timerange=2592000&amp;zoom=1630504360002,1632239562424,0,123469.11111111111</a></p>
+         <p>Link that you get from: <a class="reference external" href="https://treeherder.mozilla.org/perfherder/graphs">https://treeherder.mozilla.org/perfherder/graphs</a> by looking at last year data for “DevTools” in the first dropdown, and double clicking on the relevant line in “Tests” menulist.</p>
+         <p>Significant improvements and regressions will be notified through <a class="reference external" href="https://treeherder.mozilla.org/perfherder/alerts?hideDwnToInv=1&amp;amp;page=1&amp;amp;framework=12">the following dashboard</a>.</p>
+        </section>
+       </div>
+      </div>
+      <footer>
+       <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../node-tests.html" class="btn btn-neutral float-left" title="DevTools node tests" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a> <a href="../writing-tests.html" class="btn btn-neutral float-right" title="Automated tests: writing tests" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+       </div>
+       <hr>
+       <div role="contentinfo">
+        <p></p>
+       </div> Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+      </footer>
+     </div>
+    </div>
+   </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ </body>
+</html>

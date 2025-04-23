@@ -1,0 +1,435 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+  <link rel="top" title="Home" href="http://www.mozilla.org/">
+  <link rel="stylesheet" type="text/css" href="../../../../css/print.css" media="print">
+  <link rel="stylesheet" type="text/css" href="../../../../css/base/content.css" media="all">
+  <link rel="stylesheet" type="text/css" href="../../../../css/cavendish/content.css" title="Cavendish" media="screen">
+  <link rel="stylesheet" type="text/css" href="../../../../css/base/template.css" media="screen">
+  <link rel="stylesheet" type="text/css" href="../../../../css/cavendish/template.css" title="Cavendish" media="screen">
+  <link rel="icon" href="../../../../images/mozilla-16.png" type="image/png">
+  <title>Physical Format of pcertdb</title>
+  <script src="../../../../__utm.js" type="text/javascript"></script>
+ </head>
+ <body id="www-mozilla-org" class="deepLevel">
+  <div id="container">
+   <p class="important">You are currently viewing a snapshot of www.mozilla.org taken on April 21, 2008. Most of this content is highly out of date (some pages haven't been updated since the project began in 1998) and exists for historical purposes only. If there are any pages on this archive site that you think should be added back to www.mozilla.org, please <a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Websites&amp;component=www.mozilla.org">file a bug</a>.</p>
+   <p class="skipLink"><a href="#mainContent" accesskey="2">Skip to main content</a></p>
+   <div id="header">
+    <h1><a href="/" title="Return to home page" accesskey="1">Mozilla</a></h1>
+    <ul>
+     <li id="menu_aboutus"><a href="../../../../about/" title="Getting the most out of your online experience">About</a></li>
+     <li id="menu_developers"><a href="../../../../developer/" title="Using Mozilla's products for your own applications">Developers</a></li>
+     <li id="menu_store"><a href="http://store.mozilla.org/?r=mozorg1" title="Shop for Mozilla products on CD and other merchandise">Store</a></li>
+     <li id="menu_support"><a href="../../../../support/" title="Installation, trouble-shooting, and the knowledge base">Support</a></li>
+     <li id="menu_products"><a href="../../../../products/" title="All software Mozilla currently offers">Products</a></li>
+    </ul>
+    <form id="searchbox_002443141534113389537:ysdmevkkknw" action="http://www.google.com/cse" title="mozilla.org Search">
+     <div>
+      <label for="q" title="Search mozilla.org's sites">search mozilla:</label> <input type="hidden" name="cx" value="002443141534113389537:ysdmevkkknw"> <input type="hidden" name="cof" value="FORID:0"> <input type="text" id="q" name="q" accesskey="s" size="30"> <input type="submit" id="submit" value="Go">
+     </div>
+    </form>
+   </div>
+   <hr class="hide">
+   <div id="mBody">
+    <div id="side">
+     <ul id="nav">
+      <li><a href="/roadmap" title="Roadmap"><strong> Roadmap</strong></a></li>
+      <li><a title="Projects" href="../../../../projects/"><strong> Projects</strong></a></li>
+      <li><a title="For developers" href="../../../../developer/"><strong> Coding</strong></a>
+       <ul>
+        <li><a href="/owners" title="Module Owners"> Module Owners</a></li>
+        <li><a title="Hacking" href="../../../../hacking/"> Hacking</a></li>
+        <li><a title="Get the Source" href="http://developer.mozilla.org/en/docs/Download_Mozilla_Source_Code"> Get the Source</a></li>
+        <li><a title="Building Mozilla" href="http://developer.mozilla.org/en/docs/Build_Documentation"> Build It</a></li>
+       </ul></li>
+      <li><a title="Testing" href="../../../../quality/"><strong> Testing</strong></a>
+       <ul>
+        <li><a href="/download" title="Downloads of mozilla.org software releases"> Releases</a></li>
+        <li><a title="Latest mozilla builds for testers" href="../../../../developer/#builds"> Nightly Builds</a></li>
+        <li><a title="For testers to report bugs" href="https://bugzilla.mozilla.org/"> Report A Problem</a></li>
+       </ul></li>
+      <li><a href="/tools" title="Tools for mozilla developers"><strong> Tools</strong></a>
+       <ul>
+        <li><a title="Bug tracking system for mozilla testers." href="https://bugzilla.mozilla.org/"> Bugzilla</a></li>
+        <li><a title="Latest status of mozilla builds" href="http://tinderbox.mozilla.org/showbuilds.cgi?tree=Firefox"> Tinderbox</a></li>
+        <li><a title="Latest checkins" href="http://bonsai.mozilla.org/cvsqueryform.cgi"> Bonsai</a></li>
+        <li><a title="Source cross reference" href="http://lxr.mozilla.org/seamonkey/"> LXR</a></li>
+       </ul></li>
+      <li><a href="/faq" title="Frequently Asked Questions."><strong> FAQs</strong></a></li>
+     </ul>
+    </div>
+    <hr class="hide">
+    <div id="mainContent">
+     <center>
+      <h2>Physical Format of pcertdb</h2><i><font size="-1"> Newsgroup: <a href="news://news.mozilla.org/mozilla.dev.tech.crypto">mozilla.dev.tech.crypto</a> </font></i>
+     </center>
+     <p>There are currently seven record types stored in the permanent cert database. <br></p>
+     <h2>RowID</h2> Usually one uses "keys" to find records in a database. However, since we have various encryption keys floating around, and in fact an entire "key database," I use the term "RowID" here to refer to the things used to specify records in databases. 
+     <p>All rowIDs begin with a single byte, whose value indicates the record type. <br></p>
+     <h2>Payloads</h2> All payloads begin with a three-byte header. The first byte indicates the database format version. The second byte indicates the record type, and should match the record type byte of the corresponding rowID. The third byte consists of flags <font color="#FF0000">[flag info to come].</font>
+     <br>
+     <h2>Specific record types</h2>
+     <h3>Database version</h3>
+     <h4>RowID</h4> The rowID of this database record is a fixed null-terminated ascii string, "Version." 
+     <br>
+     <table border cellspacing="0" cellpadding="0" bgcolor="#F0F0AA" nosave>
+      <tbody>
+       <tr nosave>
+        <td bgcolor="#FFF0B4"><tt><font color="#D21400">0</font></tt></td>
+        <td nosave><tt><font color="#965A00">V</font></tt></td>
+        <td><tt><font color="#965A00">e</font></tt></td>
+        <td><tt><font color="#965A00">r</font></tt></td>
+        <td><tt><font color="#965A00">s</font></tt></td>
+        <td><tt><font color="#965A00">i</font></tt></td>
+        <td><tt><font color="#965A00">o</font></tt></td>
+        <td><tt><font color="#965A00">n</font></tt></td>
+        <td><tt><font color="#965A00">\0</font></tt></td>
+       </tr>
+      </tbody>
+     </table>
+     <h4>Payload</h4> The only point of this record is to store the database format version, which is stored as the first byte of all payloads. Therefore, this payload only includes the common header. 
+     <br>
+     <table border cellspacing="0" cellpadding="0" bgcolor="#FFF0B4" nosave>
+      <tbody>
+       <tr nosave>
+        <td bgcolor="#FFF0B4" nosave><tt><font color="#D21400">7</font></tt></td>
+        <td nosave><tt><font color="#D21400">0</font></tt></td>
+        <td bgcolor="#FFFFE6" nosave><tt><font color="#3C3CC8">f</font></tt></td>
+       </tr>
+      </tbody>
+     </table>
+     <h3>Certificate</h3>
+     <h4>RowID</h4> RowIDs are the guaranteed unique combination of the certificate issuer's (DER-encoded) distinguished name, and that serial number of the cert as assigned by that issuer. The issuer's DN is provided in DER-encoded format in the certificate <font color="#FF0000">[description of DER encoding of DNs to come]</font>, and the serial number is DER-encoded as an integer. To make a rowID, the DN is not decoded, though the integer serial number is. 
+     <br>
+     <table border cellspacing="0" cellpadding="0" bgcolor="#F0F0AA" nosave>
+      <tbody>
+       <tr nosave>
+        <td bgcolor="#FFF0B4" nosave><tt><font color="#D21400">1</font></tt></td>
+        <td><i><font color="#965A00">DER-encoded issuer</font></i></td>
+        <td><i><font color="#965A00">integer serial number</font></i></td>
+       </tr>
+      </tbody>
+     </table>
+     <h4>Payload</h4> The first three elements of this record after the common header are each two-byte sets of flags, indicating for what purposes this cert is "trusted." The first set of flags is for SSL, the second is for S/MIME e-mail, and the third is for object signing. Then comes a two-byte integer (most significant byte first) indicating the length in bytes of the DER-encoded certificate. Then comes a two-byte integer indicating the length of the certificate's nickname; this nickname length may be zero, in which case no nickname is present. Then comes the DER-encoded certificate itself, and finally any nickname as a null-terminated ascii string. 
+     <br>
+     <table border cellspacing="0" cellpadding="0" bgcolor="#F0F0AA" nosave>
+      <tbody>
+       <tr nosave>
+        <td bgcolor="#FFF0B4" nosave><tt><font color="#D21400">7</font></tt></td>
+        <td bgcolor="#FFF0B4" nosave><tt><font color="#D21400">1</font></tt></td>
+        <td bgcolor="#FFFFE6" nosave><tt><font color="#3C3CC8">f</font></tt></td>
+        <td bgcolor="#FFFFE6" nosave><tt><font color="#3C3CC8">ssl</font></tt></td>
+        <td bgcolor="#FFFFE6" nosave><tt><font color="#3C3CC8">email</font></tt></td>
+        <td bgcolor="#FFFFE6" nosave><tt><font color="#3C3CC8">os</font></tt></td>
+        <td><i><font color="#965A00">length of DER-encoded cert</font></i></td>
+        <td><i><font color="#965A00">length of nickname or zero</font></i></td>
+        <td><i><font color="#965A00">DER-encoded cert</font></i></td>
+        <td><i><font color="#965A00">nickname (optional)</font></i></td>
+       </tr>
+      </tbody>
+     </table>
+     <p>The trust bits are defined by or'ing together the following values: <br><br></p>
+     <table border bgcolor="#FFFFE6" nosave>
+      <tbody>
+       <tr nosave>
+        <td bgcolor="#FFF0B4" nosave><tt><font color="#D21400">0x0001</font></tt></td>
+        <td><i><font color="#3C3CC8">Valid peer</font></i></td>
+       </tr>
+       <tr nosave>
+        <td bgcolor="#FFF0B4" nosave><tt><font color="#D21400">0x0002</font></tt></td>
+        <td><i><font color="#3C3CC8">Trusted</font></i></td>
+       </tr>
+       <tr nosave>
+        <td bgcolor="#FFF0B4" nosave><tt><font color="#D21400">0x0004</font></tt></td>
+        <td><i><font color="#3C3CC8">Warn before posting over ssl connections with this server cert</font></i></td>
+       </tr>
+       <tr nosave>
+        <td bgcolor="#FFF0B4" nosave><tt><font color="#D21400">0x0008</font></tt></td>
+        <td><i><font color="#3C3CC8">Valid CA cert</font></i></td>
+       </tr>
+       <tr nosave>
+        <td bgcolor="#FFF0B4" nosave><tt><font color="#D21400">0x0010</font></tt></td>
+        <td><i><font color="#3C3CC8">CA cert trusted for issuing server certs</font></i></td>
+       </tr>
+       <tr nosave>
+        <td bgcolor="#FFF0B4" nosave><tt><font color="#D21400">0x0020</font></tt></td>
+        <td><i><font color="#3C3CC8">NS trusted CA </font><font color="#FF0000">[means what?]</font></i></td>
+       </tr>
+       <tr nosave>
+        <td bgcolor="#FFF0B4" nosave><tt><font color="#D21400">0x0040</font></tt></td>
+        <td><i><font color="#3C3CC8">User certificate</font></i></td>
+       </tr>
+       <tr nosave>
+        <td bgcolor="#FFF0B4" nosave><tt><font color="#D21400">0x0080</font></tt></td>
+        <td><i><font color="#3C3CC8">CA cert trusted for issuing client certs</font></i></td>
+       </tr>
+       <tr nosave>
+        <td bgcolor="#FFF0B4" nosave><tt><font color="#D21400">0x0100</font></tt></td>
+        <td><i><font color="#3C3CC8">"Invisible" cert -- don't show in UI (was used for policy-file cert)</font></i></td>
+       </tr>
+       <tr nosave>
+        <td bgcolor="#FFF0B4" nosave><tt><font color="#D21400">0x0200</font></tt></td>
+        <td><i><font color="#3C3CC8">"Government approved" -- can do strong crypto in export clients</font></i></td>
+       </tr>
+       <tr nosave>
+        <td bgcolor="#FFF0B4" nosave><tt><font color="#D21400">0x0400</font></tt></td>
+        <td><i><font color="#3C3CC8">May do object signing, even if not marked for object signing </font><font color="#FF0000">[is this set on disk? or just memory?]</font></i></td>
+       </tr>
+       <tr nosave>
+        <td bgcolor="#FFF0B4" nosave><tt><font color="#D21400">0x0800</font></tt></td>
+        <td><i><font color="#3C3CC8">(unused)</font></i></td>
+       </tr>
+       <tr nosave>
+        <td bgcolor="#FFF0B4" nosave><tt><font color="#D21400">0x1000</font></tt></td>
+        <td><i><font color="#3C3CC8">(unused)</font></i></td>
+       </tr>
+       <tr nosave>
+        <td bgcolor="#FFF0B4" nosave><tt><font color="#D21400">0x2000</font></tt></td>
+        <td><i><font color="#3C3CC8">(unused)</font></i></td>
+       </tr>
+       <tr nosave>
+        <td bgcolor="#FFF0B4" nosave><tt><font color="#D21400">0x4000</font></tt></td>
+        <td><i><font color="#3C3CC8">(unused)</font></i></td>
+       </tr>
+       <tr nosave>
+        <td bgcolor="#FFF0B4" nosave><tt><font color="#D21400">0x8000</font></tt></td>
+        <td><i><font color="#3C3CC8">(unused)</font></i></td>
+       </tr>
+      </tbody>
+     </table>
+     <p>Version six of this entry only had one byte for each of the ssl, email, and object signing flags; with only the eight least significant bits defined.</p>
+     <h3>Nickname</h3> Nickname entries map ascii strings to cert subjects, which are described below. 
+     <h4>RowID</h4> The rowID is just a null-terminated ascii string. 
+     <br>
+     <table border cellspacing="0" cellpadding="0" bgcolor="#F0F0AA" nosave>
+      <tbody>
+       <tr nosave>
+        <td bgcolor="#FFF0B4" nosave><tt><font color="#D21400">2</font></tt></td>
+        <td><i><font color="#965A00">Nickname as an ascii string</font></i></td>
+        <td><tt><font color="#965A00">\0</font></tt></td>
+       </tr>
+      </tbody>
+     </table>
+     <h4>Payload</h4> The payload contains a two-byte integer (most significant byte first) specifying the length of the following DER-encoded cert subject, followed by the DER-encoded subject itself. 
+     <br>
+     <table border cellspacing="0" cellpadding="0" bgcolor="#F0F0AA" nosave>
+      <tbody>
+       <tr nosave>
+        <td bgcolor="#FFF0B4" nosave><tt><font color="#D21400">7</font></tt></td>
+        <td bgcolor="#FFF0B4" nosave><tt><font color="#D21400">2</font></tt></td>
+        <td bgcolor="#FFFFE6" nosave><tt><font color="#3C3CC8">f</font></tt></td>
+        <td><i><font color="#965A00">Length of DER-encoded cert subject</font></i></td>
+        <td><i><font color="#965A00">DER-encoded cert subject</font></i></td>
+       </tr>
+      </tbody>
+     </table>
+     <h3>Subject</h3> Subject entries map cert subjects (distinguished names) to the certs themselves (well, the cert's rowIDs, which are composed of their issuer and serial number) and to the <font color="#FF0000">[keyIDs]</font>. 
+     <h4>RowID</h4> The rowID is just the DER-encoded subject of the cert, which is a distinguished name. 
+     <br>
+     <table border cellspacing="0" cellpadding="0" bgcolor="#F0F0AA" nosave>
+      <tbody>
+       <tr nosave>
+        <td bgcolor="#FFF0B4" nosave><tt><font color="#D21400">3</font></tt></td>
+        <td><i><font color="#965A00">DER-encoded distinguished name</font></i></td>
+       </tr>
+      </tbody>
+     </table>
+     <h4>Payload</h4> The payloads of these records are complex. The first thing after the common header is a two-byte integer specifying how many cert rowIDs and keyIDs are listed in this entry. That integer, like all others in this record, is most-significant-byte first. After that comes another two-byte integer, specifying the length of the nickname for this subject. The nickname is presented as a null-terminated ascii string. If there is no nickname, the string consists of merely the null terminating byte, and hence the minimum nickname length is one. After that comes another two-byte integer, this one specifying the length of the email address corresponding to this subject. It, too, is a null-terminated ascii string with a minimum length of one. After these lengths comes the null-terminated nickname, and after that, the null-terminated e-mail address. 
+     <p>Next, there are N two-byte integers, each one specifying the length of a cert rowID. After that, there are N more two-byte integers, each one specifying the length of a keyID. Finally, there are the N cert rowIDs, and the N keyIDs. <br></p>
+     <table border cellspacing="0" cellpadding="0" bgcolor="#F0F0AA" nosave>
+      <tbody>
+       <tr nosave>
+        <td bgcolor="#FFF0B4" nosave><tt><font color="#D21400">7</font></tt></td>
+        <td bgcolor="#FFF0B4" nosave><tt><font color="#D21400">3</font></tt></td>
+        <td bgcolor="#FFFFE6" nosave><tt><font color="#3C3CC8">f</font></tt></td>
+        <td><i><font color="#965A00"># of certs N</font></i></td>
+        <td><i><font color="#965A00">nickname length</font></i></td>
+        <td><i><font color="#965A00">email length</font></i></td>
+        <td><i><font color="#965A00">ascii nickname</font></i></td>
+        <td><tt><font color="#965A00">\0</font></tt></td>
+        <td><i><font color="#965A00">email address</font></i></td>
+        <td><tt><font color="#965A00">\0</font></tt></td>
+       </tr>
+       <tr nosave>
+        <td colspan="4" nosave><i><font color="#965A00">len of cert 0 rowID</font></i></td>
+        <td colspan="2" nosave><i><font color="#965A00">len of cert 1 rowID</font></i></td>
+        <td align="CENTER" nosave><i><font color="#965A00">(...)</font></i></td>
+        <td colspan="3" nosave><i><font color="#965A00">len of cert (N-1) rowID</font></i></td>
+       </tr>
+       <tr nosave>
+        <td colspan="4" nosave><i><font color="#965A00">len of keyID 0</font></i></td>
+        <td colspan="2" nosave><i><font color="#965A00">len of keyID 1</font></i></td>
+        <td align="CENTER" nosave><i><font color="#965A00">(...)</font></i></td>
+        <td colspan="3" nosave><i><font color="#965A00">len of keyID (N-1)</font></i></td>
+       </tr>
+       <tr nosave>
+        <td colspan="10" nosave><i><font color="#965A00">cert 0 rowID</font></i></td>
+       </tr>
+       <tr nosave>
+        <td colspan="10" nosave><i><font color="#965A00">cert 1 rowID</font></i></td>
+       </tr>
+       <tr nosave>
+        <td colspan="10" nosave><i><font color="#965A00">(...)</font></i></td>
+       </tr>
+       <tr nosave>
+        <td colspan="10" nosave><i><font color="#965A00">cert (N-1) rowID</font></i></td>
+       </tr>
+       <tr nosave>
+        <td colspan="10" nosave><i><font color="#965A00">keyID 0</font></i></td>
+       </tr>
+       <tr nosave>
+        <td colspan="10" nosave><i><font color="#965A00">keyID 1</font></i></td>
+       </tr>
+       <tr nosave>
+        <td colspan="10" nosave><i><font color="#965A00">(...)</font></i></td>
+       </tr>
+       <tr nosave>
+        <td colspan="10" nosave><i><font color="#965A00">keyID (N-1)</font></i></td>
+       </tr>
+      </tbody>
+     </table>
+     <h3>CRL</h3>
+     <h4>RowID</h4> The rowID for CRLs is the DER-encoded distinguished name of the cert server issuing the CRL. 
+     <br>
+     <table border cellspacing="0" cellpadding="0" bgcolor="#F0F0AA" nosave>
+      <tbody>
+       <tr nosave>
+        <td bgcolor="#FFF0B4" nosave><tt><font color="#D21400">4</font></tt></td>
+        <td><i><font color="#965A00">DER-encoded DN of the issuing cert server</font></i></td>
+       </tr>
+      </tbody>
+     </table>
+     <h4>Payload</h4> The first part of this record after the common header is a two-byte integer indicating the length of the DER-encoded CRL itself. Next, there is a two-byte integer indicating the length of the "nickname" URL associated with the CRL <font color="#FF0000">[more info describing the purpose of the url to come]</font>. The URL is a null-terminated ascii string. If there is no URL, merely the null termination is present. Therefore, the minimum URL length is 1. Next comes the DER-encoded CRL, then the URL as a null-terminated ASCII string. 
+     <br>
+     <table border cellspacing="0" cellpadding="0" bgcolor="#F0F0AA" nosave>
+      <tbody>
+       <tr nosave>
+        <td bgcolor="#FFF0B4" nosave><tt><font color="#D21400">7</font></tt></td>
+        <td bgcolor="#FFF0B4" nosave><tt><font color="#D21400">4</font></tt></td>
+        <td bgcolor="#FFFFE6" nosave><tt><font color="#3C3CC8">f</font></tt></td>
+        <td><i><font color="#965A00">length of DER-encoded CRL</font></i></td>
+        <td><i><font color="#965A00">length of URL</font></i></td>
+        <td><i><font color="#965A00">DER-encoded CRL </font><font color="#FF0000"> [more info to come]</font></i></td>
+        <td><i><font color="#965A00">URL </font><font color="#FF0000">[more info to come]</font></i></td>
+        <td><tt><font color="#965A00">\0</font></tt></td>
+       </tr>
+      </tbody>
+     </table>
+     <h3>KRL</h3>
+     <h4>RowID</h4> There can only be one key revocation list (KRL) in a database, so its rowID consists merely of the record type. (KRLs are used with FORTEZZA only.) 
+     <br>
+     <table border cellspacing="0" cellpadding="0" bgcolor="#F0F0AA" nosave>
+      <tbody>
+       <tr nosave>
+        <td bgcolor="#FFF0B4" nosave><tt><font color="#D21400">5</font></tt></td>
+       </tr>
+      </tbody>
+     </table>
+     <h4>Payload</h4> The first part of this record after the common header is a two-byte integer indicating the length of the DER-encoded KRL itself. Next, there is a two-byte integer indicating the length of the "nickname" URL associated with the KRL <font color="#FF0000">[more info describing the purpose of the url to come]</font>. The URL is a null-terminated ascii string. If there is no URL, merely the null termination is present. Therefore, the minimum URL length is 1. Next comes the DER-encoded KRL, then the URL as a null-terminated ASCII string. 
+     <br>
+     <table border cellspacing="0" cellpadding="0" bgcolor="#F0F0AA" nosave>
+      <tbody>
+       <tr nosave>
+        <td bgcolor="#FFF0B4" nosave><tt><font color="#D21400">7</font></tt></td>
+        <td bgcolor="#FFF0B4" nosave><tt><font color="#D21400">5</font></tt></td>
+        <td bgcolor="#FFFFE6" nosave><tt><font color="#3C3CC8">f</font></tt></td>
+        <td><i><font color="#965A00">length of DER-encoded KRL</font></i></td>
+        <td><i><font color="#965A00">length of URL</font></i></td>
+        <td><i><font color="#965A00">DER-encoded KRL </font><font color="#FF0000">[more info to come]</font></i></td>
+        <td><i><font color="#965A00">URL </font><font color="#FF0000">[more info to come]</font></i></td>
+        <td><tt><font color="#965A00">\0</font></tt></td>
+       </tr>
+      </tbody>
+     </table>
+     <h3>S/MIME profile</h3>
+     <h4>RowID</h4> The rowID for an S/MIME profile is a null-terminated ascii string containing the e-mail address for which this profile applies. <font color="#FF0000">[Info to come on what formats are valid for the e-mail address]</font>
+     <br><font color="#FF0000"></font>
+     <table border cellspacing="0" cellpadding="0" bgcolor="#F0F0AA" nosave>
+      <tbody>
+       <tr nosave>
+        <td bgcolor="#FFF0B4" nosave><tt><font color="#D21400">6</font></tt></td>
+        <td><i><font color="#965A00">e-mail address</font></i></td>
+        <td><tt><font color="#965A00">\0</font></tt></td>
+       </tr>
+      </tbody>
+     </table>
+     <h4>Payload</h4> After the common header, there are three two-byte integers indicating the lengths of (respectively), the subject name field, the options field, and the options date field. Following those lengths come the subject name, which is the DER-encoded distinguished name associated with this e-mail address; the S/MIME options, which is the value of the PKCS#7 attribute tagged by SEC_OID_PKCS9_SMIME_CAPABILITIES <font color="#FF0000">[format details to come]</font>; and the timestamp of those options, inUTCTime format. The timestamp is usually the signing time of the message from which these capabilities are taken. 
+     <br>
+     <br>
+     <table border cellspacing="0" cellpadding="0" bgcolor="#F0F0AA" nosave>
+      <tbody>
+       <tr nosave>
+        <td bgcolor="#FFF0B4" nosave><tt><font color="#D21400">7</font></tt></td>
+        <td bgcolor="#FFF0B4" nosave><tt><font color="#D21400">6</font></tt></td>
+        <td bgcolor="#FFFFE6" nosave><tt><font color="#3C3CC8">f</font></tt></td>
+        <td><i><font color="#965A00">length of subject name</font></i></td>
+        <td><i><font color="#965A00">length of S/MIME options</font></i></td>
+        <td><i><font color="#965A00">length of options timestamp</font></i></td>
+       </tr>
+       <tr nosave>
+        <td colspan="6" nosave><i><font color="#965A00">DER-encoded distinguished name associated with this e-mail address</font></i></td>
+       </tr>
+       <tr nosave>
+        <td colspan="6" nosave><i><font color="#965A00">S/MIME options</font></i></td>
+       </tr>
+       <tr nosave>
+        <td colspan="6" nosave><i><font color="#965A00">options timestamp, in UTCTime format.</font></i></td>
+       </tr>
+      </tbody>
+     </table>
+     <h3>Content Version</h3>
+     <h4>RowID</h4> The rowID of this database record is the fixed null-terminated ascii string, "ContentVersion." 
+     <br>
+     <table border cellspacing="0" cellpadding="0" bgcolor="#F0F0AA" nosave>
+      <tbody>
+       <tr>
+        <td><tt><font color="#D21400">7</font></tt></td>
+        <td><tt><font color="#965A00">C</font></tt></td>
+        <td><tt><font color="#965A00">o</font></tt></td>
+        <td><tt><font color="#965A00">n</font></tt></td>
+        <td><tt><font color="#965A00">t</font></tt></td>
+        <td><tt><font color="#965A00">e</font></tt></td>
+        <td><tt><font color="#965A00">n</font></tt></td>
+        <td><tt><font color="#965A00">t</font></tt></td>
+        <td><tt><font color="#965A00">V</font></tt></td>
+        <td><tt><font color="#965A00">e</font></tt></td>
+        <td><tt><font color="#965A00">r</font></tt></td>
+        <td><tt><font color="#965A00">s</font></tt></td>
+        <td><tt><font color="#965A00">i</font></tt></td>
+        <td><tt><font color="#965A00">o</font></tt></td>
+        <td><tt><font color="#965A00">n</font></tt></td>
+        <td><tt><font color="#965A00">\0</font></tt></td>
+       </tr>
+      </tbody>
+     </table>
+     <h4>Payload</h4> After the common header, there is a one-byte integer, with the version number of the database contents. This number is revised when the permanent data compiled into the security library changes, so that the initialization code knows what changes to make to the permanent database to bring it into line with the compiled-in data. 
+     <br>
+     <table border cellspacing="0" cellpadding="0" bgcolor="#F0F0AA" nosave>
+      <tbody>
+       <tr nosave>
+        <td bgcolor="#FFF0B4" nosave><tt><font color="#D21400">7</font></tt></td>
+        <td bgcolor="#FFF0B4" nosave><tt><font color="#D21400">7</font></tt></td>
+        <td bgcolor="#FFFFE6" nosave><tt><font color="#3C3CC8">f</font></tt></td>
+        <td><tt><font color="#965A00">7</font></tt></td>
+       </tr>
+      </tbody>
+     </table>
+     <p></p>
+     <hr class="hide">
+    </div>
+   </div>
+   <div id="footer">
+    <ul>
+     <li><a href="/sitemap">Site Map</a></li>
+     <li><a href="../../../../security/">Security Updates</a></li>
+     <li><a href="../../../../contact/">Contact Us</a></li>
+     <li><a href="/foundation/donate">Donate</a></li>
+    </ul>
+    <p class="copyright">Portions of this content are © 1998–2009 by individual mozilla.org contributors; content available under a Creative Commons license | <a href="http://www.mozilla.org/foundation/licensing/website-content">Details</a>.</p>
+    <p><span>Last modified September 15, 2006</span> <span><a href="http://bonsai-www.mozilla.org/cvslog.cgi?file=mozilla-org/html/projects/security/pki/nss/pcertdb.html&amp;rev=&amp;root=/www/">Document History</a></span></p>
+   </div>
+  </div>
+ </body>
+</html>

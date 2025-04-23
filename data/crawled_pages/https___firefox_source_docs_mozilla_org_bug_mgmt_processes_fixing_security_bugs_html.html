@@ -1,0 +1,382 @@
+<!doctype html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fixing Security Bugs — Firefox Source Docs  documentation</title>
+  <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50">
+  <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094">
+  <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=fd3f3429">
+  <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b">
+  <link rel="stylesheet" type="text/css" href="../../_static/custom_theme.css?v=dc5ed815">
+  <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7">
+  <link rel="shortcut icon" href="../../_static/firefox.ico"><!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script src="../../_static/jquery.js?v=5d32c60e"></script>
+  <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+  <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+  <script src="../../_static/doctools.js?v=9a2dae69"></script>
+  <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+  <script src="../../_static/copybutton.js?v=30646c52"></script>
+  <script src="../../_static/design-tabs.js?v=36754332"></script>
+  <script src="../../_static/js/theme.js"></script>
+  <link rel="index" title="Index" href="../../genindex.html">
+  <link rel="search" title="Search" href="../../search.html">
+  <link rel="next" title="GitHub Metadata Recommendations" href="labels.html">
+  <link rel="prev" title="User documentation requests" href="doc-requests.html">
+ </head>
+ <body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+   <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <div class="wy-side-scroll">
+     <div class="wy-side-nav-search">
+      <a href="../../index.html" class="icon icon-home"> Firefox Source Docs <img src="../../_static/firefox-wordmark.svg" class="logo" alt="Logo"> </a><!-- -- This code is governed by the BSD license ---->
+      <div>
+       <h3>Quick search</h3>
+       <script>
+    (function () {
+      var cx = "dd12886298f75dbef";
+      var gcse = document.createElement("script");
+      gcse.async = true;
+      gcse.src = "https://cse.google.com/cse.js?cx=" + cx;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(gcse, s);
+    })();
+  </script><gcse:search></gcse:search>
+      </div>
+     </div>
+     <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+      <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../glossary/index.html">A Glossary of Common Terms</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../overview/index.html">A Quick Guide to Mozilla Applications</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../setup/index.html">Getting Set Up To Work On The Firefox Codebase</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Working On Firefox</span></p>
+      <ul class="current">
+       <li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Working on Firefox</a></li>
+       <li class="toctree-l1 current"><a class="reference internal" href="../index.html">Bug Handling</a>
+        <ul class="current">
+         <li class="toctree-l2"><a class="reference internal" href="../index.html#guides">Guides</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../index.html#policies">Policies</a></li>
+         <li class="toctree-l2 current"><a class="reference internal" href="../index.html#processes">Processes</a>
+          <ul class="current">
+           <li class="toctree-l3"><a class="reference internal" href="accessibility-review.html">Accessibility Review</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="doc-requests.html">User documentation requests</a></li>
+           <li class="toctree-l3 current"><a class="current reference internal" href="#">Fixing Security Bugs</a>
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="#keeping-private-information-private">Keeping private information private</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#during-development">During Development</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#essentials">Essentials</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#documentation-contacts">Documentation &amp; Contacts</a></li>
+            </ul></li>
+           <li class="toctree-l3"><a class="reference internal" href="labels.html">GitHub Metadata Recommendations</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="regressions.html">How to Mark Regressions</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="security-approval.html">Security Bug Approval Process</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="shared-bug-queues.html">Shared Bug Queues</a></li>
+          </ul></li>
+         <li class="toctree-l2"><a class="reference internal" href="../index.html#related-documentation">Related documentation</a></li>
+        </ul></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox User Guide</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../devtools-user/index.html">Firefox DevTools User Docs</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Source Code Documentation</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mots/index.html">Governance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../browser/index.html">Firefox Front-end</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../dom/index.html">DOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../editor/index.html">Editor</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../layout/index.html">Style system (CSS) &amp; Layout</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../gfx/index.html">Graphics</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../ipc/index.html">Processes, Threads and IPC</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../devtools/index.html">Firefox DevTools Contributor Docs</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../toolkit/index.html">Toolkit</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../js/index.html">SpiderMonkey</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../jsloader/index.html">JS Loader</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/geckoview/index.html">GeckoView</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/fenix/index.html">Fenix</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/focus-android/index.html">Focus for Android</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../dom/bindings/webidl/index.html">WebIDL</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../modules/libpref/index.html">libpref</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../networking/index.html">Networking</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../remote/index.html">Remote Protocols</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../services/index.html">Services</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../permissions/index.html">Permissions</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../uriloader/index.html">File Handling</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../widget/cocoa/index.html">Firefox on macOS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../widget/windows/index.html">Firefox on Windows</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../toolkit/components/ml/index.html">Firefox AI Runtime</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../accessible/index.html">Accessibility</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../media/index.html">Media Playback</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../code-quality/index.html">Code quality</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../writing-rust-code/index.html">Writing Rust Code</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../rust-components/index.html">Rust Components</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/profiler/index.html">Gecko Profiler</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../performance/index.html">Performance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../storage/index.html">Database bindings (SQLite, KV, …)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../xpcom/index.html">XPCOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../nspr/index.html">NSPR</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../security/nss/index.html">Network Security Services (NSS)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../content-security/index.html">Web Security Checks in Gecko</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">The Firefox Build System</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mach/index.html">Mach</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/try/index.html">Pushing to Try</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../build/buildsystem/index.html">Build System</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../taskcluster/index.html">Firefox CI and Taskgraph</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/moztreedocs/index.html">Managing Documentation</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mozbuild/vendor/index.html">Vendoring Third Party Components</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Testing &amp; Test Infrastructure</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/automated-testing/index.html">Automated Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/treeherder-try/index.html">Understanding Treeherder Results</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/sheriffed-intermittents/index.html">Sheriffed intermittent failures</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/tests-for-new-config/index.html">Turning on Firefox tests for a new configuration</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/intermittent/index.html">Avoiding intermittent tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/testing-policy/index.html">Testing Policy</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/ci-configs/index.html">Configuration Changes</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/browser-chrome/index.html">Browser chrome mochitests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/chrome-tests/index.html">Chrome Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/marionette/index.html">Marionette</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/geckodriver/index.html">geckodriver</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/test-verification/index.html">Test Verification</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/webrender/index.html">WebRender Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/mochitest-plain/index.html">Mochitest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/xpcshell/index.html">XPCShell tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/tps/index.html">TPS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../web-platform/index.html">web-platform-tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../gtest/index.html">GTest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/fuzzing/index.html">Fuzzing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/sanitizer/index.html">Sanitizer</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/perfdocs/index.html">Performance Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/code-coverage/index.html">Code coverage</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing-rust-code/index.html">Testing &amp; Debugging Rust Code</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Releases &amp; Updates</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html">Mozilla Update Infrastructure</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html#watershed-updates">Watershed Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html#desupport-updates">Desupport Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/update-verify/index.html">Update Verify</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Localization &amp; Internationalization</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../intl/index.html">Internationalization</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../l10n/index.html">Localization</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox and Python</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mozbase/index.html">mozbase</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../python/index.html">Using third-party Python packages</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Metrics Collected in Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../metrics/index.html">Metrics</a></li>
+      </ul>
+     </div>
+    </div>
+   </nav>
+   <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+    <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+     <i data-toggle="wy-nav-top" class="fa fa-bars"></i> <a href="../../index.html">Firefox Source Docs</a>
+    </nav>
+    <div class="wy-nav-content">
+     <div class="rst-content">
+      <!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+      <div role="navigation" aria-label="Page navigation">
+       <ul class="wy-breadcrumbs">
+        <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+        <li class="breadcrumb-item"><a href="../index.html">Bug Handling</a></li>
+        <li class="breadcrumb-item active">Fixing Security Bugs</li>
+        <li class="wy-breadcrumbs-aside"><a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Developer+Infrastructure&amp;component=Firefox+Source+Docs%3A+Content&amp;short_desc=Documentation+issue+on+bug-mgmt/processes/fixing-security-bugs&amp;comment=URL+=+https://firefox-source-docs.mozilla.org/bug-mgmt/processes/fixing-security-bugs.html&amp;bug_file_loc=https://firefox-source-docs.mozilla.org/bug-mgmt/processes/fixing-security-bugs.html" rel="nofollow">Report an issue</a> / <a href="../../_sources/bug-mgmt/processes/fixing-security-bugs.rst.txt" rel="nofollow"> View page source</a></li>
+       </ul>
+       <hr>
+      </div>
+      <div role="main" class="document" itemscope itemtype="http://schema.org/Article">
+       <div itemprop="articleBody">
+        <section id="fixing-security-bugs">
+         <h1>Fixing Security Bugs<a class="headerlink" href="#fixing-security-bugs" title="Link to this heading">?</a></h1>
+         <p>A bug has been reported as security-sensitive in Bugzilla and received a security rating.</p>
+         <p>If this bug is private - which is most likely for a reported security bug - <strong>the process for patching is slightly different than the usual process for fixing a bug</strong>.</p>
+         <p>Here are security guidelines to follow if you’re involved in reviewing, testing and landing a security patch. See <a class="reference internal" href="security-approval.html#security-bug-approval-process"><span class="std std-ref">Security Bug Approval Process</span></a> for more details about how to request sec-approval and land the patch.</p>
+         <section id="keeping-private-information-private">
+          <h2>Keeping private information private<a class="headerlink" href="#keeping-private-information-private" title="Link to this heading">?</a></h2>
+          <p>A security-sensitive bug in Bugzilla means that all information about the bug except its ID number are hidden. This includes the title, comments, reporter, assignee and CC’d people.</p>
+          <p>A security-sensitive bug usually remains private until a fix is shipped in a new release, <strong>and after a certain amount of time to ensure that a maximum number of users updated their version of Firefox</strong>. Bugs are usually made public after 6 months and a couple of releases.</p>
+          <p>From the moment a security bug has been privately reported to the moment a fix is shipped and the bug is set public, all information about that bug needs to be handled carefully in order to avoid an unmitigated vulnerability becoming known and exploited before we release a fix (0-day).</p>
+          <p>During a normal process, information about the nature of bug can be accessed through:</p>
+          <ul class="simple">
+           <li>
+            <p>Bug comments (Bugzilla, GitHub issue)</p></li>
+           <li>
+            <p>Commit message (visible on Bugzilla, tree check-ins and test servers)</p></li>
+           <li>
+            <p>Code comments</p></li>
+           <li>
+            <p>Test cases</p></li>
+           <li>
+            <p>Bug content can potentially be discussed on public IRC/Slack channels and mailing list emails.</p></li>
+          </ul>
+          <p>When patching for a security bug, you’ll need to be mindful about what type of information you share and where.</p>
+          <section id="in-commit-messages">
+           <h3>In commit messages<a class="headerlink" href="#in-commit-messages" title="Link to this heading">?</a></h3>
+           <p>People are watching code check-ins, so we want to avoid sharing information which would disclose or help finding a vulnerability too easily before we shipped the fix to our users. This includes:</p>
+           <ul class="simple">
+            <li>
+             <p>The <strong>nature of the vulnerability</strong> (overflow, use-after-free, XSS, CSP bypass…)</p></li>
+            <li>
+             <p><strong>Ways to trigger and exploit that vulnerability</strong> - In commit messages, code comments and test cases.</p></li>
+            <li>
+             <p>The fact that a bug / commit is security-related:</p>
+             <ul>
+              <li>
+               <p><strong>Trigger words</strong> in the commit message or code comments such as “security”, “exploitable”, or the nature of a security vulnerability (overflow, use-after-free…)</p></li>
+              <li>
+               <p><strong>Security approver’s name</strong> in a commit message.</p></li>
+             </ul></li>
+            <li>
+             <p>The Firefox versions and components affected by the vulnerability.</p></li>
+            <li>
+             <p>Patches with an obvious fix.</p></li>
+           </ul>
+          </section>
+          <section id="in-bugzilla-and-other-public-channels">
+           <h3>In Bugzilla and other public channels<a class="headerlink" href="#in-bugzilla-and-other-public-channels" title="Link to this heading">?</a></h3>
+           <p>In addition to commits, you’ll need to be mindful of not disclosing sensitive information about the bug in public places, such as Bugzilla:</p>
+           <ul class="simple">
+            <li>
+             <p>Mention the bugs in comment of the private bug instead.</p></li>
+            <li>
+             <p>Do not comment sensitive information in public related bugs.</p></li>
+            <li>
+             <p>Also be careful about who you give bug access to: <strong>double check before CC’ing the wrong person or alias</strong>.</p></li>
+            <li>
+             <p>As of recently, you may now add public bugs in the “duplicate”, “depends on”, “blocks”, “regression”, “regressed by”, or “see also” section. Bugzilla will only reveal those relationships to people with <code class="docutils literal notranslate"><span class="pre">editbugs</span></code> permission or access to the security bug.</p></li>
+           </ul>
+           <p>On IRC, Slack channels, GitHub issues, mailing lists: If you need to discuss about a security bug, use a private channel (protected with a password or with proper right access management)</p>
+          </section>
+         </section>
+         <section id="during-development">
+          <h2>During Development<a class="headerlink" href="#during-development" title="Link to this heading">?</a></h2>
+          <section id="testing-security-bugs">
+           <h3>Testing security bugs<a class="headerlink" href="#testing-security-bugs" title="Link to this heading">?</a></h3>
+           <p>Pushing to Try servers requires Level 1 Commit access but <strong>content viewing is publicly accessible</strong>.</p>
+           <p>As much as possible, <strong>do not push to Try servers</strong>. Testing should be done locally before checkin in order to prevent public disclosing of the bug.</p>
+           <p>Because of the public visibility, pushing to Try has all the same concerns as committing the patch. Please heed the concerns in the <a class="reference internal" href="#landing-your-patch"><span class="std std-ref">Landing your patch (with or without sec-approval)</span></a> section before thinking about it, and check with the security team for an informal “sec-approval” before doing so.</p>
+           <p><strong>Do not push the bug’s own vulnerability testcase to Try.</strong></p>
+           <p>If you need to push to Try servers, make sure your tests don’t disclose what the vulnerability is about or how to trigger it. Do not mention anywhere it is security related.</p>
+          </section>
+          <section id="obfuscating-a-security-patch">
+           <h3>Obfuscating a security patch<a class="headerlink" href="#obfuscating-a-security-patch" title="Link to this heading">?</a></h3>
+           <p>If your security patch looks obvious because of the code it contains (e.g. a one-line fix), or if you really need to push to Try servers, <strong>consider integrating your security-related patch to non-security work in the same area</strong>. And/or pretend it is related to something else, like some performance improvement or a correctness fix. <strong>Definitely don’t include the bug number in the commit message.</strong> This will help making the security issue less easily identifiable. (The absolute ban against “Security through Obscurity” is in relation to cryptographic systems. In other situations you still can’t <em>rely</em> on obscurity but it can sometimes buy you a little time. In this context we need to get the fixes into the hands of our users faster than attackers can weaponize and deploy attacks and a little extra time can help.)</p>
+          </section>
+          <section id="requesting-sec-approval">
+           <h3>Requesting sec-approval<a class="headerlink" href="#requesting-sec-approval" title="Link to this heading">?</a></h3>
+           <p>See <a class="reference internal" href="security-approval.html#security-bug-approval-process"><span class="std std-ref">Security Bug Approval Process</span></a> for more details</p>
+          </section>
+          <section id="landing-your-patch-with-or-without-sec-approval">
+           <span id="landing-your-patch"></span>
+           <h3>Landing your patch (with or without sec-approval)<a class="headerlink" href="#landing-your-patch-with-or-without-sec-approval" title="Link to this heading">?</a></h3>
+           <p>Before asking for sec-approval or landing, ensure your patch does not disclose information about the security vulnerability unnecessarily. Specifically:</p>
+           <ol class="arabic">
+            <li>
+             <p>The patch commit message and its contents should not mention security, security bugs, or sec-approvers. Note that you can alter the commit message directly in phabricator, if that’s the only thing you need to do - you don’t need to amend your local commit and re-push it. While comprehensive commit messages are generally encouraged; they should be omitted for security bugs and instead be posted in the bug (which will eventually become public.)</p></li>
+            <li>
+             <p>Separate out tests into a separate commit. <strong>Do not land tests when landing the patch. Remember we don’t want to 0-day ourselves!</strong> This includes when pushing to try.</p>
+             <ul>
+              <li>
+               <p>Tests should only be checked in later, after an official Firefox release that contains the fix has been live for at least four weeks. For example, if Firefox 53 contains a security issue that affects the world and that issue is fixed in 54, tests for this fix should not be checked in until four weeks after 54 goes live.</p>
+               <p>The exception to this is if there is a security issue that doesn’t affect any release branches, only mozilla-central and/or other development branches. Since the security problem was never released to the world, once the bug is fixed in all affected places, tests can be checked in to the various branches.</p></li>
+              <li>
+               <p>There are two main techniques for remembering to check in the tests later:</p></li>
+             </ul>
+             <blockquote>
+              <div>
+               <ol class="loweralpha">
+                <li>
+                 <p>clone the sec bug into a separate “task” bug <strong>that is also in a security-sensitive group to ensure it’s not publicly visible</strong> called something like “land tests for bug xxxxx” and assign to yourself. It should get a “sec-other” keyword rating.</p>
+                 <p>Tip: In phabricator, you can change the bug linked to a commit with tests if the tests were already separate, while keeping the previously granted review, meaning you can just land the patch when ready, rather than having your reviewer and you have to remember what this was about a month or two down the line.</p></li>
+                <li>
+                 <p>Or, set the “in-testsuite” flag to “?”, and later set it to “+” when the tests get checked in.</p></li>
+               </ol>
+              </div>
+             </blockquote></li>
+           </ol>
+          </section>
+          <section id="landing-tests">
+           <h3>Landing tests<a class="headerlink" href="#landing-tests" title="Link to this heading">?</a></h3>
+           <p>Tests can be landed <strong>once the release containing fixes has been live at least 4 weeks</strong>.</p>
+           <p>The exception is if a security issue has never been shipped in a release build and has been fixed in all development branches.</p>
+          </section>
+          <section id="making-a-security-bug-public">
+           <h3>Making a security bug public<a class="headerlink" href="#making-a-security-bug-public" title="Link to this heading">?</a></h3>
+           <p>This is the responsibility of the security management team.</p>
+          </section>
+         </section>
+         <section id="essentials">
+          <h2>Essentials<a class="headerlink" href="#essentials" title="Link to this heading">?</a></h2>
+          <ul class="simple">
+           <li>
+            <p><strong>Do not disclose any information about the vulnerability before a release with a fix has gone live for enough time for users to update their software</strong>.</p>
+            <ul>
+             <li>
+              <p>This includes code comments, commit messages, tests, public communication channels.</p></li>
+            </ul></li>
+           <li>
+            <p>If any doubt: ‘’’request sec-approval? ‘’’</p></li>
+           <li>
+            <p>If any doubt: <strong>needinfo security folks</strong>.</p></li>
+           <li>
+            <p><strong>If there’s no rating, assume the worst and treat the bug as sec-critical</strong>.</p></li>
+          </ul>
+         </section>
+         <section id="documentation-contacts">
+          <h2>Documentation &amp; Contacts<a class="headerlink" href="#documentation-contacts" title="Link to this heading">?</a></h2>
+          <ul class="simple">
+           <li>
+            <p><a class="reference internal" href="../../contributing/how_to_submit_a_patch.html#how-to-submit-a-patch"><span class="std std-ref">Normal process for submitting a patch</span></a></p></li>
+           <li>
+            <p><a class="reference external" href="https://wiki.mozilla.org/Security/Fileabug">How to file a security bug</a></p></li>
+           <li>
+            <p><a class="reference external" href="https://www.mozilla.org/en-US/about/governance/policies/security-group/bugs/">Handling Mozilla security bugs (policy)</a></p></li>
+           <li>
+            <p><a class="reference internal" href="security-approval.html#security-bug-approval-process"><span class="std std-ref">Security Bug Approval Process</span></a></p></li>
+           <li>
+            <p><a class="reference external" href="https://wiki.mozilla.org/Security">Contacting the Security team(s) at Mozilla:</a></p></li>
+          </ul>
+         </section>
+        </section>
+       </div>
+      </div>
+      <footer>
+       <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="doc-requests.html" class="btn btn-neutral float-left" title="User documentation requests" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a> <a href="labels.html" class="btn btn-neutral float-right" title="GitHub Metadata Recommendations" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+       </div>
+       <hr>
+       <div role="contentinfo">
+        <p></p>
+       </div> Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+      </footer>
+     </div>
+    </div>
+   </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ </body>
+</html>

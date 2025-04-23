@@ -1,0 +1,345 @@
+<!doctype html>
+<html class="writer-html5" lang="en" data-content_root="../">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AccessibleCaret — Firefox Source Docs  documentation</title>
+  <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50">
+  <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094">
+  <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=fd3f3429">
+  <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b">
+  <link rel="stylesheet" type="text/css" href="../_static/custom_theme.css?v=dc5ed815">
+  <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7">
+  <link rel="shortcut icon" href="../_static/firefox.ico"><!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script src="../_static/jquery.js?v=5d32c60e"></script>
+  <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+  <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+  <script src="../_static/doctools.js?v=9a2dae69"></script>
+  <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+  <script src="../_static/copybutton.js?v=30646c52"></script>
+  <script src="../_static/design-tabs.js?v=36754332"></script>
+  <script src="../_static/js/theme.js"></script>
+  <link rel="index" title="Index" href="../genindex.html">
+  <link rel="search" title="Search" href="../search.html">
+  <link rel="next" title="Graphics" href="../gfx/index.html">
+  <link rel="prev" title="Layout Debugger" href="LayoutDebugger.html">
+ </head>
+ <body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+   <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <div class="wy-side-scroll">
+     <div class="wy-side-nav-search">
+      <a href="../index.html" class="icon icon-home"> Firefox Source Docs <img src="../_static/firefox-wordmark.svg" class="logo" alt="Logo"> </a><!-- -- This code is governed by the BSD license ---->
+      <div>
+       <h3>Quick search</h3>
+       <script>
+    (function () {
+      var cx = "dd12886298f75dbef";
+      var gcse = document.createElement("script");
+      gcse.async = true;
+      gcse.src = "https://cse.google.com/cse.js?cx=" + cx;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(gcse, s);
+    })();
+  </script><gcse:search></gcse:search>
+      </div>
+     </div>
+     <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+      <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../glossary/index.html">A Glossary of Common Terms</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../overview/index.html">A Quick Guide to Mozilla Applications</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../setup/index.html">Getting Set Up To Work On The Firefox Codebase</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Working On Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../contributing/index.html">Working on Firefox</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../bug-mgmt/index.html">Bug Handling</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox User Guide</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../devtools-user/index.html">Firefox DevTools User Docs</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Source Code Documentation</span></p>
+      <ul class="current">
+       <li class="toctree-l1"><a class="reference internal" href="../mots/index.html">Governance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../browser/index.html">Firefox Front-end</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../dom/index.html">DOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../editor/index.html">Editor</a></li>
+       <li class="toctree-l1 current"><a class="reference internal" href="index.html">Style system (CSS) &amp; Layout</a>
+        <ul class="current">
+         <li class="toctree-l2"><a class="reference internal" href="StyleSystemOverview.html">Style System Overview</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="LayoutOverview.html">Layout Overview</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="DynamicChangeHandling.html">Dynamic change handling along the rendering pipeline</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Reftest.html">Layout Engine Visual Tests (reftest)</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="LayoutDebugger.html">Layout Debugger</a></li>
+         <li class="toctree-l2 current"><a class="current reference internal" href="#">AccessibleCaret</a>
+          <ul>
+           <li class="toctree-l3"><a class="reference internal" href="#meta-bug">Meta Bug</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#gecko-implementation-details">Gecko implementation details</a>
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="#preferences">Preferences</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#accessiblecareteventhub-state-transition-diagram">AccessibleCaretEventHub State Transition Diagram</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#debug-tips">Debug Tips</a></li>
+            </ul></li>
+           <li class="toctree-l3"><a class="reference internal" href="#developers">Developers</a>
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="#current-maintainer">Current maintainer</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#developers-emeritus">Developers Emeritus</a></li>
+            </ul></li>
+          </ul></li>
+        </ul></li>
+       <li class="toctree-l1"><a class="reference internal" href="../gfx/index.html">Graphics</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../ipc/index.html">Processes, Threads and IPC</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../devtools/index.html">Firefox DevTools Contributor Docs</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../toolkit/index.html">Toolkit</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../js/index.html">SpiderMonkey</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../jsloader/index.html">JS Loader</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mobile/android/geckoview/index.html">GeckoView</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mobile/android/fenix/index.html">Fenix</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mobile/android/focus-android/index.html">Focus for Android</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../dom/bindings/webidl/index.html">WebIDL</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../modules/libpref/index.html">libpref</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../networking/index.html">Networking</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../remote/index.html">Remote Protocols</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../services/index.html">Services</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../permissions/index.html">Permissions</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../uriloader/index.html">File Handling</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../widget/cocoa/index.html">Firefox on macOS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../widget/windows/index.html">Firefox on Windows</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../toolkit/components/ml/index.html">Firefox AI Runtime</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../accessible/index.html">Accessibility</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../media/index.html">Media Playback</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../code-quality/index.html">Code quality</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../writing-rust-code/index.html">Writing Rust Code</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../rust-components/index.html">Rust Components</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/profiler/index.html">Gecko Profiler</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../performance/index.html">Performance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../storage/index.html">Database bindings (SQLite, KV, …)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../xpcom/index.html">XPCOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../nspr/index.html">NSPR</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../security/nss/index.html">Network Security Services (NSS)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../content-security/index.html">Web Security Checks in Gecko</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">The Firefox Build System</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../mach/index.html">Mach</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/try/index.html">Pushing to Try</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../build/buildsystem/index.html">Build System</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../taskcluster/index.html">Firefox CI and Taskgraph</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/moztreedocs/index.html">Managing Documentation</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mozbuild/vendor/index.html">Vendoring Third Party Components</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Testing &amp; Test Infrastructure</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/automated-testing/index.html">Automated Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/treeherder-try/index.html">Understanding Treeherder Results</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/sheriffed-intermittents/index.html">Sheriffed intermittent failures</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/tests-for-new-config/index.html">Turning on Firefox tests for a new configuration</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/intermittent/index.html">Avoiding intermittent tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/testing-policy/index.html">Testing Policy</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/ci-configs/index.html">Configuration Changes</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/browser-chrome/index.html">Browser chrome mochitests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/chrome-tests/index.html">Chrome Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/marionette/index.html">Marionette</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/geckodriver/index.html">geckodriver</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/test-verification/index.html">Test Verification</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/webrender/index.html">WebRender Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/mochitest-plain/index.html">Mochitest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/xpcshell/index.html">XPCShell tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/tps/index.html">TPS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../web-platform/index.html">web-platform-tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../gtest/index.html">GTest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/fuzzing/index.html">Fuzzing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/sanitizer/index.html">Sanitizer</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/perfdocs/index.html">Performance Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/code-coverage/index.html">Code coverage</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing-rust-code/index.html">Testing &amp; Debugging Rust Code</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Releases &amp; Updates</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../update-infrastructure/index.html">Mozilla Update Infrastructure</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../update-infrastructure/index.html#watershed-updates">Watershed Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../update-infrastructure/index.html#desupport-updates">Desupport Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/update-verify/index.html">Update Verify</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Localization &amp; Internationalization</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../intl/index.html">Internationalization</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../l10n/index.html">Localization</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox and Python</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../mozbase/index.html">mozbase</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../python/index.html">Using third-party Python packages</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Metrics Collected in Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../metrics/index.html">Metrics</a></li>
+      </ul>
+     </div>
+    </div>
+   </nav>
+   <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+    <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+     <i data-toggle="wy-nav-top" class="fa fa-bars"></i> <a href="../index.html">Firefox Source Docs</a>
+    </nav>
+    <div class="wy-nav-content">
+     <div class="rst-content">
+      <!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+      <div role="navigation" aria-label="Page navigation">
+       <ul class="wy-breadcrumbs">
+        <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+        <li class="breadcrumb-item"><a href="index.html">Style system (CSS) &amp; Layout</a></li>
+        <li class="breadcrumb-item active">AccessibleCaret</li>
+        <li class="wy-breadcrumbs-aside"><a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Developer+Infrastructure&amp;component=Firefox+Source+Docs%3A+Content&amp;short_desc=Documentation+issue+on+layout/AccessibleCaret&amp;comment=URL+=+https://firefox-source-docs.mozilla.org/layout/AccessibleCaret.html&amp;bug_file_loc=https://firefox-source-docs.mozilla.org/layout/AccessibleCaret.html" rel="nofollow">Report an issue</a> / <a href="../_sources/layout/AccessibleCaret.rst.txt" rel="nofollow"> View page source</a></li>
+       </ul>
+       <hr>
+      </div>
+      <div role="main" class="document" itemscope itemtype="http://schema.org/Article">
+       <div itemprop="articleBody">
+        <section id="accessiblecaret">
+         <h1>AccessibleCaret<a class="headerlink" href="#accessiblecaret" title="Link to this heading">?</a></h1>
+         <p>AccessibleCaret is a pair of raindrop shape handles at both ends of selection highlight, or it is a single handle at the blinking caret in a text area. It assists the user to change the range of the selection highlight or the position of the blinking caret on platforms with touch-event support.</p>
+         <section id="meta-bug">
+          <h2>Meta Bug<a class="headerlink" href="#meta-bug" title="Link to this heading">?</a></h2>
+          <p><a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1124074">Bug 1124074</a> tracks all the open issues.</p>
+         </section>
+         <section id="gecko-implementation-details">
+          <h2>Gecko implementation details<a class="headerlink" href="#gecko-implementation-details" title="Link to this heading">?</a></h2>
+          <section id="preferences">
+           <h3>Preferences<a class="headerlink" href="#preferences" title="Link to this heading">?</a></h3>
+           <ul class="simple">
+            <li>
+             <p><code class="docutils literal notranslate"><span class="pre">layout.accessiblecaret.enabled_on_touch</span></code> (Enabled on Firefox with touch-event support since 51.)</p></li>
+            <li>
+             <p><code class="docutils literal notranslate"><span class="pre">layout.accessiblecaret.enabled</span></code> (Defaults off, but it can be turn on to force enable AccessibleCaret.)</p></li>
+            <li>
+             <p><code class="docutils literal notranslate"><span class="pre">layout.accessiblecaret.hide_carets_for_mouse_input</span></code> (Defaults on. Turn this on to debug AccessibleCaret on desktop browser with mouse events.)</p></li>
+           </ul>
+          </section>
+          <section id="accessiblecareteventhub-state-transition-diagram">
+           <h3>AccessibleCaretEventHub State Transition Diagram<a class="headerlink" href="#accessiblecareteventhub-state-transition-diagram" title="Link to this heading">?</a></h3>
+           <p>This diagram depicts the state transition of the state machine in AccessibleCaretEventHub, which handles external events and callbacks.</p>
+           <p>Note that the diagram omits some callbacks which do not cause a state transition such as <code class="docutils literal notranslate"><span class="pre">NotifySelectionChanged</span></code> or <code class="docutils literal notranslate"><span class="pre">Reflow</span></code>.</p>
+           <p>This table is a mapping of the real events and callback to the actions described on the edge of the diagram:</p>
+           <table class="docutils align-default">
+            <thead>
+             <tr class="row-odd">
+              <th class="head">
+               <p>Real events or callbacks</p></th>
+              <th class="head">
+               <p>Actions</p></th>
+             </tr>
+            </thead>
+            <tbody>
+             <tr class="row-even">
+              <td>
+               <p><code class="docutils literal notranslate"><span class="pre">eMouseDown</span></code> or <code class="docutils literal notranslate"><span class="pre">eTouchStart</span></code></p></td>
+              <td>
+               <p>Press</p></td>
+             </tr>
+             <tr class="row-odd">
+              <td>
+               <p><code class="docutils literal notranslate"><span class="pre">eMouseMove</span></code> or <code class="docutils literal notranslate"><span class="pre">eTouchMove</span></code></p></td>
+              <td>
+               <p>Move</p></td>
+             </tr>
+             <tr class="row-even">
+              <td>
+               <p><code class="docutils literal notranslate"><span class="pre">eMouseUp</span></code> or <code class="docutils literal notranslate"><span class="pre">eTouchEnd</span></code> or <code class="docutils literal notranslate"><span class="pre">eTouchCancel</span></code></p></td>
+              <td>
+               <p>Release</p></td>
+             </tr>
+             <tr class="row-odd">
+              <td>
+               <p><code class="docutils literal notranslate"><span class="pre">eMouseLongTap</span></code></p></td>
+              <td>
+               <p>Long tap</p></td>
+             </tr>
+             <tr class="row-even">
+              <td>
+               <p><code class="docutils literal notranslate"><span class="pre">AsyncPanZoomStarted()</span></code></p></td>
+              <td>
+               <p>Scroll start</p></td>
+             </tr>
+             <tr class="row-odd">
+              <td>
+               <p><code class="docutils literal notranslate"><span class="pre">AsyncPanZoomStopped()</span></code></p></td>
+              <td>
+               <p>Scroll end</p></td>
+             </tr>
+             <tr class="row-even">
+              <td>
+               <p><code class="docutils literal notranslate"><span class="pre">NotifyBlur()</span></code></p></td>
+              <td>
+               <p>Blur</p></td>
+             </tr>
+            </tbody>
+           </table><img alt="../_images/AccessibleCaretEventHubStates.png" src="../_images/AccessibleCaretEventHubStates.png">
+          </section>
+          <section id="debug-tips">
+           <h3>Debug Tips<a class="headerlink" href="#debug-tips" title="Link to this heading">?</a></h3>
+           <ul class="simple">
+            <li>
+             <p>Dump AccessibleCaret log from command line: run <code class="docutils literal notranslate"><span class="pre">MOZ_LOG=AccessibleCaret:5</span> <span class="pre">./mach</span> <span class="pre">run</span></code>.</p></li>
+            <li>
+             <p>Dump AccessibleCaret log by using a preference: Open <code class="docutils literal notranslate"><span class="pre">about:config</span></code> and add a pref <code class="docutils literal notranslate"><span class="pre">logging.AccessibleCaret</span></code> with value <code class="docutils literal notranslate"><span class="pre">debug</span></code> or <code class="docutils literal notranslate"><span class="pre">verbose</span></code> (case matters).</p></li>
+            <li>
+             <p><code class="docutils literal notranslate"><span class="pre">AC_LOG()</span></code> is useful to add new logs.</p></li>
+           </ul>
+          </section>
+         </section>
+         <section id="developers">
+          <h2>Developers<a class="headerlink" href="#developers" title="Link to this heading">?</a></h2>
+          <section id="current-maintainer">
+           <h3>Current maintainer<a class="headerlink" href="#current-maintainer" title="Link to this heading">?</a></h3>
+           <ul class="simple">
+            <li>
+             <p>Ting-Yu Lin &lt;<a class="reference external" href="mailto:aethanyc%40gmail.com">aethanyc<span>@</span>gmail<span>.</span>com</a>&gt;</p></li>
+           </ul>
+          </section>
+          <section id="developers-emeritus">
+           <h3>Developers Emeritus<a class="headerlink" href="#developers-emeritus" title="Link to this heading">?</a></h3>
+           <ul class="simple">
+            <li>
+             <p>Morris Tseng &lt;<a class="reference external" href="mailto:mtseng%40mozilla.com">mtseng<span>@</span>mozilla<span>.</span>com</a>&gt;</p></li>
+            <li>
+             <p>Jeremy Chen &lt;<a class="reference external" href="mailto:jeremychen%40mozilla.com">jeremychen<span>@</span>mozilla<span>.</span>com</a>&gt;</p></li>
+            <li>
+             <p>Boris Chiou &lt;<a class="reference external" href="mailto:boris%40mozilla.com">boris<span>@</span>mozilla<span>.</span>com</a>&gt;*</p></li>
+           </ul>
+          </section>
+         </section>
+        </section>
+       </div>
+      </div>
+      <footer>
+       <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="LayoutDebugger.html" class="btn btn-neutral float-left" title="Layout Debugger" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a> <a href="../gfx/index.html" class="btn btn-neutral float-right" title="Graphics" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+       </div>
+       <hr>
+       <div role="contentinfo">
+        <p></p>
+       </div> Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+      </footer>
+     </div>
+    </div>
+   </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ </body>
+</html>

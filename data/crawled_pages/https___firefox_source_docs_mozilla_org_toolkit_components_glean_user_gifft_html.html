@@ -1,0 +1,529 @@
+<!doctype html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Glean Interface For Firefox Telemetry (GIFFT) — Firefox Source Docs  documentation</title>
+  <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=fa44fd50">
+  <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=19f00094">
+  <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css?v=fd3f3429">
+  <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css?v=76b2166b">
+  <link rel="stylesheet" type="text/css" href="../../../../_static/custom_theme.css?v=dc5ed815">
+  <link rel="stylesheet" type="text/css" href="../../../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7">
+  <link rel="shortcut icon" href="../../../../_static/firefox.ico"><!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+  <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+  <script src="../../../../_static/documentation_options.js?v=5929fcd5"></script>
+  <script src="../../../../_static/doctools.js?v=9a2dae69"></script>
+  <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
+  <script src="../../../../_static/copybutton.js?v=30646c52"></script>
+  <script src="../../../../_static/design-tabs.js?v=36754332"></script>
+  <script src="../../../../_static/js/theme.js"></script>
+  <link rel="index" title="Index" href="../../../../genindex.html">
+  <link rel="search" title="Search" href="../../../../search.html">
+  <link rel="next" title="Using Firefox on Glean to Record Legacy Telemetry Events" href="glean_for_legacy_events.html">
+  <link rel="prev" title="New Metrics and Pings" href="new_definitions_file.html">
+ </head>
+ <body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+   <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <div class="wy-side-scroll">
+     <div class="wy-side-nav-search">
+      <a href="../../../../index.html" class="icon icon-home"> Firefox Source Docs <img src="../../../../_static/firefox-wordmark.svg" class="logo" alt="Logo"> </a><!-- -- This code is governed by the BSD license ---->
+      <div>
+       <h3>Quick search</h3>
+       <script>
+    (function () {
+      var cx = "dd12886298f75dbef";
+      var gcse = document.createElement("script");
+      gcse.async = true;
+      gcse.src = "https://cse.google.com/cse.js?cx=" + cx;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(gcse, s);
+    })();
+  </script><gcse:search></gcse:search>
+      </div>
+     </div>
+     <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+      <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../glossary/index.html">A Glossary of Common Terms</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../overview/index.html">A Quick Guide to Mozilla Applications</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../setup/index.html">Getting Set Up To Work On The Firefox Codebase</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Working On Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../contributing/index.html">Working on Firefox</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../bug-mgmt/index.html">Bug Handling</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox User Guide</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../devtools-user/index.html">Firefox DevTools User Docs</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Source Code Documentation</span></p>
+      <ul class="current">
+       <li class="toctree-l1"><a class="reference internal" href="../../../../mots/index.html">Governance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../browser/index.html">Firefox Front-end</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../dom/index.html">DOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../editor/index.html">Editor</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../layout/index.html">Style system (CSS) &amp; Layout</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../gfx/index.html">Graphics</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../ipc/index.html">Processes, Threads and IPC</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../devtools/index.html">Firefox DevTools Contributor Docs</a></li>
+       <li class="toctree-l1 current"><a class="reference internal" href="../../../index.html">Toolkit</a>
+        <ul class="current">
+         <li class="toctree-l2"><a class="reference internal" href="../../../javascript-logging.html">JavaScript Logging</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../mozapps/extensions/addon-manager/index.html">Add-on Manager</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../backgroundtasks/index.html">Background Task Mode</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../crashes/crash-manager/index.html">Crash Manager</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../crashreporter/crashreporter/index.html">Crash Reporter</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../internal-urls.html">Internal URLs</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../search/index.html">Search Service</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../normandy/normandy/index.html">Shield Recipe Client</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../nimbus/docs/index.html">Nimbus</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../messaging-system/docs/index.html">Messaging System Schemas</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../pictureinpicture/pictureinpicture/index.html">Picture-in-Picture</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../prompts/prompts/index.html">Prompts</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../modules/subprocess/toolkit_modules/subprocess/index.html">Subprocess Module</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../telemetry/index.html">Telemetry</a></li>
+         <li class="toctree-l2 current"><a class="reference internal" href="../index.html">Firefox on Glean (FOG)</a>
+          <ul class="current">
+           <li class="toctree-l3 current"><a class="reference internal" href="index.html">Using Firefox on Glean</a>
+            <ul class="current">
+             <li class="toctree-l4"><a class="reference internal" href="getting_started.html">Getting Started with Firefox on Glean (FOG)</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="new_definitions_file.html">New Metrics and Pings</a></li>
+             <li class="toctree-l4 current"><a class="current reference internal" href="#">Glean Interface For Firefox Telemetry (GIFFT)</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="glean_for_legacy_events.html">Using Firefox on Glean to Record Legacy Telemetry Events</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="glean_for_legacy_scalars.html">Using Firefox on Glean to Record Legacy Telemetry Scalars</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="instrumentation_tests.html">Writing Instrumentation Tests</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="migration.html">Migrating Firefox Telemetry to Glean</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="ohttp.html">Using Oblivious HTTP in Firefox on Glean</a></li>
+             <li class="toctree-l4"><a class="reference external" href="https://mozilla.github.io/glean/book/index.html">Glean SDK Documentation</a></li>
+            </ul></li>
+           <li class="toctree-l3"><a class="reference internal" href="../dev/index.html">Developing Firefox on Glean</a></li>
+          </ul></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../modules/toolkit_modules/index.html">Toolkit Modules</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../content/toolkit_widgets/index.html">Toolkit Widgets</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../resistfingerprinting/resistfingerprinting/index.html">Fingerprinting Resistance</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../url-classifier/url-classifier/index.html">URL Classifier</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../extensions/webextensions/index.html">WebExtensions API Development</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../../extensions/spellcheck/index.html">Managing the built-in en-US dictionary</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../mozapps/update/docs/index.html">Application Update</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../antitracking/anti-tracking/index.html">Anti-Tracking</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../translations/index.html">Translations</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../sessionstore/index.html">Session Store</a></li>
+        </ul></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../js/index.html">SpiderMonkey</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../jsloader/index.html">JS Loader</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../mobile/android/geckoview/index.html">GeckoView</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../mobile/android/fenix/index.html">Fenix</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../mobile/android/focus-android/index.html">Focus for Android</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../dom/bindings/webidl/index.html">WebIDL</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../modules/libpref/index.html">libpref</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../networking/index.html">Networking</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../remote/index.html">Remote Protocols</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../services/index.html">Services</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../permissions/index.html">Permissions</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../uriloader/index.html">File Handling</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../widget/cocoa/index.html">Firefox on macOS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../widget/windows/index.html">Firefox on Windows</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../ml/index.html">Firefox AI Runtime</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../accessible/index.html">Accessibility</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../media/index.html">Media Playback</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../code-quality/index.html">Code quality</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../writing-rust-code/index.html">Writing Rust Code</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../rust-components/index.html">Rust Components</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../tools/profiler/index.html">Gecko Profiler</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../performance/index.html">Performance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../storage/index.html">Database bindings (SQLite, KV, …)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../xpcom/index.html">XPCOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../nspr/index.html">NSPR</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../security/nss/index.html">Network Security Services (NSS)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../content-security/index.html">Web Security Checks in Gecko</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">The Firefox Build System</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../mach/index.html">Mach</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../tools/try/index.html">Pushing to Try</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../build/buildsystem/index.html">Build System</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../taskcluster/index.html">Firefox CI and Taskgraph</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../tools/moztreedocs/index.html">Managing Documentation</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../mozbuild/vendor/index.html">Vendoring Third Party Components</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Testing &amp; Test Infrastructure</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/automated-testing/index.html">Automated Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/treeherder-try/index.html">Understanding Treeherder Results</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/sheriffed-intermittents/index.html">Sheriffed intermittent failures</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/tests-for-new-config/index.html">Turning on Firefox tests for a new configuration</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/intermittent/index.html">Avoiding intermittent tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/testing-policy/index.html">Testing Policy</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/ci-configs/index.html">Configuration Changes</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/browser-chrome/index.html">Browser chrome mochitests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/chrome-tests/index.html">Chrome Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/marionette/index.html">Marionette</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/geckodriver/index.html">geckodriver</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/test-verification/index.html">Test Verification</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/webrender/index.html">WebRender Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/mochitest-plain/index.html">Mochitest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/xpcshell/index.html">XPCShell tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/tps/index.html">TPS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../web-platform/index.html">web-platform-tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../gtest/index.html">GTest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../tools/fuzzing/index.html">Fuzzing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../tools/sanitizer/index.html">Sanitizer</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/perfdocs/index.html">Performance Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../tools/code-coverage/index.html">Code coverage</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing-rust-code/index.html">Testing &amp; Debugging Rust Code</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Releases &amp; Updates</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../update-infrastructure/index.html">Mozilla Update Infrastructure</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../update-infrastructure/index.html#watershed-updates">Watershed Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../update-infrastructure/index.html#desupport-updates">Desupport Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../tools/update-verify/index.html">Update Verify</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Localization &amp; Internationalization</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../intl/index.html">Internationalization</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../l10n/index.html">Localization</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox and Python</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../mozbase/index.html">mozbase</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../python/index.html">Using third-party Python packages</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Metrics Collected in Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../metrics/index.html">Metrics</a></li>
+      </ul>
+     </div>
+    </div>
+   </nav>
+   <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+    <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+     <i data-toggle="wy-nav-top" class="fa fa-bars"></i> <a href="../../../../index.html">Firefox Source Docs</a>
+    </nav>
+    <div class="wy-nav-content">
+     <div class="rst-content">
+      <!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+      <div role="navigation" aria-label="Page navigation">
+       <ul class="wy-breadcrumbs">
+        <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+        <li class="breadcrumb-item"><a href="../../../index.html">Toolkit</a></li>
+        <li class="breadcrumb-item"><a href="../index.html">Firefox on Glean (FOG)</a></li>
+        <li class="breadcrumb-item"><a href="index.html">Using Firefox on Glean</a></li>
+        <li class="breadcrumb-item active">Glean Interface For Firefox Telemetry (GIFFT)</li>
+        <li class="wy-breadcrumbs-aside"><a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Developer+Infrastructure&amp;component=Firefox+Source+Docs%3A+Content&amp;short_desc=Documentation+issue+on+toolkit/components/glean/user/gifft&amp;comment=URL+=+https://firefox-source-docs.mozilla.org/toolkit/components/glean/user/gifft.html&amp;bug_file_loc=https://firefox-source-docs.mozilla.org/toolkit/components/glean/user/gifft.html" rel="nofollow">Report an issue</a> / <a href="../../../../_sources/toolkit/components/glean/user/gifft.md.txt" rel="nofollow"> View page source</a></li>
+       </ul>
+       <hr>
+      </div>
+      <div role="main" class="document" itemscope itemtype="http://schema.org/Article">
+       <div itemprop="articleBody">
+        <section id="glean-interface-for-firefox-telemetry-gifft">
+         <h1>Glean Interface For Firefox Telemetry (GIFFT)<a class="headerlink" href="#glean-interface-for-firefox-telemetry-gifft" title="Link to this heading">?</a></h1>
+         <p>To make Migration from Firefox Telemetry to Glean easier, the C++ and JS Glean API can be configured (on a metric-by-metric basis) to mirror data collection to both the Glean metric and a Telemetry probe.</p>
+         <p>GIFFT should ideally be used only when the data you require for analysis still mostly lives in Telemetry, and should be removed promptly when no longer needed. Instrumentors are encouraged to have the Telemetry mirror probe expire within six versions. (As always you can renew an expiring probe if you’re still using it, but this will help us get closer to the time when we eventually turn Telemetry off.)</p>
+         <p><strong>Note:</strong> GIFFT only works for data provided via C++ or JS. Rust Glean metrics APIs will not mirror to Telemetry as Telemetry does not have a Rust API.</p>
+         <p><strong>Note:</strong> Using the Glean API replaces the Telemetry API. Do not use any mix of the two APIs for the same probe.</p>
+         <section id="how-to-mirror-a-glean-metric-to-a-firefox-telemetry-probe">
+          <h2>How to Mirror a Glean Metric to a Firefox Telemetry Probe<a class="headerlink" href="#how-to-mirror-a-glean-metric-to-a-firefox-telemetry-probe" title="Link to this heading">?</a></h2>
+          <p>For the mirror to work, you need three things:</p>
+          <ul class="simple">
+           <li>
+            <p>A compatible Glean metric (defined in a <code class="docutils literal notranslate"><span class="pre">metrics.yaml</span></code>)</p></li>
+           <li>
+            <p>A compatible Telemetry probe (defined in <code class="docutils literal notranslate"><span class="pre">Histograms.json</span></code>, <code class="docutils literal notranslate"><span class="pre">Scalars.yaml</span></code>, or <code class="docutils literal notranslate"><span class="pre">Events.yaml</span></code>)</p></li>
+           <li>
+            <p>A <code class="docutils literal notranslate"><span class="pre">telemetry_mirror</span></code> property on the Glean metric definition identifying the Telemetry probe</p></li>
+          </ul>
+          <section id="compatibility">
+           <h3>Compatibility<a class="headerlink" href="#compatibility" title="Link to this heading">?</a></h3>
+           <p>This compatibility table explains which Telemetry probe types can be mirrors for which Glean metric types:</p>
+           <table border="1" class="docutils">
+            <thead>
+             <tr>
+              <th>Glean Metric Type</th>
+              <th>Telementry Probe Type</th>
+             </tr>
+            </thead>
+            <tbody>
+             <tr>
+              <td><a href="https://mozilla.github.io/glean/book/reference/metrics/boolean.html">boolean</a></td>
+              <td><a href="/toolkit/components/telemetry/collection/scalars.html">Scalar of kind: boolean</a></td>
+             </tr>
+             <tr>
+              <td><a href="https://mozilla.github.io/glean/book/reference/metrics/labeled_booleans.html">labeled_boolean</a></td>
+              <td><a href="/toolkit/components/telemetry/collection/scalars.html">Keyed scalar of kind: boolean</a></td>
+             </tr>
+             <tr>
+              <td><a href="https://mozilla.github.io/glean/book/reference/metrics/counter.html">counter</a></td>
+              <td><a href="/toolkit/components/telemetry/collection/scalars.html">Scalar of kind: uint</a></td>
+             </tr>
+             <tr>
+              <td><a href="https://mozilla.github.io/glean/book/reference/metrics/labeled_counters.html">labeled_counter</a></td>
+              <td><a href="/toolkit/components/telemetry/collection/scalars.html">Keyed Scalar of kind: uint</a></td>
+             </tr>
+             <tr>
+              <td><a href="https://mozilla.github.io/glean/book/reference/metrics/string.html">string</a></td>
+              <td><a href="/toolkit/components/telemetry/collection/scalars.html">Scalar of kind: string</a></td>
+             </tr>
+             <tr>
+              <td><a href="https://mozilla.github.io/glean/book/reference/metrics/labeled_strings.html">labeled_string</a></td>
+              <td><em>No Supported Telemetry Type</em></td>
+             </tr>
+             <tr>
+              <td><a href="https://mozilla.github.io/glean/book/reference/metrics/string_list.html">string_list</a></td>
+              <td><a href="/toolkit/components/telemetry/collection/scalars.html">Keyed Scalar of kind: boolean</a>. The keys are the strings. The values are all <code>true</code>. Calling <code>Set</code> on the labeled_string is not mirrored (since there's no way to remove keys from a keyed scalar of kind boolean). Doing so will log a warning.</td>
+             </tr>
+             <tr>
+              <td><a href="https://mozilla.github.io/glean/book/reference/metrics/timespan.html">timespan</a></td>
+              <td><a href="/toolkit/components/telemetry/collection/scalars.html">Scalar of kind: uint</a>. The value is in units of milliseconds.</td>
+             </tr>
+             <tr>
+              <td><a href="https://mozilla.github.io/glean/book/reference/metrics/timing_distribution.html">timing_distribution</a></td>
+              <td><a href="/toolkit/components/telemetry/collection/histograms.html#exponential">Histogram of kind "linear" or "exponential"</a>. Samples will be in <code>timing_unit</code> units.</td>
+             </tr>
+             <tr>
+              <td><a href="https://mozilla.github.io/glean/book/reference/metrics/labeled_timing_distributions.html">labeled_timing_distribution</a></td>
+              <td><a href="/toolkit/components/telemetry/collection/histograms.html#exponential">Keyed Histogram of kind "linear" or "exponential"</a>. Samples will be in units of milliseconds.</td>
+             </tr>
+             <tr>
+              <td><a href="https://mozilla.github.io/glean/book/reference/metrics/memory_distribution.html">memory_distribution</a></td>
+              <td><a href="/toolkit/components/telemetry/collection/histograms.html#exponential">Histogram of kind "linear" or "exponential"</a>. Samples will be in <code>memory_unit</code> units.</td>
+             </tr>
+             <tr>
+              <td><a href="https://mozilla.github.io/glean/book/reference/metrics/labeled_memory_distributions.html">labeled_memory_distribution</a></td>
+              <td><a href="/toolkit/components/telemetry/collection/histograms.html#exponential">Keyed Histogram of kind "linear" or "exponential"</a>. Samples will be in <code>memory_unit</code> units.</td>
+             </tr>
+             <tr>
+              <td><a href="https://mozilla.github.io/glean/book/reference/metrics/custom_distribution.html">custom_distribution</a></td>
+              <td><a href="/toolkit/components/telemetry/collection/histograms.html#exponential">Histogram of kind "linear" or "exponential"</a>. Samples will be used as is. Ensure the bucket count and range match.</td>
+             </tr>
+             <tr>
+              <td><a href="https://mozilla.github.io/glean/book/reference/metrics/labeled_custom_distributions.html">labeled_custom_distribution</a></td>
+              <td><a href="/toolkit/components/telemetry/collection/histograms.html#exponential">Keyed Histogram of kind "linear" or "exponential"</a>. Samples will be used as is. Ensure the bucket count and range match.</td>
+             </tr>
+             <tr>
+              <td><a href="https://mozilla.github.io/glean/book/reference/metrics/uuid.html">uuid</a></td>
+              <td><a href="/toolkit/components/telemetry/collection/scalars.html">Scalar of kind: string</a>. Value will be in canonical 8-4-4-4-12 format. Value is not guaranteed to be valid, and invalid values may be present in the mirrored scalar while the uuid metric remains empty. Calling <code>GenerateAndSet</code> on the uuid is not mirrored, and will log a warning.</td>
+             </tr>
+             <tr>
+              <td><a href="https://mozilla.github.io/glean/book/reference/metrics/url.html">url</a></td>
+              <td><a href="/toolkit/components/telemetry/collection/scalars.html">Scalar of kind: string</a>. The stringified Url will be cropped to the maximum length allowed by the legacy type.</td>
+             </tr>
+             <tr>
+              <td><a href="https://mozilla.github.io/glean/book/reference/metrics/datetime.html">datetime</a></td>
+              <td><a href="/toolkit/components/telemetry/collection/scalars.html">Scalar of kind: string</a>. Value will be in ISO8601 format.</td>
+             </tr>
+             <tr>
+              <td><a href="https://mozilla.github.io/glean/book/reference/metrics/event.html">events</a></td>
+              <td><a href="/toolkit/components/telemetry/collection/events.html">Events</a>. The <code>value</code> field will be filled by the Glean extra named <code>value</code> if defined and present.</td>
+             </tr>
+             <tr>
+              <td><a href="https://mozilla.github.io/glean/book/reference/metrics/quantity.html">quantity</a></td>
+              <td><a href="/toolkit/components/telemetry/collection/scalars.html">Scalar of kind: uint</a></td>
+             </tr>
+             <tr>
+              <td><a href="https://mozilla.github.io/glean/book/reference/metrics/labeled_quantity.html">labeled_quantity</a></td>
+              <td><a href="/toolkit/components/telemetry/collection/scalars.html">Keyed Scalar of kind: uint</a></td>
+             </tr>
+             <tr>
+              <td><a href="https://mozilla.github.io/glean/book/reference/metrics/rate.html">rate</a></td>
+              <td><a href="/toolkit/components/telemetry/collection/scalars.html">Keyed Scalar of kind: uint</a>. The keys are "numerator" and "denominator". Does not work for <code>rate</code> metrics with external denominators.</td>
+             </tr>
+             <tr>
+              <td><a href="https://mozilla.github.io/glean/book/reference/metrics/text.html">text</a></td>
+              <td><em>No Supported Telemetry Type</em></td>
+             </tr>
+            </tbody>
+           </table>
+          </section>
+          <section id="the-telemetry-mirror-property-in-metrics-yaml">
+           <h3>The <code class="docutils literal notranslate"><span class="pre">telemetry_mirror</span></code> property in <code class="docutils literal notranslate"><span class="pre">metrics.yaml</span></code><a class="headerlink" href="#the-telemetry-mirror-property-in-metrics-yaml" title="Link to this heading">?</a></h3>
+           <p>You must use the C++ enum identifier of the Histogram, Scalar, or Event being mirrored to:</p>
+           <ul class="simple">
+            <li>
+             <p>For Histograms, the Telemetry C++ enum identifier is the histogram’s name</p>
+             <ul>
+              <li>
+               <p>e.g. The C++ enum identifier for <code class="docutils literal notranslate"><span class="pre">WR_RENDERER_TIME</span></code> is <code class="docutils literal notranslate"><span class="pre">WR_RENDERER_TIME</span></code> (see <a class="reference external" href="https://searchfox.org/mozilla-central/source/gfx/metrics.yaml">gfx/metrics.yaml</a>)</p></li>
+             </ul></li>
+            <li>
+             <p>For Scalars, the Telemetry C++ enum identifier is the Scalar category and name in <code class="docutils literal notranslate"><span class="pre">SCREAMING_SNAKE_CASE</span></code> with any <code class="docutils literal notranslate"><span class="pre">.</span></code> replaced with <code class="docutils literal notranslate"><span class="pre">_</span></code></p>
+             <ul>
+              <li>
+               <p>e.g. The enum identifier for <code class="docutils literal notranslate"><span class="pre">extensions.startupCache.load_time</span></code> is <code class="docutils literal notranslate"><span class="pre">EXTENSIONS_STARTUPCACHE_LOAD_TIME</span></code> (see <a class="reference external" href="https://searchfox.org/mozilla-central/source/toolkit/components/extensions/metrics.yaml">toolkit/components/extensions/metrics.yaml</a>)</p></li>
+             </ul></li>
+            <li>
+             <p>For Events, the Telemetry C++ enum identifier is the Event category, method, and object rendered in <code class="docutils literal notranslate"><span class="pre">Snakey_CamelCase</span></code>.</p>
+             <ul>
+              <li>
+               <p>e.g. The enum identifier for <code class="docutils literal notranslate"><span class="pre">page_load.toplevel#content</span></code> is <code class="docutils literal notranslate"><span class="pre">Page_load_Toplevel_Content</span></code> (see <a class="reference external" href="https://searchfox.org/mozilla-central/source/dom/metrics.yaml">dom/metrics.yaml</a>)</p></li>
+             </ul></li>
+           </ul>
+           <p>If you use the wrong enum identifier, this will manifest as a build error.</p>
+           <p>If you are having trouble finding the correct conjugation for the mirror Telemetry probe, you can find the specific value in the list of all Telemetry C++ enum identifiers in <code class="docutils literal notranslate"><span class="pre">&lt;objdir&gt;/toolkit/components/telemetry/Telemetry{Histogram|Scalar|Event}Enums.h</span></code>. (Choose the file appropriate to the type of the Telemetry mirror.)</p>
+          </section>
+         </section>
+         <section id="artifact-build-support">
+          <h2>Artifact Build Support<a class="headerlink" href="#artifact-build-support" title="Link to this heading">?</a></h2>
+          <p>Sadly, GIFFT does not support Artifact builds. You must build Firefox when you add the mirrored metric so the C++ enum value is present, even if you only use the metric from Javascript.</p>
+         </section>
+         <section id="analysis-gotchas">
+          <h2>Analysis Gotchas<a class="headerlink" href="#analysis-gotchas" title="Link to this heading">?</a></h2>
+          <p>Firefox Telemetry and the Glean SDK are very different. Though GIFFT bridges the differences as best it can, there are many things it cannot account for.</p>
+          <p>These are a few of the ways that differences between Firefox Telemetry and the Glean SDK might manifest as anomalies during analysis.</p>
+          <section id="processes-products-and-channels">
+           <h3>Processes, Products, and Channels<a class="headerlink" href="#processes-products-and-channels" title="Link to this heading">?</a></h3>
+           <p>Like Firefox on Glean itself, GIFFT doesn’t know what process, product, or channel it is recording in. Telemetry does, and imposes restrictions on which probes can be recorded to and when.</p>
+           <p>Ensure that the following fields in any Telemetry mirror’s definition aren’t too restrictive for your use:</p>
+           <ul class="simple">
+            <li>
+             <p><code class="docutils literal notranslate"><span class="pre">record_in_processes</span></code></p></li>
+            <li>
+             <p><code class="docutils literal notranslate"><span class="pre">products</span></code></p></li>
+            <li>
+             <p><code class="docutils literal notranslate"><span class="pre">release_channel_collection</span></code>/<code class="docutils literal notranslate"><span class="pre">releaseChannelCollection</span></code></p></li>
+           </ul>
+           <p>A mismatch won’t result in an error. If you, for example, record to a Glean metric in a release channel that the Telemetry mirror probe doesn’t permit, then the Glean metric will have a value and the Telemetry mirror probe won’t.</p>
+           <p>Also recall that Telemetry probes split their values across processes. <a class="reference internal" href="../dev/ipc.html"><span class="std std-doc">Glean metrics do not</span></a>. This may manifest as curious anomalies when comparing the Glean metric to its Telemetry mirror probe. Ensure your analyses are aggregating Telemetry values from all processes, or define and use process-specific Glean metrics and Telemetry mirror probes to keep things separate.</p>
+          </section>
+          <section id="pings">
+           <h3>Pings<a class="headerlink" href="#pings" title="Link to this heading">?</a></h3>
+           <p>Glean and Telemetry both send their built-in pings on their own schedules. This means the values present in these pings may not agree since they reflect state at different time.</p>
+           <p>For example, if you are measuring “Number of Monitors” with a <a class="reference external" href="https://mozilla.github.io/glean/book/reference/metrics/quantity.html"><code class="docutils literal notranslate"><span class="pre">quantity</span></code></a> sent by default in the Glean “metrics” ping mirrored to a <a class="reference internal" href="../../telemetry/collection/scalars.html"><span class="std std-doc">Scalar of kind: uint</span></a> sent by default in the Telemetry “main” ping, then if the user plugs in a second monitor between midnight (when Telemetry “main” pings with reason “daily” are sent) and 4AM (when Glean “metrics” pings with reason “today” are sent), the value in the <code class="docutils literal notranslate"><span class="pre">quantity</span></code> will be <code class="docutils literal notranslate"><span class="pre">2</span></code> while the value in the Scalar of kind: uint will be <code class="docutils literal notranslate"><span class="pre">1</span></code>.</p>
+           <p>If the metric or mirrored probe are sent in Custom pings, the schedules could line up exactly or be entirely unrelated.</p>
+          </section>
+          <section id="labels">
+           <h3>Labels<a class="headerlink" href="#labels" title="Link to this heading">?</a></h3>
+           <p>Labeled metrics supported by GIFFT adhere to the Glean SDK’s <a class="reference external" href="https://mozilla.github.io/glean/book/reference/metrics/index.html#label-format">label format</a>.</p>
+           <p>Keyed Scalars and Keyed Histograms, on the other hand, do not have a concept of an “Invalid key”. Firefox Telemetry will accept just about any sequence of bytes as a key.</p>
+           <p>This means that a label deemed invalid by the Glean SDK may appear in the mirrored probe’s data. For example, using 72 “1” characters as a label that doesn’t conform to the format (it is longer than 71 printable ASCII characters). See that the <code class="docutils literal notranslate"><span class="pre">labeled_boolean</span></code> metric <a class="reference external" href="https://mozilla.github.io/glean/book/reference/metrics/index.html#labeled-metrics">correctly ascribes it to <code class="docutils literal notranslate"><span class="pre">__other__</span></code></a> whereas the mirrored Keyed Scalar with kind boolean stores and retrieves it without change:</p>
+           <div class="highlight-js notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="nx">Glean</span><span class="p">.</span><span class="nx">testOnly</span><span class="p">.</span><span class="nx">mirrorsForLabeledBools</span><span class="p">[</span><span class="s2">"1"</span><span class="p">.</span><span class="nx">repeat</span><span class="p">(</span><span class="mf">72</span><span class="p">)].</span><span class="nx">set</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
+<span class="nx">Assert</span><span class="p">.</span><span class="nx">equal</span><span class="p">(</span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="nx">Glean</span><span class="p">.</span><span class="nx">testOnly</span><span class="p">.</span><span class="nx">mirrorsForLabeledBools</span><span class="p">.</span><span class="nx">__other__</span><span class="p">.</span><span class="nx">testGetValue</span><span class="p">());</span>
+<span class="c1">// The above actually throws NS_ERROR_LOSS_OF_SIGNIFICANT_DATA because it also records</span>
+<span class="c1">// an invalid_label error. But you get the idea.</span>
+<span class="kd">let</span><span class="w"> </span><span class="nx">snapshot</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">Services</span><span class="p">.</span><span class="nx">telemetry</span><span class="p">.</span><span class="nx">getSnapshotForKeyedScalars</span><span class="p">().</span><span class="nx">parent</span><span class="p">;</span>
+<span class="nx">Assert</span><span class="p">.</span><span class="nx">equal</span><span class="p">(</span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="nx">snapshot</span><span class="p">[</span><span class="s2">"telemetry.test.mirror_for_labeled_bool"</span><span class="p">][</span><span class="s2">"1"</span><span class="p">.</span><span class="nx">repeat</span><span class="p">(</span><span class="mf">72</span><span class="p">)]);</span>
+</pre>
+            </div>
+           </div>
+          </section>
+          <section id="telemetry-events">
+           <h3>Telemetry Events<a class="headerlink" href="#telemetry-events" title="Link to this heading">?</a></h3>
+           <p>A Glean event can be mirrored to a Telemetry Event.</p>
+           <p>In order to make use of the <code class="docutils literal notranslate"><span class="pre">value</span></code> field in Telemetry Events, you must first define an event extra in the metrics.yaml file with the name “value”. On recording the event with the Glean extra key for the “value” filled in, GIFFT will map this to the Telemetry Event <code class="docutils literal notranslate"><span class="pre">value</span></code> property and remove it from the list of extras so it is not duplicated.</p>
+          </section>
+          <section id="numeric-values">
+           <h3>Numeric Values<a class="headerlink" href="#numeric-values" title="Link to this heading">?</a></h3>
+           <p>The arguments and storage formats for Glean’s numeric types (<code class="docutils literal notranslate"><span class="pre">counter</span></code>, <code class="docutils literal notranslate"><span class="pre">labeled_counter</span></code>, <code class="docutils literal notranslate"><span class="pre">quantity</span></code>, <code class="docutils literal notranslate"><span class="pre">rate</span></code>, and <code class="docutils literal notranslate"><span class="pre">timespan</span></code>) are different from Telemetry’s numeric type (Scalar of kind <code class="docutils literal notranslate"><span class="pre">uint</span></code>).</p>
+           <p>This results in a few notable differences.</p>
+           <section id="saturation-and-overflow">
+            <h4>Saturation and Overflow<a class="headerlink" href="#saturation-and-overflow" title="Link to this heading">?</a></h4>
+            <p><code class="docutils literal notranslate"><span class="pre">counter</span></code>, <code class="docutils literal notranslate"><span class="pre">labeled_counter</span></code>, and <code class="docutils literal notranslate"><span class="pre">rate</span></code> metrics are stored as 32-bit signed values. <code class="docutils literal notranslate"><span class="pre">quantity</span></code> metrics are stored as 64-bit signed values. <code class="docutils literal notranslate"><span class="pre">timing_distribution</span></code> samples can be 64-bit signed values. All of these Glean numeric metric types saturate at their maximum representable value, or according to the Limits section of the Glean metric type documentation.</p>
+            <p>Scalars of kind <code class="docutils literal notranslate"><span class="pre">uint</span></code> are stored as 32-bit unsigned values. They will overflow if they exceed the value $2^{32} - 1$.</p>
+            <p>If a Glean numeric type saturates, it will record an error of type <code class="docutils literal notranslate"><span class="pre">invalid_overflow</span></code>. In your analyses please check for these errors.</p>
+           </section>
+           <section id="quantity-value-over-size">
+            <h4>Quantity Value Over-size<a class="headerlink" href="#quantity-value-over-size" title="Link to this heading">?</a></h4>
+            <p>Values greater than $2^{32} - 1$ passed to a <code class="docutils literal notranslate"><span class="pre">quantity</span></code> metric’s <code class="docutils literal notranslate"><span class="pre">set()</span></code> method will be clamped to $2^{32} - 1$ before being passed to the metric’s Telemetry mirror.</p>
+           </section>
+           <section id="negative-values">
+            <h4>Negative Values<a class="headerlink" href="#negative-values" title="Link to this heading">?</a></h4>
+            <p>Values less than 0 passed to any numeric metric type’s API will not be passed on to the Telemetry mirror. This avoids small negative numbers being cast into a stunningly large numbers, and keeps the Telemetry mirror’s value closer to that of the Glean metric.</p>
+           </section>
+           <section id="long-time-spans">
+            <h4>Long Time Spans<a class="headerlink" href="#long-time-spans" title="Link to this heading">?</a></h4>
+            <p>If the number of milliseconds between calls to a <code class="docutils literal notranslate"><span class="pre">timespan</span></code> metric’s <code class="docutils literal notranslate"><span class="pre">start()</span></code> and <code class="docutils literal notranslate"><span class="pre">stop()</span></code> methods exceeds $2^{32} - 1$, the value passed to the metric’s Telemetry mirror will be clamped to $2^{32} - 1$.</p>
+            <p>The same happens for samples in <code class="docutils literal notranslate"><span class="pre">timing_distribution</span></code> metrics: values passed to the Telemetry mirror histogram will saturate at $2^{32} - 1$ until they get past $2^{64}$ when they’ll overflow.</p>
+           </section>
+           <section id="timing-distribution-mirrors-samples-and-sums-might-be-different">
+            <h4><code class="docutils literal notranslate"><span class="pre">timing_distribution</span></code> mirrors: Samples and Sums might be Different<a class="headerlink" href="#timing-distribution-mirrors-samples-and-sums-might-be-different" title="Link to this heading">?</a></h4>
+            <p>A specific value in a <code class="docutils literal notranslate"><span class="pre">timing_distribution</span></code> metric will not always agree with the corresponding value in its mirrored-to histogram. Though the calls to the clock are very close together in the code in Telemetry and Glean, Telemetry’s are not on the exact same instruction as Glean’s <em>and</em> Telemetry uses a different clock source (<code class="docutils literal notranslate"><span class="pre">TimeStamp::Now()</span></code>) than Glean (<code class="docutils literal notranslate"><span class="pre">time::precise_time_ns()</span></code>).</p>
+            <p>Also, if these slight drifts happen to cross the boundary of a bucket in either system, samples might end up looking more different than you’d expect.</p>
+            <p>This shouldn’t affect analysis, but it can affect testing, so please <a class="reference internal" href="instrumentation_tests.html#general-things-to-bear-in-mind"><span class="std std-ref">bear this difference in mind</span></a> in testing.</p>
+           </section>
+           <section id="labeled-timing-distribution-mirrors-sample-based-apis-are-not-recorded">
+            <h4><code class="docutils literal notranslate"><span class="pre">labeled_timing_distribution</span></code> mirrors: sample-based APIs are not recorded<a class="headerlink" href="#labeled-timing-distribution-mirrors-sample-based-apis-are-not-recorded" title="Link to this heading">?</a></h4>
+            <p>Values stored with <code class="docutils literal notranslate"><span class="pre">accumulate_samples</span></code> and <code class="docutils literal notranslate"><span class="pre">accumulate_single_sample</span></code> are not passed to the Telemetry mirror histogram with GIFFT.</p>
+            <p>See <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1943453">bug 1943453</a> for more details.</p>
+           </section>
+          </section>
+          <section id="app-shutdown">
+           <h3>App Shutdown<a class="headerlink" href="#app-shutdown" title="Link to this heading">?</a></h3>
+           <p>Telemetry only works up to <a class="reference external" href="https://searchfox.org/mozilla-central/source/xpcom/base/AppShutdown.cpp#57"><code class="docutils literal notranslate"><span class="pre">ShutdownPhase::AppShutdownTelemetry</span></code> aka <code class="docutils literal notranslate"><span class="pre">profile-before-change-telemetry</span></code></a>. Telemetry data recorded after that phase just aren’t persisted.</p>
+           <p>FOG <em>presently</em> shuts down Glean in a later phase, and so is able to collect data deeper into shutdown. (The particular phase is not presently something anyone’s asked us to guarantee, so that’s why I’m not being precise.)</p>
+           <p>What this means is that, for data recorded later in shutdown, Glean will report more complete information than Telemetry will.</p>
+          </section>
+          <section id="once-per-session-scalars">
+           <h3>Once-per-session Scalars<a class="headerlink" href="#once-per-session-scalars" title="Link to this heading">?</a></h3>
+           <p>Legacy Telemetry Scalars are guaranteed to be submitted in Telemetry “main” pings at least once every session. The default metrics transport in Glean, the “metrics” ping, is submitted at least once a <em>day</em>.</p>
+           <p>This means if your instrumentation code runs once per session, in your Glean metrics later sessions’ values will overwrite earlier ones until a Glean “metrics” ping is submitted.</p>
+           <div class="admonition-glean-timespan-metrics-are-slightly-different admonition">
+            <p class="admonition-title">Glean timespan metrics are slightly different</p>
+            <p>If your Glean metric is a <code class="docutils literal notranslate"><span class="pre">timespan</span></code>, later sessions’ values will not overwrite earlier ones. Instead, the earliest one will persist and <a class="reference external" href="https://mozilla.github.io/glean/book/reference/metrics/timespan.html#recorded-errors">an <code class="docutils literal notranslate"><span class="pre">invalid_state</span></code> error will be recorded</a>. If you’d prefer it to instead silently overwrite, use a <code class="docutils literal notranslate"><span class="pre">quantity</span></code> instead of a <code class="docutils literal notranslate"><span class="pre">timespan</span></code>.</p>
+           </div>
+           <p>To preserve all sessions’ values, you can use different <code class="docutils literal notranslate"><span class="pre">metric</span></code> types:</p>
+           <ul class="simple">
+            <li>
+             <p>For <code class="docutils literal notranslate"><span class="pre">quantity</span></code> metrics:</p>
+             <ul>
+              <li>
+               <p>If timing-related, use <code class="docutils literal notranslate"><span class="pre">timing_distribution</span></code>.</p></li>
+              <li>
+               <p>If memory-related, use <code class="docutils literal notranslate"><span class="pre">memory_distribution</span></code>.</p></li>
+              <li>
+               <p>Otherwise, use <code class="docutils literal notranslate"><span class="pre">custom_distribution</span></code>.</p></li>
+             </ul></li>
+            <li>
+             <p>For <code class="docutils literal notranslate"><span class="pre">string</span></code>, <code class="docutils literal notranslate"><span class="pre">uuid</span></code>, <code class="docutils literal notranslate"><span class="pre">url</span></code>, or <code class="docutils literal notranslate"><span class="pre">datetime</span></code> metrics, you can use <code class="docutils literal notranslate"><span class="pre">string_list</span></code>.</p>
+             <ul>
+              <li>
+               <p>Note: <code class="docutils literal notranslate"><span class="pre">string_list</span></code> has a <a class="reference external" href="https://mozilla.github.io/glean/book/reference/metrics/string_list.html#limits-1">fixed limit on the number of values</a>.</p></li>
+             </ul></li>
+            <li>
+             <p>For <code class="docutils literal notranslate"><span class="pre">boolean</span></code> metrics, use a <code class="docutils literal notranslate"><span class="pre">labeled_counter</span></code> with labels “true” and “false”.</p></li>
+           </ul>
+           <p>To only preserve the session’s values for as long as the session is active, use <code class="docutils literal notranslate"><span class="pre">lifetime:</span> <span class="pre">application</span></code> and apply <code class="docutils literal notranslate"><span class="pre">no_lint:</span> <span class="pre">[GIFFT_NON_PING_LIFETIME]</span></code> to have Glean <a class="reference external" href="https://mozilla.github.io/glean/book/user/metrics/adding-new-metrics.html#when-should-the-glean-sdk-automatically-clear-the-measurement">send the value in every “metrics” ping that session, clearing it after the session completes</a>.</p>
+           <div class="admonition-legacy-telemetry-has-no-concept-of-metric-lifetimes admonition">
+            <p class="admonition-title">Legacy Telemetry has no concept of metric lifetimes</p>
+            <p>Be careful when using <code class="docutils literal notranslate"><span class="pre">lifetime:</span> <span class="pre">application</span></code> in combination with GIFFT. Legacy Telemetry has no concept of metric lifetimes. You would do well to think through exactly what instrumentation operations are happening, and when.</p>
+           </div>
+           <p>Please do <a class="reference external" href="https://chat.mozilla.org/#/room/#glean:mozilla.org">reach out for assistance</a> if you have any questions.</p>
+          </section>
+         </section>
+        </section>
+       </div>
+      </div>
+      <footer>
+       <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="new_definitions_file.html" class="btn btn-neutral float-left" title="New Metrics and Pings" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a> <a href="glean_for_legacy_events.html" class="btn btn-neutral float-right" title="Using Firefox on Glean to Record Legacy Telemetry Events" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+       </div>
+       <hr>
+       <div role="contentinfo">
+        <p></p>
+       </div> Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+      </footer>
+     </div>
+    </div>
+   </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ </body>
+</html>

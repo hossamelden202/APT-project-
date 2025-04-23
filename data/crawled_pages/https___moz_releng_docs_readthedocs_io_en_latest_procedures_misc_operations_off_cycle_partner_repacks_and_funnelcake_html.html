@@ -1,0 +1,601 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/">
+  <title>Off-Cycle Partner Repacks, Funnelcakes, and partner-attributed builds — RelEng Docs</title>
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script><!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet">
+  <link href="../../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet">
+  <link href="../../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet">
+  <link href="../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet">
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2">
+  <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css">
+  <link rel="stylesheet" href="../../../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css"><!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=e353d410970836974a52">
+  <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52">
+  <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+  <script src="../../../_static/doctools.js"></script>
+  <script src="../../../_static/sphinx_highlight.js"></script>
+  <script src="../../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+  <script>DOCUMENTATION_OPTIONS.pagename = 'how-to/release/firefox/off-cycle-partner-repacks-and-funnelcake';</script>
+  <link rel="canonical" href="http://docs.mozilla-releng.net/en/latest/how-to/release/firefox/off-cycle-partner-repacks-and-funnelcake.html">
+  <link rel="index" title="Index" href="../../../genindex.html">
+  <link rel="search" title="Search" href="../../../search.html">
+  <link rel="next" title="Mozilla VPN Release Process" href="../mozillavpn.html">
+  <link rel="prev" title="Partner Repacks and EME Free" href="partner-repacks.html">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="docsearch:language" content="en">
+  <script async type="text/javascript" src="/_/static/javascript/readthedocs-addons.js"></script>
+  <meta name="readthedocs-project-slug" content="moz-releng-docs">
+  <meta name="readthedocs-version-slug" content="latest">
+  <meta name="readthedocs-resolver-filename" content="/how-to/release/firefox/off-cycle-partner-repacks-and-funnelcake.html">
+  <meta name="readthedocs-http-status" content="200">
+ </head>
+ <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+  <a class="skip-link" href="#main-content">Skip to main content</a> <input type="checkbox" class="sidebar-toggle" name="__primary" id="__primary"> <label class="overlay overlay-primary" for="__primary"></label> <input type="checkbox" class="sidebar-toggle" name="__secondary" id="__secondary"> <label class="overlay overlay-secondary" for="__secondary"></label>
+  <div class="search-button__wrapper">
+   <div class="search-button__overlay"></div>
+   <div class="search-button__search-container">
+    <form class="bd-search d-flex align-items-center" action="../../../search.html" method="get">
+     <i class="fa-solid fa-magnifying-glass"></i> <input type="search" class="form-control" name="q" id="search-input" placeholder="Search..." aria-label="Search..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"> <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+    </form>
+   </div>
+  </div>
+  <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+  </nav>
+  <div class="bd-container">
+   <div class="bd-container__inner bd-page-width">
+    <div class="bd-sidebar-primary bd-sidebar">
+     <div class="sidebar-header-items sidebar-primary__section">
+     </div>
+     <div class="sidebar-primary-items__start sidebar-primary__section">
+      <div class="sidebar-primary-item">
+       <a class="navbar-brand logo" href="../../../index.html"> <img src="../../../_static/releng.png" class="logo__image only-light" alt="Logo image">
+        <script>document.write(`<img src="../../../_static/releng-dark.png" class="logo__image only-dark" alt="Logo image"/>`);</script></a>
+      </div>
+      <div class="sidebar-primary-item">
+       <nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+        <div class="bd-toc-item navbar-nav active">
+         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Releng Docs</span></p>
+         <ul class="current nav bd-sidenav">
+          <li class="toctree-l1 has-children"><a class="reference internal" href="../../../tutorials/index.html">Tutorials</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label>
+           <ul>
+            <li class="toctree-l2"><a class="reference internal" href="../../../tutorials/accounts_setup.html">Week 1 checklist</a></li>
+           </ul></li>
+          <li class="toctree-l1 current active has-children"><a class="reference internal" href="../../index.html">How To</a><input checked class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label>
+           <ul class="current">
+            <li class="toctree-l2 current active has-children"><a class="reference internal" href="../index.html">Release</a><input checked class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label>
+             <ul class="current">
+              <li class="toctree-l3 current active has-children"><a class="reference internal" href="index.html">Firefox</a><input checked class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label>
+               <ul class="current">
+                <li class="toctree-l4"><a class="reference internal" href="partner-repacks.html">Partner Repacks and EME Free</a></li>
+                <li class="toctree-l4 current active"><a class="current reference internal" href="#">Off-Cycle Partner Repacks, Funnelcakes, and partner-attributed builds</a></li>
+               </ul></li>
+              <li class="toctree-l3"><a class="reference internal" href="../mozillavpn.html">Mozilla VPN</a></li>
+              <li class="toctree-l3 has-children"><a class="reference internal" href="../addons/index.html">Addons</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label>
+               <ul>
+                <li class="toctree-l4"><a class="reference internal" href="../addons/langpacks.html">Langpack Submission Pipeline</a></li>
+                <li class="toctree-l4"><a class="reference internal" href="../addons/xpi-signing.html">XPI Signing Pipeline</a></li>
+                <li class="toctree-l4"><a class="reference internal" href="../addons/openh264.html">OpenH264 updates</a></li>
+                <li class="toctree-l4"><a class="reference internal" href="../addons/widevine.html">Widevine updates</a></li>
+               </ul></li>
+              <li class="toctree-l3"><a class="reference external" href="https://mozilla-hub.atlassian.net/wiki/x/K4DDPg">System Addons</a></li>
+              <li class="toctree-l3"><a class="reference internal" href="../adhoc_signing.html">Adhoc</a></li>
+             </ul></li>
+            <li class="toctree-l2 has-children"><a class="reference internal" href="../../releaseduty/index.html">Perform Release Duty</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label>
+             <ul>
+              <li class="toctree-l3"><a class="reference internal" href="../../releaseduty/desktop/esr-to-esr-updates.html">Updating one ESR version to another</a></li>
+              <li class="toctree-l3"><a class="reference internal" href="../../releaseduty/desktop/flathub-flatpak.html">Desktop Flatpak Releases</a></li>
+              <li class="toctree-l3"><a class="reference internal" href="../../releaseduty/desktop/howto.html">Desktop Releases</a></li>
+              <li class="toctree-l3"><a class="reference internal" href="../../releaseduty/desktop/staging-release.html">Run staging releases</a></li>
+              <li class="toctree-l3"><a class="reference internal" href="../../releaseduty/scheduled-deploys.html">Regularly Scheduled Deploys</a></li>
+              <li class="toctree-l3"><a class="reference internal" href="../../releaseduty/merge-duty/merge_duty.html">Merge Duty</a></li>
+              <li class="toctree-l3"><a class="reference internal" href="../../releaseduty/merge-duty/merge_new_esr_branch.html">Merge Duty for major ESR bump</a></li>
+              <li class="toctree-l3"><a class="reference internal" href="../../releaseduty/interrupt-duty.html">Interrupt Duty</a></li>
+             </ul></li>
+            <li class="toctree-l2 has-children"><a class="reference internal" href="../../taskcluster/index.html">Administer Firefox-CI</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"><label class="toctree-toggle" for="toctree-checkbox-7"><i class="fa-solid fa-chevron-down"></i></label>
+             <ul>
+              <li class="toctree-l3"><a class="reference internal" href="../../taskcluster/uploading_an_image.html">Uploading an image</a></li>
+              <li class="toctree-l3"><a class="reference internal" href="../../taskcluster/troubleshooting_workers.html">Troubleshooting Workers</a></li>
+              <li class="toctree-l3"><a class="reference internal" href="../../taskcluster/taskcluster_cli.html">Taskcluster command line interface (CLI)</a></li>
+              <li class="toctree-l3"><a class="reference internal" href="../../taskcluster/testing_relpro.html">Testing and Customizing Release Promotion actions</a></li>
+              <li class="toctree-l3"><a class="reference internal" href="../../taskcluster/known_problems.html">Known Problems</a></li>
+              <li class="toctree-l3"><a class="reference internal" href="../../taskcluster/ci_admin.html">CI-Admin</a></li>
+              <li class="toctree-l3"><a class="reference internal" href="../../taskcluster/fxci_upgrades.html">FirefoxCI cluster upgrades</a></li>
+              <li class="toctree-l3"><a class="reference internal" href="../../taskcluster/tc_staging.html">Taskcluster Staging</a></li>
+              <li class="toctree-l3"><a class="reference internal" href="../../taskcluster/new_region.html">Adding a new region</a></li>
+             </ul></li>
+            <li class="toctree-l2 has-children"><a class="reference internal" href="../../handle-emergencies/index.html">Handle Emergencies</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"><label class="toctree-toggle" for="toctree-checkbox-8"><i class="fa-solid fa-chevron-down"></i></label>
+             <ul>
+              <li class="toctree-l3"><a class="reference internal" href="../../handle-emergencies/manual-release.html">Manually submit a release with the Ship It API</a></li>
+              <li class="toctree-l3"><a class="reference internal" href="../../handle-emergencies/manually-beetmove.html">Manually Beetmove Files</a></li>
+              <li class="toctree-l3"><a class="reference internal" href="../../handle-emergencies/manually-generate-partials.html">Manually Generate Partials</a></li>
+              <li class="toctree-l3"><a class="reference internal" href="../../handle-emergencies/purge-partials-cache.html">Purging the Partials Cache</a></li>
+              <li class="toctree-l3"><a class="reference internal" href="../../handle-emergencies/expired-artifacts.html">Recover From Expired Artifacts</a></li>
+             </ul></li>
+            <li class="toctree-l2 has-children"><a class="reference internal" href="../../rotate/index.html">Rotate</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"><label class="toctree-toggle" for="toctree-checkbox-9"><i class="fa-solid fa-chevron-down"></i></label>
+             <ul>
+              <li class="toctree-l3"><a class="reference internal" href="../../rotate/gpg_signing_key.html">Firefox GPG Signing Key</a></li>
+              <li class="toctree-l3"><a class="reference internal" href="../../rotate/github-apps.html">Github Apps</a></li>
+              <li class="toctree-l3"><a class="reference internal" href="../../rotate/hg-cert.html">Rotate hg.m.o cert</a></li>
+             </ul></li>
+            <li class="toctree-l2 has-children"><a class="reference internal" href="../../troubleshoot/index.html">Troubleshoot</a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" type="checkbox"><label class="toctree-toggle" for="toctree-checkbox-10"><i class="fa-solid fa-chevron-down"></i></label>
+             <ul>
+              <li class="toctree-l3"><a class="reference internal" href="../../troubleshoot/autograph_credentials.html">Autograph Credentials</a></li>
+              <li class="toctree-l3"><a class="reference internal" href="../../troubleshoot/expirations.html">Expiration Notifications</a></li>
+              <li class="toctree-l3"><a class="reference internal" href="../../troubleshoot/update-verify-logs.html">Debugging Update Verify Failures</a></li>
+             </ul></li>
+            <li class="toctree-l2 has-children"><a class="reference internal" href="../../test/index.html">Test</a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" type="checkbox"><label class="toctree-toggle" for="toctree-checkbox-11"><i class="fa-solid fa-chevron-down"></i></label>
+             <ul>
+              <li class="toctree-l3"><a class="reference internal" href="../../test/autograph.html">Autograph</a></li>
+              <li class="toctree-l3"><a class="reference internal" href="../../test/build-decision.html">Build Decision</a></li>
+              <li class="toctree-l3"><a class="reference internal" href="../../test/updates.html">Updates</a></li>
+              <li class="toctree-l3"><a class="reference internal" href="../../test/update-verify.html">Run Update Verify Locally</a></li>
+             </ul></li>
+            <li class="toctree-l2 has-children"><a class="reference internal" href="../../create/index.html">Create</a><input class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" type="checkbox"><label class="toctree-toggle" for="toctree-checkbox-12"><i class="fa-solid fa-chevron-down"></i></label>
+             <ul>
+              <li class="toctree-l3"><a class="reference internal" href="../../create/new-scriptworker-script.html">New Scriptworker-Script</a></li>
+              <li class="toctree-l3"><a class="reference internal" href="../../create/new-package-format.html">New Package Format</a></li>
+              <li class="toctree-l3"><a class="reference internal" href="../../create/mobile_automation_setup.html">Google Play Deployments</a></li>
+             </ul></li>
+            <li class="toctree-l2 has-children"><a class="reference internal" href="../../l10n/index.html">Manage L10n</a><input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" type="checkbox"><label class="toctree-toggle" for="toctree-checkbox-13"><i class="fa-solid fa-chevron-down"></i></label>
+             <ul>
+              <li class="toctree-l3"><a class="reference internal" href="../../l10n/l10n-bumper.html">L10n-Bumper</a></li>
+              <li class="toctree-l3"><a class="reference internal" href="../../l10n/l10n-cross-channel.html">L10n Cross-channel</a></li>
+              <li class="toctree-l3"><a class="reference internal" href="../../l10n/l10n-repacks.html">L10n Repacks</a></li>
+              <li class="toctree-l3"><a class="reference internal" href="../../l10n/langpacks.html">Langpacks</a></li>
+              <li class="toctree-l3"><a class="reference internal" href="../../l10n/android-l10n.html">Android L10n</a></li>
+             </ul></li>
+            <li class="toctree-l2"><a class="reference external" href="https://wiki.mozilla.org/ReleaseEngineering/How_To/Upload_to_internal_Pypi">Upload to Internal Pypi</a></li>
+           </ul></li>
+          <li class="toctree-l1 has-children"><a class="reference internal" href="../../../explanations/index.html">Explanations</a><input class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" type="checkbox"><label class="toctree-toggle" for="toctree-checkbox-14"><i class="fa-solid fa-chevron-down"></i></label>
+           <ul>
+            <li class="toctree-l2 has-children"><a class="reference internal" href="../../../explanations/best-practices/index.html">Best Practices</a><input class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" type="checkbox"><label class="toctree-toggle" for="toctree-checkbox-15"><i class="fa-solid fa-chevron-down"></i></label>
+             <ul>
+              <li class="toctree-l3"><a class="reference internal" href="../../../explanations/best-practices/project-standards.html">Project Standards</a></li>
+              <li class="toctree-l3"><a class="reference internal" href="../../../explanations/best-practices/cross-training.html">Cross-training</a></li>
+              <li class="toctree-l3"><a class="reference internal" href="../../../explanations/best-practices/code-reviews.html">Code reviews</a></li>
+              <li class="toctree-l3"><a class="reference internal" href="../../../explanations/best-practices/bug-triage.html">Bug Triage</a></li>
+              <li class="toctree-l3"><a class="reference internal" href="../../../explanations/best-practices/handoffs.html">Handoffs and Incident Response</a></li>
+              <li class="toctree-l3"><a class="reference internal" href="../../../explanations/best-practices/security.html">Security Best Practices</a></li>
+              <li class="toctree-l3"><a class="reference internal" href="../../../explanations/best-practices/screen-sharing.html">Sharing Terminal Sessions</a></li>
+             </ul></li>
+            <li class="toctree-l2 has-children"><a class="reference internal" href="../../../explanations/taskcluster/index.html">Firefox-CI &amp; Taskcluster</a><input class="toctree-checkbox" id="toctree-checkbox-16" name="toctree-checkbox-16" type="checkbox"><label class="toctree-toggle" for="toctree-checkbox-16"><i class="fa-solid fa-chevron-down"></i></label>
+             <ul>
+              <li class="toctree-l3"><a class="reference internal" href="../../../explanations/taskcluster/how_tasks_are_triggered.html">How Tasks are Triggered</a></li>
+              <li class="toctree-l3"><a class="reference internal" href="../../../explanations/taskcluster/scopes.html">Scopes</a></li>
+              <li class="toctree-l3"><a class="reference internal" href="../../../explanations/taskcluster/rerun_vs_retrigger.html">Rerun vs Retrigger</a></li>
+             </ul></li>
+            <li class="toctree-l2"><a class="reference internal" href="../../../explanations/fxci-etl.html">Firefox-CI ETL</a></li>
+            <li class="toctree-l2 has-children"><a class="reference internal" href="../../../explanations/balrog/index.html">Balrog &amp; Updates</a><input class="toctree-checkbox" id="toctree-checkbox-17" name="toctree-checkbox-17" type="checkbox"><label class="toctree-toggle" for="toctree-checkbox-17"><i class="fa-solid fa-chevron-down"></i></label>
+             <ul>
+              <li class="toctree-l3"><a class="reference internal" href="../../../explanations/balrog/Balrog-and-Scheduled-Changes.html">Balrog and Scheduled Changes</a></li>
+              <li class="toctree-l3"><a class="reference internal" href="../../../explanations/balrog/update_to_last_good_build.html">Change Update to Last Known Good</a></li>
+              <li class="toctree-l3"><a class="reference internal" href="../../../explanations/balrog/win32-win64-migration-balrog.html">win32-win64 migration</a></li>
+              <li class="toctree-l3"><a class="reference internal" href="../../../explanations/balrog/os-de-support.html">Ending Firefox Support for an Operating System</a></li>
+             </ul></li>
+            <li class="toctree-l2 has-children"><a class="reference internal" href="../../../explanations/signing/index.html">Signing</a><input class="toctree-checkbox" id="toctree-checkbox-18" name="toctree-checkbox-18" type="checkbox"><label class="toctree-toggle" for="toctree-checkbox-18"><i class="fa-solid fa-chevron-down"></i></label>
+             <ul>
+              <li class="toctree-l3"><a class="reference internal" href="../../../explanations/signing/cert_levels_and_best_practices.html">Signing Cert Levels and Best Practices</a></li>
+              <li class="toctree-l3"><a class="reference internal" href="../../../explanations/signing/Apple_signing_and_notarization.html">Signing and Notarization</a></li>
+              <li class="toctree-l3"><a class="reference internal" href="../../../explanations/signing/inventory_and_safe.html">Inventory and Archival</a></li>
+             </ul></li>
+            <li class="toctree-l2"><a class="reference internal" href="../../../explanations/l10n.html">L10n and Release Engineering</a></li>
+            <li class="toctree-l2"><a class="reference internal" href="../../../explanations/mozharness.html">Mozharness</a></li>
+            <li class="toctree-l2"><a class="reference internal" href="../../../explanations/slide_decks.html">Slide Decks</a></li>
+            <li class="toctree-l2"><a class="reference internal" href="../../../explanations/releng_environments.html">Releng Test Environments</a></li>
+           </ul></li>
+          <li class="toctree-l1 has-children"><a class="reference internal" href="../../../reference/index.html">Reference</a><input class="toctree-checkbox" id="toctree-checkbox-19" name="toctree-checkbox-19" type="checkbox"><label class="toctree-toggle" for="toctree-checkbox-19"><i class="fa-solid fa-chevron-down"></i></label>
+           <ul>
+            <li class="toctree-l2"><a class="reference internal" href="../../../reference/access.html">Access Control</a></li>
+            <li class="toctree-l2"><a class="reference internal" href="../../../reference/machine-users.html">Machine Users</a></li>
+            <li class="toctree-l2"><a class="reference internal" href="../../../reference/logs.html">Production &amp; Staging Logs</a></li>
+            <li class="toctree-l2 has-children"><a class="reference internal" href="../../../reference/external.html">External Docs</a><input class="toctree-checkbox" id="toctree-checkbox-20" name="toctree-checkbox-20" type="checkbox"><label class="toctree-toggle" for="toctree-checkbox-20"><i class="fa-solid fa-chevron-down"></i></label>
+             <ul>
+              <li class="toctree-l3"><a class="reference external" href="https://mozilla-balrog.readthedocs.io/en/latest/index.html">Balrog</a></li>
+              <li class="toctree-l3"><a class="reference external" href="https://mana.mozilla.org/wiki/display/SRE/Contacting+Services+SRE">CloudOps Contact Info</a></li>
+              <li class="toctree-l3"><a class="reference external" href="https://firefox-source-docs.mozilla.org/l10n/index.html">Firefox L10n</a></li>
+              <li class="toctree-l3"><a class="reference external" href="https://firefox-source-docs.mozilla.org/taskcluster/partner-repacks.html">Partner Repacks</a></li>
+              <li class="toctree-l3"><a class="reference external" href="https://mana.mozilla.org/wiki/display/RelEng/Release+Engineering+Home">Releng Mana</a></li>
+              <li class="toctree-l3"><a class="reference external" href="https://scriptworker.readthedocs.io/en/latest/index.html">Scriptworker</a></li>
+              <li class="toctree-l3"><a class="reference external" href="https://scriptworker-scripts.readthedocs.io/en/latest/index.html">Scriptworker Scripts</a></li>
+              <li class="toctree-l3"><a class="reference external" href="https://github.com/mozilla-releng/scriptworker-scripts/wiki">Scriptworker-scripts Wiki (mac signing procedures)</a></li>
+              <li class="toctree-l3"><a class="reference external" href="https://taskcluster-taskgraph.readthedocs.io/">Taskgraph</a></li>
+              <li class="toctree-l3"><a class="reference external" href="https://treeherder.readthedocs.io/">Treeherder</a></li>
+             </ul></li>
+           </ul></li>
+          <li class="toctree-l1 has-children"><a class="reference internal" href="../../../meta/index.html">Meta</a><input class="toctree-checkbox" id="toctree-checkbox-21" name="toctree-checkbox-21" type="checkbox"><label class="toctree-toggle" for="toctree-checkbox-21"><i class="fa-solid fa-chevron-down"></i></label>
+           <ul>
+            <li class="toctree-l2"><a class="reference internal" href="../../../CODE_OF_CONDUCT.html">Community Participation Guidelines</a></li>
+            <li class="toctree-l2"><a class="reference internal" href="../../../meta/adding_repo_to_releng_rtfd_account.html">Add a new repo to docs</a></li>
+            <li class="toctree-l2"><a class="reference internal" href="../../../meta/adding_docs_to_existing_code.html">Add existing repo to docs</a></li>
+            <li class="toctree-l2"><a class="reference internal" href="../../../README.html">Maintaining this Documentation</a></li>
+           </ul></li>
+         </ul>
+        </div>
+       </nav>
+      </div>
+     </div>
+     <div class="sidebar-primary-items__end sidebar-primary__section">
+     </div>
+     <div id="rtd-footer-container"></div>
+    </div>
+    <main id="main-content" class="bd-main">
+     <div class="sbt-scroll-pixel-helper"></div>
+     <div class="bd-content">
+      <div class="bd-article-container">
+       <div class="bd-header-article">
+        <div class="header-article-items header-article__inner">
+         <div class="header-article-items__start">
+          <div class="header-article-item">
+           <label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip"> <span class="fa-solid fa-bars"></span> </label>
+          </div>
+         </div>
+         <div class="header-article-items__end">
+          <div class="header-article-item">
+           <div class="article-header-buttons">
+            <div class="dropdown dropdown-download-buttons">
+             <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page"><i class="fas fa-download"></i></button>
+             <ul class="dropdown-menu">
+              <li><a href="../../../_sources/how-to/release/firefox/off-cycle-partner-repacks-and-funnelcake.rst" target="_blank" class="btn btn-sm btn-download-source-button dropdown-item" title="Download source file" data-bs-placement="left" data-bs-toggle="tooltip"> <span class="btn__icon-container"> <i class="fas fa-file"></i> </span> <span class="btn__text-container">.rst</span> </a></li>
+              <li>
+               <button onclick="window.print()" class="btn btn-sm btn-download-pdf-button dropdown-item" title="Print to PDF" data-bs-placement="left" data-bs-toggle="tooltip"><span class="btn__icon-container"> <i class="fas fa-file-pdf"></i> </span> <span class="btn__text-container">.pdf</span></button></li>
+             </ul>
+            </div>
+            <button onclick="toggleFullScreen()" class="btn btn-sm btn-fullscreen-button" title="Fullscreen mode" data-bs-placement="bottom" data-bs-toggle="tooltip"><span class="btn__icon-container"> <i class="fas fa-expand"></i> </span></button>
+            <script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+            <script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script><label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip"> <span class="fa-solid fa-list"></span> </label>
+           </div>
+          </div>
+         </div>
+        </div>
+       </div>
+       <div id="jb-print-docs-body" class="onlyprint">
+        <h1>Off-Cycle Partner Repacks, Funnelcakes, and partner-attributed builds</h1><!-- Table of contents -->
+        <div id="print-main-content">
+         <div id="jb-print-toc">
+          <div>
+           <h2>Contents</h2>
+          </div>
+          <nav aria-label="Page">
+           <ul class="visible nav section-nav flex-column">
+            <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#background">Background</a></li>
+            <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#when">When?</a></li>
+            <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how">How?</a></li>
+            <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preparation">Preparation</a></li>
+            <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#additional-steps">Additional steps</a>
+             <ul class="nav section-nav flex-column">
+              <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#funnelcake">Funnelcake</a></li>
+              <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#shipping-partner-attributed-builds">Shipping partner-attributed builds</a></li>
+              <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#stub-installers">Stub installers</a></li>
+             </ul></li>
+            <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#future">Future</a></li>
+           </ul>
+          </nav>
+         </div>
+        </div>
+       </div>
+       <div id="searchbox"></div>
+       <article class="bd-article" role="main">
+        <section id="off-cycle-partner-repacks-funnelcakes-and-partner-attributed-builds">
+         <span id="off-cycle-partner-repacks"></span>
+         <h1>Off-Cycle Partner Repacks, Funnelcakes, and partner-attributed builds<a class="headerlink" href="#off-cycle-partner-repacks-funnelcakes-and-partner-attributed-builds" title="Permalink to this heading">#</a></h1>
+         <p>Original docs are <a class="reference external" href="https://mana.mozilla.org/wiki/display/RelEng/Partner+Repack+Creation">here</a>.</p>
+         <section id="background">
+          <h2>Background<a class="headerlink" href="#background" title="Permalink to this heading">#</a></h2>
+          <p>We repackage Firefox for partners. Occasionally we’ll have a new study (funnelcake) or a new partner or partner config that happens after a release is built, but before the next release is scheduled to be built, and we need to repack that partner off-cycle.</p>
+         </section>
+         <section id="when">
+          <h2>When?<a class="headerlink" href="#when" title="Permalink to this heading">#</a></h2>
+          <p>We’ll get a bug for a new partner repack or funnelcake, in the Release Engineering :: Custom Release Requests component in Bugzilla.</p>
+          <p>These will need to run against a previously-promoted release.</p>
+          <p><strong>Warning:</strong> Adding a new partner, or partner sub-config, can cause alarming failures for an in-progress Firefox release, but does not actually block the release. The problem usually occurs in the push or ship phase, where a new partner config since the previous phase causes extra partner tasks in the new graph and these fail. A resolution for this is tracked in <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1496530">Bug 1496530</a>, but in the meantime you can either delay the partner configuration change until the release is complete, or inform releaseduty to ignore the extra tasks.</p>
+         </section>
+         <section id="how">
+          <h2>How?<a class="headerlink" href="#how" title="Permalink to this heading">#</a></h2>
+          <p>These are the steps on how to trigger the repack/signing/repackage/repackage-signing/beetmover tasks for partner repacks and funnelcakes. We sometimes still have additional steps afterwards, until we automate everything.</p>
+         </section>
+         <section id="preparation">
+          <h2>Preparation<a class="headerlink" href="#preparation" title="Permalink to this heading">#</a></h2>
+          <ol class="arabic simple">
+           <li>
+            <p>Clone <a class="reference external" href="https://hg.mozilla.org/build/braindump/">braindump</a> and set up a virtualenv with requests and pyyaml.</p></li>
+          </ol>
+          <div class="highlight-bash notranslate">
+           <div class="highlight">
+            <pre><span></span>hg<span class="w"> </span>clone<span class="w"> </span>https://hg.mozilla.org/build/braindump/
+<span class="nb">cd</span><span class="w"> </span>braindump/releases-related
+python3<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>./venv
+.<span class="w"> </span>venv/bin/activate
+pip<span class="w"> </span>install<span class="w"> </span>requests<span class="w"> </span>pyyaml
+</pre>
+           </div>
+          </div>
+          <p>or update your existing clone.</p>
+          <ol class="arabic" start="2">
+           <li>
+            <p>Determine the version and build number we’re going to use. This is generally the most recent Firefox release, but might be ESR or beta.</p></li>
+           <li>
+            <p>Determine the partner name - this will be usually be given in the bug. There should be a repo at <code class="docutils literal notranslate"><span class="pre">https://github.com/mozilla-partners/&lt;name&gt;/</span></code> - you may have to figure out the parent of a sub-config.</p>
+            <p>Until <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1530231">Bug 1530231</a> is resolved we support a single, top-level config, eg <code class="docutils literal notranslate"><span class="pre">funnelcake</span></code>, but not <code class="docutils literal notranslate"><span class="pre">funnelcakeNNN</span></code> or <code class="docutils literal notranslate"><span class="pre">yandex,ironsource</span></code>. If more than one partner is needed create separate graphs using separate custom actions.</p></li>
+           <li>
+            <p>Generate the action input, eg</p></li>
+          </ol>
+          <div class="highlight-bash notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="c1"># This will send instructions to stderr (console) and the input.yml</span>
+<span class="c1"># to ./input.yml</span>
+./off-cycle-parter-respin.py<span class="w"> </span>-v<span class="w"> </span><span class="m">65</span>.0.2<span class="w"> </span>-b<span class="w"> </span>release<span class="w"> </span>-p<span class="w"> </span>seznam<span class="w"> </span>&gt;<span class="w"> </span>input.yml
+</pre>
+           </div>
+          </div>
+          <ol class="arabic simple" start="5">
+           <li>
+            <p>If dealing with partner-attributed build, you will have to manually edit <code class="docutils literal notranslate"><span class="pre">input.yml</span></code> (until <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1943617">Bug 1943617</a>) is done. Change the following fields:</p></li>
+          </ol>
+          <div class="highlight-yaml notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="nt">rebuild_kinds</span><span class="p">:</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">release-partner-repack-bouncer-sub</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">release-partner-attribution</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">release-partner-attribution-beetmover</span>
+
+<span class="nt">release_enable_emefree</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="nt">release_enable_partner_attribution</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="nt">release_enable_partner_repack</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"> </span><span class="c1"># Still set to true until bug 1943599 is done</span>
+
+<span class="nt">release_partner_build_number</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w">  </span><span class="c1"># Cannot be another value until bug 1943594 is fixed</span>
+</pre>
+           </div>
+          </div>
+          <ol class="arabic simple" start="6">
+           <li>
+            <p>Load the Treeherder link from stderr. Make sure you are logged into Treeherder. In the top-right corner of the UI for the push locate the small triangle, select <code class="docutils literal notranslate"><span class="pre">Custom</span> <span class="pre">Push</span> <span class="pre">Action...</span></code> from the dropdown list.</p></li>
+           <li>
+            <p>From the <code class="docutils literal notranslate"><span class="pre">Action</span></code> dropdown select <code class="docutils literal notranslate"><span class="pre">Release</span> <span class="pre">Promotion</span></code>.</p></li>
+           <li>
+            <p>Paste the contents of <code class="docutils literal notranslate"><span class="pre">./input.yml</span></code> into the <code class="docutils literal notranslate"><span class="pre">Payload</span></code> box, and click the <code class="docutils literal notranslate"><span class="pre">Trigger</span></code> button.</p></li>
+           <li>
+            <p>Treeherder will display a link to the Taskcluster task for a few seconds, otherwise look for the <code class="docutils literal notranslate"><span class="pre">firefox_promote_partners</span></code> job in the <code class="docutils literal notranslate"><span class="pre">Gecko</span> <span class="pre">Decision</span> <span class="pre">Task</span></code> line. The graphs are small enough they can be monitored in a browser tab, but you can also use <code class="docutils literal notranslate"><span class="pre">braindump//taskcluster/graph-progress.sh</span></code>.</p></li>
+           <li>
+            <p>When the graph is done, resolve the bug. If there are tasks in the</p></li>
+          </ol>
+          <blockquote>
+           <div>
+            <p>graph matching <code class="docutils literal notranslate"><span class="pre">release-partner-repack-beetmover-*-public</span></code>, add the link to the candidates directory which the <code class="docutils literal notranslate"><span class="pre">off-cycle-parter-respin.py</span></code> script provides; otherwise the repacks will be available in the partners portal.</p>
+           </div>
+          </blockquote>
+         </section>
+         <section id="additional-steps">
+          <h2>Additional steps<a class="headerlink" href="#additional-steps" title="Permalink to this heading">#</a></h2>
+          <section id="funnelcake">
+           <h3>Funnelcake<a class="headerlink" href="#funnelcake" title="Permalink to this heading">#</a></h3>
+           <p>For funnelcake, we still need to deal with bouncer. See the bouncer-related docs <a class="reference external" href="https://mana.mozilla.org/wiki/display/RelEng/Partner+Repack+Creation#PartnerRepackCreation-Funnelcakebuilds">here</a>.</p>
+          </section>
+          <section id="shipping-partner-attributed-builds">
+           <h3>Shipping partner-attributed builds<a class="headerlink" href="#shipping-partner-attributed-builds" title="Permalink to this heading">#</a></h3>
+           <p>For requests like <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1941537">bug 1941537</a>, you will need to push partner-attributed builds to releases and create bouncer entries. You won’t have to do all these manual steps once <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1943599">bug 1943599</a> is done.</p>
+           <ol class="arabic simple">
+            <li>
+             <p>Repeat preparation steps 1 to 4.</p></li>
+            <li>
+             <p>Change the following fields in <code class="docutils literal notranslate"><span class="pre">input.yml</span></code>:</p></li>
+           </ol>
+           <div class="highlight-yaml notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="w"> </span><span class="nt">rebuild_kinds</span><span class="p">:</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">release-beetmover-push-to-release</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">release-bouncer-aliases</span>
+
+<span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">release_enable_emefree</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="w w-Error"> </span><span class="nt">release_enable_partner_attribution</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w"> </span><span class="nt">release_enable_partner_repack</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"> </span><span class="c1"># Still set to true until bug 1943599 is done</span>
+
+<span class="w"> </span><span class="nt">release_partner_build_number</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w">  </span><span class="c1"># Cannot be another value until bug 1943594 is fixed</span>
+<span class="w"> </span><span class="nt">release_promotion_flavor</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ship_firefox</span>
+</pre>
+            </div>
+           </div>
+           <ol class="arabic simple" start="3">
+            <li>
+             <p>Before going further, be aware that you have to IMMEDIATELY CANCEL THE TASK GROUP you are about to create. That’s because the action task will generate more tasks than necessary (notably <code class="docutils literal notranslate"><span class="pre">release-notify-ship-firefox</span></code> that will email Release Management).</p></li>
+            <li>
+             <p>Repeat preparation steps 6 to 8 and IMMEDIATELY CANCEL the spawned task group.</p></li>
+            <li>
+             <p>Rerun <code class="docutils literal notranslate"><span class="pre">firefox-push-to-release</span></code> and <code class="docutils literal notranslate"><span class="pre">release-bouncer-aliases-firefox</span></code>.</p></li>
+           </ol>
+           <p>Now URLs like <a class="reference external" href="https://download.mozilla.org/?product=partner-firefox-release-PARTNER-SUBPARTNER-stub&amp;lang=en-GB">https://download.mozilla.org/?product=partner-firefox-release-PARTNER-SUBPARTNER-stub&amp;lang=en-GB</a> should be pointing to the expected binaries.</p>
+          </section>
+          <section id="stub-installers">
+           <h3>Stub installers<a class="headerlink" href="#stub-installers" title="Permalink to this heading">#</a></h3>
+           <p>We have some manual steps to copy files and set up bouncer for stub installers, as this is not automated in the respin case. Regular releases do not require this work, and automating respins is covered by <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1583685">Bug 1583685</a>.</p>
+           <ol class="arabic simple">
+            <li>
+             <p>First, define some parameters. You can most of this from the output of the script, but <code class="docutils literal notranslate"><span class="pre">PARTNER_SUB_CONFIGS</span></code> will depend on which sub-configs are of interest in this respin. eg:</p></li>
+           </ol>
+           <div class="highlight-bash notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="nv">VERSION</span><span class="o">=</span><span class="m">69</span>.0.1
+<span class="nv">BUILDN</span><span class="o">=</span>build1
+<span class="nv">PARTNER</span><span class="o">=</span>softonic
+<span class="nv">PARTNER_SUB_CONFIGS</span><span class="o">=</span><span class="s2">"softonic-010 softonic-011 softonic-012"</span>
+<span class="nv">PARTNER_BUILDN</span><span class="o">=</span>v201909242143
+</pre>
+            </div>
+           </div>
+           <ol class="arabic simple" start="2">
+            <li>
+             <p>To push the files into <code class="docutils literal notranslate"><span class="pre">firefox/releases/partners</span></code> you’ll need a copy of the <code class="docutils literal notranslate"><span class="pre">release</span></code> beetmover credentials in your <code class="docutils literal notranslate"><span class="pre">~/.aws/credentials</span></code>, in the <code class="docutils literal notranslate"><span class="pre">[temp]</span></code> section. Then</p></li>
+           </ol>
+           <div class="highlight-bash notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="c1"># you can echo the commands or add the --dryrun argument to test this</span>
+<span class="k">for</span><span class="w"> </span>P_SUB<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="si">${</span><span class="nv">PARTNER_SUB_CONFIGS</span><span class="si">}</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">    </span><span class="nv">AWS_PROFILE</span><span class="o">=</span>temp<span class="w"> </span>aws<span class="w"> </span>s3<span class="w"> </span>sync<span class="w"> </span><span class="se">\</span>
+<span class="w">      </span>s3://net-mozaws-prod-delivery-firefox/pub/firefox/candidates/<span class="si">${</span><span class="nv">VERSION</span><span class="si">}</span>-candidates/<span class="si">${</span><span class="nv">BUILDN</span><span class="si">}</span>/partner-repacks/<span class="si">${</span><span class="nv">PARTNER</span><span class="si">}</span>/<span class="si">${</span><span class="nv">P_SUB</span><span class="si">}</span>/<span class="si">${</span><span class="nv">PARTNER_BUILDN</span><span class="si">}</span>/<span class="w"> </span><span class="se">\</span>
+<span class="w">      </span>s3://net-mozaws-prod-delivery-firefox/pub/firefox/releases/partners/<span class="si">${</span><span class="nv">PARTNER</span><span class="si">}</span>/<span class="si">${</span><span class="nv">P_SUB</span><span class="si">}</span>/<span class="si">${</span><span class="nv">VERSION</span><span class="si">}</span>/
+<span class="k">done</span>
+</pre>
+            </div>
+           </div>
+           <p>Clean up the credentials immediately after use!</p>
+           <ol class="arabic simple" start="3">
+            <li>
+             <p>To set up the bouncer products, locations, and aliases, generate the config with</p></li>
+           </ol>
+           <div class="highlight-bash notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="k">for</span><span class="w"> </span>P_SUB<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="si">${</span><span class="nv">PARTNER_SUB_CONFIGS</span><span class="si">}</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">   </span><span class="c1">## add products</span>
+<span class="w">   </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"new product: Firefox-</span><span class="si">${</span><span class="nv">VERSION</span><span class="si">}</span><span class="s2">-</span><span class="si">${</span><span class="nv">PARTNER</span><span class="si">}</span><span class="s2">-</span><span class="si">${</span><span class="nv">P_SUB</span><span class="si">}</span><span class="s2">  with SSL disabled, locales not set"</span>
+<span class="w">   </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"new location: win   :  /firefox/releases/partners/</span><span class="si">${</span><span class="nv">PARTNER</span><span class="si">}</span><span class="s2">/</span><span class="si">${</span><span class="nv">P_SUB</span><span class="si">}</span><span class="s2">/</span><span class="si">${</span><span class="nv">VERSION</span><span class="si">}</span><span class="s2">/win32/:lang/Firefox%20Setup%20</span><span class="si">${</span><span class="nv">VERSION</span><span class="si">}</span><span class="s2">.exe"</span>
+<span class="w">   </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"new location: win64 :  /firefox/releases/partners/</span><span class="si">${</span><span class="nv">PARTNER</span><span class="si">}</span><span class="s2">/</span><span class="si">${</span><span class="nv">P_SUB</span><span class="si">}</span><span class="s2">/</span><span class="si">${</span><span class="nv">VERSION</span><span class="si">}</span><span class="s2">/win64/:lang/Firefox%20Setup%20</span><span class="si">${</span><span class="nv">VERSION</span><span class="si">}</span><span class="s2">.exe"</span>
+<span class="w">   </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"new location: osx   :  /firefox/releases/partners/</span><span class="si">${</span><span class="nv">PARTNER</span><span class="si">}</span><span class="s2">/</span><span class="si">${</span><span class="nv">P_SUB</span><span class="si">}</span><span class="s2">/</span><span class="si">${</span><span class="nv">VERSION</span><span class="si">}</span><span class="s2">/mac/:lang/Firefox%20</span><span class="si">${</span><span class="nv">VERSION</span><span class="si">}</span><span class="s2">.dmg"</span>
+
+<span class="w">   </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"new product: Firefox-</span><span class="si">${</span><span class="nv">VERSION</span><span class="si">}</span><span class="s2">-</span><span class="si">${</span><span class="nv">PARTNER</span><span class="si">}</span><span class="s2">-</span><span class="si">${</span><span class="nv">P_SUB</span><span class="si">}</span><span class="s2">-stub  with SSL enabled"</span>
+<span class="w">   </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"new location: win and win64:  /firefox/releases/partners/</span><span class="si">${</span><span class="nv">PARTNER</span><span class="si">}</span><span class="s2">/</span><span class="si">${</span><span class="nv">P_SUB</span><span class="si">}</span><span class="s2">/</span><span class="si">${</span><span class="nv">VERSION</span><span class="si">}</span><span class="s2">/win32/:lang/Firefox%20Installer.exe"</span>
+
+<span class="w">   </span><span class="c1">## add aliases</span>
+<span class="w">   </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"new alias: partner-firefox-release-</span><span class="si">${</span><span class="nv">PARTNER</span><span class="si">}</span><span class="s2">-</span><span class="si">${</span><span class="nv">P_SUB</span><span class="si">}</span><span class="s2">-latest  --&gt;  Firefox-</span><span class="si">${</span><span class="nv">VERSION</span><span class="si">}</span><span class="s2">-</span><span class="si">${</span><span class="nv">PARTNER</span><span class="si">}</span><span class="s2">-</span><span class="si">${</span><span class="nv">P_SUB</span><span class="si">}</span><span class="s2">"</span>
+<span class="w">   </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"new alias: partner-firefox-release-</span><span class="si">${</span><span class="nv">PARTNER</span><span class="si">}</span><span class="s2">-</span><span class="si">${</span><span class="nv">P_SUB</span><span class="si">}</span><span class="s2">-stub    --&gt;  Firefox-</span><span class="si">${</span><span class="nv">VERSION</span><span class="si">}</span><span class="s2">-</span><span class="si">${</span><span class="nv">PARTNER</span><span class="si">}</span><span class="s2">-</span><span class="si">${</span><span class="nv">P_SUB</span><span class="si">}</span><span class="s2">-stub"</span>
+<span class="w">   </span><span class="nb">echo</span>
+<span class="w"> </span><span class="k">done</span>
+</pre>
+            </div>
+           </div>
+           <p>then go to <a class="reference external" href="https://bounceradmin.mozilla.com/admin/">Bounceradmin</a> to add entries listed, with the usual <a class="reference external" href="https://github.com/mozilla-releng/releasewarrior-2.0/blob/master/docs/misc-operations/accessing-bouncer.md">tunnel to gain access</a>. This work will need to be scripted once we move to Nazgul and only have an HTTP API to work with.</p>
+           <ol class="arabic simple" start="4">
+            <li>
+             <p>Verify that redirects from bouncer end up on the expected files:</p></li>
+           </ol>
+           <div class="highlight-bash notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="k">for</span><span class="w"> </span>P_SUB<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="si">${</span><span class="nv">PARTNER_SUB_CONFIGS</span><span class="si">}</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">   </span><span class="nb">echo</span><span class="w"> </span><span class="s1">'------------------------------------------------------------------------'</span><span class="p">;</span>
+<span class="w">   </span><span class="nb">echo</span><span class="w"> </span>Checking<span class="w"> </span><span class="si">${</span><span class="nv">PARTNER</span><span class="si">}</span><span class="w"> </span><span class="si">${</span><span class="nv">P_SUB</span><span class="si">}</span><span class="w"> </span>full<span class="w"> </span>installer
+<span class="w">   </span><span class="k">for</span><span class="w"> </span>os<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="o">{</span>win64,win,osx<span class="o">}</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">     </span><span class="nv">url</span><span class="o">=</span><span class="s2">"https://download.mozilla.org/?product=partner-firefox-release-</span><span class="si">${</span><span class="nv">PARTNER</span><span class="si">}</span><span class="s2">-</span><span class="si">${</span><span class="nv">P_SUB</span><span class="si">}</span><span class="s2">-latest&amp;os=</span><span class="si">${</span><span class="nv">os</span><span class="si">}</span><span class="s2">&amp;lang=en-US"</span><span class="p">;</span>
+<span class="w">     </span><span class="nb">echo</span><span class="w"> </span><span class="nv">$url</span><span class="p">;</span>
+<span class="w">     </span>curl<span class="w"> </span>-sIL<span class="w"> </span><span class="nv">$url</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>egrep<span class="w"> </span><span class="s2">"^HTTP|^Location"</span><span class="p">;</span>
+<span class="w">     </span>echo<span class="p">;</span>
+<span class="w">   </span><span class="k">done</span><span class="p">;</span>
+<span class="w">   </span><span class="nb">echo</span><span class="w"> </span>Checking<span class="w"> </span><span class="si">${</span><span class="nv">PARTNER</span><span class="si">}</span><span class="w"> </span><span class="si">${</span><span class="nv">P_SUB</span><span class="si">}</span><span class="w"> </span>stub<span class="w"> </span>installer
+<span class="w">   </span><span class="k">for</span><span class="w"> </span>os<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="o">{</span>win64,win<span class="o">}</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">     </span><span class="nv">url</span><span class="o">=</span><span class="s2">"https://download.mozilla.org/?product=partner-firefox-release-</span><span class="si">${</span><span class="nv">PARTNER</span><span class="si">}</span><span class="s2">-</span><span class="si">${</span><span class="nv">P_SUB</span><span class="si">}</span><span class="s2">-stub&amp;os=</span><span class="si">${</span><span class="nv">os</span><span class="si">}</span><span class="s2">&amp;lang=en-US"</span><span class="p">;</span>
+<span class="w">     </span><span class="nb">echo</span><span class="w"> </span><span class="nv">$url</span><span class="p">;</span>
+<span class="w">     </span>curl<span class="w"> </span>-sIL<span class="w"> </span><span class="nv">$url</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>egrep<span class="w"> </span><span class="s2">"^HTTP|^Location"</span><span class="p">;</span>
+<span class="w">     </span>echo<span class="p">;</span>
+<span class="w">   </span><span class="k">done</span><span class="p">;</span>
+<span class="w"> </span><span class="k">done</span>
+</pre>
+            </div>
+           </div>
+           <p>You should see output like this, indicating a 302 from bouncer to the CDN, with a 200 response from th ere:</p>
+           <div class="highlight-default notranslate">
+            <div class="highlight">
+             <pre><span></span>Checking softonic softonic-010 full installer
+https://download.mozilla.org/?product=partner-firefox-release-softonic-softonic-010-latest&amp;os=win64&amp;lang=en-US
+HTTP/1.1 302 Found
+Location: https://download-installer.cdn.mozilla.net/pub/firefox/releases/partners/softonic/softonic-010/69.0.1/win64/en-US/Firefox%20Setup%2069.0.1.exe
+HTTP/2 200
+...
+</pre>
+            </div>
+           </div>
+          </section>
+         </section>
+         <section id="future">
+          <h2>Future<a class="headerlink" href="#future" title="Permalink to this heading">#</a></h2>
+          <p>In the future, we can use <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1415868">action hooks</a> for this. In addition, we can do things like add bouncer tasks in a shipping phase that allow us to automate the final remaining manual steps.</p>
+          <p>Ideally, ship-it v2 will be the forward-facing UI instead of hooks or an ssh shell. This is tracked in <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1530859">bug 1530859</a>.</p>
+         </section>
+        </section>
+       </article>
+       <footer class="bd-footer-article">
+        <div class="footer-article-items footer-article__inner">
+         <div class="footer-article-item">
+          <!-- Previous / next buttons -->
+          <div class="prev-next-area">
+           <a class="left-prev" href="partner-repacks.html" title="previous page"> <i class="fa-solid fa-angle-left"></i>
+            <div class="prev-next-info">
+             <p class="prev-next-subtitle">previous</p>
+             <p class="prev-next-title">Partner Repacks and EME Free</p>
+            </div></a> <a class="right-next" href="../mozillavpn.html" title="next page">
+            <div class="prev-next-info">
+             <p class="prev-next-subtitle">next</p>
+             <p class="prev-next-title">Mozilla VPN Release Process</p>
+            </div><i class="fa-solid fa-angle-right"></i> </a>
+          </div>
+         </div>
+        </div>
+       </footer>
+      </div>
+      <div class="bd-sidebar-secondary bd-toc">
+       <div class="sidebar-secondary-items sidebar-secondary__inner">
+        <div class="sidebar-secondary-item">
+         <div class="page-toc tocsection onthispage">
+          <i class="fa-solid fa-list"></i> Contents
+         </div>
+         <nav class="bd-toc-nav page-toc">
+          <ul class="visible nav section-nav flex-column">
+           <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#background">Background</a></li>
+           <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#when">When?</a></li>
+           <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how">How?</a></li>
+           <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preparation">Preparation</a></li>
+           <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#additional-steps">Additional steps</a>
+            <ul class="nav section-nav flex-column">
+             <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#funnelcake">Funnelcake</a></li>
+             <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#shipping-partner-attributed-builds">Shipping partner-attributed builds</a></li>
+             <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#stub-installers">Stub installers</a></li>
+            </ul></li>
+           <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#future">Future</a></li>
+          </ul>
+         </nav>
+        </div>
+       </div>
+      </div>
+     </div>
+     <footer class="bd-footer-content">
+      <div class="bd-footer-content__inner container">
+       <div class="footer-item">
+        <p class="component-author">By Mozilla Release Engineering</p>
+       </div>
+       <div class="footer-item">
+        <p class="copyright">© Copyright 2023, Mozilla Release Engineering. <br></p>
+       </div>
+       <div class="footer-item">
+       </div>
+       <div class="footer-item">
+       </div>
+      </div>
+     </footer>
+    </main>
+   </div>
+  </div><!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+  <script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+  <footer class="bd-footer">
+  </footer>
+ </body>
+</html>

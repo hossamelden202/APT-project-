@@ -1,0 +1,106 @@
+<html>
+ <head>
+  <meta name="keywords" content="chemistry, computational chemistry,
+semiempirical, MOPAC"><!-- This document was created from RTF source by rtftohtml version
+2.7.4 -->
+  <title>Absolute Beginners Guide to MOPAC</title>
+ </head>
+ <body>
+  <center>
+   <h1>The Absolute Beginners Guide to MOPAC</h1> David Young
+   <br>
+    Cytoclonal Pharmaceutics Inc.
+   <p></p>
+  </center>
+  <p></p>
+  <h2>Introduction:</h2>
+  <p>This is to teach the beginner how to use the MOPAC semiempirical computational chemistry program. This guide is intended for use by someone who has never used the program before.</p>
+  <p>This guide is in no way intended to be a comprehensive or advance guide to MOPAC. Also, this is not an explanation of the theory behind the different methods or their strengths, weaknesses, accuracy, etc.</p>
+  <p>The term "semiempirical" refers to methods which use the general process dictated by molecular orbital quantum mechanics, but simplify it to gain speed then correct for the simplification by the use of some experimental data.</p>
+  <p>MOPAC is a program for doing semiempirical calculations on atoms and molecules. The program is operated by making an ASCII input file using any convenient text editor then running the program. The results of the calculation are put in one or more output files. MOPAC itself currently has no provisions for graphical or interactive inputs or outputs. However, such things do exist for use with MOPAC and can be obtained from other sources.</p>
+  <p>This guide gives an input description by showing three sample input files and describing what they mean. The section listing available options is not comprehensive, but lists a number of the most frequently used options.</p>
+  <p></p>
+  <p></p>
+  <h2>Input file for an atom:</h2>
+  <p>The input file name is given an extention to tell the program that it is an input file. For most systems, the input file has the extension ".dat". Here is a sample input file for a single atom calculation.</p>
+  <p></p>
+  <p><b> </b></p>
+  <pre><b>
+am1 triplet vectors 
+Oxygen triplet atom  
+
+O
+</b></pre><b> </b>
+  <p>Line 1: "am1 triplet vectors" This is telling the program what type of calculations to do. "am1" is the semiempirical method being used. "triplet" specifies two unpaired electrons. "vectors" asks the program to include the molecular orbital coeficients in the output file.</p>
+  <p>Line 2:"Oxygen triplet atom" Line 2 is a comment for the users reference only.</p>
+  <p>Line 3 is also designated as a comment line.</p>
+  <p>Line 4: "O" is specifying an oxygen atom.</p>
+  <p></p>
+  <p></p>
+  <h2>Input example for a diatomic molecule:</h2>
+  <p>Here is a sample input for a diatomic molecule</p>
+  <p></p>
+  <p><b> </b></p>
+  <pre><b>
+PM3 singlet bonds dipole mullik force
+Carbon Monoxide
+PM3 bond length optimization
+C
+O  0.955000  1                                1  0  0
+</b></pre><b> </b>
+  <p>Only significant differences from the atom input file will be mentioned.</p>
+  <p>Line 1: "PM3 singlet bonds dipole mullik force" The "PM3" specifies the PM3 semiempirical method. "singlet" specifies all electrons paired. "dipole" is asking for calculation of a dipole moment. "mullik" is asking for a mulliken population analysis. "force" will result in calculation of normal mode vibrational frequencies.</p>
+  <p>Line 4: "C" specifies a carbon atom.</p>
+  <p>Line 5: "O 0.955000 1 1 0 0" The "O" specifies an oxygen atom. The "0.955000" specifies a bond length. The first "1" designates this bond length to be optimized (0 would specify no optimization). "1 0 0" specify which bond length angle and dihedral angle. "1" means that the bond length on that line refers to a distance between that atom and atom number 1 (the Carbon). "0 0" these are zero because this molecule has no angles or dihedral angles.</p>
+  <p></p>
+  <p></p>
+  <h2>Input file for a polyatomic molecule:</h2>
+  <p>Here is an input file for a formaldehyde molecule.</p>
+  <p></p>
+  <p><b> </b></p>
+  <pre><b>
+singlet vectors local bonds mullik symmetry
+formaldehyde MNDO optimization with symmetry
+with local orbital analysis
+C
+O  1.200000  1                 				1  0  0
+H  1.080000  1   120.000000  1              		1  2  0
+H  1.080000  0   120.000000  0  180.000000  0 		1  2  3
+0  0.000000  0     0.000000  0    0.000000  0  	  	0  0  0
+ 3,  1,  4,
+ 3,  2,  4,
+</b></pre><b> </b>
+  <p>Line 1: "singlet vectors local bonds mullik symmetry" The "local" keyword will result in doing a local orbital analysis. The "bonds" keyword will result in a bond order matrix. The "symmetry" keyword specifies that certain geometrical parameters will be forced to have the same value - this requires inputs with the format shown in the last three lines. When no semempirical method is specified, the program does a MNDO calculation.</p>
+  <p>Line 6: "H 1.080000 1 120.000000 1 1 2 0" This specifies a hydrogen atom with a bond length of 1.080000 to be optimized "1". A bond angle of 120.000000 is to be optimized "1". The "1 2 0" means that the bond length referes to the distance to atom 1 (Carbon), the angle is that with atom 1 and atom 2 and there is no dihedral angle "0".</p>
+  <p>Line 7: "H 1.080000 0 120.000000 0 180.000000 0 1 2 3" specifies a hydrogen bonded to atom 1 with a length of 1.08000 not to be optimized separately "0". The angle of 120.000000 with atom 1 and atom 2 is not to be optimized "0". The dihedral angle of 180.000000 with atoms 1, 2 and 3 is not to be optimized "0".</p>
+  <p>Line 8: "0 0.000000 0 0.000000 0 0.000000 0 0 0 0" tells the program that all atoms have now been defined.</p>
+  <p>Line 9: " 3, 1, 4," specifies that atoms 3 and 4 have an identical geometric parameter which is the first "1" parameter, therefore the bond length.</p>
+  <p>Line 10: " 3, 2, 4," specifies that atoms 3 and 4 have an identical geometric parameter which is the second "2" parameter or the angle.</p>
+  <p>This input will result in a geometry optimization of three variable, the carbon-oxygen bond length, the carbond-hydrogen bond length and the oxygen-carbon-hydrogen bond angle. All other parameters are either identical by definition (i.e. the second hydrogen) or not optimized (i.e. the dihedral angle). Thus we have defined that our molecule has C2V symmetry and that we will only calculate geometries corresponding to this symmetry.</p>
+  <p></p>
+  <p></p>
+  <h2>Output files:</h2>
+  <p>A number of output files are created. Usually, the file with the extension ".out" is the output that contains the information of interest.</p>
+  <p>In some versions of the program, running a second job with the same input file name results in overwriting the output files. In other versions, running a second job results in a second set of output files being created with filenames contiaining a numerical code to distinguish them.</p>
+  <p></p>
+  <p></p>
+  <h2>List of keywords:</h2>
+  <p>This is a list of the keywords to specify what is to be calculated. This is not a comprehensive list. This list is provided for the sake of seeing what is available. For other options and how to use these options, see the MOPAC manual.</p>
+  <p></p>
+  <p><b>aigin</b> - use a Gaussian zmatrix geometry specification<br><b>biradical</b>- system has two unpaired electrons<br><b>bonds</b> - print bond order matrix<br><b>C.I.</b> - configuration interaction (useful for excited states)<br><b>charge=N</b> - charge for ions<br><b>dfp</b> - Davidson-Fletcher-Powell method for geometry optimization<br><b>dipole</b> - fit the ESP to the calculated dipole<br><b>drc</b> - dynamic reaction coordinate calculation<br><b>esp</b> - electrostatic potential calculation<br><b>esr</b> - calculate rhf unpaired spin density<br><b>excited</b> - optimize first excited singlet state<br><b>force</b> - force calculation (vibrational frequencies)<br><b>geo-ok</b> - override interatomic distance check<br><b>hyperfine</b>- hyperfine coupling constants to be calculated<br><b>irc</b> - intrinsic reaction coordinate calculation<br><b>k=(n,n)</b> - one dimensional Brillouin zone structure (polymer)<br><b>localize</b> - print localized orbitals<br><b>mmok</b> - use molecular mechanics correction to CONH bonds<br><b>mullik</b> - mulliken population analysis<br><b>nomm</b> - do not use molecular mechanics correction to CONH bonds<br><b>open</b> - open shell rhf calculation<br><b>pi</b> - resolve density matrix into sigma and pi bonds<br><b>polar</b> - calculate first, second and third order polarizablilities<br><b>precise</b> - criteria to be increased by 100 times<br><b>pulay</b> - use Pulay's converger to obtain a scf<br><b>restart</b> - calculation restarted<br><b>root=n</b> - root n to be optimized in a C.I. calculation<br><b>rot=n</b> - symmetry number of the system is n<br><b>saddle</b> - optimize transition state<br><b>scale</b> - scaling factor for Van der Waals distance in ESP<br><b>symmetry</b> - impose symmetry conditions<br><b>uhf</b> - unrestricted calculation<br><b>vectors</b> - print final eigenvectors (molecular orbital coeficients)<br><b>xyz</b> - do all geometric operations in cartesian coordinates<br></p>
+  <p></p>
+  <h2>Semiempirical methods available:</h2>
+  <p>Not specifying a method results in the default MNDO method. The other methods are specified with the appropriate keyword on line 1 of the input file. These keywords are "AM1", "PM3" and "MINDO/3".</p>
+  <p></p>
+  <p></p>
+  <h2>Spin multiplicity:</h2>
+  <p>The spin multiplicity is specified by the use of a keyword on the first line of the input file. The available multiplicities are</p>
+  <p></p>
+  <p><b>singlet</b> - 0 unpaired electrons<br><b>doublet</b> - 1 unpaired electrons<br><b>triplet</b> - 2 unpaired electrons<br><b>quartet</b> - 3 unpaired electrons<br><b>quintet</b> - 4 unpaired electrons<br><b>sextet</b> - 5 unpaired electrons<br></p>
+  <p></p>
+  <h2>Elements:</h2>
+  <p>These methods were originally created with organic chemistry in mind, so the entire periodic table is not available. However the AM1 and PM3 methods do include some "less organic" atoms such as a few transition metals, alkalai metals and semimetals. See the manual for which elements are available in your version of MOPAC.</p>
+  <p></p>
+  <p><a href="contents.html"> Return to table of contents.</a></p>
+ </body>
+</html>

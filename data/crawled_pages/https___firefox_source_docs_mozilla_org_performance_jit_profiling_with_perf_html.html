@@ -1,0 +1,340 @@
+<!doctype html>
+<html class="writer-html5" lang="en" data-content_root="../">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JIT Profiling with perf — Firefox Source Docs  documentation</title>
+  <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50">
+  <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094">
+  <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=fd3f3429">
+  <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b">
+  <link rel="stylesheet" type="text/css" href="../_static/custom_theme.css?v=dc5ed815">
+  <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7">
+  <link rel="shortcut icon" href="../_static/firefox.ico"><!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script src="../_static/jquery.js?v=5d32c60e"></script>
+  <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+  <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+  <script src="../_static/doctools.js?v=9a2dae69"></script>
+  <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+  <script src="../_static/copybutton.js?v=30646c52"></script>
+  <script src="../_static/design-tabs.js?v=36754332"></script>
+  <script src="../_static/js/theme.js"></script>
+  <link rel="index" title="Index" href="../genindex.html">
+  <link rel="search" title="Search" href="../search.html">
+ </head>
+ <body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+   <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <div class="wy-side-scroll">
+     <div class="wy-side-nav-search">
+      <a href="../index.html" class="icon icon-home"> Firefox Source Docs <img src="../_static/firefox-wordmark.svg" class="logo" alt="Logo"> </a><!-- -- This code is governed by the BSD license ---->
+      <div>
+       <h3>Quick search</h3>
+       <script>
+    (function () {
+      var cx = "dd12886298f75dbef";
+      var gcse = document.createElement("script");
+      gcse.async = true;
+      gcse.src = "https://cse.google.com/cse.js?cx=" + cx;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(gcse, s);
+    })();
+  </script><gcse:search></gcse:search>
+      </div>
+     </div>
+     <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+      <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../glossary/index.html">A Glossary of Common Terms</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../overview/index.html">A Quick Guide to Mozilla Applications</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../setup/index.html">Getting Set Up To Work On The Firefox Codebase</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Working On Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../contributing/index.html">Working on Firefox</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../bug-mgmt/index.html">Bug Handling</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox User Guide</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../devtools-user/index.html">Firefox DevTools User Docs</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Source Code Documentation</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../mots/index.html">Governance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../browser/index.html">Firefox Front-end</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../dom/index.html">DOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../editor/index.html">Editor</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../layout/index.html">Style system (CSS) &amp; Layout</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../gfx/index.html">Graphics</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../ipc/index.html">Processes, Threads and IPC</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../devtools/index.html">Firefox DevTools Contributor Docs</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../toolkit/index.html">Toolkit</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../js/index.html">SpiderMonkey</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../jsloader/index.html">JS Loader</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mobile/android/geckoview/index.html">GeckoView</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mobile/android/fenix/index.html">Fenix</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mobile/android/focus-android/index.html">Focus for Android</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../dom/bindings/webidl/index.html">WebIDL</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../modules/libpref/index.html">libpref</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../networking/index.html">Networking</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../remote/index.html">Remote Protocols</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../services/index.html">Services</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../permissions/index.html">Permissions</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../uriloader/index.html">File Handling</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../widget/cocoa/index.html">Firefox on macOS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../widget/windows/index.html">Firefox on Windows</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../toolkit/components/ml/index.html">Firefox AI Runtime</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../accessible/index.html">Accessibility</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../media/index.html">Media Playback</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../code-quality/index.html">Code quality</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../writing-rust-code/index.html">Writing Rust Code</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../rust-components/index.html">Rust Components</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/profiler/index.html">Gecko Profiler</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="index.html">Performance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../storage/index.html">Database bindings (SQLite, KV, …)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../xpcom/index.html">XPCOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../nspr/index.html">NSPR</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../security/nss/index.html">Network Security Services (NSS)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../content-security/index.html">Web Security Checks in Gecko</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">The Firefox Build System</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../mach/index.html">Mach</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/try/index.html">Pushing to Try</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../build/buildsystem/index.html">Build System</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../taskcluster/index.html">Firefox CI and Taskgraph</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/moztreedocs/index.html">Managing Documentation</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mozbuild/vendor/index.html">Vendoring Third Party Components</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Testing &amp; Test Infrastructure</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/automated-testing/index.html">Automated Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/treeherder-try/index.html">Understanding Treeherder Results</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/sheriffed-intermittents/index.html">Sheriffed intermittent failures</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/tests-for-new-config/index.html">Turning on Firefox tests for a new configuration</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/intermittent/index.html">Avoiding intermittent tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/testing-policy/index.html">Testing Policy</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/ci-configs/index.html">Configuration Changes</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/browser-chrome/index.html">Browser chrome mochitests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/chrome-tests/index.html">Chrome Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/marionette/index.html">Marionette</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/geckodriver/index.html">geckodriver</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/test-verification/index.html">Test Verification</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/webrender/index.html">WebRender Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/mochitest-plain/index.html">Mochitest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/xpcshell/index.html">XPCShell tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/tps/index.html">TPS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../web-platform/index.html">web-platform-tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../gtest/index.html">GTest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/fuzzing/index.html">Fuzzing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/sanitizer/index.html">Sanitizer</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/perfdocs/index.html">Performance Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/code-coverage/index.html">Code coverage</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing-rust-code/index.html">Testing &amp; Debugging Rust Code</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Releases &amp; Updates</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../update-infrastructure/index.html">Mozilla Update Infrastructure</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../update-infrastructure/index.html#watershed-updates">Watershed Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../update-infrastructure/index.html#desupport-updates">Desupport Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/update-verify/index.html">Update Verify</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Localization &amp; Internationalization</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../intl/index.html">Internationalization</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../l10n/index.html">Localization</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox and Python</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../mozbase/index.html">mozbase</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../python/index.html">Using third-party Python packages</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Metrics Collected in Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../metrics/index.html">Metrics</a></li>
+      </ul>
+     </div>
+    </div>
+   </nav>
+   <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+    <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+     <i data-toggle="wy-nav-top" class="fa fa-bars"></i> <a href="../index.html">Firefox Source Docs</a>
+    </nav>
+    <div class="wy-nav-content">
+     <div class="rst-content">
+      <!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+      <div role="navigation" aria-label="Page navigation">
+       <ul class="wy-breadcrumbs">
+        <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+        <li class="breadcrumb-item active">JIT Profiling with perf</li>
+        <li class="wy-breadcrumbs-aside"><a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Developer+Infrastructure&amp;component=Firefox+Source+Docs%3A+Content&amp;short_desc=Documentation+issue+on+performance/jit_profiling_with_perf&amp;comment=URL+=+https://firefox-source-docs.mozilla.org/performance/jit_profiling_with_perf.html&amp;bug_file_loc=https://firefox-source-docs.mozilla.org/performance/jit_profiling_with_perf.html" rel="nofollow">Report an issue</a> / <a href="../_sources/performance/jit_profiling_with_perf.md.txt" rel="nofollow"> View page source</a></li>
+       </ul>
+       <hr>
+      </div>
+      <div role="main" class="document" itemscope itemtype="http://schema.org/Article">
+       <div itemprop="articleBody">
+        <section id="jit-profiling-with-perf">
+         <h1>JIT Profiling with perf<a class="headerlink" href="#jit-profiling-with-perf" title="Link to this heading">?</a></h1>
+         <section id="maybe-preferable-profiling-with-samply">
+          <h2>Maybe preferable: profiling with <code class="docutils literal notranslate"><span class="pre">samply</span></code><a class="headerlink" href="#maybe-preferable-profiling-with-samply" title="Link to this heading">?</a></h2>
+          <p><code class="docutils literal notranslate"><span class="pre">samply</span></code> makes profiling JIT a lot easier and should be preferred if running macOS or Linux. Documentation is at <a class="reference internal" href="jit_profiling_with_samply.html"><span class="std std-doc">JIT profiling with <code class="docutils literal notranslate"><span class="pre">samply</span></code></span></a>.</p>
+         </section>
+         <section id="introduction">
+          <h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">?</a></h2>
+          <p><code class="docutils literal notranslate"><span class="pre">perf</span></code> is a performance profiling tool available on Linux that is capable of measuring performance events such as cycles, instructions executed, cache misses, etc and providing assembly and source code annotation. It is possible to collect performance profiles of the SpiderMonkey JIT using perf on Linux and also annotate the generated assembly with the IR opcodes that were used during compilation as shown below.</p>
+          <p><img alt="" src="../_images/annotation.png"></p>
+         </section>
+         <section id="build-setup">
+          <h2>Build setup<a class="headerlink" href="#build-setup" title="Link to this heading">?</a></h2>
+          <p>JIT profiling with perf jitdump is <strong>enabled by default for nightly builds</strong> in the shell and browser.</p>
+          <p>If you wish to disable jitdump support in your build, then you can include the following build flag:</p>
+          <div class="highlight-default notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="n">ac_add_options</span> <span class="o">--</span><span class="n">disable</span><span class="o">-</span><span class="n">jitdump</span>
+</pre>
+           </div>
+          </div>
+         </section>
+         <section id="environment-variables">
+          <h2>Environment Variables<a class="headerlink" href="#environment-variables" title="Link to this heading">?</a></h2>
+          <p>Environment variables that must be defined for perf JIT profiling:</p>
+          <p><code class="docutils literal notranslate"><span class="pre">PERF_SPEW_DIR</span></code>: Location of jitdump output files. Making this directory a tmpfs filesystem could help reduce overhead.<br><code class="docutils literal notranslate"><span class="pre">IONPERF</span></code>: Valid options include: <code class="docutils literal notranslate"><span class="pre">func</span></code>, <code class="docutils literal notranslate"><span class="pre">src</span></code>, <code class="docutils literal notranslate"><span class="pre">ir</span></code>, <code class="docutils literal notranslate"><span class="pre">ir-ops</span></code>.</p>
+          <p><code class="docutils literal notranslate"><span class="pre">IONPERF=func</span></code> will disable all annotation and only function names will be available. It is the fastest option.<br><code class="docutils literal notranslate"><span class="pre">IONPERF=ir</span></code> will enable IR annotation.<br><code class="docutils literal notranslate"><span class="pre">IONPERF=ir-ops</span></code> will enable IR annotation with operand support. <strong>Requires –enable-jitspew</strong> and adds additional overhead to “ir”.<br><code class="docutils literal notranslate"><span class="pre">IONPERF=src</span></code> will enable source code annotation <strong>only if</strong> perf can read the source file locally. Only really works well in the JS shell.</p>
+         </section>
+         <section id="profiling-the-js-shell">
+          <h2>Profiling the JS shell<a class="headerlink" href="#profiling-the-js-shell" title="Link to this heading">?</a></h2>
+          <p>Profiling the JS shell requires the following commands but is very straight forward.</p>
+          <p>Begin by removing any pre-existing jitdump files:</p>
+          <p><code class="docutils literal notranslate"><span class="pre">rm</span> <span class="pre">-rf</span> <span class="pre">output</span></code> or <code class="docutils literal notranslate"><span class="pre">rm</span> <span class="pre">-f</span> <span class="pre">jitted-*.so</span> <span class="pre">jit.data</span> <span class="pre">perf.data</span> <span class="pre">jit-*.dump</span> <span class="pre">jitdump-*.txt</span></code></p>
+          <p>Next define environment variables:</p>
+          <div class="highlight-default notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="n">export</span> <span class="n">IONPERF</span><span class="o">=</span><span class="n">ir</span>
+<span class="n">export</span> <span class="n">PERF_SPEW_DIR</span><span class="o">=</span><span class="n">output</span>
+</pre>
+           </div>
+          </div>
+          <p>Run your test case with perf attached:</p>
+          <div class="highlight-default notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="n">perf</span> <span class="n">record</span> <span class="o">-</span><span class="n">g</span> <span class="o">-</span><span class="n">k</span> <span class="mi">1</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">denis</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="n">mozilla</span><span class="o">-</span><span class="n">central</span><span class="o">/</span><span class="n">obj</span><span class="o">-</span><span class="n">js</span><span class="o">/</span><span class="n">dist</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">js</span> <span class="n">test</span><span class="o">.</span><span class="n">js</span>
+</pre>
+           </div>
+          </div>
+          <p>Inject the jitdump files into your perf.data file:</p>
+          <div class="highlight-default notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="n">perf</span> <span class="n">inject</span> <span class="o">-</span><span class="n">j</span> <span class="o">-</span><span class="n">i</span> <span class="n">perf</span><span class="o">.</span><span class="n">data</span> <span class="o">-</span><span class="n">o</span> <span class="n">jit</span><span class="o">.</span><span class="n">data</span>
+</pre>
+           </div>
+          </div>
+          <p>View the profile:</p>
+          <div class="highlight-default notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="n">perf</span> <span class="n">report</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">children</span> <span class="o">--</span><span class="n">call</span><span class="o">-</span><span class="n">graph</span><span class="o">=</span><span class="n">graph</span><span class="p">,</span><span class="mi">0</span> <span class="o">-</span><span class="n">i</span> <span class="n">jit</span><span class="o">.</span><span class="n">data</span>
+</pre>
+           </div>
+          </div>
+          <p>All of the above commands can be put into a single shell script.</p>
+         </section>
+         <section id="profiling-the-browser">
+          <h2>Profiling the Browser<a class="headerlink" href="#profiling-the-browser" title="Link to this heading">?</a></h2>
+          <p>Profiling the browser is less straight forward than the shell, but the only main difference is that perf must attach to the content process while it is running.</p>
+          <p>Begin by removing any pre-existing jitdump files:</p>
+          <p><code class="docutils literal notranslate"><span class="pre">rm</span> <span class="pre">-rf</span> <span class="pre">output</span></code> or <code class="docutils literal notranslate"><span class="pre">rm</span> <span class="pre">-f</span> <span class="pre">jitted-*.so</span> <span class="pre">jit.data</span> <span class="pre">perf.data</span> <span class="pre">jit-*.dump</span> <span class="pre">jitdump-*.txt</span></code></p>
+          <p>Next define environment variables:</p>
+          <div class="highlight-default notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="n">export</span> <span class="n">IONPERF</span><span class="o">=</span><span class="n">ir</span>
+<span class="n">export</span> <span class="n">PERF_SPEW_DIR</span><span class="o">=</span><span class="n">output</span>
+<span class="n">export</span> <span class="n">MOZ_DISABLE_CONTENT_SANDBOX</span><span class="o">=</span><span class="mi">1</span>
+</pre>
+           </div>
+          </div>
+          <p>Run the Firefox browser</p>
+          <div class="highlight-default notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="o">~/</span><span class="n">mozilla</span><span class="o">-</span><span class="n">central</span><span class="o">/</span><span class="n">obj</span><span class="o">-</span><span class="n">opt64</span><span class="o">/</span><span class="n">dist</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">firefox</span> <span class="o">-</span><span class="n">profile</span> <span class="o">~/</span><span class="n">mozilla</span><span class="o">-</span><span class="n">central</span><span class="o">/</span><span class="n">obj</span><span class="o">-</span><span class="n">opt64</span><span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">profile</span><span class="o">-</span><span class="n">default</span> <span class="o">&amp;</span>
+</pre>
+           </div>
+          </div>
+          <p>Navigate to the test case, but do not start it yet. Then hover over the tab to get the content process PID.</p>
+          <p><img alt="" src="../_images/pid.png"></p>
+          <p>Attach perf to begin profiling:</p>
+          <div class="highlight-default notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="n">perf</span> <span class="n">record</span> <span class="o">-</span><span class="n">g</span> <span class="o">-</span><span class="n">k</span> <span class="mi">1</span> <span class="o">-</span><span class="n">p</span> <span class="o">&lt;</span><span class="n">pid</span><span class="o">&gt;</span>
+</pre>
+           </div>
+          </div>
+          <p>Close the browser when finished benchmarking.</p>
+          <p>Inject the jitdump files into your perf.data file:</p>
+          <div class="highlight-default notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="n">perf</span> <span class="n">inject</span> <span class="o">-</span><span class="n">j</span> <span class="o">-</span><span class="n">i</span> <span class="n">perf</span><span class="o">.</span><span class="n">data</span> <span class="o">-</span><span class="n">o</span> <span class="n">jit</span><span class="o">.</span><span class="n">data</span>
+</pre>
+           </div>
+          </div>
+          <p>View the profile (–call-graph=graph,0 shows all call stacks instead of the default threshold of &gt;= 0.5%):</p>
+          <div class="highlight-default notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="n">perf</span> <span class="n">report</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">children</span> <span class="o">--</span><span class="n">call</span><span class="o">-</span><span class="n">graph</span><span class="o">=</span><span class="n">graph</span><span class="p">,</span><span class="mi">0</span> <span class="o">-</span><span class="n">i</span> <span class="n">jit</span><span class="o">.</span><span class="n">data</span>
+</pre>
+           </div>
+          </div>
+         </section>
+         <section id="additional-information">
+          <h2>Additional Information<a class="headerlink" href="#additional-information" title="Link to this heading">?</a></h2>
+          <p>Some Linux distributions offer a “libc6-prof” package that includes frame pointers. This can help resolve symbols and call stacks that involve libc calls.</p>
+          <p>On Ubuntu, you can install this with:</p>
+          <div class="highlight-default notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="n">libc6</span><span class="o">-</span><span class="n">prof</span>
+</pre>
+           </div>
+          </div>
+          <p>libc6-prof can be used with <code class="docutils literal notranslate"><span class="pre">LD_LIBRARY_PATH=/lib/libc6-prof/x86_64-linux-gnu</span></code></p>
+          <p>It may also be useful to have access to kernel addresses during profiling. These can be exposed with:</p>
+          <div class="highlight-default notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="n">sudo</span> <span class="n">sh</span> <span class="o">-</span><span class="n">c</span> <span class="s2">"echo 0 &gt; /proc/sys/kernel/kptr_restrict"</span>
+</pre>
+           </div>
+          </div>
+          <p>The max stack depth is 127 by default. This is often too few. It can be increased with:</p>
+          <div class="highlight-default notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="n">sudo</span> <span class="n">sh</span> <span class="o">-</span><span class="n">c</span> <span class="s2">"echo 4000 &gt; /proc/sys/kernel/perf_event_max_stack"</span>
+</pre>
+           </div>
+          </div>
+         </section>
+        </section>
+       </div>
+      </div>
+      <footer>
+       <hr>
+       <div role="contentinfo">
+        <p></p>
+       </div> Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+      </footer>
+     </div>
+    </div>
+   </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ </body>
+</html>

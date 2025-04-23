@@ -1,0 +1,453 @@
+<!doctype html>
+<html class="writer-html5" lang="en" data-content_root="../../../../../">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bounce Tracking Protection — Firefox Source Docs  documentation</title>
+  <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=fa44fd50">
+  <link rel="stylesheet" type="text/css" href="../../../../../_static/css/theme.css?v=19f00094">
+  <link rel="stylesheet" type="text/css" href="../../../../../_static/graphviz.css?v=fd3f3429">
+  <link rel="stylesheet" type="text/css" href="../../../../../_static/copybutton.css?v=76b2166b">
+  <link rel="stylesheet" type="text/css" href="../../../../../_static/custom_theme.css?v=dc5ed815">
+  <link rel="stylesheet" type="text/css" href="../../../../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7">
+  <link rel="shortcut icon" href="../../../../../_static/firefox.ico"><!--[if lt IE 9]>
+    <script src="../../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
+  <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+  <script src="../../../../../_static/documentation_options.js?v=5929fcd5"></script>
+  <script src="../../../../../_static/doctools.js?v=9a2dae69"></script>
+  <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <script src="../../../../../_static/clipboard.min.js?v=a7894cd8"></script>
+  <script src="../../../../../_static/copybutton.js?v=30646c52"></script>
+  <script src="../../../../../_static/design-tabs.js?v=36754332"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/npm/mermaid@11.2.0/dist/mermaid.esm.min.mjs"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/npm/@mermaid-js/layout-elk@0.1.4/dist/mermaid-layout-elk.esm.min.mjs"></script>
+  <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.2.0/dist/mermaid.esm.min.mjs";import elkLayouts from "https://cdn.jsdelivr.net/npm/@mermaid-js/layout-elk@0.1.4/dist/mermaid-layout-elk.esm.min.mjs";mermaid.registerLayoutLoaders(elkLayouts);mermaid.initialize({startOnLoad:false});</script>
+  <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+  <script type="module">
+import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.2.0/dist/mermaid.esm.min.mjs";
+window.addEventListener("load", () => mermaid.run());
+</script>
+  <script src="../../../../../_static/js/theme.js"></script>
+  <link rel="index" title="Index" href="../../../../../genindex.html">
+  <link rel="search" title="Search" href="../../../../../search.html">
+  <link rel="next" title="Cookie Purging" href="../cookie-purging/index.html">
+  <link rel="prev" title="Anti-Tracking" href="../index.html">
+ </head>
+ <body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+   <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <div class="wy-side-scroll">
+     <div class="wy-side-nav-search">
+      <a href="../../../../../index.html" class="icon icon-home"> Firefox Source Docs <img src="../../../../../_static/firefox-wordmark.svg" class="logo" alt="Logo"> </a><!-- -- This code is governed by the BSD license ---->
+      <div>
+       <h3>Quick search</h3>
+       <script>
+    (function () {
+      var cx = "dd12886298f75dbef";
+      var gcse = document.createElement("script");
+      gcse.async = true;
+      gcse.src = "https://cse.google.com/cse.js?cx=" + cx;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(gcse, s);
+    })();
+  </script><gcse:search></gcse:search>
+      </div>
+     </div>
+     <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+      <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../../glossary/index.html">A Glossary of Common Terms</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../../overview/index.html">A Quick Guide to Mozilla Applications</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../../setup/index.html">Getting Set Up To Work On The Firefox Codebase</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Working On Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../../contributing/index.html">Working on Firefox</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../../bug-mgmt/index.html">Bug Handling</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox User Guide</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../../devtools-user/index.html">Firefox DevTools User Docs</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Source Code Documentation</span></p>
+      <ul class="current">
+       <li class="toctree-l1"><a class="reference internal" href="../../../../../mots/index.html">Governance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../../browser/index.html">Firefox Front-end</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../../dom/index.html">DOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../../editor/index.html">Editor</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../../layout/index.html">Style system (CSS) &amp; Layout</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../../gfx/index.html">Graphics</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../../ipc/index.html">Processes, Threads and IPC</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../../devtools/index.html">Firefox DevTools Contributor Docs</a></li>
+       <li class="toctree-l1 current"><a class="reference internal" href="../../../../index.html">Toolkit</a>
+        <ul class="current">
+         <li class="toctree-l2"><a class="reference internal" href="../../../../javascript-logging.html">JavaScript Logging</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../../mozapps/extensions/addon-manager/index.html">Add-on Manager</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../backgroundtasks/index.html">Background Task Mode</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../crashes/crash-manager/index.html">Crash Manager</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../../crashreporter/crashreporter/index.html">Crash Reporter</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../../internal-urls.html">Internal URLs</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../../search/index.html">Search Service</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../normandy/normandy/index.html">Shield Recipe Client</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../nimbus/docs/index.html">Nimbus</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../messaging-system/docs/index.html">Messaging System Schemas</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../pictureinpicture/pictureinpicture/index.html">Picture-in-Picture</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../prompts/prompts/index.html">Prompts</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../../modules/subprocess/toolkit_modules/subprocess/index.html">Subprocess Module</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../telemetry/index.html">Telemetry</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../glean/index.html">Firefox on Glean (FOG)</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../../modules/toolkit_modules/index.html">Toolkit Modules</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../../content/toolkit_widgets/index.html">Toolkit Widgets</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../resistfingerprinting/resistfingerprinting/index.html">Fingerprinting Resistance</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../url-classifier/url-classifier/index.html">URL Classifier</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../extensions/webextensions/index.html">WebExtensions API Development</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../../../extensions/spellcheck/index.html">Managing the built-in en-US dictionary</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../../mozapps/update/docs/index.html">Application Update</a></li>
+         <li class="toctree-l2 current"><a class="reference internal" href="../index.html">Anti-Tracking</a>
+          <ul class="current">
+           <li class="toctree-l3 current"><a class="current reference internal" href="#">Bounce Tracking Protection</a>
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="#standardization">Standardization</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#behavior">Behavior</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#gecko-implementation">Gecko Implementation</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#preferences">Preferences</a></li>
+            </ul></li>
+           <li class="toctree-l3"><a class="reference internal" href="#nimbus-integration">Nimbus Integration</a>
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="#logging">Logging</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#testing">Testing</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#test-page">Test Page</a></li>
+            </ul></li>
+           <li class="toctree-l3"><a class="reference internal" href="../cookie-purging/index.html">Cookie Purging</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="../data-sanitization/index.html">Data Sanitization</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="../query-stripping/index.html">Query Stripping</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="../smartblock-embeds/index.html">SmartBlock Embeds</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="../tracking-lists/index.html">Tracking Lists</a></li>
+          </ul></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../translations/index.html">Translations</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../sessionstore/index.html">Session Store</a></li>
+        </ul></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../../js/index.html">SpiderMonkey</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../../jsloader/index.html">JS Loader</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../../mobile/android/geckoview/index.html">GeckoView</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../../mobile/android/fenix/index.html">Fenix</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../../mobile/android/focus-android/index.html">Focus for Android</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../../dom/bindings/webidl/index.html">WebIDL</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../../modules/libpref/index.html">libpref</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../../networking/index.html">Networking</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../../remote/index.html">Remote Protocols</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../../services/index.html">Services</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../../permissions/index.html">Permissions</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../../uriloader/index.html">File Handling</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../../widget/cocoa/index.html">Firefox on macOS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../../widget/windows/index.html">Firefox on Windows</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../ml/index.html">Firefox AI Runtime</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../../accessible/index.html">Accessibility</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../../media/index.html">Media Playback</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../../code-quality/index.html">Code quality</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../../writing-rust-code/index.html">Writing Rust Code</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../../rust-components/index.html">Rust Components</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../../tools/profiler/index.html">Gecko Profiler</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../../performance/index.html">Performance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../../storage/index.html">Database bindings (SQLite, KV, …)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../../xpcom/index.html">XPCOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../../nspr/index.html">NSPR</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../../security/nss/index.html">Network Security Services (NSS)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../../content-security/index.html">Web Security Checks in Gecko</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">The Firefox Build System</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../../mach/index.html">Mach</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../../tools/try/index.html">Pushing to Try</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../../build/buildsystem/index.html">Build System</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../../taskcluster/index.html">Firefox CI and Taskgraph</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../../tools/moztreedocs/index.html">Managing Documentation</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../../mozbuild/vendor/index.html">Vendoring Third Party Components</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Testing &amp; Test Infrastructure</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../../testing/automated-testing/index.html">Automated Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../../testing/treeherder-try/index.html">Understanding Treeherder Results</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../../testing/sheriffed-intermittents/index.html">Sheriffed intermittent failures</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../../testing/tests-for-new-config/index.html">Turning on Firefox tests for a new configuration</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../../testing/intermittent/index.html">Avoiding intermittent tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../../testing/testing-policy/index.html">Testing Policy</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../../testing/ci-configs/index.html">Configuration Changes</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../../testing/browser-chrome/index.html">Browser chrome mochitests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../../testing/chrome-tests/index.html">Chrome Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../../testing/marionette/index.html">Marionette</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../../testing/geckodriver/index.html">geckodriver</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../../testing/test-verification/index.html">Test Verification</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../../testing/webrender/index.html">WebRender Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../../testing/mochitest-plain/index.html">Mochitest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../../testing/xpcshell/index.html">XPCShell tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../../testing/tps/index.html">TPS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../../web-platform/index.html">web-platform-tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../../gtest/index.html">GTest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../../tools/fuzzing/index.html">Fuzzing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../../tools/sanitizer/index.html">Sanitizer</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../../testing/perfdocs/index.html">Performance Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../../tools/code-coverage/index.html">Code coverage</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../../testing-rust-code/index.html">Testing &amp; Debugging Rust Code</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Releases &amp; Updates</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../../update-infrastructure/index.html">Mozilla Update Infrastructure</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../../update-infrastructure/index.html#watershed-updates">Watershed Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../../update-infrastructure/index.html#desupport-updates">Desupport Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../../tools/update-verify/index.html">Update Verify</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Localization &amp; Internationalization</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../../intl/index.html">Internationalization</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../../l10n/index.html">Localization</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox and Python</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../../mozbase/index.html">mozbase</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../../python/index.html">Using third-party Python packages</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Metrics Collected in Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../../metrics/index.html">Metrics</a></li>
+      </ul>
+     </div>
+    </div>
+   </nav>
+   <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+    <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+     <i data-toggle="wy-nav-top" class="fa fa-bars"></i> <a href="../../../../../index.html">Firefox Source Docs</a>
+    </nav>
+    <div class="wy-nav-content">
+     <div class="rst-content">
+      <!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+      <div role="navigation" aria-label="Page navigation">
+       <ul class="wy-breadcrumbs">
+        <li><a href="../../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+        <li class="breadcrumb-item"><a href="../../../../index.html">Toolkit</a></li>
+        <li class="breadcrumb-item"><a href="../index.html">Anti-Tracking</a></li>
+        <li class="breadcrumb-item active">Bounce Tracking Protection</li>
+        <li class="wy-breadcrumbs-aside"><a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Developer+Infrastructure&amp;component=Firefox+Source+Docs%3A+Content&amp;short_desc=Documentation+issue+on+toolkit/components/antitracking/anti-tracking/bounce-tracking-protection/index&amp;comment=URL+=+https://firefox-source-docs.mozilla.org/toolkit/components/antitracking/anti-tracking/bounce-tracking-protection/index.html&amp;bug_file_loc=https://firefox-source-docs.mozilla.org/toolkit/components/antitracking/anti-tracking/bounce-tracking-protection/index.html" rel="nofollow">Report an issue</a> / <a href="../../../../../_sources/toolkit/components/antitracking/anti-tracking/bounce-tracking-protection/index.md.txt" rel="nofollow"> View page source</a></li>
+       </ul>
+       <hr>
+      </div>
+      <div role="main" class="document" itemscope itemtype="http://schema.org/Article">
+       <div itemprop="articleBody">
+        <section id="bounce-tracking-protection">
+         <h1>Bounce Tracking Protection<a class="headerlink" href="#bounce-tracking-protection" title="Link to this heading">?</a></h1>
+         <p>Bounce Tracking Protection (BTP) is an anti-tracking feature in Gecko which detects bounce trackers (navigational tracking) based on a set of heuristics. As opposed to the <a class="reference internal" href="../cookie-purging/index.html"><span class="std std-doc">cookie purging</span></a> feature it does not rely on a list of trackers which makes it more webcompat friendly while also covering unknown bounce trackers.</p>
+         <section id="standardization">
+          <h2>Standardization<a class="headerlink" href="#standardization" title="Link to this heading">?</a></h2>
+          <p>The protection is a work item of the PrivacyCG. The implementation in Gecko closely follows the <a class="reference external" href="https://privacycg.github.io/nav-tracking-mitigations/#bounce-tracking-mitigations">Bounce Tracking Mitigations spec draft</a>.</p>
+          <p>Mozilla also has a <a class="reference external" href="https://mozilla.github.io/standards-positions/#bounce-tracking-mitigations">specification position on Bounce Tracking Mitigations</a>.</p>
+         </section>
+         <section id="behavior">
+          <h2>Behavior<a class="headerlink" href="#behavior" title="Link to this heading">?</a></h2>
+          <p>BTP detects bounce trackers by looking at navigation timing. It establishes the concept of an extended navigation which can encompass a chain of short-lived redirects. These short-lived redirects are commonly used by bounce trackers. If a site accesses cookies or storage in such a short-lived redirect it gets added to a classification list. Classified bounce trackers have their cookies, site data and cache purged periodically. In order to avoid false positives and purging data that may be important for users, sites which the user directly interacted with in the last 45 days are exempt from being classified or purged.</p>
+          <p>See <a class="reference external" href="https://github.com/privacycg/nav-tracking-mitigations/blob/main/bounce-tracking-explainer.md">Bounce Tracking Mitigations Explainer</a> for a more detailed (albeit chromium-oriented) description of the feature and how trackers are classified.</p><!--
+    TODO: This section should be extended to describe the behavior and rely less on the chromium explainer.
+    It should also talk about potential deviations from the spec.
+-->
+         </section>
+         <section id="gecko-implementation">
+          <h2>Gecko Implementation<a class="headerlink" href="#gecko-implementation" title="Link to this heading">?</a></h2>
+          <p>Work for the Gecko implementation in tracked under following meta-bug: <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1839915">Bug 1839915 - [meta] Bounce Tracking Protection</a>.</p>
+          <p>A simplified UML diagram of the BTP implementation in Gecko. Note that some classes and attributes have been omitted for readability. You can use the diagram feature in Searchfox to view the full diagram (<a class="reference external" href="https://searchfox.org/mozilla-central/query/default?q=class-diagram%3A%27mozilla%3A%3ABounceTrackingState%27+depth%3A2">example</a>).</p>
+          <pre class="mermaid">        classDiagram
+    class BounceTrackingProtection {
+        - mBounceTrackingPurgeTimer: nsITimer
+        - mStorage: BounceTrackingProtectionStorage
+        - mStorageObserver: BounceTrackingStorageObserver
+    }
+
+    note for BounceTrackingProtection "Singleton class to manage the feature."
+
+    class BounceTrackingProtectionStorage {
+        - mStateGlobal : nsTHashMap&amp;lt;OriginAttributesHashKey, RefPtr&amp;lt;BounceTrackingStateGlobal&amp;gt;&amp;gt;
+        - mDatabaseFile : nsCOMPtr&amp;lt;nsIFile&amp;gt;
+    }
+
+    class BounceTrackingStateGlobal {
+        - mUserActivation: nsTHashMap&amp;lt;nsCStringHashKey, PRTime&amp;gt;
+        - mBounceTrackers: nsTHashMap&amp;lt;nsCStringHashKey, PRTime&amp;gt;
+        - mOriginAttributes: OriginAttributes
+    }
+
+    note for BounceTrackingStateGlobal "Manages the global maps for bounce tracker candidates
+                                        and user activation for a specific OriginAttributes dict."
+
+    class BounceTrackingStorageObserver {
+        &lt;!-- [...] --&gt;
+    }
+
+    note for BounceTrackingStorageObserver "Listens to cookie/storage access
+                                            and notifies BounceTrackingState"
+
+    class BounceTrackingRecord {
+        - mInitialHost: nsAutoCString
+        - mBounceHosts: nsTHashSet&amp;lt;nsCStringHashKey&amp;gt;
+        - mFinalHost: nsAutoCString
+        - mStorageAccessHosts: nsTHashSet&amp;lt;nsCStringHashKey&amp;gt;
+    }
+
+    note for BounceTrackingRecord "Encapsulates the per-tab navigation state
+                                   during an extended navigation."
+
+    class BounceTrackingState {
+        - mBounceTrackingProtection: BounceTrackingProtection
+        - mBounceTrackingRecord: BounceTrackingRecord
+        - mClientBounceDetectionTimeout: nsReadOnlyTimer
+        - mOriginAttributes: OriginAttributes
+    }
+
+
+    class BrowsingContextWebProgress {
+        - mBounceTrackingState: BounceTrackingState
+    }
+
+    class nsIBTPExceptionList {
+        &lt;!-- Bug 1930704: Empty classes lead to build errors. Adding a comment inside the class fixes the issue --&gt;
+        &lt;!-- [...] --&gt;
+    }
+
+    class BounceTrackingAllowList {
+        &lt;!-- [...] --&gt;
+    }
+
+    class DocumentLoadListener{
+        &lt;!-- [...] --&gt;
+    }
+
+    note for BrowsingContextWebProgress "Every tab has a web progress
+                                         and therefore a BounceTrackingState"
+
+    BounceTrackingProtection *-- BounceTrackingProtectionStorage
+    BounceTrackingProtection *-- BounceTrackingStorageObserver
+    BounceTrackingState --o BounceTrackingProtection
+    BounceTrackingState --&gt; BounceTrackingProtection : RecordStatefulBounces() on extended nav end
+    BounceTrackingState *-- BounceTrackingRecord
+    BounceTrackingStorageObserver --&gt; BounceTrackingState : Storage access signals
+    BrowsingContextWebProgress *-- BounceTrackingState
+    BounceTrackingStateGlobal --* BounceTrackingProtectionStorage
+    BounceTrackingStateGlobal --&gt; BounceTrackingProtectionStorage : Persists state changes in storage.
+    BounceTrackingProtection --&gt; BounceTrackingStateGlobal : Manages global state
+    nsIBTPExceptionList --* BounceTrackingProtection
+    nsIBTPExceptionList --&gt; BounceTrackingProtection : Site host purge exceptions from RemoteSettings.
+    BounceTrackingAllowList --* BounceTrackingProtection
+    BounceTrackingAllowList --&gt; BounceTrackingProtection :  Site host purge exceptions from PermissionManager.
+    BrowsingContextWebProgress --&gt; BounceTrackingState : Navigation signals
+    DocumentLoadListener --&gt; BounceTrackingState : Navigation signals
+    </pre>
+         </section>
+         <section id="preferences">
+          <h2>Preferences<a class="headerlink" href="#preferences" title="Link to this heading">?</a></h2>
+          <p>The feature can be enabled and it’s behavior can be adjusted using the <code class="docutils literal notranslate"><span class="pre">privacy.bounceTrackingProtection.*</span></code> prefs. See <a class="reference external" href="https://searchfox.org/mozilla-central/rev/ec342a3d481d9ac3324d1041e05eefa6b61392d2/modules/libpref/init/StaticPrefList.yaml#15125-15180">StaticPrefList.yaml</a> for a list of prefs with descriptions.</p>
+          <p>The main feature pref is <code class="docutils literal notranslate"><span class="pre">privacy.bounceTrackingProtection.mode</span></code> where <code class="docutils literal notranslate"><span class="pre">0</span></code> is fully disabled and <code class="docutils literal notranslate"><span class="pre">1</span></code> is fully enabled. See <a class="reference external" href="https://searchfox.org/mozilla-central/rev/ec342a3d481d9ac3324d1041e05eefa6b61392d2/toolkit/components/antitracking/bouncetrackingprotection/nsIBounceTrackingProtection.idl#10-42">nsIBounceTrackingProtection.idl</a> for a full list of options.</p>
+          <p>When classifying sites, BTP also looks at whether the site accessed cookies or storage in the redirect. Whether cookies or storage access is considered is controlled by the <code class="docutils literal notranslate"><span class="pre">privacy.bounceTrackingProtection.requireStatefulBounces</span></code> pref.</p>
+         </section>
+        </section>
+        <section id="nimbus-integration">
+         <h1>Nimbus Integration<a class="headerlink" href="#nimbus-integration" title="Link to this heading">?</a></h1>
+         <p>A subset of the BTP prefs can be controlled via Nimbus. See definition here: <a class="reference external" href="https://searchfox.org/mozilla-central/source/toolkit/components/nimbus/FeatureManifest.yaml#:~:text=bounceTrackingProtection">FeatureManifest.yaml</a>.</p>
+         <section id="logging">
+          <h2>Logging<a class="headerlink" href="#logging" title="Link to this heading">?</a></h2>
+          <p>BTP has a logger which can be enabled by starting Firefox with the <code class="docutils literal notranslate"><span class="pre">MOZ_LOG</span></code> environment variable. Use <code class="docutils literal notranslate"><span class="pre">MOZ_LOG=BounceTrackingProtection:5</span></code> for verbose logging for every navigation and <code class="docutils literal notranslate"><span class="pre">MOZ_LOG=BounceTrackingProtection:3</span></code> for more concise logging focused on classification and purging.</p>
+          <section id="console-messages">
+           <h3>Console Messages<a class="headerlink" href="#console-messages" title="Link to this heading">?</a></h3>
+           <p>You can check the developer tools console for warning messages which will be logged when a site gets classified. Example:</p>
+           <blockquote>
+            <div>
+             <p>“bounce-tracking-demo-tracker-server.glitch.me” has been classified as a bounce tracker. If it does not receive user activation within the next 3,600 seconds it will have its state purged.</p>
+            </div>
+           </blockquote>
+           <p>When a site has recently been purged (since last restart), upon next visit, Firefox will also log a warning to the website console:</p>
+           <blockquote>
+            <div>
+             <p>The state of “bounce-tracking-demo-tracker-server.glitch.me” was recently purged because it was detected as a bounce tracker.</p>
+            </div>
+           </blockquote>
+          </section>
+         </section>
+         <section id="testing">
+          <h2>Testing<a class="headerlink" href="#testing" title="Link to this heading">?</a></h2>
+          <p>When testing sites to ensure they don’t get purged for bounce tracking behavior you can use both logging (as described above) to observe classification and direct calls to the feature via the Browser Toolbox to trigger the purging early.</p>
+          <p>The snippets in the following section need to be executed in the <a class="reference internal" href="../../../../../devtools-user/browser_toolbox/index.html"><span class="std std-doc">Browser Toolbox</span></a>. Note that while the toolbox looks like the regular devtools it’s a special console used to debug Firefox itself rather than websites.</p>
+          <section id="print-the-list-of-classified-bounce-trackers">
+           <h3>Print the list of classified bounce trackers<a class="headerlink" href="#print-the-list-of-classified-bounce-trackers" title="Link to this heading">?</a></h3>
+           <p>To get a list of all currently classified bounce trackers use the following snippet:</p>
+           <div class="highlight-javascript notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="k">await</span><span class="w"> </span><span class="nx">Cc</span><span class="p">[</span>
+<span class="w">  </span><span class="s2">"@mozilla.org/bounce-tracking-protection;1"</span>
+<span class="p">].</span><span class="nx">getService</span><span class="p">(</span><span class="nx">Ci</span><span class="p">.</span><span class="nx">nsIBounceTrackingProtection</span><span class="p">).</span><span class="nx">testGetUserActivationHosts</span><span class="p">({})</span>
+</pre>
+            </div>
+           </div>
+           <p>This prints the list excluding private browsing and tab containers. For those you need to pass in an <code class="docutils literal notranslate"><span class="pre">OriginAttributes</span></code> object. See <a class="reference external" href="https://searchfox.org/mozilla-central/rev/ec342a3d481d9ac3324d1041e05eefa6b61392d2/toolkit/components/antitracking/bouncetrackingprotection/nsIBounceTrackingProtection.idl#90">nsIBounceTrackingProtection</a> for more documentation.</p>
+           <p>Sites which have been purged or which receive user interaction are automatically removed from this list.</p>
+           <p>Note that just because a site is in this list it doesn’t mean that it gets classified. Once classified there is a grace period of 1h in which the site may receive user interaction. If the user interacts with the site in that time window it is removed from the bounce tracker list and exempt from purging for 45 days.</p>
+          </section>
+          <section id="trigger-a-purge-of-all-classified-trackers">
+           <h3>Trigger a purge of all classified trackers:<a class="headerlink" href="#trigger-a-purge-of-all-classified-trackers" title="Link to this heading">?</a></h3>
+           <p>Before navigating to the site set <code class="docutils literal notranslate"><span class="pre">privacy.bounceTrackingProtection.bounceTrackingGracePeriodSec</span></code> to <code class="docutils literal notranslate"><span class="pre">0</span></code> or a low number. This controls how fast after (classified) bounce a site may be purged. If you don’t update this pref you need to wait up to 1h for a site to be purged.</p>
+           <p>Purges normally run every hour. To trigger a purge manually you can use the following snippet:</p>
+           <div class="highlight-javascript notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="k">await</span><span class="w"> </span><span class="nx">Cc</span><span class="p">[</span>
+<span class="w">  </span><span class="s2">"@mozilla.org/bounce-tracking-protection;1"</span>
+<span class="p">].</span><span class="nx">getService</span><span class="p">(</span><span class="nx">Ci</span><span class="p">.</span><span class="nx">nsIBounceTrackingProtection</span><span class="p">).</span><span class="nx">testRunPurgeBounceTrackers</span><span class="p">();</span>
+</pre>
+            </div>
+           </div>
+           <p>The return value will be an array of sites that have been purged. Note that purging applies for the entire domain (eTLD+1).</p>
+          </section>
+          <section id="list-recently-purged-sites">
+           <h3>List recently purged sites<a class="headerlink" href="#list-recently-purged-sites" title="Link to this heading">?</a></h3>
+           <p>You can obtain a list of recently purged sites (since the last restart) by calling:</p>
+           <div class="highlight-javascript notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="k">await</span><span class="w"> </span><span class="nx">Cc</span><span class="p">[</span>
+<span class="w">  </span><span class="s2">"@mozilla.org/bounce-tracking-protection;1"</span>
+<span class="p">].</span><span class="nx">getService</span><span class="p">(</span><span class="nx">Ci</span><span class="p">.</span><span class="nx">nsIBounceTrackingProtection</span><span class="p">).</span><span class="nx">testGetRecentlyPurgedTrackers</span><span class="p">({});</span>
+</pre>
+            </div>
+           </div>
+           <p>This only shows sites which have been purged in normal browsing. If you want data from private browsing or containers you need to pass in a non-default <code class="docutils literal notranslate"><span class="pre">OriginAttributes</span></code> object, e.g. <code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">privateBrowsingId:</span> <span class="pre">1</span> <span class="pre">}</span></code>.</p>
+           <p>There is also <code class="docutils literal notranslate"><span class="pre">hasRecentlyPurgedSite</span></code> which can be used to check if a specific site has been recently purged (across all OriginAttributes contexts).</p>
+          </section>
+         </section>
+         <section id="test-page">
+          <h2>Test Page<a class="headerlink" href="#test-page" title="Link to this heading">?</a></h2>
+          <p>https://bounce-tracking-demo.glitch.me/ is a demo page with two links that exhibit bounce tracking behaviour. You can use it combined with the methods above to verify that the mechanism is running.</p>
+         </section>
+        </section>
+       </div>
+      </div>
+      <footer>
+       <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../index.html" class="btn btn-neutral float-left" title="Anti-Tracking" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a> <a href="../cookie-purging/index.html" class="btn btn-neutral float-right" title="Cookie Purging" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+       </div>
+       <hr>
+       <div role="contentinfo">
+        <p></p>
+       </div> Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+      </footer>
+     </div>
+    </div>
+   </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ </body>
+</html>

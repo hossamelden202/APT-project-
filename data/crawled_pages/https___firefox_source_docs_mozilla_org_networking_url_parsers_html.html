@@ -1,0 +1,473 @@
+<!doctype html>
+<html class="writer-html5" lang="en" data-content_root="../">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>URL Parsers — Firefox Source Docs  documentation</title>
+  <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50">
+  <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094">
+  <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=fd3f3429">
+  <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b">
+  <link rel="stylesheet" type="text/css" href="../_static/custom_theme.css?v=dc5ed815">
+  <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7">
+  <link rel="shortcut icon" href="../_static/firefox.ico"><!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script src="../_static/jquery.js?v=5d32c60e"></script>
+  <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+  <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+  <script src="../_static/doctools.js?v=9a2dae69"></script>
+  <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+  <script src="../_static/copybutton.js?v=30646c52"></script>
+  <script src="../_static/design-tabs.js?v=36754332"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/npm/mermaid@11.2.0/dist/mermaid.esm.min.mjs"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/npm/@mermaid-js/layout-elk@0.1.4/dist/mermaid-layout-elk.esm.min.mjs"></script>
+  <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.2.0/dist/mermaid.esm.min.mjs";import elkLayouts from "https://cdn.jsdelivr.net/npm/@mermaid-js/layout-elk@0.1.4/dist/mermaid-layout-elk.esm.min.mjs";mermaid.registerLayoutLoaders(elkLayouts);mermaid.initialize({startOnLoad:false});</script>
+  <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+  <script type="module">
+import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.2.0/dist/mermaid.esm.min.mjs";
+window.addEventListener("load", () => mermaid.run());
+</script>
+  <script src="../_static/js/theme.js"></script>
+  <link rel="index" title="Index" href="../genindex.html">
+  <link rel="search" title="Search" href="../search.html">
+  <link rel="next" title="WebTransport (WIP)" href="webtransport/webtransport.html">
+  <link rel="prev" title="DNS over HTTPS (Trusted Recursive Resolver)" href="dns/dns-over-https-trr.html">
+ </head>
+ <body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+   <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <div class="wy-side-scroll">
+     <div class="wy-side-nav-search">
+      <a href="../index.html" class="icon icon-home"> Firefox Source Docs <img src="../_static/firefox-wordmark.svg" class="logo" alt="Logo"> </a><!-- -- This code is governed by the BSD license ---->
+      <div>
+       <h3>Quick search</h3>
+       <script>
+    (function () {
+      var cx = "dd12886298f75dbef";
+      var gcse = document.createElement("script");
+      gcse.async = true;
+      gcse.src = "https://cse.google.com/cse.js?cx=" + cx;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(gcse, s);
+    })();
+  </script><gcse:search></gcse:search>
+      </div>
+     </div>
+     <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+      <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../glossary/index.html">A Glossary of Common Terms</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../overview/index.html">A Quick Guide to Mozilla Applications</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../setup/index.html">Getting Set Up To Work On The Firefox Codebase</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Working On Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../contributing/index.html">Working on Firefox</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../bug-mgmt/index.html">Bug Handling</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox User Guide</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../devtools-user/index.html">Firefox DevTools User Docs</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Source Code Documentation</span></p>
+      <ul class="current">
+       <li class="toctree-l1"><a class="reference internal" href="../mots/index.html">Governance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../browser/index.html">Firefox Front-end</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../dom/index.html">DOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../editor/index.html">Editor</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../layout/index.html">Style system (CSS) &amp; Layout</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../gfx/index.html">Graphics</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../ipc/index.html">Processes, Threads and IPC</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../devtools/index.html">Firefox DevTools Contributor Docs</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../toolkit/index.html">Toolkit</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../js/index.html">SpiderMonkey</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../jsloader/index.html">JS Loader</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mobile/android/geckoview/index.html">GeckoView</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mobile/android/fenix/index.html">Fenix</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mobile/android/focus-android/index.html">Focus for Android</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../dom/bindings/webidl/index.html">WebIDL</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../modules/libpref/index.html">libpref</a></li>
+       <li class="toctree-l1 current"><a class="reference internal" href="index.html">Networking</a>
+        <ul class="current">
+         <li class="toctree-l2"><a class="reference internal" href="index.html#how-tos">How-to’s</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="index.html#tutorials">Tutorials</a></li>
+         <li class="toctree-l2 current"><a class="reference internal" href="index.html#deep-dives">Deep Dives</a>
+          <ul class="current">
+           <li class="toctree-l3"><a class="reference internal" href="index.html#necko-design">Necko Design</a></li>
+           <li class="toctree-l3 current"><a class="reference internal" href="index.html#necko-features">Necko Features</a>
+            <ul class="current">
+             <li class="toctree-l4"><a class="reference internal" href="http/lifecycle.html">The Lifecycle of a HTTP Request</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="dns/dns-over-https-trr.html">DNS over HTTPS (Trusted Recursive Resolver)</a></li>
+             <li class="toctree-l4 current"><a class="current reference internal" href="#">URL Parsers</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="webtransport/webtransport.html">WebTransport (WIP)</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="captive_portals.html">Captive Portal Detection</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="early_hints.html">Early Hints</a></li>
+            </ul></li>
+          </ul></li>
+         <li class="toctree-l2"><a class="reference internal" href="index.html#references">References</a></li>
+        </ul></li>
+       <li class="toctree-l1"><a class="reference internal" href="../remote/index.html">Remote Protocols</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../services/index.html">Services</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../permissions/index.html">Permissions</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../uriloader/index.html">File Handling</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../widget/cocoa/index.html">Firefox on macOS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../widget/windows/index.html">Firefox on Windows</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../toolkit/components/ml/index.html">Firefox AI Runtime</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../accessible/index.html">Accessibility</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../media/index.html">Media Playback</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../code-quality/index.html">Code quality</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../writing-rust-code/index.html">Writing Rust Code</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../rust-components/index.html">Rust Components</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/profiler/index.html">Gecko Profiler</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../performance/index.html">Performance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../storage/index.html">Database bindings (SQLite, KV, …)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../xpcom/index.html">XPCOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../nspr/index.html">NSPR</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../security/nss/index.html">Network Security Services (NSS)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../content-security/index.html">Web Security Checks in Gecko</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">The Firefox Build System</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../mach/index.html">Mach</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/try/index.html">Pushing to Try</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../build/buildsystem/index.html">Build System</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../taskcluster/index.html">Firefox CI and Taskgraph</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/moztreedocs/index.html">Managing Documentation</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mozbuild/vendor/index.html">Vendoring Third Party Components</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Testing &amp; Test Infrastructure</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/automated-testing/index.html">Automated Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/treeherder-try/index.html">Understanding Treeherder Results</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/sheriffed-intermittents/index.html">Sheriffed intermittent failures</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/tests-for-new-config/index.html">Turning on Firefox tests for a new configuration</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/intermittent/index.html">Avoiding intermittent tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/testing-policy/index.html">Testing Policy</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/ci-configs/index.html">Configuration Changes</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/browser-chrome/index.html">Browser chrome mochitests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/chrome-tests/index.html">Chrome Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/marionette/index.html">Marionette</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/geckodriver/index.html">geckodriver</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/test-verification/index.html">Test Verification</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/webrender/index.html">WebRender Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/mochitest-plain/index.html">Mochitest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/xpcshell/index.html">XPCShell tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/tps/index.html">TPS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../web-platform/index.html">web-platform-tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../gtest/index.html">GTest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/fuzzing/index.html">Fuzzing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/sanitizer/index.html">Sanitizer</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/perfdocs/index.html">Performance Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/code-coverage/index.html">Code coverage</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing-rust-code/index.html">Testing &amp; Debugging Rust Code</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Releases &amp; Updates</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../update-infrastructure/index.html">Mozilla Update Infrastructure</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../update-infrastructure/index.html#watershed-updates">Watershed Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../update-infrastructure/index.html#desupport-updates">Desupport Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/update-verify/index.html">Update Verify</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Localization &amp; Internationalization</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../intl/index.html">Internationalization</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../l10n/index.html">Localization</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox and Python</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../mozbase/index.html">mozbase</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../python/index.html">Using third-party Python packages</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Metrics Collected in Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../metrics/index.html">Metrics</a></li>
+      </ul>
+     </div>
+    </div>
+   </nav>
+   <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+    <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+     <i data-toggle="wy-nav-top" class="fa fa-bars"></i> <a href="../index.html">Firefox Source Docs</a>
+    </nav>
+    <div class="wy-nav-content">
+     <div class="rst-content">
+      <!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+      <div role="navigation" aria-label="Page navigation">
+       <ul class="wy-breadcrumbs">
+        <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+        <li class="breadcrumb-item"><a href="index.html">Networking</a></li>
+        <li class="breadcrumb-item active">URL Parsers</li>
+        <li class="wy-breadcrumbs-aside"><a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Developer+Infrastructure&amp;component=Firefox+Source+Docs%3A+Content&amp;short_desc=Documentation+issue+on+networking/url_parsers&amp;comment=URL+=+https://firefox-source-docs.mozilla.org/networking/url_parsers.html&amp;bug_file_loc=https://firefox-source-docs.mozilla.org/networking/url_parsers.html" rel="nofollow">Report an issue</a> / <a href="../_sources/networking/url_parsers.md.txt" rel="nofollow"> View page source</a></li>
+       </ul>
+       <hr>
+      </div>
+      <div role="main" class="document" itemscope itemtype="http://schema.org/Article">
+       <div itemprop="articleBody">
+        <section id="url-parsers">
+         <h1>URL Parsers<a class="headerlink" href="#url-parsers" title="Link to this heading">?</a></h1>
+         <div class="admonition warning">
+          <p class="admonition-title">Warning</p>
+          <p>In order to ensure thread safety it is important that all of the objects and interfaces of URI objects are immutable. If you are implementing a new URI type, please make sure that none of the type’s public methods change the URL.</p>
+         </div>
+         <section id="definitions">
+          <h2>Definitions<a class="headerlink" href="#definitions" title="Link to this heading">?</a></h2>
+          <ul class="simple">
+           <li>
+            <p>URI - Uniform Resource Identifier</p></li>
+           <li>
+            <p>URL - Uniform Resource Locator</p></li>
+          </ul>
+          <p>These two terms are used interchangeably throughout the codebase and essentially represent the same thing - a string of characters that represents a specific resource.</p>
+         </section>
+         <section id="motivation">
+          <h2>Motivation<a class="headerlink" href="#motivation" title="Link to this heading">?</a></h2>
+          <p>While we could simply pass strings around and leave it to the final consumer to deal with it, that creates a burden for the consumer and would probably be inefficient. Instead we parse the string into a nsIURI object as soon as possible and pass that object through function calls. This allows the consumer to easily extract only the part of the string they are interested in (eg. the hostname or the path).</p>
+         </section>
+         <section id="interfaces">
+          <h2>Interfaces<a class="headerlink" href="#interfaces" title="Link to this heading">?</a></h2>
+          <ul class="simple">
+           <li>
+            <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/netwerk/base/nsIURI.idl">nsIURI</a></p>
+            <ul>
+             <li>
+              <p>This is the most important interface for URI parsing. It contains a series of readonly attributes that consumers can use to extract information from the URI.</p></li>
+            </ul></li>
+           <li>
+            <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/netwerk/base/nsIURL.idl">nsIURL</a></p>
+            <ul>
+             <li>
+              <p>Defines a structure for the URI’s path (directory, fileName, fileBaseName, fileExtension)</p></li>
+            </ul></li>
+           <li>
+            <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/netwerk/base/nsIFileURL.idl">nsIFileURL</a></p>
+            <ul>
+             <li>
+              <p>Has a file attribute of type <code class="docutils literal notranslate"><span class="pre">nsIFile</span></code></p></li>
+             <li>
+              <p>Used for local protocols to access the file represented by the <code class="docutils literal notranslate"><span class="pre">nsIURI</span></code></p></li>
+            </ul></li>
+           <li>
+            <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/image/nsIIconURI.idl">nsIMozIconURI</a></p>
+            <ul>
+             <li>
+              <p>Used to represent an icon. Contains additional attributes such as the size and contentType or state of the URL.</p></li>
+            </ul></li>
+           <li>
+            <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/modules/libjar/nsIJARURI.idl">nsIJARURI</a></p>
+            <ul>
+             <li>
+              <p>Used to represent a resource inside of a JAR (zip archive) file.</p></li>
+             <li>
+              <p>For example <code class="docutils literal notranslate"><span class="pre">jar:http://www.example.com/blue.jar!/ocean.html</span></code> represents the <code class="docutils literal notranslate"><span class="pre">/ocean.html</span></code> resource located inside the <code class="docutils literal notranslate"><span class="pre">blue.jar</span></code> archive that can be fetched via HTTP from example.com.</p></li>
+            </ul></li>
+           <li>
+            <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/netwerk/base/nsIStandardURL.idl">nsIStandardURL</a></p>
+            <ul>
+             <li>
+              <p>Defines a few constant flags used to determine the type of the URL. No other attributes.</p></li>
+            </ul></li>
+           <li>
+            <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/netwerk/base/nsINestedURI.idl">nsINestedURI</a></p>
+            <ul>
+             <li>
+              <p>Defines <code class="docutils literal notranslate"><span class="pre">innerURI</span></code> and <code class="docutils literal notranslate"><span class="pre">innermostURI</span></code>.</p></li>
+             <li>
+              <p><code class="docutils literal notranslate"><span class="pre">innermostURI</span></code> is just a helper - one could also get it by going through <code class="docutils literal notranslate"><span class="pre">innerURI</span></code> repeatedly until the attribute no longer QIs to nsINestedURI.</p></li>
+            </ul></li>
+           <li>
+            <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/netwerk/base/nsISensitiveInfoHiddenURI.idl">nsISensitiveInfoHiddenURI</a></p>
+            <ul>
+             <li>
+              <p>Objects that implement this interface will have a <code class="docutils literal notranslate"><span class="pre">getSensitiveInfoHiddenSpec()</span></code> method that returns the spec of the URI with sensitive info (such as the password) replaced by the <code class="docutils literal notranslate"><span class="pre">*</span></code> symbol.</p></li>
+            </ul></li>
+          </ul>
+          <section id="diagram-of-interfaces">
+           <h3>Diagram of Interfaces<a class="headerlink" href="#diagram-of-interfaces" title="Link to this heading">?</a></h3>
+           <pre class="mermaid">        classDiagram
+nsISupports &lt;-- nsIURI
+nsIURI &lt;-- nsIURL
+nsIURL &lt;-- nsIFileURL
+nsIURI &lt;-- nsIMozIconURI
+nsIURL &lt;-- nsIJARURI
+nsISupports &lt;-- nsIStandardURL
+nsISupports &lt;-- nsINestedURI
+nsISupports &lt;-- nsISensitiveInfoHiddenURI
+    </pre>
+          </section>
+          <section id="mutation">
+           <h3>Mutation<a class="headerlink" href="#mutation" title="Link to this heading">?</a></h3>
+           <p>To ensure thread safety all implementations of nsIURI must be immutable. To change a URI the consumer must call <code class="docutils literal notranslate"><span class="pre">nsIURI.mutate()</span></code> which returns a <code class="docutils literal notranslate"><span class="pre">nsIMutator</span></code>. The <code class="docutils literal notranslate"><span class="pre">nsIMutator</span></code> has several setter methods that can be used change attributes on the concrete object. Once done changing the object, the consumer will call <code class="docutils literal notranslate"><span class="pre">nsIMutator.finalize()</span></code> to obtain an immutable <code class="docutils literal notranslate"><span class="pre">nsIURI</span></code>.</p>
+           <ul class="simple">
+            <li>
+             <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/netwerk/base/nsIURIMutator.idl">nsIURIMutator</a></p>
+             <ul>
+              <li>
+               <p>This interface contains a series of setters that can be used to mutate and/or construct a <code class="docutils literal notranslate"><span class="pre">nsIURI</span></code></p></li>
+             </ul></li>
+           </ul>
+          </section>
+          <section id="additional-interfaces">
+           <h3>Additional Interfaces<a class="headerlink" href="#additional-interfaces" title="Link to this heading">?</a></h3>
+           <ul class="simple">
+            <li>
+             <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/xpcom/ds/nsISerializable.idl">nsISerializable</a></p>
+             <ul>
+              <li>
+               <p>Allows us to serialize and deserialize URL objects into strings for persistent storage (such as session restore).</p></li>
+             </ul></li>
+           </ul>
+          </section>
+         </section>
+         <section id="implementations">
+          <h2>Implementations<a class="headerlink" href="#implementations" title="Link to this heading">?</a></h2>
+          <ul class="simple">
+           <li>
+            <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/netwerk/base/nsStandardURL.h">nsStandardURL</a></p></li>
+           <li>
+            <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/netwerk/protocol/res/SubstitutingURL.h">SubstitutingURL</a></p>
+            <ul>
+             <li>
+              <p>overrides nsStandardURL::GetFile to provide nsIFile resolution.</p></li>
+             <li>
+              <p>This allows us to map URLs such as <code class="docutils literal notranslate"><span class="pre">resource://gre/actors/RemotePageChild.sys.mjs</span></code> to the actual file on the disk.</p></li>
+            </ul></li>
+           <li>
+            <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/image/decoders/icon/nsIconURI.h">nsMozIconURI</a></p>
+            <ul>
+             <li>
+              <p>Used to represent icon URLs</p></li>
+            </ul></li>
+           <li>
+            <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/netwerk/base/nsSimpleURI.h">nsSimpleURI</a></p>
+            <ul>
+             <li>
+              <p>Used for simple URIs that normally don’t have an authority (username, password, host, port)</p></li>
+            </ul></li>
+           <li>
+            <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/netwerk/base/nsSimpleNestedURI.h">nsSimpleNestedURI</a></p>
+            <ul>
+             <li>
+              <p>eg. <code class="docutils literal notranslate"><span class="pre">view-source:http://example.com/path</span></code></p></li>
+             <li>
+              <p>Normally only the extra scheme of the nestedURI is relevant (eg. <code class="docutils literal notranslate"><span class="pre">view-source:</span></code>)</p></li>
+             <li>
+              <p>Most of the getter/setters are delegated to the innerURI</p></li>
+            </ul></li>
+           <li>
+            <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/netwerk/protocol/about/nsAboutProtocolHandler.h">nsNestedAboutURI</a></p>
+            <ul>
+             <li>
+              <p>Similar to nsSimpleNestedURI, but has an extra <code class="docutils literal notranslate"><span class="pre">mBaseURI</span></code> member that allows us to propagate the base URI to about:blank correctly`</p></li>
+            </ul></li>
+           <li>
+            <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/dom/file/uri/BlobURL.h">BlobURL</a></p>
+            <ul>
+             <li>
+              <p>Used for javascript blobs</p></li>
+             <li>
+              <p>Similar to nsSimpleURI, but also has a revoked field.</p></li>
+            </ul></li>
+           <li>
+            <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/netwerk/base/DefaultURI.h">DefaultURI</a></p>
+            <ul>
+             <li>
+              <p>This class wraps an object parsed by the <code class="docutils literal notranslate"><span class="pre">rust-url</span></code> crate.</p></li>
+             <li>
+              <p>While not yet enabled by default, due to small bugs in that parser, the plan is to eventually use this implementation for all <em>unknown protocols</em> that don’t have their own URL parser.</p></li>
+            </ul></li>
+           <li>
+            <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/dom/jsurl/nsJSProtocolHandler.h">nsJSURI</a></p>
+            <ul>
+             <li>
+              <p>Used to represent javascript code (eg. <code class="docutils literal notranslate"><span class="pre">javascript:alert('hello')</span></code>)</p></li>
+            </ul></li>
+           <li>
+            <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/modules/libjar/nsJARURI.h">nsJARURI</a></p>
+            <ul>
+             <li>
+              <p>Used to represent resources inside of JAR files.</p></li>
+            </ul></li>
+          </ul>
+          <section id="diagram-of-implementations">
+           <h3>Diagram of Implementations<a class="headerlink" href="#diagram-of-implementations" title="Link to this heading">?</a></h3>
+           <pre class="mermaid">        classDiagram
+nsSimpleURI o-- BlobURL
+nsIMozIconURI o-- nsMozIconURI
+nsIFileURL o-- nsStandardURL
+nsIStandardURL o-- nsStandardURL
+nsISensitiveInfoHiddenURI o-- nsStandardURL
+nsStandardURL o-- SubstitutingURL
+nsIURI o-- nsSimpleURI
+nsSimpleURI o-- nsSimpleNestedURI
+nsSimpleNestedURI o-- nsNestedAboutURI
+
+nsIURI o-- DefaultURI
+
+nsSimpleURI o-- nsJSURI
+
+nsINestedURI o-- nsJARURI
+nsIJARURI o-- nsJARURI
+    </pre>
+          </section>
+         </section>
+         <section id="class-and-interface-diagram">
+          <h2>Class and Interface Diagram<a class="headerlink" href="#class-and-interface-diagram" title="Link to this heading">?</a></h2>
+          <pre class="mermaid">        classDiagram
+nsISupports &lt;-- nsIURI
+nsIURI &lt;-- nsIURL
+nsIURL &lt;-- nsIFileURL
+nsIURI &lt;-- nsIMozIconURI
+nsIURL &lt;-- nsIJARURI
+nsISupports &lt;-- nsIStandardURL
+nsISupports &lt;-- nsINestedURI
+nsISupports &lt;-- nsISensitiveInfoHiddenURI
+
+%% classes
+
+nsSimpleURI o-- BlobURL
+nsSimpleURI o-- nsJSURI
+nsIMozIconURI o-- nsMozIconURI
+nsIFileURL o-- nsStandardURL
+nsIStandardURL o-- nsStandardURL
+nsISensitiveInfoHiddenURI o-- nsStandardURL
+nsStandardURL o-- SubstitutingURL
+nsIURI o-- nsSimpleURI
+nsINestedURI o-- nsJARURI
+nsIJARURI o-- nsJARURI
+nsSimpleURI o-- nsSimpleNestedURI
+nsSimpleNestedURI o-- nsNestedAboutURI
+nsIURI o-- DefaultURI
+
+    </pre>
+         </section>
+        </section>
+       </div>
+      </div>
+      <footer>
+       <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="dns/dns-over-https-trr.html" class="btn btn-neutral float-left" title="DNS over HTTPS (Trusted Recursive Resolver)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a> <a href="webtransport/webtransport.html" class="btn btn-neutral float-right" title="WebTransport (WIP)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+       </div>
+       <hr>
+       <div role="contentinfo">
+        <p></p>
+       </div> Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+      </footer>
+     </div>
+    </div>
+   </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ </body>
+</html>

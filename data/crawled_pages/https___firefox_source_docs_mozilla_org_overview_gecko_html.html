@@ -1,0 +1,386 @@
+<!doctype html>
+<html class="writer-html5" lang="en" data-content_root="../">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gecko — Firefox Source Docs  documentation</title>
+  <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50">
+  <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094">
+  <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=fd3f3429">
+  <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b">
+  <link rel="stylesheet" type="text/css" href="../_static/custom_theme.css?v=dc5ed815">
+  <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7">
+  <link rel="shortcut icon" href="../_static/firefox.ico"><!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script src="../_static/jquery.js?v=5d32c60e"></script>
+  <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+  <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+  <script src="../_static/doctools.js?v=9a2dae69"></script>
+  <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+  <script src="../_static/copybutton.js?v=30646c52"></script>
+  <script src="../_static/design-tabs.js?v=36754332"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/npm/mermaid@11.2.0/dist/mermaid.esm.min.mjs"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/npm/@mermaid-js/layout-elk@0.1.4/dist/mermaid-layout-elk.esm.min.mjs"></script>
+  <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.2.0/dist/mermaid.esm.min.mjs";import elkLayouts from "https://cdn.jsdelivr.net/npm/@mermaid-js/layout-elk@0.1.4/dist/mermaid-layout-elk.esm.min.mjs";mermaid.registerLayoutLoaders(elkLayouts);mermaid.initialize({startOnLoad:false});</script>
+  <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+  <script type="module">
+import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.2.0/dist/mermaid.esm.min.mjs";
+window.addEventListener("load", () => mermaid.run());
+</script>
+  <script src="../_static/js/theme.js"></script>
+  <link rel="index" title="Index" href="../genindex.html">
+  <link rel="search" title="Search" href="../search.html">
+  <link rel="next" title="Firefox for Desktop" href="../browser/overview.html">
+  <link rel="prev" title="A Quick Guide to Mozilla Applications" href="index.html">
+ </head>
+ <body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+   <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <div class="wy-side-scroll">
+     <div class="wy-side-nav-search">
+      <a href="../index.html" class="icon icon-home"> Firefox Source Docs <img src="../_static/firefox-wordmark.svg" class="logo" alt="Logo"> </a><!-- -- This code is governed by the BSD license ---->
+      <div>
+       <h3>Quick search</h3>
+       <script>
+    (function () {
+      var cx = "dd12886298f75dbef";
+      var gcse = document.createElement("script");
+      gcse.async = true;
+      gcse.src = "https://cse.google.com/cse.js?cx=" + cx;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(gcse, s);
+    })();
+  </script><gcse:search></gcse:search>
+      </div>
+     </div>
+     <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+      <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+      <ul class="current">
+       <li class="toctree-l1"><a class="reference internal" href="../glossary/index.html">A Glossary of Common Terms</a></li>
+       <li class="toctree-l1 current"><a class="reference internal" href="index.html">A Quick Guide to Mozilla Applications</a>
+        <ul class="current">
+         <li class="toctree-l2 current"><a class="current reference internal" href="#">Gecko</a>
+          <ul>
+           <li class="toctree-l3"><a class="reference internal" href="#networking-necko">Networking (necko)</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#javascript-spidermonkey">JavaScript (SpiderMonkey)</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#system-modules">System Modules</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#xpcom">XPCOM</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#process-separation-fission-ipc-actors">Process Separation / Fission / IPC / Actors</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#dom-webidl">DOM + WebIDL</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#style-system-css">Style System (CSS)</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#layout">Layout</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#graphics">Graphics</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#localization-fluent">Localization (Fluent)</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#profiles">Profiles</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#preferences">Preferences</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#observer-service">Observer Service</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#principals-security-model">Principals / Security model</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#chrome-protocol">Chrome Protocol</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#resource-protocol">Resource Protocol</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#about-pages-protocol">About pages/protocol</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#toolkit">Toolkit</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#linting-building-testing-developer-workflow">Linting / building / testing / developer workflow</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#webextensions">WebExtensions</a></li>
+          </ul></li>
+         <li class="toctree-l2"><a class="reference internal" href="../browser/overview.html">Firefox for Desktop</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../mobile/android/index.html">Firefox for Android</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="ios.html">Firefox for iOS</a></li>
+        </ul></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../setup/index.html">Getting Set Up To Work On The Firefox Codebase</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Working On Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../contributing/index.html">Working on Firefox</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../bug-mgmt/index.html">Bug Handling</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox User Guide</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../devtools-user/index.html">Firefox DevTools User Docs</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Source Code Documentation</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../mots/index.html">Governance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../browser/index.html">Firefox Front-end</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../dom/index.html">DOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../editor/index.html">Editor</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../layout/index.html">Style system (CSS) &amp; Layout</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../gfx/index.html">Graphics</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../ipc/index.html">Processes, Threads and IPC</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../devtools/index.html">Firefox DevTools Contributor Docs</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../toolkit/index.html">Toolkit</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../js/index.html">SpiderMonkey</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../jsloader/index.html">JS Loader</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mobile/android/geckoview/index.html">GeckoView</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mobile/android/fenix/index.html">Fenix</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mobile/android/focus-android/index.html">Focus for Android</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../dom/bindings/webidl/index.html">WebIDL</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../modules/libpref/index.html">libpref</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../networking/index.html">Networking</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../remote/index.html">Remote Protocols</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../services/index.html">Services</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../permissions/index.html">Permissions</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../uriloader/index.html">File Handling</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../widget/cocoa/index.html">Firefox on macOS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../widget/windows/index.html">Firefox on Windows</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../toolkit/components/ml/index.html">Firefox AI Runtime</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../accessible/index.html">Accessibility</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../media/index.html">Media Playback</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../code-quality/index.html">Code quality</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../writing-rust-code/index.html">Writing Rust Code</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../rust-components/index.html">Rust Components</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/profiler/index.html">Gecko Profiler</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../performance/index.html">Performance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../storage/index.html">Database bindings (SQLite, KV, …)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../xpcom/index.html">XPCOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../nspr/index.html">NSPR</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../security/nss/index.html">Network Security Services (NSS)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../content-security/index.html">Web Security Checks in Gecko</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">The Firefox Build System</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../mach/index.html">Mach</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/try/index.html">Pushing to Try</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../build/buildsystem/index.html">Build System</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../taskcluster/index.html">Firefox CI and Taskgraph</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/moztreedocs/index.html">Managing Documentation</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mozbuild/vendor/index.html">Vendoring Third Party Components</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Testing &amp; Test Infrastructure</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/automated-testing/index.html">Automated Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/treeherder-try/index.html">Understanding Treeherder Results</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/sheriffed-intermittents/index.html">Sheriffed intermittent failures</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/tests-for-new-config/index.html">Turning on Firefox tests for a new configuration</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/intermittent/index.html">Avoiding intermittent tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/testing-policy/index.html">Testing Policy</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/ci-configs/index.html">Configuration Changes</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/browser-chrome/index.html">Browser chrome mochitests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/chrome-tests/index.html">Chrome Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/marionette/index.html">Marionette</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/geckodriver/index.html">geckodriver</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/test-verification/index.html">Test Verification</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/webrender/index.html">WebRender Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/mochitest-plain/index.html">Mochitest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/xpcshell/index.html">XPCShell tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/tps/index.html">TPS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../web-platform/index.html">web-platform-tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../gtest/index.html">GTest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/fuzzing/index.html">Fuzzing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/sanitizer/index.html">Sanitizer</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/perfdocs/index.html">Performance Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/code-coverage/index.html">Code coverage</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing-rust-code/index.html">Testing &amp; Debugging Rust Code</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Releases &amp; Updates</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../update-infrastructure/index.html">Mozilla Update Infrastructure</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../update-infrastructure/index.html#watershed-updates">Watershed Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../update-infrastructure/index.html#desupport-updates">Desupport Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/update-verify/index.html">Update Verify</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Localization &amp; Internationalization</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../intl/index.html">Internationalization</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../l10n/index.html">Localization</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox and Python</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../mozbase/index.html">mozbase</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../python/index.html">Using third-party Python packages</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Metrics Collected in Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../metrics/index.html">Metrics</a></li>
+      </ul>
+     </div>
+    </div>
+   </nav>
+   <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+    <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+     <i data-toggle="wy-nav-top" class="fa fa-bars"></i> <a href="../index.html">Firefox Source Docs</a>
+    </nav>
+    <div class="wy-nav-content">
+     <div class="rst-content">
+      <!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+      <div role="navigation" aria-label="Page navigation">
+       <ul class="wy-breadcrumbs">
+        <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+        <li class="breadcrumb-item"><a href="index.html">A Quick Guide to Mozilla Applications</a></li>
+        <li class="breadcrumb-item active">Gecko</li>
+        <li class="wy-breadcrumbs-aside"><a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Developer+Infrastructure&amp;component=Firefox+Source+Docs%3A+Content&amp;short_desc=Documentation+issue+on+overview/gecko&amp;comment=URL+=+https://firefox-source-docs.mozilla.org/overview/gecko.html&amp;bug_file_loc=https://firefox-source-docs.mozilla.org/overview/gecko.html" rel="nofollow">Report an issue</a> / <a href="../_sources/overview/gecko.rst.txt" rel="nofollow"> View page source</a></li>
+       </ul>
+       <hr>
+      </div>
+      <div role="main" class="document" itemscope itemtype="http://schema.org/Article">
+       <div itemprop="articleBody">
+        <section id="gecko">
+         <h1>Gecko<a class="headerlink" href="#gecko" title="Link to this heading">?</a></h1>
+         <p>Gecko is Mozilla’s rendering engine for the web. It is made up of HTML parsing and rendering, networking, JavaScript, IPC, DOM, OS widget abstractions and much much more. It also includes some UI components that are shared with applications built on top of Gecko such as Firefox for Desktop, Firefox for Android, and Thunderbird. As well as rendering web pages Gecko is also responsible for rendering the application’s UI in some applications.</p>
+         <section id="networking-necko">
+          <h2>Networking (necko)<a class="headerlink" href="#networking-necko" title="Link to this heading">?</a></h2>
+          <p>The networking engine services requests for DNS queries as well as for content hosted on web servers using either http, http/2 or http/3 protocols to retrieve it. Necko uses NSS (<a class="reference external" href="https://wiki.mozilla.org/NSS">Network Security Services library</a>) for its cryptographic uses e.g. to perform secure requests using TLS.</p>
+          <p><a class="reference internal" href="../networking/index.html#networking"><span class="std std-ref">Read more</span></a></p>
+         </section>
+         <section id="javascript-spidermonkey">
+          <h2>JavaScript (SpiderMonkey)<a class="headerlink" href="#javascript-spidermonkey" title="Link to this heading">?</a></h2>
+          <p>The JavaScript engine is responsible for running JavaScript code both in content processes for webpages as well as the JavaScript code that makes up the bulk of the UI in applications like Firefox and Thunderbird.</p>
+          <p><a class="reference internal" href="../js/index.html#spidermonkey"><span class="std std-ref">Read more</span></a></p>
+         </section>
+         <section id="system-modules">
+          <h2>System Modules<a class="headerlink" href="#system-modules" title="Link to this heading">?</a></h2>
+          <p>Gecko uses a variant of the standard ECMAScript module to implement the browser internal.</p>
+          <p><a class="reference internal" href="../jsloader/system-modules.html#system-modules"><span class="std std-ref">Read more</span></a></p>
+         </section>
+         <section id="xpcom">
+          <h2>XPCOM<a class="headerlink" href="#xpcom" title="Link to this heading">?</a></h2>
+          <p>XPCOM (Cross-Platform Component Object Model) is Mozilla’s version of Microsoft’s <a class="reference external" href="https://en.wikipedia.org/wiki/Component_Object_Model">COM</a>.</p>
+          <p>XPCOM and <a class="reference internal" href="../dom/bindings/webidl/index.html#webidl"><span class="std std-ref">WebIDL</span></a> are the primary ways for our frontend to communicate with the underlying platform and to invoke methods that are implemented in native code.</p>
+          <p>XPCOM performs the following critical functions:</p>
+          <ol class="arabic simple">
+           <li>
+            <p>Allows creating software components with strictly defined <a class="reference external" href="https://searchfox.org/mozilla-central/search?q=&amp;path=.idl&amp;case=false&amp;regexp=false">interfaces</a> using <a class="reference internal" href="../xpcom/xpidl.html#xpidl"><span class="std std-ref">XPIDL</span></a>. These components can be implemented in C++, JavaScript or Rust. They can also be invoked and manipulated in any of those languages regardless of the underlying implementation language.</p></li>
+           <li>
+            <p>Acts as a process-global registry of named components (there are singleton “services” as well as factories for creating instances of components).</p></li>
+           <li>
+            <p>Allows components and services to implement multiple interfaces, and to be dynamically cast to those interfaces using <code class="docutils literal notranslate"><span class="pre">QueryInterface</span></code>.</p></li>
+          </ol>
+          <p>If that all sounds rather abstract, that’s because it is. XPCOM is one of the oldest Mozilla technologies that Firefox is still built on top of. XPCOM made a lot more sense in the late 90s when Microsoft COM was still popular and the Mozilla codebase was also being developed as a general application development platform for third-parties. There have been <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=decom">long-standing efforts</a> to move away from or simplify XPCOM in places where its usefulness is questionable.</p>
+          <pre class="mermaid">        sequenceDiagram
+    Caller-&gt;&gt;Component Registry: Get service @mozilla.org/cookie-banner-service#59;1
+    Component Registry-&gt;&gt;nsCookieBannerService: new
+    nsCookieBannerService--&gt;&gt;Component Registry: return
+    Component Registry--&gt;&gt;Caller: return
+    Caller-&gt;&gt;nsCookieBannerService: QueryInterface(nsICookieBannerService)
+    nsCookieBannerService--&gt;&gt;Caller: return
+    </pre>
+          <p><a class="reference internal" href="../xpcom/index.html#xpcom"><span class="std std-ref">Read more</span></a></p>
+         </section>
+         <section id="process-separation-fission-ipc-actors">
+          <h2>Process Separation / Fission / IPC / Actors<a class="headerlink" href="#process-separation-fission-ipc-actors" title="Link to this heading">?</a></h2>
+          <p>Firefox is a multi-process application. Over the lifetime of the main Firefox process, many other sub processes can be started and stopped. A full catalogue of those different processes can be found <a class="reference internal" href="../dom/ipc/process_model.html#process-model"><span class="std std-ref">here</span></a>.</p>
+          <p>Firefox communicates between these processes (mostly) asynchronously using the native inter-process communication mechanisms of the underlying platform. Those mechanisms and their details are hidden under cross-platform abstractions like <a class="reference internal" href="../ipc/ipdl.html#ipdl-inter-thread-and-inter-process-message-passing"><span class="std std-ref">IPDL</span></a> (for native code) and <a class="reference internal" href="../dom/ipc/jsactors.html#jsactors"><span class="std std-ref">JSActors</span></a> (for frontend code).</p>
+          <p>Firefox’s initial web content process separation (this was Project “Electrolysis”, sometimes shortened to “e10s”) shipped in 2016, and separated all web content into a single shared content process. Not long after that, multiple content processes were enabled, and the web content of tabs would be assigned to one of the created content processes using a round-robin scheme. In 2021, as part of the mitigations for the <a class="reference external" href="https://en.wikipedia.org/wiki/Spectre_(security_vulnerability)">Spectre</a> and <a class="reference external" href="https://en.wikipedia.org/wiki/Meltdown_(security_vulnerability)">Meltdown</a> processor vulnerabilities, Firefox’s process model changed to enforce a model where each content process only loads and executes instructions from a single site (this was Project “Fission”). You can read more about the <a class="reference external" href="https://hacks.mozilla.org/2021/05/introducing-firefox-new-site-isolation-security-architecture/">underlying rationale and technical details about Project Fission</a>.</p>
+         </section>
+         <section id="dom-webidl">
+          <h2>DOM + WebIDL<a class="headerlink" href="#dom-webidl" title="Link to this heading">?</a></h2>
+          <p>The <a class="reference internal" href="../dom/index.html#dom"><span class="std std-ref">DOM APIs</span></a> implement the functionality of elements in webpages and UI that is rendered by Gecko.</p>
+          <p><a class="reference internal" href="../dom/bindings/webidl/index.html#webidl"><span class="std std-ref">WebIDL</span></a> is a standard specification for describing the interfaces to DOM objects. As well as defining the interface for webpages Gecko also makes use of it for defining the interface to various internal components. Like XPCOM, components that implement WebIDL interfaces can be called from both C++ and JavaScript.</p>
+         </section>
+         <section id="style-system-css">
+          <h2>Style System (CSS)<a class="headerlink" href="#style-system-css" title="Link to this heading">?</a></h2>
+          <p>The style system is responsible for parsing the document’s CSS and using that to resolve a value for every CSS property on every element in the document. This determines many characteristics of how each element will render (e.g. fonts, colors, size, layout model).</p>
+          <p><a class="reference internal" href="../layout/index.html#style-system-css-layout"><span class="std std-ref">Read more</span></a></p>
+         </section>
+         <section id="layout">
+          <h2>Layout<a class="headerlink" href="#layout" title="Link to this heading">?</a></h2>
+          <p>The layout engine is responsible for taking the DOM and styles and generating and updating a frame tree ready for presentation to the user.</p>
+          <p><a class="reference internal" href="../layout/index.html#style-system-css-layout"><span class="std std-ref">Read more</span></a></p>
+         </section>
+         <section id="graphics">
+          <h2>Graphics<a class="headerlink" href="#graphics" title="Link to this heading">?</a></h2>
+          <p>The graphics component is responsible for taking the frame tree generated by the layout engine and presenting it on screen.</p>
+          <p><a class="reference internal" href="../gfx/index.html#graphics"><span class="std std-ref">Read more</span></a></p>
+         </section>
+         <section id="localization-fluent">
+          <h2>Localization (Fluent)<a class="headerlink" href="#localization-fluent" title="Link to this heading">?</a></h2>
+          <p>At Mozilla, localizations are managed by locale communities around the world, who are responsible for maintaining high quality linguistic and cultural adaptation of Mozilla software into over 100 locales.</p>
+          <p>The exact process of localization management differs from project to project, but in the case of Gecko applications, the localization is primarily done via a web localization system called <a class="reference external" href="https://pontoon.mozilla.org/">Pontoon</a> and stored in a GitHub repository under <a class="reference external" href="https://github.com/mozilla-l10n/firefox-l10n">github.com/mozilla-l10n/firefox-l10n</a>.</p>
+          <p><a class="reference internal" href="../l10n/overview.html#localization"><span class="std std-ref">Read more</span></a></p>
+         </section>
+         <section id="profiles">
+          <h2>Profiles<a class="headerlink" href="#profiles" title="Link to this heading">?</a></h2>
+          <p>A user profile is where Gecko stores settings, caches and any other data that must persist after the application exits. It is made up of two directories on disk. The root directory (often just called the profile directory) is where settings are stored. The local directory is for caches or any other data that is temporary and will be rebuilt with no perceived loss to the user should it be unavailable. These two directories can just be the same directory on disk. In an enterprise environment or other situation where a user often switches between computers the root directory is intended to be in a location on the network accessible to all computers while the local directory can be local to the computer.</p>
+          <p>The profile service maintains a database of named user profiles that can be selected either from the command line or through a basic user interface. Additionally command line arguments exist that will run an application using any given directory for the user profile.</p>
+         </section>
+         <section id="preferences">
+          <h2>Preferences<a class="headerlink" href="#preferences" title="Link to this heading">?</a></h2>
+          <p>The preferences service is a basic key value store for a user’s settings. The keys are simple strings and although are often considered to be hierarchical with parts separated by periods internally everything is just held as flat lists. Preference values can be strings, integers or boolean.</p>
+          <p><a class="reference internal" href="../modules/libpref/index.html#libpref"><span class="std std-ref">Read more</span></a></p>
+         </section>
+         <section id="observer-service">
+          <h2>Observer Service<a class="headerlink" href="#observer-service" title="Link to this heading">?</a></h2>
+          <p>The Observer Service (nsIObserverService) is a process-global XPCOM service that acts as a general message bus implementing the <a class="reference external" href="https://en.wikipedia.org/wiki/Publish%E2%80%93subscribe_pattern">publish-subscribe pattern</a>. Components implementing nsIObserver (or simple functions in JavaScript) can be registered with the observer service to be notified when particular “topics” (topics are just developer-defined strings) have occurred. This is particularly useful for creating a dependency between two components without tightly coupling them.</p>
+          <p>For example, suppose there is a mechanism that clears a user’s browsing history from the disk and memory. At the end of that process, it might tell the observer service to notify on a topic like “browser-clear-history”. An observer registered for that topic might use that signal to know to clear some of its caches, which might also contain browsing history.</p>
+         </section>
+         <section id="principals-security-model">
+          <h2>Principals / Security model<a class="headerlink" href="#principals-security-model" title="Link to this heading">?</a></h2>
+          <p>Whenever Firefox on Desktop or Android fetches a resource from the web, Firefox performs a variety of web security checks. Most prominently the <a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/Security/Same-origin_policy">Same-origin Policy</a> to ensure web pages can not harm end users by performing malicious actions, like e.g. accessing the local file system. All web related security checks within Firefox are evaluated based on the security concept of a Principal, which slightly simplified represents an origin. More precisely, Firefox captures the security context using one of the following four types of Principals:</p>
+          <ul class="simple">
+           <li>
+            <p>Content-Principal, which reflects the Security Context of web content (origin). For example, when visiting <a class="reference external" href="https://example.com">https://example.com</a> a Content-Principal of <a class="reference external" href="https://example.com">https://example.com</a> reflects the security context of that origin and passes if scheme, host and port match.</p></li>
+           <li>
+            <p>Null-Principal, which reflects a sandboxed (or least privilege) Security Context. For example, when loading an iframe with a sandbox attribute Firefox internally generates a Null-Principal to reflect that security context. A Null-Principal is only same-origin with itself.</p></li>
+           <li>
+            <p>System-Principal, which reflects the security context of browser chrome-code and passes all security checks. Important: Never use SystemPrincipal if the URI to be loaded can be influenced by web content.</p></li>
+           <li>
+            <p>Expanded-Principal, which is a list of principals to match the security needs for Content Scripts in Firefox Extensions.</p></li>
+          </ul>
+          <p>Whenever Firefox starts to load a resource (e.g. script, css, image) then security relevant meta information including <a class="reference external" href="https://searchfox.org/mozilla-central/source/caps/nsIPrincipal.idl">nsIPrincipal</a> is attached to the <a class="reference external" href="https://searchfox.org/mozilla-central/source/netwerk/base/nsILoadInfo.idl">nsILoadInfo</a>. This load context providing object remains attached to the resource load ( <a class="reference external" href="https://searchfox.org/mozilla-central/source/netwerk/base/nsIChannel.idl">nsIChannel</a>) throughout the entire loading life cycle of a resource and allows Firefox to provide the same security guarantees even if the resource load encounters a server side redirect.</p>
+          <p>Please find all the details about the Security Model of Firefox by reading the blog posts: Understanding Web Security Checks in Firefox ( <a class="reference external" href="https://blog.mozilla.org/attack-and-defense/2020/06/10/understanding-web-security-checks-in-firefox-part-1/">Part 1</a> &amp; <a class="reference external" href="https://blog.mozilla.org/attack-and-defense/2020/08/05/understanding-web-security-checks-in-firefox-part-2/">Part 2</a>) and <a class="reference external" href="https://blog.mozilla.org/security/2016/11/10/enforcing-content-security-by-default-within-firefox/">Enforcing Content Security By Default within Firefox</a>.</p>
+         </section>
+         <section id="chrome-protocol">
+          <h2>Chrome Protocol<a class="headerlink" href="#chrome-protocol" title="Link to this heading">?</a></h2>
+          <p>The chrome protocol is an internal protocol used to reference files that ship as part of the application. It is of the form <code class="docutils literal notranslate"><span class="pre">chrome://&lt;package&gt;/&lt;provider&gt;/…</span></code> where provider is one of content, skin or locale. The majority of files referenced by the chrome protocol are stored in the omni.ja files which are generated from <a class="reference internal" href="../build/buildsystem/jar-manifests.html#jar-manifests"><span class="std std-ref">JAR manifest files</span></a> at build time. <a class="reference internal" href="../build/buildsystem/chrome-registration.html#chrome-registration"><span class="std std-ref">Chrome manifest files</span></a> are used to register where in the jar files different packages are stored.</p>
+         </section>
+         <section id="resource-protocol">
+          <h2>Resource Protocol<a class="headerlink" href="#resource-protocol" title="Link to this heading">?</a></h2>
+          <p>The resource protocol is another internal protocol that can reference files that ship as part of the application. Strictly speaking it is simply a mapped, all urls of the form <code class="docutils literal notranslate"><span class="pre">resource://&lt;package&gt;/…</span></code> are mapped to <code class="docutils literal notranslate"><span class="pre">&lt;new-uri&gt;/…</span></code>. The mappings are generally defined using the resource instruction in <a class="reference internal" href="../build/buildsystem/chrome-registration.html#chrome-manifest-resource"><span class="std std-ref">chrome manifest files</span></a> however can also be defined at runtime and some hardcoded mappings. Common examples include:</p>
+          <ul class="simple">
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">resource://gre/…</span></code> which references files in the gecko omni.ja file.</p></li>
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">resource://app/…</span></code>, often simplified as <code class="docutils literal notranslate"><span class="pre">resource:///…</span></code> which references files in the application omni.ja file.</p></li>
+          </ul>
+         </section>
+         <section id="about-pages-protocol">
+          <h2>About pages/protocol<a class="headerlink" href="#about-pages-protocol" title="Link to this heading">?</a></h2>
+          <p>The <code class="docutils literal notranslate"><span class="pre">about</span></code> protocol allows for binding short human-readable urls to internal content to be displayed in the content area. For the most part each about page is simply a simpler name for content in the chrome or resource protocols. For example the page <code class="docutils literal notranslate"><span class="pre">about:processes</span></code> simply loads <code class="docutils literal notranslate"><span class="pre">chrome://global/content/aboutProcesses.html</span></code>. About pages are registered in the <a class="reference external" href="https://searchfox.org/mozilla-central/source/docshell/base/nsAboutRedirector.cpp">global</a> and <a class="reference external" href="https://searchfox.org/mozilla-central/source/browser/components/about/AboutRedirector.cpp">desktop</a> redirector components.</p>
+         </section>
+         <section id="toolkit">
+          <h2>Toolkit<a class="headerlink" href="#toolkit" title="Link to this heading">?</a></h2>
+          <p>Toolkit consists of components that can be shared across multiple applications built on top of Gecko. For example, much of our WebExtensions API surfaces are implemented in toolkit, as several of these APIs are shared between both Firefox, Firefox for Android, and in some cases Thunderbird.</p>
+          <p><a class="reference internal" href="../toolkit/index.html#toolkit"><span class="std std-ref">Read more</span></a></p>
+         </section>
+         <section id="linting-building-testing-developer-workflow">
+          <h2>Linting / building / testing / developer workflow<a class="headerlink" href="#linting-building-testing-developer-workflow" title="Link to this heading">?</a></h2>
+          <p>Set-up the build environment using the <a class="reference internal" href="../contributing/contribution_quickref.html#firefox-contributors-quick-reference"><span class="std std-ref">contributor’s quick reference</span></a>.</p>
+          <p>Make yourself aware of the <a class="reference internal" href="../code-quality/lint/index.html#linting"><span class="std std-ref">Linting set-up</span></a>, in particular how to run <a class="reference internal" href="../code-quality/lint/usage.html#running-linters-locally"><span class="std std-ref">linters and add hooks to automatically run the linters on commit</span></a>. Additionally, make sure you set-up your editor with appropriate settings for linters. For VS Code, these are set up automatically, as <a class="reference internal" href="../contributing/editors/vscode.html#visual-studio-code"><span class="std std-ref">per the documentation</span></a>.</p>
+          <p>For front-end work, ESLint and Prettier are the linters you’ll use the most, see the <a class="reference internal" href="../code-quality/lint/linters/eslint.html#eslint"><span class="std std-ref">section on ESLint</span></a> for details of both of those, which also has <a class="reference internal" href="../code-quality/lint/linters/eslint.html#eslint-common-issues"><span class="std std-ref">an FAQ</span></a>.</p>
+          <p>Details about <a class="reference internal" href="../testing/automated-testing/index.html#automated-testing"><span class="std std-ref">automated tests may be found here</span></a>. The most commonly used tests are <a class="reference internal" href="../testing/xpcshell/index.html#xpcshell-tests"><span class="std std-ref">XPCShell</span></a> for testing backend components, <a class="reference internal" href="../testing/browser-chrome/index.html#browser-chrome-mochitests"><span class="std std-ref">Browser Chrome Tests</span></a> for testing the frontend UI and <a class="reference internal" href="../web-platform/index.html#web-platform-tests"><span class="std std-ref">Web Platform Tests</span></a> for testing web APIs.</p>
+         </section>
+         <section id="webextensions">
+          <h2>WebExtensions<a class="headerlink" href="#webextensions" title="Link to this heading">?</a></h2>
+          <p>The WebExtensions APIs allow extensions to interact with the rest of the browser.</p>
+          <p><a class="reference internal" href="../toolkit/components/extensions/webextensions/index.html#webextensions-api-development"><span class="std std-ref">Read more</span></a></p>
+         </section>
+        </section>
+       </div>
+      </div>
+      <footer>
+       <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="A Quick Guide to Mozilla Applications" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a> <a href="../browser/overview.html" class="btn btn-neutral float-right" title="Firefox for Desktop" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+       </div>
+       <hr>
+       <div role="contentinfo">
+        <p></p>
+       </div> Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+      </footer>
+     </div>
+    </div>
+   </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ </body>
+</html>

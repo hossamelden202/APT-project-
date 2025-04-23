@@ -1,0 +1,979 @@
+<!doctype html>
+<html class="writer-html5" lang="en" data-content_root="../">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IME handling guide — Firefox Source Docs  documentation</title>
+  <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50">
+  <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094">
+  <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=fd3f3429">
+  <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b">
+  <link rel="stylesheet" type="text/css" href="../_static/custom_theme.css?v=dc5ed815">
+  <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7">
+  <link rel="shortcut icon" href="../_static/firefox.ico"><!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script src="../_static/jquery.js?v=5d32c60e"></script>
+  <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+  <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+  <script src="../_static/doctools.js?v=9a2dae69"></script>
+  <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+  <script src="../_static/copybutton.js?v=30646c52"></script>
+  <script src="../_static/design-tabs.js?v=36754332"></script>
+  <script src="../_static/js/theme.js"></script>
+  <link rel="index" title="Index" href="../genindex.html">
+  <link rel="search" title="Search" href="../search.html">
+  <link rel="next" title="Style system (CSS) &amp; Layout" href="../layout/index.html">
+  <link rel="prev" title="Editor module specific rules" href="EditorModuleSpecificRules.html">
+ </head>
+ <body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+   <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <div class="wy-side-scroll">
+     <div class="wy-side-nav-search">
+      <a href="../index.html" class="icon icon-home"> Firefox Source Docs <img src="../_static/firefox-wordmark.svg" class="logo" alt="Logo"> </a><!-- -- This code is governed by the BSD license ---->
+      <div>
+       <h3>Quick search</h3>
+       <script>
+    (function () {
+      var cx = "dd12886298f75dbef";
+      var gcse = document.createElement("script");
+      gcse.async = true;
+      gcse.src = "https://cse.google.com/cse.js?cx=" + cx;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(gcse, s);
+    })();
+  </script><gcse:search></gcse:search>
+      </div>
+     </div>
+     <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+      <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../glossary/index.html">A Glossary of Common Terms</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../overview/index.html">A Quick Guide to Mozilla Applications</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../setup/index.html">Getting Set Up To Work On The Firefox Codebase</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Working On Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../contributing/index.html">Working on Firefox</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../bug-mgmt/index.html">Bug Handling</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox User Guide</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../devtools-user/index.html">Firefox DevTools User Docs</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Source Code Documentation</span></p>
+      <ul class="current">
+       <li class="toctree-l1"><a class="reference internal" href="../mots/index.html">Governance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../browser/index.html">Firefox Front-end</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../dom/index.html">DOM</a></li>
+       <li class="toctree-l1 current"><a class="reference internal" href="index.html">Editor</a>
+        <ul class="current">
+         <li class="toctree-l2"><a class="reference internal" href="EditorModuleStructure.html">Editor module structure</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="EditorModuleSpecificRules.html">Editor module specific rules</a></li>
+         <li class="toctree-l2 current"><a class="current reference internal" href="#">IME handling guide</a>
+          <ul>
+           <li class="toctree-l3"><a class="reference internal" href="#introduction">Introduction</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#composition-string-and-clauses">Composition string and clauses</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#modules-handling-ime-composition">Modules handling IME composition</a>
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="#widget">widget</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#mozilla-widget-texteventdispatcher">mozilla::widget::TextEventDispatcher</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#mozilla-widgetcompositionevent">mozilla::WidgetCompositionEvent</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#presshell">PresShell</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#mozilla-imestatemanager">mozilla::IMEStateManager</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#mozilla-textcomposition">mozilla::TextComposition</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#editor-libeditor">editor/libeditor</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#nstextframe">nsTextFrame</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#mozilla-imecontentobserver">mozilla::IMEContentObserver</a></li>
+            </ul></li>
+           <li class="toctree-l3"><a class="reference internal" href="#e10s-support">e10s support</a>
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="#mozilla-contentcache">mozilla::ContentCache</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#mozilla-contentcacheinchild">mozilla::ContentCacheInChild</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#mozilla-contentcacheinparent">mozilla::ContentCacheInParent</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#how-do-mozilla-textcomposition-and-mozilla-imestatemanager-work-in-e10s-mode">How do mozilla::TextComposition and mozilla::IMEStateManager work in e10s mode?</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#style-of-each-clause">Style of each clause</a></li>
+            </ul></li>
+           <li class="toctree-l3"><a class="reference internal" href="#lifetime-of-composition-string">Lifetime of composition string</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#limitation-of-handling-composition">Limitation of handling composition</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#notifications-to-ime">Notifications to IME</a>
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="#notify-ime-of-focus">NOTIFY_IME_OF_FOCUS</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#notify-ime-of-blur">NOTIFY_IME_OF_BLUR</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#notify-ime-of-text-change">NOTIFY_IME_OF_TEXT_CHANGE</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#notify-ime-of-selection-change">NOTIFY_IME_OF_SELECTION_CHANGE</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#notify-ime-of-position-change">NOTIFY_IME_OF_POSITION_CHANGE</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#notify-ime-of-composition-event-handled">NOTIFY_IME_OF_COMPOSITION_EVENT_HANDLED</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#notify-ime-of-mouse-button-event">NOTIFY_IME_OF_MOUSE_BUTTON_EVENT</a></li>
+            </ul></li>
+           <li class="toctree-l3"><a class="reference internal" href="#requests-to-ime">Requests to IME</a>
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="#request-to-commit-composition">REQUEST_TO_COMMIT_COMPOSITION</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#request-to-cancel-composition">REQUEST_TO_CANCEL_COMPOSITION</a></li>
+            </ul></li>
+           <li class="toctree-l3"><a class="reference internal" href="#forcibly-committing-composition">Forcibly committing composition</a>
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="#the-composition-is-committed-with-non-empty-string-synchronously">The composition is committed with non-empty string synchronously</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#the-composition-is-not-committed-synchronously-but-later">The composition is not committed synchronously but later</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#the-composition-is-committed-synchronously-but-with-empty-string">The composition is committed synchronously but with empty string</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#the-composition-is-not-committed">The composition is not committed</a></li>
+            </ul></li>
+           <li class="toctree-l3"><a class="reference internal" href="#ime-state-management">IME state management</a>
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="#inputcontext">InputContext</a></li>
+            </ul></li>
+           <li class="toctree-l3"><a class="reference internal" href="#native-ime-handlers">Native IME handlers</a>
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="#windows">Windows</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#mac">Mac</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#gtk">GTK</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#android">Android</a></li>
+            </ul></li>
+          </ul></li>
+        </ul></li>
+       <li class="toctree-l1"><a class="reference internal" href="../layout/index.html">Style system (CSS) &amp; Layout</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../gfx/index.html">Graphics</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../ipc/index.html">Processes, Threads and IPC</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../devtools/index.html">Firefox DevTools Contributor Docs</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../toolkit/index.html">Toolkit</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../js/index.html">SpiderMonkey</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../jsloader/index.html">JS Loader</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mobile/android/geckoview/index.html">GeckoView</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mobile/android/fenix/index.html">Fenix</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mobile/android/focus-android/index.html">Focus for Android</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../dom/bindings/webidl/index.html">WebIDL</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../modules/libpref/index.html">libpref</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../networking/index.html">Networking</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../remote/index.html">Remote Protocols</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../services/index.html">Services</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../permissions/index.html">Permissions</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../uriloader/index.html">File Handling</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../widget/cocoa/index.html">Firefox on macOS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../widget/windows/index.html">Firefox on Windows</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../toolkit/components/ml/index.html">Firefox AI Runtime</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../accessible/index.html">Accessibility</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../media/index.html">Media Playback</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../code-quality/index.html">Code quality</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../writing-rust-code/index.html">Writing Rust Code</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../rust-components/index.html">Rust Components</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/profiler/index.html">Gecko Profiler</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../performance/index.html">Performance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../storage/index.html">Database bindings (SQLite, KV, …)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../xpcom/index.html">XPCOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../nspr/index.html">NSPR</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../security/nss/index.html">Network Security Services (NSS)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../content-security/index.html">Web Security Checks in Gecko</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">The Firefox Build System</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../mach/index.html">Mach</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/try/index.html">Pushing to Try</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../build/buildsystem/index.html">Build System</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../taskcluster/index.html">Firefox CI and Taskgraph</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/moztreedocs/index.html">Managing Documentation</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mozbuild/vendor/index.html">Vendoring Third Party Components</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Testing &amp; Test Infrastructure</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/automated-testing/index.html">Automated Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/treeherder-try/index.html">Understanding Treeherder Results</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/sheriffed-intermittents/index.html">Sheriffed intermittent failures</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/tests-for-new-config/index.html">Turning on Firefox tests for a new configuration</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/intermittent/index.html">Avoiding intermittent tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/testing-policy/index.html">Testing Policy</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/ci-configs/index.html">Configuration Changes</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/browser-chrome/index.html">Browser chrome mochitests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/chrome-tests/index.html">Chrome Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/marionette/index.html">Marionette</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/geckodriver/index.html">geckodriver</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/test-verification/index.html">Test Verification</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/webrender/index.html">WebRender Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/mochitest-plain/index.html">Mochitest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/xpcshell/index.html">XPCShell tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/tps/index.html">TPS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../web-platform/index.html">web-platform-tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../gtest/index.html">GTest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/fuzzing/index.html">Fuzzing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/sanitizer/index.html">Sanitizer</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/perfdocs/index.html">Performance Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/code-coverage/index.html">Code coverage</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing-rust-code/index.html">Testing &amp; Debugging Rust Code</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Releases &amp; Updates</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../update-infrastructure/index.html">Mozilla Update Infrastructure</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../update-infrastructure/index.html#watershed-updates">Watershed Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../update-infrastructure/index.html#desupport-updates">Desupport Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/update-verify/index.html">Update Verify</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Localization &amp; Internationalization</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../intl/index.html">Internationalization</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../l10n/index.html">Localization</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox and Python</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../mozbase/index.html">mozbase</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../python/index.html">Using third-party Python packages</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Metrics Collected in Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../metrics/index.html">Metrics</a></li>
+      </ul>
+     </div>
+    </div>
+   </nav>
+   <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+    <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+     <i data-toggle="wy-nav-top" class="fa fa-bars"></i> <a href="../index.html">Firefox Source Docs</a>
+    </nav>
+    <div class="wy-nav-content">
+     <div class="rst-content">
+      <!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+      <div role="navigation" aria-label="Page navigation">
+       <ul class="wy-breadcrumbs">
+        <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+        <li class="breadcrumb-item"><a href="index.html">Editor</a></li>
+        <li class="breadcrumb-item active">IME handling guide</li>
+        <li class="wy-breadcrumbs-aside"><a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Developer+Infrastructure&amp;component=Firefox+Source+Docs%3A+Content&amp;short_desc=Documentation+issue+on+editor/IMEHandlingGuide&amp;comment=URL+=+https://firefox-source-docs.mozilla.org/editor/IMEHandlingGuide.html&amp;bug_file_loc=https://firefox-source-docs.mozilla.org/editor/IMEHandlingGuide.html" rel="nofollow">Report an issue</a> / <a href="../_sources/editor/IMEHandlingGuide.rst.txt" rel="nofollow"> View page source</a></li>
+       </ul>
+       <hr>
+      </div>
+      <div role="main" class="document" itemscope itemtype="http://schema.org/Article">
+       <div itemprop="articleBody">
+        <section id="ime-handling-guide">
+         <h1>IME handling guide<a class="headerlink" href="#ime-handling-guide" title="Link to this heading">?</a></h1>
+         <p>This document explains how Gecko handles IME.</p>
+         <section id="introduction">
+          <h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">?</a></h2>
+          <p>IME is an abbreviation of Input Method Editor. This is a technical term from Windows but these days, this is used on other platforms as well.</p>
+          <p>IME is a helper application of a user’s text input. It handles native key events before or after focused application (depending on the platform) and creates a composition string (a.k.a. preedit string), suggests a list of what the user attempts to input, commits composition string as a selected item off the list and commits composition string without any conversion. IME is used by Chinese, Japanese, Korean and Taiwan users for inputting Chinese characters because the number of them is beyond thousands and cannot be input from the keyboard directly. However, especially on mobile devices nowadays, IME is also used for inputting Latin languages like autocomplete. Additionally, IME may be used for handwriting systems or speech input systems on some platforms.</p>
+          <p>If IME is available on focused elements, we call that state “enabled”. If IME is not fully available(i.e., user cannot enable IME), we call this state “disabled”.</p>
+          <p>If IME is enabled but users use direct input mode (e.g., for inputting Latin characters), we call it “IME is closed”. Otherwise, we call it “IME is open”. (FYI: “open” is also called “active” or “turned on”. “closed” is also called “inactive” or “turned off”)</p>
+          <p>So, this document is useful when you’re try to fix a bug for text input in Gecko.</p>
+         </section>
+         <section id="composition-string-and-clauses">
+          <h2>Composition string and clauses<a class="headerlink" href="#composition-string-and-clauses" title="Link to this heading">?</a></h2>
+          <p>Typical Japanese IME can input two or more words into a composition string. When a user converts from Hiragana characters to Chinese characters the composition string, Japanese IME separates the composition string into multiple clauses. For example, if a user types “watasinonamaehanakanodesu”, it’s converted to Hiragana characters, “?????????????”, automatically (In the following screenshots, the composition string has a wavy underline and the only one clause is called “raw input clause”).</p><img alt="Screenshot of raw composition string which is inputting Roman character mode of MS-IME (Japanese)" src="../_images/inputting_composition_string.png"> <img alt="Screenshot of raw composition string whose all characters are Hiragana character (MS-IME, Japanese)" src="../_images/raw_composition_string.png">
+          <p>When a user presses <code class="docutils literal notranslate"><span class="pre">Convert</span></code> key, Japanese IME separates the composition string as “????” (my), “????” (name is) and “?????” (Nakano). Then, converts each clause with Chinese characters: “??”, “???” and “????” (In the following screenshot each clause is underlined and not connected adjacently. These clauses are called “converted clause”).</p><img alt="Screenshot of converted composition string (MS-IME, Japanese)" src="../_images/converted_composition_string.png">
+          <p>If one or more clauses were not converted as expected, the user can choose one of the clauses with Arrow keys and look for the expected result form the list in the drop down menu (In the following screenshot, the clause with the thicker underline is called “selected clause”).</p><img alt="Screenshot of candidate window of MS-IME (Japanese) which converts the selected clause" src="../_images/candidatewindow.png">
+          <p>Basically, composition string and each clause style is rendered by Gecko. And the drop down menu is created by IME.</p>
+          <p>Each clause is represented with selection in the editor. From chrome script, you can check it with <code class="docutils literal notranslate"><span class="pre">nsISelectionController</span></code>. In native code, you can access it with either <code class="docutils literal notranslate"><span class="pre">nsISelectionController</span></code> or <code class="docutils literal notranslate"><span class="pre">mozilla::SelectionType</span></code> (the latter is recommended because of type safer). And editor sets these IME selections from <code class="docutils literal notranslate"><span class="pre">mozilla::TextRangeType</span></code> which are sent by <code class="docutils literal notranslate"><span class="pre">mozilla::WidgetCompositionEvent</span></code> as <code class="docutils literal notranslate"><span class="pre">mozilla::TextRangeArray</span></code>. The following table explains the mapping between them.</p>
+          <table class="docutils align-default" id="id4">
+           <caption>
+            <span class="caption-text">Selection types of each clause of composition string or caret</span><a class="headerlink" href="#id4" title="Link to this table">?</a>
+           </caption>
+           <thead>
+            <tr class="row-odd">
+             <th class="head"></th>
+             <th class="head">
+              <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/dom/base/nsISelectionController.idl">nsISelectionController</a></p></th>
+             <th class="head">
+              <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/dom/base/nsISelectionController.idl">mozilla::SelectionType</a></p></th>
+             <th class="head">
+              <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/widget/TextRange.h">mozilla::TextRangeType</a></p></th>
+            </tr>
+           </thead>
+           <tbody>
+            <tr class="row-even">
+             <td>
+              <p>Caret</p></td>
+             <td>
+              <p><code class="docutils literal notranslate"><span class="pre">SELECTION_NORMAL</span></code></p></td>
+             <td>
+              <p><code class="docutils literal notranslate"><span class="pre">eNormal</span></code></p></td>
+             <td>
+              <p><code class="docutils literal notranslate"><span class="pre">eCaret</span></code></p></td>
+            </tr>
+            <tr class="row-odd">
+             <td>
+              <p>Raw text typed by the user</p></td>
+             <td>
+              <p><code class="docutils literal notranslate"><span class="pre">SELECTION_IME_RAW_INPUT</span></code></p></td>
+             <td>
+              <p><code class="docutils literal notranslate"><span class="pre">eIMERawClause</span></code></p></td>
+             <td>
+              <p><code class="docutils literal notranslate"><span class="pre">eRawClause</span></code></p></td>
+            </tr>
+            <tr class="row-even">
+             <td>
+              <p>Selected clause of raw text typed by the user</p></td>
+             <td>
+              <p><code class="docutils literal notranslate"><span class="pre">SELECTION_IME_SELECTEDRAWTEXT</span></code></p></td>
+             <td>
+              <p><code class="docutils literal notranslate"><span class="pre">eIMESelectedRawClause</span></code></p></td>
+             <td>
+              <p><code class="docutils literal notranslate"><span class="pre">eSelectedRawClause</span></code></p></td>
+            </tr>
+            <tr class="row-odd">
+             <td>
+              <p>Converted clause by IME</p></td>
+             <td>
+              <p><code class="docutils literal notranslate"><span class="pre">SELECTION_IME_CONVERTEDTEXT</span></code></p></td>
+             <td>
+              <p><code class="docutils literal notranslate"><span class="pre">eIMEConvertedClause</span></code></p></td>
+             <td>
+              <p><code class="docutils literal notranslate"><span class="pre">eConvertedClause</span></code></p></td>
+            </tr>
+            <tr class="row-even">
+             <td>
+              <p>Selected clause by the user or IME and also converted by IME</p></td>
+             <td>
+              <p><code class="docutils literal notranslate"><span class="pre">SELECTION_IME_SELECTEDCONVERTEDTEXT</span></code></p></td>
+             <td>
+              <p><code class="docutils literal notranslate"><span class="pre">eIMESelectedClause</span></code></p></td>
+             <td>
+              <p><code class="docutils literal notranslate"><span class="pre">eSelectedClause</span></code></p></td>
+            </tr>
+           </tbody>
+          </table>
+          <p>Note that typically, “Selected clause of raw text typed by the user” isn’t used because when composition string is already separated to multiple clauses, that means that the composition string has already been converted by IME at least once.</p>
+         </section>
+         <section id="modules-handling-ime-composition">
+          <h2>Modules handling IME composition<a class="headerlink" href="#modules-handling-ime-composition" title="Link to this heading">?</a></h2>
+          <section id="widget">
+           <h3>widget<a class="headerlink" href="#widget" title="Link to this heading">?</a></h3>
+           <p>Each widget handles native IME events and dispatches <code class="docutils literal notranslate"><span class="pre">WidgetCompositionEvent</span></code> with <code class="docutils literal notranslate"><span class="pre">mozilla::widget::TextEventDispatcher</span></code> to represent the behavior of IME in the focused editor.</p>
+           <p>This is the only module that depends on the users platform. See also <a class="reference internal" href="#native-ime-handlers">Native IME handlers</a> section for the detail of each platform’s implementation.</p>
+           <div class="admonition note">
+            <p class="admonition-title">Note</p>
+            <p>Android widget still does not use <code class="docutils literal notranslate"><span class="pre">TextEventDispatcher</span></code> to dispatch <code class="docutils literal notranslate"><span class="pre">WidgetCompositionEvents</span></code>, see <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1137567">bug 1137567</a>.</p>
+           </div>
+          </section>
+          <section id="mozilla-widget-texteventdispatcher">
+           <h3>mozilla::widget::TextEventDispatcher<a class="headerlink" href="#mozilla-widget-texteventdispatcher" title="Link to this heading">?</a></h3>
+           <p>This class is used by native IME handler(s) on each platform. This capsules the logic to dispatch <code class="docutils literal notranslate"><span class="pre">WidgetCompositionEvent</span></code> and <code class="docutils literal notranslate"><span class="pre">WidgetKeyboardEvent</span></code> for making the behavior on each platform exactly same. For example, if <code class="docutils literal notranslate"><span class="pre">WidgetKeyboardEvent</span></code> should be dispatched when there is a composition is managed by this class in XP level. First of use, native IME handlers get the rights to use <code class="docutils literal notranslate"><span class="pre">TextEventDispatcher</span></code> with a call of <code class="docutils literal notranslate"><span class="pre">BeginNativeInputTransaction()</span></code>. Then, <code class="docutils literal notranslate"><span class="pre">StartComposition()</span></code>, <code class="docutils literal notranslate"><span class="pre">SetPendingComposition()</span></code>, <code class="docutils literal notranslate"><span class="pre">FlushPendingComposition()</span></code>, <code class="docutils literal notranslate"><span class="pre">CommitComposition()</span></code>, etc. are available if <code class="docutils literal notranslate"><span class="pre">BeginNativeInputTransaction()</span></code> return true. These methods automatically manage composition state and dispatch <code class="docutils literal notranslate"><span class="pre">WidgetCompositionEvent</span></code> properly.</p>
+           <p>This is also used by <code class="docutils literal notranslate"><span class="pre">mozilla::TextInputProcessor</span></code> which can emulates (or implements) IME with chrome script. So, native IME handlers using this class means that the dispatching part is also tested by automated tests.</p>
+          </section>
+          <section id="mozilla-widgetcompositionevent">
+           <h3>mozilla::WidgetCompositionEvent<a class="headerlink" href="#mozilla-widgetcompositionevent" title="Link to this heading">?</a></h3>
+           <p>Internally, <code class="docutils literal notranslate"><span class="pre">WidgetCompositionEvent</span></code> represents native IME behavior. Its message is one of following values:</p>
+           <section id="ecompositionstart">
+            <h4>eCompositionStart<a class="headerlink" href="#ecompositionstart" title="Link to this heading">?</a></h4>
+            <p>This is dispatched at starting a composition. This represents a DOM <code class="docutils literal notranslate"><span class="pre">compositionstart</span></code> event. The mData value is a selected string at dispatching the DOM event and it’s automatically set by <code class="docutils literal notranslate"><span class="pre">TextComposition</span></code>.</p>
+           </section>
+           <section id="ecompositionupdate">
+            <h4>eCompositionUpdate<a class="headerlink" href="#ecompositionupdate" title="Link to this heading">?</a></h4>
+            <p>This is dispatched by <code class="docutils literal notranslate"><span class="pre">TextComposition</span></code> when an <code class="docutils literal notranslate"><span class="pre">eCompositionChange</span></code> will change the composition string. This represents a DOM <code class="docutils literal notranslate"><span class="pre">compositionupdate</span></code> event.</p>
+           </section>
+           <section id="ecompositionend">
+            <h4>eCompositionEnd<a class="headerlink" href="#ecompositionend" title="Link to this heading">?</a></h4>
+            <p>This is dispatched by <code class="docutils literal notranslate"><span class="pre">TextComposition</span></code> when an <code class="docutils literal notranslate"><span class="pre">eCompositionCommitAsIs</span></code> or <code class="docutils literal notranslate"><span class="pre">eCompositionCommit</span></code> event is dispatched. This represents a DOM <code class="docutils literal notranslate"><span class="pre">compositionend</span></code> event.</p>
+           </section>
+           <section id="ecompositionchange">
+            <h4>eCompositionChange<a class="headerlink" href="#ecompositionchange" title="Link to this heading">?</a></h4>
+            <p>This is used internally only. This is dispatched at modifying a composition string, committing a composition, changing caret position and/or changing ranges of clauses. This represents a DOM text event which is not in any standards. <code class="docutils literal notranslate"><span class="pre">mRanges</span></code> should not be empty only with this message.</p>
+           </section>
+           <section id="ecompositioncommitasis">
+            <h4>eCompositionCommitAsIs<a class="headerlink" href="#ecompositioncommitasis" title="Link to this heading">?</a></h4>
+            <p>This is used internally only. This is dispatched when a composition is committed with the string. The <code class="docutils literal notranslate"><span class="pre">mData</span></code> value should be always be an empty string. This causes a DOM text event without clause information and a DOM <code class="docutils literal notranslate"><span class="pre">compositionend</span></code> event.</p>
+           </section>
+           <section id="ecompositioncommit">
+            <h4>eCompositionCommit<a class="headerlink" href="#ecompositioncommit" title="Link to this heading">?</a></h4>
+            <p>This is used internally only. This is dispatched when a composition is committed with specific string. The <code class="docutils literal notranslate"><span class="pre">mData</span></code> value is the commit string. This causes a DOM text event without clause information and a DOM <code class="docutils literal notranslate"><span class="pre">compositionend</span></code> event.</p>
+            <table class="docutils align-default" id="id5">
+             <caption>
+              <span class="caption-text">Table of event messages</span><a class="headerlink" href="#id5" title="Link to this table">?</a>
+             </caption>
+             <thead>
+              <tr class="row-odd">
+               <th class="head"></th>
+               <th class="head">
+                <p>meaning of mData</p></th>
+               <th class="head">
+                <p>who sets <code class="docutils literal notranslate"><span class="pre">mData</span></code>?</p></th>
+               <th class="head">
+                <p><code class="docutils literal notranslate"><span class="pre">mRanges</span></code></p></th>
+               <th class="head">
+                <p>representing DOM event</p></th>
+              </tr>
+             </thead>
+             <tbody>
+              <tr class="row-even">
+               <td>
+                <p><code class="docutils literal notranslate"><span class="pre">eCompositionStart</span></code></p></td>
+               <td>
+                <p>selected string before starting composition</p></td>
+               <td>
+                <p><code class="docutils literal notranslate"><span class="pre">TextComposition</span></code></p></td>
+               <td>
+                <p><code class="docutils literal notranslate"><span class="pre">nullptr</span></code></p></td>
+               <td>
+                <p><code class="docutils literal notranslate"><span class="pre">compositionstart</span></code></p></td>
+              </tr>
+              <tr class="row-odd">
+               <td>
+                <p><code class="docutils literal notranslate"><span class="pre">eCompositionUpdate</span></code></p></td>
+               <td>
+                <p>new composition string</p></td>
+               <td>
+                <p><code class="docutils literal notranslate"><span class="pre">TextComposition</span></code></p></td>
+               <td>
+                <p><code class="docutils literal notranslate"><span class="pre">nullptr</span></code></p></td>
+               <td>
+                <p><code class="docutils literal notranslate"><span class="pre">compositionupdate</span></code></p></td>
+              </tr>
+              <tr class="row-even">
+               <td>
+                <p><code class="docutils literal notranslate"><span class="pre">eCompositionEnd</span></code></p></td>
+               <td>
+                <p>commit string</p></td>
+               <td>
+                <p><code class="docutils literal notranslate"><span class="pre">TextComposition</span></code></p></td>
+               <td>
+                <p><code class="docutils literal notranslate"><span class="pre">nullptr</span></code></p></td>
+               <td>
+                <p><code class="docutils literal notranslate"><span class="pre">compositionend</span></code></p></td>
+              </tr>
+              <tr class="row-odd">
+               <td>
+                <p><code class="docutils literal notranslate"><span class="pre">eCompositionChange</span></code></p></td>
+               <td>
+                <p>new composition string</p></td>
+               <td>
+                <p>widget (or <code class="docutils literal notranslate"><span class="pre">TextComposition</span></code>)</p></td>
+               <td>
+                <p>must not be <code class="docutils literal notranslate"><span class="pre">nullptr</span></code></p></td>
+               <td>
+                <p><code class="docutils literal notranslate"><span class="pre">text</span></code></p></td>
+              </tr>
+              <tr class="row-even">
+               <td>
+                <p><code class="docutils literal notranslate"><span class="pre">eCompositionCommitAsIs</span></code></p></td>
+               <td>
+                <p>N/A (must be empty)</p></td>
+               <td>
+                <p>nobody</p></td>
+               <td>
+                <p><code class="docutils literal notranslate"><span class="pre">nullptr</span></code></p></td>
+               <td>
+                <p>None</p></td>
+              </tr>
+              <tr class="row-odd">
+               <td>
+                <p><code class="docutils literal notranslate"><span class="pre">eCompositionCommit</span></code></p></td>
+               <td>
+                <p>commit string</p></td>
+               <td>
+                <p>widget (or <code class="docutils literal notranslate"><span class="pre">TextComposition</span></code>)</p></td>
+               <td>
+                <p><code class="docutils literal notranslate"><span class="pre">nullptr</span></code></p></td>
+               <td>
+                <p>None</p></td>
+              </tr>
+             </tbody>
+            </table>
+           </section>
+          </section>
+          <section id="presshell">
+           <h3>PresShell<a class="headerlink" href="#presshell" title="Link to this heading">?</a></h3>
+           <p><code class="docutils literal notranslate"><span class="pre">PresShell</span></code> receives the widget events and decides an event target from focused document and element. Then, it sends the events and the event target to <code class="docutils literal notranslate"><span class="pre">IMEStateManager</span></code>.</p>
+          </section>
+          <section id="mozilla-imestatemanager">
+           <h3>mozilla::IMEStateManager<a class="headerlink" href="#mozilla-imestatemanager" title="Link to this heading">?</a></h3>
+           <p><code class="docutils literal notranslate"><span class="pre">IMEStateManager</span></code> looks for a <code class="docutils literal notranslate"><span class="pre">TextComposition</span></code> instance whose native IME context is same as the widget’ which dispatches the widget event. If there is no proper <code class="docutils literal notranslate"><span class="pre">TextComposition</span></code> instance, it creates the instance. And it sends the event to the <code class="docutils literal notranslate"><span class="pre">TextComposition</span></code> instance.</p>
+           <p>Note that all instances of <code class="docutils literal notranslate"><span class="pre">TextComposition</span></code> are managed by <code class="docutils literal notranslate"><span class="pre">IMEStateManager</span></code>. When an instance is created, it’s registered to the list. When composition completely ends, it’s unregistered from the list (and released automatically).</p>
+          </section>
+          <section id="mozilla-textcomposition">
+           <h3>mozilla::TextComposition<a class="headerlink" href="#mozilla-textcomposition" title="Link to this heading">?</a></h3>
+           <p><code class="docutils literal notranslate"><span class="pre">TextComposition</span></code> manages a composition and dispatches DOM <code class="docutils literal notranslate"><span class="pre">compositionupdate</span></code> events.</p>
+           <p>When this receives an <code class="docutils literal notranslate"><span class="pre">eCompositionChange</span></code>, <code class="docutils literal notranslate"><span class="pre">eCompositionCommit</span></code> or <code class="docutils literal notranslate"><span class="pre">eCompositionCommitAsIs</span></code> event, it dispatches the event to the stored node which was the event target of <code class="docutils literal notranslate"><span class="pre">eCompositionStart</span></code> event. Therefore, this class guarantees that all composition events for a composition are fired on same element.</p>
+           <p>When this receives <code class="docutils literal notranslate"><span class="pre">eCompositionChange</span></code> or <code class="docutils literal notranslate"><span class="pre">eCompositionCommit</span></code>, this checks if new composition string (or committing string) is different from the last data stored by the <code class="docutils literal notranslate"><span class="pre">TextComposition</span></code>. If the composition event is changing the composition string, the <code class="docutils literal notranslate"><span class="pre">TextComposition</span></code> instance dispatches <code class="docutils literal notranslate"><span class="pre">WidgetCompositionEvent</span></code> with <code class="docutils literal notranslate"><span class="pre">eCompositionUpdate</span></code> into the DOM tree directly and modifies the last data. The <code class="docutils literal notranslate"><span class="pre">eCompositionUpdate</span></code> event will cause a DOM <code class="docutils literal notranslate"><span class="pre">compositionupdate</span></code> event.</p>
+           <p>When this receives <code class="docutils literal notranslate"><span class="pre">eCompositionCommitAsIs</span></code> or <code class="docutils literal notranslate"><span class="pre">eCompositionCommit</span></code>, this dispatches an <code class="docutils literal notranslate"><span class="pre">eCompositionEnd</span></code> event which will cause a DOM <code class="docutils literal notranslate"><span class="pre">compositionend</span></code> event after dispatching <code class="docutils literal notranslate"><span class="pre">eCompositionUpdate</span></code> event and/or <code class="docutils literal notranslate"><span class="pre">eCompositionChange</span></code> event if necessary.</p>
+           <p>One of the other important jobs of this is, when a focused editor handles a dispatched <code class="docutils literal notranslate"><span class="pre">eCompositionChange</span></code> event, this modifies the stored composition string and its clause information. The editor refers the stored information for creating or modifying a text node representing a composition string.</p>
+           <p>And before dispatching <code class="docutils literal notranslate"><span class="pre">eComposition*</span></code> events, this class removes ASCII control characters from dispatching composition event’s data in the default settings. Although, this can be disabled with <code class="docutils literal notranslate"><span class="pre">"dom.compositionevent.allow_control_characters"</span></code> pref.</p>
+           <p>Finally, this class guarantees that requesting to commit or cancel current composition to IME is perefored synchronously. See <a class="reference internal" href="#forcibly-committing-composition">Forcibly committing composition</a> section for the detail.</p>
+          </section>
+          <section id="editor-libeditor">
+           <h3>editor/libeditor<a class="headerlink" href="#editor-libeditor" title="Link to this heading">?</a></h3>
+           <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/editor/libeditor/EditorEventListener.cpp">mozilla::EditorEventListener</a> listens for trusted DOM <code class="docutils literal notranslate"><span class="pre">compositionstart</span></code>, <code class="docutils literal notranslate"><span class="pre">text</span></code> and <code class="docutils literal notranslate"><span class="pre">compositionend</span></code> events and notifies <a class="reference external" href="https://searchfox.org/mozilla-central/source/editor/libeditor/EditorBase.cpp">mozilla::EditorBase</a> and <a class="reference external" href="https://searchfox.org/mozilla-central/source/editor/libeditor/TextEditor.cpp">mozilla::TextEditor</a> of the events.</p>
+           <p>When <code class="docutils literal notranslate"><span class="pre">EditorBase</span></code> receives an <code class="docutils literal notranslate"><span class="pre">eCompositionStart</span></code> (DOM <code class="docutils literal notranslate"><span class="pre">"compositionstart"</span></code>) event, it looks for a proper <code class="docutils literal notranslate"><span class="pre">TextComposition</span></code> instance and stores it.</p>
+           <p>When <code class="docutils literal notranslate"><span class="pre">TextEditor</span></code> receives an <code class="docutils literal notranslate"><span class="pre">eCompositionChange</span></code> (DOM <code class="docutils literal notranslate"><span class="pre">"text"</span></code>) event, it creates or modifies a text node which includes the composition string and <a class="reference external" href="https://searchfox.org/mozilla-central/source/editor/libeditor/CompositionTransaction.cpp">mozilla::CompositionTransaction</a> (it was called <code class="docutils literal notranslate"><span class="pre">IMETextTxn</span></code>) sets IME selections for representing the clauses of the composition string.</p>
+           <p>When <code class="docutils literal notranslate"><span class="pre">EditorBase</span></code> receives an <code class="docutils literal notranslate"><span class="pre">eCompositionEnd</span></code> (DOM <code class="docutils literal notranslate"><span class="pre">"compositionend"</span></code>) event, it releases the stored <code class="docutils literal notranslate"><span class="pre">TextComposition</span></code> instance.</p>
+          </section>
+          <section id="nstextframe">
+           <h3>nsTextFrame<a class="headerlink" href="#nstextframe" title="Link to this heading">?</a></h3>
+           <p><code class="docutils literal notranslate"><span class="pre">nsTextFrame</span></code> paints IME selections.</p>
+          </section>
+          <section id="mozilla-imecontentobserver">
+           <h3>mozilla::IMEContentObserver<a class="headerlink" href="#mozilla-imecontentobserver" title="Link to this heading">?</a></h3>
+           <p><code class="docutils literal notranslate"><span class="pre">IMEContentObserver</span></code> observes various changes of a focused editor. When a corresponding element of a <code class="docutils literal notranslate"><span class="pre">TextEditor</span></code> or <code class="docutils literal notranslate"><span class="pre">HTMLEditor</span></code> instance gets focus, an instance is created by <code class="docutils literal notranslate"><span class="pre">IMEStateManager</span></code>, then, starts to observe and notifies <code class="docutils literal notranslate"><span class="pre">widget</span></code> of IME getting focus. When the editor loses focus, it notifies <code class="docutils literal notranslate"><span class="pre">widget</span></code> of IME losing focus and stops observing everything. Finally, it’s destroyed by <code class="docutils literal notranslate"><span class="pre">IMEStateManager</span></code>.</p>
+           <p>This class observes selection changes (caret position changes), text changes of a focused editor and layout changes (by reflow or scroll) of everything in the document. It depends on the result of <code class="docutils literal notranslate"><span class="pre">nsIWidget::GetIMEUpdatePreference()</span></code> what is observed.</p>
+           <p>When this notifies <code class="docutils literal notranslate"><span class="pre">widget</span></code> of something, it needs to be safe to run script because notifying something may cause dispatching one or more DOM events and/or new reflow. Therefore, <code class="docutils literal notranslate"><span class="pre">IMEContentObserver</span></code> only stores which notification should be sent to <code class="docutils literal notranslate"><span class="pre">widget</span></code>. Then, <code class="docutils literal notranslate"><span class="pre">mozilla::IMEContentObserver::IMENotificationSender</span></code> tries to send the pending notifications when it might become safe to do that. Currently, it’s tried:</p>
+           <ul class="simple">
+            <li>
+             <p>after a native event is dispatched from <code class="docutils literal notranslate"><span class="pre">PresShell::HandleEventInternal()</span></code></p></li>
+            <li>
+             <p>when new focused editor receives DOM <code class="docutils literal notranslate"><span class="pre">focus</span></code> event</p></li>
+            <li>
+             <p>when next refresh driver tick</p></li>
+           </ul>
+           <div class="admonition note">
+            <p class="admonition-title">Note</p>
+            <p>The 3rd timing may not be safe actually, but it causes a lot of oranges of automated tests.</p>
+           </div>
+           <p>See also <a class="reference internal" href="#notifications-to-ime">Notifications to IME</a> section for the detail of sending notifications.</p>
+           <p>Currently, <code class="docutils literal notranslate"><span class="pre">WidgetQueryContentEvent</span></code> is handled via <code class="docutils literal notranslate"><span class="pre">IMEContentObserver</span></code> because if it has a cache of selection, it can set reply of <code class="docutils literal notranslate"><span class="pre">eQuerySelectedText</span></code> event only with the cache. That is much faster than using <code class="docutils literal notranslate"><span class="pre">ContentEventHandler</span></code>.</p>
+          </section>
+         </section>
+         <section id="e10s-support">
+          <h2>e10s support<a class="headerlink" href="#e10s-support" title="Link to this heading">?</a></h2>
+          <p>Even when a remote process has focus, native IME handler in chrome process does its job. So, there is process boundary between native IME handler and focused editor. Unfortunately, it’s not allowed to use synchronous communication from chrome process to a remote process. This means that chrome process (and also native IME and our native IME handler) cannot query the focused editor contents directly. For fixing this issue, we have <code class="docutils literal notranslate"><span class="pre">ContentCache</span></code> classes around process boundary.</p>
+          <section id="mozilla-contentcache">
+           <h3>mozilla::ContentCache<a class="headerlink" href="#mozilla-contentcache" title="Link to this heading">?</a></h3>
+           <p>This is a base class of <code class="docutils literal notranslate"><span class="pre">ContentCacheInChild</span></code> and <code class="docutils literal notranslate"><span class="pre">ContentCacheInParent</span></code> and IPC-aware. This has common members of them including all cache data:</p>
+           <dl>
+            <dt>
+             <code class="docutils literal notranslate"><span class="pre">mText</span></code>
+            </dt>
+            <dd>
+             <p>Whole text in focused editor. This may be too big but IME may request all text in the editor.</p>
+             <p>If we can separate editor contents per paragraph, moving selection between paragraphs generates pseudo focus move, we can reduce this size and runtime cost of <code class="docutils literal notranslate"><span class="pre">ContentEventHandler</span></code>. However, we’ve not had a plan to do that yet. Note that Microsoft Word uses this hack.</p>
+            </dd>
+            <dt>
+             <code class="docutils literal notranslate"><span class="pre">mCompositionStart</span></code>
+            </dt>
+            <dd>
+             <p>Offset of composition string in <code class="docutils literal notranslate"><span class="pre">mText</span></code>. When there is no composition, this is <code class="docutils literal notranslate"><span class="pre">UINT32_MAX</span></code>.</p>
+            </dd>
+            <dt>
+             <code class="docutils literal notranslate"><span class="pre">mSelection::mAnchor</span></code>, <code class="docutils literal notranslate"><span class="pre">mSelection::mFocus</span></code>
+            </dt>
+            <dd>
+             <p>Offset of selection anchor and focus in <code class="docutils literal notranslate"><span class="pre">mText</span></code>.</p>
+            </dd>
+            <dt>
+             <code class="docutils literal notranslate"><span class="pre">mSelection::mWritingMode</span></code>
+            </dt>
+            <dd>
+             <p>Writing mode at selection start.</p>
+            </dd>
+            <dt>
+             <code class="docutils literal notranslate"><span class="pre">mSelection::mAnchorCharRect</span></code>, <code class="docutils literal notranslate"><span class="pre">mSelection::mFocusCharRect</span></code>
+            </dt>
+            <dd>
+             <p>Next character rectangle of <code class="docutils literal notranslate"><span class="pre">mSelection::mAnchor</span></code> and <code class="docutils literal notranslate"><span class="pre">mSelection::mFocus</span></code>. If corresponding offset is end of the editor contents, its rectangle should be a caret rectangle.</p>
+             <p>These rectangles shouldn’t be empty rect.</p>
+            </dd>
+            <dt>
+             <code class="docutils literal notranslate"><span class="pre">mSelection::mRect</span></code>
+            </dt>
+            <dd>
+             <p>Unified character rectangle in selection range. When the selection is collapsed, this should be caret rect.</p>
+            </dd>
+            <dt>
+             <code class="docutils literal notranslate"><span class="pre">mFirstRect</span></code>
+            </dt>
+            <dd>
+             <p>First character rect of <code class="docutils literal notranslate"><span class="pre">mText</span></code>. When <code class="docutils literal notranslate"><span class="pre">mText</span></code> is empty string, this should be caret rect.</p>
+            </dd>
+            <dt>
+             <code class="docutils literal notranslate"><span class="pre">mCaret::mOffset</span></code>
+            </dt>
+            <dd>
+             <p>Always same as selection start offset even when selection isn’t collapsed.</p>
+            </dd>
+            <dt>
+             <code class="docutils literal notranslate"><span class="pre">mCaret::mRect</span></code>
+            </dt>
+            <dd>
+             <p>Caret rect at <code class="docutils literal notranslate"><span class="pre">mCaret::mOffset</span></code>. If caret isn’t actually exists, it’s computed with a character rect at the offset.</p>
+            </dd>
+            <dt>
+             <code class="docutils literal notranslate"><span class="pre">mTextRectArray::mStart</span></code>
+            </dt>
+            <dd>
+             <p>If there is composition, <code class="docutils literal notranslate"><span class="pre">mStart</span></code> is same as <code class="docutils literal notranslate"><span class="pre">mCompositionStart</span></code>. Otherwise, <code class="docutils literal notranslate"><span class="pre">UINT32_MAX</span></code>.</p>
+            </dd>
+            <dt>
+             <code class="docutils literal notranslate"><span class="pre">mTextRectArray::mRects</span></code>
+            </dt>
+            <dd>
+             <p>Each character rectangle of composition string.</p>
+            </dd>
+            <dt>
+             <code class="docutils literal notranslate"><span class="pre">mEditorRect</span></code>
+            </dt>
+            <dd>
+             <p>The rect of editor element.</p>
+            </dd>
+           </dl>
+          </section>
+          <section id="mozilla-contentcacheinchild">
+           <h3>mozilla::ContentCacheInChild<a class="headerlink" href="#mozilla-contentcacheinchild" title="Link to this heading">?</a></h3>
+           <p>This exists only in remote processes. This is created as a member of <a class="reference external" href="https://searchfox.org/mozilla-central/source/widget/PuppetWidget.cpp">PuppetWidget</a>. When <code class="docutils literal notranslate"><span class="pre">PuppetWidget</span></code> receives notifications to IME from <code class="docutils literal notranslate"><span class="pre">IMEContentObserver</span></code> in the remote process, it makes this class modify its cached content. Then, this class do that with <code class="docutils literal notranslate"><span class="pre">WidgetQueryContentEvents</span></code>. Finally, <code class="docutils literal notranslate"><span class="pre">PuppetWidget</span></code> sends the notification and <code class="docutils literal notranslate"><span class="pre">ContentCacheInParent</span></code> instance as <code class="docutils literal notranslate"><span class="pre">ContentCache</span></code> to its parent process.</p>
+          </section>
+          <section id="mozilla-contentcacheinparent">
+           <h3>mozilla::ContentCacheInParent<a class="headerlink" href="#mozilla-contentcacheinparent" title="Link to this heading">?</a></h3>
+           <p>This exists as a member of <code class="docutils literal notranslate"><span class="pre">TabParent</span></code>. When <code class="docutils literal notranslate"><span class="pre">TabParent</span></code> receives notification from corresponding remote process, it assigns <code class="docutils literal notranslate"><span class="pre">ContentCacheInParent</span></code> new <code class="docutils literal notranslate"><span class="pre">ContentCache</span></code> and post the notification to <code class="docutils literal notranslate"><span class="pre">ContentCacheInParent</span></code>. If all sent <code class="docutils literal notranslate"><span class="pre">WidgetCompositionEvents</span></code> and <code class="docutils literal notranslate"><span class="pre">WidgetSelectionEvents</span></code> are already handled in the remote process, <code class="docutils literal notranslate"><span class="pre">ContentCacheInParent</span></code> sending the notifications to widget.</p>
+           <p>And also this handles <code class="docutils literal notranslate"><span class="pre">WidgetQueryContentEvents</span></code> with its cache. Supported event messages of them are:</p>
+           <ul class="simple">
+            <li>
+             <p><code class="docutils literal notranslate"><span class="pre">eQuerySelectedText</span></code> (only with <code class="docutils literal notranslate"><span class="pre">SelectionType::eNormal</span></code>)</p></li>
+            <li>
+             <p><code class="docutils literal notranslate"><span class="pre">eQueryTextContent</span></code></p></li>
+            <li>
+             <p><code class="docutils literal notranslate"><span class="pre">eQueryTextRect</span></code></p></li>
+            <li>
+             <p><code class="docutils literal notranslate"><span class="pre">eQueryCaretRect</span></code></p></li>
+            <li>
+             <p><code class="docutils literal notranslate"><span class="pre">eQueryEditorRect</span></code></p></li>
+           </ul>
+           <p>Additionally, this does not support query content events with XP line breakers but this must not be any problem since native IME handlers query contents with native line breakers.</p>
+           <p><code class="docutils literal notranslate"><span class="pre">ContentCacheInParent</span></code> also manages sent <code class="docutils literal notranslate"><span class="pre">WidgetCompositionEvents</span></code> and <code class="docutils literal notranslate"><span class="pre">WidgetSelectionEvents</span></code>. After these events are handled in the remote process, <code class="docutils literal notranslate"><span class="pre">TabParent</span></code> receives it with a call of <code class="docutils literal notranslate"><span class="pre">RecvOnEventNeedingAckHandled()</span></code>. Then, it calls <code class="docutils literal notranslate"><span class="pre">ContentCacheInParent::OnEventNeedingAckHandled()</span></code>. Finally, <code class="docutils literal notranslate"><span class="pre">ContentCacheInParent</span></code> flushes pending notifications.</p>
+          </section>
+          <section id="how-do-mozilla-textcomposition-and-mozilla-imestatemanager-work-in-e10s-mode">
+           <h3>How do mozilla::TextComposition and mozilla::IMEStateManager work in e10s mode?<a class="headerlink" href="#how-do-mozilla-textcomposition-and-mozilla-imestatemanager-work-in-e10s-mode" title="Link to this heading">?</a></h3>
+           <p>In remote process, they work as non-e10s mode. On the other hand, they work specially in parent process.</p>
+           <p>When <code class="docutils literal notranslate"><span class="pre">IMEStateManager</span></code> in parent process receives <code class="docutils literal notranslate"><span class="pre">eCompositionStart</span></code>, it creates <code class="docutils literal notranslate"><span class="pre">TextComposition</span></code> instance normally. However, if the event target has remote contents, <code class="docutils literal notranslate"><span class="pre">TextComposition::DispatchCompositionEvent()</span></code> directly sends the event to the remote process instead of dispatching the event into the target DOM tree in the process.</p>
+           <p>That means that even in a parent process, anybody can retrieve <code class="docutils literal notranslate"><span class="pre">TextComposition</span></code> instance, but it just does nothing in parent process.</p>
+           <p><code class="docutils literal notranslate"><span class="pre">IMEStateManager</span></code> works more complicated because <code class="docutils literal notranslate"><span class="pre">IMEStateManager</span></code> in each process need to negotiate about owner ship of managing input context.</p>
+           <p>When a remote process gets focus, temporarily, <code class="docutils literal notranslate"><span class="pre">IMEStateManager</span></code> in parent process disables IME in the widget. After that, <code class="docutils literal notranslate"><span class="pre">IMEStateManager</span></code> in the remote process will set proper input context for the focused editor. At this time, <code class="docutils literal notranslate"><span class="pre">IMEStateManager</span></code> in the parent process does nothing. Therefore, <code class="docutils literal notranslate"><span class="pre">IMEContentObserver</span></code> is never created while a remote process has focus.</p>
+           <p>When a remote process loses focus, <code class="docutils literal notranslate"><span class="pre">IMEStateManager</span></code> in parent process notifies <code class="docutils literal notranslate"><span class="pre">IMEStateManager</span></code> in the remote process of “Stop IME state management”. When <code class="docutils literal notranslate"><span class="pre">IMEStateManager::StopIMEStateManagement()</span></code> is called in the remote process by this, the <code class="docutils literal notranslate"><span class="pre">IMEStateManager</span></code> forgets all focus information (i.e., that indicates nobody has focus).</p>
+           <p>When <code class="docutils literal notranslate"><span class="pre">IMEStateManager</span></code> in parent process is notified of pseudo focus move from or to menubar while a remote process has focus, it notifies the remote process of “Menu keyboard listener installed”. Then, <code class="docutils literal notranslate"><span class="pre">TabChild</span></code> calls <code class="docutils literal notranslate"><span class="pre">IMEStateManager::OnInstalledMenuKeyboardListener()</span></code> in the remote process.</p>
+          </section>
+          <section id="style-of-each-clause">
+           <h3>Style of each clause<a class="headerlink" href="#style-of-each-clause" title="Link to this heading">?</a></h3>
+           <p>The style of each IME selection is managed by <a class="reference external" href="https://searchfox.org/mozilla-central/source/widget/LookAndFeel.h">LookAndFeel</a> class per platform. Therefore, it can be overridden by prefs.</p>
+           <p>Background color, foreground color (text color) and underline color can be specified with following prefs. The values must be string of “#rrggbb” format.</p>
+           <ul class="simple">
+            <li>
+             <p><code class="docutils literal notranslate"><span class="pre">ui.IMERawInputBackground</span></code></p></li>
+            <li>
+             <p><code class="docutils literal notranslate"><span class="pre">ui.IMERawInputForeground</span></code></p></li>
+            <li>
+             <p><code class="docutils literal notranslate"><span class="pre">ui.IMERawInputUnderline</span></code></p></li>
+            <li>
+             <p><code class="docutils literal notranslate"><span class="pre">ui.IMESelectedRawTextBackground</span></code></p></li>
+            <li>
+             <p><code class="docutils literal notranslate"><span class="pre">ui.IMESelectedRawTextForeground</span></code></p></li>
+            <li>
+             <p><code class="docutils literal notranslate"><span class="pre">ui.IMESelectedRawTextUnderline</span></code></p></li>
+            <li>
+             <p><code class="docutils literal notranslate"><span class="pre">ui.IMEConvertedTextBackground</span></code></p></li>
+            <li>
+             <p><code class="docutils literal notranslate"><span class="pre">ui.IMEConvertedTextForeground</span></code></p></li>
+            <li>
+             <p><code class="docutils literal notranslate"><span class="pre">ui.IMEConvertedTextUnderline</span></code></p></li>
+            <li>
+             <p><code class="docutils literal notranslate"><span class="pre">ui.IMESelectedConvertedTextBackground</span></code></p></li>
+            <li>
+             <p><code class="docutils literal notranslate"><span class="pre">ui.IMESelectedConvertedTextForeground</span></code></p></li>
+            <li>
+             <p><code class="docutils literal notranslate"><span class="pre">ui.IMESelectedConvertedTextUnderline</span></code></p></li>
+           </ul>
+           <p>Underline style can be specified with the following prefs. The values are integer, 0: none, 1: dotted, 2: dashed, 3: solid, 4: double, 5: wavy (The values same as <code class="docutils literal notranslate"><span class="pre">mozilla::StyleTextDecorationStyle</span></code> defined in <a class="reference external" href="https://searchfox.org/mozilla-central/source/layout/style/nsStyleConsts.h">nsStyleConsts.h</a>).</p>
+           <ul class="simple">
+            <li>
+             <p><code class="docutils literal notranslate"><span class="pre">ui.IMERawInputUnderlineStyle</span></code></p></li>
+            <li>
+             <p><code class="docutils literal notranslate"><span class="pre">ui.IMESelectedRawTextUnderlineStyle</span></code></p></li>
+            <li>
+             <p><code class="docutils literal notranslate"><span class="pre">ui.IMEConvertedTextUnderlineStyle</span></code></p></li>
+            <li>
+             <p><code class="docutils literal notranslate"><span class="pre">ui.IMESelectedConvertedTextUnderlineStyle</span></code></p></li>
+           </ul>
+           <p>Underline width can be specified with <code class="docutils literal notranslate"><span class="pre">"ui.IMEUnderlineRelativeSize"</span></code> pref. This affects all types of clauses. The value should be 100 or 200. 100 means normal width, 200 means double width.</p>
+           <p>On some platforms, IME may support its own style for each clause. Currently, this feature is supported in TSF mode of Windows and on Linux. The style information is stored in <code class="docutils literal notranslate"><span class="pre">TextRangeStyle</span></code> which is defined in <a class="reference external" href="https://searchfox.org/mozilla-central/source/widget/TextRange.h">TextRange.h</a>. It’s a member of <code class="docutils literal notranslate"><span class="pre">TextRange</span></code>. <code class="docutils literal notranslate"><span class="pre">TextRange</span></code> is stored in <code class="docutils literal notranslate"><span class="pre">mRanges</span></code> of <code class="docutils literal notranslate"><span class="pre">WidgetCompositionEvent</span></code> only when its message is <code class="docutils literal notranslate"><span class="pre">eCompositionChange</span></code>.</p>
+          </section>
+         </section>
+         <section id="lifetime-of-composition-string">
+          <h2>Lifetime of composition string<a class="headerlink" href="#lifetime-of-composition-string" title="Link to this heading">?</a></h2>
+          <p>When native IME notifies Gecko of starting a composition, a widget dispatches <code class="docutils literal notranslate"><span class="pre">WidgetCompositionEvent</span></code> with <code class="docutils literal notranslate"><span class="pre">eCompositionStart</span></code> which will cause a DOM <code class="docutils literal notranslate"><span class="pre">compositionstart</span></code> event.</p>
+          <p>When native IME notifies Gecko of a composition string change, a caret position change and/or a change of length of clauses, a widget dispatches <code class="docutils literal notranslate"><span class="pre">WidgetCompositionEvent</span></code> with <code class="docutils literal notranslate"><span class="pre">eCompositionChange</span></code> event. It will cause a DOM <code class="docutils literal notranslate"><span class="pre">compositionupdate</span></code> event when composition string is changing. That is dispatched by <code class="docutils literal notranslate"><span class="pre">TextComposition</span></code> automatically. After that when the widget and <code class="docutils literal notranslate"><span class="pre">PresShell</span></code> of the focused editor have not been destroyed yet, the <code class="docutils literal notranslate"><span class="pre">eCompositionChange</span></code> will cause a DOM text event which is not in any web standards.</p>
+          <p>When native IME notifies Gecko of the ending of a composition, a widget dispatches <code class="docutils literal notranslate"><span class="pre">WidgetCompositionEvent</span></code> with <code class="docutils literal notranslate"><span class="pre">eCompositionCommitAsIs</span></code> or <code class="docutils literal notranslate"><span class="pre">eCompositionCommit</span></code>. If the committing string is different from the last set of data (i.e., if the event message is <code class="docutils literal notranslate"><span class="pre">eCompositionCommit</span></code>), <code class="docutils literal notranslate"><span class="pre">TextComposition</span></code> dispatches a DOM <code class="docutils literal notranslate"><span class="pre">compositionupdate</span></code> event. After that, when the widget and <code class="docutils literal notranslate"><span class="pre">PresShell</span></code> of the focused editor have not been destroyed yet, an <code class="docutils literal notranslate"><span class="pre">eCompositionChange</span></code> event dispatched by <code class="docutils literal notranslate"><span class="pre">TextComposition</span></code>, that causes a DOM text event. Finally, if the widget and PresShell of the focused editor has not been destroyed yet too, <code class="docutils literal notranslate"><span class="pre">TextComposition</span></code> dispatches an <code class="docutils literal notranslate"><span class="pre">eCompositionEnd</span></code> event which will cause a DOM compositionend event.</p>
+         </section>
+         <section id="limitation-of-handling-composition">
+          <h2>Limitation of handling composition<a class="headerlink" href="#limitation-of-handling-composition" title="Link to this heading">?</a></h2>
+          <p>Currently, <code class="docutils literal notranslate"><span class="pre">EditorBase</span></code> touches undo stack at receiving every <code class="docutils literal notranslate"><span class="pre">WidgetCompositionEvent</span></code>. Therefore, <code class="docutils literal notranslate"><span class="pre">EditorBase</span></code> requests to commit composition when the following cases occur:</p>
+          <ul class="simple">
+           <li>
+            <p>The editor loses focus</p></li>
+           <li>
+            <p>The caret is moved by mouse or Javascript</p></li>
+           <li>
+            <p>Value of the editor is changed by Javascript</p></li>
+           <li>
+            <p>Node of the editor is removed from DOM tree</p></li>
+           <li>
+            <p>Somethings object is modified in an HTML editor, e.g., resizing an image</p></li>
+           <li>
+            <p>Composition string is moved to a different position which is specified by native IME (e.g., only a part of composition is committed)</p></li>
+          </ul>
+          <p>In the future, we should fix this limitation. If we make <code class="docutils literal notranslate"><span class="pre">EditorBase</span></code> not touch undo stack until composition is committed, some of the cases must be fixed.</p>
+         </section>
+         <section id="notifications-to-ime">
+          <h2>Notifications to IME<a class="headerlink" href="#notifications-to-ime" title="Link to this heading">?</a></h2>
+          <p>XP part of Gecko uses <code class="docutils literal notranslate"><span class="pre">nsIWidget::NotifyIME()</span></code> for notifying <code class="docutils literal notranslate"><span class="pre">widget</span></code> of something useful to handle IME. Note that some of them are notified only when <code class="docutils literal notranslate"><span class="pre">nsIWidget::GetIMEUpdatePreference()</span></code> returns flags which request the notifications.</p>
+          <p><code class="docutils literal notranslate"><span class="pre">NOTIFY_IME_OF_TEXT_CHANGE</span></code>, <code class="docutils literal notranslate"><span class="pre">NOTIFY_IME_OF_SELECTION_CHANGE</span></code>, <code class="docutils literal notranslate"><span class="pre">NOTIFY_IME_OF_POSITION_CHANGE</span></code> and <code class="docutils literal notranslate"><span class="pre">NOTIFY_IME_OF_COMPOSITION_EVENT_HANDLED</span></code> are always sent by following order:</p>
+          <ol class="arabic simple">
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">NOTIFY_IME_OF_TEXT_CHANGE</span></code></p></li>
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">NOTIFY_IME_OF_SELECTION_CHANGE</span></code></p></li>
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">NOTIFY_IME_OF_POSITION_CHANGE</span></code></p></li>
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">NOTIFY_IME_OF_COMPOSITION_EVENT_HANDLED</span></code></p></li>
+          </ol>
+          <p>If sending one of above notifications causes higher priority notification, the sender should abort to send remaining notifications and restart from high priority notification again.</p>
+          <p>Additionally, all notifications except <code class="docutils literal notranslate"><span class="pre">NOTIFY_IME_OF_BLUR</span></code> should be sent only when it’s safe to run script since the notification may cause querying content and/or dispatching composition events.</p>
+          <section id="notify-ime-of-focus">
+           <h3>NOTIFY_IME_OF_FOCUS<a class="headerlink" href="#notify-ime-of-focus" title="Link to this heading">?</a></h3>
+           <p>When an editable editor gets focus and <code class="docutils literal notranslate"><span class="pre">IMEContentObserver</span></code> starts to observe it, this is sent to widget. This must be called after the previous <code class="docutils literal notranslate"><span class="pre">IMEContentObserver</span></code> notified widget of <code class="docutils literal notranslate"><span class="pre">NOTIFY_IME_OF_BLUR</span></code>.</p>
+           <p>Note that even if there are pending notifications, they are canceled when <code class="docutils literal notranslate"><span class="pre">NOTIFY_IME_OF_FOCUS</span></code> is sent since querying content with following notifications immediately after getting focus does not make sense. The result is always same as the result of querying contents at receiving this notification.</p>
+          </section>
+          <section id="notify-ime-of-blur">
+           <h3>NOTIFY_IME_OF_BLUR<a class="headerlink" href="#notify-ime-of-blur" title="Link to this heading">?</a></h3>
+           <p>When an <code class="docutils literal notranslate"><span class="pre">IMEContentObserver</span></code> instance ends observing the focused editor, this is sent to <code class="docutils literal notranslate"><span class="pre">widget</span></code> synchronously because assumed that this notification causes neither query content events nor composition events.</p>
+           <p>If <code class="docutils literal notranslate"><span class="pre">widget</span></code> wants notifications even while all windows are inactive, <code class="docutils literal notranslate"><span class="pre">IMEContentObserver</span></code> doesn’t end observing the focused editor. I.e., in this case, <code class="docutils literal notranslate"><span class="pre">NOTIFY_IME_OF_FOCUS</span></code> and <code class="docutils literal notranslate"><span class="pre">NOTIFY_IME_OF_BLUR</span></code> are not sent to <code class="docutils literal notranslate"><span class="pre">widget</span></code> when a window which has a composition is being activated or inactivated.</p>
+           <p>When <code class="docutils literal notranslate"><span class="pre">widget</span></code> wants notifications during inactive, <code class="docutils literal notranslate"><span class="pre">widget</span></code> includes <code class="docutils literal notranslate"><span class="pre">NOTIFY_DURING_DEACTIVE</span></code> to the result of <code class="docutils literal notranslate"><span class="pre">nsIWidget::GetIMEUpdatePreference()</span></code>.</p>
+           <p>If this notification is tried to sent before sending <code class="docutils literal notranslate"><span class="pre">NOTIFY_IME_OF_FOCUS</span></code>, all pending notifications and <code class="docutils literal notranslate"><span class="pre">NOTIFY_IME_OF_BLUR</span></code> itself are canceled.</p>
+          </section>
+          <section id="notify-ime-of-text-change">
+           <h3>NOTIFY_IME_OF_TEXT_CHANGE<a class="headerlink" href="#notify-ime-of-text-change" title="Link to this heading">?</a></h3>
+           <p>When text of focused editor is changed, this is sent to <code class="docutils literal notranslate"><span class="pre">widget</span></code> with a range of the change. But this is sent only when result of <code class="docutils literal notranslate"><span class="pre">nsIWidget::GetIMEUpdatePreference()</span></code> includes <code class="docutils literal notranslate"><span class="pre">NOTIFY_TEXT_CHANGE</span></code>.</p>
+           <p>If two or more text changes occurred after previous <code class="docutils literal notranslate"><span class="pre">NOTIFY_IME_OF_TEXT_CHANGE</span></code> or <code class="docutils literal notranslate"><span class="pre">NOTIFY_IME_OF_FOCUS</span></code>, the ranges of all changes are merged. E.g., if first change is from <code class="docutils literal notranslate"><span class="pre">1</span></code> to <code class="docutils literal notranslate"><span class="pre">5</span></code> and second change is from <code class="docutils literal notranslate"><span class="pre">5</span></code> to <code class="docutils literal notranslate"><span class="pre">10</span></code>, the notified range is from <code class="docutils literal notranslate"><span class="pre">1</span></code> to <code class="docutils literal notranslate"><span class="pre">10</span></code>.</p>
+           <p>If all merged text changes were caused by composition, <code class="docutils literal notranslate"><span class="pre">IMENotification::mTextChangeData::mCausedOnlyByComposition</span></code> is set to true. This is useful if native IME handler wants to ignore all text changes which are expected by native IME.</p>
+           <p>If at least one text change of the merged text changes was caused by current composition, <code class="docutils literal notranslate"><span class="pre">IMENotification::mTextChangeData::mIncludingChangesDuringComposition</span></code> is set to true. This is useful if native IME handler wants to ignore delayed text change notifications.</p>
+           <p>If at least one text change of the merged text changes was caused when there was no composition, <code class="docutils literal notranslate"><span class="pre">IMENotification::mTextChangeData::mIncludingChangesWithoutComposition</span></code> is set to true.</p>
+          </section>
+          <section id="notify-ime-of-selection-change">
+           <h3>NOTIFY_IME_OF_SELECTION_CHANGE<a class="headerlink" href="#notify-ime-of-selection-change" title="Link to this heading">?</a></h3>
+           <p>When selection (or caret position) is changed in focused editor, widget is notified of this.</p>
+           <p>If the last selection change was occurred by a composition event event handling, <code class="docutils literal notranslate"><span class="pre">IMENotification::mSelectionChangeData::mCausedByComposition</span></code> is set to true. This is useful if native IME handler wants to ignore the last selection change which is expected by native IME.</p>
+           <p>If the last selection change was occurred by an <code class="docutils literal notranslate"><span class="pre">eSetSelection</span></code> event, <code class="docutils literal notranslate"><span class="pre">IMENotification::mSelectionChangeData::mCausedBySelectionEvent</span></code> is set to true. This is useful if native IME handler wants to ignore the last selection change which was requested by native IME.</p>
+           <p>If the last selection is occurred during a composition, <code class="docutils literal notranslate"><span class="pre">IMENotification::mSelectionChangeData::mOccurredDuringComposition</span></code> is set to true. This is useful if native IME handler wants to ignore the last selection change which occurred by web application’s <code class="docutils literal notranslate"><span class="pre">compositionstart</span></code> or <code class="docutils literal notranslate"><span class="pre">compositionupdate</span></code> event handler before inserting composition string.</p>
+          </section>
+          <section id="notify-ime-of-position-change">
+           <h3>NOTIFY_IME_OF_POSITION_CHANGE<a class="headerlink" href="#notify-ime-of-position-change" title="Link to this heading">?</a></h3>
+           <p>When reflow or scroll occurs in the document, this is sent to widget, but this is sent only when result of <code class="docutils literal notranslate"><span class="pre">nsIWidget::GetIMEUpdatePreference()</span></code> includes <code class="docutils literal notranslate"><span class="pre">NOTIFY_POSITION_CHANGE</span></code>.</p>
+           <p>This might be useful to update a candidate window position or something.</p>
+          </section>
+          <section id="notify-ime-of-composition-event-handled">
+           <h3>NOTIFY_IME_OF_COMPOSITION_EVENT_HANDLED<a class="headerlink" href="#notify-ime-of-composition-event-handled" title="Link to this heading">?</a></h3>
+           <p>After <code class="docutils literal notranslate"><span class="pre">TextComposition</span></code> handles <code class="docutils literal notranslate"><span class="pre">eCompositionStart</span></code>, <code class="docutils literal notranslate"><span class="pre">eCompositionChange</span></code>, <code class="docutils literal notranslate"><span class="pre">eComposiitionCommit</span></code> or <code class="docutils literal notranslate"><span class="pre">eCompositionCommitAsIs</span></code>, this notification is sent to widget. This might be useful to update a candidate window position or something.</p>
+          </section>
+          <section id="notify-ime-of-mouse-button-event">
+           <h3>NOTIFY_IME_OF_MOUSE_BUTTON_EVENT<a class="headerlink" href="#notify-ime-of-mouse-button-event" title="Link to this heading">?</a></h3>
+           <p>When a <code class="docutils literal notranslate"><span class="pre">mousedown</span></code> event or a <code class="docutils literal notranslate"><span class="pre">mouseup</span></code> event is fired on a character in a focused editor, this is sent to widget. But this is sent only when result of <code class="docutils literal notranslate"><span class="pre">nsIWidget::GetIMEUpdatePreference()</span></code> includes <code class="docutils literal notranslate"><span class="pre">NOTIFY_MOUSE_BUTTON_EVENT_ON_CHAR</span></code>. This is sent with various information. See <code class="docutils literal notranslate"><span class="pre">IMENotification::mMouseButtonEventData</span></code> in <a class="reference external" href="https://searchfox.org/mozilla-central/source/widget/IMEData.h">IMEData.h</a> for the detail.</p>
+           <p>If native IME supports mouse button event handling, <code class="docutils literal notranslate"><span class="pre">widget</span></code> should notify IME of mouse button events with this. If IME consumes an event, <code class="docutils literal notranslate"><span class="pre">widget</span></code> should return <code class="docutils literal notranslate"><span class="pre">NS_SUCCESS_EVENT_CONSUMED</span></code> from <code class="docutils literal notranslate"><span class="pre">nsIWidget::NotifyIME()</span></code>. Then, <code class="docutils literal notranslate"><span class="pre">EditorBase</span></code> doesn’t handle the mouse event.</p>
+           <p>Note that if a <code class="docutils literal notranslate"><span class="pre">mousedown</span></code> event or a <code class="docutils literal notranslate"><span class="pre">mouseup</span></code> event is consumed by a web application (before a focused editor handles it), this notification is not sent to <code class="docutils literal notranslate"><span class="pre">widget</span></code>. This means that web applications can handle mouse button events before IME.</p>
+          </section>
+         </section>
+         <section id="requests-to-ime">
+          <h2>Requests to IME<a class="headerlink" href="#requests-to-ime" title="Link to this heading">?</a></h2>
+          <p>XP part of Gecko can request IME to commit or cancel composition. This must be requested via <code class="docutils literal notranslate"><span class="pre">IMEStateManager::NotifyIME()</span></code>. Then, <code class="docutils literal notranslate"><span class="pre">IMEStateManager</span></code> looks for a proper <code class="docutils literal notranslate"><span class="pre">TextComposition</span></code> instance. If it’s found, <code class="docutils literal notranslate"><span class="pre">TextComposition::RequestToCommit()</span></code> for calling <code class="docutils literal notranslate"><span class="pre">nsIWidget::NotifyIME()</span></code> and handles some extra jobs.</p>
+          <p>widget should call the proper native API if it’s available. Even if commit or canceling composition does not occur synchronously, widget doesn’t need to emulate it since <code class="docutils literal notranslate"><span class="pre">TextComposition</span></code> will emulate it automatically. In other words, widget should only request to commit or cancel composition to IME.</p>
+          <section id="request-to-commit-composition">
+           <h3>REQUEST_TO_COMMIT_COMPOSITION<a class="headerlink" href="#request-to-commit-composition" title="Link to this heading">?</a></h3>
+           <p>A request to commit current composition to IME. See also following “<a class="reference internal" href="#forcibly-committing-composition">Forcibly committing composition</a>” section for additional information.</p>
+          </section>
+          <section id="request-to-cancel-composition">
+           <h3>REQUEST_TO_CANCEL_COMPOSITION<a class="headerlink" href="#request-to-cancel-composition" title="Link to this heading">?</a></h3>
+           <p>A request to cancel current composition to IME. In other words, a request to commit current composition with an empty string.</p>
+          </section>
+         </section>
+         <section id="forcibly-committing-composition">
+          <h2>Forcibly committing composition<a class="headerlink" href="#forcibly-committing-composition" title="Link to this heading">?</a></h2>
+          <p>When <code class="docutils literal notranslate"><span class="pre">TextComposition::RequestToCommit()</span></code> calls <code class="docutils literal notranslate"><span class="pre">nsIWidget::NotifyIME()</span></code>, it guarantees synchronous commit or canceling composition.</p>
+          <p>In order to put it into practice, we need to handle the following four scenarios:</p>
+          <section id="the-composition-is-committed-with-non-empty-string-synchronously">
+           <h3>The composition is committed with non-empty string synchronously<a class="headerlink" href="#the-composition-is-committed-with-non-empty-string-synchronously" title="Link to this heading">?</a></h3>
+           <p>This is the most usual case. In this case, <code class="docutils literal notranslate"><span class="pre">TextComposition</span></code> handles <code class="docutils literal notranslate"><span class="pre">WidgetCompositionEvent</span></code> instances during a request normally. However, in a remote process in e10s mode, this case never occurs since requests to native IME is handled asynchronously.</p>
+          </section>
+          <section id="the-composition-is-not-committed-synchronously-but-later">
+           <h3>The composition is not committed synchronously but later<a class="headerlink" href="#the-composition-is-not-committed-synchronously-but-later" title="Link to this heading">?</a></h3>
+           <p>This is the only case in a remote process in e10s mode or occurs on Linux even in non-e10s mode if the native IME is iBus. The callers of <code class="docutils literal notranslate"><span class="pre">NotifyIME(REQUEST_TO_COMMIT_COMPOSITION)</span></code> may expect that composition string is committed immediately for their next job. For such a case, <code class="docutils literal notranslate"><span class="pre">TextComposition::RequestToCommit()</span></code> synthesizes DOM composition events and a DOM text event for emulating to commit composition synchronously. Additionally, <code class="docutils literal notranslate"><span class="pre">TextComposition</span></code> ignores committing events which are dispatched by widget when the widget receives native IME events.</p>
+           <p>In this case, using the last composition string as commit string.</p>
+           <p>However, if the last composition string is only an ideographic space (fullwidth space), the composition string may be a placeholder of some old Chinese IME on Windows.</p><img alt="aScreenshot of ChangJie (Traditional Chinese IME) which puts an ideographic space into composition string for placeholder" src="../_images/ChangJie.png">
+           <p>In this case, although, we should not commit the placeholder character because it’s not a character which the user wanted to input but we commit it as is. The reason is, inputting an ideographic space causes a composition. Therefore, we cannot distinguish if committing composition is unexpected. If the user uses such old Chinese IME, <code class="docutils literal notranslate"><span class="pre">"intl.ime.remove_placeholder_character_at_commit"</span></code> pref may be useful but we don’t support them anymore in default settings (except if somebody will find a good way to fix this issue).</p>
+          </section>
+          <section id="the-composition-is-committed-synchronously-but-with-empty-string">
+           <h3>The composition is committed synchronously but with empty string<a class="headerlink" href="#the-composition-is-committed-synchronously-but-with-empty-string" title="Link to this heading">?</a></h3>
+           <p>This case may occur on Linux or with some IME on other platforms. If a web application implements autocomplete, committing with different strings especially an empty string it might cause confusion.</p>
+           <p>In this case, TextComposition overwrites the commit string of <code class="docutils literal notranslate"><span class="pre">eCompositionChange</span></code> event dispatched by widget. However, if the last composition string is only an ideographic space, it shouldn’t be committed. See the previous case.</p>
+           <p>Note that this case doesn’t work as expected when composition is in a remote process in e10s mode.</p>
+          </section>
+          <section id="the-composition-is-not-committed">
+           <h3>The composition is not committed<a class="headerlink" href="#the-composition-is-not-committed" title="Link to this heading">?</a></h3>
+           <p>On Linux, there is no API to request commit or canceling composition forcibly. Instead, Gecko uses <code class="docutils literal notranslate"><span class="pre">gtk_im_context_reset()</span></code> API for this purpose because most IME cancel composition with it. But there are some IMEs which do nothing when Gecko calls it.</p>
+           <p>If this occurs, Gecko should restart composition with a DOM <code class="docutils literal notranslate"><span class="pre">compositionstart</span></code> event , a DOM <code class="docutils literal notranslate"><span class="pre">compositionupdate</span></code> event and a DOM <code class="docutils literal notranslate"><span class="pre">text</span></code> event at caret position.</p>
+           <div class="admonition note">
+            <p class="admonition-title">Note</p>
+            <p>This issue hasn’t been supported yet.</p>
+           </div>
+          </section>
+         </section>
+         <section id="ime-state-management">
+          <h2>IME state management<a class="headerlink" href="#ime-state-management" title="Link to this heading">?</a></h2>
+          <p>IME is a text input system. It means that except when a user wants to input some text, IME shouldn’t be available. For example, pressing the space key to attempt scrolling a page may be consumed and prevented by IME. Additionally, password editors need to request special behavior with IME.</p>
+          <p>For solving this issue, Gecko sets the proper IME state at DOM focus change.</p>
+          <p>First, when a DOM node gets focus, nsFocusManager notifies <code class="docutils literal notranslate"><span class="pre">IMEStateManager</span></code> of the new focused node (calls <code class="docutils literal notranslate"><span class="pre">IMEStateManager::OnChangeFocus()</span></code>). <code class="docutils literal notranslate"><span class="pre">IMEStateManager</span></code> asks desired IME state by calling <code class="docutils literal notranslate"><span class="pre">nsIContent::GetDesiredIMEState()</span></code> of the node. If the node owns <code class="docutils literal notranslate"><span class="pre">TextEditor</span></code> instance, it asks for the desired IME state from the editor and returns the result.</p>
+          <p>Next, <code class="docutils literal notranslate"><span class="pre">IMEStateManager</span></code> initializes <code class="docutils literal notranslate"><span class="pre">InputContext</span></code> (defined in <a class="reference external" href="https://searchfox.org/mozilla-central/source/widget/IMEData.h">IMEData.h</a>) with the desired IME state and node information. Then, it calls <code class="docutils literal notranslate"><span class="pre">nsIWidget::SetInputContext()</span></code> with the <code class="docutils literal notranslate"><span class="pre">InputContext</span></code>.</p>
+          <p>Finally, widget stores the InputContext and enables or disables IME if the platform has such an API.</p>
+          <section id="inputcontext">
+           <h3>InputContext<a class="headerlink" href="#inputcontext" title="Link to this heading">?</a></h3>
+           <p>InputContext is a struct. Its <code class="docutils literal notranslate"><span class="pre">mIMEState</span></code>, <code class="docutils literal notranslate"><span class="pre">mHTMLInputType</span></code>, <code class="docutils literal notranslate"><span class="pre">mHTMLInputInputMode</span></code> and <code class="docutils literal notranslate"><span class="pre">mActionHint</span></code> are set at <code class="docutils literal notranslate"><span class="pre">nsIWidget::SetInputContext()</span></code> called.</p>
+           <section id="mimestate">
+            <h4>mIMEState<a class="headerlink" href="#mimestate" title="Link to this heading">?</a></h4>
+            <p>IME state has two abilities. One is enabled state:</p>
+            <section id="enabled">
+             <h5>ENABLED<a class="headerlink" href="#enabled" title="Link to this heading">?</a></h5>
+             <p>This means IME is fully available. E.g., when an editable element such as <code class="docutils literal notranslate"><span class="pre">&lt;input</span> <span class="pre">type="text"&gt;</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;textarea&gt;</span></code> or <code class="docutils literal notranslate"><span class="pre">&lt;foo</span> <span class="pre">contenteditable&gt;</span></code> has focus.</p>
+            </section>
+            <section id="disabled">
+             <h5>DISABLED<a class="headerlink" href="#disabled" title="Link to this heading">?</a></h5>
+             <p>This means IME is not available. E.g., when a non-editable element has focus or no element has focus, the desired IME state is <code class="docutils literal notranslate"><span class="pre">DISABLED</span></code>.</p>
+            </section>
+            <section id="password">
+             <h5>PASSWORD<a class="headerlink" href="#password" title="Link to this heading">?</a></h5>
+             <p>This means IME state should be the same as the state when a native password field has focus. This state is set only when <code class="docutils literal notranslate"><span class="pre">&lt;input</span> <span class="pre">type="password"&gt;</span> <span class="pre">(ime-mode:</span> <span class="pre">auto;)</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;input</span> <span class="pre">type="text"</span> <span class="pre">style="ime-mode:</span> <span class="pre">disabled;"&gt;</span></code> or <code class="docutils literal notranslate"><span class="pre">&lt;textarea</span> <span class="pre">style="ime-mode:</span> <span class="pre">disabled;"&gt;</span></code>.</p>
+             <p>The other is IME open state:</p>
+            </section>
+            <section id="dont-change-open-state">
+             <h5>DONT_CHANGE_OPEN_STATE<a class="headerlink" href="#dont-change-open-state" title="Link to this heading">?</a></h5>
+             <p>The open state of IME shouldn’t be changed. I.e., Gecko should keep the last IME open state.</p>
+            </section>
+            <section id="open">
+             <h5>OPEN<a class="headerlink" href="#open" title="Link to this heading">?</a></h5>
+             <p>Open IME. This is specified only when ime-mode of the new focused element is <code class="docutils literal notranslate"><span class="pre">active</span></code>.</p>
+            </section>
+            <section id="close">
+             <h5>CLOSE<a class="headerlink" href="#close" title="Link to this heading">?</a></h5>
+             <p>Close IME. This is specified only when ime-mode of the new focused element is <code class="docutils literal notranslate"><span class="pre">inactive</span></code>.</p>
+             <div class="admonition note">
+              <p class="admonition-title">Note</p>
+              <p>E.g., on Linux, applications cannot manage IME open state. On such platforms, this is ignored.</p>
+             </div>
+             <div class="admonition note">
+              <p class="admonition-title">Note</p>
+              <p>IME open state should be changed only when <code class="docutils literal notranslate"><span class="pre">nsIWidget::SetInputContext()</span></code> is called at DOM focus change because changing IME open state while an editor has focus makes users confused. The reason why <code class="docutils literal notranslate"><span class="pre">nsIWidget::SetInputContext()</span></code> is called is stored in <code class="docutils literal notranslate"><span class="pre">InputContextAction::mCause</span></code>.</p>
+             </div>
+            </section>
+            <section id="how-does-gecko-disable-ime-in-imm-mode-on-windows">
+             <h5>How does Gecko disable IME in IMM mode on Windows<a class="headerlink" href="#how-does-gecko-disable-ime-in-imm-mode-on-windows" title="Link to this heading">?</a></h5>
+             <p>Every window on Windows is associated an <code class="docutils literal notranslate"><span class="pre">IMContext</span></code>. When Gecko disables IME, <a class="reference external" href="https://searchfox.org/mozilla-central/source/widget/windows/WinIMEHandler.cpp">mozilla::widget::IMEHandler</a>::SetInputContext() disassociates the context from the window.</p>
+            </section>
+            <section id="how-does-gecko-disable-ime-in-tsf-mode-on-windows">
+             <h5>How does Gecko disable IME in TSF mode on Windows<a class="headerlink" href="#how-does-gecko-disable-ime-in-tsf-mode-on-windows" title="Link to this heading">?</a></h5>
+             <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/widget/windows/TSFTextStore.cpp">mozilla::widget::TSFTextStore</a> sets focus to a dummy context which disables the keyboard.</p>
+            </section>
+            <section id="how-does-gecko-disable-ime-on-mac">
+             <h5>How does Gecko disable IME on Mac<a class="headerlink" href="#how-does-gecko-disable-ime-on-mac" title="Link to this heading">?</a></h5>
+             <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/widget/cocoa/TextInputHandler.mm">mozilla::widget::TextInputHandler</a>::HandleKeyDownEvent() doesn’t call focused view’s interpretKeyEvents. This prevents native key events to be passed to IME.</p>
+            </section>
+            <section id="how-does-gecko-disable-ime-on-gtk">
+             <h5>How does Gecko disable IME on GTK<a class="headerlink" href="#how-does-gecko-disable-ime-on-gtk" title="Link to this heading">?</a></h5>
+             <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/widget/gtk/IMContextWrapper.cpp">mozilla::widget::IMContextWrapper</a> sets focus to a dummy context which doesn’t have IME composition.</p>
+            </section>
+            <section id="how-does-gecko-disable-ime-on-android">
+             <h5>How does Gecko disable IME on Android<a class="headerlink" href="#how-does-gecko-disable-ime-on-android" title="Link to this heading">?</a></h5>
+             <p>?</p>
+            </section>
+           </section>
+           <section id="mhtmlinputtype">
+            <h4>mHTMLInputType<a class="headerlink" href="#mhtmlinputtype" title="Link to this heading">?</a></h4>
+            <p>The value is a string representing the focused editor.</p>
+            <dl class="simple">
+             <dt>
+              <code class="docutils literal notranslate"><span class="pre">"text"</span></code>, <code class="docutils literal notranslate"><span class="pre">"password"</span></code>, <code class="docutils literal notranslate"><span class="pre">"number"</span></code>, etc.
+             </dt>
+             <dd>
+              <p>When an <code class="docutils literal notranslate"><span class="pre">&lt;input&gt;</span></code> element gets focus, the value is the type of the input element.</p>
+             </dd>
+             <dt>
+              <code class="docutils literal notranslate"><span class="pre">"textarea"</span></code>
+             </dt>
+             <dd>
+              <p>When a <code class="docutils literal notranslate"><span class="pre">&lt;textarea&gt;</span></code> element gets focus, the value is <code class="docutils literal notranslate"><span class="pre">"textarea"</span></code>.</p>
+             </dd>
+             <dt>
+              <code class="docutils literal notranslate"><span class="pre">""</span></code>
+             </dt>
+             <dd>
+              <p>When an HTML editor (an element whose <code class="docutils literal notranslate"><span class="pre">contenteditable</span></code> attribute is <code class="docutils literal notranslate"><span class="pre">true</span></code> or document whose <code class="docutils literal notranslate"><span class="pre">designMode</span></code> is <code class="docutils literal notranslate"><span class="pre">"on"</span></code>) gets focus, the value is empty. And also, when the other elements get focus.</p>
+             </dd>
+            </dl>
+           </section>
+           <section id="mhtmlinputmode">
+            <h4>mHTMLInputMode<a class="headerlink" href="#mhtmlinputmode" title="Link to this heading">?</a></h4>
+            <p>The value is <code class="docutils literal notranslate"><span class="pre">inputmode</span></code> attribute value of the focused editor.</p>
+           </section>
+           <section id="mactionhint">
+            <h4>mActionHint<a class="headerlink" href="#mactionhint" title="Link to this heading">?</a></h4>
+            <p>The value is <code class="docutils literal notranslate"><span class="pre">enterkeyhint</span></code> attribute value of the focused editor when <code class="docutils literal notranslate"><span class="pre">"dom.forms.enterkeyhint"</span></code> pref is true. This is useful for deciding the caption for the submit button in virtual keyboard. E.g., the value could be <code class="docutils literal notranslate"><span class="pre">"Go"</span></code>, <code class="docutils literal notranslate"><span class="pre">"Next"</span></code> or <code class="docutils literal notranslate"><span class="pre">"Search"</span></code>.</p>
+           </section>
+          </section>
+         </section>
+         <section id="native-ime-handlers">
+          <h2>Native IME handlers<a class="headerlink" href="#native-ime-handlers" title="Link to this heading">?</a></h2>
+          <p>Following classes handles IME on each platform:</p>
+          <section id="windows">
+           <h3>Windows<a class="headerlink" href="#windows" title="Link to this heading">?</a></h3>
+           <section id="mozilla-widget-imehandler">
+            <h4><a class="reference external" href="https://searchfox.org/mozilla-central/source/widget/windows/WinIMEHandler.cpp">mozilla::widget::IMEHandler</a><a class="headerlink" href="#mozilla-widget-imehandler" title="Link to this heading">?</a></h4>
+            <p>This class manages input method context of each window and makes <code class="docutils literal notranslate"><span class="pre">IMMHandler</span></code> or <code class="docutils literal notranslate"><span class="pre">TSFTextStore</span></code> work with active IME and focused editor. This class has only static members, i.e., never created its instance.</p>
+           </section>
+           <section id="mozilla-widget-immhandler">
+            <h4><a class="reference external" href="https://searchfox.org/mozilla-central/source/widget/windows/IMMHandler.cpp">mozilla::widget::IMMHandler</a><a class="headerlink" href="#mozilla-widget-immhandler" title="Link to this heading">?</a></h4>
+            <p>This class is used when TSF mode is disabled by pref (<code class="docutils literal notranslate"><span class="pre">"intl.tsf.enabled"</span></code> since 108, formerly named <code class="docutils literal notranslate"><span class="pre">"intl.tsf.enable"</span></code>) or active IME is for IMM (i.e., not TIP for TSF).</p>
+            <p>This class handles <code class="docutils literal notranslate"><span class="pre">WM_IME_*</span></code> messages and uses <code class="docutils literal notranslate"><span class="pre">Imm*()</span></code> API. This is a singleton class since Gecko supports only on IM context in a process. Typically, a process creates windows with default IM context. Therefore, this design is enough (ideally, an instance should be created per IM context, though). The singleton instance is created when it becomes necessary.</p>
+           </section>
+           <section id="mozilla-widget-tsftextstore">
+            <h4><a class="reference external" href="https://searchfox.org/mozilla-central/source/widget/windows/TSFTextStore.cpp">mozilla::widget::TSFTextStore</a><a class="headerlink" href="#mozilla-widget-tsftextstore" title="Link to this heading">?</a></h4>
+            <p>This class handles IME events in TSF mode and when TIP (IME implemented with TSF) is active. This instances are created when an editable element gets focus and released when it loses focus.</p>
+            <p><code class="docutils literal notranslate"><span class="pre">TSFTextStore</span></code> implements some COM interfaces which is necessary to work with TIP. And similarly, there is a singleton class, <code class="docutils literal notranslate"><span class="pre">TSFStaticSink</span></code>, to observe active TIP changes.</p>
+            <p>TSF is the most complicated IME API on all platforms, therefore, design of this class is also very complicated.</p>
+            <p>FIrst, TSF/TIP requests to lock the editor content for querying or modifying the content or selection. However, web standards don’t have such mechanism. Therefore, when it’s requested, <code class="docutils literal notranslate"><span class="pre">TSFTextStore</span></code> caches current content and selection with <code class="docutils literal notranslate"><span class="pre">WidgetQueryContentEvent</span></code>. Then, it uses the cache to reply to query requests, and modifies the cache as they requested. At this time, <code class="docutils literal notranslate"><span class="pre">TSFTextStore</span></code> saves the requests of modification into the queue called <code class="docutils literal notranslate"><span class="pre">PendingAction</span></code>. Finally, after unlocking the contents, it flushes the pending actions with dispatches <code class="docutils literal notranslate"><span class="pre">WidgetCompositionEvent``s</span> <span class="pre">via</span> <span class="pre">``TextEventDispatcher</span></code>.</p>
+            <p>Then, <code class="docutils literal notranslate"><span class="pre">IMEContentObserver</span></code> will notify some changes caused by the dispatched <code class="docutils literal notranslate"><span class="pre">WidgetCompositionEvents</span></code> (they are notified synchronously in chrome or non-e10s mode, but asynchronously from a remote process in e10s mode). At this time, <code class="docutils literal notranslate"><span class="pre">TSFTextStore</span></code> may receive notifications which indicates web application changes the content differently from cache in <code class="docutils literal notranslate"><span class="pre">TSFTextStore</span></code>. However, <code class="docutils literal notranslate"><span class="pre">TSFTextStore</span></code> ignores such fact temporarily until the composition is finished completely. The reason is that, notifying unexpected text or selection changes to TSF and/or TIP during composition may behave them odd.</p>
+            <p>When a composition is committed and it receives <code class="docutils literal notranslate"><span class="pre">NOTIFY_IME_OF_COMPOSITION_EVENT_HANDLED</span></code>, <code class="docutils literal notranslate"><span class="pre">TSFTextStore</span></code> clears the cache of contents and notifying TSF of merged text changes and the last selection change if they are not caused by composition. By this step, TSF and TIP may sync its internal cache with actual contents.</p>
+            <p>Note that if new composition is started before <code class="docutils literal notranslate"><span class="pre">NOTIFY_IME_OF_COMPOSITION_EVENT_HANDLED</span></code> notification, <code class="docutils literal notranslate"><span class="pre">TSFTextStore</span></code> handles the a composition with cached contents which may be different from actual contents. So, e.g., reconversion around caret may not work as unexpected in such case, but we don’t have a good solution for this issue.</p>
+            <p>On the other hand, <code class="docutils literal notranslate"><span class="pre">TSFTextStore</span></code> cannot cache character rectangles since if there are a lot of characters, caching the rectangles require a lot of CPU cost (to compute each rect) and memory. Therefore, <code class="docutils literal notranslate"><span class="pre">TSFTextStore</span></code> will use insertion point relative query for them <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1286157">bug 1286157</a>. Then, it can retrieve expected character’s rect even if the cache of <code class="docutils literal notranslate"><span class="pre">TSFTextStore</span></code> is different from the actual contents because TIP typically needs caret position’s character rect (for a popup to indicate current input mode or next word suggestion list) or first character rect of the target clause of current composition (for a candidate list window of conversion).</p>
+           </section>
+          </section>
+          <section id="mac">
+           <h3>Mac<a class="headerlink" href="#mac" title="Link to this heading">?</a></h3>
+           <p>Both IME and key events are handled in <a class="reference external" href="https://searchfox.org/mozilla-central/source/widget/cocoa/TextInputHandler.mm">TextInputHandler.mm</a>.</p>
+           <p><code class="docutils literal notranslate"><span class="pre">mozilla::widget::TextInputHandlerBase</span></code> is the most base class. <code class="docutils literal notranslate"><span class="pre">mozilla::widget::IMEInputHandler</span></code> inherits <code class="docutils literal notranslate"><span class="pre">TextInputHandlerBase</span></code> and handles IME related events. <code class="docutils literal notranslate"><span class="pre">mozilla::widget::TextInputHandler</span></code> inherits <code class="docutils literal notranslate"><span class="pre">TextInputHandlerBase</span></code> and implements <code class="docutils literal notranslate"><span class="pre">NSTextInput</span></code> protocol of Cocoa. Its instance is created per <a class="reference external" href="https://searchfox.org/mozilla-central/source/widget/cocoa/nsChildView.mm">nsChildView</a> instance.</p>
+          </section>
+          <section id="gtk">
+           <h3>GTK<a class="headerlink" href="#gtk" title="Link to this heading">?</a></h3>
+           <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/widget/gtk/IMContextWrapper.cpp">mozilla::widget::IMContextWrapper</a> handles IME. The instance is created per top level window.</p>
+          </section>
+          <section id="android">
+           <h3>Android<a class="headerlink" href="#android" title="Link to this heading">?</a></h3>
+           <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/mobile/android/geckoview/src/main/java/org/mozilla/geckoview/GeckoEditable.java">org.mozilla.geckoview.GeckoEditable</a> handles native IME events and <a class="reference external" href="https://searchfox.org/mozilla-central/source/widget/android/GeckoEditableSupport.cpp">mozilla::widget::GeckoEditableSupport</a> dispatches <code class="docutils literal notranslate"><span class="pre">Widget*Event</span></code>.</p>
+          </section>
+         </section>
+        </section>
+       </div>
+      </div>
+      <footer>
+       <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="EditorModuleSpecificRules.html" class="btn btn-neutral float-left" title="Editor module specific rules" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a> <a href="../layout/index.html" class="btn btn-neutral float-right" title="Style system (CSS) &amp; Layout" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+       </div>
+       <hr>
+       <div role="contentinfo">
+        <p></p>
+       </div> Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+      </footer>
+     </div>
+    </div>
+   </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ </body>
+</html>

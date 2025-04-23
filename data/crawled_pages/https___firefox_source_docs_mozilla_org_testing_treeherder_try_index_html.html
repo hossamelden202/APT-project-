@@ -1,0 +1,363 @@
+<!doctype html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Understanding Treeherder Results — Firefox Source Docs  documentation</title>
+  <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50">
+  <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094">
+  <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=fd3f3429">
+  <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b">
+  <link rel="stylesheet" type="text/css" href="../../_static/custom_theme.css?v=dc5ed815">
+  <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7">
+  <link rel="shortcut icon" href="../../_static/firefox.ico"><!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script src="../../_static/jquery.js?v=5d32c60e"></script>
+  <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+  <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+  <script src="../../_static/doctools.js?v=9a2dae69"></script>
+  <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+  <script src="../../_static/copybutton.js?v=30646c52"></script>
+  <script src="../../_static/design-tabs.js?v=36754332"></script>
+  <script src="../../_static/js/theme.js"></script>
+  <link rel="index" title="Index" href="../../genindex.html">
+  <link rel="search" title="Search" href="../../search.html">
+  <link rel="next" title="Sheriffed intermittent failures" href="../sheriffed-intermittents/index.html">
+  <link rel="prev" title="Adding Context to manifestparser based Manifests" href="../automated-testing/manifest-sandbox.html">
+ </head>
+ <body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+   <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <div class="wy-side-scroll">
+     <div class="wy-side-nav-search">
+      <a href="../../index.html" class="icon icon-home"> Firefox Source Docs <img src="../../_static/firefox-wordmark.svg" class="logo" alt="Logo"> </a><!-- -- This code is governed by the BSD license ---->
+      <div>
+       <h3>Quick search</h3>
+       <script>
+    (function () {
+      var cx = "dd12886298f75dbef";
+      var gcse = document.createElement("script");
+      gcse.async = true;
+      gcse.src = "https://cse.google.com/cse.js?cx=" + cx;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(gcse, s);
+    })();
+  </script><gcse:search></gcse:search>
+      </div>
+     </div>
+     <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+      <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../glossary/index.html">A Glossary of Common Terms</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../overview/index.html">A Quick Guide to Mozilla Applications</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../setup/index.html">Getting Set Up To Work On The Firefox Codebase</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Working On Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Working on Firefox</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../bug-mgmt/index.html">Bug Handling</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox User Guide</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../devtools-user/index.html">Firefox DevTools User Docs</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Source Code Documentation</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mots/index.html">Governance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../browser/index.html">Firefox Front-end</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../dom/index.html">DOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../editor/index.html">Editor</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../layout/index.html">Style system (CSS) &amp; Layout</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../gfx/index.html">Graphics</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../ipc/index.html">Processes, Threads and IPC</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../devtools/index.html">Firefox DevTools Contributor Docs</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../toolkit/index.html">Toolkit</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../js/index.html">SpiderMonkey</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../jsloader/index.html">JS Loader</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/geckoview/index.html">GeckoView</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/fenix/index.html">Fenix</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/focus-android/index.html">Focus for Android</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../dom/bindings/webidl/index.html">WebIDL</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../modules/libpref/index.html">libpref</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../networking/index.html">Networking</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../remote/index.html">Remote Protocols</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../services/index.html">Services</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../permissions/index.html">Permissions</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../uriloader/index.html">File Handling</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../widget/cocoa/index.html">Firefox on macOS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../widget/windows/index.html">Firefox on Windows</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../toolkit/components/ml/index.html">Firefox AI Runtime</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../accessible/index.html">Accessibility</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../media/index.html">Media Playback</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../code-quality/index.html">Code quality</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../writing-rust-code/index.html">Writing Rust Code</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../rust-components/index.html">Rust Components</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/profiler/index.html">Gecko Profiler</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../performance/index.html">Performance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../storage/index.html">Database bindings (SQLite, KV, …)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../xpcom/index.html">XPCOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../nspr/index.html">NSPR</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../security/nss/index.html">Network Security Services (NSS)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../content-security/index.html">Web Security Checks in Gecko</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">The Firefox Build System</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mach/index.html">Mach</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/try/index.html">Pushing to Try</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../build/buildsystem/index.html">Build System</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../taskcluster/index.html">Firefox CI and Taskgraph</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/moztreedocs/index.html">Managing Documentation</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mozbuild/vendor/index.html">Vendoring Third Party Components</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Testing &amp; Test Infrastructure</span></p>
+      <ul class="current">
+       <li class="toctree-l1"><a class="reference internal" href="../automated-testing/index.html">Automated Testing</a></li>
+       <li class="toctree-l1 current"><a class="current reference internal" href="#">Understanding Treeherder Results</a>
+        <ul>
+         <li class="toctree-l2"><a class="reference internal" href="#confirm-failure-cf">Confirm Failure (CF)</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="#retrigger-r">Retrigger (R)</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="#new-annotations-new">NEW annotations (NEW)</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="#mitten-icon">MITTEN icon</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="#bug-suggestions">Bug Suggestions</a></li>
+        </ul></li>
+       <li class="toctree-l1"><a class="reference internal" href="../sheriffed-intermittents/index.html">Sheriffed intermittent failures</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tests-for-new-config/index.html">Turning on Firefox tests for a new configuration</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../intermittent/index.html">Avoiding intermittent tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing-policy/index.html">Testing Policy</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../ci-configs/index.html">Configuration Changes</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../browser-chrome/index.html">Browser chrome mochitests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../chrome-tests/index.html">Chrome Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../marionette/index.html">Marionette</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../geckodriver/index.html">geckodriver</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../test-verification/index.html">Test Verification</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../webrender/index.html">WebRender Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mochitest-plain/index.html">Mochitest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../xpcshell/index.html">XPCShell tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tps/index.html">TPS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../web-platform/index.html">web-platform-tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../gtest/index.html">GTest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/fuzzing/index.html">Fuzzing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/sanitizer/index.html">Sanitizer</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../perfdocs/index.html">Performance Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/code-coverage/index.html">Code coverage</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing-rust-code/index.html">Testing &amp; Debugging Rust Code</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Releases &amp; Updates</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html">Mozilla Update Infrastructure</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html#watershed-updates">Watershed Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html#desupport-updates">Desupport Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/update-verify/index.html">Update Verify</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Localization &amp; Internationalization</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../intl/index.html">Internationalization</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../l10n/index.html">Localization</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox and Python</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mozbase/index.html">mozbase</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../python/index.html">Using third-party Python packages</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Metrics Collected in Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../metrics/index.html">Metrics</a></li>
+      </ul>
+     </div>
+    </div>
+   </nav>
+   <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+    <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+     <i data-toggle="wy-nav-top" class="fa fa-bars"></i> <a href="../../index.html">Firefox Source Docs</a>
+    </nav>
+    <div class="wy-nav-content">
+     <div class="rst-content">
+      <!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+      <div role="navigation" aria-label="Page navigation">
+       <ul class="wy-breadcrumbs">
+        <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+        <li class="breadcrumb-item active">Understanding Treeherder Results</li>
+        <li class="wy-breadcrumbs-aside"><a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Developer+Infrastructure&amp;component=Firefox+Source+Docs%3A+Content&amp;short_desc=Documentation+issue+on+testing/treeherder-try/index&amp;comment=URL+=+https://firefox-source-docs.mozilla.org/testing/treeherder-try/index.html&amp;bug_file_loc=https://firefox-source-docs.mozilla.org/testing/treeherder-try/index.html" rel="nofollow">Report an issue</a> / <a href="../../_sources/testing/treeherder-try/index.rst.txt" rel="nofollow"> View page source</a></li>
+       </ul>
+       <hr>
+      </div>
+      <div role="main" class="document" itemscope itemtype="http://schema.org/Article">
+       <div itemprop="articleBody">
+        <section id="understanding-treeherder-results">
+         <h1>Understanding Treeherder Results<a class="headerlink" href="#understanding-treeherder-results" title="Link to this heading">?</a></h1>
+         <p><a class="reference external" href="https://treeherder.mozilla.org/userguide">Treeherder</a> serves as the primary dashboard for developers looking to view CI test results from their try pushes. The main purpose of the dashboard is to display all the tasks and their status along with tool to view logs, see failures, add jobs, cancel jobs, or connect to other tools.</p>
+         <p>When a test fails, it is important to figure out if this is a regression or an intermittent failure. It is typically to see 3-10% of the jobs fail, although the majority of the failures are intermittent (infrastructure failed, timing is off, test is sort of flaky, etc.). Sometimes a regression occurs but the failure is assumed intermittent.</p>
+         <dl class="simple">
+          <dt>
+           There are a few tools to use when a test fails:
+          </dt>
+          <dd>
+           <ul class="simple">
+            <li>
+             <p>Confirm Failure (CF)</p></li>
+            <li>
+             <p>Retrigger (R)</p></li>
+            <li>
+             <p>NEW annotation (NEW)</p></li>
+            <li>
+             <p>MITTEN icon</p></li>
+            <li>
+             <p>Bug Suggestions</p></li>
+           </ul>
+          </dd>
+         </dl>
+         <p>The quick answer is: use confirm failure for all failures and when all results are in, whichever tests are orange and do not have a mitten icon are what need further investigation.</p>
+         <p>It is best to understand how each of the tools work and use them in combination to be most efficient with your time and to find a regression.</p>
+         <section id="confirm-failure-cf">
+          <h2>Confirm Failure (CF)<a class="headerlink" href="#confirm-failure-cf" title="Link to this heading">?</a></h2>
+          <dl class="simple">
+           <dt>
+            This tool will give a strong signal when it is applicable. Confirm failure works by running the failing test path 10x in the same browser. We have found that this is the strongest signal compared to other methods, but there are limitations:
+           </dt>
+           <dd>
+            <ul class="simple">
+             <li>
+              <p>This requires a test failure that is discoverable in the failure line.</p></li>
+             <li>
+              <p>This requires the failure to be in a supported test harness (web-platform-test, mochitest*, reftest, xpcshell).</p></li>
+             <li>
+              <p>Some exceptions exist around specific hardware (e.g. android reftests) or required machines.</p></li>
+             <li>
+              <p>Running this can result in infrastructure failure.</p></li>
+             <li>
+              <p>Some specific tests do not work well when run in this method.</p></li>
+             <li>
+              <p>This launches a CF task for every failure (up to 10) discovered in the failing task, so often you end up with &gt;1 CF job.</p></li>
+            </ul>
+           </dd>
+          </dl>
+          <p>When this runs, a new task is scheduled and typically only takes a few minutes to complete (a retrigger can take 15-90 minutes depending on the task). If you run confirm failure on a failure and there is a lack of test path, unsupported harness or other well known limitations, a retrigger will automatically be scheduled.</p>
+          <p>To launch confirm failure you need to select the task</p>
+          <blockquote>
+           <div>
+            <a class="reference internal image-reference" href="../../_images/th_select_task1.png"><img alt="../../_images/th_select_task1.png" src="../../_images/th_select_task1.png" style="width: 300px;"></a>
+           </div>
+          </blockquote>
+          <p>then click the task action menu</p>
+          <blockquote>
+           <div>
+            <a class="reference internal image-reference" href="../../_images/th_task_action.png"><img alt="../../_images/th_task_action.png" src="../../_images/th_task_action.png" style="width: 300px;"></a>
+           </div>
+          </blockquote>
+          <p>and finally select “Confirm Test Failures”</p>
+          <blockquote>
+           <div>
+            <a class="reference internal image-reference" href="../../_images/th_confirm_failures.png"><img alt="../../_images/th_confirm_failures.png" src="../../_images/th_confirm_failures.png" style="width: 300px;"></a>
+           </div>
+          </blockquote>
+          <p>When the jobs are done, Treeherder will determine if the CF job passes and add a <a class="reference internal" href="../../_images/th_mitten.png"><img alt="MITTEN" src="../../_images/th_mitten.png" style="width: 30px;"></a> icon to the original failure if it is intermittent.</p>
+          <p>In the future we are planning to run confirm failure automatically on NEW failures only.</p>
+         </section>
+         <section id="retrigger-r">
+          <h2>Retrigger (R)<a class="headerlink" href="#retrigger-r" title="Link to this heading">?</a></h2>
+          <dl class="simple">
+           <dt>
+            When a retrigger happens the entire task is rerun. This sounds straightforward if a test fails once, rerun it and if it passes it is intermittent. In reality that isn’t the strongest signal, but sometimes it is the best signal. Here are some limitations:
+           </dt>
+           <dd>
+            <ul class="simple">
+             <li>
+              <p>a retrigger has infrastructure failures</p></li>
+             <li>
+              <p>a retrigger has a different set of test failures (maybe not even running your test)</p></li>
+             <li>
+              <p>a retrigger runs other tests that could influence the state of the browser/machine causing uncertain results</p></li>
+             <li>
+              <p>a retrigger can take a long time (many tasks run &gt;30 minutes)</p></li>
+            </ul>
+           </dd>
+          </dl>
+          <p>Given these limitations, a retrigger is a useful tool for gathering more information, just be prepared to double check the logs and failures in more detail if the task doesn’t succeed.</p>
+          <p>To launch a Retrigger, you can: select a task:</p>
+          <blockquote>
+           <div>
+            <a class="reference internal image-reference" href="../../_images/th_select_task1.png"><img alt="../../_images/th_select_task1.png" src="../../_images/th_select_task1.png" style="width: 300px;"></a>
+           </div>
+          </blockquote>
+          <p>click the rotating arrow icon in the task action bar:</p>
+          <blockquote>
+           <div>
+            <a class="reference internal image-reference" href="../../_images/th_retrigger1.png"><img alt="../../_images/th_retrigger1.png" src="../../_images/th_retrigger1.png" style="width: 300px;"></a>
+            <p>OR type the ‘r’ key on your keyboard</p>
+           </div>
+          </blockquote>
+          <p>If a task is retriggered and it is green, the original failing task will have a <a class="reference internal" href="../../_images/th_mitten.png"><img alt="MITTEN" src="../../_images/th_mitten.png" style="width: 30px;"></a> icon.</p>
+         </section>
+         <section id="new-annotations-new">
+          <h2>NEW annotations (NEW)<a class="headerlink" href="#new-annotations-new" title="Link to this heading">?</a></h2>
+          <p>Treeherder keeps a cache of every failure line seen on Autoland and Mozilla-Central for the last 3 weeks. When a new failure line shows up it is flagged in the task failure summary with a NEW tag. The NEW tag is very successful at finding nearly all regressions, the downside is that many of the NEW tags are seen on intermittents (if an intermittent wasn’t seen recently, or the failure line is slightly different).</p>
+          <p>NEW failures are for all tasks (build, lint, test, etc.) and for all failures (infra failures as well)</p><a class="reference internal image-reference" href="../../_images/th_new.png"><img alt="../../_images/th_new.png" src="../../_images/th_new.png" style="width: 400px;"></a>
+          <dl class="simple">
+           <dt>
+            On Try server, the NEW annotations are shown, and can act as a way to quickly filter a large number of failing tasks down to a more manageable number. It is best practice to run confirm failure or retrigger on the failing NEW task. To view only failing tasks, you can:
+           </dt>
+           <dd>
+            <p>click on the filter icon for the entire page</p>
+           </dd>
+          </dl><a class="reference internal image-reference" href="../../_images/th_filter.png"><img alt="../../_images/th_filter.png" src="../../_images/th_filter.png" style="width: 300px;"></a>
+          <p>select the field “failure classification” and select the value “new failure not classified”</p><a class="reference internal image-reference" href="../../_images/th_filter_classifications.png"><img alt="../../_images/th_filter_classifications.png" src="../../_images/th_filter_classifications.png" style="width: 300px;"></a>
+          <p>then click “Add”</p><a class="reference internal image-reference" href="../../_images/th_filter_add.png"><img alt="../../_images/th_filter_add.png" src="../../_images/th_filter_add.png" style="width: 300px;"></a>
+          <p>the above will add a <cite>&amp;failure_classification=6</cite> to the url, you can add that manually if you wish.</p>
+         </section>
+         <section id="mitten-icon">
+          <h2>MITTEN icon<a class="headerlink" href="#mitten-icon" title="Link to this heading">?</a></h2>
+          <p>Another feature in Treeherder is the <a class="reference internal" href="../../_images/th_mitten.png"><img alt="MITTEN" src="../../_images/th_mitten.png" style="width: 30px;"></a> icon. This is added to an orange job if the job had a retrigger or confirm failure and it is green. This is a great visual shortcut to ignore job failures.</p>
+         </section>
+         <section id="bug-suggestions">
+          <h2>Bug Suggestions<a class="headerlink" href="#bug-suggestions" title="Link to this heading">?</a></h2>
+          <p>Built into Treeherder originally is the feature when looking at the “Failure Summary” there will be bug suggestions showing you similar bugs that match the failure.</p><a class="reference internal image-reference" href="../../_images/th_bug_suggestions.png"><img alt="../../_images/th_bug_suggestions.png" src="../../_images/th_bug_suggestions.png" style="width: 300px;"></a>
+          <p>If there is a <a class="reference external" href="../sheriffed-intermittents/index.html#single-tracking-bugs">Single Tracking Bug</a>, only that will be shown.</p>
+          <dl class="simple">
+           <dt>
+            Some caveats to keep in mind:
+           </dt>
+           <dd>
+            <ul class="simple">
+             <li>
+              <p>It is easy to assume if there is a bug that the failure is an intermittent.</p></li>
+             <li>
+              <p>this doesn’t tell you if you have made an intermittent a permanent failure.</p></li>
+             <li>
+              <p>the bug could be for a different configuration (look at failure history and compare platform, build type, test variant to make sure this failure isn’t spreading)</p></li>
+             <li>
+              <p>the bug could be inactive for months.</p></li>
+            </ul>
+           </dd>
+          </dl>
+         </section>
+        </section>
+       </div>
+      </div>
+      <footer>
+       <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../automated-testing/manifest-sandbox.html" class="btn btn-neutral float-left" title="Adding Context to manifestparser based Manifests" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a> <a href="../sheriffed-intermittents/index.html" class="btn btn-neutral float-right" title="Sheriffed intermittent failures" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+       </div>
+       <hr>
+       <div role="contentinfo">
+        <p></p>
+       </div> Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+      </footer>
+     </div>
+    </div>
+   </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ </body>
+</html>

@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en" data-content_root="../../">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Python Handlers — web-platform-tests  documentation</title>
+  <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=5ecbeea2">
+  <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css?v=12dfc556">
+  <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+  <script src="../../_static/doctools.js?v=888ff710"></script>
+  <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <link rel="index" title="Index" href="../../genindex.html">
+  <link rel="search" title="Search" href="../../search.html">
+  <link rel="next" title="Request" href="../../tools/wptserve/docs/request.html">
+  <link rel="prev" title="Server Features" href="../server-features.html">
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css">
+ </head>
+ <body>
+  <div class="document">
+   <div class="documentwrapper">
+    <div class="bodywrapper">
+     <div class="body" role="main">
+      <section id="python-handlers">
+       <h1>Python Handlers<a class="headerlink" href="#python-handlers" title="Link to this heading">¶</a></h1>
+       <p>Python file handlers are Python files which the server executes in response to requests made to the corresponding URL. This is hooked up to a route like <code class="docutils literal notranslate"><span class="pre">("*",</span> <span class="pre">"*.py",</span> <span class="pre">python_file_handler)</span></code>, meaning that any .py file will be treated as a handler file (note that this makes it easy to write unsafe handlers, particularly when running the server in a web-exposed setting).</p>
+       <p>The Python files must define a function named <code class="docutils literal notranslate"><span class="pre">main</span></code> with the signature:</p>
+       <div class="highlight-default notranslate">
+        <div class="highlight">
+         <pre><span></span><span class="n">main</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">response</span><span class="p">)</span>
+</pre>
+        </div>
+       </div>
+       <p>…where <code class="docutils literal notranslate"><span class="pre">request</span></code> is <a class="reference internal" href="../../tools/wptserve/docs/request.html"><span class="doc">a wptserve Request object</span></a> and <code class="docutils literal notranslate"><span class="pre">response</span></code> is <a class="reference internal" href="../../tools/wptserve/docs/response.html"><span class="doc">a wptserve Response object</span></a>.</p>
+       <p>This function must return a value in one of the following four formats:</p>
+       <div class="highlight-default notranslate">
+        <div class="highlight">
+         <pre><span></span><span class="p">((</span><span class="n">status_code</span><span class="p">,</span> <span class="n">reason</span><span class="p">),</span> <span class="n">headers</span><span class="p">,</span> <span class="n">content</span><span class="p">)</span>
+<span class="p">(</span><span class="n">status_code</span><span class="p">,</span> <span class="n">headers</span><span class="p">,</span> <span class="n">content</span><span class="p">)</span>
+<span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">content</span><span class="p">)</span>
+<span class="n">content</span>
+</pre>
+        </div>
+       </div>
+       <p>Above, <code class="docutils literal notranslate"><span class="pre">headers</span></code> is a list of (field name, value) pairs, and <code class="docutils literal notranslate"><span class="pre">content</span></code> is a string or an iterable returning strings.</p>
+       <p>The <code class="docutils literal notranslate"><span class="pre">main</span></code> function may also update the response manually. For example, one may use <code class="docutils literal notranslate"><span class="pre">response.headers.set</span></code> to set a response header, and only return the content. One may even use this kind of handler, but manipulate the output socket directly. The <code class="docutils literal notranslate"><span class="pre">writer</span></code> property of the response exposes a <code class="docutils literal notranslate"><span class="pre">ResponseWriter</span></code> object that allows writing specific parts of the request or direct access to the underlying socket. If used, the return value of the <code class="docutils literal notranslate"><span class="pre">main</span></code> function and the properties of the <code class="docutils literal notranslate"><span class="pre">response</span></code> object will be ignored.</p>
+       <p>The wptserver implements a number of Python APIs for controlling traffic.</p>
+       <div class="toctree-wrapper compound">
+        <ul>
+         <li class="toctree-l1"><a class="reference internal" href="../../tools/wptserve/docs/request.html">Request</a></li>
+         <li class="toctree-l1"><a class="reference internal" href="../../tools/wptserve/docs/response.html">Response</a></li>
+         <li class="toctree-l1"><a class="reference internal" href="../../tools/wptserve/docs/stash.html">Stash</a></li>
+        </ul>
+       </div>
+       <section id="importing-local-helper-scripts">
+        <h2>Importing local helper scripts<a class="headerlink" href="#importing-local-helper-scripts" title="Link to this heading">¶</a></h2>
+        <p>Python file handlers may import local helper scripts, e.g. to share logic across multiple handlers. To avoid module name collision, however, imports must be relative to the root of WPT. For example, in an imaginary <code class="docutils literal notranslate"><span class="pre">cookies/resources/myhandler.py</span></code>:</p>
+        <div class="highlight-python notranslate">
+         <div class="highlight">
+          <pre><span></span><span class="c1"># DON'T DO THIS</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">myhelper</span>
+
+<span class="c1"># DO THIS</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">cookies.resources</span><span class="w"> </span><span class="kn">import</span> <span class="n">myhelper</span>
+</pre>
+         </div>
+        </div>
+        <p>Only absolute imports are allowed; do not use relative imports. If the path to your helper script includes a hyphen (<code class="docutils literal notranslate"><span class="pre">-</span></code>), you can use <code class="docutils literal notranslate"><span class="pre">import_module</span></code> from <code class="docutils literal notranslate"><span class="pre">importlib</span></code> to import it. For example:</p>
+        <div class="highlight-python notranslate">
+         <div class="highlight">
+          <pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">importlib</span>
+<span class="n">myhelper</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="s1">'common.security-features.myhelper'</span><span class="p">)</span>
+</pre>
+         </div>
+        </div>
+        <p><strong>Note on <strong>init</strong> files</strong>: Importing helper scripts like this requires a ‘path’ of empty <code class="docutils literal notranslate"><span class="pre">__init__.py</span></code> files in every directory down to the helper. For example, if your helper is <code class="docutils literal notranslate"><span class="pre">css/css-align/resources/myhelper.py</span></code>, you need to have:</p>
+        <div class="highlight-default notranslate">
+         <div class="highlight">
+          <pre><span></span><span class="n">css</span><span class="o">/</span><span class="fm">__init__</span><span class="o">.</span><span class="n">py</span>
+<span class="n">css</span><span class="o">/</span><span class="n">css</span><span class="o">-</span><span class="n">align</span><span class="o">/</span><span class="fm">__init__</span><span class="o">.</span><span class="n">py</span>
+<span class="n">css</span><span class="o">/</span><span class="n">css</span><span class="o">-</span><span class="n">align</span><span class="o">/</span><span class="n">resources</span><span class="o">/</span><span class="fm">__init__</span><span class="o">.</span><span class="n">py</span>
+</pre>
+         </div>
+        </div>
+       </section>
+       <section id="example-dynamic-http-headers">
+        <h2>Example: Dynamic HTTP headers<a class="headerlink" href="#example-dynamic-http-headers" title="Link to this heading">¶</a></h2>
+        <p>The following code defines a Python handler that allows the requester to control the value of the <code class="docutils literal notranslate"><span class="pre">Content-Type</span></code> HTTP response header:</p>
+        <div class="highlight-python notranslate">
+         <div class="highlight">
+          <pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">response</span><span class="p">):</span>
+    <span class="n">content_type</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">first</span><span class="p">(</span><span class="s1">'content-type'</span><span class="p">)</span>
+    <span class="n">headers</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">'Content-Type'</span><span class="p">,</span> <span class="n">content_type</span><span class="p">)]</span>
+
+    <span class="k">return</span> <span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="s1">'my status text'</span><span class="p">),</span> <span class="n">headers</span><span class="p">,</span> <span class="s1">'my response content'</span>
+</pre>
+         </div>
+        </div>
+        <p>If saved to a file named <code class="docutils literal notranslate"><span class="pre">resources/control-content-type.py</span></code>, the WPT server will respond to requests for <code class="docutils literal notranslate"><span class="pre">resources/control-content-type.py</span></code> by executing that code.</p>
+        <p>This could be used from a <a class="reference internal" href="../testharness.html"><span class="doc">testharness.js test</span></a> like so:</p>
+        <div class="highlight-html notranslate">
+         <div class="highlight">
+          <pre><span></span><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="p">&lt;</span><span class="nt">meta</span> <span class="na">charset</span><span class="o">=</span><span class="s">"utf-8"</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>Demonstrating the WPT server's Python handler feature<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">"/resources/testharness.js"</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">"/resources/testharnessreport.js"</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="nx">promise_test</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="nx">fetch</span><span class="p">(</span><span class="s1">'resources/control-content-type.py?content-type=text/foobar'</span><span class="p">)</span>
+<span class="w">    </span><span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nx">assert_equals</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">status</span><span class="p">,</span><span class="w"> </span><span class="mf">200</span><span class="p">);</span>
+<span class="w">      </span><span class="nx">assert_equals</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">statusText</span><span class="p">,</span><span class="w"> </span><span class="s1">'my status text'</span><span class="p">);</span>
+<span class="w">      </span><span class="nx">assert_equals</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">headers</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'Content-Type'</span><span class="p">),</span><span class="w"> </span><span class="s1">'text/foobar'</span><span class="p">);</span>
+<span class="w">    </span><span class="p">});</span>
+<span class="p">});</span>
+<span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+</pre>
+         </div>
+        </div>
+       </section>
+      </section>
+     </div>
+    </div>
+   </div>
+   <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+    <div class="sphinxsidebarwrapper">
+     <h1 class="logo"><a href="../../index.html">web-platform-tests</a></h1>
+     <h3>Navigation</h3>
+     <ul class="current">
+      <li class="toctree-l1"><a class="reference internal" href="../../test-suite-design.html">Test Suite Design</a></li>
+      <li class="toctree-l1"><a class="reference internal" href="../../intro-video-transcript.html">“Introduction to WPT” video transcript</a></li>
+      <li class="toctree-l1"><a class="reference internal" href="../../running-tests/index.html">Running Tests</a></li>
+      <li class="toctree-l1 current"><a class="reference internal" href="../index.html">Writing Tests</a>
+       <ul class="current">
+        <li class="toctree-l2"><a class="reference internal" href="../index.html#test-types">Test Types</a></li>
+        <li class="toctree-l2"><a class="reference internal" href="../index.html#submitting-tests">Submitting Tests</a></li>
+        <li class="toctree-l2 current"><a class="reference internal" href="../index.html#table-of-contents">Table of Contents</a></li>
+       </ul></li>
+      <li class="toctree-l1"><a class="reference internal" href="../../reviewing-tests/index.html">Reviewing Tests</a></li>
+      <li class="toctree-l1"><a class="reference internal" href="../../admin/index.html">Project Administration</a></li>
+     </ul>
+     <div class="relations">
+      <h3>Related Topics</h3>
+      <ul>
+       <li><a href="../../index.html">Documentation overview</a>
+        <ul>
+         <li><a href="../index.html">Writing Tests</a>
+          <ul>
+           <li><a href="../server-features.html">Server Features</a>
+            <ul>
+             <li>Previous: <a href="../server-features.html" title="previous chapter">Server Features</a></li>
+             <li>Next: <a href="../../tools/wptserve/docs/request.html" title="next chapter">Request</a></li>
+            </ul></li>
+          </ul></li>
+        </ul></li>
+      </ul>
+     </div>
+     <div id="searchbox" style="display: none" role="search">
+      <h3 id="searchlabel">Quick search</h3>
+      <div class="searchformwrapper">
+       <form class="search" action="../../search.html" method="get">
+        <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"> <input type="submit" value="Go">
+       </form>
+      </div>
+     </div>
+     <script>document.getElementById('searchbox').style.display = "block"</script>
+    </div>
+   </div>
+   <div class="clearer"></div>
+  </div>
+  <div class="footer">
+   ©2019, wpt contributors. | Powered by <a href="https://www.sphinx-doc.org/">Sphinx 7.2.6</a> &amp; <a href="https://alabaster.readthedocs.io">Alabaster 0.7.16</a> | <a href="../../_sources/writing-tests/python-handlers/index.md.txt" rel="nofollow">Page source</a>
+  </div>
+ </body>
+</html>

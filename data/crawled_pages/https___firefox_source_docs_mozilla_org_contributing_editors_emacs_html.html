@@ -1,0 +1,352 @@
+<!doctype html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Emacs — Firefox Source Docs  documentation</title>
+  <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50">
+  <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094">
+  <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=fd3f3429">
+  <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b">
+  <link rel="stylesheet" type="text/css" href="../../_static/custom_theme.css?v=dc5ed815">
+  <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7">
+  <link rel="shortcut icon" href="../../_static/firefox.ico"><!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script src="../../_static/jquery.js?v=5d32c60e"></script>
+  <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+  <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+  <script src="../../_static/doctools.js?v=9a2dae69"></script>
+  <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+  <script src="../../_static/copybutton.js?v=30646c52"></script>
+  <script src="../../_static/design-tabs.js?v=36754332"></script>
+  <script src="../../_static/js/theme.js"></script>
+  <link rel="index" title="Index" href="../../genindex.html">
+  <link rel="search" title="Search" href="../../search.html">
+  <link rel="next" title="Vim / Neovim" href="vim.html">
+  <link rel="prev" title="Visual Studio Code" href="vscode.html">
+ </head>
+ <body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+   <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <div class="wy-side-scroll">
+     <div class="wy-side-nav-search">
+      <a href="../../index.html" class="icon icon-home"> Firefox Source Docs <img src="../../_static/firefox-wordmark.svg" class="logo" alt="Logo"> </a><!-- -- This code is governed by the BSD license ---->
+      <div>
+       <h3>Quick search</h3>
+       <script>
+    (function () {
+      var cx = "dd12886298f75dbef";
+      var gcse = document.createElement("script");
+      gcse.async = true;
+      gcse.src = "https://cse.google.com/cse.js?cx=" + cx;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(gcse, s);
+    })();
+  </script><gcse:search></gcse:search>
+      </div>
+     </div>
+     <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+      <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../glossary/index.html">A Glossary of Common Terms</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../overview/index.html">A Quick Guide to Mozilla Applications</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../setup/index.html">Getting Set Up To Work On The Firefox Codebase</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Working On Firefox</span></p>
+      <ul class="current">
+       <li class="toctree-l1 current"><a class="reference internal" href="../index.html">Working on Firefox</a>
+        <ul class="current">
+         <li class="toctree-l2"><a class="reference internal" href="../contribution_quickref.html">Firefox Contributors’ Quick Reference</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../stack_quickref.html">Working with stack of patches Quick Reference</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../pocket-guide-shipping-firefox.html">Pocket Guide: Shipping Firefox</a></li>
+         <li class="toctree-l2 current"><a class="reference internal" href="../editor.html">Editor / IDE integration</a>
+          <ul class="current">
+           <li class="toctree-l3"><a class="reference internal" href="vscode.html">Visual Studio Code</a></li>
+           <li class="toctree-l3 current"><a class="current reference internal" href="#">Emacs</a>
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="#eslint">ESLint</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#c-c-development-packages">C/C++ Development Packages</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#general-guidelines-to-emacs-c-programming">General Guidelines to Emacs C++ Programming</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#rtags-llvm-clang-based-code-indexing">rtags (LLVM/Clang-based Code Indexing)</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#irony-llvm-clang-based-code-completion">irony (LLVM/Clang-based Code Completion)</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#projectile-project-management">Projectile (Project Management)</a></li>
+            </ul></li>
+           <li class="toctree-l3"><a class="reference internal" href="vim.html">Vim / Neovim</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="others.html">Eclipse</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="others.html#visual-studio">Visual Studio</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="others.html#compiledb-back-end-compileflags">CompileDB back-end / compileflags</a></li>
+          </ul></li>
+         <li class="toctree-l2"><a class="reference internal" href="../reviews.html">Getting reviews</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../levelling-up.html">Levelling up</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../how_to_submit_a_patch.html">How to submit a patch</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../data-review.html">Data Review</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../Code_Review_FAQ.html">Code Review FAQ</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../reviewer_checklist.html">Reviewer Checklist</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../vcs/mercurial.html">Mercurial Overview</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../vcs/mercurial_bundles.html">Mercurial Bundles</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../debugging/capturing_minidump.html">Capturing a minidump</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../debugging/debugging_a_hang_on_macos.html">Debugging A Hang On macOS</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../debugging/debugging_a_minidump.html">Debugging A Minidump</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../debugging/debugging_firefox_with_gdb.html">Debugging Firefox with GDB</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../debugging/debugging_firefox_with_lldb.html">Debugging Firefox with LLDB</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../debugging/debugging_firefox_with_pernosco.html">Debugging Firefox with Pernosco</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../debugging/debugging_firefox_with_rr.html">Debugging Firefox with rr</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../debugging/debugging_firefox_with_valgrind.html">Debugging Firefox with Valgrind</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../debugging/debugging_on_macos.html">Debugging On macOS</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../debugging/debugging_on_windows.html">Debugging On Windows</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../debugging/debugging_webrtc_calls.html">Debugging WebRTC Calls</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../debugging/local_symbols.html">Symbolicating TreeHerder stacks locally</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../debugging/process_dump_task_manager.html">How to get a process dump with Windows Task Manager</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../debugging/stacktrace_report.html">How to get a stacktrace for a bug report</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../debugging/stacktrace_windbg.html">How to get a stacktrace with WinDbg</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../debugging/understanding_crash_reports.html">Understanding Crash Reports</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../signing/signing_macos_build.html">Signing Local macOS Builds</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../directory_structure.html">Firefox Source Code Directory Structure</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../build/artifact_builds.html">Understanding Artifact Builds</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../build/building_mobile_firefox.html">Firefox for Mobile Devices</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../build/supported.html">Supported Build Hosts and Targets</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../engineering_show_and_tell.html">Engineering Show and Tell</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../filing-good-bugs.html">Filing good bugs</a></li>
+        </ul></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../bug-mgmt/index.html">Bug Handling</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox User Guide</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../devtools-user/index.html">Firefox DevTools User Docs</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Source Code Documentation</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mots/index.html">Governance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../browser/index.html">Firefox Front-end</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../dom/index.html">DOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../editor/index.html">Editor</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../layout/index.html">Style system (CSS) &amp; Layout</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../gfx/index.html">Graphics</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../ipc/index.html">Processes, Threads and IPC</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../devtools/index.html">Firefox DevTools Contributor Docs</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../toolkit/index.html">Toolkit</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../js/index.html">SpiderMonkey</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../jsloader/index.html">JS Loader</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/geckoview/index.html">GeckoView</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/fenix/index.html">Fenix</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/focus-android/index.html">Focus for Android</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../dom/bindings/webidl/index.html">WebIDL</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../modules/libpref/index.html">libpref</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../networking/index.html">Networking</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../remote/index.html">Remote Protocols</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../services/index.html">Services</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../permissions/index.html">Permissions</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../uriloader/index.html">File Handling</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../widget/cocoa/index.html">Firefox on macOS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../widget/windows/index.html">Firefox on Windows</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../toolkit/components/ml/index.html">Firefox AI Runtime</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../accessible/index.html">Accessibility</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../media/index.html">Media Playback</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../code-quality/index.html">Code quality</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../writing-rust-code/index.html">Writing Rust Code</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../rust-components/index.html">Rust Components</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/profiler/index.html">Gecko Profiler</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../performance/index.html">Performance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../storage/index.html">Database bindings (SQLite, KV, …)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../xpcom/index.html">XPCOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../nspr/index.html">NSPR</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../security/nss/index.html">Network Security Services (NSS)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../content-security/index.html">Web Security Checks in Gecko</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">The Firefox Build System</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mach/index.html">Mach</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/try/index.html">Pushing to Try</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../build/buildsystem/index.html">Build System</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../taskcluster/index.html">Firefox CI and Taskgraph</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/moztreedocs/index.html">Managing Documentation</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mozbuild/vendor/index.html">Vendoring Third Party Components</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Testing &amp; Test Infrastructure</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/automated-testing/index.html">Automated Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/treeherder-try/index.html">Understanding Treeherder Results</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/sheriffed-intermittents/index.html">Sheriffed intermittent failures</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/tests-for-new-config/index.html">Turning on Firefox tests for a new configuration</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/intermittent/index.html">Avoiding intermittent tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/testing-policy/index.html">Testing Policy</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/ci-configs/index.html">Configuration Changes</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/browser-chrome/index.html">Browser chrome mochitests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/chrome-tests/index.html">Chrome Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/marionette/index.html">Marionette</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/geckodriver/index.html">geckodriver</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/test-verification/index.html">Test Verification</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/webrender/index.html">WebRender Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/mochitest-plain/index.html">Mochitest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/xpcshell/index.html">XPCShell tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/tps/index.html">TPS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../web-platform/index.html">web-platform-tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../gtest/index.html">GTest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/fuzzing/index.html">Fuzzing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/sanitizer/index.html">Sanitizer</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/perfdocs/index.html">Performance Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/code-coverage/index.html">Code coverage</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing-rust-code/index.html">Testing &amp; Debugging Rust Code</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Releases &amp; Updates</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html">Mozilla Update Infrastructure</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html#watershed-updates">Watershed Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html#desupport-updates">Desupport Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/update-verify/index.html">Update Verify</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Localization &amp; Internationalization</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../intl/index.html">Internationalization</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../l10n/index.html">Localization</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox and Python</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mozbase/index.html">mozbase</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../python/index.html">Using third-party Python packages</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Metrics Collected in Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../metrics/index.html">Metrics</a></li>
+      </ul>
+     </div>
+    </div>
+   </nav>
+   <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+    <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+     <i data-toggle="wy-nav-top" class="fa fa-bars"></i> <a href="../../index.html">Firefox Source Docs</a>
+    </nav>
+    <div class="wy-nav-content">
+     <div class="rst-content">
+      <!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+      <div role="navigation" aria-label="Page navigation">
+       <ul class="wy-breadcrumbs">
+        <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+        <li class="breadcrumb-item"><a href="../index.html">Working on Firefox</a></li>
+        <li class="breadcrumb-item"><a href="../editor.html">Editor / IDE integration</a></li>
+        <li class="breadcrumb-item active">Emacs</li>
+        <li class="wy-breadcrumbs-aside"><a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Developer+Infrastructure&amp;component=Firefox+Source+Docs%3A+Content&amp;short_desc=Documentation+issue+on+contributing/editors/emacs&amp;comment=URL+=+https://firefox-source-docs.mozilla.org/contributing/editors/emacs.html&amp;bug_file_loc=https://firefox-source-docs.mozilla.org/contributing/editors/emacs.html" rel="nofollow">Report an issue</a> / <a href="../../_sources/contributing/editors/emacs.rst.txt" rel="nofollow"> View page source</a></li>
+       </ul>
+       <hr>
+      </div>
+      <div role="main" class="document" itemscope itemtype="http://schema.org/Article">
+       <div itemprop="articleBody">
+        <section id="emacs">
+         <h1>Emacs<a class="headerlink" href="#emacs" title="Link to this heading">?</a></h1>
+         <section id="eslint">
+          <h2>ESLint<a class="headerlink" href="#eslint" title="Link to this heading">?</a></h2>
+          <p>See <a class="reference external" href="https://wiki.mozilla.org/DevTools/CodingStandards#Running_ESLint_in_Emacs">the devtools documentation</a> that describes how to integrate ESLint into Emacs.</p>
+         </section>
+         <section id="c-c-development-packages">
+          <h2>C/C++ Development Packages<a class="headerlink" href="#c-c-development-packages" title="Link to this heading">?</a></h2>
+         </section>
+         <section id="general-guidelines-to-emacs-c-programming">
+          <h2>General Guidelines to Emacs C++ Programming<a class="headerlink" href="#general-guidelines-to-emacs-c-programming" title="Link to this heading">?</a></h2>
+          <p>The following guides give an overview of the C++ editing capabilities of emacs.</p>
+          <p>It is worth reading through these guides to see what features are available. The rest of this section is dedicated to Mozilla/Gecko specific setup for packages.</p>
+          <blockquote>
+           <div>
+            <ul class="simple">
+             <li>
+              <p><a class="reference external" href="https://tuhdo.github.io/c-ide.html">C/C++ Development Environment for Emacs</a></p></li>
+             <li>
+              <p><a class="reference external" href="https://syamajala.github.io/c-ide.html">Emacs as C++ IDE</a></p></li>
+            </ul>
+           </div>
+          </blockquote>
+         </section>
+         <section id="rtags-llvm-clang-based-code-indexing">
+          <h2>rtags (LLVM/Clang-based Code Indexing)<a class="headerlink" href="#rtags-llvm-clang-based-code-indexing" title="Link to this heading">?</a></h2>
+          <p>Instructions for the installation of rtags are available at the <a class="reference external" href="https://github.com/Andersbakken/rtags">rtags github repo</a>.</p>
+          <p>rtags requires a <a class="reference internal" href="others.html#compiledb-back-end-compileflags"><span class="std std-ref">compilation database</span></a>.</p>
+          <p>In order for rtags to index correctly, included files need to be copied and unified compilation files need to be created. Either run a full build of the tree, or if you only want indexes to be generated for the moment, run the following commands (assuming you’re in the gecko repo root):</p>
+          <div class="highlight-default notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="n">cd</span> <span class="n">gecko_build_directory</span>
+<span class="n">make</span> <span class="n">export</span>
+<span class="o">./</span><span class="n">config</span><span class="o">.</span><span class="n">status</span>
+</pre>
+           </div>
+          </div>
+          <p>To increase indexing speed, it’s best to remove unified build files and test files from database updates. This can be done by creating a <code class="code docutils literal notranslate"><span class="pre">~/.rdmrc</span></code> file with the following contents, with <code class="code docutils literal notranslate"><span class="pre">[src_dir]</span></code> replaced with either the repo or build directory for your checkout:</p>
+          <div class="highlight-default notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="o">-</span><span class="n">X</span> <span class="o">*/</span><span class="p">[</span><span class="n">src_dir</span><span class="p">]</span><span class="o">/*</span><span class="n">Unified</span><span class="o">*</span><span class="p">;</span><span class="o">*/</span><span class="p">[</span><span class="n">src_dir</span><span class="p">]</span><span class="o">/*/</span><span class="n">test</span><span class="o">/*</span><span class="p">;</span><span class="o">*/</span><span class="p">[</span><span class="n">src_dir</span><span class="p">]</span><span class="o">/*/</span><span class="n">tests</span><span class="o">/*</span>
+</pre>
+           </div>
+          </div>
+          <p>Once the rdm daemon is running, the compilation database can be added to rtags like so:</p>
+          <div class="highlight-default notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="n">rc</span> <span class="o">-</span><span class="n">J</span> <span class="p">[</span><span class="n">gecko_build_directory</span><span class="p">]</span><span class="o">/</span><span class="n">compile_commands</span><span class="o">.</span><span class="n">json</span>
+</pre>
+           </div>
+          </div>
+          <p>Note that this process will take a while initially. However, once the database is built, it will only require incremental updates. As long as the rdm daemon is running in the background, the database will be updated based on changes to files.</p>
+         </section>
+         <section id="irony-llvm-clang-based-code-completion">
+          <h2>irony (LLVM/Clang-based Code Completion)<a class="headerlink" href="#irony-llvm-clang-based-code-completion" title="Link to this heading">?</a></h2>
+          <p>Instructions on the installation of irony-mode are available at the <a class="reference external" href="https://github.com/Sarcasm/irony-mode">irony-mode github repo</a>.</p>
+          <p>irony-mode requires a <a class="reference internal" href="others.html#compiledb-back-end-compileflags"><span class="std std-ref">compilation database</span></a>.</p>
+          <p>Note that irony-mode, by default, uses elisp to parse the <code class="code docutils literal notranslate"><span class="pre">compile_commands.json</span></code> file. As gecko is a very large codebase, this file can easily be multiple megabytes, which can make irony-mode take multiple seconds to load on a gecko file.</p>
+          <p>It is recommended to use <a class="reference external" href="https://github.com/Hylen/irony-mode/tree/compilation-database-guessing-4-pull-request">this fork of irony-mode</a>, which requires the boost System and Filesystem libraries.</p>
+          <p><a class="reference external" href="https://github.com/Sarcasm/irony-mode/issues/176">Checking the bug to get this patch into the mainline of irony-mode</a> is recommended, to see if the fork can be used or if the mainline repo can be used. Using the Boost version of the irony-mode server brings file load times to under 1s.</p>
+         </section>
+         <section id="projectile-project-management">
+          <h2>Projectile (Project Management)<a class="headerlink" href="#projectile-project-management" title="Link to this heading">?</a></h2>
+          <p>Instructions on the installation of projectile are available at the <a class="reference external" href="https://github.com/bbatsov/projectile">projectile github repo</a>.</p>
+          <p>Projectile comes preconfigured for many project types. Since, gecko uses its own special build system (mach), a new project type needs to be added. This can be done via adding the following elisp configuration command to your emacs configuration file.</p>
+          <div class="highlight-default notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="p">(</span><span class="n">projectile</span><span class="o">-</span><span class="n">register</span><span class="o">-</span><span class="n">project</span><span class="o">-</span><span class="nb">type</span> <span class="s1">'gecko</span>
+                                  <span class="s1">'("mach" "moz.build")</span>
+                                  <span class="s2">"python mach --log-no-times build"</span>
+                                  <span class="s2">"python mach mochitest"</span>
+                                  <span class="s2">"python mach run"</span><span class="p">)</span>
+</pre>
+           </div>
+          </div>
+          <p>Assuming projectile-global-mode is on, this will allow projectile to run the correct commands whenever it is working in a gecko repo.</p>
+          <section id="gdb">
+           <h3>gdb<a class="headerlink" href="#gdb" title="Link to this heading">?</a></h3>
+           <p>Emacs comes with great integration with gdb, especially when using <a class="reference external" href="https://www.gnu.org/software/emacs/manual/html_node/emacs/GDB-User-Interface-Layout.html">gdb-many-windows</a>.</p>
+           <p>However, when gdb is invoked via mach, some special arguments need to be passed in order to make sure the correct display mode is used. To use M-x gdb with mach on firefox, use the following command:</p>
+           <div class="highlight-default notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="n">gecko_repo_directory</span><span class="o">/</span><span class="n">mach</span> <span class="n">run</span> <span class="o">--</span><span class="n">debug</span> <span class="o">--</span><span class="n">debugparams</span><span class="o">=-</span><span class="n">i</span><span class="o">=</span><span class="n">mi</span>
+</pre>
+            </div>
+           </div>
+          </section>
+         </section>
+        </section>
+       </div>
+      </div>
+      <footer>
+       <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="vscode.html" class="btn btn-neutral float-left" title="Visual Studio Code" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a> <a href="vim.html" class="btn btn-neutral float-right" title="Vim / Neovim" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+       </div>
+       <hr>
+       <div role="contentinfo">
+        <p></p>
+       </div> Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+      </footer>
+     </div>
+    </div>
+   </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ </body>
+</html>

@@ -1,0 +1,626 @@
+<!doctype html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Debugger.Object — Firefox Source Docs  documentation</title>
+  <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50">
+  <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094">
+  <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=fd3f3429">
+  <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b">
+  <link rel="stylesheet" type="text/css" href="../../_static/custom_theme.css?v=dc5ed815">
+  <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7">
+  <link rel="shortcut icon" href="../../_static/firefox.ico"><!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script src="../../_static/jquery.js?v=5d32c60e"></script>
+  <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+  <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+  <script src="../../_static/doctools.js?v=9a2dae69"></script>
+  <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+  <script src="../../_static/copybutton.js?v=30646c52"></script>
+  <script src="../../_static/design-tabs.js?v=36754332"></script>
+  <script src="../../_static/js/theme.js"></script>
+  <link rel="index" title="Index" href="../../genindex.html">
+  <link rel="search" title="Search" href="../../search.html">
+  <link rel="next" title="Debugger.Script" href="Debugger.Script.html">
+  <link rel="prev" title="The Debugger Object" href="Debugger.html">
+ </head>
+ <body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+   <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <div class="wy-side-scroll">
+     <div class="wy-side-nav-search">
+      <a href="../../index.html" class="icon icon-home"> Firefox Source Docs <img src="../../_static/firefox-wordmark.svg" class="logo" alt="Logo"> </a><!-- -- This code is governed by the BSD license ---->
+      <div>
+       <h3>Quick search</h3>
+       <script>
+    (function () {
+      var cx = "dd12886298f75dbef";
+      var gcse = document.createElement("script");
+      gcse.async = true;
+      gcse.src = "https://cse.google.com/cse.js?cx=" + cx;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(gcse, s);
+    })();
+  </script><gcse:search></gcse:search>
+      </div>
+     </div>
+     <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+      <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../glossary/index.html">A Glossary of Common Terms</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../overview/index.html">A Quick Guide to Mozilla Applications</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../setup/index.html">Getting Set Up To Work On The Firefox Codebase</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Working On Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Working on Firefox</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../bug-mgmt/index.html">Bug Handling</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox User Guide</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../devtools-user/index.html">Firefox DevTools User Docs</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Source Code Documentation</span></p>
+      <ul class="current">
+       <li class="toctree-l1"><a class="reference internal" href="../../mots/index.html">Governance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../browser/index.html">Firefox Front-end</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../dom/index.html">DOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../editor/index.html">Editor</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../layout/index.html">Style system (CSS) &amp; Layout</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../gfx/index.html">Graphics</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../ipc/index.html">Processes, Threads and IPC</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../devtools/index.html">Firefox DevTools Contributor Docs</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../toolkit/index.html">Toolkit</a></li>
+       <li class="toctree-l1 current"><a class="reference internal" href="../index.html">SpiderMonkey</a>
+        <ul class="current">
+         <li class="toctree-l2"><a class="reference internal" href="../build.html">Building and testing SpiderMonkey</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../test.html">Running Automated JavaScript Tests</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../hacking_tips.html">Hacking Tips</a></li>
+         <li class="toctree-l2 current"><a class="reference internal" href="index.html">Debugger API</a>
+          <ul class="current">
+           <li class="toctree-l3"><a class="reference internal" href="Debugger-API.html">The <code class="docutils literal notranslate"><span class="pre">Debugger</span></code> Interface</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="Debugger.html">The Debugger Object</a></li>
+           <li class="toctree-l3 current"><a class="current reference internal" href="#">Debugger.Object</a>
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="#accessor-properties-of-the-debugger-object-prototype">Accessor Properties of the Debugger.Object prototype</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#function-properties-of-the-debugger-object-prototype">Function Properties of the Debugger.Object prototype</a></li>
+            </ul></li>
+           <li class="toctree-l3"><a class="reference internal" href="Debugger.Script.html">Debugger.Script</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="Debugger.Source.html">Debugger.Source</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="Debugger.Environment.html">Debugger.Environment</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="Debugger.Frame.html">Debugger.Frame</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="Debugger.Memory.html">Debugger.Memory</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="Conventions.html">General Conventions</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="Tutorial-Alloc-Log-Tree.html">Tutorial: Show Allocations Per Call Path</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="Tutorial-Breakpoint.html">Tutorial: Set a breakpoint using <code class="docutils literal notranslate"><span class="pre">Debugger</span></code></a></li>
+           <li class="toctree-l3"><a class="reference internal" href="Tutorial-Debugger-Statement.html">Tutorial: Evaluate an Expression When a debugger; Statement Is Executed</a></li>
+          </ul></li>
+         <li class="toctree-l2"><a class="reference internal" href="../SavedFrame/index.html">SavedFrame</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../feature_checklist.html">JavaScript Language Feature Checklist</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../bytecode_checklist.html">So You Want to Add a Bytecode Op</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../use_counter.html">Adding Use Counter Telemetry to the JS Engine</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../index.html#components-of-spidermonkey">Components of SpiderMonkey</a></li>
+        </ul></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../jsloader/index.html">JS Loader</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/geckoview/index.html">GeckoView</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/fenix/index.html">Fenix</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/focus-android/index.html">Focus for Android</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../dom/bindings/webidl/index.html">WebIDL</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../modules/libpref/index.html">libpref</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../networking/index.html">Networking</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../remote/index.html">Remote Protocols</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../services/index.html">Services</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../permissions/index.html">Permissions</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../uriloader/index.html">File Handling</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../widget/cocoa/index.html">Firefox on macOS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../widget/windows/index.html">Firefox on Windows</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../toolkit/components/ml/index.html">Firefox AI Runtime</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../accessible/index.html">Accessibility</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../media/index.html">Media Playback</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../code-quality/index.html">Code quality</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../writing-rust-code/index.html">Writing Rust Code</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../rust-components/index.html">Rust Components</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/profiler/index.html">Gecko Profiler</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../performance/index.html">Performance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../storage/index.html">Database bindings (SQLite, KV, …)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../xpcom/index.html">XPCOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../nspr/index.html">NSPR</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../security/nss/index.html">Network Security Services (NSS)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../content-security/index.html">Web Security Checks in Gecko</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">The Firefox Build System</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mach/index.html">Mach</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/try/index.html">Pushing to Try</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../build/buildsystem/index.html">Build System</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../taskcluster/index.html">Firefox CI and Taskgraph</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/moztreedocs/index.html">Managing Documentation</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mozbuild/vendor/index.html">Vendoring Third Party Components</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Testing &amp; Test Infrastructure</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/automated-testing/index.html">Automated Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/treeherder-try/index.html">Understanding Treeherder Results</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/sheriffed-intermittents/index.html">Sheriffed intermittent failures</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/tests-for-new-config/index.html">Turning on Firefox tests for a new configuration</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/intermittent/index.html">Avoiding intermittent tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/testing-policy/index.html">Testing Policy</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/ci-configs/index.html">Configuration Changes</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/browser-chrome/index.html">Browser chrome mochitests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/chrome-tests/index.html">Chrome Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/marionette/index.html">Marionette</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/geckodriver/index.html">geckodriver</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/test-verification/index.html">Test Verification</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/webrender/index.html">WebRender Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/mochitest-plain/index.html">Mochitest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/xpcshell/index.html">XPCShell tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/tps/index.html">TPS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../web-platform/index.html">web-platform-tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../gtest/index.html">GTest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/fuzzing/index.html">Fuzzing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/sanitizer/index.html">Sanitizer</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/perfdocs/index.html">Performance Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/code-coverage/index.html">Code coverage</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing-rust-code/index.html">Testing &amp; Debugging Rust Code</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Releases &amp; Updates</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html">Mozilla Update Infrastructure</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html#watershed-updates">Watershed Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html#desupport-updates">Desupport Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/update-verify/index.html">Update Verify</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Localization &amp; Internationalization</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../intl/index.html">Internationalization</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../l10n/index.html">Localization</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox and Python</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mozbase/index.html">mozbase</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../python/index.html">Using third-party Python packages</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Metrics Collected in Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../metrics/index.html">Metrics</a></li>
+      </ul>
+     </div>
+    </div>
+   </nav>
+   <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+    <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+     <i data-toggle="wy-nav-top" class="fa fa-bars"></i> <a href="../../index.html">Firefox Source Docs</a>
+    </nav>
+    <div class="wy-nav-content">
+     <div class="rst-content">
+      <!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+      <div role="navigation" aria-label="Page navigation">
+       <ul class="wy-breadcrumbs">
+        <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+        <li class="breadcrumb-item"><a href="../index.html">SpiderMonkey</a></li>
+        <li class="breadcrumb-item"><a href="index.html">Debugger API</a></li>
+        <li class="breadcrumb-item active">Debugger.Object</li>
+        <li class="wy-breadcrumbs-aside"><a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Developer+Infrastructure&amp;component=Firefox+Source+Docs%3A+Content&amp;short_desc=Documentation+issue+on+js/Debugger/Debugger.Object&amp;comment=URL+=+https://firefox-source-docs.mozilla.org/js/Debugger/Debugger.Object.html&amp;bug_file_loc=https://firefox-source-docs.mozilla.org/js/Debugger/Debugger.Object.html" rel="nofollow">Report an issue</a> / <a href="../../_sources/js/Debugger/Debugger.Object.md.txt" rel="nofollow"> View page source</a></li>
+       </ul>
+       <hr>
+      </div>
+      <div role="main" class="document" itemscope itemtype="http://schema.org/Article">
+       <div itemprop="articleBody">
+        <section id="debugger-object">
+         <h1>Debugger.Object<a class="headerlink" href="#debugger-object" title="Link to this heading">?</a></h1>
+         <p>A <code class="docutils literal notranslate"><span class="pre">Debugger.Object</span></code> instance represents an object in the debuggee, providing reflection-oriented methods to inspect and modify its referent. The referent’s properties do not appear directly as properties of the <code class="docutils literal notranslate"><span class="pre">Debugger.Object</span></code> instance; the debugger can access them only through methods like <code class="docutils literal notranslate"><span class="pre">Debugger.Object.prototype.getOwnPropertyDescriptor</span></code> and <code class="docutils literal notranslate"><span class="pre">Debugger.Object.prototype.defineProperty</span></code>, ensuring that the debugger will not inadvertently invoke the referent’s getters and setters.</p>
+         <p>SpiderMonkey creates exactly one <code class="docutils literal notranslate"><span class="pre">Debugger.Object</span></code> instance for each debuggee object it presents to a given <a class="reference internal" href="Debugger.html"><span class="std std-doc"><code class="docutils literal notranslate"><span class="pre">Debugger</span></code></span></a> instance: if the debugger encounters the same object through two different routes (perhaps two functions are called on the same object), SpiderMonkey presents the same <code class="docutils literal notranslate"><span class="pre">Debugger.Object</span></code> instance to the debugger each time. This means that the debugger can use the <code class="docutils literal notranslate"><span class="pre">==</span></code> operator to recognize when two <code class="docutils literal notranslate"><span class="pre">Debugger.Object</span></code> instances refer to the same debuggee object, and place its own properties on a <code class="docutils literal notranslate"><span class="pre">Debugger.Object</span></code> instance to store metadata about particular debuggee objects.</p>
+         <p>JavaScript code in different compartments can have different views of the same object. For example, in Firefox, code in privileged compartments sees content DOM element objects without redefinitions or extensions made to that object’s properties by content code. (In Firefox terminology, privileged code sees the element through an “xray wrapper”.) To ensure that debugger code sees each object just as the debuggee would, each <code class="docutils literal notranslate"><span class="pre">Debugger.Object</span></code> instance presents its referent as it would be seen from a particular compartment. This “viewing compartment” is chosen to match the way the debugger came across the referent. As a consequence, a single <a class="reference internal" href="Debugger.html"><span class="std std-doc"><code class="docutils literal notranslate"><span class="pre">Debugger</span></code></span></a> instance may actually have several <code class="docutils literal notranslate"><span class="pre">Debugger.Object</span></code> instances: one for each compartment from which the referent is viewed.</p>
+         <p>If more than one <a class="reference internal" href="Debugger.html"><span class="std std-doc"><code class="docutils literal notranslate"><span class="pre">Debugger</span></code></span></a> instance is debugging the same code, each <a class="reference internal" href="Debugger.html"><span class="std std-doc"><code class="docutils literal notranslate"><span class="pre">Debugger</span></code></span></a> gets a separate <code class="docutils literal notranslate"><span class="pre">Debugger.Object</span></code> instance for a given object. This allows the code using each <a class="reference internal" href="Debugger.html"><span class="std std-doc"><code class="docutils literal notranslate"><span class="pre">Debugger</span></code></span></a> instance to place whatever properties it likes on its own <code class="docutils literal notranslate"><span class="pre">Debugger.Object</span></code> instances, without worrying about interfering with other debuggers.</p>
+         <p>While most <code class="docutils literal notranslate"><span class="pre">Debugger.Object</span></code> instances are created by SpiderMonkey in the process of exposing debuggee’s behavior and state to the debugger, the debugger can use <code class="docutils literal notranslate"><span class="pre">Debugger.Object.prototype.makeDebuggeeValue</span></code> to create <code class="docutils literal notranslate"><span class="pre">Debugger.Object</span></code> instances for given debuggee objects, or use <code class="docutils literal notranslate"><span class="pre">Debugger.Object.prototype.copy</span></code> and <code class="docutils literal notranslate"><span class="pre">Debugger.Object.prototype.create</span></code> to create new objects in debuggee compartments, allocated as if by particular debuggee globals.</p>
+         <p><code class="docutils literal notranslate"><span class="pre">Debugger.Object</span></code> instances protect their referents from the garbage collector; as long as the <code class="docutils literal notranslate"><span class="pre">Debugger.Object</span></code> instance is live, the referent remains live. This means that garbage collection has no visible effect on <code class="docutils literal notranslate"><span class="pre">Debugger.Object</span></code> instances.</p>
+         <section id="accessor-properties-of-the-debugger-object-prototype">
+          <h2>Accessor Properties of the Debugger.Object prototype<a class="headerlink" href="#accessor-properties-of-the-debugger-object-prototype" title="Link to this heading">?</a></h2>
+          <p>A <code class="docutils literal notranslate"><span class="pre">Debugger.Object</span></code> instance inherits the following accessor properties from its prototype:</p>
+          <section id="proto">
+           <h3><code class="docutils literal notranslate"><span class="pre">proto</span></code><a class="headerlink" href="#proto" title="Link to this heading">?</a></h3>
+           <p>The referent’s prototype (as a new <code class="docutils literal notranslate"><span class="pre">Debugger.Object</span></code> instance), or <code class="docutils literal notranslate"><span class="pre">null</span></code> if it has no prototype. This accessor may throw if the referent is a scripted proxy or some other sort of exotic object (an opaque wrapper, for example).</p>
+          </section>
+          <section id="class">
+           <h3><code class="docutils literal notranslate"><span class="pre">class</span></code><a class="headerlink" href="#class" title="Link to this heading">?</a></h3>
+           <p>A string naming the ECMAScript <code class="docutils literal notranslate"><span class="pre">[[Class]]</span></code> of the referent.</p>
+          </section>
+          <section id="callable">
+           <h3><code class="docutils literal notranslate"><span class="pre">callable</span></code><a class="headerlink" href="#callable" title="Link to this heading">?</a></h3>
+           <p><code class="docutils literal notranslate"><span class="pre">true</span></code> if the referent is a callable object (such as a function or a function proxy); false otherwise.</p>
+          </section>
+          <section id="name">
+           <h3><code class="docutils literal notranslate"><span class="pre">name</span></code><a class="headerlink" href="#name" title="Link to this heading">?</a></h3>
+           <p>The name of the referent, if it is a named function. If the referent is an anonymous function, or not a function at all, this is <code class="docutils literal notranslate"><span class="pre">undefined</span></code>.</p>
+           <p>This accessor returns whatever name appeared after the <code class="docutils literal notranslate"><span class="pre">function</span></code> keyword in the source code, regardless of whether the function is the result of instantiating a function declaration (which binds the function to its name in the enclosing scope) or evaluating a function expression (which binds the function to its name only within the function’s body).</p>
+          </section>
+          <section id="displayname">
+           <h3><code class="docutils literal notranslate"><span class="pre">displayName</span></code><a class="headerlink" href="#displayname" title="Link to this heading">?</a></h3>
+           <p>The referent’s display name, if the referent is a function with a display name. If the referent is not a function, or if it has no display name, this is <code class="docutils literal notranslate"><span class="pre">undefined</span></code>.</p>
+           <p>If a function has a given name, its display name is the same as its given name. In this case, the <code class="docutils literal notranslate"><span class="pre">displayName</span></code> and <code class="docutils literal notranslate"><span class="pre">name</span></code> properties are equal.</p>
+           <p>If a function has no name, SpiderMonkey attempts to infer an appropriate name for it given its context. For example:</p>
+           <div class="highlight-js notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="kd">function</span><span class="w"> </span><span class="nx">f</span><span class="p">()</span><span class="w"> </span><span class="p">{}</span><span class="w">          </span><span class="c1">// display name: f (the given name)</span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">g</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">{};</span><span class="w">  </span><span class="c1">// display name: g</span>
+<span class="nx">o</span><span class="p">.</span><span class="nx">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">{};</span><span class="w">    </span><span class="c1">// display name: o.p</span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">q</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">r</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">{}</span><span class="w">      </span><span class="c1">// display name: q.r</span>
+<span class="p">};</span>
+</pre>
+            </div>
+           </div>
+           <p>Note that the display name may not be a proper JavaScript identifier, or even a proper expression: we attempt to find helpful names even when the function is not immediately assigned as the value of some variable or property. Thus, we use <code><i>a</i>/<i>b</i></code> to refer to the <i>b</i> defined within <i>a</i>, and <code><i>a</i>&lt;</code> to refer to a function that occurs somewhere within an expression that is assigned to <i>a</i>. For example:</p>
+           <div class="highlight-js notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="kd">function</span><span class="w"> </span><span class="nx">h</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">var</span><span class="w"> </span><span class="nx">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kd">function</span><span class="p">()</span><span class="w"> </span><span class="p">{};</span><span class="w">    </span><span class="c1">// display name: h/i</span>
+<span class="w">  </span><span class="nx">f</span><span class="p">(</span><span class="kd">function</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">{});</span><span class="w">        </span><span class="c1">// display name: h/&lt;</span>
+<span class="p">}</span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">f</span><span class="p">(</span><span class="kd">function</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">{});</span><span class="w">  </span><span class="c1">// display name: s&lt;</span>
+</pre>
+            </div>
+           </div>
+          </section>
+          <section id="parameternames">
+           <h3><code class="docutils literal notranslate"><span class="pre">parameterNames</span></code><a class="headerlink" href="#parameternames" title="Link to this heading">?</a></h3>
+           <p>If the referent is a debuggee function, the names of its parameters, as an array of strings. If the referent is not a debuggee function, or not a function at all, this is <code class="docutils literal notranslate"><span class="pre">undefined</span></code>.</p>
+           <p>If the referent is a host function for which parameter names are not available, return an array with one element per parameter, each of which is <code class="docutils literal notranslate"><span class="pre">undefined</span></code>.</p>
+           <p>If the referent is a function proxy, return an empty array.</p>
+           <p>If the function uses destructuring parameters, the corresponding array elements are <code class="docutils literal notranslate"><span class="pre">undefined</span></code>. For example, if the referent is a function declared in this way:</p>
+           <div class="highlight-js notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="kd">function</span><span class="w"> </span><span class="nx">f</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="nx">b</span><span class="p">,</span><span class="w"> </span><span class="nx">c</span><span class="p">],</span><span class="w"> </span><span class="p">{</span><span class="nx">d</span><span class="p">,</span><span class="w"> </span><span class="nx">e</span><span class="o">:</span><span class="nx">f</span><span class="p">})</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">}</span>
+</pre>
+            </div>
+           </div>
+           <p>then this <code class="docutils literal notranslate"><span class="pre">Debugger.Object</span></code> instance’s <code class="docutils literal notranslate"><span class="pre">parameterNames</span></code> property would have the value:</p>
+           <div class="highlight-js notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="p">[</span><span class="s2">"a"</span><span class="p">,</span><span class="w"> </span><span class="kc">undefined</span><span class="p">,</span><span class="w"> </span><span class="kc">undefined</span><span class="p">]</span>
+</pre>
+            </div>
+           </div>
+          </section>
+          <section id="script">
+           <h3><code class="docutils literal notranslate"><span class="pre">script</span></code><a class="headerlink" href="#script" title="Link to this heading">?</a></h3>
+           <p>If the referent is a function that is debuggee code, this is that function’s script, as a <a class="reference internal" href="Debugger.Script.html"><span class="std std-doc"><code class="docutils literal notranslate"><span class="pre">Debugger.Script</span></code></span></a> instance. If the referent is a function proxy or not debuggee code, this is <code class="docutils literal notranslate"><span class="pre">undefined</span></code>.</p>
+          </section>
+          <section id="environment">
+           <h3><code class="docutils literal notranslate"><span class="pre">environment</span></code><a class="headerlink" href="#environment" title="Link to this heading">?</a></h3>
+           <p>If the referent is a function that is debuggee code, a <a class="reference internal" href="Debugger.Environment.html"><span class="std std-doc"><code class="docutils literal notranslate"><span class="pre">Debugger.Environment</span></code></span></a> instance representing the lexical environment enclosing the function when it was created. If the referent is a function proxy or not debuggee code, this is <code class="docutils literal notranslate"><span class="pre">undefined</span></code>.</p>
+          </section>
+          <section id="iserror">
+           <h3><code class="docutils literal notranslate"><span class="pre">isError</span></code><a class="headerlink" href="#iserror" title="Link to this heading">?</a></h3>
+           <p><code class="docutils literal notranslate"><span class="pre">true</span></code> if the referent is any potentially wrapped Error; <code class="docutils literal notranslate"><span class="pre">false</span></code> otherwise.</p>
+          </section>
+          <section id="errormessagename">
+           <h3><code class="docutils literal notranslate"><span class="pre">errorMessageName</span></code><a class="headerlink" href="#errormessagename" title="Link to this heading">?</a></h3>
+           <p>If the referent is an error created with an engine internal message template this is a string which is the name of the template; <code class="docutils literal notranslate"><span class="pre">undefined</span></code> otherwise.</p>
+          </section>
+          <section id="errorlinenumber">
+           <h3><code class="docutils literal notranslate"><span class="pre">errorLineNumber</span></code><a class="headerlink" href="#errorlinenumber" title="Link to this heading">?</a></h3>
+           <p>If the referent is an Error object, this is the 1-origin line number at which the referent was created; <code class="docutils literal notranslate"><span class="pre">undefined</span></code> otherwise.</p>
+          </section>
+          <section id="errorcolumnnumber">
+           <h3><code class="docutils literal notranslate"><span class="pre">errorColumnNumber</span></code><a class="headerlink" href="#errorcolumnnumber" title="Link to this heading">?</a></h3>
+           <p>If the referent is an Error object, this is the 1-origin column number in UTF-16 code units at which the referent was created; <code class="docutils literal notranslate"><span class="pre">undefined</span></code> otherwise.</p>
+          </section>
+          <section id="isboundfunction">
+           <h3><code class="docutils literal notranslate"><span class="pre">isBoundFunction</span></code><a class="headerlink" href="#isboundfunction" title="Link to this heading">?</a></h3>
+           <p>If the referent is a debuggee function, returns <code class="docutils literal notranslate"><span class="pre">true</span></code> if the referent is a bound function; <code class="docutils literal notranslate"><span class="pre">false</span></code> otherwise. If the referent is not a debuggee function, or not a function at all, returns <code class="docutils literal notranslate"><span class="pre">undefined</span></code> instead.</p>
+          </section>
+          <section id="isarrowfunction">
+           <h3><code class="docutils literal notranslate"><span class="pre">isArrowFunction</span></code><a class="headerlink" href="#isarrowfunction" title="Link to this heading">?</a></h3>
+           <p>If the referent is a debuggee function, returns <code class="docutils literal notranslate"><span class="pre">true</span></code> if the referent is an arrow function; <code class="docutils literal notranslate"><span class="pre">false</span></code> otherwise. If the referent is not a debuggee function, or not a function at all, returns <code class="docutils literal notranslate"><span class="pre">undefined</span></code> instead.</p>
+          </section>
+          <section id="isgeneratorfunction">
+           <h3><code class="docutils literal notranslate"><span class="pre">isGeneratorFunction</span></code><a class="headerlink" href="#isgeneratorfunction" title="Link to this heading">?</a></h3>
+           <p>If the referent is a debuggee function, returns <code class="docutils literal notranslate"><span class="pre">true</span></code> if the referent was created with a <code class="docutils literal notranslate"><span class="pre">function*</span></code> expression or statement, or false if it is some other sort of function. If the referent is not a debuggee function, or not a function at all, this is <code class="docutils literal notranslate"><span class="pre">undefined</span></code>. (This is always equal to <code class="docutils literal notranslate"><span class="pre">obj.script.isGeneratorFunction</span></code>, assuming <code class="docutils literal notranslate"><span class="pre">obj.script</span></code> is a <code class="docutils literal notranslate"><span class="pre">Debugger.Script</span></code>.)</p>
+          </section>
+          <section id="isasyncfunction">
+           <h3><code class="docutils literal notranslate"><span class="pre">isAsyncFunction</span></code><a class="headerlink" href="#isasyncfunction" title="Link to this heading">?</a></h3>
+           <p>If the referent is a debuggee function, returns <code class="docutils literal notranslate"><span class="pre">true</span></code> if the referent is an async function, defined with an <code class="docutils literal notranslate"><span class="pre">async</span> <span class="pre">function</span></code> expression or statement, or false if it is some other sort of function. If the referent is not a debuggee function, or not a function at all, this is <code class="docutils literal notranslate"><span class="pre">undefined</span></code>. (This is always equal to <code class="docutils literal notranslate"><span class="pre">obj.script.isAsyncFunction</span></code>, assuming <code class="docutils literal notranslate"><span class="pre">obj.script</span></code> is a <code class="docutils literal notranslate"><span class="pre">Debugger.Script</span></code>.)</p>
+          </section>
+          <section id="isclassconstructor">
+           <h3><code class="docutils literal notranslate"><span class="pre">isClassConstructor</span></code><a class="headerlink" href="#isclassconstructor" title="Link to this heading">?</a></h3>
+           <p>If the referent is a debuggee function, returns <code class="docutils literal notranslate"><span class="pre">true</span></code> if the referent is a class, or false if it is some other sort of function. If the referent is not a debuggee function, or not a function at all, this is <code class="docutils literal notranslate"><span class="pre">undefined</span></code>. (This is always equal to <code class="docutils literal notranslate"><span class="pre">obj.script.isClassConstructor</span></code>, assuming <code class="docutils literal notranslate"><span class="pre">obj.script</span></code> is a <code class="docutils literal notranslate"><span class="pre">Debugger.Script</span></code>.)</p>
+          </section>
+          <section id="ispromise">
+           <h3><code class="docutils literal notranslate"><span class="pre">isPromise</span></code><a class="headerlink" href="#ispromise" title="Link to this heading">?</a></h3>
+           <p><code class="docutils literal notranslate"><span class="pre">true</span></code> if the referent is a Promise; <code class="docutils literal notranslate"><span class="pre">false</span></code> otherwise.</p>
+          </section>
+          <section id="boundtargetfunction">
+           <h3><code class="docutils literal notranslate"><span class="pre">boundTargetFunction</span></code><a class="headerlink" href="#boundtargetfunction" title="Link to this heading">?</a></h3>
+           <p>If the referent is a bound debuggee function, this is its target function— the function that was bound to a particular <code class="docutils literal notranslate"><span class="pre">this</span></code> object. If the referent is either not a bound function, not a debuggee function, or not a function at all, this is <code class="docutils literal notranslate"><span class="pre">undefined</span></code>.</p>
+          </section>
+          <section id="boundthis">
+           <h3><code class="docutils literal notranslate"><span class="pre">boundThis</span></code><a class="headerlink" href="#boundthis" title="Link to this heading">?</a></h3>
+           <p>If the referent is a bound debuggee function, this is the <code class="docutils literal notranslate"><span class="pre">this</span></code> value it was bound to. If the referent is either not a bound function, not a debuggee function, or not a function at all, this is <code class="docutils literal notranslate"><span class="pre">undefined</span></code>.</p>
+          </section>
+          <section id="boundarguments">
+           <h3><code class="docutils literal notranslate"><span class="pre">boundArguments</span></code><a class="headerlink" href="#boundarguments" title="Link to this heading">?</a></h3>
+           <p>If the referent is a bound debuggee function, this is an array (in the Debugger object’s compartment) that contains the debuggee values of the <code class="docutils literal notranslate"><span class="pre">arguments</span></code> object it was bound to. If the referent is either not a bound function, not a debuggee function, or not a function at all, this is <code class="docutils literal notranslate"><span class="pre">undefined</span></code>.</p>
+          </section>
+          <section id="isproxy">
+           <h3><code class="docutils literal notranslate"><span class="pre">isProxy</span></code><a class="headerlink" href="#isproxy" title="Link to this heading">?</a></h3>
+           <p>If the referent is a (scripted) proxy, either revoked or not, return <code class="docutils literal notranslate"><span class="pre">true</span></code>. If the referent is not a (scripted) proxy, return <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p>
+          </section>
+          <section id="proxytarget">
+           <h3><code class="docutils literal notranslate"><span class="pre">proxyTarget</span></code><a class="headerlink" href="#proxytarget" title="Link to this heading">?</a></h3>
+           <p>If the referent is a non-revoked (scripted) proxy, return a <code class="docutils literal notranslate"><span class="pre">Debugger.Object</span></code> instance referring to the ECMAScript <code class="docutils literal notranslate"><span class="pre">[[ProxyTarget]]</span></code> of the referent. If the referent is a revoked (scripted) proxy, return <code class="docutils literal notranslate"><span class="pre">null</span></code>. If the referent is not a (scripted) proxy, return <code class="docutils literal notranslate"><span class="pre">undefined</span></code>.</p>
+          </section>
+          <section id="proxyhandler">
+           <h3><code class="docutils literal notranslate"><span class="pre">proxyHandler</span></code><a class="headerlink" href="#proxyhandler" title="Link to this heading">?</a></h3>
+           <p>If the referent is a non-revoked (scripted) proxy, return a <code class="docutils literal notranslate"><span class="pre">Debugger.Object</span></code> instance referring to the ECMAScript <code class="docutils literal notranslate"><span class="pre">[[ProxyHandler]]</span></code> of the referent. If the referent is a revoked (scripted) proxy, return <code class="docutils literal notranslate"><span class="pre">null</span></code>. If the referent is not a (scripted) proxy, return <code class="docutils literal notranslate"><span class="pre">undefined</span></code>.</p>
+          </section>
+          <section id="promisestate">
+           <h3><code class="docutils literal notranslate"><span class="pre">promiseState</span></code><a class="headerlink" href="#promisestate" title="Link to this heading">?</a></h3>
+           <p>If the referent is a <a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise"><code class="docutils literal notranslate"><span class="pre">Promise</span></code></a>, return a string indicating whether the <a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise"><code class="docutils literal notranslate"><span class="pre">Promise</span></code></a> is pending, or has been fulfilled or rejected. This string takes one of the following values:</p>
+           <ul class="simple">
+            <li>
+             <p><code class="docutils literal notranslate"><span class="pre">"pending"</span></code>, if the <a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise"><code class="docutils literal notranslate"><span class="pre">Promise</span></code></a> is pending.</p></li>
+            <li>
+             <p><code class="docutils literal notranslate"><span class="pre">"fulfilled"</span></code>, if the <a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise"><code class="docutils literal notranslate"><span class="pre">Promise</span></code></a> has been fulfilled.</p></li>
+            <li>
+             <p><code class="docutils literal notranslate"><span class="pre">"rejected"</span></code>, if the <a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise"><code class="docutils literal notranslate"><span class="pre">Promise</span></code></a> has been rejected.</p></li>
+           </ul>
+           <p>If the referent is not a <a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise"><code class="docutils literal notranslate"><span class="pre">Promise</span></code></a>, throw a <code class="docutils literal notranslate"><span class="pre">TypeError</span></code>.</p>
+          </section>
+          <section id="promisevalue">
+           <h3><code class="docutils literal notranslate"><span class="pre">promiseValue</span></code><a class="headerlink" href="#promisevalue" title="Link to this heading">?</a></h3>
+           <p>Return a debuggee value representing the value the <a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise"><code class="docutils literal notranslate"><span class="pre">Promise</span></code></a> has been fulfilled with.</p>
+           <p>If the referent is not a <a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise"><code class="docutils literal notranslate"><span class="pre">Promise</span></code></a>, or the <a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise"><code class="docutils literal notranslate"><span class="pre">Promise</span></code></a> has not been fulfilled, throw a <code class="docutils literal notranslate"><span class="pre">TypeError</span></code>.</p>
+          </section>
+          <section id="promisereason">
+           <h3><code class="docutils literal notranslate"><span class="pre">promiseReason</span></code><a class="headerlink" href="#promisereason" title="Link to this heading">?</a></h3>
+           <p>Return a debuggee value representing the value the <a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise"><code class="docutils literal notranslate"><span class="pre">Promise</span></code></a> has been rejected with.</p>
+           <p>If the referent is not a <a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise"><code class="docutils literal notranslate"><span class="pre">Promise</span></code></a>, or the <a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise"><code class="docutils literal notranslate"><span class="pre">Promise</span></code></a> has not been rejected, throw a <code class="docutils literal notranslate"><span class="pre">TypeError</span></code>.</p>
+          </section>
+          <section id="promiseallocationsite">
+           <h3><code class="docutils literal notranslate"><span class="pre">promiseAllocationSite</span></code><a class="headerlink" href="#promiseallocationsite" title="Link to this heading">?</a></h3>
+           <p>If the referent is a <a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise"><code class="docutils literal notranslate"><span class="pre">Promise</span></code></a>, this is the <a class="reference internal" href="../SavedFrame/index.html"><span class="doc std std-doc">JavaScript execution stack</span></a> captured at the time of the promise’s allocation. This can return null if the promise was not created from script. If the referent is not a <a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise"><code class="docutils literal notranslate"><span class="pre">Promise</span></code></a>, throw a <code class="docutils literal notranslate"><span class="pre">TypeError</span></code> exception.</p>
+          </section>
+          <section id="promiseresolutionsite">
+           <h3><code class="docutils literal notranslate"><span class="pre">promiseResolutionSite</span></code><a class="headerlink" href="#promiseresolutionsite" title="Link to this heading">?</a></h3>
+           <p>If the referent is a <a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise"><code class="docutils literal notranslate"><span class="pre">Promise</span></code></a>, this is the <a class="reference internal" href="../SavedFrame/index.html"><span class="doc std std-doc">JavaScript execution stack</span></a> captured at the time of the promise’s resolution. This can return null if the promise was not resolved by calling its <code class="docutils literal notranslate"><span class="pre">resolve</span></code> or <code class="docutils literal notranslate"><span class="pre">reject</span></code> resolving functions from script. If the referent is not a <a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise"><code class="docutils literal notranslate"><span class="pre">Promise</span></code></a>, throw a <code class="docutils literal notranslate"><span class="pre">TypeError</span></code> exception.</p>
+          </section>
+          <section id="promiseid">
+           <h3><code class="docutils literal notranslate"><span class="pre">promiseID</span></code><a class="headerlink" href="#promiseid" title="Link to this heading">?</a></h3>
+           <p>If the referent is a <a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise"><code class="docutils literal notranslate"><span class="pre">Promise</span></code></a>, this is a process-unique identifier for the <a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise"><code class="docutils literal notranslate"><span class="pre">Promise</span></code></a>. With e10s, the same id can potentially be assigned to multiple <a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise"><code class="docutils literal notranslate"><span class="pre">Promise</span></code></a> instances, if those instances were created in different processes. If the referent is not a <a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise"><code class="docutils literal notranslate"><span class="pre">Promise</span></code></a>, throw a <code class="docutils literal notranslate"><span class="pre">TypeError</span></code> exception.</p>
+          </section>
+          <section id="promisedependentpromises">
+           <h3><code class="docutils literal notranslate"><span class="pre">promiseDependentPromises</span></code><a class="headerlink" href="#promisedependentpromises" title="Link to this heading">?</a></h3>
+           <p>If the referent is a <a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise"><code class="docutils literal notranslate"><span class="pre">Promise</span></code></a>, this is an <code class="docutils literal notranslate"><span class="pre">Array</span></code> of <code class="docutils literal notranslate"><span class="pre">Debugger.Objects</span></code> referring to the promises directly depending on the referent <a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise"><code class="docutils literal notranslate"><span class="pre">Promise</span></code></a>. These are:</p>
+           <ol class="arabic simple">
+            <li>
+             <p>Return values of <code class="docutils literal notranslate"><span class="pre">then()</span></code> calls on the promise.</p></li>
+            <li>
+             <p>Return values of <code class="docutils literal notranslate"><span class="pre">Promise.all()</span></code> if the referent <a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise"><code class="docutils literal notranslate"><span class="pre">Promise</span></code></a> was passed in as one of the arguments.</p></li>
+            <li>
+             <p>Return values of <code class="docutils literal notranslate"><span class="pre">Promise.race()</span></code> if the referent <a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise"><code class="docutils literal notranslate"><span class="pre">Promise</span></code></a> was passed in as one of the arguments.</p></li>
+           </ol>
+           <p>Once a <a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise"><code class="docutils literal notranslate"><span class="pre">Promise</span></code></a> is settled, it will generally notify its dependent promises and forget about them, so this is most useful on <em>pending</em> promises.</p>
+           <p>Note that the <code class="docutils literal notranslate"><span class="pre">Array</span></code> only contains the promises that directly depend on the referent <a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise"><code class="docutils literal notranslate"><span class="pre">Promise</span></code></a>. It does not contain promises that depend on promises that depend on the referent <a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise"><code class="docutils literal notranslate"><span class="pre">Promise</span></code></a>.</p>
+           <p>If the referent is not a <a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise"><code class="docutils literal notranslate"><span class="pre">Promise</span></code></a>, throw a <code class="docutils literal notranslate"><span class="pre">TypeError</span></code> exception.</p>
+          </section>
+          <section id="promiselifetime">
+           <h3><code class="docutils literal notranslate"><span class="pre">promiseLifetime</span></code><a class="headerlink" href="#promiselifetime" title="Link to this heading">?</a></h3>
+           <p>If the referent is a <a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise"><code class="docutils literal notranslate"><span class="pre">Promise</span></code></a>, this is the number of milliseconds elapsed since the <a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise"><code class="docutils literal notranslate"><span class="pre">Promise</span></code></a> was created. If the referent is not a <a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise"><code class="docutils literal notranslate"><span class="pre">Promise</span></code></a>, throw a <code class="docutils literal notranslate"><span class="pre">TypeError</span></code> exception.</p>
+          </section>
+          <section id="promisetimetoresolution">
+           <h3><code class="docutils literal notranslate"><span class="pre">promiseTimeToResolution</span></code><a class="headerlink" href="#promisetimetoresolution" title="Link to this heading">?</a></h3>
+           <p>If the referent is a <a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise"><code class="docutils literal notranslate"><span class="pre">Promise</span></code></a>, this is the number of milliseconds elapsed between when the <a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise"><code class="docutils literal notranslate"><span class="pre">Promise</span></code></a> was created and when it was resolved. If the referent hasn’t been resolved or is not a <a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise"><code class="docutils literal notranslate"><span class="pre">Promise</span></code></a>, throw a <code class="docutils literal notranslate"><span class="pre">TypeError</span></code> exception.</p>
+          </section>
+          <section id="allocationsite">
+           <h3><code class="docutils literal notranslate"><span class="pre">allocationSite</span></code><a class="headerlink" href="#allocationsite" title="Link to this heading">?</a></h3>
+           <p>If <a class="reference internal" href="Debugger.Memory.html#trackingallocationsites"><span class="std std-ref">object allocation site tracking</span></a> was enabled when this <code class="docutils literal notranslate"><span class="pre">Debugger.Object</span></code>’s referent was allocated, return the <a class="reference internal" href="../SavedFrame/index.html"><span class="doc std std-doc">JavaScript execution stack</span></a> captured at the time of the allocation. Otherwise, return <code class="docutils literal notranslate"><span class="pre">null</span></code>.</p>
+          </section>
+         </section>
+         <section id="function-properties-of-the-debugger-object-prototype">
+          <h2>Function Properties of the Debugger.Object prototype<a class="headerlink" href="#function-properties-of-the-debugger-object-prototype" title="Link to this heading">?</a></h2>
+          <p>The functions described below may only be called with a <code class="docutils literal notranslate"><span class="pre">this</span></code> value referring to a <code class="docutils literal notranslate"><span class="pre">Debugger.Object</span></code> instance; they may not be used as methods of other kinds of objects. The descriptions use “referent” to mean “the referent of this <code class="docutils literal notranslate"><span class="pre">Debugger.Object</span></code> instance”.</p>
+          <p>Unless otherwise specified, these methods are not <a class="reference internal" href="Debugger.Frame.html#invocation-functions-and-debugger-frames"><span class="std std-ref">invocation functions</span></a>; if a call would cause debuggee code to run (say, because it gets or sets an accessor property whose handler is debuggee code, or because the referent is a proxy whose traps are debuggee code), the call throws a <a class="reference internal" href="Conventions.html#the-debugger-debuggeewouldrun-exception"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">Debugger.DebuggeeWouldRun</span></code></span></a> exception.</p>
+          <p>These methods may throw if the referent is not a native object. Even simple accessors like <code class="docutils literal notranslate"><span class="pre">isExtensible</span></code> may throw if the referent is a proxy or some sort of exotic object like an opaque wrapper.</p>
+          <section id="getproperty-key-receiver">
+           <h3><code class="docutils literal notranslate"><span class="pre">getProperty(key,</span> <span class="pre">[receiver])</span></code><a class="headerlink" href="#getproperty-key-receiver" title="Link to this heading">?</a></h3>
+           <p>Return a <a class="reference internal" href="Conventions.html#completion-values"><span class="std std-ref">completion value</span></a> with “return” being the value of the referent’s property named <i>key</i>, or <code class="docutils literal notranslate"><span class="pre">undefined</span></code> if it has no such property. <i>key</i> must be a string or symbol; <i>receiver</i> must be a debuggee value. If the property is a getter, it will be evaluated with <i>receiver</i> as the receiver, defaulting to the <code class="docutils literal notranslate"><span class="pre">Debugger.Object</span></code> if omitted. All extant handler methods, breakpoints, and so on remain active during the call.</p>
+          </section>
+          <section id="setproperty-key-value-receiver">
+           <h3><code class="docutils literal notranslate"><span class="pre">setProperty(key,</span> <span class="pre">value&lt;,</span> <span class="pre">[receiver])</span></code><a class="headerlink" href="#setproperty-key-value-receiver" title="Link to this heading">?</a></h3>
+           <p>Store <i>value</i> as the value of the referent’s property named <i>key</i>, creating the property if it does not exist. <i>key</i> must be a string or symbol; <i>value</i> and <i>receiver</i> must be debuggee values. If the property is a setter, it will be evaluated with <i>receiver</i> as the receiver, defaulting to the <code class="docutils literal notranslate"><span class="pre">Debugger.Object</span></code> if omitted. Return a <a class="reference internal" href="Conventions.html#completion-values"><span class="std std-ref">completion value</span></a> with “return” being a success/failure boolean, or else “throw” being the exception thrown during property assignment. All extant handler methods, breakpoints, and so on remain active during the call.</p>
+          </section>
+          <section id="getownpropertydescriptor-key">
+           <h3><code class="docutils literal notranslate"><span class="pre">getOwnPropertyDescriptor(key)</span></code><a class="headerlink" href="#getownpropertydescriptor-key" title="Link to this heading">?</a></h3>
+           <p>Return a property descriptor for the property named <i>key</i> of the referent. If the referent has no such property, return <code class="docutils literal notranslate"><span class="pre">undefined</span></code>. (This function behaves like the standard <code class="docutils literal notranslate"><span class="pre">Object.getOwnPropertyDescriptor</span></code> function, except that the object being inspected is implicit; the property descriptor returned is allocated as if by code scoped to the debugger’s global object (and is thus in the debugger’s compartment); and its <code class="docutils literal notranslate"><span class="pre">value</span></code>, <code class="docutils literal notranslate"><span class="pre">get</span></code>, and <code class="docutils literal notranslate"><span class="pre">set</span></code> properties, if present, are debuggee values.)</p>
+          </section>
+          <section id="getownpropertynames">
+           <h3><code class="docutils literal notranslate"><span class="pre">getOwnPropertyNames()</span></code><a class="headerlink" href="#getownpropertynames" title="Link to this heading">?</a></h3>
+           <p>Return an array of strings naming all the referent’s own properties, as if <code>Object.getOwnPropertyNames(<i>referent</i>)</code> had been called in the debuggee, and the result copied in the scope of the debugger’s global object.</p>
+          </section>
+          <section id="getownpropertynameslength">
+           <h3><code class="docutils literal notranslate"><span class="pre">getOwnPropertyNamesLength()</span></code><a class="headerlink" href="#getownpropertynameslength" title="Link to this heading">?</a></h3>
+           <p>Return the number of the referent’s own properties.</p>
+          </section>
+          <section id="getownpropertysymbols">
+           <h3><code class="docutils literal notranslate"><span class="pre">getOwnPropertySymbols()</span></code><a class="headerlink" href="#getownpropertysymbols" title="Link to this heading">?</a></h3>
+           <p>Return an array of strings naming all the referent’s own symbols, as if <code>Object.getOwnPropertySymbols(<i>referent</i>)</code> had been called in the debuggee, and the result copied in the scope of the debugger’s global object.</p>
+          </section>
+          <section id="defineproperty-key-attributes">
+           <h3><code class="docutils literal notranslate"><span class="pre">defineProperty(key,</span> <span class="pre">attributes)</span></code><a class="headerlink" href="#defineproperty-key-attributes" title="Link to this heading">?</a></h3>
+           <p>Define a property on the referent named <i>key</i>, as described by the property descriptor <i>descriptor</i>. Any <code class="docutils literal notranslate"><span class="pre">value</span></code>, <code class="docutils literal notranslate"><span class="pre">get</span></code>, and <code class="docutils literal notranslate"><span class="pre">set</span></code> properties of <i>attributes</i> must be debuggee values. (This function behaves like <code class="docutils literal notranslate"><span class="pre">Object.defineProperty</span></code>, except that the target object is implicit, and in a different compartment from the function and descriptor.)</p>
+          </section>
+          <section id="defineproperties-properties">
+           <h3><code class="docutils literal notranslate"><span class="pre">defineProperties(properties)</span></code><a class="headerlink" href="#defineproperties-properties" title="Link to this heading">?</a></h3>
+           <p>Add the properties given by <i>properties</i> to the referent. (This function behaves like <code class="docutils literal notranslate"><span class="pre">Object.defineProperties</span></code>, except that the target object is implicit, and in a different compartment from the <i>properties</i> argument.)</p>
+          </section>
+          <section id="deleteproperty-key">
+           <h3><code class="docutils literal notranslate"><span class="pre">deleteProperty(key)</span></code><a class="headerlink" href="#deleteproperty-key" title="Link to this heading">?</a></h3>
+           <p>Remove the referent’s property named <i>key</i>. Return true if the property was successfully removed, or if the referent has no such property. Return false if the property is non-configurable.</p>
+          </section>
+          <section id="seal">
+           <h3><code class="docutils literal notranslate"><span class="pre">seal()</span></code><a class="headerlink" href="#seal" title="Link to this heading">?</a></h3>
+           <p>Prevent properties from being added to or deleted from the referent. Return this <code class="docutils literal notranslate"><span class="pre">Debugger.Object</span></code> instance. (This function behaves like the standard <code class="docutils literal notranslate"><span class="pre">Object.seal</span></code> function, except that the object to be sealed is implicit and in a different compartment from the caller.)</p>
+          </section>
+          <section id="freeze">
+           <h3><code class="docutils literal notranslate"><span class="pre">freeze()</span></code><a class="headerlink" href="#freeze" title="Link to this heading">?</a></h3>
+           <p>Prevent properties from being added to or deleted from the referent, and mark each property as non-writable. Return this <code class="docutils literal notranslate"><span class="pre">Debugger.Object</span></code> instance. (This function behaves like the standard <code class="docutils literal notranslate"><span class="pre">Object.freeze</span></code> function, except that the object to be sealed is implicit and in a different compartment from the caller.)</p>
+          </section>
+          <section id="preventextensions">
+           <h3><code class="docutils literal notranslate"><span class="pre">preventExtensions()</span></code><a class="headerlink" href="#preventextensions" title="Link to this heading">?</a></h3>
+           <p>Prevent properties from being added to the referent. (This function behaves like the standard <code class="docutils literal notranslate"><span class="pre">Object.preventExtensions</span></code> function, except that the object to operate on is implicit and in a different compartment from the caller.)</p>
+          </section>
+          <section id="issealed">
+           <h3><code class="docutils literal notranslate"><span class="pre">isSealed()</span></code><a class="headerlink" href="#issealed" title="Link to this heading">?</a></h3>
+           <p>Return true if the referent is sealed—that is, if it is not extensible, and all its properties have been marked as non-configurable. (This function behaves like the standard <code class="docutils literal notranslate"><span class="pre">Object.isSealed</span></code> function, except that the object inspected is implicit and in a different compartment from the caller.)</p>
+          </section>
+          <section id="isfrozen">
+           <h3><code class="docutils literal notranslate"><span class="pre">isFrozen()</span></code><a class="headerlink" href="#isfrozen" title="Link to this heading">?</a></h3>
+           <p>Return true if the referent is frozen—that is, if it is not extensible, and all its properties have been marked as non-configurable and read-only. (This function behaves like the standard <code class="docutils literal notranslate"><span class="pre">Object.isFrozen</span></code> function, except that the object inspected is implicit and in a different compartment from the caller.)</p>
+          </section>
+          <section id="isextensible">
+           <h3><code class="docutils literal notranslate"><span class="pre">isExtensible()</span></code><a class="headerlink" href="#isextensible" title="Link to this heading">?</a></h3>
+           <p>Return true if the referent is extensible—that is, if it can have new properties defined on it. (This function behaves like the standard <code class="docutils literal notranslate"><span class="pre">Object.isExtensible</span></code> function, except that the object inspected is implicit and in a different compartment from the caller.)</p>
+          </section>
+          <section id="makedebuggeevalue-value">
+           <h3><code class="docutils literal notranslate"><span class="pre">makeDebuggeeValue(value)</span></code><a class="headerlink" href="#makedebuggeevalue-value" title="Link to this heading">?</a></h3>
+           <p>Return the debuggee value that represents <i>value</i> in the debuggee. If <i>value</i> is a primitive, we return it unchanged; if <i>value</i> is an object, we return the <code class="docutils literal notranslate"><span class="pre">Debugger.Object</span></code> instance representing that object, wrapped appropriately for use in this <code class="docutils literal notranslate"><span class="pre">Debugger.Object</span></code>’s referent’s compartment.</p>
+           <p>Note that, if <i>value</i> is an object, it need not be one allocated in a debuggee global, nor even a debuggee compartment; it can be any object the debugger wishes to use as a debuggee value.</p>
+           <p>As described above, each <code class="docutils literal notranslate"><span class="pre">Debugger.Object</span></code> instance presents its referent as viewed from a particular compartment. Given a <code class="docutils literal notranslate"><span class="pre">Debugger.Object</span></code> instance <i>d</i> and an object <i>o</i>, the call <code><i>d</i>.makeDebuggeeValue(<i>o</i>)</code> returns a <code class="docutils literal notranslate"><span class="pre">Debugger.Object</span></code> instance that presents <i>o</i> as it would be seen by code in <i>d</i>’s compartment.</p>
+          </section>
+          <section id="issamenative-value">
+           <h3><code class="docutils literal notranslate"><span class="pre">isSameNative(value)</span></code><a class="headerlink" href="#issamenative-value" title="Link to this heading">?</a></h3>
+           <p>If <i>value</i> is a native function in the debugger’s compartment, return whether the referent is a native function for the same C++ native.</p>
+          </section>
+          <section id="issamenativewithjitinfo-value">
+           <h3><code class="docutils literal notranslate"><span class="pre">isSameNativeWithJitInfo(value)</span></code><a class="headerlink" href="#issamenativewithjitinfo-value" title="Link to this heading">?</a></h3>
+           <p>If <i>value</i> is a native function in the debugger’s compartment, return whether the referent is a native function for the same C++ native with the same JSJitInfo pointer value.</p>
+           <p>This can be used to distinguish functions with shared native function implementation with different JSJitInfo pointer to define the underlying functionality.</p>
+          </section>
+          <section id="isnativegetterwithjitinfo">
+           <h3><code class="docutils literal notranslate"><span class="pre">isNativeGetterWithJitInfo()</span></code><a class="headerlink" href="#isnativegetterwithjitinfo" title="Link to this heading">?</a></h3>
+           <p>Return whether the referent is a native getter function with JSJitInfo.</p>
+          </section>
+          <section id="decompile-pretty">
+           <h3><code class="docutils literal notranslate"><span class="pre">decompile([pretty])</span></code><a class="headerlink" href="#decompile-pretty" title="Link to this heading">?</a></h3>
+           <p>If the referent is a function that is debuggee code, return the JavaScript source code for a function definition equivalent to the referent function in its effect and result, as a string. If <i>pretty</i> is present and <code class="docutils literal notranslate"><span class="pre">true</span></code>, produce indented code with line breaks. If the referent is not a function that is debuggee code, return <code class="docutils literal notranslate"><span class="pre">undefined</span></code>.</p>
+          </section>
+          <section id="call-this-argument">
+           <h3><code class="docutils literal notranslate"><span class="pre">call(this,</span> <span class="pre">argument,</span> <span class="pre">...)</span></code><a class="headerlink" href="#call-this-argument" title="Link to this heading">?</a></h3>
+           <p>If the referent is callable, call it with the given <i>this</i> value and <i>argument</i> values, and return a <a class="reference internal" href="Conventions.html#completion-values"><span class="std std-ref">completion value</span></a> describing how the call completed. <i>This</i> should be a debuggee value, or <code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">asConstructor:</span> <span class="pre">true</span> <span class="pre">}</span></code> to invoke the referent as a constructor, in which case SpiderMonkey provides an appropriate <code class="docutils literal notranslate"><span class="pre">this</span></code> value itself. Each <i>argument</i> must be a debuggee value. All extant handler methods, breakpoints, and so on remain active during the call. If the referent is not callable, throw a <code class="docutils literal notranslate"><span class="pre">TypeError</span></code>. This function follows the <a class="reference internal" href="Debugger.Frame.html#invocation-functions-and-debugger-frames"><span class="std std-ref">invocation function conventions</span></a>.</p>
+           <p>Note: If this method is called on an object whose owner <a class="reference internal" href="Debugger.html"><span class="std std-doc">Debugger object</span></a> has an onNativeCall handler, only hooks on objects associated with that debugger will be called during the evaluation.</p>
+          </section>
+          <section id="apply-this-arguments">
+           <h3><code class="docutils literal notranslate"><span class="pre">apply(this,</span> <span class="pre">arguments)</span></code><a class="headerlink" href="#apply-this-arguments" title="Link to this heading">?</a></h3>
+           <p>If the referent is callable, call it with the given <i>this</i> value and the argument values in <i>arguments</i>, and return a <a class="reference internal" href="Conventions.html#completion-values"><span class="std std-ref">completion value</span></a> describing how the call completed. <i>This</i> should be a debuggee value, or <code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">asConstructor:</span> <span class="pre">true</span> <span class="pre">}</span></code> to invoke <i>function</i> as a constructor, in which case SpiderMonkey provides an appropriate <code class="docutils literal notranslate"><span class="pre">this</span></code> value itself. <i>Arguments</i> must either be an array (in the debugger) of debuggee values, or <code class="docutils literal notranslate"><span class="pre">null</span></code> or <code class="docutils literal notranslate"><span class="pre">undefined</span></code>, which are treated as an empty array. All extant handler methods, breakpoints, and so on remain active during the call. If the referent is not callable, throw a <code class="docutils literal notranslate"><span class="pre">TypeError</span></code>. This function follows the <a class="reference internal" href="Debugger.Frame.html#invocation-functions-and-debugger-frames"><span class="std std-ref">invocation function conventions</span></a>.</p>
+           <p>Note: If this method is called on an object whose owner <a class="reference internal" href="Debugger.html"><span class="std std-doc">Debugger object</span></a> has an onNativeCall handler, only hooks on objects associated with that debugger will be called during the evaluation.</p>
+          </section>
+          <section id="executeinglobal-code-options">
+           <h3><code class="docutils literal notranslate"><span class="pre">executeInGlobal(code,</span> <span class="pre">[options])</span></code><a class="headerlink" href="#executeinglobal-code-options" title="Link to this heading">?</a></h3>
+           <p>If the referent is a global object, evaluate <i>code</i> in that global environment, and return a <a class="reference internal" href="Conventions.html#completion-values"><span class="std std-ref">completion value</span></a> describing how it completed. <i>Code</i> is a string. All extant handler methods, breakpoints, and so on remain active during the call (pending note below). This function follows the <a class="reference internal" href="Debugger.Frame.html#invocation-functions-and-debugger-frames"><span class="std std-ref">invocation function conventions</span></a>. If the referent is not a global object, throw a <code class="docutils literal notranslate"><span class="pre">TypeError</span></code> exception.</p>
+           <p><i>Code</i> is interpreted as strict mode code when it contains a Use Strict Directive.</p>
+           <p>This evaluation is semantically equivalent to executing statements at the global level, not an indirect eval. Regardless of <i>code</i> being strict mode code, variable declarations in <i>code</i> affect the referent global object.</p>
+           <p>The <i>options</i> argument is as for <a class="reference internal" href="Debugger.Frame.html#eval-code-options"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">Debugger.Frame.prototype.eval</span></code></span></a>.</p>
+           <p>Note: If this method is called on an object whose owner <a class="reference internal" href="Debugger.html"><span class="std std-doc">Debugger object</span></a> has an onNativeCall handler, only hooks on objects associated with that debugger will be called during the evaluation.</p>
+          </section>
+          <section id="executeinglobalwithbindings-code-bindings-options">
+           <h3><code class="docutils literal notranslate"><span class="pre">executeInGlobalWithBindings(code,</span> <span class="pre">bindings,</span> <span class="pre">[options])</span></code><a class="headerlink" href="#executeinglobalwithbindings-code-bindings-options" title="Link to this heading">?</a></h3>
+           <p>Like <code class="docutils literal notranslate"><span class="pre">executeInGlobal</span></code>, but evaluate <i>code</i> using the referent as the variable object, but with a lexical environment extended with bindings from the object <i>bindings</i>.</p>
+           <p>An extra environment is created with bindings specified by <i>bindings</i>. The environment contains bindings corresponding to each own enumerable property of <i>bindings</i>, where the property name <i>name</i> as binding name, and the property value <i>value</i> as binding’s initial value.</p>
+           <p>If <code class="docutils literal notranslate"><span class="pre">options.useInnerBindings</span></code> is not specified or is specified as <code class="docutils literal notranslate"><span class="pre">false</span></code>, it emulates where the bindings environment is placed outside of global, which means, if the binding conflicts with any global variable declared in the <i>code</i>, or any existing global variable, the binding is ignored.</p>
+           <p>If <code class="docutils literal notranslate"><span class="pre">options.useInnerBindings</span></code> is speified as <code class="docutils literal notranslate"><span class="pre">true</span></code>, it directly performs as the bindings environment is placed inside the global, and the provided bindings shadow the global variables.</p>
+           <p>Each <i>value</i> must be a debuggee value.</p>
+           <p>This is not like a <code class="docutils literal notranslate"><span class="pre">with</span></code> statement: <i>code</i> may access, assign to, and delete the introduced bindings without having any effect on the passed <i>bindings</i> object, because the properties are copied to a new object for each invocation.</p>
+           <p>This method allows debugger code to introduce temporary bindings that are visible to the given debuggee code and which refer to debugger-held debuggee values, and do so without mutating any existing debuggee environment.</p>
+           <p>Note that, like <code class="docutils literal notranslate"><span class="pre">executeInGlobal</span></code>, any declarations it contains affect the referent global object, even as <i>code</i> is evaluated in an environment extended according to <i>bindings</i>. (In the terms used by the ECMAScript specification, the <code class="docutils literal notranslate"><span class="pre">VariableEnvironment</span></code> of the execution context for <i>code</i> is the referent, and the <i>bindings</i> appear in a new declarative environment, which is the eval code’s <code class="docutils literal notranslate"><span class="pre">LexicalEnvironment</span></code>.)</p>
+           <p>The <i>options</i> argument is as for <a class="reference internal" href="Debugger.Frame.html#eval-code-options"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">Debugger.Frame.prototype.eval</span></code></span></a>.</p>
+           <p>Note: If this method is called on an object whose owner <a class="reference internal" href="Debugger.html"><span class="std std-doc">Debugger object</span></a> has an onNativeCall handler, only hooks on objects associated with that debugger will be called during the evaluation.</p>
+          </section>
+          <section id="createsource-options">
+           <h3><code class="docutils literal notranslate"><span class="pre">createSource(options)</span></code><a class="headerlink" href="#createsource-options" title="Link to this heading">?</a></h3>
+           <p>If the referent is a global object, return a new JavaScript source in the global’s realm which has its properties filled in according to the <code class="docutils literal notranslate"><span class="pre">options</span></code> object. If the referent is not a global object, throw a <code class="docutils literal notranslate"><span class="pre">TypeError</span></code> exception. The <code class="docutils literal notranslate"><span class="pre">options</span></code> object can have the following properties:</p>
+           <ul class="simple">
+            <li>
+             <p><code class="docutils literal notranslate"><span class="pre">text</span></code>: String contents of the JavaScript in the source.</p></li>
+            <li>
+             <p><code class="docutils literal notranslate"><span class="pre">url</span></code>: URL the resulting source should be associated with.</p></li>
+            <li>
+             <p><code class="docutils literal notranslate"><span class="pre">startLine</span></code>: Starting line of the source.</p></li>
+            <li>
+             <p><code class="docutils literal notranslate"><span class="pre">startColumn</span></code>: Starting column of the source.</p></li>
+            <li>
+             <p><code class="docutils literal notranslate"><span class="pre">sourceMapURL</span></code>: Optional URL specifying the source’s source map URL. If not specified, the source map URL can be filled in if specified by the source’s text.</p></li>
+            <li>
+             <p><code class="docutils literal notranslate"><span class="pre">isScriptElement</span></code>: Optional boolean which will set the source’s <code class="docutils literal notranslate"><span class="pre">introductionType</span></code> to <code class="docutils literal notranslate"><span class="pre">"inlineScript"</span></code> if specified. Otherwise, the source’s <code class="docutils literal notranslate"><span class="pre">introductionType</span></code> will be <code class="docutils literal notranslate"><span class="pre">undefined</span></code>.</p></li>
+            <li>
+             <p><code class="docutils literal notranslate"><span class="pre">forceEnableAsmJS</span></code>: Optional boolean to force enable the asm.js feature. Unless specified, asm.js is disabled by default in the debuggee global. This option can be used when the createSource is used for recompiling the top-level script, where the script contains asm.js functions and the asm.js was enabled at the first compilation, and the consumer doesn’t want the asm.js functions being compiled as regular JS functions.</p></li>
+           </ul>
+          </section>
+          <section id="asenvironment">
+           <h3><code class="docutils literal notranslate"><span class="pre">asEnvironment()</span></code><a class="headerlink" href="#asenvironment" title="Link to this heading">?</a></h3>
+           <p>If the referent is a global object, return the <a class="reference internal" href="Debugger.Environment.html"><span class="std std-doc"><code class="docutils literal notranslate"><span class="pre">Debugger.Environment</span></code></span></a> instance representing the referent’s global lexical scope. The global lexical scope’s enclosing scope is the global object. If the referent is not a global object, throw a <code class="docutils literal notranslate"><span class="pre">TypeError</span></code>.</p>
+          </section>
+          <section id="unwrap">
+           <h3><code class="docutils literal notranslate"><span class="pre">unwrap()</span></code><a class="headerlink" href="#unwrap" title="Link to this heading">?</a></h3>
+           <p>If the referent is a wrapper that this <code class="docutils literal notranslate"><span class="pre">Debugger.Object</span></code>’s compartment is permitted to unwrap, return a <code class="docutils literal notranslate"><span class="pre">Debugger.Object</span></code> instance referring to the wrapped object. If we are not permitted to unwrap the referent, return <code class="docutils literal notranslate"><span class="pre">null</span></code>. If the referent is not a wrapper, return this <code class="docutils literal notranslate"><span class="pre">Debugger.Object</span></code> instance unchanged.</p>
+          </section>
+          <section id="unsafedereference">
+           <h3><code class="docutils literal notranslate"><span class="pre">unsafeDereference()</span></code><a class="headerlink" href="#unsafedereference" title="Link to this heading">?</a></h3>
+           <p>Return the referent of this <code class="docutils literal notranslate"><span class="pre">Debugger.Object</span></code> instance.</p>
+           <p>If the referent is an inner object (say, an HTML5 <code class="docutils literal notranslate"><span class="pre">Window</span></code> object), return the corresponding outer object (say, the HTML5 <code class="docutils literal notranslate"><span class="pre">WindowProxy</span></code> object). This makes <code class="docutils literal notranslate"><span class="pre">unsafeDereference</span></code> more useful in producing values appropriate for direct use by debuggee code, without using <a class="reference internal" href="Debugger.Frame.html#invocation-functions-and-debugger-frames"><span class="std std-ref">invocation functions</span></a>.</p>
+           <p>This method pierces the membrane of <code class="docutils literal notranslate"><span class="pre">Debugger.Object</span></code> instances meant to protect debugger code from debuggee code, and allows debugger code to access debuggee objects through the standard cross-compartment wrappers, rather than via <code class="docutils literal notranslate"><span class="pre">Debugger.Object</span></code>’s reflection-oriented interfaces. This method makes it easier to gradually adapt large code bases to this Debugger API: adapted portions of the code can use <code class="docutils literal notranslate"><span class="pre">Debugger.Object</span></code> instances, but use this method to pass direct object references to code that has not yet been updated.</p>
+          </section>
+          <section id="forcelexicalinitializationbyname-binding">
+           <h3><code class="docutils literal notranslate"><span class="pre">forceLexicalInitializationByName(binding)</span></code><a class="headerlink" href="#forcelexicalinitializationbyname-binding" title="Link to this heading">?</a></h3>
+           <p>If <i>binding</i> is in an uninitialized state initialize it to undefined and return true, otherwise do nothing and return false.</p>
+          </section>
+          <section id="getpromisereactions">
+           <h3><code class="docutils literal notranslate"><span class="pre">getPromiseReactions</span></code><a class="headerlink" href="#getpromisereactions" title="Link to this heading">?</a></h3>
+           <p>If the referent is a <a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise"><code class="docutils literal notranslate"><span class="pre">Promise</span></code></a> or a cross-compartment wrapper of one, this returns an array of objects describing the reaction records added to the promise. There are several different sorts of reaction records:</p>
+           <ul>
+            <li>
+             <p>The array entry for a reaction record added with <code class="docutils literal notranslate"><span class="pre">then</span></code> or <code class="docutils literal notranslate"><span class="pre">catch</span></code> has the form <code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">resolve:</span> <span class="pre">F,</span> <span class="pre">reject:</span> <span class="pre">F,</span> <span class="pre">result:</span> <span class="pre">P</span> <span class="pre">}</span></code>, where each <code class="docutils literal notranslate"><span class="pre">F</span></code> is a <code class="docutils literal notranslate"><span class="pre">Debugger.Object</span></code> referring to a function object, and <code class="docutils literal notranslate"><span class="pre">P</span></code> is the promise that will be resolved with the result of calling them.</p>
+             <p>The <code class="docutils literal notranslate"><span class="pre">resolve</span></code> and <code class="docutils literal notranslate"><span class="pre">reject</span></code> properties may be absent in some cases. A call to <code class="docutils literal notranslate"><span class="pre">then</span></code> can omit the rejection handler, and a call to <code class="docutils literal notranslate"><span class="pre">catch</span></code> omits the resolution handler. Furthermore, various promise facilities create records like this as internal implementation details, creating handlers that are not representable as JavaScript functions.</p></li>
+            <li>
+             <p>When a promise <code class="docutils literal notranslate"><span class="pre">P1</span></code> is resolved to another promise <code class="docutils literal notranslate"><span class="pre">P2</span></code> (such that resolving <code class="docutils literal notranslate"><span class="pre">P2</span></code> resolves <code class="docutils literal notranslate"><span class="pre">P1</span></code> in the same way) that adds a reaction record to <code class="docutils literal notranslate"><span class="pre">P2</span></code>. The array entry for that reaction record is simply the <code class="docutils literal notranslate"><span class="pre">Debugger.Object</span></code> representing <code class="docutils literal notranslate"><span class="pre">P1</span></code>.</p>
+             <p>Note that, if <code class="docutils literal notranslate"><span class="pre">P1</span></code> and <code class="docutils literal notranslate"><span class="pre">P2</span></code> are in different compartments, resolving <code class="docutils literal notranslate"><span class="pre">P1</span></code> to <code class="docutils literal notranslate"><span class="pre">P2</span></code> creates the same sort of reaction record as a call to <code class="docutils literal notranslate"><span class="pre">then</span></code> or <code class="docutils literal notranslate"><span class="pre">catch</span></code>, with <code class="docutils literal notranslate"><span class="pre">P1</span></code> stored only in a private slot of the <code class="docutils literal notranslate"><span class="pre">resolve</span></code> and <code class="docutils literal notranslate"><span class="pre">reject</span></code> functions, and not directly available from the reaction record.</p></li>
+            <li>
+             <p>An <code class="docutils literal notranslate"><span class="pre">await</span></code> expression calls <code class="docutils literal notranslate"><span class="pre">PromiseResolve</span></code> on its operand to obtain a promise <code class="docutils literal notranslate"><span class="pre">P</span></code>, and then adds a reaction record to <code class="docutils literal notranslate"><span class="pre">P</span></code> that resumes the suspended call appropriately. The array entry for that reaction record is a <code class="docutils literal notranslate"><span class="pre">Debugger.Frame</span></code> representing the suspended call.</p>
+             <p>If the <code class="docutils literal notranslate"><span class="pre">await</span></code>’s operand <code class="docutils literal notranslate"><span class="pre">A</span></code> is a native promise with the standard constructor, then <code class="docutils literal notranslate"><span class="pre">PromiseResolve</span></code> simply returns <code class="docutils literal notranslate"><span class="pre">A</span></code> unchanged, and the reaction record for resuming the suspended call is added to <code class="docutils literal notranslate"><span class="pre">A</span></code>’s list. But if <code class="docutils literal notranslate"><span class="pre">A</span></code> is some other sort of ‘thenable’, then <code class="docutils literal notranslate"><span class="pre">PromiseResolve</span></code> creates a new promise and enqueues a job to call <code class="docutils literal notranslate"><span class="pre">A</span></code>’s <code class="docutils literal notranslate"><span class="pre">then</span></code> method; this may produce more indirect chains from awaitees to awaiters.</p></li>
+            <li>
+             <p><code class="docutils literal notranslate"><span class="pre">JS::AddPromiseReactions</span></code> and <code class="docutils literal notranslate"><span class="pre">JS::AddPromiseReactionsIgnoringUnhandledRejection</span></code> create a reaction record whose promise field is <code class="docutils literal notranslate"><span class="pre">null</span></code>.</p></li>
+           </ul>
+          </section>
+         </section>
+        </section>
+       </div>
+      </div>
+      <footer>
+       <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Debugger.html" class="btn btn-neutral float-left" title="The Debugger Object" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a> <a href="Debugger.Script.html" class="btn btn-neutral float-right" title="Debugger.Script" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+       </div>
+       <hr>
+       <div role="contentinfo">
+        <p></p>
+       </div> Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+      </footer>
+     </div>
+    </div>
+   </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ </body>
+</html>

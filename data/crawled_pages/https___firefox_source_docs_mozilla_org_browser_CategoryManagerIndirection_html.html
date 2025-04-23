@@ -1,0 +1,380 @@
+<!doctype html>
+<html class="writer-html5" lang="en" data-content_root="../">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Category manager indirection (callModulesFromCategory) — Firefox Source Docs  documentation</title>
+  <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50">
+  <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094">
+  <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=fd3f3429">
+  <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b">
+  <link rel="stylesheet" type="text/css" href="../_static/custom_theme.css?v=dc5ed815">
+  <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7">
+  <link rel="shortcut icon" href="../_static/firefox.ico"><!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script src="../_static/jquery.js?v=5d32c60e"></script>
+  <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+  <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+  <script src="../_static/doctools.js?v=9a2dae69"></script>
+  <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+  <script src="../_static/copybutton.js?v=30646c52"></script>
+  <script src="../_static/design-tabs.js?v=36754332"></script>
+  <script src="../_static/js/theme.js"></script>
+  <link rel="index" title="Index" href="../genindex.html">
+  <link rel="search" title="Search" href="../search.html">
+  <link rel="next" title="CustomizableUI Component" href="components/customizableui/docs/index.html">
+  <link rel="prev" title="Browser Startup" href="BrowserStartup.html">
+ </head>
+ <body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+   <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <div class="wy-side-scroll">
+     <div class="wy-side-nav-search">
+      <a href="../index.html" class="icon icon-home"> Firefox Source Docs <img src="../_static/firefox-wordmark.svg" class="logo" alt="Logo"> </a><!-- -- This code is governed by the BSD license ---->
+      <div>
+       <h3>Quick search</h3>
+       <script>
+    (function () {
+      var cx = "dd12886298f75dbef";
+      var gcse = document.createElement("script");
+      gcse.async = true;
+      gcse.src = "https://cse.google.com/cse.js?cx=" + cx;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(gcse, s);
+    })();
+  </script><gcse:search></gcse:search>
+      </div>
+     </div>
+     <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+      <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../glossary/index.html">A Glossary of Common Terms</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../overview/index.html">A Quick Guide to Mozilla Applications</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../setup/index.html">Getting Set Up To Work On The Firefox Codebase</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Working On Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../contributing/index.html">Working on Firefox</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../bug-mgmt/index.html">Bug Handling</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox User Guide</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../devtools-user/index.html">Firefox DevTools User Docs</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Source Code Documentation</span></p>
+      <ul class="current">
+       <li class="toctree-l1"><a class="reference internal" href="../mots/index.html">Governance</a></li>
+       <li class="toctree-l1 current"><a class="reference internal" href="index.html">Firefox Front-end</a>
+        <ul class="current">
+         <li class="toctree-l2"><a class="reference internal" href="urlbar/index.html">Address Bar</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="BrowserUsageTelemetry.html">Browser Usage Telemetry</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="FrontendCodeReviewBestPractices.html">Frontend Code Review Best Practices</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="CommandLineParameters.html">Command Line Parameters</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="BrowserStartup.html">Browser Startup</a></li>
+         <li class="toctree-l2 current"><a class="current reference internal" href="#">Category manager indirection (callModulesFromCategory)</a>
+          <ul>
+           <li class="toctree-l3"><a class="reference internal" href="#consumer-registration-with-the-category-manager">Consumer registration with the category manager.</a>
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="#runtime-registration">Runtime registration</a></li>
+            </ul></li>
+           <li class="toctree-l3"><a class="reference internal" href="#publishers-actors-invoking-consumers">Publishers/actors invoking consumers</a>
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="#BrowserUtils.callModulesFromCategory"><code class="docutils literal notranslate"><span class="pre">BrowserUtils.callModulesFromCategory</span></code></a></li>
+            </ul></li>
+           <li class="toctree-l3"><a class="reference internal" href="#caveats">Caveats</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#why-not-just-call-consumers-directly">Why not just call consumers directly?</a>
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="#reducing-direct-dependencies-between-different-parts-of-the-code-base">Reducing direct dependencies between different parts of the code-base</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#avoiding-a-bootstrap-problem-in-favour-of-a-just-in-time-approach">Avoiding a bootstrap problem in favour of a “just in time” approach</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#unified-error-handling-performance-inspection-and-scheduling">Unified error-handling, performance inspection, and scheduling</a></li>
+            </ul></li>
+          </ul></li>
+         <li class="toctree-l2"><a class="reference internal" href="components/customizableui/docs/index.html">CustomizableUI Component</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="components/enterprisepolicies/docs/index.html">Enterprise Policies</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="extensions/formautofill/docs/index.html">Form Autofill</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="extensions/newtab/docs/index.html">Firefox Home (New Tab)</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="components/aboutwelcome/docs/index.html">Firefox Welcome Experience (about:welcome)</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="installer/windows/installer/index.html">Installer</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="components/attribution/docs/index.html">Installation Attribution</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../toolkit/mozapps/defaultagent/default-browser-agent/index.html">Default Browser Agent</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="components/migration/docs/index.html">Migration</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="components/pagedata/docs/index.html">PageDataService</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="places/index.html">Places</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="components/asrouter/docs/index.html">Messaging System</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="search/index.html">Search</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="base/tabbrowser/index.html">tabbrowser</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="touchbar/index.html">Touch Bar</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="components/uitour/docs/index.html">UITour</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="branding/docs/index.html">Firefox Branding</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="components/storybook/docs/README.storybook.stories.html">Storybook for Firefox</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="components/storybook/docs/README.reusable-widgets.stories.html">Reusable UI widgets</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="components/storybook/docs/README.other-widgets.stories.html">Other types of UI Widgets</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="components/storybook/docs/README.lit-guide.stories.html">Lit</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="components/storybook/docs/README.xul-and-html.stories.html">XUL and HTML</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../toolkit/themes/shared/design-system/docs/README.design-tokens.stories.html">Design tokens</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../toolkit/themes/shared/design-system/docs/README.json-design-tokens.stories.html">JSON design tokens</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="components/backup/docs/index.html">Backup Component</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="components/sidebar/docs/index.html">Sidebar</a></li>
+        </ul></li>
+       <li class="toctree-l1"><a class="reference internal" href="../dom/index.html">DOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../editor/index.html">Editor</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../layout/index.html">Style system (CSS) &amp; Layout</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../gfx/index.html">Graphics</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../ipc/index.html">Processes, Threads and IPC</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../devtools/index.html">Firefox DevTools Contributor Docs</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../toolkit/index.html">Toolkit</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../js/index.html">SpiderMonkey</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../jsloader/index.html">JS Loader</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mobile/android/geckoview/index.html">GeckoView</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mobile/android/fenix/index.html">Fenix</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mobile/android/focus-android/index.html">Focus for Android</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../dom/bindings/webidl/index.html">WebIDL</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../modules/libpref/index.html">libpref</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../networking/index.html">Networking</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../remote/index.html">Remote Protocols</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../services/index.html">Services</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../permissions/index.html">Permissions</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../uriloader/index.html">File Handling</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../widget/cocoa/index.html">Firefox on macOS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../widget/windows/index.html">Firefox on Windows</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../toolkit/components/ml/index.html">Firefox AI Runtime</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../accessible/index.html">Accessibility</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../media/index.html">Media Playback</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../code-quality/index.html">Code quality</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../writing-rust-code/index.html">Writing Rust Code</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../rust-components/index.html">Rust Components</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/profiler/index.html">Gecko Profiler</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../performance/index.html">Performance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../storage/index.html">Database bindings (SQLite, KV, …)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../xpcom/index.html">XPCOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../nspr/index.html">NSPR</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../security/nss/index.html">Network Security Services (NSS)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../content-security/index.html">Web Security Checks in Gecko</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">The Firefox Build System</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../mach/index.html">Mach</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/try/index.html">Pushing to Try</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../build/buildsystem/index.html">Build System</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../taskcluster/index.html">Firefox CI and Taskgraph</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/moztreedocs/index.html">Managing Documentation</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mozbuild/vendor/index.html">Vendoring Third Party Components</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Testing &amp; Test Infrastructure</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/automated-testing/index.html">Automated Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/treeherder-try/index.html">Understanding Treeherder Results</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/sheriffed-intermittents/index.html">Sheriffed intermittent failures</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/tests-for-new-config/index.html">Turning on Firefox tests for a new configuration</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/intermittent/index.html">Avoiding intermittent tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/testing-policy/index.html">Testing Policy</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/ci-configs/index.html">Configuration Changes</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/browser-chrome/index.html">Browser chrome mochitests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/chrome-tests/index.html">Chrome Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/marionette/index.html">Marionette</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/geckodriver/index.html">geckodriver</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/test-verification/index.html">Test Verification</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/webrender/index.html">WebRender Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/mochitest-plain/index.html">Mochitest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/xpcshell/index.html">XPCShell tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/tps/index.html">TPS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../web-platform/index.html">web-platform-tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../gtest/index.html">GTest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/fuzzing/index.html">Fuzzing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/sanitizer/index.html">Sanitizer</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/perfdocs/index.html">Performance Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/code-coverage/index.html">Code coverage</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing-rust-code/index.html">Testing &amp; Debugging Rust Code</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Releases &amp; Updates</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../update-infrastructure/index.html">Mozilla Update Infrastructure</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../update-infrastructure/index.html#watershed-updates">Watershed Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../update-infrastructure/index.html#desupport-updates">Desupport Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/update-verify/index.html">Update Verify</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Localization &amp; Internationalization</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../intl/index.html">Internationalization</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../l10n/index.html">Localization</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox and Python</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../mozbase/index.html">mozbase</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../python/index.html">Using third-party Python packages</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Metrics Collected in Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../metrics/index.html">Metrics</a></li>
+      </ul>
+     </div>
+    </div>
+   </nav>
+   <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+    <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+     <i data-toggle="wy-nav-top" class="fa fa-bars"></i> <a href="../index.html">Firefox Source Docs</a>
+    </nav>
+    <div class="wy-nav-content">
+     <div class="rst-content">
+      <!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+      <div role="navigation" aria-label="Page navigation">
+       <ul class="wy-breadcrumbs">
+        <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+        <li class="breadcrumb-item"><a href="index.html">Firefox Front-end</a></li>
+        <li class="breadcrumb-item active">Category manager indirection (callModulesFromCategory)</li>
+        <li class="wy-breadcrumbs-aside"><a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Developer+Infrastructure&amp;component=Firefox+Source+Docs%3A+Content&amp;short_desc=Documentation+issue+on+browser/CategoryManagerIndirection&amp;comment=URL+=+https://firefox-source-docs.mozilla.org/browser/CategoryManagerIndirection.html&amp;bug_file_loc=https://firefox-source-docs.mozilla.org/browser/CategoryManagerIndirection.html" rel="nofollow">Report an issue</a> / <a href="../_sources/browser/CategoryManagerIndirection.md.txt" rel="nofollow"> View page source</a></li>
+       </ul>
+       <hr>
+      </div>
+      <div role="main" class="document" itemscope itemtype="http://schema.org/Article">
+       <div itemprop="articleBody">
+        <section id="category-manager-indirection-callmodulesfromcategory">
+         <h1>Category manager indirection (callModulesFromCategory)<a class="headerlink" href="#category-manager-indirection-callmodulesfromcategory" title="Link to this heading">?</a></h1>
+         <p>Firefox front-end code uses the category manager as a publish/subscribe mechanism for dependency injection, so consumers can be notified of interesting things happening without having to directly talk to the publisher/actor who decides the interesting thing is happening.</p>
+         <p>There are 2 parts to this:</p>
+         <ol class="arabic simple">
+          <li>
+           <p>Consumers registering with the category manager</p></li>
+          <li>
+           <p>Publishers/actors invoking consumers via the category manager.</p></li>
+         </ol>
+         <section id="consumer-registration-with-the-category-manager">
+          <h2>Consumer registration with the category manager.<a class="headerlink" href="#consumer-registration-with-the-category-manager" title="Link to this heading">?</a></h2>
+          <p>The category manager is used for various purposes within Firefox; it is more or less an arbitrary double string-keyed data store.</p>
+          <p>For this particular usecase, the publisher/consumer have to use the same primary key (i.e. category name), such as <code class="docutils literal notranslate"><span class="pre">browser-idle-startup</span></code>.</p>
+          <p>The secondary key is a full URL to a <code class="docutils literal notranslate"><span class="pre">sys.mjs</span></code> module. Note that because this is a key, <strong>only one consumer per module &amp; category combination is possible</strong>.</p>
+          <p>The “value” part is an <code class="docutils literal notranslate"><span class="pre">Object.method</span></code> notation, where the expectation is that <code class="docutils literal notranslate"><span class="pre">Object</span></code> is an exported symbol from the module identified as the secondary key, and <code class="docutils literal notranslate"><span class="pre">method</span></code> is some method on that object.</p>
+          <p>At compile-time, registration can happen with an entry in a <code class="docutils literal notranslate"><span class="pre">.manifest</span></code> file like <a class="reference external" href="https://searchfox.org/mozilla-central/source/browser/components/BrowserComponents.manifest">BrowserComponents.manifest</a>. Note that any manifest successfully processed by the build system would do, we don’t need to use <code class="docutils literal notranslate"><span class="pre">BrowserComponents.manifest</span></code> specifically. In fact, it would be preferable if components used their own manifest files.</p>
+          <p>An example registration looks like:</p>
+          <div class="highlight-default notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="n">category</span> <span class="n">browser</span><span class="o">-</span><span class="n">idle</span><span class="o">-</span><span class="n">startup</span> <span class="n">moz</span><span class="o">-</span><span class="n">src</span><span class="p">:</span><span class="o">//</span><span class="n">browser</span><span class="o">/</span><span class="n">components</span><span class="o">/</span><span class="n">tabbrowser</span><span class="o">/</span><span class="n">TabUnloader</span><span class="o">.</span><span class="n">sys</span><span class="o">.</span><span class="n">mjs</span> <span class="n">TabUnloader</span><span class="o">.</span><span class="n">init</span>
+</pre>
+           </div>
+          </div>
+          <p>This will ensure that when the <code class="docutils literal notranslate"><span class="pre">browser-idle-startup</span></code> publisher is invoked, the <code class="docutils literal notranslate"><span class="pre">TabUnloader.sys.mjs</span></code> module is loaded and the <code class="docutils literal notranslate"><span class="pre">init</span></code> method on the exported <code class="docutils literal notranslate"><span class="pre">TabUnloader</span></code> object is invoked.</p>
+          <section id="runtime-registration">
+           <h3>Runtime registration<a class="headerlink" href="#runtime-registration" title="Link to this heading">?</a></h3>
+           <p>Runtime registration is less-often used, but can be done using the category manager’s XPCOM API:</p>
+           <div class="highlight-js notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="nx">Services</span><span class="p">.</span><span class="nx">catMan</span><span class="p">.</span><span class="nx">addCategoryEntry</span><span class="p">(</span>
+<span class="w">    </span><span class="s2">"browser-idle-startup"</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">"moz-src://browser/components/tabbrowser/TabUnloader.sys.mjs"</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">"TabUnloader.init"</span>
+<span class="p">)</span>
+</pre>
+            </div>
+           </div>
+          </section>
+         </section>
+         <section id="publishers-actors-invoking-consumers">
+          <h2>Publishers/actors invoking consumers<a class="headerlink" href="#publishers-actors-invoking-consumers" title="Link to this heading">?</a></h2>
+          <p>Publishers call <code class="docutils literal notranslate"><span class="pre">BrowserUtils.callModulesFromCategory</span></code> with a dictionary of options as the first argument. If provided, any other arguments are passed straight through to any consumers.</p>
+          <dl class="js staticfunction">
+           <dt class="sig sig-object js" id="BrowserUtils.callModulesFromCategory">
+            <em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="n"><span class="pre">BrowserUtils</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">callModulesFromCategory</span></span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">options</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">...args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#BrowserUtils.callModulesFromCategory" title="Link to this definition">?</a>
+           </dt>
+           <dd>
+            <p>Invoke all the category manager consumers of a given JS consumer. Similar to the (C++-only) <code class="docutils literal notranslate"><span class="pre">NS_CreateServicesFromCategory</span></code> in that it’ll abstract away the actual work of invoking the modules/services. Different in that it’s JS-only and will invoke methods in modules instead of using XPCOM services.</p>
+            <p>More context is available in <a class="reference external" href="https://firefox-source-docs.mozilla.org/browser/CategoryManagerIndirection.html">https://firefox-source-docs.mozilla.org/browser/CategoryManagerIndirection.html</a></p>
+            <dl class="field-list simple">
+             <dt class="field-odd">
+              Arguments<span class="colon">:</span>
+             </dt>
+             <dd class="field-odd">
+              <ul class="simple">
+               <li>
+                <p><strong>options</strong> (<em>object</em>)</p></li>
+               <li>
+                <p><strong>options.categoryName</strong> (<em>string</em>) – What category’s consumers to call.</p></li>
+               <li>
+                <p><strong>options.idleDispatch</strong> (<em>boolean</em>) – If set to true, call each consumer in an idle task.</p></li>
+               <li>
+                <p><strong>options.profilerMarker</strong> (<em>string</em>) – If specified, will create a profiler marker with the provided identifier for each consumer.</p></li>
+               <li>
+                <p><strong>options.failureHandler</strong> (<em>function</em>) – If specified, will be called for any exceptions raised, in order to do custom failure handling.</p></li>
+               <li>
+                <p><strong>args</strong> (<em>any</em>) – Arguments to pass to the consumers.</p></li>
+              </ul>
+             </dd>
+            </dl>
+           </dd>
+          </dl>
+          <p>Example:</p>
+          <div class="highlight-js notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="nx">BrowserUtils</span><span class="p">.</span><span class="nx">callModulesFromCategory</span><span class="p">({</span>
+<span class="w">    </span><span class="nx">categoryName</span><span class="o">:</span><span class="w"> </span><span class="s2">"my-fancy-category-name"</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">profilerMarker</span><span class="o">:</span><span class="w"> </span><span class="s2">"markMyCategories"</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">idleDispatch</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">someArgument</span>
+<span class="p">});</span>
+</pre>
+           </div>
+          </div>
+          <p>This will pass <code class="docutils literal notranslate"><span class="pre">someArgument</span></code> to each consumer registered for <code class="docutils literal notranslate"><span class="pre">my-fancy-category-name</span></code>. Each consumer will be invoked via an idle task, and each task will get a profiler marker (labelled <code class="docutils literal notranslate"><span class="pre">"markMyCategories"</span></code>) in the <a class="reference external" href="https://profiler.firefox.com/">Firefox Profiler</a> so it’s easy to find in performance profiles.</p>
+          <p>You should consider using <code class="docutils literal notranslate"><span class="pre">idleDispatch:</span> <span class="pre">true</span></code> if invocation of the consumers does not need to happen synchronously.</p>
+          <p>If you need to care about errors produced by consumers, you can specify a function for <code class="docutils literal notranslate"><span class="pre">failureHandler</span></code> and handle any exceptions/errors using your own logic. Note that it may be invoked asynchronously if the consumers are async.</p>
+         </section>
+         <section id="caveats">
+          <h2>Caveats<a class="headerlink" href="#caveats" title="Link to this heading">?</a></h2>
+          <p>Any errors thrown by consumers are automatically caught and reported via the <a class="reference internal" href="../devtools-user/browser_console/index.html"><span class="std std-doc">Browser Console</span></a>.</p>
+          <p>Async functions are not awaited before invoking other consumers. Note that rejections (exceptions from async code) are still caught and reported to the console, and that the async duration of a given consumer will be what determines the length of the profiler marker, if the publisher asks for profiler markers.</p>
+         </section>
+         <section id="why-not-just-call-consumers-directly">
+          <h2>Why not just call consumers directly?<a class="headerlink" href="#why-not-just-call-consumers-directly" title="Link to this heading">?</a></h2>
+          <p>There are a number of benefits over direct method calls and module imports.</p>
+          <section id="reducing-direct-dependencies-between-different-parts-of-the-code-base">
+           <h3>Reducing direct dependencies between different parts of the code-base<a class="headerlink" href="#reducing-direct-dependencies-between-different-parts-of-the-code-base" title="Link to this heading">?</a></h3>
+           <p>Code that looks like this:</p>
+           <div class="highlight-default notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="n">Foo</span><span class="o">.</span><span class="n">thingHappened</span><span class="p">(</span><span class="n">arg</span><span class="p">);</span>
+<span class="n">Bar</span><span class="o">.</span><span class="n">thingHappened</span><span class="p">(</span><span class="n">arg</span><span class="p">);</span>
+<span class="n">Baz</span><span class="o">.</span><span class="n">thingHappened</span><span class="p">(</span><span class="n">arg</span><span class="p">);</span>
+</pre>
+            </div>
+           </div>
+           <p>is not only repetitive, it also means that the code in question has to directly import all the modules that provide <code class="docutils literal notranslate"><span class="pre">Foo</span></code>, <code class="docutils literal notranslate"><span class="pre">Bar</span></code> and <code class="docutils literal notranslate"><span class="pre">Baz</span></code>. It means that if those modules change or move or are refactored, the “publisher” code has to be updated, with all the added burdens that comes with (potential for merge conflicts, more automatically added reviewer groups for trivial changes, easy to miss if dependencies are widespread).</p>
+          </section>
+          <section id="avoiding-a-bootstrap-problem-in-favour-of-a-just-in-time-approach">
+           <h3>Avoiding a bootstrap problem in favour of a “just in time” approach<a class="headerlink" href="#avoiding-a-bootstrap-problem-in-favour-of-a-just-in-time-approach" title="Link to this heading">?</a></h3>
+           <p>To make sure code is invoked later, when using the observer service, DOM event listeners, or other mechanisms, it usually needs to add a listener before the event of interest happens. If not managed carefully, this often leads to component initialization being front-loaded to make sure not to “miss” it later. This in turn makes browser startup more heavyweight rather than it needs to be, because we set up listeners for <em>everything</em>, potentially loading entire JS modules just to do that.</p>
+          </section>
+          <section id="unified-error-handling-performance-inspection-and-scheduling">
+           <h3>Unified error-handling, performance inspection, and scheduling<a class="headerlink" href="#unified-error-handling-performance-inspection-and-scheduling" title="Link to this heading">?</a></h3>
+           <p>Using the <code class="docutils literal notranslate"><span class="pre">BrowserUtils.callModulesFromCategory</span></code> API allows specifying error handling, performance profiler markers, and scheduling (use of idle tasks) in one place. This abstracts away the fact that we never want observers, event listeners or other mechanisms like this to break and stop notifying (or worse, propagate an exception themselves) when one of the consumers breaks.</p>
+          </section>
+         </section>
+        </section>
+       </div>
+      </div>
+      <footer>
+       <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="BrowserStartup.html" class="btn btn-neutral float-left" title="Browser Startup" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a> <a href="components/customizableui/docs/index.html" class="btn btn-neutral float-right" title="CustomizableUI Component" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+       </div>
+       <hr>
+       <div role="contentinfo">
+        <p></p>
+       </div> Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+      </footer>
+     </div>
+    </div>
+   </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ </body>
+</html>

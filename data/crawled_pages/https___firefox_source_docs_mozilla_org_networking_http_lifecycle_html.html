@@ -1,0 +1,607 @@
+<!doctype html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Lifecycle of a HTTP Request — Firefox Source Docs  documentation</title>
+  <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50">
+  <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094">
+  <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=fd3f3429">
+  <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b">
+  <link rel="stylesheet" type="text/css" href="../../_static/custom_theme.css?v=dc5ed815">
+  <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7">
+  <link rel="shortcut icon" href="../../_static/firefox.ico"><!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script src="../../_static/jquery.js?v=5d32c60e"></script>
+  <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+  <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+  <script src="../../_static/doctools.js?v=9a2dae69"></script>
+  <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+  <script src="../../_static/copybutton.js?v=30646c52"></script>
+  <script src="../../_static/design-tabs.js?v=36754332"></script>
+  <script src="../../_static/js/theme.js"></script>
+  <link rel="index" title="Index" href="../../genindex.html">
+  <link rel="search" title="Search" href="../../search.html">
+  <link rel="next" title="DNS over HTTPS (Trusted Recursive Resolver)" href="../dns/dns-over-https-trr.html">
+  <link rel="prev" title="Firefox Network Scheduling and Prioritization" href="prioritization.html">
+ </head>
+ <body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+   <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <div class="wy-side-scroll">
+     <div class="wy-side-nav-search">
+      <a href="../../index.html" class="icon icon-home"> Firefox Source Docs <img src="../../_static/firefox-wordmark.svg" class="logo" alt="Logo"> </a><!-- -- This code is governed by the BSD license ---->
+      <div>
+       <h3>Quick search</h3>
+       <script>
+    (function () {
+      var cx = "dd12886298f75dbef";
+      var gcse = document.createElement("script");
+      gcse.async = true;
+      gcse.src = "https://cse.google.com/cse.js?cx=" + cx;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(gcse, s);
+    })();
+  </script><gcse:search></gcse:search>
+      </div>
+     </div>
+     <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+      <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../glossary/index.html">A Glossary of Common Terms</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../overview/index.html">A Quick Guide to Mozilla Applications</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../setup/index.html">Getting Set Up To Work On The Firefox Codebase</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Working On Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Working on Firefox</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../bug-mgmt/index.html">Bug Handling</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox User Guide</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../devtools-user/index.html">Firefox DevTools User Docs</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Source Code Documentation</span></p>
+      <ul class="current">
+       <li class="toctree-l1"><a class="reference internal" href="../../mots/index.html">Governance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../browser/index.html">Firefox Front-end</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../dom/index.html">DOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../editor/index.html">Editor</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../layout/index.html">Style system (CSS) &amp; Layout</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../gfx/index.html">Graphics</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../ipc/index.html">Processes, Threads and IPC</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../devtools/index.html">Firefox DevTools Contributor Docs</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../toolkit/index.html">Toolkit</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../js/index.html">SpiderMonkey</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../jsloader/index.html">JS Loader</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/geckoview/index.html">GeckoView</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/fenix/index.html">Fenix</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/focus-android/index.html">Focus for Android</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../dom/bindings/webidl/index.html">WebIDL</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../modules/libpref/index.html">libpref</a></li>
+       <li class="toctree-l1 current"><a class="reference internal" href="../index.html">Networking</a>
+        <ul class="current">
+         <li class="toctree-l2"><a class="reference internal" href="../index.html#how-tos">How-to’s</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../index.html#tutorials">Tutorials</a></li>
+         <li class="toctree-l2 current"><a class="reference internal" href="../index.html#deep-dives">Deep Dives</a>
+          <ul class="current">
+           <li class="toctree-l3"><a class="reference internal" href="../index.html#necko-design">Necko Design</a></li>
+           <li class="toctree-l3 current"><a class="reference internal" href="../index.html#necko-features">Necko Features</a>
+            <ul class="current">
+             <li class="toctree-l4 current"><a class="current reference internal" href="#">The Lifecycle of a HTTP Request</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="../dns/dns-over-https-trr.html">DNS over HTTPS (Trusted Recursive Resolver)</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="../url_parsers.html">URL Parsers</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="../webtransport/webtransport.html">WebTransport (WIP)</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="../captive_portals.html">Captive Portal Detection</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="../early_hints.html">Early Hints</a></li>
+            </ul></li>
+          </ul></li>
+         <li class="toctree-l2"><a class="reference internal" href="../index.html#references">References</a></li>
+        </ul></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../remote/index.html">Remote Protocols</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../services/index.html">Services</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../permissions/index.html">Permissions</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../uriloader/index.html">File Handling</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../widget/cocoa/index.html">Firefox on macOS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../widget/windows/index.html">Firefox on Windows</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../toolkit/components/ml/index.html">Firefox AI Runtime</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../accessible/index.html">Accessibility</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../media/index.html">Media Playback</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../code-quality/index.html">Code quality</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../writing-rust-code/index.html">Writing Rust Code</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../rust-components/index.html">Rust Components</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/profiler/index.html">Gecko Profiler</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../performance/index.html">Performance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../storage/index.html">Database bindings (SQLite, KV, …)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../xpcom/index.html">XPCOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../nspr/index.html">NSPR</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../security/nss/index.html">Network Security Services (NSS)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../content-security/index.html">Web Security Checks in Gecko</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">The Firefox Build System</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mach/index.html">Mach</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/try/index.html">Pushing to Try</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../build/buildsystem/index.html">Build System</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../taskcluster/index.html">Firefox CI and Taskgraph</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/moztreedocs/index.html">Managing Documentation</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mozbuild/vendor/index.html">Vendoring Third Party Components</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Testing &amp; Test Infrastructure</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/automated-testing/index.html">Automated Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/treeherder-try/index.html">Understanding Treeherder Results</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/sheriffed-intermittents/index.html">Sheriffed intermittent failures</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/tests-for-new-config/index.html">Turning on Firefox tests for a new configuration</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/intermittent/index.html">Avoiding intermittent tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/testing-policy/index.html">Testing Policy</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/ci-configs/index.html">Configuration Changes</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/browser-chrome/index.html">Browser chrome mochitests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/chrome-tests/index.html">Chrome Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/marionette/index.html">Marionette</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/geckodriver/index.html">geckodriver</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/test-verification/index.html">Test Verification</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/webrender/index.html">WebRender Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/mochitest-plain/index.html">Mochitest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/xpcshell/index.html">XPCShell tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/tps/index.html">TPS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../web-platform/index.html">web-platform-tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../gtest/index.html">GTest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/fuzzing/index.html">Fuzzing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/sanitizer/index.html">Sanitizer</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/perfdocs/index.html">Performance Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/code-coverage/index.html">Code coverage</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing-rust-code/index.html">Testing &amp; Debugging Rust Code</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Releases &amp; Updates</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html">Mozilla Update Infrastructure</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html#watershed-updates">Watershed Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html#desupport-updates">Desupport Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/update-verify/index.html">Update Verify</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Localization &amp; Internationalization</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../intl/index.html">Internationalization</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../l10n/index.html">Localization</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox and Python</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mozbase/index.html">mozbase</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../python/index.html">Using third-party Python packages</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Metrics Collected in Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../metrics/index.html">Metrics</a></li>
+      </ul>
+     </div>
+    </div>
+   </nav>
+   <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+    <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+     <i data-toggle="wy-nav-top" class="fa fa-bars"></i> <a href="../../index.html">Firefox Source Docs</a>
+    </nav>
+    <div class="wy-nav-content">
+     <div class="rst-content">
+      <!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+      <div role="navigation" aria-label="Page navigation">
+       <ul class="wy-breadcrumbs">
+        <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+        <li class="breadcrumb-item"><a href="../index.html">Networking</a></li>
+        <li class="breadcrumb-item active">The Lifecycle of a HTTP Request</li>
+        <li class="wy-breadcrumbs-aside"><a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Developer+Infrastructure&amp;component=Firefox+Source+Docs%3A+Content&amp;short_desc=Documentation+issue+on+networking/http/lifecycle&amp;comment=URL+=+https://firefox-source-docs.mozilla.org/networking/http/lifecycle.html&amp;bug_file_loc=https://firefox-source-docs.mozilla.org/networking/http/lifecycle.html" rel="nofollow">Report an issue</a> / <a href="../../_sources/networking/http/lifecycle.rst.txt" rel="nofollow"> View page source</a></li>
+       </ul>
+       <hr>
+      </div>
+      <div role="main" class="document" itemscope itemtype="http://schema.org/Article">
+       <div itemprop="articleBody">
+        <section id="the-lifecycle-of-a-http-request">
+         <h1>The Lifecycle of a HTTP Request<a class="headerlink" href="#the-lifecycle-of-a-http-request" title="Link to this heading">?</a></h1>
+         <p>HTTP requests in Firefox go through several steps. Each piece of the request message and response message become available at certain points. Extracting that information is a challenge, though.</p>
+         <section id="what-is-available-when">
+          <h2>What is Available When<a class="headerlink" href="#what-is-available-when" title="Link to this heading">?</a></h2>
+          <table class="docutils align-default">
+           <thead>
+            <tr class="row-odd">
+             <th class="head">
+              <p>Data</p></th>
+             <th class="head">
+              <p>When it’s available</p></th>
+             <th class="head">
+              <p>Sample JS code</p></th>
+             <th class="head">
+              <p>Interfaces</p></th>
+             <th class="head">
+              <p>Test code</p></th>
+            </tr>
+           </thead>
+           <tbody>
+            <tr class="row-even">
+             <td>
+              <p>HTTP request method</p></td>
+             <td>
+              <p><em>http-on-modify-request</em> observer notification</p></td>
+             <td>
+              <p>channel.requestMethod</p></td>
+             <td>
+              <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/netwerk/protocol/http/nsIHttpChannel.idl">nsIHttpChannel</a></p></td>
+             <td></td>
+            </tr>
+            <tr class="row-odd">
+             <td>
+              <p>HTTP request URI</p></td>
+             <td>
+              <p><em>http-on-modify-request</em> observer notification</p></td>
+             <td>
+              <p>channel.URI</p></td>
+             <td>
+              <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/netwerk/base/nsIChannel.idl">nsIChannel</a></p></td>
+             <td></td>
+            </tr>
+            <tr class="row-even">
+             <td>
+              <p>HTTP request headers</p></td>
+             <td>
+              <p><em>http-on-modify-request</em> observer notification</p></td>
+             <td>
+              <p>channel.visitRequestHeaders(visitor)</p></td>
+             <td>
+              <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/netwerk/protocol/http/nsIHttpChannel.idl">nsIHttpChannel</a></p></td>
+             <td></td>
+            </tr>
+            <tr class="row-odd">
+             <td>
+              <p>HTTP request body</p></td>
+             <td>
+              <p><em>http-on-modify-request</em> observer notification</p></td>
+             <td>
+              <p>channel.uploadStream</p></td>
+             <td>
+              <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/netwerk/base/nsIUploadChannel.idl">nsIUploadChannel</a></p></td>
+             <td></td>
+            </tr>
+            <tr class="row-even">
+             <td>
+              <div class="line-block">
+               <div class="line">
+                HTTP response status
+               </div>
+               <div class="line">
+                <br>
+               </div>
+              </div></td>
+             <td>
+              <div class="line-block">
+               <div class="line">
+                <em>http-on-examine-response</em> observer notification
+               </div>
+               <div class="line">
+                <br>
+               </div>
+              </div></td>
+             <td>
+              <div class="line-block">
+               <div class="line">
+                channel.responseStatus
+               </div>
+               <div class="line">
+                channel.responseStatusText
+               </div>
+              </div></td>
+             <td>
+              <div class="line-block">
+               <div class="line">
+                <a class="reference external" href="https://searchfox.org/mozilla-central/source/netwerk/protocol/http/nsIHttpChannel.idl">nsIHttpChannel</a>
+               </div>
+               <div class="line">
+                <br>
+               </div>
+              </div></td>
+             <td>
+              <div class="line-block">
+               <div class="line">
+                <a class="reference external" href="https://searchfox.org/mozilla-central/source/netwerk/test/httpserver/test/test_basic_functionality.js">test_basic_functionality.js</a>
+               </div>
+               <div class="line">
+                <br>
+               </div>
+              </div></td>
+            </tr>
+            <tr class="row-odd">
+             <td>
+              <p>HTTP response headers</p></td>
+             <td>
+              <p><em>http-on-examine-response</em> observer notification</p></td>
+             <td>
+              <p>channel.visitResponseHeaders(visitor)</p></td>
+             <td>
+              <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/netwerk/protocol/http/nsIHttpChannel.idl">nsIHttpChannel</a></p></td>
+             <td></td>
+            </tr>
+            <tr class="row-even">
+             <td>
+              <div class="line-block">
+               <div class="line">
+                HTTP response body
+               </div>
+               <div class="line">
+                <br>
+               </div>
+               <div class="line">
+                <br>
+               </div>
+              </div></td>
+             <td>
+              <div class="line-block">
+               <div class="line">
+                <em>onStopRequest</em> via stream listener tee
+               </div>
+               <div class="line">
+                <br>
+               </div>
+               <div class="line">
+                <br>
+               </div>
+              </div></td>
+             <td>
+              <div class="line-block">
+               <div class="line">
+                See below
+               </div>
+               <div class="line">
+                <br>
+               </div>
+               <div class="line">
+                <br>
+               </div>
+              </div></td>
+             <td>
+              <div class="line-block">
+               <div class="line">
+                <a class="reference external" href="https://searchfox.org/mozilla-central/source/netwerk/base/nsITraceableChannel.idl">nsITraceableChannel</a>
+               </div>
+               <div class="line">
+                <a class="reference external" href="https://searchfox.org/mozilla-central/source/netwerk/base/nsIStreamListenerTee.idl">nsIStreamListenerTee</a>
+               </div>
+               <div class="line">
+                <a class="reference external" href="https://searchfox.org/mozilla-central/source/xpcom/io/nsIPipe.idl">nsIPipe</a>
+               </div>
+              </div></td>
+             <td>
+              <div class="line-block">
+               <div class="line">
+                <a class="reference external" href="https://searchfox.org/mozilla-central/source/netwerk/test/unit/test_traceable_channel.js">test_traceable_channel.js</a>
+               </div>
+               <div class="line">
+                <br>
+               </div>
+               <div class="line">
+                <br>
+               </div>
+              </div></td>
+            </tr>
+           </tbody>
+          </table>
+         </section>
+         <section id="the-request-http-on-modify-request">
+          <h2>The Request: http-on-modify-request<a class="headerlink" href="#the-request-http-on-modify-request" title="Link to this heading">?</a></h2>
+          <p>Firefox fires a “http-on-modify-request” observer notification before sending the HTTP request, and this blocks the sending of the request until all observers exit. This is generally the point at which you can modify the HTTP request headers (hence the name).</p>
+          <p>Attaching a listener for a request is pretty simple:</p>
+          <div class="highlight-default notranslate">
+           <div class="highlight">
+            <pre><span></span>const obs = {
+  QueryInterface: ChromeUtils.generateQI(["nsIObserver"]),
+
+  observe: function(channel, topic, data) {
+    if (!(channel instanceof Ci.nsIHttpChannel))
+      return;
+
+    // process the channel's data
+  }
+}
+
+Services.obs.addObserver(observer, "http-on-modify-request", false);
+</pre>
+           </div>
+          </div>
+          <p>See <a class="reference external" href="https://searchfox.org/mozilla-central/source/xpcom/ds/nsIObserverService.idl">nsIObserverService</a> for the details.</p>
+          <p>The request method and URI are immediately available at this time. Request headers are trivially easy to get:</p>
+          <div class="highlight-default notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="o">/**</span>
+ <span class="o">*</span> <span class="n">HTTP</span> <span class="n">header</span> <span class="n">visitor</span><span class="o">.</span>
+ <span class="o">*/</span>
+<span class="k">class</span> <span class="nc">HeaderVisitor</span> <span class="p">{</span>
+  <span class="c1">#targetObject;</span>
+
+  <span class="n">constructor</span><span class="p">(</span><span class="n">targetObject</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">this</span><span class="o">.</span><span class="c1">#targetObject = targetObject;</span>
+  <span class="p">}</span>
+
+  <span class="o">//</span> <span class="n">nsIHttpHeaderVisitor</span>
+  <span class="n">visitHeader</span><span class="p">(</span><span class="n">header</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">this</span><span class="o">.</span><span class="c1">#targetObject[header] = value;</span>
+  <span class="p">}</span>
+
+  <span class="n">QueryInterface</span> <span class="o">=</span> <span class="n">ChromeUtils</span><span class="o">.</span><span class="n">generateQI</span><span class="p">([</span><span class="s2">"nsIHttpHeaderVisitor"</span><span class="p">]);</span>
+<span class="p">}</span>
+
+<span class="o">//</span> <span class="o">...</span>
+<span class="n">const</span> <span class="n">requestHeaders</span> <span class="o">=</span> <span class="p">{};</span>
+<span class="n">const</span> <span class="n">visitor</span> <span class="o">=</span> <span class="n">new</span> <span class="n">HeaderVisitor</span><span class="p">(</span><span class="n">requestHeaders</span><span class="p">);</span>
+<span class="n">channel</span><span class="o">.</span><span class="n">visitRequestHeaders</span><span class="p">(</span><span class="n">visitor</span><span class="p">);</span>
+</pre>
+           </div>
+          </div>
+          <p>This is also the time to set request headers, if you need to. The method for that on the <a class="reference external" href="https://searchfox.org/mozilla-central/source/netwerk/protocol/http/nsIHttpChannel.idl">nsIHttpChannel</a> interface is <cite>channel.setRequestHeader(header, value);</cite></p>
+          <p>Most HTTP requests don’t have a body, as they are GET requests. POST requests often have them, though. As the <a class="reference external" href="https://searchfox.org/mozilla-central/source/netwerk/base/nsIUploadChannel.idl">nsIUploadChannel</a> documentation indicates, the body of most HTTP requests is available via a seekable stream (<a class="reference external" href="https://searchfox.org/mozilla-central/source/xpcom/io/nsISeekableStream.idl">nsISeekableStream</a>). So you can simply capture the body stream and its current position, to revisit it later. <a class="reference external" href="https://searchfox.org/mozilla-central/source/devtools/shared/webconsole/network-helper.js">network-helper.js</a> has code to read the request body.</p>
+         </section>
+         <section id="the-response-http-on-examine-response">
+          <h2>The Response: http-on-examine-response<a class="headerlink" href="#the-response-http-on-examine-response" title="Link to this heading">?</a></h2>
+          <p>Firefox fires a “http-on-examine-response” observer notification after parsing the HTTP response status and headers, but <strong>before</strong> reading the response body. Attaching a listener for this phase is also very easy:</p>
+          <div class="highlight-default notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="n">Services</span><span class="o">.</span><span class="n">obs</span><span class="o">.</span><span class="n">addObserver</span><span class="p">(</span><span class="n">observer</span><span class="p">,</span> <span class="s2">"http-on-examine-response"</span><span class="p">,</span> <span class="n">false</span><span class="p">);</span>
+</pre>
+           </div>
+          </div>
+          <p>If you use the same observer for “http-on-modify-request” and “http-on-examine-response”, make sure you check the topic argument before interacting with the channel.</p>
+          <p>The response status is available via the <em>responseStatus</em> and <em>responseStatusText</em> properties. The response headers are available via the <em>visitResponseHeaders</em> method, and requires the same interface.</p>
+         </section>
+         <section id="the-response-body-onstoprequest-stream-listener-tee">
+          <h2>The Response body: onStopRequest, stream listener tee<a class="headerlink" href="#the-response-body-onstoprequest-stream-listener-tee" title="Link to this heading">?</a></h2>
+          <p>During the “http-on-examine-response” notification, the response body is <em>not</em> available. You can, however, use a stream listener tee to <em>copy</em> the stream so that the original stream data goes on, and you have a separate input stream you can read from with the same data.</p>
+          <p>Here’s some sample code to illustrate what you need:</p>
+          <div class="highlight-default notranslate">
+           <div class="highlight">
+            <pre><span></span>const Pipe = Components.Constructor(
+  "@mozilla.org/pipe;1",
+  "nsIPipe",
+  "init"
+);
+const StreamListenerTee = Components.Constructor(
+  "@mozilla.org/network/stream-listener-tee;1",
+  "nsIStreamListenerTee"
+);
+const ScriptableStream = Components.Constructor(
+  "@mozilla.org/scriptableinputstream;1",
+  "nsIScriptableInputStream",
+  "init"
+);
+
+const obs = {
+  QueryInterface: ChromeUtils.generateQI(["nsIObserver", "nsIRequestObserver"]),
+
+  /** @typedef {WeakMap&lt;nsIHttpChannel, nsIPipe&gt;} */
+  requestToTeePipe: new WeakMap,
+
+  // nsIObserver
+  observe: function(channel, topic, data) {
+    if (!(channel instanceof Ci.nsIHttpChannel))
+      return;
+
+    /* Create input and output streams to take the new data.
+       The 0xffffffff argument is the segment count.
+       It has to be this high because you don't know how much data is coming in the response body.
+
+       As for why these are blocking streams:  I believe this is because there's no actual need to make them non-blocking.
+       The stream processing happens during onStopRequest(), so we have all the data then and the operation can be synchronous.
+       But I could be very wrong on this.
+    */
+    const pipe = new Pipe(false, false, 0, 0xffffffff);
+
+    // Install the stream listener tee to intercept the HTTP body.
+    const tee = new StreamListenerTee;
+    const originalListener = channel.setNewListener(tee);
+    tee.init(originalListener, pipe.outputStream, this);
+
+    this.requestToTeePipe.set(channel, pipe);
+  }
+
+  // nsIRequestObserver
+  onStartRequest: function() {
+    // do nothing
+  }
+
+  // nsIRequestObserver
+  onStopRequest: function(channel, statusCode) {
+    const pipe = this.requestToTeePipe.get(channel);
+
+    // No more data coming in anyway.
+    pipe.outputStream.close();
+    this.requestToTeePipe.delete(channel);
+
+    let length = 0;
+    try {
+      length = pipe.inputStream.available();
+    }
+    catch (e) {
+      if (e.result === Components.results.NS_BASE_STREAM_CLOSED)
+        throw e;
+    }
+
+    let responseBody = "";
+    if (length) {
+      // C++ code doesn't need the scriptable input stream.
+      const sin = new ScriptableStream(pipe.inputStream);
+      responseBody = sin.read(length);
+      sin.close();
+    }
+
+    void(responseBody); // do something with the body
+  }
+}
+</pre>
+           </div>
+          </div>
+          <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/netwerk/test/unit/test_traceable_channel.js">test_traceable_channel.js</a> does essentially this.</p>
+         </section>
+         <section id="character-encodings-and-compression">
+          <h2>Character Encodings and Compression<a class="headerlink" href="#character-encodings-and-compression" title="Link to this heading">?</a></h2>
+         </section>
+         <section id="canceling-requests">
+          <h2>Canceling Requests<a class="headerlink" href="#canceling-requests" title="Link to this heading">?</a></h2>
+         </section>
+         <section id="http-activity-distributor-notes">
+          <h2>HTTP Activity Distributor Notes<a class="headerlink" href="#http-activity-distributor-notes" title="Link to this heading">?</a></h2>
+         </section>
+         <section id="uricontentloader-notes">
+          <h2>URIContentLoader Notes<a class="headerlink" href="#uricontentloader-notes" title="Link to this heading">?</a></h2>
+         </section>
+         <section id="order-of-operations">
+          <h2>Order of Operations<a class="headerlink" href="#order-of-operations" title="Link to this heading">?</a></h2>
+          <ol class="arabic simple">
+           <li>
+            <p>The HTTP channel is constructed.</p></li>
+           <li>
+            <p>The “http-on-modify-request” observer service notification fires.</p></li>
+           <li>
+            <p>If the request has been canceled, exit at this step.</p></li>
+           <li>
+            <p>The HTTP channel’s request is submitted to the server. Time passes.</p></li>
+           <li>
+            <p>The HTTP channel’s response comes in from the server.</p></li>
+           <li>
+            <p>The HTTP channel parses the response status and headers.</p></li>
+           <li>
+            <p>The “http-on-examine-response” observer service notification fires.</p></li>
+          </ol>
+         </section>
+         <section id="useful-code-samples-and-references">
+          <h2>Useful Code Samples and References<a class="headerlink" href="#useful-code-samples-and-references" title="Link to this heading">?</a></h2>
+          <ul class="simple">
+           <li>
+            <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/netwerk/protocol/http/nsIHttpProtocolHandler.idl">nsIHttpProtocolHandler</a> defines a lot of observer topics, and has a lot of details.</p></li>
+          </ul>
+         </section>
+        </section>
+       </div>
+      </div>
+      <footer>
+       <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="prioritization.html" class="btn btn-neutral float-left" title="Firefox Network Scheduling and Prioritization" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a> <a href="../dns/dns-over-https-trr.html" class="btn btn-neutral float-right" title="DNS over HTTPS (Trusted Recursive Resolver)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+       </div>
+       <hr>
+       <div role="contentinfo">
+        <p></p>
+       </div> Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+      </footer>
+     </div>
+    </div>
+   </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ </body>
+</html>

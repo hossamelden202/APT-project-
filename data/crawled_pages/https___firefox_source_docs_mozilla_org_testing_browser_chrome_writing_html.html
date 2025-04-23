@@ -1,0 +1,337 @@
+<!doctype html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Writing new browser mochitests — Firefox Source Docs  documentation</title>
+  <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50">
+  <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094">
+  <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=fd3f3429">
+  <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b">
+  <link rel="stylesheet" type="text/css" href="../../_static/custom_theme.css?v=dc5ed815">
+  <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7">
+  <link rel="shortcut icon" href="../../_static/firefox.ico"><!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script src="../../_static/jquery.js?v=5d32c60e"></script>
+  <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+  <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+  <script src="../../_static/doctools.js?v=9a2dae69"></script>
+  <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+  <script src="../../_static/copybutton.js?v=30646c52"></script>
+  <script src="../../_static/design-tabs.js?v=36754332"></script>
+  <script src="../../_static/js/theme.js"></script>
+  <link rel="index" title="Index" href="../../genindex.html">
+  <link rel="search" title="Search" href="../../search.html">
+ </head>
+ <body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+   <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <div class="wy-side-scroll">
+     <div class="wy-side-nav-search">
+      <a href="../../index.html" class="icon icon-home"> Firefox Source Docs <img src="../../_static/firefox-wordmark.svg" class="logo" alt="Logo"> </a><!-- -- This code is governed by the BSD license ---->
+      <div>
+       <h3>Quick search</h3>
+       <script>
+    (function () {
+      var cx = "dd12886298f75dbef";
+      var gcse = document.createElement("script");
+      gcse.async = true;
+      gcse.src = "https://cse.google.com/cse.js?cx=" + cx;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(gcse, s);
+    })();
+  </script><gcse:search></gcse:search>
+      </div>
+     </div>
+     <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+      <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../glossary/index.html">A Glossary of Common Terms</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../overview/index.html">A Quick Guide to Mozilla Applications</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../setup/index.html">Getting Set Up To Work On The Firefox Codebase</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Working On Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Working on Firefox</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../bug-mgmt/index.html">Bug Handling</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox User Guide</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../devtools-user/index.html">Firefox DevTools User Docs</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Source Code Documentation</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mots/index.html">Governance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../browser/index.html">Firefox Front-end</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../dom/index.html">DOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../editor/index.html">Editor</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../layout/index.html">Style system (CSS) &amp; Layout</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../gfx/index.html">Graphics</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../ipc/index.html">Processes, Threads and IPC</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../devtools/index.html">Firefox DevTools Contributor Docs</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../toolkit/index.html">Toolkit</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../js/index.html">SpiderMonkey</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../jsloader/index.html">JS Loader</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/geckoview/index.html">GeckoView</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/fenix/index.html">Fenix</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/focus-android/index.html">Focus for Android</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../dom/bindings/webidl/index.html">WebIDL</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../modules/libpref/index.html">libpref</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../networking/index.html">Networking</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../remote/index.html">Remote Protocols</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../services/index.html">Services</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../permissions/index.html">Permissions</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../uriloader/index.html">File Handling</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../widget/cocoa/index.html">Firefox on macOS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../widget/windows/index.html">Firefox on Windows</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../toolkit/components/ml/index.html">Firefox AI Runtime</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../accessible/index.html">Accessibility</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../media/index.html">Media Playback</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../code-quality/index.html">Code quality</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../writing-rust-code/index.html">Writing Rust Code</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../rust-components/index.html">Rust Components</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/profiler/index.html">Gecko Profiler</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../performance/index.html">Performance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../storage/index.html">Database bindings (SQLite, KV, …)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../xpcom/index.html">XPCOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../nspr/index.html">NSPR</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../security/nss/index.html">Network Security Services (NSS)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../content-security/index.html">Web Security Checks in Gecko</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">The Firefox Build System</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mach/index.html">Mach</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/try/index.html">Pushing to Try</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../build/buildsystem/index.html">Build System</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../taskcluster/index.html">Firefox CI and Taskgraph</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/moztreedocs/index.html">Managing Documentation</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mozbuild/vendor/index.html">Vendoring Third Party Components</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Testing &amp; Test Infrastructure</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../automated-testing/index.html">Automated Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../treeherder-try/index.html">Understanding Treeherder Results</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../sheriffed-intermittents/index.html">Sheriffed intermittent failures</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tests-for-new-config/index.html">Turning on Firefox tests for a new configuration</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../intermittent/index.html">Avoiding intermittent tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing-policy/index.html">Testing Policy</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../ci-configs/index.html">Configuration Changes</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="index.html">Browser chrome mochitests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../chrome-tests/index.html">Chrome Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../marionette/index.html">Marionette</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../geckodriver/index.html">geckodriver</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../test-verification/index.html">Test Verification</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../webrender/index.html">WebRender Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mochitest-plain/index.html">Mochitest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../xpcshell/index.html">XPCShell tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tps/index.html">TPS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../web-platform/index.html">web-platform-tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../gtest/index.html">GTest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/fuzzing/index.html">Fuzzing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/sanitizer/index.html">Sanitizer</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../perfdocs/index.html">Performance Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/code-coverage/index.html">Code coverage</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing-rust-code/index.html">Testing &amp; Debugging Rust Code</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Releases &amp; Updates</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html">Mozilla Update Infrastructure</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html#watershed-updates">Watershed Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html#desupport-updates">Desupport Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/update-verify/index.html">Update Verify</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Localization &amp; Internationalization</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../intl/index.html">Internationalization</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../l10n/index.html">Localization</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox and Python</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mozbase/index.html">mozbase</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../python/index.html">Using third-party Python packages</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Metrics Collected in Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../metrics/index.html">Metrics</a></li>
+      </ul>
+     </div>
+    </div>
+   </nav>
+   <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+    <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+     <i data-toggle="wy-nav-top" class="fa fa-bars"></i> <a href="../../index.html">Firefox Source Docs</a>
+    </nav>
+    <div class="wy-nav-content">
+     <div class="rst-content">
+      <!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+      <div role="navigation" aria-label="Page navigation">
+       <ul class="wy-breadcrumbs">
+        <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+        <li class="breadcrumb-item active">Writing new browser mochitests</li>
+        <li class="wy-breadcrumbs-aside"><a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Developer+Infrastructure&amp;component=Firefox+Source+Docs%3A+Content&amp;short_desc=Documentation+issue+on+testing/browser-chrome/writing&amp;comment=URL+=+https://firefox-source-docs.mozilla.org/testing/browser-chrome/writing.html&amp;bug_file_loc=https://firefox-source-docs.mozilla.org/testing/browser-chrome/writing.html" rel="nofollow">Report an issue</a> / <a href="../../_sources/testing/browser-chrome/writing.md.txt" rel="nofollow"> View page source</a></li>
+       </ul>
+       <hr>
+      </div>
+      <div role="main" class="document" itemscope itemtype="http://schema.org/Article">
+       <div itemprop="articleBody">
+        <section id="writing-new-browser-mochitests">
+         <h1>Writing new browser mochitests<a class="headerlink" href="#writing-new-browser-mochitests" title="Link to this heading">?</a></h1>
+         <p>After <a class="reference internal" href="index.html#adding-new-tests"><span class="std std-ref">creating a new empty test file</span></a>, you will have an empty <code class="docutils literal notranslate"><span class="pre">add_task</span></code> into which you can write your test.</p>
+         <section id="general-guidance">
+          <h2>General guidance<a class="headerlink" href="#general-guidance" title="Link to this heading">?</a></h2>
+          <p>The test can use <code class="docutils literal notranslate"><span class="pre">ok</span></code>, <code class="docutils literal notranslate"><span class="pre">is</span></code>, <code class="docutils literal notranslate"><span class="pre">isnot</span></code>, as well as all the regular <a class="reference external" href="http://wiki.commonjs.org/wiki/Unit_Testing/1.1">CommonJS standard assertions</a>, to make test assertions.</p>
+          <p>The test can use <code class="docutils literal notranslate"><span class="pre">info</span></code> to log strings into the test output. <code class="docutils literal notranslate"><span class="pre">console.log</span></code> will work for local runs of individual tests, but aren’t normally used for checked-in tests.</p>
+          <p>The test will run in a separate scope inside the browser window. <code class="docutils literal notranslate"><span class="pre">gBrowser</span></code>, <code class="docutils literal notranslate"><span class="pre">gURLBar</span></code>, <code class="docutils literal notranslate"><span class="pre">document</span></code>, and various other globals are thus accessible just as they are for non-test code in the same window. However, variables declared in the test file will not outlive the test.</p>
+         </section>
+         <section id="test-architecture">
+          <h2>Test architecture<a class="headerlink" href="#test-architecture" title="Link to this heading">?</a></h2>
+          <p>It is the responsibility of individual tests to leave the browser as they found it. If the test changes prefs, opens tabs, customizes the UI, or makes other changes, it should revert those when it is done.</p>
+          <p>To help do this, a number of useful primitives are available:</p>
+          <ul class="simple">
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">add_setup</span></code> allows you to add setup tasks that run before any <code class="docutils literal notranslate"><span class="pre">add_task</span></code> tasks.</p></li>
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">SpecialPowers.pushPrefEnv</span></code> (<a class="reference internal" href="#changing-preferences">see below</a>) allows you to set prefs that will be automatically reverted when the test file has finished running.</p></li>
+           <li>
+            <p><a class="reference internal" href="browsertestutils.html#BrowserTestUtils.withNewTab"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">BrowserTestUtils.withNewTab</span></code></span></a>, allows you to easily run async code talking to a tab that you open and close it when done.</p></li>
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">registerCleanupFunction</span></code> takes an async callback function that you can use to do any other cleanup your test might need.</p></li>
+          </ul>
+         </section>
+         <section id="common-operations">
+          <h2>Common operations<a class="headerlink" href="#common-operations" title="Link to this heading">?</a></h2>
+          <section id="opening-new-tabs-and-new-windows-and-closing-them">
+           <h3>Opening new tabs and new windows, and closing them<a class="headerlink" href="#opening-new-tabs-and-new-windows-and-closing-them" title="Link to this heading">?</a></h3>
+           <p>Should be done using the relevant methods in <code class="docutils literal notranslate"><span class="pre">BrowserTestUtils</span></code> (which is available without any additional work).</p>
+           <p>Typical would be something like:</p>
+           <div class="highlight-js notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="nx">add_task</span><span class="p">(</span><span class="k">async</span><span class="w"> </span><span class="kd">function</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">await</span><span class="w"> </span><span class="nx">BrowserTestUtils</span><span class="p">.</span><span class="nx">withNewTab</span><span class="p">(</span><span class="s2">"https://example.com/mypage"</span><span class="p">,</span><span class="w"> </span><span class="k">async</span><span class="w"> </span><span class="p">(</span><span class="nx">browser</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// `browser` will have finished loading the passed URL when this code runs.</span>
+<span class="w">    </span><span class="c1">// Do stuff with `browser` in here. When the async function exits,</span>
+<span class="w">    </span><span class="c1">// the test framework will clean up the tab.</span>
+<span class="w">  </span><span class="p">});</span>
+<span class="p">});</span>
+</pre>
+            </div>
+           </div>
+          </section>
+          <section id="executing-code-in-the-content-process-associated-with-a-tab-or-its-subframes">
+           <h3>Executing code in the content process associated with a tab or its subframes<a class="headerlink" href="#executing-code-in-the-content-process-associated-with-a-tab-or-its-subframes" title="Link to this heading">?</a></h3>
+           <p>Should be done using <code class="docutils literal notranslate"><span class="pre">SpecialPowers.spawn</span></code>:</p>
+           <div class="highlight-js notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="kd">let</span><span class="w"> </span><span class="nx">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">SpecialPowers</span><span class="p">.</span><span class="nx">spawn</span><span class="p">(</span><span class="nx">browser</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="mf">42</span><span class="p">,</span><span class="w"> </span><span class="mf">100</span><span class="p">],</span><span class="w"> </span><span class="k">async</span><span class="w"> </span><span class="p">(</span><span class="nx">val</span><span class="p">,</span><span class="w"> </span><span class="nx">val2</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="c1">// Replaces the document body with '42':</span>
+<span class="w">  </span><span class="nx">content</span><span class="p">.</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">textContent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">val</span><span class="p">;</span>
+<span class="w">  </span><span class="c1">// Optionally, return a result. Has to be serializable to make it back to</span>
+<span class="w">  </span><span class="c1">// the parent process (so DOM nodes or similar won't work!).</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="nb">Promise</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">val2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">2</span><span class="p">);</span>
+<span class="p">});</span>
+</pre>
+            </div>
+           </div>
+           <p>You can pass a BrowsingContext reference instead of <code class="docutils literal notranslate"><span class="pre">browser</span></code> to directly execute code in subframes.</p>
+           <p>Inside the function argument passed to <code class="docutils literal notranslate"><span class="pre">SpecialPowers.spawn</span></code>, <code class="docutils literal notranslate"><span class="pre">content</span></code> refers to the <code class="docutils literal notranslate"><span class="pre">window</span></code> of the web content in that browser/BrowsingContext.</p>
+           <p>For some operations, like mouse clicks, convenience helpers are available on <code class="docutils literal notranslate"><span class="pre">BrowserTestUtils</span></code>:</p>
+           <div class="highlight-js notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="k">await</span><span class="w"> </span><span class="nx">BrowserTestUtils</span><span class="p">.</span><span class="nx">synthesizeMouseAtCenter</span><span class="p">(</span><span class="s2">"#my.css.selector"</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="nx">accelKey</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="p">},</span><span class="w"> </span><span class="nx">browser</span><span class="p">);</span>
+</pre>
+            </div>
+           </div>
+          </section>
+          <section id="changing-preferences">
+           <h3>Changing preferences<a class="headerlink" href="#changing-preferences" title="Link to this heading">?</a></h3>
+           <p>Use <code class="docutils literal notranslate"><span class="pre">SpecialPowers.pushPrefEnv</span></code>:</p>
+           <div class="highlight-js notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="k">await</span><span class="w"> </span><span class="nx">SpecialPowers</span><span class="p">.</span><span class="nx">pushPrefEnv</span><span class="p">({</span>
+<span class="w">  </span><span class="nx">set</span><span class="o">:</span><span class="w"> </span><span class="p">[[</span><span class="s2">"accessibility.tabfocus"</span><span class="p">,</span><span class="w"> </span><span class="mf">7</span><span class="p">]]</span>
+<span class="p">});</span>
+</pre>
+            </div>
+           </div>
+           <p>This example sets the pref allowing buttons and other controls to receive tab focus - this is the default on Windows and Linux but not on macOS, so it can be necessary in order for your test to pass reliably on macOS if it uses keyboard focus.</p>
+          </section>
+          <section id="wait-for-an-observer-service-notification-topic-or-dom-event">
+           <h3>Wait for an observer service notification topic or DOM event<a class="headerlink" href="#wait-for-an-observer-service-notification-topic-or-dom-event" title="Link to this heading">?</a></h3>
+           <p>Use the utilities for this on <a class="reference internal" href="../testutils.html#TestUtils.topicObserved"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">TestUtils</span></code></span></a>:</p>
+           <div class="highlight-js notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="k">await</span><span class="w"> </span><span class="nx">TestUtils</span><span class="p">.</span><span class="nx">topicObserved</span><span class="p">(</span><span class="s2">"sync-pane-loaded"</span><span class="p">);</span>
+</pre>
+            </div>
+           </div>
+           <p>and <a class="reference internal" href="browsertestutils.html#BrowserTestUtils.waitForEvent"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">BrowserTestUtils</span></code></span></a>, respectively:</p>
+           <div class="highlight-js notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="k">await</span><span class="w"> </span><span class="nx">BrowserTestUtils</span><span class="p">.</span><span class="nx">waitForEvent</span><span class="p">(</span><span class="nx">domElement</span><span class="p">,</span><span class="w"> </span><span class="s2">"click"</span><span class="p">);</span>
+</pre>
+            </div>
+           </div>
+          </section>
+          <section id="wait-for-some-dom-to-update">
+           <h3>Wait for some DOM to update.<a class="headerlink" href="#wait-for-some-dom-to-update" title="Link to this heading">?</a></h3>
+           <p>Use <a class="reference internal" href="browsertestutils.html#BrowserTestUtils.waitForMutationCondition"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">BrowserTestUtils.waitForMutationCondition</span></code></span></a>. Do <strong>not</strong> use <code class="docutils literal notranslate"><span class="pre">waitForCondition</span></code>, which uses a timeout loop and often leads to intermittent failures.</p>
+          </section>
+          <section id="mocking-code-not-under-test">
+           <h3>Mocking code not under test<a class="headerlink" href="#mocking-code-not-under-test" title="Link to this heading">?</a></h3>
+           <p>The <a class="reference external" href="https://sinonjs.org/"><code class="docutils literal notranslate"><span class="pre">Sinon</span></code></a> mocking framework is available. You can import it using something like:</p>
+           <div class="highlight-js notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="kd">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">sinon</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ChromeUtils</span><span class="p">.</span><span class="nx">importESModule</span><span class="p">(</span><span class="s2">"resource://testing-common/Sinon.sys.mjs"</span><span class="p">);</span>
+</pre>
+            </div>
+           </div>
+           <p>More details on how to do mocking are available on the Sinon website.</p>
+          </section>
+         </section>
+         <section id="additional-files">
+          <h2>Additional files<a class="headerlink" href="#additional-files" title="Link to this heading">?</a></h2>
+          <p>You can use extra files (e.g. webpages to load) by adding them to a <code class="docutils literal notranslate"><span class="pre">support-files</span></code> property using the <code class="docutils literal notranslate"><span class="pre">browser.toml</span></code> file:</p>
+          <div class="highlight-toml notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="k">[</span><span class="s2">"browser_foo.js"</span><span class="k">]</span>
+<span class="n">support-files</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span>
+<span class="w">  </span><span class="s2">"bar.html"</span><span class="p">,</span>
+<span class="w">  </span><span class="s2">"baz.js"</span><span class="p">,</span>
+<span class="p">]</span>
+</pre>
+           </div>
+          </div>
+         </section>
+         <section id="reusing-code-across-tests">
+          <h2>Reusing code across tests<a class="headerlink" href="#reusing-code-across-tests" title="Link to this heading">?</a></h2>
+          <p>For operations that are common to a specific set of tests, you can use the <code class="docutils literal notranslate"><span class="pre">head.js</span></code> file to share JS code.</p>
+          <p>Where code is needed across various directories of tests, you should consider if it’s common enough to warrant being in <code class="docutils literal notranslate"><span class="pre">BrowserTestUtils.sys.mjs</span></code>, or if not, setting up a separate <code class="docutils literal notranslate"><span class="pre">jsm</span></code> module containing your test helpers. You can add these to <code class="docutils literal notranslate"><span class="pre">TESTING_JS_MODULES</span></code> in <code class="docutils literal notranslate"><span class="pre">moz.build</span></code> to avoid packaging them with Firefox. They will be available in <code class="docutils literal notranslate"><span class="pre">resource://testing-common/</span></code> to all tests.</p>
+         </section>
+        </section>
+       </div>
+      </div>
+      <footer>
+       <hr>
+       <div role="contentinfo">
+        <p></p>
+       </div> Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+      </footer>
+     </div>
+    </div>
+   </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ </body>
+</html>

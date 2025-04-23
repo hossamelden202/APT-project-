@@ -1,0 +1,307 @@
+<!doctype html>
+<html>
+ <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hunting an intermittent leak until shutdown. | Words</title>
+  <meta name="description" content="This week I had to debug an intermittentleak-until-shutdown whichseemed to be caused by a fairly innocent testchange.">
+  <link rel="stylesheet" href="/words/css/main.css">
+  <link rel="canonical" href="http://crisal.io/words/2019/11/13/shutdown-leak-hunting.html">
+  <link rel="alternate" type="application/rss+xml" title="Words" href="http://crisal.io/words/feed.xml">
+ </head>
+ <body>
+  <header class="site-header">
+   <div class="wrapper">
+    <a class="site-title" href="/words/">Words</a>
+    <nav class="site-nav">
+     <a href="#" class="menu-icon">
+      <svg viewBox="0 0 18 15">
+       <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z" /> <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z" /> <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z" />
+      </svg></a>
+     <div class="trigger">
+      <a class="page-link" href="/words/about/">About</a>
+     </div>
+    </nav>
+   </div>
+  </header>
+  <div class="page-content">
+   <div class="wrapper">
+    <div class="post">
+     <header class="post-header">
+      <p class="post-meta">Nov 13, 2019</p>
+      <h1 class="post-title">Hunting an intermittent leak until shutdown.</h1>
+     </header>
+     <article class="post-content">
+      <p>This week I had to debug an <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1595573">intermittent leak-until-shutdown</a> which seemed to be caused by a fairly innocent <a href="https://hg.mozilla.org/integration/autoland/rev/e19c5df398de#l22.10">test change</a>.</p>
+      <p>As it turns out, the issue was not my fault (yay), but it was quite a pain to debug, even though <a href="https://phabricator.services.mozilla.com/D52833">the fix</a> was trivial.</p>
+      <p>So I wrote this in the hopes of not forgetting how I did it, and in case that other people could find it useful.</p>
+      <h1 id="reproducing-it">Reproducing it</h1>
+      <p>The first step to fix this is to reproduce it. As it turns out it wasn’t trivial to reproduce while running the test on its own.</p>
+      <div class="language-plaintext highlighter-rouge">
+       <div class="highlight">
+        <pre class="highlight"><code>$ ./mach mochitest toolkit/components/places/tests/browser/browser_bug461710.js
+# No leak
+</code></pre>
+       </div>
+      </div>
+      <p>So the next thing I tried was running it under <a href="https://robert.ocallahan.org/2016/02/introducing-rr-chaos-mode.html">rr’s chaos mode</a>:</p>
+      <div class="language-plaintext highlighter-rouge">
+       <div class="highlight">
+        <pre class="highlight"><code>$ ./mach mochitest --debugger=rr --debugger-args="record --chaos" toolkit/components/places/tests/browser/browser_bug461710.js
+</code></pre>
+       </div>
+      </div>
+      <p>But that still sowed no signs of leaks.</p>
+      <p>Thankfully Marco <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1595573#c3">commented on the bug</a>, mentioning that running the whole directory used to help.</p>
+      <p>And indeed with something like this I managed to reproduce the failure pretty consistently!</p>
+      <div class="language-plaintext highlighter-rouge">
+       <div class="highlight">
+        <pre class="highlight"><code>$ ./mach mochitest --debugger=rr --debugger-args="record --chaos" toolkit/components/places/tests/browser
+</code></pre>
+       </div>
+      </div>
+      <p>Using the test output you can see the ID’s of the windows and such that are leaking, such as:</p>
+      <div class="language-plaintext highlighter-rouge">
+       <div class="highlight">
+        <pre class="highlight"><code>10:52.16 ERROR TEST-UNEXPECTED-FAIL | toolkit/components/places/tests/browser/browser_bug461710.js | leaked 2 window(s) until shutdown [url = about:blank]
+10:52.16 ERROR TEST-UNEXPECTED-FAIL | toolkit/components/places/tests/browser/browser_bug461710.js | leaked 2 window(s) until shutdown [url = chrome://browser/content/browser.xhtml]
+10:52.16 INFO TEST-INFO | toolkit/components/places/tests/browser/browser_bug461710.js | windows(s) leaked: [pid = 153511] [serial = 19], [pid = 153511] [serial = 15], [pid = 153511] [serial = 18], [pid = 153511] [serial = 14]
+</code></pre>
+       </div>
+      </div>
+      <p>So <code class="language-plaintext highlighter-rouge">[pid = 153511] [serial = 19]</code>, <code class="language-plaintext highlighter-rouge">[pid = 153511] [serial = 15]</code>, <code class="language-plaintext highlighter-rouge">[pid = 153511] [serial = 18]</code>, and <code class="language-plaintext highlighter-rouge">[pid = 153511] [serial = 14]</code> are the windows we’re interested in.</p>
+      <p>Looking at the output, we can see the window addresses, for example:</p>
+      <div class="language-plaintext highlighter-rouge">
+       <div class="highlight">
+        <pre class="highlight"><code>--DOMWINDOW == 2 (0x2e2228e5000) [pid = 153511] [serial = 19] [outer = (nil)] [url = about:blank]
+</code></pre>
+       </div>
+      </div>
+      <p>This is the window we’re going to focus on.</p>
+      <p>So with rr I can poke at the window object and so on, but I can’t figure out easily what’s keeping it alive.</p>
+      <h2 id="cc-and-gc-logs">CC and GC logs</h2>
+      <p>So to debug this, we’re going to need some more help from the CC and GC logs.</p>
+      <p>We have <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Performance/GC_and_CC_logs">some documentation</a> to take those logs and such.</p>
+      <p>Usually the shutdown logs is all you want (<code class="language-plaintext highlighter-rouge">MOZ_CC_LOG_SHUTDOWN=1</code>). That’s useful to know why something is still alive <em>after</em> shutdown.</p>
+      <p>But, in this case, the window is not <em>actually</em> completely leaked, it’s just leaked until shutdown, which means that there’s something keeping it alive, but we manage to free it in the end when shutting down the browser, and thus the shutdown logs just tell us what objects did we cycle-collect, but not why those objects were kept alive for so long.</p>
+      <p>So I ran this a couple times until it reproduced:</p>
+      <div class="language-plaintext highlighter-rouge">
+       <div class="highlight">
+        <pre class="highlight"><code>mkdir -p /tmp/leaklogs; rm -f /tmp/leaklogs/*.log; MOZ_CC_LOG_THREAD=main MOZ_CC_LOG_DIRECTORY=/tmp/leaklogs MOZ_CC_LOG_ALL=1 ./mach mochitest --debugger=rr --debugger-args="record --chaos" toolkit/components/places/tests/browser --timeout 100000
+</code></pre>
+       </div>
+      </div>
+      <p>Note that I had to increase the <code class="language-plaintext highlighter-rouge">--timeout</code> since CC logs are quite slow, and more so under rr seems like.</p>
+      <p>As soon as I reproduced, I did the following:</p>
+      <div class="language-plaintext highlighter-rouge">
+       <div class="highlight">
+        <pre class="highlight"><code>$ mkdir ~/tmp/leak
+$ rr pack # This makes a mostly-self-contained trace.
+$ mv &lt;rr-trace-directory&gt; ~/tmp/leak/rr-trace
+$ mv /tmp/leaklogs ~/tmp/leak/leaklogs
+$ rr replay -a -M ~/tmp/leak/rr-trace &gt;~/tmp/leak/log 2&gt;&amp;1
+</code></pre>
+       </div>
+      </div>
+      <p>And I manually copied the leaked window identifiers in <code class="language-plaintext highlighter-rouge">~/tmp/leak/leaked-windows.log</code>.</p>
+      <p>So now we have a directory in <code class="language-plaintext highlighter-rouge">~/tmp/leak</code> with all the things we actually need to debug this, let’s move to that directory.</p>
+      <p>So we have a window address (<code class="language-plaintext highlighter-rouge">0x2e2228e5000</code>), and we can easily go to the points where it’s created and destroying thanks to rr. So if I want to go to this part of the runtime (looking at the <code class="language-plaintext highlighter-rouge">log</code> file, which contains all the rr marks):</p>
+      <div class="language-plaintext highlighter-rouge">
+       <div class="highlight">
+        <pre class="highlight"><code>[rr 153511 4073694]--DOMWINDOW == 2 (0x2e2228e5000) [pid = 153511] [serial = 19] [outer = (nil)] [url = about:blank]
+</code></pre>
+       </div>
+      </div>
+      <p>I can just <code class="language-plaintext highlighter-rouge">rr replay rr-trace -p 153511 -g 4073694</code> to go to that point of the program using rr.</p>
+      <p>Anyway. We have an address, let’s look at where it was used by grepping on the <code class="language-plaintext highlighter-rouge">leaklogs</code> directory:</p>
+      <div class="language-plaintext highlighter-rouge">
+       <div class="highlight">
+        <pre class="highlight"><code>$ rg 0x2e2228e5000 leaklogs | cut -d : -f 1 | uniq
+leaklogs/cc-edges.153511-32.log
+</code></pre>
+       </div>
+      </div>
+      <p>Seems we only log the window on the last CC (where it’s actually freed), that’s suspicious. So we need to figure out what caused it to stay alive for so long.</p>
+      <p>To analyze the logs, I used <a href="https://github.com/amccreight/heapgraph">Andrew’s <code class="language-plaintext highlighter-rouge">heapgraph</code> repo</a>, which has the super-useful <code class="language-plaintext highlighter-rouge">find_roots.py</code> script.</p>
+      <p>So if I run:</p>
+      <div class="language-plaintext highlighter-rouge">
+       <div class="highlight">
+        <pre class="highlight"><code>$ python2 ~/src/moz/heapgraph/find_roots.py leaklogs/cc-edges.153511-32.log 0x2e2228e5000
+</code></pre>
+       </div>
+      </div>
+      <p>I get an output like:</p>
+      <div class="language-plaintext highlighter-rouge">
+       <div class="highlight">
+        <pre class="highlight"><code>Parsing leaklogs/cc-edges.153511-32.log. Done loading graph.
+Didn't find a path.
+
+    known edges:
+
+       0x2e2227e9280 [CallbackObject] --[mIncumbentGlobal]--&gt; 0x2e2228e5000
+       ...
+       0x707acbb0 [Promise] --[mGlobal]--&gt; 0x2e2228e5000
+       ...
+       0x2e2228e5000 [nsGlobalWindowInner # 49 inner chrome://browser/content/browser.xhtml] --[mTopInnerWindow]--&gt; 0x2e2228e5000
+       ...
+       [tons more]
+</code></pre>
+       </div>
+      </div>
+      <p>So this was annoying, because <code class="language-plaintext highlighter-rouge">Didn't find a path.</code> means that the window actually gets freed, but also the different bits there seem somewhat normal.</p>
+      <p>I spent quite some time chasing the things that kept references to the window only to find various global objects that should get properly cleaned up.</p>
+      <p>The cyclic reference to itself also seemed suspicious, but nothing that the CC shouldn’t handle and it ended up not being the root cause of the leak.</p>
+      <p>So the next thing is to try to figure out why it was alive in the <em>previous</em> GC.</p>
+      <p>For that, I had to figure out the address of the JS wrapper (the object that’s exposed to JS) using rr, as that’s what appears on the GC logs, as opposed to the CC logs that contain the native address.</p>
+      <p>The fact that the native window address didn’t appear on the GC logs got me pretty confused for quite a lot, and I thought I didn’t have a lead anymore.</p>
+      <p>So let’s jump on rr, and figure out the wrapper of the window (<code class="language-plaintext highlighter-rouge">4014963</code> is a random point in time between the relevant <code class="language-plaintext highlighter-rouge">++DOMWINDOW</code> and <code class="language-plaintext highlighter-rouge">--DOMWINDOW</code> lines where I know the window is alive).</p>
+      <div class="language-plaintext highlighter-rouge">
+       <div class="highlight">
+        <pre class="highlight"><code>$ rr replay rr-trace -p 153511 -g 4014963
+...
+(rr) print ((nsGlobalWindowInner*)0x2e2228e5000)-&gt;mWrapper
+(JSObject*) 0x189b08eec9c0
+</code></pre>
+       </div>
+      </div>
+      <p>So that’s something, and that address does appear on all the GC logs, that’s awesome!</p>
+      <p>The last cc (where it gets freed) was number 32 (<code class="language-plaintext highlighter-rouge">cc-edges.153511-32.log</code>). The previous one is 31, then.</p>
+      <p>Let’s look at the gc logs for the GC #31 and see what’s up:</p>
+      <div class="language-plaintext highlighter-rouge">
+       <div class="highlight">
+        <pre class="highlight"><code>$ python2 ~/src/moz/heapgraph/find_roots.py leaklogs/gc-edges.153511-31.log 0x189b08eec9c0 -obr
+Parsing leaklogs/gc-edges.153511-31.log. Done loading graph.
+
+via persistent-Object :
+0x1582c8cf0550 [NonSyntacticVariablesObject &lt;no private&gt;]
+    --[gPromises]--&gt; 0x202153af68c0 [Map 0x4ca6275b0330]
+    --[value]--&gt; 0x3377c0074ee0 [Object &lt;no private&gt;]
+    --[promise]--&gt; 0x10620b429880 [Object &lt;no private&gt;]
+    --[{private:internals:1}]--&gt; 0x3377c004afc0 [Object &lt;no private&gt;]
+    --[handlers]--&gt; 0x25d5e2d92400 [Array &lt;no private&gt;]
+    --[objectElements[0]]--&gt; 0x1985b80bdac0 [Object &lt;no private&gt;]
+    --[onReject]--&gt; 0x10620b491ec0 [Function ]
+    --[nativeReserved[0]]--&gt; 0x1985b80bdfc0 [Promise &lt;no private&gt;]
+    --[**UNKNOWN SLOT 1**]--&gt; 0x25d5e2d32820 [PromiseReactionRecord &lt;no private&gt;]
+    --[**UNKNOWN SLOT 7**]--&gt; 0x10620b42ea00 [AsyncFunctionGenerator &lt;no private&gt;]
+    --[**UNKNOWN SLOT 0**]--&gt; 0x3edc014dd300 [Function]
+    --[fun_environment]--&gt; 0x25d5e2d0b180 [Call &lt;no private&gt;]
+    --[enclosing_environment]--&gt; 0x204e31204a40 [LexicalEnvironment &lt;no private&gt;]
+    --[enclosing_environment]--&gt; 0x111675425d40 [LexicalEnvironment &lt;no private&gt;]
+    --[enclosing_environment]--&gt; 0x2431cba9d220 [LexicalEnvironment &lt;no private&gt;]
+    --[privateWindow]--&gt; 0x189b08eec9c0 [Proxy &lt;no private&gt;]
+</code></pre>
+       </div>
+      </div>
+      <p>So, that’s interesting. <code class="language-plaintext highlighter-rouge">privateWindow</code> is the window we’re leaking, and there seem to be a bunch of references to it.</p>
+      <p>The one that caught my eye was <code class="language-plaintext highlighter-rouge">gPromises</code>, which seemed to be the top of the chain.</p>
+      <p>That seems to be <a href="https://searchfox.org/mozilla-central/rev/6566d92dd46417a2f57e75c515135ebe84c9cef5/testing/mochitest/BrowserTestUtils/ContentTask.jsm#24">a global JS <code class="language-plaintext highlighter-rouge">Map</code></a> used to keep task ids to their relevant promise.</p>
+      <p>So it seems we’ve left a promise in that map that hasn’t yet resolved or rejected, and that is keeping everything alive. How could that happen?</p>
+      <p>The test was doing something conceptually simple:</p>
+      <div class="language-js highlighter-rouge">
+       <div class="highlight">
+        <pre class="highlight"><code><span class="k">await</span> <span class="nx">TestUtils</span><span class="p">.</span><span class="nx">waitForCondition</span><span class="p">(</span><span class="k">async</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">let</span> <span class="nx">color</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">ContentTask</span><span class="p">.</span><span class="nx">spawn</span><span class="p">(</span><span class="nx">browserWindow</span><span class="p">,</span> <span class="k">async</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="cm">/* Do stuff... */</span>
+  <span class="p">});</span>
+  <span class="k">return</span> <span class="nx">color</span> <span class="o">==</span> <span class="nx">something</span><span class="p">;</span>
+<span class="p">});</span>
+
+<span class="k">await</span> <span class="nx">closeWindow</span><span class="p">(</span><span class="nx">browserWindow</span><span class="p">);</span>
+</code></pre>
+       </div>
+      </div>
+      <p>So we do use <code class="language-plaintext highlighter-rouge">ContentTask.spawn</code>, but it seems the tasks should always complete for the test to finish… right?</p>
+      <p>And that’s where something clicked, and I went to see the <code class="language-plaintext highlighter-rouge">waitForCondition</code> implementation:</p>
+      <div class="language-js highlighter-rouge">
+       <div class="highlight">
+        <pre class="highlight"><code><span class="cm">/**
+ * Will poll a condition function until it returns true.
+ *
+ * @param condition
+ *        A condition function that must return true or false. If the
+ *        condition ever throws, this is also treated as a false. The
+ *        function can be a generator.
+ * @param interval
+ *        The time interval to poll the condition function. Defaults
+ *        to 100ms.
+ * @param attempts
+ *        The number of times to poll before giving up and rejecting
+ *        if the condition has not yet returned true. Defaults to 50
+ *        (~5 seconds for 100ms intervals)
+ * @return Promise
+ *        Resolves with the return value of the condition function.
+ *        Rejects if timeout is exceeded or condition ever throws.
+ */</span>
+<span class="nx">waitForCondition</span><span class="p">(</span><span class="nx">condition</span><span class="p">,</span> <span class="nx">msg</span><span class="p">,</span> <span class="nx">interval</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="nx">maxTries</span> <span class="o">=</span> <span class="mi">50</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="k">new</span> <span class="nb">Promise</span><span class="p">((</span><span class="nx">resolve</span><span class="p">,</span> <span class="nx">reject</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kd">let</span> <span class="nx">tries</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kd">let</span> <span class="nx">intervalID</span> <span class="o">=</span> <span class="nx">setInterval</span><span class="p">(</span><span class="k">async</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">tries</span> <span class="o">&gt;=</span> <span class="nx">maxTries</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">clearInterval</span><span class="p">(</span><span class="nx">intervalID</span><span class="p">);</span>
+        <span class="nx">msg</span> <span class="o">+=</span> <span class="s2">` - timed out after </span><span class="p">${</span><span class="nx">maxTries</span><span class="p">}</span><span class="s2"> tries.`</span><span class="p">;</span>
+        <span class="nx">reject</span><span class="p">(</span><span class="nx">msg</span><span class="p">);</span>
+        <span class="k">return</span><span class="p">;</span>
+      <span class="p">}</span>
+
+      <span class="kd">let</span> <span class="nx">conditionPassed</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+      <span class="k">try</span> <span class="p">{</span>
+        <span class="nx">conditionPassed</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">condition</span><span class="p">();</span>
+      <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">msg</span> <span class="o">+=</span> <span class="s2">` - threw exception: </span><span class="p">${</span><span class="nx">e</span><span class="p">}</span><span class="s2">`</span><span class="p">;</span>
+        <span class="nx">clearInterval</span><span class="p">(</span><span class="nx">intervalID</span><span class="p">);</span>
+        <span class="nx">reject</span><span class="p">(</span><span class="nx">msg</span><span class="p">);</span>
+        <span class="k">return</span><span class="p">;</span>
+      <span class="p">}</span>
+
+      <span class="k">if</span> <span class="p">(</span><span class="nx">conditionPassed</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">clearInterval</span><span class="p">(</span><span class="nx">intervalID</span><span class="p">);</span>
+        <span class="nx">resolve</span><span class="p">(</span><span class="nx">conditionPassed</span><span class="p">);</span>
+      <span class="p">}</span>
+      <span class="nx">tries</span><span class="o">++</span><span class="p">;</span>
+    <span class="p">},</span> <span class="nx">interval</span><span class="p">);</span>
+  <span class="p">});</span>
+<span class="p">},</span>
+</code></pre>
+       </div>
+      </div>
+      <p>Hmm that <code class="language-plaintext highlighter-rouge">setInterval</code> there seems <strong>highly</strong> suspect.</p>
+      <p>In particular, because the inner function is async, we may be waiting an arbitrary amount of time in <code class="language-plaintext highlighter-rouge">await condition()</code>, enough for the interval function to run <strong>again</strong>.</p>
+      <p>So we could get to a state where we have two (or more) of these functions running, and each of these post a <code class="language-plaintext highlighter-rouge">ContentTask</code>. As soon as the first of them passes, then we resolve the promise, which could get to the <code class="language-plaintext highlighter-rouge">closeWindow()</code> call which closed the browser, and made the pending <code class="language-plaintext highlighter-rouge">ContentTask</code>s never resolve ever again, and thus leaving the <code class="language-plaintext highlighter-rouge">gPromises</code> map with entries for unresolved promises, leaking the window.</p>
+      <p>Once I understood this, fixing it wasn’t that bad (hopefully, assuming my reviewer likes the patch :)).</p>
+      <p>Till next time. Oh, and thanks to Andrew Mccreight and Olli Pettay for all their help figuring out the rough edges here :)</p>
+     </article>
+    </div>
+   </div>
+  </div>
+  <footer class="site-footer">
+   <div class="wrapper">
+    <h2 class="footer-heading">Words</h2>
+    <div class="footer-col-wrapper">
+     <div class="footer-col  footer-col-1">
+      <ul class="contact-list">
+       <li><a href="mailto:emilio@crisal.io">emilio@crisal.io</a></li>
+      </ul>
+     </div>
+     <div class="footer-col  footer-col-2">
+      <ul class="social-media-list">
+       <li><a href="https://github.com/emilio"> <span class="icon  icon--github">
+          <svg viewBox="0 0 16 16">
+           <path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z" />
+          </svg></span> <span class="username">emilio</span> </a></li>
+       <li><a href="https://twitter.com/ecbos_"> <span class="icon  icon--twitter">
+          <svg viewBox="0 0 16 16">
+           <path fill="#828282" d="M15.969,3.058c-0.586,0.26-1.217,0.436-1.878,0.515c0.675-0.405,1.194-1.045,1.438-1.809
+                  c-0.632,0.375-1.332,0.647-2.076,0.793c-0.596-0.636-1.446-1.033-2.387-1.033c-1.806,0-3.27,1.464-3.27,3.27 c0,0.256,0.029,0.506,0.085,0.745C5.163,5.404,2.753,4.102,1.14,2.124C0.859,2.607,0.698,3.168,0.698,3.767 c0,1.134,0.577,2.135,1.455,2.722C1.616,6.472,1.112,6.325,0.671,6.08c0,0.014,0,0.027,0,0.041c0,1.584,1.127,2.906,2.623,3.206 C3.02,9.402,2.731,9.442,2.433,9.442c-0.211,0-0.416-0.021-0.615-0.059c0.416,1.299,1.624,2.245,3.055,2.271 c-1.119,0.877-2.529,1.4-4.061,1.4c-0.264,0-0.524-0.015-0.78-0.046c1.447,0.928,3.166,1.469,5.013,1.469 c6.015,0,9.304-4.983,9.304-9.304c0-0.142-0.003-0.283-0.009-0.423C14.976,4.29,15.531,3.714,15.969,3.058z" />
+          </svg></span> <span class="username">ecbos_</span> </a></li>
+      </ul>
+     </div>
+     <div class="footer-col  footer-col-3">
+      <p class="text">Code is poetry</p>
+     </div>
+    </div>
+   </div>
+  </footer>
+ </body>
+</html>

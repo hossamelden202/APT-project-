@@ -1,0 +1,429 @@
+<!doctype html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>In-App Update Process — Firefox Source Docs  documentation</title>
+  <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=fa44fd50">
+  <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=19f00094">
+  <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css?v=fd3f3429">
+  <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css?v=76b2166b">
+  <link rel="stylesheet" type="text/css" href="../../../../_static/custom_theme.css?v=dc5ed815">
+  <link rel="stylesheet" type="text/css" href="../../../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7">
+  <link rel="shortcut icon" href="../../../../_static/firefox.ico"><!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+  <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+  <script src="../../../../_static/documentation_options.js?v=5929fcd5"></script>
+  <script src="../../../../_static/doctools.js?v=9a2dae69"></script>
+  <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
+  <script src="../../../../_static/copybutton.js?v=30646c52"></script>
+  <script src="../../../../_static/design-tabs.js?v=36754332"></script>
+  <script src="../../../../_static/js/theme.js"></script>
+  <link rel="index" title="Index" href="../../../../genindex.html">
+  <link rel="search" title="Search" href="../../../../search.html">
+  <link rel="next" title="Anti-Tracking" href="../../../components/antitracking/anti-tracking/index.html">
+  <link rel="prev" title="Setting Up An Update Server" href="SettingUpAnUpdateServer.html">
+ </head>
+ <body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+   <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <div class="wy-side-scroll">
+     <div class="wy-side-nav-search">
+      <a href="../../../../index.html" class="icon icon-home"> Firefox Source Docs <img src="../../../../_static/firefox-wordmark.svg" class="logo" alt="Logo"> </a><!-- -- This code is governed by the BSD license ---->
+      <div>
+       <h3>Quick search</h3>
+       <script>
+    (function () {
+      var cx = "dd12886298f75dbef";
+      var gcse = document.createElement("script");
+      gcse.async = true;
+      gcse.src = "https://cse.google.com/cse.js?cx=" + cx;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(gcse, s);
+    })();
+  </script><gcse:search></gcse:search>
+      </div>
+     </div>
+     <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+      <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../glossary/index.html">A Glossary of Common Terms</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../overview/index.html">A Quick Guide to Mozilla Applications</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../setup/index.html">Getting Set Up To Work On The Firefox Codebase</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Working On Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../contributing/index.html">Working on Firefox</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../bug-mgmt/index.html">Bug Handling</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox User Guide</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../devtools-user/index.html">Firefox DevTools User Docs</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Source Code Documentation</span></p>
+      <ul class="current">
+       <li class="toctree-l1"><a class="reference internal" href="../../../../mots/index.html">Governance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../browser/index.html">Firefox Front-end</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../dom/index.html">DOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../editor/index.html">Editor</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../layout/index.html">Style system (CSS) &amp; Layout</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../gfx/index.html">Graphics</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../ipc/index.html">Processes, Threads and IPC</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../devtools/index.html">Firefox DevTools Contributor Docs</a></li>
+       <li class="toctree-l1 current"><a class="reference internal" href="../../../index.html">Toolkit</a>
+        <ul class="current">
+         <li class="toctree-l2"><a class="reference internal" href="../../../javascript-logging.html">JavaScript Logging</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../extensions/addon-manager/index.html">Add-on Manager</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../components/backgroundtasks/index.html">Background Task Mode</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../components/crashes/crash-manager/index.html">Crash Manager</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../crashreporter/crashreporter/index.html">Crash Reporter</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../internal-urls.html">Internal URLs</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../search/index.html">Search Service</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../components/normandy/normandy/index.html">Shield Recipe Client</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../components/nimbus/docs/index.html">Nimbus</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../components/messaging-system/docs/index.html">Messaging System Schemas</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../components/pictureinpicture/pictureinpicture/index.html">Picture-in-Picture</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../components/prompts/prompts/index.html">Prompts</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../modules/subprocess/toolkit_modules/subprocess/index.html">Subprocess Module</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../components/telemetry/index.html">Telemetry</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../components/glean/index.html">Firefox on Glean (FOG)</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../modules/toolkit_modules/index.html">Toolkit Modules</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../content/toolkit_widgets/index.html">Toolkit Widgets</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../components/resistfingerprinting/resistfingerprinting/index.html">Fingerprinting Resistance</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../components/url-classifier/url-classifier/index.html">URL Classifier</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../components/extensions/webextensions/index.html">WebExtensions API Development</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../../extensions/spellcheck/index.html">Managing the built-in en-US dictionary</a></li>
+         <li class="toctree-l2 current"><a class="reference internal" href="index.html">Application Update</a>
+          <ul class="current">
+           <li class="toctree-l3"><a class="reference internal" href="BackgroundUpdates.html">Background Updates</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="MaintenanceServiceTests.html">Maintenance Service Tests</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="SettingUpAnUpdateServer.html">Setting Up An Update Server</a></li>
+           <li class="toctree-l3 current"><a class="current reference internal" href="#">In-App Update Process</a>
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="#definitions">Definitions</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#documentation">Documentation</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#detailed-update-steps">Detailed Update Steps</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#operating-system-related-notes">Operating System Related Notes</a></li>
+            </ul></li>
+          </ul></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../components/antitracking/anti-tracking/index.html">Anti-Tracking</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../components/translations/index.html">Translations</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../components/sessionstore/index.html">Session Store</a></li>
+        </ul></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../js/index.html">SpiderMonkey</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../jsloader/index.html">JS Loader</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../mobile/android/geckoview/index.html">GeckoView</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../mobile/android/fenix/index.html">Fenix</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../mobile/android/focus-android/index.html">Focus for Android</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../dom/bindings/webidl/index.html">WebIDL</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../modules/libpref/index.html">libpref</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../networking/index.html">Networking</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../remote/index.html">Remote Protocols</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../services/index.html">Services</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../permissions/index.html">Permissions</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../uriloader/index.html">File Handling</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../widget/cocoa/index.html">Firefox on macOS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../widget/windows/index.html">Firefox on Windows</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../components/ml/index.html">Firefox AI Runtime</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../accessible/index.html">Accessibility</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../media/index.html">Media Playback</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../code-quality/index.html">Code quality</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../writing-rust-code/index.html">Writing Rust Code</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../rust-components/index.html">Rust Components</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../tools/profiler/index.html">Gecko Profiler</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../performance/index.html">Performance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../storage/index.html">Database bindings (SQLite, KV, …)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../xpcom/index.html">XPCOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../nspr/index.html">NSPR</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../security/nss/index.html">Network Security Services (NSS)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../content-security/index.html">Web Security Checks in Gecko</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">The Firefox Build System</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../mach/index.html">Mach</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../tools/try/index.html">Pushing to Try</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../build/buildsystem/index.html">Build System</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../taskcluster/index.html">Firefox CI and Taskgraph</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../tools/moztreedocs/index.html">Managing Documentation</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../mozbuild/vendor/index.html">Vendoring Third Party Components</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Testing &amp; Test Infrastructure</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/automated-testing/index.html">Automated Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/treeherder-try/index.html">Understanding Treeherder Results</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/sheriffed-intermittents/index.html">Sheriffed intermittent failures</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/tests-for-new-config/index.html">Turning on Firefox tests for a new configuration</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/intermittent/index.html">Avoiding intermittent tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/testing-policy/index.html">Testing Policy</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/ci-configs/index.html">Configuration Changes</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/browser-chrome/index.html">Browser chrome mochitests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/chrome-tests/index.html">Chrome Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/marionette/index.html">Marionette</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/geckodriver/index.html">geckodriver</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/test-verification/index.html">Test Verification</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/webrender/index.html">WebRender Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/mochitest-plain/index.html">Mochitest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/xpcshell/index.html">XPCShell tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/tps/index.html">TPS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../web-platform/index.html">web-platform-tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../gtest/index.html">GTest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../tools/fuzzing/index.html">Fuzzing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../tools/sanitizer/index.html">Sanitizer</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/perfdocs/index.html">Performance Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../tools/code-coverage/index.html">Code coverage</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing-rust-code/index.html">Testing &amp; Debugging Rust Code</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Releases &amp; Updates</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../update-infrastructure/index.html">Mozilla Update Infrastructure</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../update-infrastructure/index.html#watershed-updates">Watershed Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../update-infrastructure/index.html#desupport-updates">Desupport Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../tools/update-verify/index.html">Update Verify</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Localization &amp; Internationalization</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../intl/index.html">Internationalization</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../l10n/index.html">Localization</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox and Python</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../mozbase/index.html">mozbase</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../python/index.html">Using third-party Python packages</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Metrics Collected in Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../metrics/index.html">Metrics</a></li>
+      </ul>
+     </div>
+    </div>
+   </nav>
+   <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+    <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+     <i data-toggle="wy-nav-top" class="fa fa-bars"></i> <a href="../../../../index.html">Firefox Source Docs</a>
+    </nav>
+    <div class="wy-nav-content">
+     <div class="rst-content">
+      <!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+      <div role="navigation" aria-label="Page navigation">
+       <ul class="wy-breadcrumbs">
+        <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+        <li class="breadcrumb-item"><a href="../../../index.html">Toolkit</a></li>
+        <li class="breadcrumb-item"><a href="index.html">Application Update</a></li>
+        <li class="breadcrumb-item active">In-App Update Process</li>
+        <li class="wy-breadcrumbs-aside"><a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Developer+Infrastructure&amp;component=Firefox+Source+Docs%3A+Content&amp;short_desc=Documentation+issue+on+toolkit/mozapps/update/docs/InAppUpdateProcess&amp;comment=URL+=+https://firefox-source-docs.mozilla.org/toolkit/mozapps/update/docs/InAppUpdateProcess.html&amp;bug_file_loc=https://firefox-source-docs.mozilla.org/toolkit/mozapps/update/docs/InAppUpdateProcess.html" rel="nofollow">Report an issue</a> / <a href="../../../../_sources/toolkit/mozapps/update/docs/InAppUpdateProcess.rst.txt" rel="nofollow"> View page source</a></li>
+       </ul>
+       <hr>
+      </div>
+      <div role="main" class="document" itemscope itemtype="http://schema.org/Article">
+       <div itemprop="articleBody">
+        <p>Written April 2018</p>
+        <section id="in-app-update-process">
+         <h1>In-App Update Process<a class="headerlink" href="#in-app-update-process" title="Link to this heading">?</a></h1>
+         <p>This document details how Firefox checks for and installs updates. The focus is how it does this in the Windows Operating System. This was written in preparation for creating a Background Update Agent, and therefore does not cover that update mechanism.</p>
+         <section id="definitions">
+          <h2>Definitions<a class="headerlink" href="#definitions" title="Link to this heading">?</a></h2>
+          <section id="mar-file">
+           <h3>MAR file<a class="headerlink" href="#mar-file" title="Link to this heading">?</a></h3>
+           <p>An archive format containing update data. They are signed to prevent being tampered with.</p>
+          </section>
+          <section id="partial-mar-file">
+           <h3>Partial MAR file<a class="headerlink" href="#partial-mar-file" title="Link to this heading">?</a></h3>
+           <p>A MAR file containing a binary diff between the installed and updated versions of Firefox. This is the preferred update mechanism because the file sizes are much smaller.</p>
+          </section>
+          <section id="complete-mar-file">
+           <h3>Complete MAR file<a class="headerlink" href="#complete-mar-file" title="Link to this heading">?</a></h3>
+           <p>A MAR file containing a full copy of the application. This is typically used if updating from a partial MAR has failed or if the user is updating from such an old version that no partial MAR exists to upgrade directly from that version to the current version.</p>
+          </section>
+          <section id="update-directory">
+           <h3>Update directory<a class="headerlink" href="#update-directory" title="Link to this heading">?</a></h3>
+           <p>Directory where update files are saved. Location is platform-specific, but can be determined with this code:</p>
+           <div class="highlight-default notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="n">Services</span><span class="o">.</span><span class="n">dirsvc</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"UpdRootD"</span><span class="p">,</span> <span class="n">Ci</span><span class="o">.</span><span class="n">nsIFile</span><span class="p">);</span>
+</pre>
+            </div>
+           </div>
+          </section>
+          <section id="update-status-file">
+           <h3>Update status file<a class="headerlink" href="#update-status-file" title="Link to this heading">?</a></h3>
+           <p>A file written to and read from, in part, to communicate between Firefox and the updater. The file will contain a short string indicating the current status. If that status is “failed”, it will also contain an error code. A list of recognized status strings can be found <a class="reference external" href="https://searchfox.org/mozilla-central/rev/7ccb618f45a1398e31a086a009f87c8fd3a790b6/toolkit/mozapps/update/nsIUpdateService.idl#177-190">here</a>. The error codes used for failure status can be found <a class="reference external" href="https://searchfox.org/mozilla-central/rev/3265b390bd5d08a5be520253ef71835bcb715f27/toolkit/mozapps/update/common/updatererrors.h">here</a>.</p>
+          </section>
+         </section>
+         <section id="documentation">
+          <h2>Documentation<a class="headerlink" href="#documentation" title="Link to this heading">?</a></h2>
+          <ul class="simple">
+           <li>
+            <p><a class="reference external" href="https://wiki.mozilla.org/Software_Update:MAR">MAR files</a></p></li>
+           <li>
+            <p><a class="reference external" href="https://firefox-source-docs.mozilla.org/toolkit/components/telemetry/telemetry/data/update-ping.html">Update pings</a></p></li>
+          </ul>
+         </section>
+         <section id="detailed-update-steps">
+          <h2>Detailed Update Steps<a class="headerlink" href="#detailed-update-steps" title="Link to this heading">?</a></h2>
+          <ol class="arabic simple">
+           <li>
+            <p>An update check is initiated shortly after Firefox launches. First, an update XML document is retrieved by an internal XHR request. The XML is saved in the <a class="reference external" href="#update-directory">update directory</a>. Some very basic sanity checks are performed to ensure that this file is valid and describes an update that should be applied.</p>
+            <ol class="arabic simple">
+             <li>
+              <p>The URL used to download the update XML requires some variable substitution and communicates to the server information about the system and the currently installed version of Firefox: <code class="docutils literal notranslate"><span class="pre">https://aus5.mozilla.org/update/6/%PRODUCT%/%VERSION%/%BUILD_ID%/%BUILD_TARGET%/%LOCALE%/%CHANNEL%/%OS_VERSION%(noBug1296630v1)(nowebsense)/%SYSTEM_CAPABILITIES%/%DISTRIBUTION%/%DISTRIBUTION_VERSION%/update.xml</span></code> On my system, this becomes: <code class="docutils literal notranslate"><span class="pre">https://aus5.mozilla.org/update/6/Firefox/61.0a1/20180419100148/WINNT_x86_64-msvc-x64/en-US/nightly/Windows_NT</span> <span class="pre">10.0.0.0.16299.371</span> <span class="pre">(x64)(noBug1296630v1)(nowebsense)/ISET:SSE4_2,MEM:32676/default/default/update.xml</span></code></p></li>
+             <li>
+              <p>Balrog uses this information to determine what XML data to send in response. Common criteria used in making this decision include:</p>
+              <ol class="arabic simple">
+               <li>
+                <p>Is the system capable of using a 64-bit MAR? Does it have enough RAM to make it “worth it”?</p></li>
+               <li>
+                <p>Does the system support processor features that are required for newer versions of Firefox?</p></li>
+               <li>
+                <p>Are updates currently being throttled? If so, Balrog may indicate to some clients that there is not an update yet. Note that manual checks for update will add a “force” query parameter which will force Balrog to report any updates, regardless of throttling.</p></li>
+              </ol></li>
+             <li>
+              <p>Balrog will send an XML document in response. If an update is available, it will contain the URL for a <a class="reference external" href="#complete-mar-file">complete MAR</a>. If a <a class="reference external" href="#partial-mar-file">partial MAR</a> is available, the URL for that will be contained as well.</p></li>
+            </ol></li>
+           <li>
+            <p>If an update is available, Firefox downloads the update MAR file.</p>
+            <ol class="arabic simple">
+             <li>
+              <p>Currently, downloads are performed using <cite>nsIIncrementalDownloader</cite>, but ideally we would use a less-special restartable downloader (<a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1348087">Bug 1348087</a>)</p></li>
+             <li>
+              <p>Files are stored in the “update directory” (see Definitions, above)</p></li>
+             <li>
+              <p>If Firefox is closed before download completes, the download resumes the next time Firefox launches.</p></li>
+             <li>
+              <p>During this time, the update status file will contain “downloading”</p></li>
+            </ol></li>
+           <li>
+            <p>When the download completes, the MAR file stays in the <a class="reference external" href="#update-directory">update directory</a>. The signature/file integrity is not yet verified.</p>
+            <ol class="arabic simple">
+             <li>
+              <p>The action taken now differs depending on whether update staging is enabled (controlled by the pref: <code class="docutils literal notranslate"><span class="pre">app.update.staging.enabled</span></code>). Staging is currently enabled by default in all cases.</p></li>
+             <li>
+              <p>If staging is enabled:</p>
+              <ol class="arabic simple">
+               <li>
+                <p>Firefox runs the updater, which copies the install files into a directory within the installation and updates them</p></li>
+               <li>
+                <p>If privilege elevation will be needed and the Mozilla Maintenance Service is available, the update status file will now contain “applied-service”</p></li>
+               <li>
+                <p>Otherwise, the update status file will now contain “applied”</p></li>
+              </ol></li>
+             <li>
+              <p>If staging is disabled:</p>
+              <ol class="arabic simple">
+               <li>
+                <p>If privilege elevation will not be needed to install the update, the update status file will now contain “pending”</p></li>
+               <li>
+                <p>If privilege elevation will be needed and the Mozilla Maintenance Service is available, the update status file will now contain “pending-service”</p></li>
+               <li>
+                <p>If privilege elevation will be needed and the Mozilla Maintenance Service is not available, the update status file will now contain either “pending” (on Windows) or “pending-elevate” (on Mac).</p></li>
+              </ol></li>
+            </ol></li>
+           <li>
+            <p>Update ping sent with reason=”ready”.</p></li>
+           <li>
+            <p>Firefox waits to be closed so that the update can be installed.</p>
+            <ol class="arabic simple">
+             <li>
+              <p>If the user keeps the browser open for more than 4 days, a green arrow will be displayed on the menu icon, prompting the user to restart to update.</p></li>
+             <li>
+              <p>If the user keeps the browser open for 8 days, a doorhanger will prompt for a restart.</p></li>
+             <li>
+              <p>(Note: These are the delays for the release channel, the prefs that control this have different values on other channels. On Nightly, for example, the green arrow has no delay and the doorhanger delay is 12 hours)</p></li>
+            </ol></li>
+           <li>
+            <p>When Firefox next launches, it reads the update status file very early in startup. Upon discovering one of the “pending” statuses, it launches the updater and exits. This updater process will be running without privilege elevation.</p></li>
+           <li>
+            <p>The updater reads the update status file and, if the status was a “pending” status, it changes the status to “applying”.</p></li>
+           <li>
+            <p>If the status read was “pending-service” or “applied-service”, the updater contacts the Mozilla Maintenance Service and requests that a privileged updater be started.</p>
+            <ol class="arabic simple">
+             <li>
+              <p>This process is retried in the event of failure, but the updater will continue if multiple attempts all result in failure</p></li>
+             <li>
+              <p>The original updater waits for the privileged updater process to exit</p></li>
+            </ol></li>
+           <li>
+            <p>If the status read was “pending-elevate” or “applied”, or if the updater was unable to get a privileged updater from the Mozilla Maintenance Service, a new process is started with elevated privileges. This causes a UAC prompt to display. The original updater waits for the privileged updater to exit.</p>
+            <ol class="arabic simple">
+             <li>
+              <p>If the UAC prompt was declined, the updater writes an error state and exits.</p></li>
+             <li>
+              <p>When Firefox starts, it returns the status to a “pending” state, and then it returns to step 5</p></li>
+             <li>
+              <p>If this process repeats 2 times, we prompt the user to download the Firefox installer in order to update (but Firefox returns to step 5 nevertheless)</p></li>
+            </ol></li>
+           <li>
+            <p>The update is now attempted. If the status was one of the “pending” statuses, this will involve patching or overwriting installation files with data from the MAR file. If the status was one of the “applied” statuses, this will involve overwriting files in the installation directory with the patched (staged) files in the update directory.</p>
+            <ol class="arabic simple">
+             <li>
+              <p>If a privileged updater was not needed, the original updater process attempts to install the update.</p></li>
+             <li>
+              <p>If a privileged updater was started, it attempts to install the update. Afterwards it exits and the original, unprivileged updater process resumes</p></li>
+            </ol></li>
+           <li>
+            <p>The updater writes the status to the update status file (either “succeeded” or “failed”), starts Firefox, and exits.</p></li>
+           <li>
+            <p>Firefox starts and reads the update status file.</p>
+            <ol class="arabic simple">
+             <li>
+              <p>On update success:</p>
+              <ol class="arabic simple">
+               <li>
+                <p>An update ping (with reason=”success”) is sent</p></li>
+               <li>
+                <p>Firefox reads the XML file out of the <a class="reference external" href="#update-directory">update directory</a> and, if it indicates that a particular URL should be shown after that update, it does so.</p></li>
+              </ol></li>
+             <li>
+              <p>On update failure, Firefox checks whether this was a <a class="reference external" href="#partial-mar-file">partial MAR</a> or a <a class="reference external" href="#complete-mar-file">complete MAR</a> by checking the “selected” attribute in the XML.</p>
+              <ol class="arabic simple">
+               <li>
+                <p>If it was a partial MAR, Firefox downloads the complete MAR and retries the update (i.e. goes back to step 2, but downloads a different MAR)</p></li>
+               <li>
+                <p>If it was a complete MAR, Firefox notifies the user of the failure and gives them a link to the current version.</p></li>
+              </ol></li>
+            </ol></li>
+          </ol>
+         </section>
+         <section id="operating-system-related-notes">
+          <h2>Operating System Related Notes<a class="headerlink" href="#operating-system-related-notes" title="Link to this heading">?</a></h2>
+          <p>The purpose of this document is to describe the mechanism for update under the Window Operating System. These are some additional notes to describe how this process differs in other operating systems. This section is currently known to be incomplete.</p>
+          <ul class="simple">
+           <li>
+            <p>The Mozilla Maintenance Service only exists in Windows.</p></li>
+           <li>
+            <p>On Mac, Firefox can launch an elevated updater process directly.</p></li>
+           <li>
+            <p>On macOS, we write pending-elevate when we need elevation. At startup with this status, we do not actually start the updater, we instead ask the user if it’s okay to update and, if they agree, switch to the pending status. If the user is an administrator, they shouldn’t need to elevate more than once since the process fixes the permissions on the installation directory so that Firefox can be updated with administrator privileges.</p></li>
+          </ul>
+         </section>
+        </section>
+       </div>
+      </div>
+      <footer>
+       <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="SettingUpAnUpdateServer.html" class="btn btn-neutral float-left" title="Setting Up An Update Server" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a> <a href="../../../components/antitracking/anti-tracking/index.html" class="btn btn-neutral float-right" title="Anti-Tracking" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+       </div>
+       <hr>
+       <div role="contentinfo">
+        <p></p>
+       </div> Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+      </footer>
+     </div>
+    </div>
+   </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ </body>
+</html>

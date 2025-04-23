@@ -1,0 +1,192 @@
+<!doctype html>
+<html>
+ <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Developing Firefox on Windows on MSYS2 with zsh and the Windows Terminal | Words</title>
+  <meta name="description" content="I’ve been looking at how to get a more familiar set-up on Windows, somethingmore similar to what I have on Linux or macOS.">
+  <link rel="stylesheet" href="/words/css/main.css">
+  <link rel="canonical" href="http://crisal.io/words/2022/11/22/msys2-firefox-development.html">
+  <link rel="alternate" type="application/rss+xml" title="Words" href="http://crisal.io/words/feed.xml">
+ </head>
+ <body>
+  <header class="site-header">
+   <div class="wrapper">
+    <a class="site-title" href="/words/">Words</a>
+    <nav class="site-nav">
+     <a href="#" class="menu-icon">
+      <svg viewBox="0 0 18 15">
+       <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z" /> <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z" /> <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z" />
+      </svg></a>
+     <div class="trigger">
+      <a class="page-link" href="/words/about/">About</a>
+     </div>
+    </nav>
+   </div>
+  </header>
+  <div class="page-content">
+   <div class="wrapper">
+    <div class="post">
+     <header class="post-header">
+      <p class="post-meta">Nov 22, 2022</p>
+      <h1 class="post-title">Developing Firefox on Windows on MSYS2 with zsh and the Windows Terminal</h1>
+     </header>
+     <article class="post-content">
+      <p>I’ve been looking at how to get a more familiar set-up on Windows, something more similar to what I have on Linux or macOS.</p>
+      <p>The default bash terminal that comes with mozilla-build is not great for me (I’m used to zsh). Also, mozilla-build comes without a package manager, which means that software I need for managing e.g., my dotfiles doesn’t work.</p>
+      <p>It’s documented that you can <a href="https://firefox-source-docs.mozilla.org/mach/windows-usage-outside-mozillabuild.html">invoke mach outside mozilla-build</a>, and that page does have a bunch of interesting tips, but nothing too concrete.</p>
+      <p>So while I tried to get that working, I decide to write out what I did in order to hopefully make it easier for someone else.</p>
+      <h2 id="installing-msys2-and-some-basic-dependencies">Installing MSYS2 and some basic dependencies.</h2>
+      <p>First we’re going to need some basic software:</p>
+      <ul>
+       <li>Install <a href="https://wiki.mozilla.org/MozillaBuild">MozillaBuild</a>.</li>
+       <li>Install <a href="https://gitforwindows.org/">Git for Windows</a>.</li>
+       <li>Install Python 3. I used the <a href="https://apps.microsoft.com/store/detail/python-310/9PJPW5LDXLZ5">Microsoft Store</a> for it. Make sure you use Windows python rather than cygwin’s, because otherwise the Firefox build will fail.</li>
+       <li>Install <a href="https://www.msys2.org/">MSYS2</a>.</li>
+      </ul>
+      <h2 id="installing-our-shell-and-other-msys2-tweaks">Installing our shell and other MSYS2 tweaks</h2>
+      <p>On an <code class="language-plaintext highlighter-rouge">MSYS2</code> terminal I ran <code class="language-plaintext highlighter-rouge">pacman -S zsh</code> (or shell of your choice, or avoid doing it if you’re ok with bash).</p>
+      <p>Then I tweaked <code class="language-plaintext highlighter-rouge">/etc/nsswitch.conf</code>, and set <code class="language-plaintext highlighter-rouge">db_home: windows</code>. This allows the windows home directory to be the shell’s home directory, which is easier so that things like ssh / git config don’t need to live in two different places.</p>
+      <h2 id="adding-a-windows-terminal-profile">Adding a Windows Terminal profile</h2>
+      <p>In the <a href="https://apps.microsoft.com/store/detail/windows-terminal/9N0DX20HK701">Windows Terminal</a>, we need to create a new profile. Give it the name you want, and the following settings:</p>
+      <h3 id="command-line">Command line</h3>
+      <p>That should be something along the lines of:</p>
+      <div class="language-plaintext highlighter-rouge">
+       <div class="highlight">
+        <pre class="highlight"><code>C:/msys64/msys2_shell.cmd -defterm -here -no-start -ucrt64 -shell zsh -use-full-path
+</code></pre>
+       </div>
+      </div>
+      <p>Some notes:</p>
+      <ul>
+       <li>
+        <p><code class="language-plaintext highlighter-rouge">-use-full-path</code> is needed so that things like <code class="language-plaintext highlighter-rouge">git</code> or <code class="language-plaintext highlighter-rouge">python</code> are visible inside the msys2 terminal.</p></li>
+       <li>
+        <p><code class="language-plaintext highlighter-rouge">-shell zsh</code> is obviously what triggers the new shell, and you can switch to whatever or omit it to remain with bash.</p></li>
+      </ul>
+      <h3 id="start-directory">Start directory</h3>
+      <p>I made that <code class="language-plaintext highlighter-rouge">%USERPROFILE%</code> (so, the home directory). You can also set <code class="language-plaintext highlighter-rouge">C:\mozilla-unified</code> or wherever you want to have the Firefox checkout.</p>
+      <h3 id="icon">Icon</h3>
+      <p>If you fancy, you can set the icon to something like <code class="language-plaintext highlighter-rouge">C:\msys64\msys2.ico</code> or even something like <code class="language-plaintext highlighter-rouge">&lt;mozilla-repo&gt;\browser\branding\nightly\default256.png</code>.</p>
+      <h2 id="customizing-stuff">Customizing stuff</h2>
+      <p>Now you can customize your terminal and environment much like you’d do on Unix. For me, I imported my <code class="language-plaintext highlighter-rouge">~/.zshrc</code>, <code class="language-plaintext highlighter-rouge">~/.vimrc</code>, etc, and installed <code class="language-plaintext highlighter-rouge">nvim</code> (with <code class="language-plaintext highlighter-rouge">winget</code>), <code class="language-plaintext highlighter-rouge">oh-my-zsh</code>, installed my powerline fonts, etc.</p>
+      <p>I found some hiccups that I’ll document below:</p>
+      <h3 id="python-pip-path">Python pip path</h3>
+      <p>I use <code class="language-plaintext highlighter-rouge">git-revise</code>, <code class="language-plaintext highlighter-rouge">moz-phab</code>, <code class="language-plaintext highlighter-rouge">mozregression</code>, etc from pip, so I’d like <code class="language-plaintext highlighter-rouge">pip</code>-installed commands to be on my <code class="language-plaintext highlighter-rouge">PATH</code>. On my Linux/macOS <code class="language-plaintext highlighter-rouge">.zshrc</code> I had:</p>
+      <div class="language-sh highlighter-rouge">
+       <div class="highlight">
+        <pre class="highlight"><code><span class="nb">export </span><span class="nv">PATH</span><span class="o">=</span><span class="s2">"</span><span class="nv">$PATH</span><span class="s2">:</span><span class="si">$(</span>python3 <span class="nt">-m</span> site <span class="nt">--user-base</span><span class="si">)</span><span class="s2">/bin"</span>
+</code></pre>
+       </div>
+      </div>
+      <p>But that had two issues:</p>
+      <ul>
+       <li>
+        <p>The path on Windows is different (it’s user-base/Python{major}{minor}/Scripts).</p></li>
+       <li>
+        <p>The <code class="language-plaintext highlighter-rouge">python3 -m site --user-base</code> command was printing a <code class="language-plaintext highlighter-rouge">\r\n</code>, which put an annoying carriage return in the <code class="language-plaintext highlighter-rouge">PATH</code>, causing weird stuff to happen with other programs.</p></li>
+      </ul>
+      <p>In the end what I came up with is:</p>
+      <div class="language-sh highlighter-rouge">
+       <div class="highlight">
+        <pre class="highlight"><code><span class="k">if </span><span class="nb">command</span> <span class="nt">-v</span> python3 <span class="o">&gt;</span> /dev/null<span class="p">;</span> <span class="k">then
+  if </span><span class="nb">command</span> <span class="nt">-v</span> cygpath <span class="o">&gt;</span> /dev/null<span class="p">;</span> <span class="k">then
+    </span><span class="nb">export </span><span class="nv">PATH</span><span class="o">=</span><span class="s2">"</span><span class="nv">$PATH</span><span class="s2">:</span><span class="si">$(</span>cygpath <span class="si">$(</span>python3 <span class="nt">-m</span> site <span class="nt">--user-base</span> | <span class="nb">tr</span> <span class="nt">-d</span> <span class="s1">'\r'</span><span class="si">))</span><span class="s2">/Python</span><span class="si">$(</span>python3 <span class="nt">-c</span> <span class="s1">'import sys; print(f"{sys.version_info.major}{sys.version_info.minor}", end="")'</span><span class="si">)</span><span class="s2">/Scripts"</span>
+  <span class="k">else
+    </span><span class="nb">export </span><span class="nv">PATH</span><span class="o">=</span><span class="s2">"</span><span class="nv">$PATH</span><span class="s2">:</span><span class="si">$(</span>python3 <span class="nt">-m</span> site <span class="nt">--user-base</span><span class="si">)</span><span class="s2">/bin"</span>
+  <span class="k">fi
+fi</span>
+</code></pre>
+       </div>
+      </div>
+      <p>As much an abomination as it is, it works.</p>
+      <h3 id="neovim">Neovim</h3>
+      <p>There was no msys2 package of neovim (my usual editor on other platforms), but I could install it with <code class="language-plaintext highlighter-rouge">winget install Neovim.Neovim</code>.</p>
+      <p>That works, but turns out on windows <code class="language-plaintext highlighter-rouge">nvim</code> looks at a different path for its configuration, so I had to create <code class="language-plaintext highlighter-rouge">~/AppData/Local/nvim/init.vim</code> with:</p>
+      <div class="language-plaintext highlighter-rouge">
+       <div class="highlight">
+        <pre class="highlight"><code>source ~/.config/nvim/init.vim
+</code></pre>
+       </div>
+      </div>
+      <p>For it to pick up my usual config.</p>
+      <p>On top, running , my usual nvim setup has a number of plugins that didn’t quite work, and various other <a href="https://github.com/neovim/neovim/issues/21148">issues</a> related to stuff not expecting a bash-compatible shell on Windows.</p>
+      <p>After a bit of painful debugging, I ended up giving up and putting the following in my <code class="language-plaintext highlighter-rouge">.vimrc</code> file:</p>
+      <div class="language-vim highlighter-rouge">
+       <div class="highlight">
+        <pre class="highlight"><code><span class="k">if</span> <span class="nb">has</span><span class="p">(</span><span class="s1">'win32'</span><span class="p">)</span> <span class="p">||</span> <span class="nb">has</span><span class="p">(</span><span class="s1">'win64'</span><span class="p">)</span>
+  <span class="k">set</span> <span class="k">shell</span><span class="p">=</span>$COMSPEC
+<span class="k">endif</span>
+</code></pre>
+       </div>
+      </div>
+      <p>Which basically resets the shell to <code class="language-plaintext highlighter-rouge">cmd.exe</code>. Stuff just works with that. I also had to create a <code class="language-plaintext highlighter-rouge">spell/</code> directory so that nvim wouldn’t try to download spell files to <code class="language-plaintext highlighter-rouge">C:\Program Files\Neovim\...</code> (which didn’t work because of permissions).</p>
+      <p>Another few tweaks to the <code class="language-plaintext highlighter-rouge">~/.zshrc</code> file were needed, since Git would refuse to use <code class="language-plaintext highlighter-rouge">GIT_EDITOR=nvim</code> but <code class="language-plaintext highlighter-rouge">GIT_EDITOR=nvim.exe</code> worked.</p>
+      <p>These are the relevant bits of my zshrc now:</p>
+      <div class="language-plaintext highlighter-rouge">
+       <div class="highlight">
+        <pre class="highlight"><code>if ! command -v nvim &gt;/dev/null; then
+  export VISUAL=vim
+else
+  export VISUAL=nvim
+  alias vim='nvim'
+fi
+
+if command -v cygpath &gt;/dev/null; then
+  # This helps with git editor etc.
+  export VISUAL="$VISUAL.exe"
+fi
+
+export EDITOR="$VISUAL"
+export GIT_EDITOR="$VISUAL"
+</code></pre>
+       </div>
+      </div>
+      <p>Everything else just works. Autocomplete with <code class="language-plaintext highlighter-rouge">coc</code> and <code class="language-plaintext highlighter-rouge">coc-clangd</code>, etc works perfectly, my usual build setup just works…</p>
+      <h2 id="building-firefox">Building Firefox</h2>
+      <p>Yay, the fun stuff. The main thing to have into account is that you want this bit in your <code class="language-plaintext highlighter-rouge">mozconfig</code>, so that <code class="language-plaintext highlighter-rouge">configure</code> picks the right tools / cygwin dlls for the build:</p>
+      <div class="language-sh highlighter-rouge">
+       <div class="highlight">
+        <pre class="highlight"><code><span class="nb">export </span><span class="nv">PATH</span><span class="o">=</span><span class="s2">"/c/mozilla-build/msys2/usr/bin:</span><span class="nv">$PATH</span><span class="s2">"</span>
+</code></pre>
+       </div>
+      </div>
+      <p>You shouldn’t need anything else. Maybe we can fix the build system to do this automatically, I filed <a href="https://bugzil.la/1801826">bug 1801826</a> for this.</p>
+      <p>Another thing that threw me off for a bit was that on Linux, I have <a href="https://github.com/emilio/mozconfigs/blob/c0b516299f6e1658dacfae4375621693fdc491e5/mozconfigs/compile-environment#L18">a setup to allow building with different compilers</a>, and that was overriding <code class="language-plaintext highlighter-rouge">AS</code>, which on windows can’t be set to <code class="language-plaintext highlighter-rouge">clang-cl</code>.</p>
+      <p>Since I don’t care about building with different compilers on windows I just avoided setting <code class="language-plaintext highlighter-rouge">AS</code> at all.</p>
+      <p>With all this, I have a comfortable set-up to building and editing code on Windows, similar to other platforms.</p>
+     </article>
+    </div>
+   </div>
+  </div>
+  <footer class="site-footer">
+   <div class="wrapper">
+    <h2 class="footer-heading">Words</h2>
+    <div class="footer-col-wrapper">
+     <div class="footer-col  footer-col-1">
+      <ul class="contact-list">
+       <li><a href="mailto:emilio@crisal.io">emilio@crisal.io</a></li>
+      </ul>
+     </div>
+     <div class="footer-col  footer-col-2">
+      <ul class="social-media-list">
+       <li><a href="https://github.com/emilio"> <span class="icon  icon--github">
+          <svg viewBox="0 0 16 16">
+           <path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z" />
+          </svg></span> <span class="username">emilio</span> </a></li>
+       <li><a href="https://twitter.com/ecbos_"> <span class="icon  icon--twitter">
+          <svg viewBox="0 0 16 16">
+           <path fill="#828282" d="M15.969,3.058c-0.586,0.26-1.217,0.436-1.878,0.515c0.675-0.405,1.194-1.045,1.438-1.809
+                  c-0.632,0.375-1.332,0.647-2.076,0.793c-0.596-0.636-1.446-1.033-2.387-1.033c-1.806,0-3.27,1.464-3.27,3.27 c0,0.256,0.029,0.506,0.085,0.745C5.163,5.404,2.753,4.102,1.14,2.124C0.859,2.607,0.698,3.168,0.698,3.767 c0,1.134,0.577,2.135,1.455,2.722C1.616,6.472,1.112,6.325,0.671,6.08c0,0.014,0,0.027,0,0.041c0,1.584,1.127,2.906,2.623,3.206 C3.02,9.402,2.731,9.442,2.433,9.442c-0.211,0-0.416-0.021-0.615-0.059c0.416,1.299,1.624,2.245,3.055,2.271 c-1.119,0.877-2.529,1.4-4.061,1.4c-0.264,0-0.524-0.015-0.78-0.046c1.447,0.928,3.166,1.469,5.013,1.469 c6.015,0,9.304-4.983,9.304-9.304c0-0.142-0.003-0.283-0.009-0.423C14.976,4.29,15.531,3.714,15.969,3.058z" />
+          </svg></span> <span class="username">ecbos_</span> </a></li>
+      </ul>
+     </div>
+     <div class="footer-col  footer-col-3">
+      <p class="text">Code is poetry</p>
+     </div>
+    </div>
+   </div>
+  </footer>
+ </body>
+</html>

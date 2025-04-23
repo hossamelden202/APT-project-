@@ -1,0 +1,361 @@
+<!doctype html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Architecture Decisions — Firefox Source Docs  documentation</title>
+  <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50">
+  <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094">
+  <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=fd3f3429">
+  <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b">
+  <link rel="stylesheet" type="text/css" href="../../../_static/custom_theme.css?v=dc5ed815">
+  <link rel="stylesheet" type="text/css" href="../../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7">
+  <link rel="shortcut icon" href="../../../_static/firefox.ico"><!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+  <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+  <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+  <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+  <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+  <script src="../../../_static/copybutton.js?v=30646c52"></script>
+  <script src="../../../_static/design-tabs.js?v=36754332"></script>
+  <script src="../../../_static/js/theme.js"></script>
+  <link rel="index" title="Index" href="../../../genindex.html">
+  <link rel="search" title="Search" href="../../../search.html">
+  <link rel="next" title="Battery Debugging" href="Battery-Debugging.html">
+  <link rel="prev" title="Focus for Android" href="index.html">
+ </head>
+ <body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+   <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <div class="wy-side-scroll">
+     <div class="wy-side-nav-search">
+      <a href="../../../index.html" class="icon icon-home"> Firefox Source Docs <img src="../../../_static/firefox-wordmark.svg" class="logo" alt="Logo"> </a><!-- -- This code is governed by the BSD license ---->
+      <div>
+       <h3>Quick search</h3>
+       <script>
+    (function () {
+      var cx = "dd12886298f75dbef";
+      var gcse = document.createElement("script");
+      gcse.async = true;
+      gcse.src = "https://cse.google.com/cse.js?cx=" + cx;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(gcse, s);
+    })();
+  </script><gcse:search></gcse:search>
+      </div>
+     </div>
+     <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+      <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../glossary/index.html">A Glossary of Common Terms</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../overview/index.html">A Quick Guide to Mozilla Applications</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../setup/index.html">Getting Set Up To Work On The Firefox Codebase</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Working On Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../contributing/index.html">Working on Firefox</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../bug-mgmt/index.html">Bug Handling</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox User Guide</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../devtools-user/index.html">Firefox DevTools User Docs</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Source Code Documentation</span></p>
+      <ul class="current">
+       <li class="toctree-l1"><a class="reference internal" href="../../../mots/index.html">Governance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../browser/index.html">Firefox Front-end</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../dom/index.html">DOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../editor/index.html">Editor</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../layout/index.html">Style system (CSS) &amp; Layout</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../gfx/index.html">Graphics</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../ipc/index.html">Processes, Threads and IPC</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../devtools/index.html">Firefox DevTools Contributor Docs</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../toolkit/index.html">Toolkit</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../js/index.html">SpiderMonkey</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../jsloader/index.html">JS Loader</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../geckoview/index.html">GeckoView</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../fenix/index.html">Fenix</a></li>
+       <li class="toctree-l1 current"><a class="reference internal" href="index.html">Focus for Android</a>
+        <ul class="current">
+         <li class="toctree-l2 current"><a class="current reference internal" href="#">Architecture Decisions</a>
+          <ul>
+           <li class="toctree-l3"><a class="reference internal" href="#observing-state-livedata">Observing state (LiveData)</a>
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="#context">Context</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#decision">Decision</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#consequences">Consequences</a></li>
+            </ul></li>
+           <li class="toctree-l3"><a class="reference internal" href="#browser-engine-geckoview-vs-webview">Browser engine: GeckoView vs. WebView</a>
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="#id1">Context</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#id2">Decision</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#id3">Consequences</a></li>
+            </ul></li>
+           <li class="toctree-l3"><a class="reference internal" href="#minimum-supported-android-version-5-0-api-21">Minimum supported Android version: 5.0+ (API 21+)</a>
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="#id4">Context</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#id5">Decision</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#id6">Consequences</a></li>
+            </ul></li>
+          </ul></li>
+         <li class="toctree-l2"><a class="reference internal" href="Battery-Debugging.html">Battery Debugging</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Content-blocking.html">Content blocking</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Crash-Reporting-with-Sentry.html">Crash Reporting with Sentry</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Development-Custom-GeckoView.html">Development Custom GeckoView</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Feature-%26-Issue-workflow.html">Feature &amp; Issue workflow</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="GeckoView-%28In-Progress%29.html">Running GeckoView in a debug environment</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Home.html">Home</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Homescreen-Tips.html">Homescreen Tips</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Multisession-architecture.html">Multisession architecture</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Recommended-pre-push-hook.html">Recommended pre-push hook</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Release-Process.html">Release Process</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Release-tracks.html">Release tracks</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Removing-strings.html">Removing strings</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Sprint-Process.html">Sprint Process</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Telemetry.html">Telemetry</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="UI-Test.html">UI Test</a></li>
+        </ul></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../dom/bindings/webidl/index.html">WebIDL</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../modules/libpref/index.html">libpref</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../networking/index.html">Networking</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../remote/index.html">Remote Protocols</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../services/index.html">Services</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../permissions/index.html">Permissions</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../uriloader/index.html">File Handling</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../widget/cocoa/index.html">Firefox on macOS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../widget/windows/index.html">Firefox on Windows</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../toolkit/components/ml/index.html">Firefox AI Runtime</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../accessible/index.html">Accessibility</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../media/index.html">Media Playback</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../code-quality/index.html">Code quality</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../writing-rust-code/index.html">Writing Rust Code</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../rust-components/index.html">Rust Components</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../tools/profiler/index.html">Gecko Profiler</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../performance/index.html">Performance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../storage/index.html">Database bindings (SQLite, KV, …)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../xpcom/index.html">XPCOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../nspr/index.html">NSPR</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../security/nss/index.html">Network Security Services (NSS)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../content-security/index.html">Web Security Checks in Gecko</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">The Firefox Build System</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../mach/index.html">Mach</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../tools/try/index.html">Pushing to Try</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../build/buildsystem/index.html">Build System</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../taskcluster/index.html">Firefox CI and Taskgraph</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../tools/moztreedocs/index.html">Managing Documentation</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../mozbuild/vendor/index.html">Vendoring Third Party Components</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Testing &amp; Test Infrastructure</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/automated-testing/index.html">Automated Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/treeherder-try/index.html">Understanding Treeherder Results</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/sheriffed-intermittents/index.html">Sheriffed intermittent failures</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/tests-for-new-config/index.html">Turning on Firefox tests for a new configuration</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/intermittent/index.html">Avoiding intermittent tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/testing-policy/index.html">Testing Policy</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/ci-configs/index.html">Configuration Changes</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/browser-chrome/index.html">Browser chrome mochitests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/chrome-tests/index.html">Chrome Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/marionette/index.html">Marionette</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/geckodriver/index.html">geckodriver</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/test-verification/index.html">Test Verification</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/webrender/index.html">WebRender Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/mochitest-plain/index.html">Mochitest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/xpcshell/index.html">XPCShell tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/tps/index.html">TPS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../web-platform/index.html">web-platform-tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../gtest/index.html">GTest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../tools/fuzzing/index.html">Fuzzing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../tools/sanitizer/index.html">Sanitizer</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/perfdocs/index.html">Performance Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../tools/code-coverage/index.html">Code coverage</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing-rust-code/index.html">Testing &amp; Debugging Rust Code</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Releases &amp; Updates</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../update-infrastructure/index.html">Mozilla Update Infrastructure</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../update-infrastructure/index.html#watershed-updates">Watershed Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../update-infrastructure/index.html#desupport-updates">Desupport Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../tools/update-verify/index.html">Update Verify</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Localization &amp; Internationalization</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../intl/index.html">Internationalization</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../l10n/index.html">Localization</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox and Python</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../mozbase/index.html">mozbase</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../python/index.html">Using third-party Python packages</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Metrics Collected in Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../metrics/index.html">Metrics</a></li>
+      </ul>
+     </div>
+    </div>
+   </nav>
+   <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+    <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+     <i data-toggle="wy-nav-top" class="fa fa-bars"></i> <a href="../../../index.html">Firefox Source Docs</a>
+    </nav>
+    <div class="wy-nav-content">
+     <div class="rst-content">
+      <!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+      <div role="navigation" aria-label="Page navigation">
+       <ul class="wy-breadcrumbs">
+        <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+        <li class="breadcrumb-item"><a href="index.html">Focus for Android</a></li>
+        <li class="breadcrumb-item active">Architecture Decisions</li>
+        <li class="wy-breadcrumbs-aside"><a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Developer+Infrastructure&amp;component=Firefox+Source+Docs%3A+Content&amp;short_desc=Documentation+issue+on+mobile/android/focus-android/Architecture-Decisions&amp;comment=URL+=+https://firefox-source-docs.mozilla.org/mobile/android/focus-android/Architecture-Decisions.html&amp;bug_file_loc=https://firefox-source-docs.mozilla.org/mobile/android/focus-android/Architecture-Decisions.html" rel="nofollow">Report an issue</a> / <a href="../../../_sources/mobile/android/focus-android/Architecture-Decisions.md.txt" rel="nofollow"> View page source</a></li>
+       </ul>
+       <hr>
+      </div>
+      <div role="main" class="document" itemscope itemtype="http://schema.org/Article">
+       <div itemprop="articleBody">
+        <section id="architecture-decisions">
+         <h1>Architecture Decisions<a class="headerlink" href="#architecture-decisions" title="Link to this heading">?</a></h1>
+         <p>This is a collection of records for “architecturally significant” decisions. <a class="reference external" href="http://thinkrelevance.com/blog/2011/11/15/documenting-architecture-decisions">Why?</a></p>
+         <hr class="docutils">
+         <section id="observing-state-livedata">
+          <h2>Observing state (LiveData)<a class="headerlink" href="#observing-state-livedata" title="Link to this heading">?</a></h2>
+          <ul class="simple">
+           <li>
+            <p><strong>ADR-3</strong></p></li>
+           <li>
+            <p>Status: Accepted</p></li>
+           <li>
+            <p>Affected version: 2.0+</p></li>
+          </ul>
+          <section id="context">
+           <h3>Context<a class="headerlink" href="#context" title="Link to this heading">?</a></h3>
+           <p>During the refactoring of Focus for Android to support multitasking it became apparent that our callback-based approach wasn’t good enough anymore. Previously the current browser state was used to update the UI only. Now with multiple concurrent sessions this state needed to be preserved and restored while the user switched between tabs. In addition to that we wanted to update multiple UI components based on the current state (partially) for which a single callback implementation became very complex fast.</p>
+           <p>Having observers for small chunks of data and a “reactive style” seemed to be a better approach. There are a lot of libraries that offer this functionality already, namely: RxJava, event buses (e.g. Otto and EventBus), Architecture Components (LiveData), Agera and others.</p>
+          </section>
+          <section id="decision">
+           <h3>Decision<a class="headerlink" href="#decision" title="Link to this heading">?</a></h3>
+           <p>LiveData objects from Android’s Architecture Components library are used to wrap data that updates asynchronously. UI components that depend on this data can either get the current state or subscribe in order to get updates whenever the data changes.</p>
+           <p>Reasons:</p>
+           <ul class="simple">
+            <li>
+             <p>The Architecture Components library is written and maintained by the core Android team at Google (-&gt; high quality and visibility)</p></li>
+            <li>
+             <p>Parts of the library are going to be used by the support libraries. Therefore they will get included into Focus for Android sooner or later anyways.</p></li>
+            <li>
+             <p>The library is pretty small.</p></li>
+            <li>
+             <p>The library takes care of the Activity/Fragment lifecycle (Avoids common errors).</p></li>
+           </ul>
+          </section>
+          <section id="consequences">
+           <h3>Consequences<a class="headerlink" href="#consequences" title="Link to this heading">?</a></h3>
+           <ul class="simple">
+            <li>
+             <p>LiveData was designed to be used with <code class="docutils literal notranslate"><span class="pre">ViewModel</span></code> instances. So far we do not use <code class="docutils literal notranslate"><span class="pre">ViewModel</span></code>s and are also observing LiveData objects from non-UI components. This is not problematic but can cause problems in future versions of the library - although unlikely.</p></li>
+           </ul>
+          </section>
+         </section>
+         <hr class="docutils">
+         <section id="browser-engine-geckoview-vs-webview">
+          <h2>Browser engine: GeckoView vs. WebView<a class="headerlink" href="#browser-engine-geckoview-vs-webview" title="Link to this heading">?</a></h2>
+          <ul class="simple">
+           <li>
+            <p><strong>ADR-2</strong></p></li>
+           <li>
+            <p>Status: Accepted</p></li>
+           <li>
+            <p>Affected app versions: 1.0+</p></li>
+          </ul>
+          <section id="id1">
+           <h3>Context<a class="headerlink" href="#id1" title="Link to this heading">?</a></h3>
+           <p>To render web content Firefox Focus needs to use a “web browser engine”. So far all browsers from Mozilla, and Firefox for Android in particular, are using the <a class="reference external" href="https://en.wikipedia.org/wiki/Gecko_(software)">Gecko engine</a>.</p>
+           <p>Android itself ships with a <a class="reference external" href="https://developer.android.com/guide/webapps/webview.html">WebView</a> component that is (on new Android versions) based on Chromium/Chrome (<a class="reference external" href="https://en.wikipedia.org/wiki/Blink_(web_engine)">Blink engine</a>).</p>
+           <p>A number of existing Android browsers (e.g. Opera, Brave) are built on top of the Blink rendering engine or are a direct fork of Chromium.</p>
+          </section>
+          <section id="id2">
+           <h3>Decision<a class="headerlink" href="#id2" title="Link to this heading">?</a></h3>
+           <p>Firefox Focus is going to be build on top of Android’s WebView.</p>
+           <p>Reasons for using WebView:</p>
+           <ul class="simple">
+            <li>
+             <p>At the time of writing the Focus for Android prototype GeckoView already existed but it wasn’t in a state that it could be used outside of Firefox for Android reliably. In addition to that there wasn’t a stable API comparable offering the feature set of WebView.</p></li>
+            <li>
+             <p>APK size has been a long-term concern of the Firefox for Android team. A large APK size has been problematic for partnership deals and distribution in countries where bandwidth is limited or expensive. GeckoView is roughly 30 MB in size, while WebView is part of the Android system and is basically “free”. Prototype builds of Focus for Android based on WebView were less than 3 MB in size.</p></li>
+           </ul>
+           <p>In addition to that there will be a build configuration that uses GeckoView. The GeckoView version will be guaranteed to compile; but keeping feature parity or keeping the build bug free is not a goal of the team. At this time the GeckoView version is a tech demo to explore its future potential only.</p>
+           <p>Forking Chromium (or using Blink) was considered a too large investment in the prototype stage.</p>
+          </section>
+          <section id="id3">
+           <h3>Consequences<a class="headerlink" href="#id3" title="Link to this heading">?</a></h3>
+           <p>WebView has a complex API. Nevertheless it doesn’t allow us to do heavy low-level customization that we could do if we would own the web browser engine (e.g. GeckoView). It remains to be seen whether this limitation will prevent feature development in a way that forces us to ship a browser engine with Focus for Android.</p>
+          </section>
+         </section>
+         <hr class="docutils">
+         <section id="minimum-supported-android-version-5-0-api-21">
+          <h2>Minimum supported Android version: 5.0+ (API 21+)<a class="headerlink" href="#minimum-supported-android-version-5-0-api-21" title="Link to this heading">?</a></h2>
+          <ul class="simple">
+           <li>
+            <p><strong>ADR-1</strong></p></li>
+           <li>
+            <p>Status: Accepted</p></li>
+           <li>
+            <p>Affected app versions: 1.0+</p></li>
+          </ul>
+          <section id="id4">
+           <h3>Context<a class="headerlink" href="#id4" title="Link to this heading">?</a></h3>
+           <p>Every app needs to define a minimum supported SDK version. This is usually a trade-off between how many users can be reached (<a class="reference external" href="https://developer.android.com/about/dashboards/index.html">Android version distribution</a>) and what platform features the app needs to support (<a class="reference external" href="https://developer.android.com/guide/topics/manifest/uses-sdk-element.html#ApiLevels">Android API level overview</a>).</p>
+          </section>
+          <section id="id5">
+           <h3>Decision<a class="headerlink" href="#id5" title="Link to this heading">?</a></h3>
+           <p>Focus will support Android versions 5 and higher (API 21+). This decisions is primarily driven by the following platform features that are not available on earlier versions of Android:</p>
+           <ul class="simple">
+            <li>
+             <p><a class="reference internal" href="#shouldInterceptRequest"><span class="xref myst">WebView.shouldInterceptRequest()</span></a>: Our content blocking content uses the implementation of the callback that lets us inspect the request object. This implementation is only available on Android 21+.</p></li>
+            <li>
+             <p><a class="reference external" href="https://developer.android.com/training/material/shadows-clipping.html">UI features</a> like <code class="docutils literal notranslate"><span class="pre">elevation</span></code> allow us to build and prototype a “material” UI without needing to backport functionality.</p></li>
+           </ul>
+          </section>
+          <section id="id6">
+           <h3>Consequences<a class="headerlink" href="#id6" title="Link to this heading">?</a></h3>
+           <ul class="simple">
+            <li>
+             <p>At the point of writing this ADR we will cover 73.4% of the Android market with that decision <a class="reference external" href="https://developer.android.com/about/dashboards/index.html">(*)</a>.</p></li>
+            <li>
+             <p>Android 4.4 (KitKat) still covers 17.1%. Those users can’t install and use Focus. While UI features can be backported, the extended WebView APIs can not. Only a GeckoView based version of Focus would be able to support Android 4.4 or lower.</p></li>
+           </ul>
+          </section>
+         </section>
+        </section>
+       </div>
+      </div>
+      <footer>
+       <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Focus for Android" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a> <a href="Battery-Debugging.html" class="btn btn-neutral float-right" title="Battery Debugging" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+       </div>
+       <hr>
+       <div role="contentinfo">
+        <p></p>
+       </div> Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+      </footer>
+     </div>
+    </div>
+   </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ </body>
+</html>

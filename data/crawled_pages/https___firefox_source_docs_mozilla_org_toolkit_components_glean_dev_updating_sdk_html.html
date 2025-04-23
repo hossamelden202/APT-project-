@@ -1,0 +1,338 @@
+<!doctype html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Updating the Glean SDK — Firefox Source Docs  documentation</title>
+  <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=fa44fd50">
+  <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=19f00094">
+  <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css?v=fd3f3429">
+  <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css?v=76b2166b">
+  <link rel="stylesheet" type="text/css" href="../../../../_static/custom_theme.css?v=dc5ed815">
+  <link rel="stylesheet" type="text/css" href="../../../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7">
+  <link rel="shortcut icon" href="../../../../_static/firefox.ico"><!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+  <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+  <script src="../../../../_static/documentation_options.js?v=5929fcd5"></script>
+  <script src="../../../../_static/doctools.js?v=9a2dae69"></script>
+  <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
+  <script src="../../../../_static/copybutton.js?v=30646c52"></script>
+  <script src="../../../../_static/design-tabs.js?v=36754332"></script>
+  <script src="../../../../_static/js/theme.js"></script>
+  <link rel="index" title="Index" href="../../../../genindex.html">
+  <link rel="search" title="Search" href="../../../../search.html">
+  <link rel="next" title="Toolkit Modules" href="../../../modules/toolkit_modules/index.html">
+  <link rel="prev" title="Updating glean_parser" href="updating_parser.html">
+ </head>
+ <body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+   <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <div class="wy-side-scroll">
+     <div class="wy-side-nav-search">
+      <a href="../../../../index.html" class="icon icon-home"> Firefox Source Docs <img src="../../../../_static/firefox-wordmark.svg" class="logo" alt="Logo"> </a><!-- -- This code is governed by the BSD license ---->
+      <div>
+       <h3>Quick search</h3>
+       <script>
+    (function () {
+      var cx = "dd12886298f75dbef";
+      var gcse = document.createElement("script");
+      gcse.async = true;
+      gcse.src = "https://cse.google.com/cse.js?cx=" + cx;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(gcse, s);
+    })();
+  </script><gcse:search></gcse:search>
+      </div>
+     </div>
+     <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+      <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../glossary/index.html">A Glossary of Common Terms</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../overview/index.html">A Quick Guide to Mozilla Applications</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../setup/index.html">Getting Set Up To Work On The Firefox Codebase</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Working On Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../contributing/index.html">Working on Firefox</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../bug-mgmt/index.html">Bug Handling</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox User Guide</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../devtools-user/index.html">Firefox DevTools User Docs</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Source Code Documentation</span></p>
+      <ul class="current">
+       <li class="toctree-l1"><a class="reference internal" href="../../../../mots/index.html">Governance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../browser/index.html">Firefox Front-end</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../dom/index.html">DOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../editor/index.html">Editor</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../layout/index.html">Style system (CSS) &amp; Layout</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../gfx/index.html">Graphics</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../ipc/index.html">Processes, Threads and IPC</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../devtools/index.html">Firefox DevTools Contributor Docs</a></li>
+       <li class="toctree-l1 current"><a class="reference internal" href="../../../index.html">Toolkit</a>
+        <ul class="current">
+         <li class="toctree-l2"><a class="reference internal" href="../../../javascript-logging.html">JavaScript Logging</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../mozapps/extensions/addon-manager/index.html">Add-on Manager</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../backgroundtasks/index.html">Background Task Mode</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../crashes/crash-manager/index.html">Crash Manager</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../crashreporter/crashreporter/index.html">Crash Reporter</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../internal-urls.html">Internal URLs</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../search/index.html">Search Service</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../normandy/normandy/index.html">Shield Recipe Client</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../nimbus/docs/index.html">Nimbus</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../messaging-system/docs/index.html">Messaging System Schemas</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../pictureinpicture/pictureinpicture/index.html">Picture-in-Picture</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../prompts/prompts/index.html">Prompts</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../modules/subprocess/toolkit_modules/subprocess/index.html">Subprocess Module</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../telemetry/index.html">Telemetry</a></li>
+         <li class="toctree-l2 current"><a class="reference internal" href="../index.html">Firefox on Glean (FOG)</a>
+          <ul class="current">
+           <li class="toctree-l3"><a class="reference internal" href="../user/index.html">Using Firefox on Glean</a></li>
+           <li class="toctree-l3 current"><a class="reference internal" href="index.html">Developing Firefox on Glean</a>
+            <ul class="current">
+             <li class="toctree-l4"><a class="reference internal" href="builtin_pings.html">Built-in Pings</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="code_organization.html">FOG code organization</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="ipc.html">Inter-process Communication (IPC)</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="jog.html">Runtime Metric Definition Subsystem: JOG</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="local_glean.html">Developing with a local Glean build</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="metric_ids.html">FOG Identifiers (Metric Ids, Submetric Ids, Ping Ids, …)</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="new_metric_types.html">Adding a New Metric Type</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="preferences.html">Preferences and Defines</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="storage.html">Storage</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="style_guide.html">FOG Documentation Style Guide</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="testing.html">Testing</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="updating_parser.html">Updating glean_parser</a></li>
+             <li class="toctree-l4 current"><a class="current reference internal" href="#">Updating the Glean SDK</a></li>
+             <li class="toctree-l4"><a class="reference external" href="https://github.com/mozilla/glean/">Glean SDK Source</a></li>
+            </ul></li>
+          </ul></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../modules/toolkit_modules/index.html">Toolkit Modules</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../content/toolkit_widgets/index.html">Toolkit Widgets</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../resistfingerprinting/resistfingerprinting/index.html">Fingerprinting Resistance</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../url-classifier/url-classifier/index.html">URL Classifier</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../extensions/webextensions/index.html">WebExtensions API Development</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../../extensions/spellcheck/index.html">Managing the built-in en-US dictionary</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../mozapps/update/docs/index.html">Application Update</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../antitracking/anti-tracking/index.html">Anti-Tracking</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../translations/index.html">Translations</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../sessionstore/index.html">Session Store</a></li>
+        </ul></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../js/index.html">SpiderMonkey</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../jsloader/index.html">JS Loader</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../mobile/android/geckoview/index.html">GeckoView</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../mobile/android/fenix/index.html">Fenix</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../mobile/android/focus-android/index.html">Focus for Android</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../dom/bindings/webidl/index.html">WebIDL</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../modules/libpref/index.html">libpref</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../networking/index.html">Networking</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../remote/index.html">Remote Protocols</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../services/index.html">Services</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../permissions/index.html">Permissions</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../uriloader/index.html">File Handling</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../widget/cocoa/index.html">Firefox on macOS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../widget/windows/index.html">Firefox on Windows</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../ml/index.html">Firefox AI Runtime</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../accessible/index.html">Accessibility</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../media/index.html">Media Playback</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../code-quality/index.html">Code quality</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../writing-rust-code/index.html">Writing Rust Code</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../rust-components/index.html">Rust Components</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../tools/profiler/index.html">Gecko Profiler</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../performance/index.html">Performance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../storage/index.html">Database bindings (SQLite, KV, …)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../xpcom/index.html">XPCOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../nspr/index.html">NSPR</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../security/nss/index.html">Network Security Services (NSS)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../content-security/index.html">Web Security Checks in Gecko</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">The Firefox Build System</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../mach/index.html">Mach</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../tools/try/index.html">Pushing to Try</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../build/buildsystem/index.html">Build System</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../taskcluster/index.html">Firefox CI and Taskgraph</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../tools/moztreedocs/index.html">Managing Documentation</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../mozbuild/vendor/index.html">Vendoring Third Party Components</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Testing &amp; Test Infrastructure</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/automated-testing/index.html">Automated Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/treeherder-try/index.html">Understanding Treeherder Results</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/sheriffed-intermittents/index.html">Sheriffed intermittent failures</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/tests-for-new-config/index.html">Turning on Firefox tests for a new configuration</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/intermittent/index.html">Avoiding intermittent tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/testing-policy/index.html">Testing Policy</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/ci-configs/index.html">Configuration Changes</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/browser-chrome/index.html">Browser chrome mochitests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/chrome-tests/index.html">Chrome Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/marionette/index.html">Marionette</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/geckodriver/index.html">geckodriver</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/test-verification/index.html">Test Verification</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/webrender/index.html">WebRender Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/mochitest-plain/index.html">Mochitest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/xpcshell/index.html">XPCShell tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/tps/index.html">TPS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../web-platform/index.html">web-platform-tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../gtest/index.html">GTest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../tools/fuzzing/index.html">Fuzzing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../tools/sanitizer/index.html">Sanitizer</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/perfdocs/index.html">Performance Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../tools/code-coverage/index.html">Code coverage</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing-rust-code/index.html">Testing &amp; Debugging Rust Code</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Releases &amp; Updates</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../update-infrastructure/index.html">Mozilla Update Infrastructure</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../update-infrastructure/index.html#watershed-updates">Watershed Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../update-infrastructure/index.html#desupport-updates">Desupport Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../tools/update-verify/index.html">Update Verify</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Localization &amp; Internationalization</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../intl/index.html">Internationalization</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../l10n/index.html">Localization</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox and Python</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../mozbase/index.html">mozbase</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../python/index.html">Using third-party Python packages</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Metrics Collected in Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../metrics/index.html">Metrics</a></li>
+      </ul>
+     </div>
+    </div>
+   </nav>
+   <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+    <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+     <i data-toggle="wy-nav-top" class="fa fa-bars"></i> <a href="../../../../index.html">Firefox Source Docs</a>
+    </nav>
+    <div class="wy-nav-content">
+     <div class="rst-content">
+      <!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+      <div role="navigation" aria-label="Page navigation">
+       <ul class="wy-breadcrumbs">
+        <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+        <li class="breadcrumb-item"><a href="../../../index.html">Toolkit</a></li>
+        <li class="breadcrumb-item"><a href="../index.html">Firefox on Glean (FOG)</a></li>
+        <li class="breadcrumb-item"><a href="index.html">Developing Firefox on Glean</a></li>
+        <li class="breadcrumb-item active">Updating the Glean SDK</li>
+        <li class="wy-breadcrumbs-aside"><a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Developer+Infrastructure&amp;component=Firefox+Source+Docs%3A+Content&amp;short_desc=Documentation+issue+on+toolkit/components/glean/dev/updating_sdk&amp;comment=URL+=+https://firefox-source-docs.mozilla.org/toolkit/components/glean/dev/updating_sdk.html&amp;bug_file_loc=https://firefox-source-docs.mozilla.org/toolkit/components/glean/dev/updating_sdk.html" rel="nofollow">Report an issue</a> / <a href="../../../../_sources/toolkit/components/glean/dev/updating_sdk.md.txt" rel="nofollow"> View page source</a></li>
+       </ul>
+       <hr>
+      </div>
+      <div role="main" class="document" itemscope itemtype="http://schema.org/Article">
+       <div itemprop="articleBody">
+        <section id="updating-the-glean-sdk">
+         <h1>Updating the Glean SDK<a class="headerlink" href="#updating-the-glean-sdk" title="Link to this heading">?</a></h1>
+         <p>Project FOG uses the Glean SDK published as the <a class="reference external" href="https://crates.io/crates/glean"><code class="docutils literal notranslate"><span class="pre">glean</span></code></a> and <a class="reference external" href="https://crates.io/crates/glean-core"><code class="docutils literal notranslate"><span class="pre">glean-core</span></code></a> crates on crates.io.</p>
+         <p>These two crates’ versions are included in several places in mozilla-central. To update them all, you should use the command <code class="docutils literal notranslate"><span class="pre">mach</span> <span class="pre">update-glean</span> <span class="pre">&lt;version,</span> <span class="pre">like</span> <span class="pre">"54.1.0"&gt;</span></code>.</p>
+         <p>This is a semi-manual process. Please pay attention to the output of <code class="docutils literal notranslate"><span class="pre">mach</span> <span class="pre">update-glean</span></code> for instructions, and follow them closely.</p>
+         <section id="version-mismatches-of-rust-dependencies">
+          <h2>Version mismatches of Rust dependencies<a class="headerlink" href="#version-mismatches-of-rust-dependencies" title="Link to this heading">?</a></h2>
+          <p>Other crates that are already vendored might require a different version of the same dependencies that the Glean SDK requires. The general strategy for Rust dependencies is to keep one single version of the dependency in-tree (see <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1591555#c8">comment #8 in bug 1591555</a>). This might be hard to do in reality since some dependencies might require tweaks in order to work. The following strategy can be followed to decide on version mismatches:</p>
+          <ul class="simple">
+           <li>
+            <p>If the versions only <strong>differ by the patch version</strong>, Cargo will keep the vendored version, unless some other dependency pinned specific patch versions; assuming it doesn’t break the Glean SDK; if it does, follow the next steps;</p></li>
+           <li>
+            <p>If the version of the <strong>vendored dependency is newer</strong> (greater major or minor version) than the version required by the Glean SDK, <a class="reference external" href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Data+Platform+and+Tools&amp;amp;component=Glean%3A+SDK&amp;amp;priority=P3&amp;amp;status_whiteboard=%5Btelemetry%3Aglean-rs%3Am%3F%5D">file a bug in the Glean SDK component</a> to get Glean to require the same version;</p>
+            <ul>
+             <li>
+              <p>You will have to abandon updating the Glean SDK to this version. You will have to wait for Glean SDK to update its dependency and for a new Glean SDK release. Then you will have to update to that new Glean SDK version.</p></li>
+            </ul></li>
+           <li>
+            <p>If the version of the <strong>vendored dependency is older</strong> (lower major or minor version), consider updating the vendored version to the newer one; seek review from the person who vendored that dependency in the first place; if that is not possible or breaks mozilla-central build, then consider keeping both versions vendored in-tree; please note that this option will probably only be approved for small crates, and will require updating the <code class="docutils literal notranslate"><span class="pre">TOLERATED_DUPES</span></code> list in <code class="docutils literal notranslate"><span class="pre">mach</span> <span class="pre">vendor</span></code> (instructions are provided as you go).</p></li>
+          </ul>
+         </section>
+         <section id="keeping-versions-in-sync">
+          <h2>Keeping versions in sync<a class="headerlink" href="#keeping-versions-in-sync" title="Link to this heading">?</a></h2>
+          <p>The Glean SDK and <code class="docutils literal notranslate"><span class="pre">glean_parser</span></code> are currently released as separate projects. However each Glean SDK release requires a specific <code class="docutils literal notranslate"><span class="pre">glean_parser</span></code> version. When updating one or the other ensure versions stay compatible. You can find the currently used <code class="docutils literal notranslate"><span class="pre">glean_parser</span></code> version in the Glean SDK source tree, e.g. in <a class="reference external" href="https://github.com/mozilla/glean/blob/main/glean-core/ios/sdk_generator.sh#L28">sdk_generator.sh</a>.</p>
+          <p>In most cases you should update <code class="docutils literal notranslate"><span class="pre">glean_parser</span></code> first before updating the SDK.</p>
+         </section>
+         <section id="special-concerns-for-major-version-updates">
+          <h2>Special Concerns for Major Version Updates<a class="headerlink" href="#special-concerns-for-major-version-updates" title="Link to this heading">?</a></h2>
+          <p>If you are updating the major version of the Glean SDK (ie from ‘32.x.y’ to ‘33.z.a’) then there are specific steps to take. The <code class="docutils literal notranslate"><span class="pre">application-services</span></code> repository integrates the Glean SDK separately. It accepts any version within a major release, so for non-major-version updates, it happily follows <code class="docutils literal notranslate"><span class="pre">mozilla-central</span></code>’s lead. When there’s a major version update, we need to update <code class="docutils literal notranslate"><span class="pre">application-services</span></code> first, allow it to generate a new (nightly) release, and ensure that <code class="docutils literal notranslate"><span class="pre">mozilla-central</span></code> picks up that release at the same time it switches over to the new Glean SDK version.</p>
+          <p>To update the Glean SDK version used by <code class="docutils literal notranslate"><span class="pre">application-services</span></code>:</p>
+          <ol class="arabic simple">
+           <li>
+            <p>Consider not doing it yourself if someone else on the team who has done it before has the time. <a class="reference external" href="https://github.com/mozilla/application-services/blob/main/docs/contributing.md">Setting yourself up to build and test <code class="docutils literal notranslate"><span class="pre">application-services</span></code></a> is straightforward, but non-trivial. You may find it easier to ask them to do it.</p></li>
+           <li>
+            <p>Update the Glean SDK git submodule to the latest release’s tag. e.g.</p>
+            <ul class="simple">
+             <li>
+              <p><code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">components/external/glean</span></code></p></li>
+             <li>
+              <p><code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">checkout</span> <span class="pre">tags/v62.0.0</span></code></p></li>
+            </ul></li>
+           <li>
+            <p>Update the <code class="docutils literal notranslate"><span class="pre">glean-build</span></code> crate dependency for codegen:</p>
+            <ul class="simple">
+             <li>
+              <p><code class="docutils literal notranslate"><span class="pre">cargo</span> <span class="pre">update</span> <span class="pre">-p</span> <span class="pre">glean-build</span></code></p></li>
+            </ul></li>
+           <li>
+            <p>Update Gradle’s version of the Glean dependency for Android support:</p>
+            <ul class="simple">
+             <li>
+              <p>Edit <code class="docutils literal notranslate"><span class="pre">gradle/libs.versions.toml</span></code> to specify e.g. <code class="docutils literal notranslate"><span class="pre">glean</span> <span class="pre">=</span> <span class="pre">"62.0.0"</span></code></p></li>
+            </ul></li>
+           <li>
+            <p>Update Xcode’s version of its Glean dependency for iOS support:</p>
+            <ul class="simple">
+             <li>
+              <p>Edit <code class="docutils literal notranslate"><span class="pre">megazords/ios-rust/MozillaTestServices/MozillaTestServices.xcodeproj/project.pbxproj</span></code> to specify e.g. <code class="docutils literal notranslate"><span class="pre">minimumVersion</span> <span class="pre">=</span> <span class="pre">62.0.0;</span></code> for the <code class="docutils literal notranslate"><span class="pre">glean-swift</span></code> package reference.</p></li>
+             <li>
+              <p>Xcode also has a lockfile. If you do not have Xcode, or just don’t want to run it, edit <code class="docutils literal notranslate"><span class="pre">megazords/ios-rust/MozillaTestServices/MozillaTestServices.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved</span></code> to specify the new version plus the git SHA of the new release of <a class="reference external" href="https://github.com/mozilla/glean-swift">mozilla/glean-swift</a> e.g. <code class="docutils literal notranslate"><span class="pre">"revision"</span> <span class="pre">:</span> <span class="pre">"5c614b4af5a1f1ffe23b46bd03696086d8ce9d0d",</span></code> and <code class="docutils literal notranslate"><span class="pre">"version":</span> <span class="pre">"62.0.0"</span></code></p></li>
+            </ul></li>
+           <li>
+            <p>Run <code class="docutils literal notranslate"><span class="pre">cargo</span> <span class="pre">test</span></code> to make sure nothing obvious is broken.</p></li>
+           <li>
+            <p>Submit your PR for review and have it merged.</p></li>
+           <li>
+            <p>Make your <code class="docutils literal notranslate"><span class="pre">mozilla-central</span></code> changes depend on the patch the auto-update bot created to update <code class="docutils literal notranslate"><span class="pre">mozilla-central</span></code> to the new <code class="docutils literal notranslate"><span class="pre">application-services</span></code> version that contains your changes.</p>
+            <ul class="simple">
+             <li>
+              <p>This will happen if you wait a day. Look for an automatically-filed bug (<a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1893248">e.g.</a>).</p></li>
+             <li>
+              <p>If you need to operate faster, you can ask <code class="docutils literal notranslate"><span class="pre">application-services</span></code> folks to trigger a build for you, then write the patch yourself.</p></li>
+            </ul></li>
+           <li>
+            <p>Push the whole stack to <code class="docutils literal notranslate"><span class="pre">try</span></code> to make sure the tree works together.</p></li>
+           <li>
+            <p>When everything’s green, supply the whole stack to Lando to land it.</p></li>
+          </ol>
+         </section>
+        </section>
+       </div>
+      </div>
+      <footer>
+       <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="updating_parser.html" class="btn btn-neutral float-left" title="Updating glean_parser" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a> <a href="../../../modules/toolkit_modules/index.html" class="btn btn-neutral float-right" title="Toolkit Modules" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+       </div>
+       <hr>
+       <div role="contentinfo">
+        <p></p>
+       </div> Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+      </footer>
+     </div>
+    </div>
+   </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ </body>
+</html>

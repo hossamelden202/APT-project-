@@ -1,0 +1,530 @@
+<!doctype html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Worker’s Life-Cycle and WorkerRefs — Firefox Source Docs  documentation</title>
+  <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50">
+  <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094">
+  <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=fd3f3429">
+  <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b">
+  <link rel="stylesheet" type="text/css" href="../../_static/custom_theme.css?v=dc5ed815">
+  <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7">
+  <link rel="shortcut icon" href="../../_static/firefox.ico"><!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script src="../../_static/jquery.js?v=5d32c60e"></script>
+  <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+  <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+  <script src="../../_static/doctools.js?v=9a2dae69"></script>
+  <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+  <script src="../../_static/copybutton.js?v=30646c52"></script>
+  <script src="../../_static/design-tabs.js?v=36754332"></script>
+  <script src="../../_static/js/theme.js"></script>
+  <link rel="index" title="Index" href="../../genindex.html">
+  <link rel="search" title="Search" href="../../search.html">
+  <link rel="next" title="Web IDL bindings" href="../webIdlBindings/index.html">
+  <link rel="prev" title="Service Worker Performance Tests" href="PerformanceTesting.html">
+ </head>
+ <body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+   <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <div class="wy-side-scroll">
+     <div class="wy-side-nav-search">
+      <a href="../../index.html" class="icon icon-home"> Firefox Source Docs <img src="../../_static/firefox-wordmark.svg" class="logo" alt="Logo"> </a><!-- -- This code is governed by the BSD license ---->
+      <div>
+       <h3>Quick search</h3>
+       <script>
+    (function () {
+      var cx = "dd12886298f75dbef";
+      var gcse = document.createElement("script");
+      gcse.async = true;
+      gcse.src = "https://cse.google.com/cse.js?cx=" + cx;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(gcse, s);
+    })();
+  </script><gcse:search></gcse:search>
+      </div>
+     </div>
+     <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+      <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../glossary/index.html">A Glossary of Common Terms</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../overview/index.html">A Quick Guide to Mozilla Applications</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../setup/index.html">Getting Set Up To Work On The Firefox Codebase</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Working On Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Working on Firefox</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../bug-mgmt/index.html">Bug Handling</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox User Guide</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../devtools-user/index.html">Firefox DevTools User Docs</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Source Code Documentation</span></p>
+      <ul class="current">
+       <li class="toctree-l1"><a class="reference internal" href="../../mots/index.html">Governance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../browser/index.html">Firefox Front-end</a></li>
+       <li class="toctree-l1 current"><a class="reference internal" href="../index.html">DOM</a>
+        <ul class="current">
+         <li class="toctree-l2"><a class="reference internal" href="../ipc/index.html">DOM IPC</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../navigation/index.html">DOM Navigation</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../push/index.html">Push</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../scriptSecurity/index.html">Script Security</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../scriptSecurity/xray_vision.html">Xray Vision</a></li>
+         <li class="toctree-l2 current"><a class="reference internal" href="index.html">DOM Workers &amp; Storage</a>
+          <ul class="current">
+           <li class="toctree-l3"><a class="reference internal" href="CodeStyle.html">DOM Workers &amp; Storage C++ Code Style</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="PerformanceTesting.html">Service Worker Performance Tests</a></li>
+           <li class="toctree-l3 current"><a class="current reference internal" href="#">Worker’s Life-Cycle and WorkerRefs</a>
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="#worker-life-cycle">Worker Life-Cycle</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#workerrefs">WorkerRefs</a></li>
+            </ul></li>
+          </ul></li>
+         <li class="toctree-l2"><a class="reference internal" href="../webIdlBindings/index.html">Web IDL bindings</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../ioutils_migration.html">IOUtils Migration Guide</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../fedcm.html">Federated Credential Management</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../streams.html">Implementing specifications using WHATWG Streams API</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../use-counters.html">Use Counters</a></li>
+        </ul></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../editor/index.html">Editor</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../layout/index.html">Style system (CSS) &amp; Layout</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../gfx/index.html">Graphics</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../ipc/index.html">Processes, Threads and IPC</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../devtools/index.html">Firefox DevTools Contributor Docs</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../toolkit/index.html">Toolkit</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../js/index.html">SpiderMonkey</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../jsloader/index.html">JS Loader</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/geckoview/index.html">GeckoView</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/fenix/index.html">Fenix</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/focus-android/index.html">Focus for Android</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../bindings/webidl/index.html">WebIDL</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../modules/libpref/index.html">libpref</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../networking/index.html">Networking</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../remote/index.html">Remote Protocols</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../services/index.html">Services</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../permissions/index.html">Permissions</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../uriloader/index.html">File Handling</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../widget/cocoa/index.html">Firefox on macOS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../widget/windows/index.html">Firefox on Windows</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../toolkit/components/ml/index.html">Firefox AI Runtime</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../accessible/index.html">Accessibility</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../media/index.html">Media Playback</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../code-quality/index.html">Code quality</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../writing-rust-code/index.html">Writing Rust Code</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../rust-components/index.html">Rust Components</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/profiler/index.html">Gecko Profiler</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../performance/index.html">Performance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../storage/index.html">Database bindings (SQLite, KV, …)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../xpcom/index.html">XPCOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../nspr/index.html">NSPR</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../security/nss/index.html">Network Security Services (NSS)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../content-security/index.html">Web Security Checks in Gecko</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">The Firefox Build System</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mach/index.html">Mach</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/try/index.html">Pushing to Try</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../build/buildsystem/index.html">Build System</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../taskcluster/index.html">Firefox CI and Taskgraph</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/moztreedocs/index.html">Managing Documentation</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mozbuild/vendor/index.html">Vendoring Third Party Components</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Testing &amp; Test Infrastructure</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/automated-testing/index.html">Automated Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/treeherder-try/index.html">Understanding Treeherder Results</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/sheriffed-intermittents/index.html">Sheriffed intermittent failures</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/tests-for-new-config/index.html">Turning on Firefox tests for a new configuration</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/intermittent/index.html">Avoiding intermittent tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/testing-policy/index.html">Testing Policy</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/ci-configs/index.html">Configuration Changes</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/browser-chrome/index.html">Browser chrome mochitests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/chrome-tests/index.html">Chrome Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/marionette/index.html">Marionette</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/geckodriver/index.html">geckodriver</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/test-verification/index.html">Test Verification</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/webrender/index.html">WebRender Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/mochitest-plain/index.html">Mochitest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/xpcshell/index.html">XPCShell tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/tps/index.html">TPS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../web-platform/index.html">web-platform-tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../gtest/index.html">GTest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/fuzzing/index.html">Fuzzing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/sanitizer/index.html">Sanitizer</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/perfdocs/index.html">Performance Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/code-coverage/index.html">Code coverage</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing-rust-code/index.html">Testing &amp; Debugging Rust Code</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Releases &amp; Updates</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html">Mozilla Update Infrastructure</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html#watershed-updates">Watershed Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html#desupport-updates">Desupport Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/update-verify/index.html">Update Verify</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Localization &amp; Internationalization</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../intl/index.html">Internationalization</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../l10n/index.html">Localization</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox and Python</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mozbase/index.html">mozbase</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../python/index.html">Using third-party Python packages</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Metrics Collected in Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../metrics/index.html">Metrics</a></li>
+      </ul>
+     </div>
+    </div>
+   </nav>
+   <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+    <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+     <i data-toggle="wy-nav-top" class="fa fa-bars"></i> <a href="../../index.html">Firefox Source Docs</a>
+    </nav>
+    <div class="wy-nav-content">
+     <div class="rst-content">
+      <!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+      <div role="navigation" aria-label="Page navigation">
+       <ul class="wy-breadcrumbs">
+        <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+        <li class="breadcrumb-item"><a href="../index.html">DOM</a></li>
+        <li class="breadcrumb-item"><a href="index.html">DOM Workers &amp; Storage</a></li>
+        <li class="breadcrumb-item active">Worker’s Life-Cycle and WorkerRefs</li>
+        <li class="wy-breadcrumbs-aside"><a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Developer+Infrastructure&amp;component=Firefox+Source+Docs%3A+Content&amp;short_desc=Documentation+issue+on+dom/workersAndStorage/WorkerLifeCycleAndWorkerRefs&amp;comment=URL+=+https://firefox-source-docs.mozilla.org/dom/workersAndStorage/WorkerLifeCycleAndWorkerRefs.html&amp;bug_file_loc=https://firefox-source-docs.mozilla.org/dom/workersAndStorage/WorkerLifeCycleAndWorkerRefs.html" rel="nofollow">Report an issue</a> / <a href="../../_sources/dom/workersAndStorage/WorkerLifeCycleAndWorkerRefs.md.txt" rel="nofollow"> View page source</a></li>
+       </ul>
+       <hr>
+      </div>
+      <div role="main" class="document" itemscope itemtype="http://schema.org/Article">
+       <div itemprop="articleBody">
+        <section id="workers-life-cycle-and-workerrefs">
+         <h1>Worker’s Life-Cycle and WorkerRefs<a class="headerlink" href="#workers-life-cycle-and-workerrefs" title="Link to this heading">?</a></h1>
+         <p>Worker, as a thread programming model, is introduced to the Web world to use the computing power efficiently in the Web world. Just like the regular thread programming, Worker can be created and deleted anytime when needed.</p>
+         <p>Since Worker can be deleted anytime, when developing APIs on the Workers should be careful when handling the shutdown behavior. Otherwise, memory problems, UAF, memory leaking, or shutdown hang, would not be a surprise. In addition, debugging these issues on Workers sometimes is not easy. The crash stack might not provide very useful information. The bug sometimes needs a special sequence to reproduce since it could be a thread interleaving problem. To avoid getting into these troubles, keeping the Worker’s life cycle and how to play with WorkerRefs in mind would be very helpful.</p>
+         <section id="worker-life-cycle">
+          <h2>Worker Life-Cycle<a class="headerlink" href="#worker-life-cycle" title="Link to this heading">?</a></h2>
+          <p>The worker’s life cycle is maintained by a status machine in the WorkerPrivate class. A Worker could be in following status</p>
+          <ul class="simple">
+           <li>
+            <p>Pending</p></li>
+           <li>
+            <p>Running</p></li>
+           <li>
+            <p>Closing</p></li>
+           <li>
+            <p>Canceling</p></li>
+           <li>
+            <p>Killing</p></li>
+           <li>
+            <p>Dead</p></li>
+          </ul>
+          <p>Following we briefly describe what is done for each status.</p>
+          <section id="pending">
+           <h3>Pending:<a class="headerlink" href="#pending" title="Link to this heading">?</a></h3>
+           <p>This is the initial status of a Worker.</p>
+           <p>Worker’s initialization is done in this status in the parent(main or the parent worker) and worker thread.</p>
+           <p>Worker’s initialization starts from its parent thread, which includes</p>
+           <ol class="arabic simple">
+            <li>
+             <p>Get WorkerLoadInfo from parent window/worker</p></li>
+            <li>
+             <p>Create a WorkerPrivate for the Worker</p></li>
+            <li>
+             <p>Register the Worker in the RuntimeService object</p></li>
+            <li>
+             <p>Initialize a thread(worker thread) for Worker, and dispatch a WorkerThreadPrimaryRunnable on the worker thread</p></li>
+            <li>
+             <p>Connect debugger</p></li>
+            <li>
+             <p>Dispatch CompileScriptRunnable to the worker thread</p></li>
+           </ol>
+           <p>Before the Worker thread starts running runnables, a Worker could have already been exposed to its parent window/worker. So the parent window/worker can send messages to the worker through the postMessage() method. If the Worker is not in the “Running” status yet, these runnables would be kept in WorkerPrivate::mPreStartRunnables.</p>
+           <p>When WorkerThreadPrimaryRunnable starts executing on the worker thread, it continues the initialization on the worker thread, which includes</p>
+           <ol class="arabic simple">
+            <li>
+             <p>Build the connection between WorkerPrivate and the worker thread. Then moving the WorkerPrivate::mPreStartRunnables to the worker thread’s event queue.</p></li>
+            <li>
+             <p>Initialize the PerformanceStorage for the Worker.</p></li>
+            <li>
+             <p>Start the Cycle-Collector for the Worker.</p></li>
+            <li>
+             <p>Initialize the JS context for the Worker.</p></li>
+            <li>
+             <p>Call WorkerPrivate::DoRunLoop() to consume the Runnables in the worker thread’s event queue.</p></li>
+           </ol>
+          </section>
+          <section id="running">
+           <h3>Running:<a class="headerlink" href="#running" title="Link to this heading">?</a></h3>
+           <p>This is the status which the Worker starts to execute runnables on the worker thread.</p>
+           <p>Once the Worker gets into “Running”,</p>
+           <ol class="arabic simple">
+            <li>
+             <p>Enable the memory reporter</p></li>
+            <li>
+             <p>Start the GC timer.</p></li>
+           </ol>
+           <p>“Running” is the status where we play with the Worker. At this time point, we can</p>
+           <ol class="arabic simple">
+            <li>
+             <p>Create WorkerRefs to get the Worker shutdown notifications and run shutdown cleanup jobs through the registered callback.</p></li>
+            <li>
+             <p>Create sync-eventLoop to make the worker thread to wait for another thread’s execution.</p></li>
+            <li>
+             <p>Dispatching events to WorkerGlobalScope to trigger event callbacks defined in the script.</p></li>
+           </ol>
+           <p>We will talk about WorkerRef, Sync-EventLoop in detail later.</p>
+          </section>
+          <section id="closing">
+           <h3>Closing:<a class="headerlink" href="#closing" title="Link to this heading">?</a></h3>
+           <p>This is a special status for DedicatedWorker and SharedWorker when DedicateWorkerGlobalScope.close()/SharedWorkerGlobalScope.close() is called.</p>
+           <p>When Worker enters into the “Closing” status,</p>
+           <ol class="arabic simple">
+            <li>
+             <p>Cancel all Timeouts/TimeIntervals of the Worker.</p></li>
+            <li>
+             <p>Do not allow BroadcastChannel.postMessage() on the WorkerGlobalScope.</p></li>
+           </ol>
+           <p>Worker will keep in the “Closing” status until all sync-eventLoops of the Worker are closed.</p>
+          </section>
+          <section id="canceling">
+           <h3>Canceling:<a class="headerlink" href="#canceling" title="Link to this heading">?</a></h3>
+           <p>When Worker gets into the “Canceling” status, it starts the Worker shutdown steps.</p>
+           <ol class="arabic simple">
+            <li>
+             <p>Set the WorkerGlobalScope(nsIGlobalObject) as dying.</p></li>
+           </ol>
+           <p>This means the event will not be dispatched to the WorkerGlobalScope and the callbacks of the pending dispatched event will not be executed.</p>
+           <ol class="arabic simple" start="2">
+            <li>
+             <p>Cancel all Timeouts/TimeIntervals of the Worker.</p></li>
+            <li>
+             <p>Notify WorkerRef holders and children Workers.</p></li>
+           </ol>
+           <p>So the WorkerRef holders and children Workers will start the shutdown jobs</p>
+           <ol class="arabic simple" start="4">
+            <li>
+             <p>Abort the script immediately.</p></li>
+           </ol>
+           <p>Once all sync-eventLoops are closed,</p>
+           <ol class="arabic simple">
+            <li>
+             <p>Disconnect the EventTarget/WebTaskScheduler of the WorkerGlobalScope</p></li>
+           </ol>
+          </section>
+          <section id="killing">
+           <h3>Killing:<a class="headerlink" href="#killing" title="Link to this heading">?</a></h3>
+           <p>This is the status that starts to destroy the Worker</p>
+           <ol class="arabic simple">
+            <li>
+             <p>Shutdown the GC Timer</p></li>
+            <li>
+             <p>Disable the memory reporter</p></li>
+            <li>
+             <p>Switch the status to “Dead”</p></li>
+            <li>
+             <p>Cancel and release the remaining WorkerControlRunnables</p></li>
+            <li>
+             <p>Exit the WorkerPrivate::DoRunLoop()</p></li>
+           </ol>
+          </section>
+          <section id="dead">
+           <h3>Dead:<a class="headerlink" href="#dead" title="Link to this heading">?</a></h3>
+           <p>The Worker quits the main event loop, it continues the shutdown process</p>
+           <ol class="arabic simple">
+            <li>
+             <p>Release the remaining WorkerDebuggerRunnables</p></li>
+            <li>
+             <p>Unroot the WorkerGlobalScope and WorkerDebugGlobalScope</p>
+             <ol class="arabic simple">
+              <li>
+               <p>Trigger GC to release GlobalScopes</p></li>
+             </ol></li>
+            <li>
+             <p>Shutdown the Cycle-Collector for Worker</p></li>
+            <li>
+             <p>Dispatch TopLevelWorkerFinishRunnable/WorkerFinishRunnable to the parent thread</p>
+             <ol class="arabic simple">
+              <li>
+               <p>Disable/Disconnect the WorkerDebugger</p></li>
+              <li>
+               <p>Unregister the Worker in the RuntimeService object</p></li>
+              <li>
+               <p>Release WorkerPrivate::mSelf and WorkerPrivate::mParentEventTargetRef</p></li>
+             </ol></li>
+           </ol>
+           <p>The WorkerPrivate is supposed to be released after its self-reference is nullified.</p>
+           <ol class="arabic simple" start="5">
+            <li>
+             <p>Dispatch FinishedRunnable to the main thread to release the worker thread.</p></li>
+           </ol>
+          </section>
+          <section id="how-to-shutdown-a-worker">
+           <h3>How to shutdown a Worker<a class="headerlink" href="#how-to-shutdown-a-worker" title="Link to this heading">?</a></h3>
+           <p>Normally, there are four situations making a Worker get into shutdown.</p>
+           <ol class="arabic simple">
+            <li>
+             <p>Worker is GC/CCed.</p>
+             <ol class="arabic simple">
+              <li>
+               <p>Navigating to another page.</p></li>
+              <li>
+               <p>Worker is idle for a while. (Notice that idle is not a status of Worker, it is a condition in “Running” status)</p></li>
+             </ol></li>
+            <li>
+             <p>self.close() is called in the worker’s script.</p></li>
+            <li>
+             <p>Worker.terminate() is called in its parent’s script.</p></li>
+            <li>
+             <p>Firefox shutdown.</p></li>
+           </ol>
+          </section>
+          <section id="worker-status-flowchart">
+           <h3>Worker Status Flowchart<a class="headerlink" href="#worker-status-flowchart" title="Link to this heading">?</a></h3>
+           <p><img alt="Worker Status Flowchart" src="../../_images/WorkerStatusFlowchart.svg"></p>
+           <p>This flowchart shows how the status of a Worker is changing.</p>
+           <p>When the WorkerThreadPrimaryRunnable calls WorkerPrivate::DoRunLoop on the worker thread, the status changes from “Pending” to “Running.” If Firefox shutdown happens before entering into “Running,” the status directly changes from “Pending” to “Dead.”</p>
+           <p>When a Worker is in “Running,” status changing must be caused by requesting a Worker shutdown. The status switches to “Closing,” for the special case that worker’s script calls self.close(). Otherwise, the status switches to “Canceling.” And a “Closing” Worker will switch to “Canceling” when all sync-eventLoops are completed.</p>
+           <p>A “Canceling” Worker switches its status to “Killing” when following requirements are fulfilled.</p>
+           <ol class="arabic simple">
+            <li>
+             <p>No WorkerRefs, no children Workers, no Timeouts, and no sync-eventLoops</p></li>
+            <li>
+             <p>No pending runnable for the worker thread main event queue, control runnables and debugger runnables</p></li>
+           </ol>
+           <p>The status switches from “Killing” to “Dead” automatically.</p>
+          </section>
+         </section>
+         <section id="workerrefs">
+          <h2>WorkerRefs<a class="headerlink" href="#workerrefs" title="Link to this heading">?</a></h2>
+          <p>Since a Worker’s shutdown can happen at any time, knowing when the shutdown starts is important for development, especially for releasing the resources and completing the operation in the Worker shutdown phase. Therefore, WorkerRefs is introduced to get the notification of the Worker’s shutdown. When a Worker enters the “Canceling” status, it notifies the corresponding WorkerRefs to execute the registered callback on the worker thread. The WorkerRefs holder completes its shutdown steps synchronously or asynchronously in the registered callback and then releases the WorkerRef.</p>
+          <p>According to the following requirements, four types of WorkerRefs are introduced.</p>
+          <ul class="simple">
+           <li>
+            <p>Should the WorkerRef block the Worker’s shutdown</p></li>
+           <li>
+            <p>Should the WorkerRef block cycle-collection on the Worker</p></li>
+           <li>
+            <p>Should the WorkerRef need to be held on other threads.</p></li>
+          </ul>
+          <section id="weakworkerref">
+           <h3>WeakWorkerRef<a class="headerlink" href="#weakworkerref" title="Link to this heading">?</a></h3>
+           <p>WeakWorkerRef, as its name, is a “Weak” reference since WeakWorkerRef releases the internal reference to the Worker immediately after WeakWorkerRef’s registered callback execution completes. Therefore, WeakWorkerRef does not block the Worker’s shutdown. In addition, holding a WeakWorkerRef would not block GC/CC the Worker. This means a Worker will be considered to be cycle-collected even if there are WeakWorkerRefs to the Worker.</p>
+           <p>WeakWorkerRef is ref-counted, but not thread-safe.</p>
+           <p>WeakWorkerRef is designed for just getting the Worker’s shutdown notification and completing shutdown steps synchronously.</p>
+          </section>
+          <section id="strongworkerref">
+           <h3>StrongWorkerRef<a class="headerlink" href="#strongworkerref" title="Link to this heading">?</a></h3>
+           <p>Unlike WeakWorkerRef, StrongWorkerRef does not release its internal reference to the Worker after the callback execution. StrongWorkerRef’s internal reference is released when the StrongWorkerRef gets destroyed. That means StrongWorkerRef allows its holder to determine when to release the Worker by nulling the StrongWorkerRef. This also makes StrongWorkerRef’s holder block the Worker’s shutdown.</p>
+           <p>When using the StrongWorkerRef, resource cleanup might involve multiple threads and asynchronous behavior. StrongWorkerRef release timing becomes crucial not to cause memory problems, such as UAF or leaking. StrongWorkerRef must be released. Otherwise, a shutdown hang would not be a surprise.</p>
+           <p>StrongWorkerRef also blocks the GC/CC a Worker. Once there is a StrongWorkerRef to the Worker, GC/CC will not collect the Worker.</p>
+           <p>StrongWorkerRef is ref-counted, but not thread-safe.</p>
+          </section>
+          <section id="threadsafeworkerref">
+           <h3>ThreadSafeWorkerRef<a class="headerlink" href="#threadsafeworkerref" title="Link to this heading">?</a></h3>
+           <p>ThreadSafeWorkerRef is an extension of StrongWorkerRef. The difference is ThreadSafeWorkerRef holder can be on another thread. Since it is an extension of StrongWorkerRef, it gives the same characters as StrongWorkerRef. Which means its holder blocks the Worker’s shutdown, and It also blocks GC/CC a Worker.</p>
+           <p>Playing with ThreadSafeWorkerRef, just like StrongWorkerRef, ThreadSafeWorkerRef release timing is important for memory problems. Except the release timing, it should be noticed the callback execution on the worker thread, not on the holder’s owning thread.</p>
+           <p>ThreadSafeWorkerRef is ref-counted and thread-safe.</p>
+          </section>
+          <section id="ipcworkerref">
+           <h3>IPCWorkerRef<a class="headerlink" href="#ipcworkerref" title="Link to this heading">?</a></h3>
+           <p>IPCWorkerRef is a special WorkerRef for IPC actors which binds its life-cycle with Worker’s shutdown notification. (In our current codebase, Cache API and Client API uses IPCWorkerRef)</p>
+           <p>Because some IPC shutdown needs to be in a special sequence during the Worker’s shutdown. However, to make these IPC shutdown needs to ensure the Worker is kept alive, so IPCWorkerRef blocks the Worker’s shutdown. But IPC shutdown no need to block GC/CC a Worker.</p>
+           <p>IPCWorkerRef is ref-counted, but not thread-safe.</p>
+           <p>Following is a table for the comparison between WorkerRefs</p>
+           <table border="1" class="docutils">
+            <thead>
+             <tr>
+              <th></th>
+              <th style="text-align: center;"></th>
+              <th style="text-align: center;"></th>
+              <th style="text-align: center;"></th>
+              <th style="text-align: center;"></th>
+             </tr>
+            </thead>
+            <tbody>
+             <tr>
+              <td></td>
+              <td style="text-align: center;">WeakWorkerRef</td>
+              <td style="text-align: center;">StrongWorkerRef</td>
+              <td style="text-align: center;">ThreadSafeWorkerRef</td>
+              <td style="text-align: center;">IPCWorkerRef</td>
+             </tr>
+             <tr>
+              <td>Holder thread</td>
+              <td style="text-align: center;">Worker thread</td>
+              <td style="text-align: center;">Worker thread</td>
+              <td style="text-align: center;">Any thread</td>
+              <td style="text-align: center;">Worker thread</td>
+             </tr>
+             <tr>
+              <td>Callback execution thread</td>
+              <td style="text-align: center;">Worker thread</td>
+              <td style="text-align: center;">Worker thread</td>
+              <td style="text-align: center;">Worker thread</td>
+              <td style="text-align: center;">Worker thread</td>
+             </tr>
+             <tr>
+              <td>Block Worker’s shutdown</td>
+              <td style="text-align: center;">No</td>
+              <td style="text-align: center;">Yes</td>
+              <td style="text-align: center;">Yes</td>
+              <td style="text-align: center;">Yes</td>
+             </tr>
+             <tr>
+              <td>Block GC a Worker</td>
+              <td style="text-align: center;">No</td>
+              <td style="text-align: center;">Yes</td>
+              <td style="text-align: center;">Yes</td>
+              <td style="text-align: center;">No</td>
+             </tr>
+            </tbody>
+           </table>
+          </section>
+          <section id="workerref-callback">
+           <h3>WorkerRef Callback<a class="headerlink" href="#workerref-callback" title="Link to this heading">?</a></h3>
+           <p>WorkerRef Callback can be registered when creating a WorkerRef. The Callback takes the responsibility for releasing the resources related to WorkerRef’s holder. For example, resolving/rejecting the promises created by the WorkerRef’s holder. The cleanup behavior might be synchronous or asynchronous depending on how complicated the functionality involved. For example, Cache APIs might need to wait until the operation finishes on the IO thread and release the main-thread-only objects on the main thread.</p>
+           <p>To avoid memory problems, there are some things need to keep in mind for WorkerRef callback</p>
+           <ul class="simple">
+            <li>
+             <p>Don’t release WorkerRef before finishing cleanup steps. (UAF)</p></li>
+            <li>
+             <p>Don’t forget to release resources related. (Memory leaking)</p></li>
+            <li>
+             <p>Don’t forget to release WorkerRef(StrongWorkerRef/ThreadWorkerRef/IPCWorkerRef) (Shutdown hang)</p></li>
+           </ul>
+          </section>
+         </section>
+        </section>
+       </div>
+      </div>
+      <footer>
+       <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="PerformanceTesting.html" class="btn btn-neutral float-left" title="Service Worker Performance Tests" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a> <a href="../webIdlBindings/index.html" class="btn btn-neutral float-right" title="Web IDL bindings" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+       </div>
+       <hr>
+       <div role="contentinfo">
+        <p></p>
+       </div> Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+      </footer>
+     </div>
+    </div>
+   </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ </body>
+</html>

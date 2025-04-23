@@ -1,0 +1,1094 @@
+<!doctype html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Migrating Firefox Telemetry to Glean — Firefox Source Docs  documentation</title>
+  <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=fa44fd50">
+  <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=19f00094">
+  <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css?v=fd3f3429">
+  <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css?v=76b2166b">
+  <link rel="stylesheet" type="text/css" href="../../../../_static/custom_theme.css?v=dc5ed815">
+  <link rel="stylesheet" type="text/css" href="../../../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7">
+  <link rel="shortcut icon" href="../../../../_static/firefox.ico"><!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+  <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+  <script src="../../../../_static/documentation_options.js?v=5929fcd5"></script>
+  <script src="../../../../_static/doctools.js?v=9a2dae69"></script>
+  <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
+  <script src="../../../../_static/copybutton.js?v=30646c52"></script>
+  <script src="../../../../_static/design-tabs.js?v=36754332"></script>
+  <script src="../../../../_static/js/theme.js"></script>
+  <link rel="index" title="Index" href="../../../../genindex.html">
+  <link rel="search" title="Search" href="../../../../search.html">
+  <link rel="next" title="Using Oblivious HTTP in Firefox on Glean" href="ohttp.html">
+  <link rel="prev" title="Writing Instrumentation Tests" href="instrumentation_tests.html">
+ </head>
+ <body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+   <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <div class="wy-side-scroll">
+     <div class="wy-side-nav-search">
+      <a href="../../../../index.html" class="icon icon-home"> Firefox Source Docs <img src="../../../../_static/firefox-wordmark.svg" class="logo" alt="Logo"> </a><!-- -- This code is governed by the BSD license ---->
+      <div>
+       <h3>Quick search</h3>
+       <script>
+    (function () {
+      var cx = "dd12886298f75dbef";
+      var gcse = document.createElement("script");
+      gcse.async = true;
+      gcse.src = "https://cse.google.com/cse.js?cx=" + cx;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(gcse, s);
+    })();
+  </script><gcse:search></gcse:search>
+      </div>
+     </div>
+     <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+      <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../glossary/index.html">A Glossary of Common Terms</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../overview/index.html">A Quick Guide to Mozilla Applications</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../setup/index.html">Getting Set Up To Work On The Firefox Codebase</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Working On Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../contributing/index.html">Working on Firefox</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../bug-mgmt/index.html">Bug Handling</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox User Guide</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../devtools-user/index.html">Firefox DevTools User Docs</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Source Code Documentation</span></p>
+      <ul class="current">
+       <li class="toctree-l1"><a class="reference internal" href="../../../../mots/index.html">Governance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../browser/index.html">Firefox Front-end</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../dom/index.html">DOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../editor/index.html">Editor</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../layout/index.html">Style system (CSS) &amp; Layout</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../gfx/index.html">Graphics</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../ipc/index.html">Processes, Threads and IPC</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../devtools/index.html">Firefox DevTools Contributor Docs</a></li>
+       <li class="toctree-l1 current"><a class="reference internal" href="../../../index.html">Toolkit</a>
+        <ul class="current">
+         <li class="toctree-l2"><a class="reference internal" href="../../../javascript-logging.html">JavaScript Logging</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../mozapps/extensions/addon-manager/index.html">Add-on Manager</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../backgroundtasks/index.html">Background Task Mode</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../crashes/crash-manager/index.html">Crash Manager</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../crashreporter/crashreporter/index.html">Crash Reporter</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../internal-urls.html">Internal URLs</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../search/index.html">Search Service</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../normandy/normandy/index.html">Shield Recipe Client</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../nimbus/docs/index.html">Nimbus</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../messaging-system/docs/index.html">Messaging System Schemas</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../pictureinpicture/pictureinpicture/index.html">Picture-in-Picture</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../prompts/prompts/index.html">Prompts</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../modules/subprocess/toolkit_modules/subprocess/index.html">Subprocess Module</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../telemetry/index.html">Telemetry</a></li>
+         <li class="toctree-l2 current"><a class="reference internal" href="../index.html">Firefox on Glean (FOG)</a>
+          <ul class="current">
+           <li class="toctree-l3 current"><a class="reference internal" href="index.html">Using Firefox on Glean</a>
+            <ul class="current">
+             <li class="toctree-l4"><a class="reference internal" href="getting_started.html">Getting Started with Firefox on Glean (FOG)</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="new_definitions_file.html">New Metrics and Pings</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="gifft.html">Glean Interface For Firefox Telemetry (GIFFT)</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="glean_for_legacy_events.html">Using Firefox on Glean to Record Legacy Telemetry Events</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="glean_for_legacy_scalars.html">Using Firefox on Glean to Record Legacy Telemetry Scalars</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="instrumentation_tests.html">Writing Instrumentation Tests</a></li>
+             <li class="toctree-l4 current"><a class="current reference internal" href="#">Migrating Firefox Telemetry to Glean</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="ohttp.html">Using Oblivious HTTP in Firefox on Glean</a></li>
+             <li class="toctree-l4"><a class="reference external" href="https://mozilla.github.io/glean/book/index.html">Glean SDK Documentation</a></li>
+            </ul></li>
+           <li class="toctree-l3"><a class="reference internal" href="../dev/index.html">Developing Firefox on Glean</a></li>
+          </ul></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../modules/toolkit_modules/index.html">Toolkit Modules</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../content/toolkit_widgets/index.html">Toolkit Widgets</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../resistfingerprinting/resistfingerprinting/index.html">Fingerprinting Resistance</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../url-classifier/url-classifier/index.html">URL Classifier</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../extensions/webextensions/index.html">WebExtensions API Development</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../../extensions/spellcheck/index.html">Managing the built-in en-US dictionary</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../mozapps/update/docs/index.html">Application Update</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../antitracking/anti-tracking/index.html">Anti-Tracking</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../translations/index.html">Translations</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../sessionstore/index.html">Session Store</a></li>
+        </ul></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../js/index.html">SpiderMonkey</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../jsloader/index.html">JS Loader</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../mobile/android/geckoview/index.html">GeckoView</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../mobile/android/fenix/index.html">Fenix</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../mobile/android/focus-android/index.html">Focus for Android</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../dom/bindings/webidl/index.html">WebIDL</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../modules/libpref/index.html">libpref</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../networking/index.html">Networking</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../remote/index.html">Remote Protocols</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../services/index.html">Services</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../permissions/index.html">Permissions</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../uriloader/index.html">File Handling</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../widget/cocoa/index.html">Firefox on macOS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../widget/windows/index.html">Firefox on Windows</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../ml/index.html">Firefox AI Runtime</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../accessible/index.html">Accessibility</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../media/index.html">Media Playback</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../code-quality/index.html">Code quality</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../writing-rust-code/index.html">Writing Rust Code</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../rust-components/index.html">Rust Components</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../tools/profiler/index.html">Gecko Profiler</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../performance/index.html">Performance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../storage/index.html">Database bindings (SQLite, KV, …)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../xpcom/index.html">XPCOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../nspr/index.html">NSPR</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../security/nss/index.html">Network Security Services (NSS)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../content-security/index.html">Web Security Checks in Gecko</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">The Firefox Build System</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../mach/index.html">Mach</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../tools/try/index.html">Pushing to Try</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../build/buildsystem/index.html">Build System</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../taskcluster/index.html">Firefox CI and Taskgraph</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../tools/moztreedocs/index.html">Managing Documentation</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../mozbuild/vendor/index.html">Vendoring Third Party Components</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Testing &amp; Test Infrastructure</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/automated-testing/index.html">Automated Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/treeherder-try/index.html">Understanding Treeherder Results</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/sheriffed-intermittents/index.html">Sheriffed intermittent failures</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/tests-for-new-config/index.html">Turning on Firefox tests for a new configuration</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/intermittent/index.html">Avoiding intermittent tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/testing-policy/index.html">Testing Policy</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/ci-configs/index.html">Configuration Changes</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/browser-chrome/index.html">Browser chrome mochitests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/chrome-tests/index.html">Chrome Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/marionette/index.html">Marionette</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/geckodriver/index.html">geckodriver</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/test-verification/index.html">Test Verification</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/webrender/index.html">WebRender Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/mochitest-plain/index.html">Mochitest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/xpcshell/index.html">XPCShell tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/tps/index.html">TPS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../web-platform/index.html">web-platform-tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../gtest/index.html">GTest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../tools/fuzzing/index.html">Fuzzing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../tools/sanitizer/index.html">Sanitizer</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/perfdocs/index.html">Performance Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../tools/code-coverage/index.html">Code coverage</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing-rust-code/index.html">Testing &amp; Debugging Rust Code</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Releases &amp; Updates</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../update-infrastructure/index.html">Mozilla Update Infrastructure</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../update-infrastructure/index.html#watershed-updates">Watershed Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../update-infrastructure/index.html#desupport-updates">Desupport Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../tools/update-verify/index.html">Update Verify</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Localization &amp; Internationalization</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../intl/index.html">Internationalization</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../l10n/index.html">Localization</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox and Python</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../mozbase/index.html">mozbase</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../python/index.html">Using third-party Python packages</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Metrics Collected in Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../metrics/index.html">Metrics</a></li>
+      </ul>
+     </div>
+    </div>
+   </nav>
+   <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+    <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+     <i data-toggle="wy-nav-top" class="fa fa-bars"></i> <a href="../../../../index.html">Firefox Source Docs</a>
+    </nav>
+    <div class="wy-nav-content">
+     <div class="rst-content">
+      <!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+      <div role="navigation" aria-label="Page navigation">
+       <ul class="wy-breadcrumbs">
+        <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+        <li class="breadcrumb-item"><a href="../../../index.html">Toolkit</a></li>
+        <li class="breadcrumb-item"><a href="../index.html">Firefox on Glean (FOG)</a></li>
+        <li class="breadcrumb-item"><a href="index.html">Using Firefox on Glean</a></li>
+        <li class="breadcrumb-item active">Migrating Firefox Telemetry to Glean</li>
+        <li class="wy-breadcrumbs-aside"><a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Developer+Infrastructure&amp;component=Firefox+Source+Docs%3A+Content&amp;short_desc=Documentation+issue+on+toolkit/components/glean/user/migration&amp;comment=URL+=+https://firefox-source-docs.mozilla.org/toolkit/components/glean/user/migration.html&amp;bug_file_loc=https://firefox-source-docs.mozilla.org/toolkit/components/glean/user/migration.html" rel="nofollow">Report an issue</a> / <a href="../../../../_sources/toolkit/components/glean/user/migration.md.txt" rel="nofollow"> View page source</a></li>
+       </ul>
+       <hr>
+      </div>
+      <div role="main" class="document" itemscope itemtype="http://schema.org/Article">
+       <div itemprop="articleBody">
+        <section id="migrating-firefox-telemetry-to-glean">
+         <h1><a class="toc-backref" href="#id1" role="doc-backlink">Migrating Firefox Telemetry to Glean</a><a class="headerlink" href="#migrating-firefox-telemetry-to-glean" title="Link to this heading">?</a></h1>
+         <p>This guide aims to help you migrate individual data collections from <a class="reference internal" href="../../telemetry/index.html"><span class="std std-doc">Firefox Telemetry</span></a> to <a class="reference external" href="https://mozilla.github.io/glean/book/index.html">Glean</a> via <a class="reference internal" href="../index.html"><span class="std std-doc">Firefox on Glean</span></a>.</p>
+         <p>This is intended to be a reference to help you fill out your <a class="reference external" href="https://docs.google.com/spreadsheets/d/1uEK7zSIJDcGGmof9NywP5AwaovVQCv_Bm3iNqibtESI/edit#gid=0">migration worksheet</a>, or for mentally translating Telemetry concepts to Glean ones.</p>
+         <nav class="contents" id="contents">
+          <p class="topic-title">Contents</p>
+          <ul class="simple">
+           <li>
+            <p><a class="reference internal" href="#migrating-firefox-telemetry-to-glean" id="id1">Migrating Firefox Telemetry to Glean</a></p>
+            <ul>
+             <li>
+              <p><a class="reference internal" href="#general-things-to-bear-in-mind" id="id2">General Things To Bear In Mind</a></p>
+              <ul>
+               <li>
+                <p><a class="reference internal" href="#process-agnosticism-no-more-record-in-processes-field" id="id3">Process-Agnosticism: No more <code class="docutils literal notranslate"><span class="pre">record_in_processes</span></code> field</a></p></li>
+               <li>
+                <p><a class="reference internal" href="#channel-agnosticism-no-more-release-channel-collection-opt-out" id="id4">Channel-Agnosticism: No more <code class="docutils literal notranslate"><span class="pre">release_channel_collection:</span> <span class="pre">opt-out</span></code></a></p></li>
+               <li>
+                <p><a class="reference internal" href="#file-level-product-inclusion-exclusion-no-more-products-field" id="id5">File-level Product Inclusion/Exclusion: No more <code class="docutils literal notranslate"><span class="pre">products</span></code> field</a></p></li>
+               <li>
+                <p><a class="reference internal" href="#many-definitions-files" id="id6">Many Definitions Files</a></p></li>
+               <li>
+                <p><a class="reference internal" href="#testing" id="id7">Testing</a></p></li>
+              </ul></li>
+             <li>
+              <p><a class="reference internal" href="#which-glean-metric-type-should-i-use" id="id8">Which Glean Metric Type Should I Use?</a></p></li>
+             <li>
+              <p><a class="reference internal" href="#histograms" id="id9">Histograms</a></p>
+              <ul>
+               <li>
+                <p><a class="reference internal" href="#scalar-values-in-histograms-kind-flag-and-count" id="id10">Scalar Values in Histograms: kind <code class="docutils literal notranslate"><span class="pre">flag</span></code> and <code class="docutils literal notranslate"><span class="pre">count</span></code></a></p></li>
+               <li>
+                <p><a class="reference internal" href="#continuous-distributions-kind-linear-and-exponential" id="id11">Continuous Distributions: kind <code class="docutils literal notranslate"><span class="pre">linear</span></code> and <code class="docutils literal notranslate"><span class="pre">exponential</span></code></a></p>
+                <ul>
+                 <li>
+                  <p><a class="reference internal" href="#timing-samples-use-gleans-timing-distribution" id="id12">Timing samples - Use Glean’s <code class="docutils literal notranslate"><span class="pre">timing_distribution</span></code></a></p></li>
+                 <li>
+                  <p><a class="reference internal" href="#memory-samples-use-gleans-memory-distribution" id="id13">Memory Samples - Use Glean’s <code class="docutils literal notranslate"><span class="pre">memory_distribution</span></code></a></p></li>
+                 <li>
+                  <p><a class="reference internal" href="#percentage-samples-comment-on-bug-1657467" id="id14">Percentage Samples - Comment on bug 1657467</a></p></li>
+                 <li>
+                  <p><a class="reference internal" href="#other-use-gleans-custom-distribution" id="id15">Other - Use Glean’s <code class="docutils literal notranslate"><span class="pre">custom_distribution</span></code></a></p></li>
+                 <li>
+                  <p><a class="reference internal" href="#keyed-histograms-with-continuous-sample-distributions-ask-on-glean-mozilla-org-for-assistance" id="id16">Keyed Histograms with Continuous Sample Distributions - Ask on #glean:mozilla.org for assistance</a></p></li>
+                </ul></li>
+               <li>
+                <p><a class="reference internal" href="#discrete-distributions-kind-categorical-enumerated-or-boolean-use-gleans-labeled-counter" id="id17">Discrete Distributions: kind <code class="docutils literal notranslate"><span class="pre">categorical</span></code>, <code class="docutils literal notranslate"><span class="pre">enumerated</span></code>, or <code class="docutils literal notranslate"><span class="pre">boolean</span></code> - Use Glean’s <code class="docutils literal notranslate"><span class="pre">labeled_counter</span></code></a></p>
+                <ul>
+                 <li>
+                  <p><a class="reference internal" href="#keyed-histograms-with-discrete-sample-distributions-keyed-true-and-kind-categorical-enumerated-or-boolean-comment-on-bug-1657470" id="id18">Keyed Histograms with Discrete Sample Distributions: <code class="docutils literal notranslate"><span class="pre">"keyed":</span> <span class="pre">true</span></code> and kind <code class="docutils literal notranslate"><span class="pre">categorical</span></code>, <code class="docutils literal notranslate"><span class="pre">enumerated</span></code>, or <code class="docutils literal notranslate"><span class="pre">boolean</span></code> - Comment on bug 1657470</a></p></li>
+                </ul></li>
+              </ul></li>
+             <li>
+              <p><a class="reference internal" href="#scalars" id="id19">Scalars</a></p>
+              <ul>
+               <li>
+                <p><a class="reference internal" href="#scalars-of-kind-uint-that-you-call-scalaradd-on-use-gleans-counter" id="id20">Scalars of <code class="docutils literal notranslate"><span class="pre">kind:</span> <span class="pre">uint</span></code> that you call <code class="docutils literal notranslate"><span class="pre">scalarAdd</span></code> on - Use Glean’s <code class="docutils literal notranslate"><span class="pre">counter</span></code></a></p>
+                <ul>
+                 <li>
+                  <p><a class="reference internal" href="#keyed-scalars-of-kind-uint-that-you-call-scalaradd-on-use-gleans-labeled-counter" id="id21">Keyed Scalars of <code class="docutils literal notranslate"><span class="pre">kind:</span> <span class="pre">uint</span></code> that you call <code class="docutils literal notranslate"><span class="pre">scalarAdd</span></code> on - Use Glean’s <code class="docutils literal notranslate"><span class="pre">labeled_counter</span></code></a></p></li>
+                </ul></li>
+               <li>
+                <p><a class="reference internal" href="#scalars-of-kind-uint-that-you-call-scalarset-on-use-gleans-quantity" id="id22">Scalars of <code class="docutils literal notranslate"><span class="pre">kind:</span> <span class="pre">uint</span></code> that you call <code class="docutils literal notranslate"><span class="pre">scalarSet</span></code> on - Use Glean’s <code class="docutils literal notranslate"><span class="pre">quantity</span></code></a></p>
+                <ul>
+                 <li>
+                  <p><a class="reference internal" href="#keyed-scalars-of-kind-uint-that-you-call-scalarset-on-use-gleans-labeled-quantity" id="id23">Keyed Scalars of <code class="docutils literal notranslate"><span class="pre">kind:</span> <span class="pre">uint</span></code> that you call <code class="docutils literal notranslate"><span class="pre">scalarSet</span></code> on - Use Glean’s <code class="docutils literal notranslate"><span class="pre">labeled_quantity</span></code></a></p></li>
+                </ul></li>
+               <li>
+                <p><a class="reference internal" href="#scalars-of-kind-uint-that-you-call-scalarsetmaximum-or-some-combination-of-operations-on-ask-on-glean-mozilla-org-for-assistance" id="id24">Scalars of <code class="docutils literal notranslate"><span class="pre">kind:</span> <span class="pre">uint</span></code> that you call <code class="docutils literal notranslate"><span class="pre">scalarSetMaximum</span></code> or some combination of operations on - Ask on #glean:mozilla.org for assistance</a></p></li>
+               <li>
+                <p><a class="reference internal" href="#scalars-of-kind-string-use-gleans-string" id="id25">Scalars of <code class="docutils literal notranslate"><span class="pre">kind:</span> <span class="pre">string</span></code> - Use Glean’s <code class="docutils literal notranslate"><span class="pre">string</span></code></a></p></li>
+               <li>
+                <p><a class="reference internal" href="#scalars-of-kind-boolean-use-gleans-boolean" id="id26">Scalars of <code class="docutils literal notranslate"><span class="pre">kind:</span> <span class="pre">boolean</span></code> - Use Glean’s <code class="docutils literal notranslate"><span class="pre">boolean</span></code></a></p>
+                <ul>
+                 <li>
+                  <p><a class="reference internal" href="#keyed-scalars-of-kind-boolean-use-gleans-labeled-boolean" id="id27">Keyed Scalars of <code class="docutils literal notranslate"><span class="pre">kind:</span> <span class="pre">boolean</span></code> - Use Glean’s <code class="docutils literal notranslate"><span class="pre">labeled_boolean</span></code></a></p></li>
+                </ul></li>
+               <li>
+                <p><a class="reference internal" href="#other-scalar-ish-types-rate-timespan-datetime-uuid" id="id28">Other Scalar-ish types: <code class="docutils literal notranslate"><span class="pre">rate</span></code>, <code class="docutils literal notranslate"><span class="pre">timespan</span></code>, <code class="docutils literal notranslate"><span class="pre">datetime</span></code>, <code class="docutils literal notranslate"><span class="pre">uuid</span></code></a></p></li>
+              </ul></li>
+             <li>
+              <p><a class="reference internal" href="#events-use-gleans-event" id="id29">Events - Use Glean’s <code class="docutils literal notranslate"><span class="pre">event</span></code></a></p></li>
+             <li>
+              <p><a class="reference internal" href="#other-environment-crash-annotations-use-counters-etc-ask-on-glean-mozilla-org-for-assistance" id="id30">Other: Environment, Crash Annotations, Use Counters, Etc - Ask on #glean:mozilla.org for assistance</a></p></li>
+            </ul></li>
+          </ul>
+         </nav>
+         <section id="general-things-to-bear-in-mind">
+          <h2><a class="toc-backref" href="#id2" role="doc-backlink">General Things To Bear In Mind</a><a class="headerlink" href="#general-things-to-bear-in-mind" title="Link to this heading">?</a></h2>
+          <p>You should familiarize yourself with <a class="reference internal" href="new_definitions_file.html"><span class="std std-doc">the guide on adding new metrics to Firefox Desktop</span></a>. Its advice stacks with the advice included in this guide as (once you’ve figured out what kind) you will indeed be adding new metrics.</p>
+          <p>There are some other broad topics specific to migrating Firefox Telemetry stuff to Glean stuff:</p>
+          <section id="process-agnosticism-no-more-record-in-processes-field">
+           <h3><a class="toc-backref" href="#id3" role="doc-backlink">Process-Agnosticism: No more <code class="docutils literal notranslate"><span class="pre">record_in_processes</span></code> field</a><a class="headerlink" href="#process-agnosticism-no-more-record-in-processes-field" title="Link to this heading">?</a></h3>
+           <p>Glean (and thus FOG) <a class="reference internal" href="../dev/ipc.html"><span class="std std-doc">doesn’t know anything about processes</span></a> except what it has to in order to ensure all the data makes it to the parent process. Firefox Telemetry cared very much about which process was collecting which specific data, keeping them separate.</p>
+           <p>If you collect data in multiple processes and wish to keep data from each process type separate, you will need to provide this separation yourself.</p>
+           <p>Please see <a class="reference internal" href="../dev/ipc.html"><span class="std std-doc">this dev doc</span></a> for an example of how to do that.</p>
+          </section>
+          <section id="channel-agnosticism-no-more-release-channel-collection-opt-out">
+           <h3><a class="toc-backref" href="#id4" role="doc-backlink">Channel-Agnosticism: No more <code class="docutils literal notranslate"><span class="pre">release_channel_collection:</span> <span class="pre">opt-out</span></code></a><a class="headerlink" href="#channel-agnosticism-no-more-release-channel-collection-opt-out" title="Link to this heading">?</a></h3>
+           <p>FOG doesn’t make a differentiation between pre-release Firefox and release Firefox, except inasmuch as is necessary to put the correct channel in <code class="docutils literal notranslate"><span class="pre">client_info.app_channel</span></code>.</p>
+           <p>This means all data is collected in all build configurations.</p>
+           <p>If you wish or are required to only collect your data in pre-release Firefox, please avail yourself of the <code class="docutils literal notranslate"><span class="pre">EARLY_BETA_OR_EARLIER</span></code> <code class="docutils literal notranslate"><span class="pre">#define</span></code> or <code class="docutils literal notranslate"><span class="pre">AppConstant</span></code>.</p>
+          </section>
+          <section id="file-level-product-inclusion-exclusion-no-more-products-field">
+           <h3><a class="toc-backref" href="#id5" role="doc-backlink">File-level Product Inclusion/Exclusion: No more <code class="docutils literal notranslate"><span class="pre">products</span></code> field</a><a class="headerlink" href="#file-level-product-inclusion-exclusion-no-more-products-field" title="Link to this heading">?</a></h3>
+           <p>Glean determines which metrics are recorded in which products via <a class="reference external" href="https://github.com/mozilla/probe-scraper/blob/main/repositories.yaml">a dependency tree</a>. This means FOG doesn’t distinguish between products at the per-product level.</p>
+           <p>If some of your metrics are recorded in different sets of products (e.g. some of your metrics are collected in both Firefox Desktop <em>and</em> Firefox for Android, but others are Firefox Desktop-specific) you must separate them into separate <a class="reference internal" href="new_definitions_file.html"><span class="std std-doc">definitions files</span></a>.</p>
+          </section>
+          <section id="many-definitions-files">
+           <h3><a class="toc-backref" href="#id6" role="doc-backlink">Many Definitions Files</a><a class="headerlink" href="#many-definitions-files" title="Link to this heading">?</a></h3>
+           <p>Each component is expected to own and care for its own <a class="reference internal" href="new_definitions_file.html"><span class="std std-doc">metrics definitions files</span></a>. There is no centralized <code class="docutils literal notranslate"><span class="pre">Histograms.json</span></code> or <code class="docutils literal notranslate"><span class="pre">Scalars.yaml</span></code> or <code class="docutils literal notranslate"><span class="pre">Events.yaml</span></code>.</p>
+           <p>Instead the component being instrumented will have its own <code class="docutils literal notranslate"><span class="pre">metrics.yaml</span></code> (and <code class="docutils literal notranslate"><span class="pre">pings.yaml</span></code> for any [Custom Pings][custom-pings]) in which you will define the data.</p>
+           <p>See <a class="reference internal" href="new_definitions_file.html"><span class="std std-doc">this guide</span></a> for details.</p>
+          </section>
+          <section id="testing">
+           <h3><a class="toc-backref" href="#id7" role="doc-backlink">Testing</a><a class="headerlink" href="#testing" title="Link to this heading">?</a></h3>
+           <p>Firefox Telemetry had very uneven support for testing instrumentation code. FOG has much better support. Anywhere you can instrument is someplace you can test.</p>
+           <p>It’s as simple as calling <code class="docutils literal notranslate"><span class="pre">testGetValue</span></code>.</p>
+           <p>All migrated collections are expected to be tested. If you can’t test them, then you’d better have an exceptionally good reason why not.</p>
+           <p>For more details, please peruse the <a class="reference internal" href="instrumentation_tests.html"><span class="doc std std-doc">instrumentation testing docs</span></a>.</p>
+          </section>
+         </section>
+         <section id="which-glean-metric-type-should-i-use">
+          <h2><a class="toc-backref" href="#id8" role="doc-backlink">Which Glean Metric Type Should I Use?</a><a class="headerlink" href="#which-glean-metric-type-should-i-use" title="Link to this heading">?</a></h2>
+          <p>Glean uses higher-level metric types than Firefox Telemetry does. This complicates migration as something that is “just a number” in Firefox Telemetry might map to any number of Glean metric types.</p>
+          <p>Please choose the most specific metric type that solves your problem. This’ll make analysis easier as</p>
+          <ol class="arabic simple">
+           <li>
+            <p>Others will know more about how to analyse the metric from more specific types.</p></li>
+           <li>
+            <p>Tooling will be able to present only relevant operations for more specific types.</p></li>
+          </ol>
+          <p>Example:</p>
+          <blockquote>
+           <div>
+            <p>In Firefox Telemetry I record the number of monitors attached to the computer that Firefox Desktop is running on. I could record this number as a <a class="reference external" href="https://mozilla.github.io/glean/book/reference/metrics/string.html"><code class="docutils literal notranslate"><span class="pre">string</span></code></a>, a <a class="reference external" href="https://mozilla.github.io/glean/book/reference/metrics/counter.html"><code class="docutils literal notranslate"><span class="pre">counter</span></code></a>, or a <a class="reference external" href="https://mozilla.github.io/glean/book/reference/metrics/quantity.html"><code class="docutils literal notranslate"><span class="pre">quantity</span></code></a>. The <code class="docutils literal notranslate"><span class="pre">string</span></code> is an obvious trap. It doesn’t even have the correct data type (string vs number). But is it a <code class="docutils literal notranslate"><span class="pre">counter</span></code> or <code class="docutils literal notranslate"><span class="pre">quantity</span></code>? If you pay attention to this guide you’ll learn that <code class="docutils literal notranslate"><span class="pre">counter</span></code>s are used to accumulate sums of information, whereas <code class="docutils literal notranslate"><span class="pre">quantity</span></code> metrics are used to record specific values. The “sum” of monitors over time doesn’t make sense, so <code class="docutils literal notranslate"><span class="pre">counter</span></code> is out. <code class="docutils literal notranslate"><span class="pre">quantity</span></code> is the correct choice.</p>
+           </div>
+          </blockquote>
+         </section>
+         <section id="histograms">
+          <h2><a class="toc-backref" href="#id9" role="doc-backlink">Histograms</a><a class="headerlink" href="#histograms" title="Link to this heading">?</a></h2>
+          <p><a class="reference internal" href="../../telemetry/collection/histograms.html"><span class="std std-doc">Histograms</span></a> are the oldest Firefox Telemetry data type, and as such they’ve accumulated (<a class="reference external" href="https://searchfox.org/mozilla-central/rev/d59bdea4956040e16113b05296c56867f761735b/toolkit/components/telemetry/core/Telemetry.h#61">ha!</a>) the most ways of being used.</p>
+          <section id="scalar-values-in-histograms-kind-flag-and-count">
+           <h3><a class="toc-backref" href="#id10" role="doc-backlink">Scalar Values in Histograms: kind <code class="docutils literal notranslate"><span class="pre">flag</span></code> and <code class="docutils literal notranslate"><span class="pre">count</span></code></a><a class="headerlink" href="#scalar-values-in-histograms-kind-flag-and-count" title="Link to this heading">?</a></h3>
+           <p>If you have a Histogram that records exactly one value, please scroll down and look at the migration guide for the relevant Scalar:</p>
+           <ul class="simple">
+            <li>
+             <p>For Histograms of kind <code class="docutils literal notranslate"><span class="pre">flag</span></code> see “Scalars of kind <code class="docutils literal notranslate"><span class="pre">bool</span></code>”</p></li>
+            <li>
+             <p>For Histograms of kind <code class="docutils literal notranslate"><span class="pre">count</span></code> see “Scalars of kind <code class="docutils literal notranslate"><span class="pre">uint</span></code>”</p></li>
+           </ul>
+          </section>
+          <section id="continuous-distributions-kind-linear-and-exponential">
+           <h3><a class="toc-backref" href="#id11" role="doc-backlink">Continuous Distributions: kind <code class="docutils literal notranslate"><span class="pre">linear</span></code> and <code class="docutils literal notranslate"><span class="pre">exponential</span></code></a><a class="headerlink" href="#continuous-distributions-kind-linear-and-exponential" title="Link to this heading">?</a></h3>
+           <p>If the Histogram you wish to migrate is formed of multiple buckets that together form a single continuous range (like you have buckets 1-5, 6-10, 11-19, and 20-50 - they form the range 1-50), then you will want a “distribution” metric type in Glean. Which kind of “distribution” metric type depends on what the samples are.</p>
+           <section id="timing-samples-use-gleans-timing-distribution">
+            <h4><a class="toc-backref" href="#id12" role="doc-backlink">Timing samples - Use Glean’s <code class="docutils literal notranslate"><span class="pre">timing_distribution</span></code></a><a class="headerlink" href="#timing-samples-use-gleans-timing-distribution" title="Link to this heading">?</a></h4>
+            <p>The most common type of continuous distribution in Firefox Telemetry is a histogram of timing samples like <a class="reference external" href="https://glam.telemetry.mozilla.org/firefox/probe/gc_ms/explore"><code class="docutils literal notranslate"><span class="pre">GC_MS</span></code></a>.</p>
+            <p>In Glean this sort of data is recorded using a <a class="reference external" href="https://mozilla.github.io/glean/book/reference/metrics/timing_distribution.html"><code class="docutils literal notranslate"><span class="pre">timing-distribution</span></code></a> metric type.</p>
+            <p>You will no longer need to worry about the range of values or number or distribution of buckets (represented by the <code class="docutils literal notranslate"><span class="pre">low</span></code>, <code class="docutils literal notranslate"><span class="pre">high</span></code>, <code class="docutils literal notranslate"><span class="pre">n_buckets</span></code>, or <code class="docutils literal notranslate"><span class="pre">kind</span></code> in your Histogram’s definition). Glean uses a <a class="reference external" href="https://mozilla.github.io/glean/book/reference/metrics/timing_distribution.html">clever automatic bucketing algorithm</a> instead.</p>
+            <p>So for a Histogram that records timing samples like this:</p>
+            <div class="highlight-default notranslate">
+             <div class="highlight">
+              <pre><span></span>  <span class="s2">"GC_MS"</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">"record_in_processes"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"main"</span><span class="p">,</span> <span class="s2">"content"</span><span class="p">],</span>
+    <span class="s2">"products"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"firefox"</span><span class="p">],</span>
+    <span class="s2">"alert_emails"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"dev-telemetry-gc-alerts@mozilla.org"</span><span class="p">,</span> <span class="s2">"jcoppeard@mozilla.com"</span><span class="p">],</span>
+    <span class="s2">"expires_in_version"</span><span class="p">:</span> <span class="s2">"never"</span><span class="p">,</span>
+    <span class="s2">"releaseChannelCollection"</span><span class="p">:</span> <span class="s2">"opt-out"</span><span class="p">,</span>
+    <span class="s2">"kind"</span><span class="p">:</span> <span class="s2">"exponential"</span><span class="p">,</span>
+    <span class="s2">"high"</span><span class="p">:</span> <span class="mi">10000</span><span class="p">,</span>
+    <span class="s2">"n_buckets"</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span>
+    <span class="s2">"bug_numbers"</span><span class="p">:</span> <span class="p">[</span><span class="mi">1636419</span><span class="p">],</span>
+    <span class="s2">"description"</span><span class="p">:</span> <span class="s2">"Time spent running JS GC (ms)"</span>
+  <span class="p">},</span>
+</pre>
+             </div>
+            </div>
+            <p>You will migrate to a <code class="docutils literal notranslate"><span class="pre">timing_distibution</span></code> metric type like this:</p>
+            <div class="highlight-yaml notranslate">
+             <div class="highlight">
+              <pre><span></span><span class="nt">js</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">gc</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">timing_distribution</span>
+<span class="w">    </span><span class="nt">time_unit</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">millisecond</span>
+<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">      </span><span class="no">Time spent running the Javascript Garbage Collector.</span>
+<span class="w">      </span><span class="no">Migrated from Firefox Telemetry's `GC_MS`.</span>
+<span class="w">    </span><span class="nt">bugs</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://bugzilla.mozilla.org/show_bug.cgi?id=1636419</span>
+<span class="w">    </span><span class="nt">data_reviews</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://bugzilla.mozilla.org/show_bug.cgi?id=1636419#c8</span>
+<span class="w">    </span><span class="nt">data_sensitivity</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">technical</span>
+<span class="w">    </span><span class="nt">notification_emails</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dev-telemetry-gc-alerts@mozilla.org</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jcoppeard@mozilla.com</span>
+<span class="w">    </span><span class="nt">expires</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">never</span>
+</pre>
+             </div>
+            </div>
+            <p><strong>GIFFT:</strong> This type of collection is mirrorable back to Firefox Telemetry via the <a class="reference internal" href="gifft.html"><span class="std std-doc">Glean Interface For Firefox Telemetry</span></a>. See <a class="reference internal" href="gifft.html"><span class="std std-doc">the guide</span></a> for instructions.</p>
+           </section>
+           <section id="memory-samples-use-gleans-memory-distribution">
+            <h4><a class="toc-backref" href="#id13" role="doc-backlink">Memory Samples - Use Glean’s <code class="docutils literal notranslate"><span class="pre">memory_distribution</span></code></a><a class="headerlink" href="#memory-samples-use-gleans-memory-distribution" title="Link to this heading">?</a></h4>
+            <p>Another common content of <code class="docutils literal notranslate"><span class="pre">linear</span></code> or <code class="docutils literal notranslate"><span class="pre">exponential</span></code> Histograms in Firefox Telemetry is memory samples. For example, <a class="reference external" href="https://glam.telemetry.mozilla.org/firefox/probe/memory_total/explore"><code class="docutils literal notranslate"><span class="pre">MEMORY_TOTAL</span></code></a>’s samples are in kilobytes.</p>
+            <p>In Glean this sort of data is recorded using a <a class="reference external" href="https://mozilla.github.io/glean/book/reference/metrics/memory_distribution.html"><code class="docutils literal notranslate"><span class="pre">memory-distribution</span></code></a> metric type.</p>
+            <p>You will no longer need to worry about the range of values or number or distribution of buckets (represented by the <code class="docutils literal notranslate"><span class="pre">low</span></code>, <code class="docutils literal notranslate"><span class="pre">high</span></code>, <code class="docutils literal notranslate"><span class="pre">n_buckets</span></code>, or <code class="docutils literal notranslate"><span class="pre">kind</span></code> in your Histogram’s definition). Glean uses a <a class="reference external" href="https://mozilla.github.io/glean/book/reference/metrics/memory_distribution.html">clever automatic bucketing algorithm</a> instead.</p>
+            <p>So for a Histogram that records memory samples like this:</p>
+            <div class="highlight-default notranslate">
+             <div class="highlight">
+              <pre><span></span>  <span class="s2">"MEMORY_TOTAL"</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">"record_in_processes"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"main"</span><span class="p">],</span>
+    <span class="s2">"products"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"firefox"</span><span class="p">,</span> <span class="s2">"thunderbird"</span><span class="p">],</span>
+    <span class="s2">"alert_emails"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"memshrink-telemetry-alerts@mozilla.com"</span><span class="p">,</span> <span class="s2">"amccreight@mozilla.com"</span><span class="p">],</span>
+    <span class="s2">"bug_numbers"</span><span class="p">:</span> <span class="p">[</span><span class="mi">1198209</span><span class="p">,</span> <span class="mi">1511918</span><span class="p">],</span>
+    <span class="s2">"expires_in_version"</span><span class="p">:</span> <span class="s2">"never"</span><span class="p">,</span>
+    <span class="s2">"kind"</span><span class="p">:</span> <span class="s2">"exponential"</span><span class="p">,</span>
+    <span class="s2">"low"</span><span class="p">:</span> <span class="mi">32768</span><span class="p">,</span>
+    <span class="s2">"high"</span><span class="p">:</span> <span class="mi">16777216</span><span class="p">,</span>
+    <span class="s2">"n_buckets"</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>
+    <span class="s2">"description"</span><span class="p">:</span> <span class="s2">"Total Memory Across All Processes (KB)"</span><span class="p">,</span>
+    <span class="s2">"releaseChannelCollection"</span><span class="p">:</span> <span class="s2">"opt-out"</span>
+  <span class="p">},</span>
+</pre>
+             </div>
+            </div>
+            <p>You will migrate to a <code class="docutils literal notranslate"><span class="pre">memory_distribution</span></code> metric type like this:</p>
+            <div class="highlight-yaml notranslate">
+             <div class="highlight">
+              <pre><span></span><span class="nt">memory</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">total</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">memory_distribution</span>
+<span class="w">    </span><span class="nt">memory_unit</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kilobyte</span>
+<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">      </span><span class="no">The total memory allocated across all processes.</span>
+<span class="w">      </span><span class="no">Migrated from Telemetry's `MEMORY_TOTAL`.</span>
+<span class="w">    </span><span class="nt">bugs</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://bugzilla.mozilla.org/show_bug.cgi?id=1198209</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://bugzilla.mozilla.org/show_bug.cgi?id=1511918</span>
+<span class="w">    </span><span class="nt">data_reviews</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://bugzilla.mozilla.org/show_bug.cgi?id=1511918#c9</span>
+<span class="w">    </span><span class="nt">data_sensitivity</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">technical</span>
+<span class="w">    </span><span class="nt">notification_emails</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">memshrink-telemetry-alerts@mozilla.com</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">amccreight@mozilla.com</span>
+<span class="w">    </span><span class="nt">expires</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">never</span>
+</pre>
+             </div>
+            </div>
+            <p><strong>GIFFT:</strong> This type of collection is mirrorable back to Firefox Telemetry via the <a class="reference internal" href="gifft.html"><span class="std std-doc">Glean Interface For Firefox Telemetry</span></a>. See <a class="reference internal" href="gifft.html"><span class="std std-doc">the guide</span></a> for instructions.</p>
+           </section>
+           <section id="percentage-samples-comment-on-bug-1657467">
+            <h4><a class="toc-backref" href="#id14" role="doc-backlink">Percentage Samples - Comment on bug 1657467</a><a class="headerlink" href="#percentage-samples-comment-on-bug-1657467" title="Link to this heading">?</a></h4>
+            <p>A very common Histogram in Firefox Desktop is a distribution of percentage samples. <a class="reference external" href="https://glam.telemetry.mozilla.org/firefox/probe/gc_slice_during_idle/explore">For example, <code class="docutils literal notranslate"><span class="pre">GC_SLICE_DURING_IDLE</span></code></a>.</p>
+            <p>Glean doesn’t currently have a good metric type for this. But we <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1657467">intend to add one</a>. If you are migrating a collection of this type, please add a comment to the bug detailing which probe you are migrating, and when you need it migrated by. We’ll prioritize adding this metric type accordingly.</p>
+           </section>
+           <section id="other-use-gleans-custom-distribution">
+            <h4><a class="toc-backref" href="#id15" role="doc-backlink">Other - Use Glean’s <code class="docutils literal notranslate"><span class="pre">custom_distribution</span></code></a><a class="headerlink" href="#other-use-gleans-custom-distribution" title="Link to this heading">?</a></h4>
+            <p>Continuous Distribution Histograms have been around long enough to have gotten weird. If you’re migrating one of those histograms with units like <a class="reference external" href="https://searchfox.org/mozilla-central/rev/d59bdea4956040e16113b05296c56867f761735b/gfx/layers/apz/src/CheckerboardEvent.cpp#44">“square root of pixels times milliseconds”</a>, we have a “catch all” metric type for you: <a class="reference external" href="https://mozilla.github.io/glean/book/reference/metrics/custom_distribution.html">Custom Distribution</a>.</p>
+            <p>Sadly, you’ll have to care about the bucketing algorithm and bucket ranges for this one. So for a Histogram with artisinal samples like:</p>
+            <div class="highlight-default notranslate">
+             <div class="highlight">
+              <pre><span></span>  <span class="s2">"CHECKERBOARD_SEVERITY"</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">"record_in_processes"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"main"</span><span class="p">,</span> <span class="s2">"content"</span><span class="p">,</span> <span class="s2">"gpu"</span><span class="p">],</span>
+    <span class="s2">"products"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"firefox"</span><span class="p">],</span>
+    <span class="s2">"alert_emails"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"gfx-telemetry-alerts@mozilla.com"</span><span class="p">,</span> <span class="s2">"botond@mozilla.com"</span><span class="p">],</span>
+    <span class="s2">"bug_numbers"</span><span class="p">:</span> <span class="p">[</span><span class="mi">1238040</span><span class="p">,</span> <span class="mi">1539309</span><span class="p">,</span> <span class="mi">1584109</span><span class="p">],</span>
+    <span class="s2">"releaseChannelCollection"</span><span class="p">:</span> <span class="s2">"opt-out"</span><span class="p">,</span>
+    <span class="s2">"expires_in_version"</span><span class="p">:</span> <span class="s2">"never"</span><span class="p">,</span>
+    <span class="s2">"kind"</span><span class="p">:</span> <span class="s2">"exponential"</span><span class="p">,</span>
+    <span class="s2">"high"</span><span class="p">:</span> <span class="mi">1073741824</span><span class="p">,</span>
+    <span class="s2">"n_buckets"</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span>
+    <span class="s2">"description"</span><span class="p">:</span> <span class="s2">"Opaque measure of the severity of a checkerboard event"</span>
+  <span class="p">},</span>
+</pre>
+             </div>
+            </div>
+            <p>You will migrate it to a <code class="docutils literal notranslate"><span class="pre">custom_distribution</span></code> like:</p>
+            <div class="highlight-yaml notranslate">
+             <div class="highlight">
+              <pre><span></span><span class="nt">gfx.checkerboard</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">severity</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">custom_distribution</span>
+<span class="w">    </span><span class="nt">range_max</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1073741824</span>
+<span class="w">    </span><span class="nt">bucket_count</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">50</span>
+<span class="w">    </span><span class="nt">histogram_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">exponential</span>
+<span class="w">    </span><span class="nt">unit</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Opaque unit</span>
+<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">&gt;</span>
+<span class="w">      </span><span class="no">An opaque measurement of the severity of a checkerboard event.</span>
+<span class="w">      </span><span class="no">This doesn't have units, it's just useful for comparing two checkerboard</span>
+<span class="w">      </span><span class="no">events to see which one is worse, for some implementation-specific</span>
+<span class="w">      </span><span class="no">definition of "worse". The larger the value, the worse the</span>
+<span class="w">      </span><span class="no">checkerboarding.</span>
+<span class="w">      </span><span class="no">Migrated from Telemetry's `CHECKERBOARD_SEVERITY`.</span>
+<span class="w">    </span><span class="nt">bugs</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://bugzilla.mozilla.org/show_bug.cgi?id=1238040</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://bugzilla.mozilla.org/show_bug.cgi?id=1539309</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://bugzilla.mozilla.org/show_bug.cgi?id=1584109</span>
+<span class="w">    </span><span class="nt">data_reviews</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://bugzilla.mozilla.org/show_bug.cgi?id=1584109#c1</span>
+<span class="w">    </span><span class="nt">notification_emails</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gfx-telemetry-alerts@mozilla.com</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">botond@mozilla.com</span>
+<span class="w">    </span><span class="nt">data_sensitivity</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">technical</span>
+<span class="w">    </span><span class="nt">expires</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">never</span>
+</pre>
+             </div>
+            </div>
+            <p><strong>TODO <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1677447">Bug 1677447</a>:</strong> Custom Distributions aren’t yet implemented in FOG. We’re working on it. When they’re done we’ll see if they’ll support GIFFT like the other distributions.</p>
+           </section>
+           <section id="keyed-histograms-with-continuous-sample-distributions-ask-on-glean-mozilla-org-for-assistance">
+            <h4><a class="toc-backref" href="#id16" role="doc-backlink">Keyed Histograms with Continuous Sample Distributions - Ask on #glean:mozilla.org for assistance</a><a class="headerlink" href="#keyed-histograms-with-continuous-sample-distributions-ask-on-glean-mozilla-org-for-assistance" title="Link to this heading">?</a></h4>
+            <p>Glean doesn’t currently have a good metric type for keyed continuous distributions like video play time keyed by codec. Please <a class="reference external" href="https://chat.mozilla.org/#/room/#glean:mozilla.org">reach out to us</a> to explain your use-case. We will help you either work within what Glean currently affords or <a class="reference external" href="https://wiki.mozilla.org/Glean/Adding_or_changing_Glean_metric_types">design a new metric type for you</a>.</p>
+           </section>
+          </section>
+          <section id="discrete-distributions-kind-categorical-enumerated-or-boolean-use-gleans-labeled-counter">
+           <h3><a class="toc-backref" href="#id17" role="doc-backlink">Discrete Distributions: kind <code class="docutils literal notranslate"><span class="pre">categorical</span></code>, <code class="docutils literal notranslate"><span class="pre">enumerated</span></code>, or <code class="docutils literal notranslate"><span class="pre">boolean</span></code> - Use Glean’s <code class="docutils literal notranslate"><span class="pre">labeled_counter</span></code></a><a class="headerlink" href="#discrete-distributions-kind-categorical-enumerated-or-boolean-use-gleans-labeled-counter" title="Link to this heading">?</a></h3>
+           <p>If the samples don’t fall in a continuous range and instead fall into a known number of buckets, Glean provides the <a class="reference external" href="https://mozilla.github.io/glean/book/reference/metrics/labeled_counters.html">Labeled Counter</a> for these cases.</p>
+           <p>Simply enumerate the discrete categories as <code class="docutils literal notranslate"><span class="pre">labels</span></code> in the <code class="docutils literal notranslate"><span class="pre">labeled_counter</span></code>.</p>
+           <p>For example, for a Histogram of kind <code class="docutils literal notranslate"><span class="pre">categorical</span></code> like:</p>
+           <div class="highlight-default notranslate">
+            <div class="highlight">
+             <pre><span></span>  <span class="s2">"AVIF_DECODE_RESULT"</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">"record_in_processes"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"main"</span><span class="p">,</span> <span class="s2">"content"</span><span class="p">],</span>
+    <span class="s2">"products"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"firefox"</span><span class="p">],</span>
+    <span class="s2">"alert_emails"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"cchang@mozilla.com"</span><span class="p">,</span> <span class="s2">"jbauman@mozilla.com"</span><span class="p">],</span>
+    <span class="s2">"expires_in_version"</span><span class="p">:</span> <span class="s2">"never"</span><span class="p">,</span>
+    <span class="s2">"releaseChannelCollection"</span><span class="p">:</span> <span class="s2">"opt-out"</span><span class="p">,</span>
+    <span class="s2">"kind"</span><span class="p">:</span> <span class="s2">"categorical"</span><span class="p">,</span>
+    <span class="s2">"labels"</span><span class="p">:</span> <span class="p">[</span>
+      <span class="s2">"success"</span><span class="p">,</span>
+      <span class="s2">"parse_error"</span><span class="p">,</span>
+      <span class="s2">"no_primary_item"</span><span class="p">,</span>
+      <span class="s2">"decode_error"</span><span class="p">,</span>
+      <span class="s2">"size_overflow"</span><span class="p">,</span>
+      <span class="s2">"out_of_memory"</span><span class="p">,</span>
+      <span class="s2">"pipe_init_error"</span><span class="p">,</span>
+      <span class="s2">"write_buffer_error"</span><span class="p">,</span>
+      <span class="s2">"alpha_y_sz_mismatch"</span><span class="p">,</span>
+      <span class="s2">"alpha_y_bpc_mismatch"</span>
+    <span class="p">],</span>
+    <span class="s2">"description"</span><span class="p">:</span> <span class="s2">"Decode result of AVIF image"</span><span class="p">,</span>
+    <span class="s2">"bug_numbers"</span><span class="p">:</span> <span class="p">[</span><span class="mi">1670827</span><span class="p">]</span>
+  <span class="p">},</span>
+</pre>
+            </div>
+           </div>
+           <p>You would migrate to a <code class="docutils literal notranslate"><span class="pre">labeled_counter</span></code> like:</p>
+           <div class="highlight-yaml notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="nt">avif</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">decode_result</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">labeled_counter,</span>
+<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">      </span><span class="no">Each AVIF image's decode result.</span>
+<span class="w">      </span><span class="no">Migrated from Telemetry's `AVIF_DECODE_RESULT`.</span>
+<span class="w">    </span><span class="nt">labels</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">success</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">parse_error</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">no_primary_item</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">decode_error</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">size_overflow</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">out_of_memory</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pipe_init_error</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">write_buffer_error</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">alpha_y_sz_mismatch</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">alpha_y_bpc_mismatch</span>
+<span class="w">    </span><span class="nt">bugs</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://bugzilla.mozilla.org/show_bug.cgi?id=1670827</span>
+<span class="w">    </span><span class="nt">data_reviews</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://bugzilla.mozilla.org/show_bug.cgi?id=1670827#c9</span>
+<span class="w">    </span><span class="nt">data_sensitivity</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">technical</span>
+<span class="w">    </span><span class="nt">notification_emails</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cchang@mozilla.com</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jbauman@mozilla.com</span>
+<span class="w">    </span><span class="nt">expires</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">never</span>
+</pre>
+            </div>
+           </div>
+           <p><strong>GIFFT:</strong> This type of collection is mirrorable back to Firefox Telemetry via the <a class="reference internal" href="gifft.html"><span class="std std-doc">Glean Interface For Firefox Telemetry</span></a>. See <a class="reference internal" href="gifft.html"><span class="std std-doc">the guide</span></a> for instructions. <strong>N.B.:</strong> This will mirror back as a Keyed Scalar of kind <code class="docutils literal notranslate"><span class="pre">uint</span></code>, not as any kind of Histogram, so your original un-migrated histogram cannot be used as the mirror.</p>
+           <section id="keyed-histograms-with-discrete-sample-distributions-keyed-true-and-kind-categorical-enumerated-or-boolean-comment-on-bug-1657470">
+            <h4><a class="toc-backref" href="#id18" role="doc-backlink">Keyed Histograms with Discrete Sample Distributions: <code class="docutils literal notranslate"><span class="pre">"keyed":</span> <span class="pre">true</span></code> and kind <code class="docutils literal notranslate"><span class="pre">categorical</span></code>, <code class="docutils literal notranslate"><span class="pre">enumerated</span></code>, or <code class="docutils literal notranslate"><span class="pre">boolean</span></code> - Comment on bug 1657470</a><a class="headerlink" href="#keyed-histograms-with-discrete-sample-distributions-keyed-true-and-kind-categorical-enumerated-or-boolean-comment-on-bug-1657470" title="Link to this heading">?</a></h4>
+            <p>Glean doesn’t currently have a good metric type for this. But we <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1657470">intend to add one</a>. If you are migrating a collection of this type, please add a comment to the bug detailing which probe you are migrating, and when you need it migrated by. We’ll prioritize adding this metric type accordingly.</p>
+           </section>
+          </section>
+         </section>
+         <section id="scalars">
+          <h2><a class="toc-backref" href="#id19" role="doc-backlink">Scalars</a><a class="headerlink" href="#scalars" title="Link to this heading">?</a></h2>
+          <p><a class="reference internal" href="../../telemetry/collection/scalars.html"><span class="std std-doc">Scalars</span></a> are low-level individual data collections with a variety of uses.</p>
+          <section id="scalars-of-kind-uint-that-you-call-scalaradd-on-use-gleans-counter">
+           <h3><a class="toc-backref" href="#id20" role="doc-backlink">Scalars of <code class="docutils literal notranslate"><span class="pre">kind:</span> <span class="pre">uint</span></code> that you call <code class="docutils literal notranslate"><span class="pre">scalarAdd</span></code> on - Use Glean’s <code class="docutils literal notranslate"><span class="pre">counter</span></code></a><a class="headerlink" href="#scalars-of-kind-uint-that-you-call-scalaradd-on-use-gleans-counter" title="Link to this heading">?</a></h3>
+           <p>The most common kind of Scalar is of <code class="docutils literal notranslate"><span class="pre">kind:</span> <span class="pre">uint</span></code>. The most common use of such a scalar is to repeatedly call <code class="docutils literal notranslate"><span class="pre">scalarAdd</span></code> on it as countable things happen.</p>
+           <p>The Glean metric type for countable things is <a class="reference external" href="https://mozilla.github.io/glean/book/reference/metrics/counter.html">the <code class="docutils literal notranslate"><span class="pre">counter</span></code> metric type</a>.</p>
+           <p>So for a Scalar like this:</p>
+           <div class="highlight-yaml notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="nt">script.preloader</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">mainthread_recompile</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">bug_numbers</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1364235</span>
+<span class="w">    </span><span class="nt">description</span><span class="p">:</span>
+<span class="w">      </span><span class="l l-Scalar l-Scalar-Plain">How many times we ended up recompiling a script from the script preloader</span>
+<span class="w">      </span><span class="l l-Scalar l-Scalar-Plain">on the main thread.</span>
+<span class="w">    </span><span class="nt">expires</span><span class="p">:</span><span class="w"> </span><span class="s">"100"</span>
+<span class="w">    </span><span class="nt">keyed</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="w">    </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">uint</span>
+<span class="w">    </span><span class="nt">notification_emails</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dothayer@mozilla.com</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">plawless@mozilla.com</span>
+<span class="w">    </span><span class="nt">release_channel_collection</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">opt-out</span>
+<span class="w">    </span><span class="nt">products</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">'firefox'</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">'fennec'</span>
+<span class="w">    </span><span class="nt">record_in_processes</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">'main'</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">'content'</span>
+</pre>
+            </div>
+           </div>
+           <p>You will migrate to a <code class="docutils literal notranslate"><span class="pre">counter</span></code> metric type like this:</p>
+           <div class="highlight-yaml notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="nt">script.preloader</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">mainthread_recompile</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">counter</span>
+<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">      </span><span class="no">How many times we ended up recompiling a script from the script preloader</span>
+<span class="w">      </span><span class="no">on the main thread.</span>
+<span class="w">      </span><span class="no">Migrated from Telemetry's `script.preloader.mainthread_recompile`.</span>
+<span class="w">    </span><span class="nt">bugs</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://bugzilla.mozilla.org/show_bug.cgi?id=1364235</span>
+<span class="w">    </span><span class="nt">data_reviews</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://bugzilla.mozilla.org/show_bug.cgi?id=1364235#c25</span>
+<span class="w">    </span><span class="nt">data_sensitivity</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">technical</span>
+<span class="w">    </span><span class="nt">notification_emails</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dothayer@mozilla.com</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">plawless@mozilla.com</span>
+<span class="w">    </span><span class="nt">expires</span><span class="p">:</span><span class="w"> </span><span class="s">"100"</span>
+</pre>
+            </div>
+           </div>
+           <p><strong>GIFFT:</strong> This type of collection is mirrorable back to Firefox Telemetry via the <a class="reference internal" href="gifft.html"><span class="std std-doc">Glean Interface For Firefox Telemetry</span></a>. See <a class="reference internal" href="gifft.html"><span class="std std-doc">the guide</span></a> for instructions.</p>
+           <section id="keyed-scalars-of-kind-uint-that-you-call-scalaradd-on-use-gleans-labeled-counter">
+            <h4><a class="toc-backref" href="#id21" role="doc-backlink">Keyed Scalars of <code class="docutils literal notranslate"><span class="pre">kind:</span> <span class="pre">uint</span></code> that you call <code class="docutils literal notranslate"><span class="pre">scalarAdd</span></code> on - Use Glean’s <code class="docutils literal notranslate"><span class="pre">labeled_counter</span></code></a><a class="headerlink" href="#keyed-scalars-of-kind-uint-that-you-call-scalaradd-on-use-gleans-labeled-counter" title="Link to this heading">?</a></h4>
+            <p>Another very common use of Scalars is to have a Keyed Scalar of <code class="docutils literal notranslate"><span class="pre">kind:</span> <span class="pre">uint</span></code>. This was often used to track UI usage.</p>
+            <p>This is supported by the <a class="reference external" href="https://mozilla.github.io/glean/book/reference/metrics/labeled_counters.html">Glean <code class="docutils literal notranslate"><span class="pre">labeled_counter</span></code> metric type</a>.</p>
+            <p>So for a Keyed Scalar of <code class="docutils literal notranslate"><span class="pre">kind:</span> <span class="pre">uint</span></code> like this:</p>
+            <div class="highlight-yaml notranslate">
+             <div class="highlight">
+              <pre><span></span><span class="nt">urlbar</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">tips</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">bug_numbers</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1608461</span>
+<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">&gt;</span>
+<span class="w">      </span><span class="no">A keyed uint recording how many times particular tips are shown in the</span>
+<span class="w">      </span><span class="no">Urlbar and how often their confirm and help buttons are pressed.</span>
+<span class="w">    </span><span class="nt">expires</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">never</span>
+<span class="w">    </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">uint</span>
+<span class="w">    </span><span class="nt">keyed</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="nt">notification_emails</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">email@example.com</span>
+<span class="w">    </span><span class="nt">release_channel_collection</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">opt-out</span>
+<span class="w">    </span><span class="nt">products</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">'firefox'</span>
+<span class="w">    </span><span class="nt">record_in_processes</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">main</span>
+</pre>
+             </div>
+            </div>
+            <p>You would migrate it to a <code class="docutils literal notranslate"><span class="pre">labeled_counter</span></code> like this:</p>
+            <div class="highlight-yaml notranslate">
+             <div class="highlight">
+              <pre><span></span><span class="nt">urlbar</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">tips</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">labeled_counter</span>
+<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">&gt;</span>
+<span class="w">      </span><span class="no">A keyed uint recording how many times particular tips are shown in the</span>
+<span class="w">      </span><span class="no">Urlbar and how often their confirm and help buttons are pressed.</span>
+<span class="w">      </span><span class="no">Migrated from Telemetry's `urlbar.tips`.</span>
+<span class="w">    </span><span class="nt">bugs</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://bugzilla.mozilla.org/show_bug.cgi?id=1608461</span>
+<span class="w">    </span><span class="nt">data_reviews</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://bugzilla.mozilla.org/show_bug.cgi?id=1608461#c42</span>
+<span class="w">    </span><span class="nt">data_sensitivity</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">interaction</span>
+<span class="w">    </span><span class="nt">expires</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">never</span>
+<span class="w">    </span><span class="nt">notification_emails</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">email@example.com</span>
+</pre>
+             </div>
+            </div>
+            <p>Now, if your Keyed Scalar has a list of known keys, you should provide it to the <code class="docutils literal notranslate"><span class="pre">labeled_counter</span></code> using the <code class="docutils literal notranslate"><span class="pre">labels</span></code> property like so:</p>
+            <div class="highlight-yaml notranslate">
+             <div class="highlight">
+              <pre><span></span><span class="nt">urlbar</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">tips</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">labeled_counter</span>
+<span class="w">    </span><span class="nt">labels</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tabtosearch_onboard_shown</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tabtosearch_shown</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">searchtip_onboard_shown</span>
+<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+</pre>
+             </div>
+            </div>
+            <p><strong>GIFFT:</strong> This type of collection is mirrorable back to Firefox Telemetry via the <a class="reference internal" href="gifft.html"><span class="std std-doc">Glean Interface For Firefox Telemetry</span></a>. See <a class="reference internal" href="gifft.html"><span class="std std-doc">the guide</span></a> for instructions.</p>
+           </section>
+          </section>
+          <section id="scalars-of-kind-uint-that-you-call-scalarset-on-use-gleans-quantity">
+           <h3><a class="toc-backref" href="#id22" role="doc-backlink">Scalars of <code class="docutils literal notranslate"><span class="pre">kind:</span> <span class="pre">uint</span></code> that you call <code class="docutils literal notranslate"><span class="pre">scalarSet</span></code> on - Use Glean’s <code class="docutils literal notranslate"><span class="pre">quantity</span></code></a><a class="headerlink" href="#scalars-of-kind-uint-that-you-call-scalarset-on-use-gleans-quantity" title="Link to this heading">?</a></h3>
+           <p>Distinct from counts which are partial sums, Scalars of <code class="docutils literal notranslate"><span class="pre">kind:</span> <span class="pre">uint</span></code> that you <em>set</em> could contain just about anything. The best metric type depends on the type of data you’re setting (See “Other Scalar-ish types” for some possibilities).</p>
+           <p>If it’s a numerical value you are setting, chances are you will be best served by <a class="reference external" href="https://mozilla.github.io/glean/book/reference/metrics/quantity.html">Glean’s <code class="docutils literal notranslate"><span class="pre">quantity</span></code> metric type</a>.</p>
+           <p>For a such a quantitative Scalar like:</p>
+           <div class="highlight-yaml notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="nt">gfx.display</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">primary_height</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">bug_numbers</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1594145</span>
+<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">&gt;</span>
+<span class="w">      </span><span class="no">Height of the primary display, takes device rotation into account.</span>
+<span class="w">    </span><span class="nt">expires</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">never</span>
+<span class="w">    </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">uint</span>
+<span class="w">    </span><span class="nt">notification_emails</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gfx-telemetry-alerts@mozilla.com</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ktaeleman@mozilla.com</span>
+<span class="w">    </span><span class="nt">products</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">'firefox'</span>
+<span class="w">    </span><span class="nt">record_in_processes</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">'main'</span>
+<span class="w">    </span><span class="nt">release_channel_collection</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">opt-out</span>
+</pre>
+            </div>
+           </div>
+           <p>You would migrate it to a <code class="docutils literal notranslate"><span class="pre">quantity</span></code> like:</p>
+           <div class="highlight-yaml notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="nt">gfx.display</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">primary_height</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">quantity</span>
+<span class="w">    </span><span class="nt">unit</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pixels</span>
+<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">&gt;</span>
+<span class="w">      </span><span class="no">Height of the primary display, takes device rotation into account.</span>
+<span class="w">      </span><span class="no">Migrated from Telemetry's `gfx.display.primary_height`.</span>
+<span class="w">    </span><span class="nt">bugs</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://bugzilla.mozilla.org/show_bug.cgi?id=1594145</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://bugzilla.mozilla.org/show_bug.cgi?id=1687219</span>
+<span class="w">    </span><span class="nt">data_reviews</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://bugzilla.mozilla.org/show_bug.cgi?id=1594145#c4</span>
+<span class="w">    </span><span class="nt">data_sensitivity</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">technical</span>
+<span class="w">    </span><span class="nt">notification_emails</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gfx-telemetry-alerts@mozilla.com</span>
+<span class="w">    </span><span class="nt">expires</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">never</span>
+</pre>
+            </div>
+           </div>
+           <p>Note the required <code class="docutils literal notranslate"><span class="pre">unit</span></code> property.</p>
+           <p><strong>GIFFT:</strong> This type of collection is mirrorable back to Firefox Telemetry via the <a class="reference internal" href="gifft.html"><span class="std std-doc">Glean Interface For Firefox Telemetry</span></a>. See <a class="reference internal" href="gifft.html"><span class="std std-doc">the guide</span></a> for instructions.</p>
+           <p><strong>IPC Note:</strong> Due to <code class="docutils literal notranslate"><span class="pre">set</span></code> not being a <a class="reference internal" href="../dev/ipc.html"><span class="std std-doc">commutative operation</span></a>, using <code class="docutils literal notranslate"><span class="pre">quantity</span></code> on non-parent processes is forbidden. This is a restriction that favours correctness over friendliness, which we may revisit if enough use cases require it. Please <a class="reference external" href="https://chat.mozilla.org/#/room/#glean:mozilla.org">contact us</a> if you’d like us to do so.</p>
+           <section id="keyed-scalars-of-kind-uint-that-you-call-scalarset-on-use-gleans-labeled-quantity">
+            <h4><a class="toc-backref" href="#id23" role="doc-backlink">Keyed Scalars of <code class="docutils literal notranslate"><span class="pre">kind:</span> <span class="pre">uint</span></code> that you call <code class="docutils literal notranslate"><span class="pre">scalarSet</span></code> on - Use Glean’s <code class="docutils literal notranslate"><span class="pre">labeled_quantity</span></code></a><a class="headerlink" href="#keyed-scalars-of-kind-uint-that-you-call-scalarset-on-use-gleans-labeled-quantity" title="Link to this heading">?</a></h4>
+            <p>Distinct from counts which are partial sums, Keyed Scalars of <code class="docutils literal notranslate"><span class="pre">kind:</span> <span class="pre">uint</span></code> that you <em>set</em> could contain just about anything. For these cases, you should use <a class="reference external" href="https://mozilla.github.io/glean/book/reference/metrics/labeled_quantity.html">Glean’s <code class="docutils literal notranslate"><span class="pre">labeled_quantity</span></code> metric type</a>.</p>
+            <p>For a such a quantitative Keyed Scalar like:</p>
+            <div class="highlight-yaml notranslate">
+             <div class="highlight">
+              <pre><span></span><span class="nt">normandy</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">recipe_freshness</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">bug_numbers</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1530508</span>
+<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">&gt;</span>
+<span class="w">      </span><span class="no">For each recipe ID seen by the Normandy client, its last_modified.</span>
+<span class="w">    </span><span class="nt">expires</span><span class="p">:</span><span class="w"> </span><span class="s">"never"</span>
+<span class="w">    </span><span class="nt">keyed</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">uint</span>
+<span class="w">    </span><span class="nt">notification_emails</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">product-delivery@mozilla.com</span>
+<span class="w">    </span><span class="nt">release_channel_collection</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">opt-out</span>
+<span class="w">    </span><span class="nt">products</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">'firefox'</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">'fennec'</span>
+<span class="w">    </span><span class="nt">record_in_processes</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">main</span>
+</pre>
+             </div>
+            </div>
+            <p>You would migrate it to a <code class="docutils literal notranslate"><span class="pre">labeled_quantity</span></code> like:</p>
+            <div class="highlight-yaml notranslate">
+             <div class="highlight">
+              <pre><span></span><span class="w">  </span><span class="nt">recipe_freshness</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">labeled_quantity</span>
+<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">&gt;</span>
+<span class="w">      </span><span class="no">For each recipe ID seen by the Normandy client, its last_modified.</span>
+<span class="w">      </span><span class="no">This metric was generated to correspond to the Legacy Telemetry</span>
+<span class="w">      </span><span class="no">scalar normandy.recipe_freshness.</span>
+<span class="w">    </span><span class="nt">bugs</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://bugzil.la/1530508</span>
+<span class="w">    </span><span class="nt">data_reviews</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://bugzil.la/1530508</span>
+<span class="w">    </span><span class="nt">notification_emails</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">product-delivery@mozilla.com</span>
+<span class="w">    </span><span class="nt">expires</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">never</span>
+<span class="w">    </span><span class="nt">unit</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">revision id</span>
+<span class="w">    </span><span class="nt">telemetry_mirror</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NORMANDY_RECIPE_FRESHNESS</span>
+</pre>
+             </div>
+            </div>
+            <p>Note the required <code class="docutils literal notranslate"><span class="pre">unit</span></code> property.</p>
+            <p><strong>GIFFT:</strong> This type of collection is mirrorable back to Firefox Telemetry via the <a class="reference internal" href="gifft.html"><span class="std std-doc">Glean Interface For Firefox Telemetry</span></a>. See <a class="reference internal" href="gifft.html"><span class="std std-doc">the guide</span></a> for instructions.</p>
+            <p><strong>IPC Note:</strong> Due to <code class="docutils literal notranslate"><span class="pre">set</span></code> not being a <a class="reference internal" href="../dev/ipc.html"><span class="std std-doc">commutative operation</span></a>, using <code class="docutils literal notranslate"><span class="pre">labeled_quantity</span></code> on non-parent processes is forbidden. This is a restriction that favours correctness over friendliness, which we may revisit if enough use cases require it. Please <a class="reference external" href="https://chat.mozilla.org/#/room/#glean:mozilla.org">contact us</a> if you’d like us to do so.</p>
+           </section>
+          </section>
+          <section id="scalars-of-kind-uint-that-you-call-scalarsetmaximum-or-some-combination-of-operations-on-ask-on-glean-mozilla-org-for-assistance">
+           <h3><a class="toc-backref" href="#id24" role="doc-backlink">Scalars of <code class="docutils literal notranslate"><span class="pre">kind:</span> <span class="pre">uint</span></code> that you call <code class="docutils literal notranslate"><span class="pre">scalarSetMaximum</span></code> or some combination of operations on - Ask on #glean:mozilla.org for assistance</a><a class="headerlink" href="#scalars-of-kind-uint-that-you-call-scalarsetmaximum-or-some-combination-of-operations-on-ask-on-glean-mozilla-org-for-assistance" title="Link to this heading">?</a></h3>
+           <p>Glean doesn’t currently have a good metric type for dealing with maximums, or for dealing with values you both count and set. Please <a class="reference external" href="https://chat.mozilla.org/#/room/#glean:mozilla.org">reach out to us</a> to explain your use-case. We will help you either work within what Glean currently affords or <a class="reference external" href="https://wiki.mozilla.org/Glean/Adding_or_changing_Glean_metric_types">design a new metric type for you</a>.</p>
+          </section>
+          <section id="scalars-of-kind-string-use-gleans-string">
+           <h3><a class="toc-backref" href="#id25" role="doc-backlink">Scalars of <code class="docutils literal notranslate"><span class="pre">kind:</span> <span class="pre">string</span></code> - Use Glean’s <code class="docutils literal notranslate"><span class="pre">string</span></code></a><a class="headerlink" href="#scalars-of-kind-string-use-gleans-string" title="Link to this heading">?</a></h3>
+           <p>If your string value is a unique identifier, then consider <a class="reference external" href="https://mozilla.github.io/glean/book/reference/metrics/uuid.html">Glean’s <code class="docutils literal notranslate"><span class="pre">uuid</span></code> metric type</a> first.</p>
+           <p>If the string scalar value doesn’t fit that or any other more specific metric type, then <a class="reference external" href="https://mozilla.github.io/glean/book/reference/metrics/string.html">Glean’s <code class="docutils literal notranslate"><span class="pre">string</span></code> metric type</a> will do.</p>
+           <p>For a Scalar of <code class="docutils literal notranslate"><span class="pre">kind:</span> <span class="pre">string</span></code> like:</p>
+           <div class="highlight-yaml notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="nt">widget</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">gtk_version</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">bug_numbers</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1670145</span>
+<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">&gt;</span>
+<span class="w">      </span><span class="no">The version of Gtk 3 in use.</span>
+<span class="w">    </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span>
+<span class="w">    </span><span class="nt">expires</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">never</span>
+<span class="w">    </span><span class="nt">notification_emails</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">layout-telemetry-alerts@mozilla.com</span>
+<span class="w">    </span><span class="nt">release_channel_collection</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">opt-out</span>
+<span class="w">    </span><span class="nt">products</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">'firefox'</span>
+<span class="w">    </span><span class="nt">record_in_processes</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">'main'</span>
+</pre>
+            </div>
+           </div>
+           <p>You will migrate it to a <code class="docutils literal notranslate"><span class="pre">string</span></code> metric like:</p>
+           <div class="highlight-yaml notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="nt">widget</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">gtk_version</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span>
+<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">&gt;</span>
+<span class="w">      </span><span class="no">The version of Gtk 3 in use.</span>
+<span class="w">      </span><span class="no">Migrated from Telemetry's `widget.gtk_version`.</span>
+<span class="w">    </span><span class="nt">bugs</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://bugzilla.mozilla.org/show_bug.cgi?id=1670145</span>
+<span class="w">    </span><span class="nt">data_reviews</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://bugzilla.mozilla.org/show_bug.cgi?id=1670145#c7</span>
+<span class="w">    </span><span class="nt">data_sensitivity</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">technical</span>
+<span class="w">    </span><span class="nt">notification_emails</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">layout-telemetry-alerts@mozilla.com</span>
+<span class="w">    </span><span class="nt">expires</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">never</span>
+</pre>
+            </div>
+           </div>
+           <p><strong>GIFFT:</strong> This type of collection is mirrorable back to Firefox Telemetry via the <a class="reference internal" href="gifft.html"><span class="std std-doc">Glean Interface For Firefox Telemetry</span></a>. See <a class="reference internal" href="gifft.html"><span class="std std-doc">the guide</span></a> for instructions.</p>
+           <p><strong>IPC Note:</strong> Due to <code class="docutils literal notranslate"><span class="pre">set</span></code> not being a <a class="reference internal" href="../dev/ipc.html"><span class="std std-doc">commutative operation</span></a>, using <code class="docutils literal notranslate"><span class="pre">string</span></code> on non-parent processes is forbidden. This is a restriction that favours correctness over friendliness, which we may revisit if enough use cases require it. Please <a class="reference external" href="https://chat.mozilla.org/#/room/#glean:mozilla.org">contact us</a> if you’d like us to do so.</p>
+          </section>
+          <section id="scalars-of-kind-boolean-use-gleans-boolean">
+           <h3><a class="toc-backref" href="#id26" role="doc-backlink">Scalars of <code class="docutils literal notranslate"><span class="pre">kind:</span> <span class="pre">boolean</span></code> - Use Glean’s <code class="docutils literal notranslate"><span class="pre">boolean</span></code></a><a class="headerlink" href="#scalars-of-kind-boolean-use-gleans-boolean" title="Link to this heading">?</a></h3>
+           <p>If you need to store a simple true/false, <a class="reference external" href="https://mozilla.github.io/glean/book/reference/metrics/boolean.html">Glean’s <code class="docutils literal notranslate"><span class="pre">boolean</span></code> metric type</a> is likely best.</p>
+           <p>If you have more that just <code class="docutils literal notranslate"><span class="pre">true</span></code> and <code class="docutils literal notranslate"><span class="pre">false</span></code> to store, you may prefer a <code class="docutils literal notranslate"><span class="pre">labeled_counter</span></code>.</p>
+           <p>For a Scalar of <code class="docutils literal notranslate"><span class="pre">kind:</span> <span class="pre">boolean</span></code> like:</p>
+           <div class="highlight-yaml notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="nt">widget</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">dark_mode</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">bug_numbers</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1601846</span>
+<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">&gt;</span>
+<span class="w">      </span><span class="no">Whether the OS theme is dark.</span>
+<span class="w">    </span><span class="nt">expires</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">never</span>
+<span class="w">    </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">boolean</span>
+<span class="w">    </span><span class="nt">notification_emails</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">layout-telemetry-alerts@mozilla.com</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cmccormack@mozilla.com</span>
+<span class="w">    </span><span class="nt">release_channel_collection</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">opt-out</span>
+<span class="w">    </span><span class="nt">products</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">'firefox'</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">'fennec'</span>
+<span class="w">    </span><span class="nt">record_in_processes</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">'main'</span>
+</pre>
+            </div>
+           </div>
+           <p>You would migrate to a <code class="docutils literal notranslate"><span class="pre">boolean</span></code> metric type like:</p>
+           <div class="highlight-yaml notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="nt">widget</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">dark_mode</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">boolean</span>
+<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">&gt;</span>
+<span class="w">      </span><span class="no">Whether the OS theme is dark.</span>
+<span class="w">      </span><span class="no">Migrated from Telemetry's `widget.dark_mode`.</span>
+<span class="w">    </span><span class="nt">bugs</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://bugzilla.mozilla.org/show_bug.cgi?id=1601846</span>
+<span class="w">    </span><span class="nt">data_reviews</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://bugzilla.mozilla.org/show_bug.cgi?id=1601846#c5</span>
+<span class="w">    </span><span class="nt">data_sensitivity</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">technical</span>
+<span class="w">    </span><span class="nt">notification_emails</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">layout-telemetry-alerts@mozilla.com</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cmccormack@mozilla.com</span>
+<span class="w">    </span><span class="nt">expires</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">never</span>
+</pre>
+            </div>
+           </div>
+           <p><strong>GIFFT:</strong> This type of collection is mirrorable back to Firefox Telemetry via the <a class="reference internal" href="gifft.html"><span class="std std-doc">Glean Interface For Firefox Telemetry</span></a>. See <a class="reference internal" href="gifft.html"><span class="std std-doc">the guide</span></a> for instructions.</p>
+           <p><strong>IPC Note:</strong> Due to <code class="docutils literal notranslate"><span class="pre">set</span></code> not being a <a class="reference internal" href="../dev/ipc.html"><span class="std std-doc">commutative operation</span></a>, using <code class="docutils literal notranslate"><span class="pre">boolean</span></code> on non-parent processes is forbidden. This is a restriction that favours correctness over friendliness, which we may revisit if enough use cases require it. Please <a class="reference external" href="https://chat.mozilla.org/#/room/#glean:mozilla.org">contact us</a> if you’d like us to do so.</p>
+           <section id="keyed-scalars-of-kind-boolean-use-gleans-labeled-boolean">
+            <h4><a class="toc-backref" href="#id27" role="doc-backlink">Keyed Scalars of <code class="docutils literal notranslate"><span class="pre">kind:</span> <span class="pre">boolean</span></code> - Use Glean’s <code class="docutils literal notranslate"><span class="pre">labeled_boolean</span></code></a><a class="headerlink" href="#keyed-scalars-of-kind-boolean-use-gleans-labeled-boolean" title="Link to this heading">?</a></h4>
+            <p>If you have multiple related true/false values, you may have put them in a Keyed Scalar of <code class="docutils literal notranslate"><span class="pre">kind:</span> <span class="pre">boolean</span></code>.</p>
+            <p>The best match for this is <a class="reference external" href="https://mozilla.github.io/glean/book/reference/metrics/labeled_booleans.html">Glean’s <code class="docutils literal notranslate"><span class="pre">labeled_boolean</span></code> metric type</a>.</p>
+            <p>For a Keyed Scalar of <code class="docutils literal notranslate"><span class="pre">kind:</span> <span class="pre">boolean</span></code> like:</p>
+            <div class="highlight-yaml notranslate">
+             <div class="highlight">
+              <pre><span></span><span class="nt">devtools.tool</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">registered</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">bug_numbers</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1447302</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1503568</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1587985</span>
+<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">&gt;</span>
+<span class="w">      </span><span class="no">Recorded on enable tool checkbox check/uncheck in Developer Tools options</span>
+<span class="w">      </span><span class="no">panel. Boolean stating if the tool was enabled or disabled by the user.</span>
+<span class="w">      </span><span class="no">Keyed by tool id. Current default tools with their id's are defined in</span>
+<span class="w">      </span><span class="no">https://searchfox.org/mozilla-central/source/devtools/client/definitions.js</span>
+<span class="w">    </span><span class="nt">expires</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">never</span>
+<span class="w">    </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">boolean</span>
+<span class="w">    </span><span class="nt">keyed</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="nt">notification_emails</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dev-developer-tools@lists.mozilla.org</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">accessibility@mozilla.com</span>
+<span class="w">    </span><span class="nt">release_channel_collection</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">opt-out</span>
+<span class="w">    </span><span class="nt">products</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">'firefox'</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">'fennec'</span>
+<span class="w">    </span><span class="nt">record_in_processes</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">'main'</span>
+</pre>
+             </div>
+            </div>
+            <p>You would migrate to a <code class="docutils literal notranslate"><span class="pre">labeled_boolean</span></code> like:</p>
+            <div class="highlight-yaml notranslate">
+             <div class="highlight">
+              <pre><span></span><span class="nt">devtools.tool</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">registered</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">labeled_boolean</span>
+<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">&gt;</span>
+<span class="w">      </span><span class="no">Recorded on enable tool checkbox check/uncheck in Developer Tools options</span>
+<span class="w">      </span><span class="no">panel. Boolean stating if the tool was enabled or disabled by the user.</span>
+<span class="w">      </span><span class="no">Migrated from Telemetry's `devtools.tool`.</span>
+<span class="w">    </span><span class="nt">labels</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">options</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">inspector</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">webconsole</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jsdebugger</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">styleeditor</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">performance</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">memory</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">netmonitor</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">storage</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dom</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">accessibility</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">application</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dark</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">light</span>
+<span class="w">    </span><span class="nt">bugs</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://bugzilla.mozilla.org/show_bug.cgi?id=1447302</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://bugzilla.mozilla.org/show_bug.cgi?id=1503568</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://bugzilla.mozilla.org/show_bug.cgi?id=1587985</span>
+<span class="w">    </span><span class="nt">data_reviews</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://bugzilla.mozilla.org/show_bug.cgi?id=1447302#c17</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://bugzilla.mozilla.org/show_bug.cgi?id=1503568#c3</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://bugzilla.mozilla.org/show_bug.cgi?id=1587985#c5</span>
+<span class="w">    </span><span class="nt">data_sensitivity</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">interaction</span>
+<span class="w">    </span><span class="nt">notification_emails</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dev-developer-tools@lists.mozilla.org</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">accessibility@mozilla.com</span>
+<span class="w">    </span><span class="nt">expires</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">never</span>
+</pre>
+             </div>
+            </div>
+            <p><strong>GIFFT:</strong> This type of collection is mirrorable back to Firefox Telemetry via the <a class="reference internal" href="gifft.html"><span class="std std-doc">Glean Interface For Firefox Telemetry</span></a>. See <a class="reference internal" href="gifft.html"><span class="std std-doc">the guide</span></a> for instructions.</p>
+            <p><strong>IPC Note:</strong> Due to <code class="docutils literal notranslate"><span class="pre">set</span></code> not being a <a class="reference internal" href="../dev/ipc.html"><span class="std std-doc">commutative operation</span></a>, using <code class="docutils literal notranslate"><span class="pre">labeled_boolean</span></code> on non-parent processes is forbidden. This is a restriction that favours correctness over friendliness, which we may revisit if enough use cases require it. Please <a class="reference external" href="https://chat.mozilla.org/#/room/#glean:mozilla.org">contact us</a> if you’d like us to do so.</p>
+           </section>
+          </section>
+          <section id="other-scalar-ish-types-rate-timespan-datetime-uuid">
+           <h3><a class="toc-backref" href="#id28" role="doc-backlink">Other Scalar-ish types: <code class="docutils literal notranslate"><span class="pre">rate</span></code>, <code class="docutils literal notranslate"><span class="pre">timespan</span></code>, <code class="docutils literal notranslate"><span class="pre">datetime</span></code>, <code class="docutils literal notranslate"><span class="pre">uuid</span></code></a><a class="headerlink" href="#other-scalar-ish-types-rate-timespan-datetime-uuid" title="Link to this heading">?</a></h3>
+           <p>The Glean SDK provides some very handy higher-level metric types for specific data. If your data</p>
+           <ul class="simple">
+            <li>
+             <p>Is two or more numbers that are related (like failure count vs total count), then consider the <a class="reference external" href="https://mozilla.github.io/glean/book/reference/metrics/rate.html">Glean <code class="docutils literal notranslate"><span class="pre">rate</span></code> metric type</a>.</p></li>
+            <li>
+             <p>Is a single duration or span of time (like how long Firefox takes to start), then consider the <a class="reference external" href="https://mozilla.github.io/glean/book/reference/metrics/timespan.html">Glean <code class="docutils literal notranslate"><span class="pre">timespan</span></code> metric type</a>.</p></li>
+            <li>
+             <p>Is a single point in time (like the most recent sync time), then consider the <a class="reference external" href="https://mozilla.github.io/glean/book/reference/metrics/datetime.html">Glean <code class="docutils literal notranslate"><span class="pre">datetime</span></code> metric type</a>.</p></li>
+            <li>
+             <p>Is a unique identifier (like a session id), then consider the <a class="reference external" href="https://mozilla.github.io/glean/book/reference/metrics/uuid.html">Glean <code class="docutils literal notranslate"><span class="pre">uuid</span></code> metric type</a>.</p></li>
+           </ul>
+           <p><strong>GIFFT:</strong> These types of collection are mirrorable back to Firefox Telemetry via the <a class="reference internal" href="gifft.html"><span class="std std-doc">Glean Interface For Firefox Telemetry</span></a>. See <a class="reference internal" href="gifft.html"><span class="std std-doc">the guide</span></a> for instructions.</p>
+          </section>
+         </section>
+         <section id="events-use-gleans-event">
+          <h2><a class="toc-backref" href="#id29" role="doc-backlink">Events - Use Glean’s <code class="docutils literal notranslate"><span class="pre">event</span></code></a><a class="headerlink" href="#events-use-gleans-event" title="Link to this heading">?</a></h2>
+          <p><a class="reference internal" href="../../telemetry/collection/events.html"><span class="std std-doc">Telemetry Events</span></a> are a lesser-used form of data collection in Firefox Desktop. Glean aimed to remove some of the stumbling blocks facing instrumentors when using events in the <a class="reference external" href="https://mozilla.github.io/glean/book/reference/metrics/event.html">Glean <code class="docutils literal notranslate"><span class="pre">event</span></code> metric type</a>:</p>
+          <ul class="simple">
+           <li>
+            <p>Don’t worry about enabling event categories. In Glean all <code class="docutils literal notranslate"><span class="pre">events</span></code> are always on.</p></li>
+           <li>
+            <p>No more event <code class="docutils literal notranslate"><span class="pre">name</span></code>. Events in Glean follow the same <code class="docutils literal notranslate"><span class="pre">category.name.metric_name</span></code> naming structure that other metrics do.</p></li>
+           <li>
+            <p>No more <code class="docutils literal notranslate"><span class="pre">method</span></code>/<code class="docutils literal notranslate"><span class="pre">object</span></code>/<code class="docutils literal notranslate"><span class="pre">value</span></code>. Events in Glean are just their identifier and an <code class="docutils literal notranslate"><span class="pre">extras</span></code> key/value dictionary.</p></li>
+          </ul>
+          <p>Since the two Event types aren’t that analogous you will need to decide if your event</p>
+          <ul class="simple">
+           <li>
+            <p>Prefers to put its <code class="docutils literal notranslate"><span class="pre">method</span></code>/<code class="docutils literal notranslate"><span class="pre">object</span></code>/<code class="docutils literal notranslate"><span class="pre">value</span></code> in the <code class="docutils literal notranslate"><span class="pre">extras</span></code> dictionary</p></li>
+           <li>
+            <p>Prefers to fold its <code class="docutils literal notranslate"><span class="pre">method</span></code>/<code class="docutils literal notranslate"><span class="pre">object</span></code>/<code class="docutils literal notranslate"><span class="pre">value</span></code> into its identifier</p></li>
+          </ul>
+          <p><strong>GIFFT:</strong> Events are mirrorable back to Firefox Telemetry via the <a class="reference internal" href="gifft.html"><span class="std std-doc">Glean Interface For Firefox Telemetry</span></a>. See <a class="reference internal" href="gifft.html"><span class="std std-doc">the guide</span></a> for instructions.</p>
+         </section>
+         <section id="other-environment-crash-annotations-use-counters-etc-ask-on-glean-mozilla-org-for-assistance">
+          <h2><a class="toc-backref" href="#id30" role="doc-backlink">Other: Environment, Crash Annotations, Use Counters, Etc - Ask on #glean:mozilla.org for assistance</a><a class="headerlink" href="#other-environment-crash-annotations-use-counters-etc-ask-on-glean-mozilla-org-for-assistance" title="Link to this heading">?</a></h2>
+          <p>Telemetry has a lot of collection subsystems build adjacent to those already mentioned. We have solutions for the common ones, but they are entirely dependent on the specific use case. Please <a class="reference external" href="https://chat.mozilla.org/#/room/#glean:mozilla.org">reach out to us</a> to explain it to us so we can help you either work within what Glean currently affords or <a class="reference external" href="https://wiki.mozilla.org/Glean/Adding_or_changing_Glean_metric_types">design a new metric type for you</a>.</p>
+         </section>
+        </section>
+       </div>
+      </div>
+      <footer>
+       <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="instrumentation_tests.html" class="btn btn-neutral float-left" title="Writing Instrumentation Tests" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a> <a href="ohttp.html" class="btn btn-neutral float-right" title="Using Oblivious HTTP in Firefox on Glean" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+       </div>
+       <hr>
+       <div role="contentinfo">
+        <p></p>
+       </div> Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+      </footer>
+     </div>
+    </div>
+   </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ </body>
+</html>

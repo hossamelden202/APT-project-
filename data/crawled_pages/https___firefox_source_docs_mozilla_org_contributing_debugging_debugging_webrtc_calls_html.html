@@ -1,0 +1,1500 @@
+<!doctype html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Debugging WebRTC Calls — Firefox Source Docs  documentation</title>
+  <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50">
+  <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094">
+  <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=fd3f3429">
+  <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b">
+  <link rel="stylesheet" type="text/css" href="../../_static/custom_theme.css?v=dc5ed815">
+  <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7">
+  <link rel="shortcut icon" href="../../_static/firefox.ico"><!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script src="../../_static/jquery.js?v=5d32c60e"></script>
+  <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+  <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+  <script src="../../_static/doctools.js?v=9a2dae69"></script>
+  <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+  <script src="../../_static/copybutton.js?v=30646c52"></script>
+  <script src="../../_static/design-tabs.js?v=36754332"></script>
+  <script src="../../_static/js/theme.js"></script>
+  <link rel="index" title="Index" href="../../genindex.html">
+  <link rel="search" title="Search" href="../../search.html">
+  <link rel="next" title="Symbolicating TreeHerder stacks locally" href="local_symbols.html">
+  <link rel="prev" title="Debugging On Windows" href="debugging_on_windows.html">
+ </head>
+ <body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+   <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <div class="wy-side-scroll">
+     <div class="wy-side-nav-search">
+      <a href="../../index.html" class="icon icon-home"> Firefox Source Docs <img src="../../_static/firefox-wordmark.svg" class="logo" alt="Logo"> </a><!-- -- This code is governed by the BSD license ---->
+      <div>
+       <h3>Quick search</h3>
+       <script>
+    (function () {
+      var cx = "dd12886298f75dbef";
+      var gcse = document.createElement("script");
+      gcse.async = true;
+      gcse.src = "https://cse.google.com/cse.js?cx=" + cx;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(gcse, s);
+    })();
+  </script><gcse:search></gcse:search>
+      </div>
+     </div>
+     <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+      <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../glossary/index.html">A Glossary of Common Terms</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../overview/index.html">A Quick Guide to Mozilla Applications</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../setup/index.html">Getting Set Up To Work On The Firefox Codebase</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Working On Firefox</span></p>
+      <ul class="current">
+       <li class="toctree-l1 current"><a class="reference internal" href="../index.html">Working on Firefox</a>
+        <ul class="current">
+         <li class="toctree-l2"><a class="reference internal" href="../contribution_quickref.html">Firefox Contributors’ Quick Reference</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../stack_quickref.html">Working with stack of patches Quick Reference</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../pocket-guide-shipping-firefox.html">Pocket Guide: Shipping Firefox</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../editor.html">Editor / IDE integration</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../reviews.html">Getting reviews</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../levelling-up.html">Levelling up</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../how_to_submit_a_patch.html">How to submit a patch</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../data-review.html">Data Review</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../Code_Review_FAQ.html">Code Review FAQ</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../reviewer_checklist.html">Reviewer Checklist</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../vcs/mercurial.html">Mercurial Overview</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../vcs/mercurial_bundles.html">Mercurial Bundles</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="capturing_minidump.html">Capturing a minidump</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="debugging_a_hang_on_macos.html">Debugging A Hang On macOS</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="debugging_a_minidump.html">Debugging A Minidump</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="debugging_firefox_with_gdb.html">Debugging Firefox with GDB</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="debugging_firefox_with_lldb.html">Debugging Firefox with LLDB</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="debugging_firefox_with_pernosco.html">Debugging Firefox with Pernosco</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="debugging_firefox_with_rr.html">Debugging Firefox with rr</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="debugging_firefox_with_valgrind.html">Debugging Firefox with Valgrind</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="debugging_on_macos.html">Debugging On macOS</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="debugging_on_windows.html">Debugging On Windows</a></li>
+         <li class="toctree-l2 current"><a class="current reference internal" href="#">Debugging WebRTC Calls</a>
+          <ul>
+           <li class="toctree-l3"><a class="reference internal" href="#reporting-webrtc-call-issues">Reporting WebRTC Call Issues</a>
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="#adding-call-setup-information">Adding Call Setup Information</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#adding-about-support-text">Adding about:support Text</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#adding-about-webrtc-rtcpeerconnection-stats">Adding about:webrtc RTCPeerConnection Stats</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#adding-your-about-webrtc-contents">Adding Your about:webrtc Contents</a></li>
+            </ul></li>
+           <li class="toctree-l3"><a class="reference internal" href="#diagnosing-call-quality-issues">Diagnosing Call Quality Issues</a>
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="#about-webrtc-overview">about:webrtc Overview</a></li>
+            </ul></li>
+           <li class="toctree-l3"><a class="reference internal" href="#performance-profiling-and-logging">Performance Profiling and Logging</a>
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="#capturing-a-firefox-performance-profile">Capturing a Firefox Performance Profile</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#standard-logging-modules">Standard Logging Modules</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#non-standard-logging-modules">Non-standard Logging Modules</a></li>
+            </ul></li>
+           <li class="toctree-l3"><a class="reference internal" href="#examining-call-performance-issues">Examining Call Performance Issues</a>
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="#enabling-call-stats-history">Enabling Call Stats History</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#dumping-call-stats">Dumping Call Stats</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#debugging-encrypted-packets">Debugging Encrypted Packets</a></li>
+            </ul></li>
+           <li class="toctree-l3"><a class="reference internal" href="#examining-codec-availability-and-capabilities">Examining Codec Availability and Capabilities</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#id13">Running WebRTC Tests</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#test-atlas">Test Atlas</a>
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="#web-platform-tests">Web Platform Tests</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#mochitests">Mochitests</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#gtests">GTests</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#fuzz-testing">Fuzz Testing</a></li>
+            </ul></li>
+           <li class="toctree-l3"><a class="reference internal" href="#code-atlas">Code Atlas</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#standards-documentation">Standards Documentation</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#appendix-delay-calculation">Appendix: Delay Calculation</a></li>
+          </ul></li>
+         <li class="toctree-l2"><a class="reference internal" href="local_symbols.html">Symbolicating TreeHerder stacks locally</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="process_dump_task_manager.html">How to get a process dump with Windows Task Manager</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="stacktrace_report.html">How to get a stacktrace for a bug report</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="stacktrace_windbg.html">How to get a stacktrace with WinDbg</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="understanding_crash_reports.html">Understanding Crash Reports</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../signing/signing_macos_build.html">Signing Local macOS Builds</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../directory_structure.html">Firefox Source Code Directory Structure</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../build/artifact_builds.html">Understanding Artifact Builds</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../build/building_mobile_firefox.html">Firefox for Mobile Devices</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../build/supported.html">Supported Build Hosts and Targets</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../engineering_show_and_tell.html">Engineering Show and Tell</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../filing-good-bugs.html">Filing good bugs</a></li>
+        </ul></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../bug-mgmt/index.html">Bug Handling</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox User Guide</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../devtools-user/index.html">Firefox DevTools User Docs</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Source Code Documentation</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mots/index.html">Governance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../browser/index.html">Firefox Front-end</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../dom/index.html">DOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../editor/index.html">Editor</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../layout/index.html">Style system (CSS) &amp; Layout</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../gfx/index.html">Graphics</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../ipc/index.html">Processes, Threads and IPC</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../devtools/index.html">Firefox DevTools Contributor Docs</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../toolkit/index.html">Toolkit</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../js/index.html">SpiderMonkey</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../jsloader/index.html">JS Loader</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/geckoview/index.html">GeckoView</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/fenix/index.html">Fenix</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/focus-android/index.html">Focus for Android</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../dom/bindings/webidl/index.html">WebIDL</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../modules/libpref/index.html">libpref</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../networking/index.html">Networking</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../remote/index.html">Remote Protocols</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../services/index.html">Services</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../permissions/index.html">Permissions</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../uriloader/index.html">File Handling</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../widget/cocoa/index.html">Firefox on macOS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../widget/windows/index.html">Firefox on Windows</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../toolkit/components/ml/index.html">Firefox AI Runtime</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../accessible/index.html">Accessibility</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../media/index.html">Media Playback</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../code-quality/index.html">Code quality</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../writing-rust-code/index.html">Writing Rust Code</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../rust-components/index.html">Rust Components</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/profiler/index.html">Gecko Profiler</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../performance/index.html">Performance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../storage/index.html">Database bindings (SQLite, KV, …)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../xpcom/index.html">XPCOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../nspr/index.html">NSPR</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../security/nss/index.html">Network Security Services (NSS)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../content-security/index.html">Web Security Checks in Gecko</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">The Firefox Build System</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mach/index.html">Mach</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/try/index.html">Pushing to Try</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../build/buildsystem/index.html">Build System</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../taskcluster/index.html">Firefox CI and Taskgraph</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/moztreedocs/index.html">Managing Documentation</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mozbuild/vendor/index.html">Vendoring Third Party Components</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Testing &amp; Test Infrastructure</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/automated-testing/index.html">Automated Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/treeherder-try/index.html">Understanding Treeherder Results</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/sheriffed-intermittents/index.html">Sheriffed intermittent failures</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/tests-for-new-config/index.html">Turning on Firefox tests for a new configuration</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/intermittent/index.html">Avoiding intermittent tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/testing-policy/index.html">Testing Policy</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/ci-configs/index.html">Configuration Changes</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/browser-chrome/index.html">Browser chrome mochitests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/chrome-tests/index.html">Chrome Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/marionette/index.html">Marionette</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/geckodriver/index.html">geckodriver</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/test-verification/index.html">Test Verification</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/webrender/index.html">WebRender Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/mochitest-plain/index.html">Mochitest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/xpcshell/index.html">XPCShell tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/tps/index.html">TPS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../web-platform/index.html">web-platform-tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../gtest/index.html">GTest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/fuzzing/index.html">Fuzzing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/sanitizer/index.html">Sanitizer</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/perfdocs/index.html">Performance Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/code-coverage/index.html">Code coverage</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing-rust-code/index.html">Testing &amp; Debugging Rust Code</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Releases &amp; Updates</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html">Mozilla Update Infrastructure</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html#watershed-updates">Watershed Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html#desupport-updates">Desupport Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/update-verify/index.html">Update Verify</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Localization &amp; Internationalization</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../intl/index.html">Internationalization</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../l10n/index.html">Localization</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox and Python</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mozbase/index.html">mozbase</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../python/index.html">Using third-party Python packages</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Metrics Collected in Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../metrics/index.html">Metrics</a></li>
+      </ul>
+     </div>
+    </div>
+   </nav>
+   <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+    <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+     <i data-toggle="wy-nav-top" class="fa fa-bars"></i> <a href="../../index.html">Firefox Source Docs</a>
+    </nav>
+    <div class="wy-nav-content">
+     <div class="rst-content">
+      <!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+      <div role="navigation" aria-label="Page navigation">
+       <ul class="wy-breadcrumbs">
+        <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+        <li class="breadcrumb-item"><a href="../index.html">Working on Firefox</a></li>
+        <li class="breadcrumb-item active">Debugging WebRTC Calls</li>
+        <li class="wy-breadcrumbs-aside"><a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Developer+Infrastructure&amp;component=Firefox+Source+Docs%3A+Content&amp;short_desc=Documentation+issue+on+contributing/debugging/debugging_webrtc_calls&amp;comment=URL+=+https://firefox-source-docs.mozilla.org/contributing/debugging/debugging_webrtc_calls.html&amp;bug_file_loc=https://firefox-source-docs.mozilla.org/contributing/debugging/debugging_webrtc_calls.html" rel="nofollow">Report an issue</a> / <a href="../../_sources/contributing/debugging/debugging_webrtc_calls.rst.txt" rel="nofollow"> View page source</a></li>
+       </ul>
+       <hr>
+      </div>
+      <div role="main" class="document" itemscope itemtype="http://schema.org/Article">
+       <div itemprop="articleBody">
+        <section id="debugging-webrtc-calls">
+         <h1>Debugging WebRTC Calls<a class="headerlink" href="#debugging-webrtc-calls" title="Link to this heading">?</a></h1>
+         <section id="reporting-webrtc-call-issues">
+          <span id="id1"></span>
+          <h2>Reporting WebRTC Call Issues<a class="headerlink" href="#reporting-webrtc-call-issues" title="Link to this heading">?</a></h2>
+          <p>The best way to report an issue is through Bugzilla using this <a class="reference external" href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Core&amp;component=WebRTC">link</a>. Describe the issue you’ve run into, include a URL, along with the details of the call setup. See the <a class="reference internal" href="#adding-call-setup-information"><span class="std std-ref">Adding Call Setup Information</span></a> section for helpful templates. Here are some common examples of descriptive WebRTC bug summaries:</p>
+          <ul class="simple">
+           <li>
+            <p>caller is experiencing frozen video, screen capture, or desktop capture</p></li>
+           <li>
+            <p>caller does not hear audio</p></li>
+           <li>
+            <p>caller’s voice sounds distorted or robotic</p></li>
+           <li>
+            <p>video resolution is lower than expected</p></li>
+           <li>
+            <p>caller’s video appears rotated</p></li>
+           <li>
+            <p>there is significant delay between a caller’s video and audio</p></li>
+           <li>
+            <p>camera, microphone, or screens are not appearing in the Firefox device access permission prompts, etc.</p></li>
+           <li>
+            <p>caller’s video is garbled, partially missing, or the colors are incorrect</p></li>
+           <li>
+            <p>caller can not share external display, but can share integrated display</p></li>
+          </ul>
+          <div class="admonition note">
+           <p class="admonition-title">Note</p>
+           <p>Not all web conferencing software makes extensive use of WebRTC.</p>
+          </div>
+          <p>For simple issues, the first place to look is to check the <a class="reference external" href="/devtools-user/web_console">web developer console</a> for error messages related to media format issues. If you see messages here related to WebRTC, getUserMedia, or getDisplayMedia, please add this information to your bug.</p>
+          <section id="adding-call-setup-information">
+           <span id="id2"></span>
+           <h3>Adding Call Setup Information<a class="headerlink" href="#adding-call-setup-information" title="Link to this heading">?</a></h3>
+           <p>The following template can help one provide all the call details needed to diagnose many common issues.</p>
+           <div class="highlight-md notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="k">*</span><span class="w"> </span>Does this problem occur in Firefox for Desktop or Android?
+
+<span class="k">*</span><span class="w"> </span>Is this problem reproducible in Firefox Nightly?
+
+<span class="k">*</span><span class="w"> </span>Has this worked previously?
+
+<span class="k">*</span><span class="w"> </span>Have you tried using <span class="sb">`about:profiles`</span> to reproduce the problem in a
+  clean profile?
+
+<span class="k">*</span><span class="w"> </span>How many participants were in the call?
+
+<span class="k">*</span><span class="w"> </span>In which web conferencing or web calling services does the problem occur?
+
+<span class="k">*</span><span class="w"> </span>Does the problem present itself immediately upon starting the call?
+
+<span class="k">*</span><span class="w"> </span>If not how long does it take to occur?
+
+<span class="k">*</span><span class="w"> </span>If this is a problem with audio or video capture, what camera or microphone
+  are you using? (adding about:support text may be helpful)
+
+<span class="k">*</span><span class="w"> </span>If this is problem with screen capture, which screen was being captured,
+  and are there other screens attached to the same machine?
+
+<span class="k">*</span><span class="w"> </span>Would you be willing to help us find a regression range?
+</pre>
+            </div>
+           </div>
+           <p>If the issue is of specification compliance the template provided below may be more useful. If one is unsure if this is a compliance issue, one can refer to the <a class="reference internal" href="#standards-documentation"><span class="std std-ref">Standards Documentation</span></a> section for links.</p>
+           <div class="highlight-md notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="k">*</span><span class="w"> </span>What unexpected behavior is being observed? What are the steps to reproduce
+  this issue?
+
+<span class="k">*</span><span class="w"> </span>What is the expected behavior?
+
+<span class="k">*</span><span class="w"> </span>Where is this behavior specified?
+
+<span class="k">*</span><span class="w"> </span>Is this problem reproducible in Nightly?
+
+<span class="k">*</span><span class="w"> </span>Have you tried using <span class="sb">`about:profiles`</span> to reproduce the problem in a clean
+  profile?
+
+<span class="k">*</span><span class="w"> </span>Has this worked previously?
+
+<span class="k">*</span><span class="w"> </span>If so, would you be willing to help us find a regression range?
+</pre>
+            </div>
+           </div>
+          </section>
+          <section id="adding-about-support-text">
+           <span id="share-your-aboutsupport-text"></span>
+           <h3>Adding <a class="reference external" href="about:support">about:support</a> Text<a class="headerlink" href="#adding-about-support-text" title="Link to this heading">?</a></h3>
+           <p>In your Bugzilla report, please include support information about the current device on which you are experiencing an issue.</p>
+           <ol class="arabic simple">
+            <li>
+             <p>Open a tab and visit <a class="reference external" href="about:support">about:support</a></p></li>
+            <li>
+             <p>Click ‘Copy Text to Clipboard’</p></li>
+            <li>
+             <p>Paste this text in your Bugzilla bug comment and post.</p></li>
+           </ol>
+           <div class="admonition note">
+            <p class="admonition-title">Note</p>
+            <p>To open <code class="code docutils literal notranslate"><span class="pre">about:*</span></code> links in Firefox one must do the following: #. Right-click the link and select <cite>Open Link in New Tab</cite> #. Select the new tab #. Click inside the address bar which should contain the about URL #. Press Enter</p>
+           </div>
+          </section>
+          <section id="adding-about-webrtc-rtcpeerconnection-stats">
+           <span id="share-your-aboutwebrtc-contents"></span>
+           <h3>Adding <a class="reference external" href="about:webrtc">about:webrtc</a> RTCPeerConnection Stats<a class="headerlink" href="#adding-about-webrtc-rtcpeerconnection-stats" title="Link to this heading">?</a></h3>
+           <ol class="arabic simple">
+            <li>
+             <p>Open <a class="reference external" href="about:webrtc">about:webrtc</a>.</p></li>
+            <li>
+             <p>Expand the RTCPeerConnection section.</p></li>
+            <li>
+             <p>Locate and expand the subsection RTCPeerConnection that one wishes to copy stats from.</p></li>
+            <li>
+             <p>Press the <code class="code docutils literal notranslate"><span class="pre">Copy</span> <span class="pre">Stats</span> <span class="pre">Report</span></code></p></li>
+            <li>
+             <p>In the Bugzilla bug, press the <code class="code docutils literal notranslate"><span class="pre">Attach</span> <span class="pre">New</span> <span class="pre">File</span></code> button.</p></li>
+            <li>
+             <p>Click inside the large text box labeled <code class="code docutils literal notranslate"><span class="pre">File</span></code>, and paste the copied stats report.</p></li>
+            <li>
+             <p>Add a descriptive label to the the <code class="code docutils literal notranslate"><span class="pre">Description:</span></code>, e.g. “PeerConnection statistics sample taken during period of frame loss”.</p></li>
+            <li>
+             <p>In the drop down box, next to the <code class="code docutils literal notranslate"><span class="pre">select</span> <span class="pre">from</span> <span class="pre">list</span></code> radio option, select “JSON source (application/json)”.</p></li>
+            <li>
+             <p>If needed, add a descriptive comment to the <code class="code docutils literal notranslate"><span class="pre">comment</span></code> field.</p></li>
+            <li>
+             <p>Press the <code class="code docutils literal notranslate"><span class="pre">Submit</span></code> button.</p></li>
+           </ol>
+           <div class="admonition note">
+            <p class="admonition-title">Note</p>
+            <p>Hovering the mouse over some headings will reveal a clipboard icon. Clicking this icon will copy the contents under that section to the clipboard as a JSON document. This can be useful if one wants to submit a portion of the available stats. Of particular note are the <code class="code docutils literal notranslate"><span class="pre">RTP</span> <span class="pre">Stats</span></code> heading whose button will copy the latests RTP stats, and the <code class="code docutils literal notranslate"><span class="pre">SDP</span></code> section whose button will copy the SDP offer; answer; and roles.</p>
+           </div>
+          </section>
+          <section id="adding-your-about-webrtc-contents">
+           <h3>Adding Your <a class="reference external" href="about:webrtc">about:webrtc</a> Contents<a class="headerlink" href="#adding-your-about-webrtc-contents" title="Link to this heading">?</a></h3>
+           <p>For issues with call quality, please share web conferencing related performance information by providing your <a class="reference external" href="about:webrtc">about:webrtc</a> information. Note this information should be collected while the call in question is still active.</p>
+           <ol class="arabic simple">
+            <li>
+             <p>While your call is still ongoing, open an additional tab and visit <a class="reference external" href="about:webrtc">about:webrtc</a>.</p></li>
+            <li>
+             <p>Click “Clear History” to clear the stats from other recent calls which are no longer ongoing.</p></li>
+            <li>
+             <p>At the bottom of the page click ‘Save Page’, and save this file.</p></li>
+            <li>
+             <p>Add this file as an attachment to your bug.</p></li>
+           </ol>
+           <p>This data contains statistics about your call, the signalling that was used to setup your call, and information about the network transports.</p>
+          </section>
+         </section>
+         <section id="diagnosing-call-quality-issues">
+          <span id="id3"></span>
+          <h2>Diagnosing Call Quality Issues<a class="headerlink" href="#diagnosing-call-quality-issues" title="Link to this heading">?</a></h2>
+          <section id="about-webrtc-overview">
+           <span id="id4"></span>
+           <h3><a class="reference external" href="about:webrtc">about:webrtc</a> Overview<a class="headerlink" href="#about-webrtc-overview" title="Link to this heading">?</a></h3>
+           <p><a class="reference external" href="about:webrtc">about:webrtc</a> is an in-browser resource for debugging WebRTC calls. The primary audience for <a class="reference external" href="about:webrtc">about:webrtc</a> is browser developers but it can also be of use to anyone that needs to troubleshoot a WebRTC call. When there is no call data to display, <a class="reference external" href="about:webrtc">about:webrtc</a> will appear as follows:</p>
+           <figure class="align-default" id="id19">
+            <img alt="about:webrtc before any calls have been made" src="../../_images/about_webrtc_default_view.png">
+            <figcaption>
+             <p><span class="caption-text"><a class="reference external" href="about:webrtc">about:webrtc</a> before any calls have been made</span><a class="headerlink" href="#id19" title="Link to this image">?</a></p>
+            </figcaption>
+           </figure>
+           <p>Note that there are several sections. During a call each section will contain information pertinent to different aspects of the WebRTC browser implementation.</p>
+           <section id="rtcpeerconnection-statistics">
+            <h4>RTCPeerConnection Statistics<a class="headerlink" href="#rtcpeerconnection-statistics" title="Link to this heading">?</a></h4>
+            <p>This section presents information useful for diagnosing active calls. It contains RTCPeerConnection creation parameters, connection information, negotiation details, RTP stream statistics, bandwidth statistics, and output frame statistics.</p>
+           </section>
+           <section id="connection-log">
+            <h4>Connection Log<a class="headerlink" href="#connection-log" title="Link to this heading">?</a></h4>
+            <p>When one needs to diagnose issues with the underlying transports, logs can be found under Connection Log.</p>
+           </section>
+           <section id="user-modified-webrtc-configuration">
+            <h4>User Modified WebRTC Configuration<a class="headerlink" href="#user-modified-webrtc-configuration" title="Link to this heading">?</a></h4>
+            <p>This section will display any user modified preferences which effect the performance or behavior of browser components which can impact WebRTC calls. When hovering over a preference path displayed in this section a clipboard icon will appear. Clicking that icon will copy the path to the clipboard. It can then be pasted into <a class="reference external" href="about:config">about:config</a>, to change or reset the value to its default.</p>
+            <div class="admonition warning">
+             <p class="admonition-title">Warning</p>
+             <p>Unexpected values in this section may be caused by installed extensions. It is best to test issues in a clean profile when possible using <a class="reference external" href="about:profiles">about:profiles</a>.</p>
+            </div>
+           </section>
+           <section id="media-context">
+            <h4>Media Context<a class="headerlink" href="#media-context" title="Link to this heading">?</a></h4>
+            <p>Information that is gathered to determine Codec availability and capability is recorded under Media Context.</p>
+           </section>
+           <section id="bottom-control-bar">
+            <h4>Bottom Control Bar<a class="headerlink" href="#bottom-control-bar" title="Link to this heading">?</a></h4>
+            <p>At the bottom of <a class="reference external" href="about:webrtc">about:webrtc</a> is a row of buttons which allow the user to perform miscellaneous actions.</p>
+            <p>The <cite>Save Page</cite> button expands all the sections and presents a dialog to save the contents of the page. This will produce an HTML file suitable for attaching to bug reports.</p>
+            <p>In the event of a WebRTC issue, the <code class="code docutils literal notranslate"><span class="pre">Enable</span> <span class="pre">WebRTC</span> <span class="pre">Log</span> <span class="pre">Preset</span></code> button is a very quick way to start logging. Pressing that button will open a new tab with <a class="reference external" href="about:logging">about:logging</a> with the <code class="code docutils literal notranslate"><span class="pre">webrtc</span></code> preset selected. This preset contains all <a class="reference internal" href="#standard-logging-modules"><span class="std std-ref">Standard Logging Modules</span></a>. Logging will begin immediately. If one needs to change other log settings on that page one can customize them, and then press <code class="code docutils literal notranslate"><span class="pre">Start</span> <span class="pre">Logging</span></code>. This may be necessary if one wishes to log to the profiler.</p>
+            <p>If experiencing echo cancellation issues, one may be asked to submit echo cancellation logs. These logs are gathered by pressing the <code class="code docutils literal notranslate"><span class="pre">Start</span> <span class="pre">AEC</span> <span class="pre">Logging</span></code> button. One should press the button to activate the logging while actively experiencing an echo cancellation failure.</p>
+            <div class="admonition note">
+             <p class="admonition-title">Note</p>
+             <p>Producing echo cancellation logs is incompatible with the content sandbox. The user will be prompted with further instructions if the sandbox is active and the <code class="code docutils literal notranslate"><span class="pre">Start</span> <span class="pre">AEC</span> <span class="pre">Logging</span></code> button is pressed.</p>
+            </div>
+           </section>
+           <section id="audio-video-delay">
+            <span id="audiovideo-delay"></span>
+            <h4>Audio/Video Delay<a class="headerlink" href="#audio-video-delay" title="Link to this heading">?</a></h4>
+            <p>Delayed media is commonly caused by long physical paths between endpoints, though anything that slows down inter-hop delivery of packets can be at fault. Note that this is different than the bandwidth of the network path, and a high latency will not be fixed by reducing the video resolution or audio sample rate. Round trip time, or RTT, is the time it takes for a packet to get from the sender to the receiver and then for a packet to get from the receiver back to the sender. If the path is symmetric between the two endpoints one can assume that the one way delay is half the delay of the round trip.</p>
+            <p>The second common cause of A/V delay is jitter, the magnitude of variability in packet inter-arrival times. In order to smoothly play out of the incoming stream a receiver experiencing jitter will have to buffer (delay) incoming packets.</p>
+            <p><strong>Using</strong> <a class="reference external" href="about:webrtc">about:webrtc</a> <strong>to Diagnose Delay</strong></p>
+            <p>The key metrics in <a class="reference external" href="about:webrtc">about:webrtc</a> are RTT (round-trip-time) and jitter. They can be found in the RTP stats section of the PeerConnection. The PeerConnection informational blocks start out in a minimized state, and one will need to expand a block to find the RTP stats section:</p>
+            <figure class="align-default" id="id20">
+             <a class="reference internal image-reference" href="../../_images/about_webrtc_reveal_PeerConnection_stats.png"><img alt="How to reveal the full statistics of a PeerConnection in about:webrtc" src="../../_images/about_webrtc_reveal_PeerConnection_stats.png" style="width: 800px;"></a>
+             <figcaption>
+              <p><span class="caption-text">How to reveal the full statistics of a PeerConnection in <a class="reference external" href="about:webrtc">about:webrtc</a></span><a class="headerlink" href="#id20" title="Link to this image">?</a></p>
+             </figcaption>
+            </figure>
+            <p>Once expanded one can locate the RTP Stats section and find the key diagnostic stats:</p>
+            <figure class="align-default" id="id21">
+             <a class="reference internal image-reference" href="../../_images/about_webrtc_Jitter_and_RTT.png"><img alt="Location in about:webrtc of jitter and RTT stats" src="../../_images/about_webrtc_Jitter_and_RTT.png" style="width: 800px;"></a>
+             <figcaption>
+              <p><span class="caption-text">Location in <a class="reference external" href="about:webrtc">about:webrtc</a> of jitter and RTT stats</span><a class="headerlink" href="#id21" title="Link to this image">?</a></p>
+             </figcaption>
+            </figure>
+            <p>In this image we can see that there are 0 milliseconds of jitter, and 32 milliseconds of round trip delay. This call should not be experiencing any noticeable delay. See the <a class="reference external" href="#delay-calculation">Delay Calculation</a> appendix section below for some more detail.</p>
+            <p>If the perceived delay is larger than the estimated delay that could indicate a problem within Firefox that requires debugging. Under these circumstances it would be helpful to grab a JSON copy of the current stats by pressing the “Copy Report” button, pasting those stats into your Bugzilla bug report.</p>
+            <figure class="align-default" id="id22">
+             <a class="reference internal image-reference" href="../../_images/about_webrtc_copy_report.png"><img alt="Location in about:webrtc of Copy Report button" src="../../_images/about_webrtc_copy_report.png" style="width: 800px;"></a>
+             <figcaption>
+              <p><span class="caption-text">Location in <a class="reference external" href="about:webrtc">about:webrtc</a> of Copy Report button</span><a class="headerlink" href="#id22" title="Link to this image">?</a></p>
+             </figcaption>
+            </figure>
+           </section>
+          </section>
+         </section>
+         <section id="performance-profiling-and-logging">
+          <span id="id5"></span>
+          <h2>Performance Profiling and Logging<a class="headerlink" href="#performance-profiling-and-logging" title="Link to this heading">?</a></h2>
+          <section id="capturing-a-firefox-performance-profile">
+           <span id="id6"></span>
+           <h3>Capturing a Firefox Performance Profile<a class="headerlink" href="#capturing-a-firefox-performance-profile" title="Link to this heading">?</a></h3>
+           <p>For basic performance issues, a performance profile can help engineers diagnose issues with video formats, performance, and rendering.</p>
+           <ol class="arabic simple">
+            <li>
+             <p>Visit <a class="reference external" href="https://profiler.firefox.com/">https://profiler.firefox.com/</a> and enable the Profiler toolbar button.</p></li>
+            <li>
+             <p>Click the toolbar button down arrow and select ‘Media’ in the Settings drop down.</p></li>
+            <li>
+             <p>Open a tab and visit the page with the affected media content.</p></li>
+            <li>
+             <p>Click the Profiler toolbar main button to start recording.</p></li>
+            <li>
+             <p>Play media until the issue you are seeing manifests.</p></li>
+            <li>
+             <p>Click the Profiler toolbar button again to stop recording.</p></li>
+            <li>
+             <p>When a new Profile tab opens, click the upload profile button on the upper right.</p></li>
+            <li>
+             <p>Copy the resulting profile URL and post this to your Bugzilla report.</p></li>
+           </ol>
+           <p>Additionally, detailed logging can be collected within performance profiles to help aid in debugging complicated issues. To enable the collection of a profile with low level debugging -</p>
+           <ol class="arabic simple">
+            <li>
+             <p>Visit <a class="reference external" href="https://profiler.firefox.com/">https://profiler.firefox.com/</a> and enable the Profiler toolbar button.</p></li>
+            <li>
+             <p>In a new tab, visit <a class="reference external" href="about:webrtc">about:webrtc</a>. Click the ‘Enable WebRTC Log Preset’ button, which will open a tab for <a class="reference external" href="about:logging">about:logging</a> with pre-populated information.</p></li>
+            <li>
+             <p>In <a class="reference external" href="about:logging">about:logging</a>, click the “Start Logging” button. (You are now recording a profile, the profiler toolbar toggle button should be selected automatically.)</p></li>
+            <li>
+             <p>Open a new tab for testing and view the media you are having an issue with. (After reproducing, DO NOT close this test tab yet.)</p></li>
+            <li>
+             <p>Switch to the <a class="reference external" href="about:logging">about:logging</a> tab, click ‘Stop logging’, and then close the test tab.</p></li>
+            <li>
+             <p>Wait approximately 10 - 20 seconds for a new tab to automatically open containing the generated performance profile.</p></li>
+            <li>
+             <p>Within the upper-right side of the profiler tab click the ‘upload local profile’ button to initiate profile upload. Once the upload is complete, a drop down text field will open displaying the URL of the profile. Select this text and copy it.</p></li>
+            <li>
+             <p>Share the URL of the profile for analysis with the engineer you are working with.</p></li>
+           </ol>
+           <p>Alternatively one can set the following environment variable:</p>
+           <div class="highlight-sh notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="nv">MOZ_LOG</span><span class="o">=</span><span class="s2">"jsep:5,sdp:5,signaling:5,mtransport:5,nicer:5,RTCRtpReceiver:5,RTCRtpSender:5,RTCDMTFSender:5,WebrtcTCPSocket:5,CamerasChild:5,CamerasParent:5,VideoEngine:5,ShmemPool:5,TabShare:5,MediaChild:5,MediaParent:5,MediaManager:5,MediaTrackGraph:5,cubeb:5,MediaStream:5,MediaStreamTrack:5,DriftCompensator:5,ForwardInputTrack:5,MediaRecorder:5,MediaEncoder:5,TrackEncoder:5,VP8TrackEncoder:5,Muxer:5,GetUserMedia:5,MediaPipeline:5,WebAudioAPI:5,webrtc_trace:5,RTCRtpTransceiver:5,ForwardedInputTrack:5,HTMLMediaElement:5,HTMLMediaElementEvents:5"</span>
+</pre>
+            </div>
+           </div>
+          </section>
+          <section id="standard-logging-modules">
+           <span id="id7"></span>
+           <h3>Standard Logging Modules<a class="headerlink" href="#standard-logging-modules" title="Link to this heading">?</a></h3>
+           <table class="docutils align-default" id="id23">
+            <caption>
+             <span class="caption-text">Standard Logging Modules</span><a class="headerlink" href="#id23" title="Link to this table">?</a>
+            </caption>
+            <thead>
+             <tr class="row-odd">
+              <th class="head">
+               <p>Module</p></th>
+              <th class="head">
+               <p>Component</p></th>
+              <th class="head">
+               <p>Function</p></th>
+              <th class="head">
+               <p>Notes</p></th>
+             </tr>
+            </thead>
+            <tbody>
+             <tr class="row-even">
+              <td>
+               <p>jsep</p></td>
+              <td>
+               <p>signalling</p></td>
+              <td>
+               <p>JSEP state machine</p></td>
+              <td></td>
+             </tr>
+             <tr class="row-odd">
+              <td>
+               <p>sdp</p></td>
+              <td>
+               <p>signalling</p></td>
+              <td>
+               <p>SDP parsing</p></td>
+              <td></td>
+             </tr>
+             <tr class="row-even">
+              <td>
+               <p>mtransport</p></td>
+              <td>
+               <p>networking</p></td>
+              <td>
+               <p>Network transports</p></td>
+              <td></td>
+             </tr>
+             <tr class="row-odd">
+              <td>
+               <p>nicer</p></td>
+              <td>
+               <p>networking</p></td>
+              <td>
+               <p>ICE stack</p></td>
+              <td></td>
+             </tr>
+             <tr class="row-even">
+              <td>
+               <p>RTCRtpReceiver</p></td>
+              <td>
+               <p>JS API</p></td>
+              <td>
+               <p>JS API related to receiving media and media control packets</p></td>
+              <td></td>
+             </tr>
+             <tr class="row-odd">
+              <td>
+               <p>RTCRtpSender</p></td>
+              <td>
+               <p>JS API</p></td>
+              <td>
+               <p>JS API related to sending media and media control packets</p></td>
+              <td></td>
+             </tr>
+             <tr class="row-even">
+              <td>
+               <p>RTCDMTFSender</p></td>
+              <td>
+               <p>JS API</p></td>
+              <td>
+               <p>JS API related to sending DTMF messages</p></td>
+              <td></td>
+             </tr>
+             <tr class="row-odd">
+              <td>
+               <p>WebrtcTCPSocket</p></td>
+              <td>
+               <p>networking</p></td>
+              <td></td>
+              <td></td>
+             </tr>
+             <tr class="row-even">
+              <td>
+               <p>CamerasChild</p></td>
+              <td>
+               <p>media capture</p></td>
+              <td>
+               <p>Content process end of IPC channel for receiving frames from media capture devices</p></td>
+              <td></td>
+             </tr>
+             <tr class="row-odd">
+              <td>
+               <p>CamerasParent</p></td>
+              <td>
+               <p>media capture</p></td>
+              <td>
+               <p>Parent process end of IPC channel for sending frames from media capture devices</p></td>
+              <td></td>
+             </tr>
+             <tr class="row-even">
+              <td>
+               <p>VideoEngine</p></td>
+              <td>
+               <p>media capture</p></td>
+              <td>
+               <p>Orchestrates capture of frames from media capture devices in the parent process</p></td>
+              <td></td>
+             </tr>
+             <tr class="row-odd">
+              <td>
+               <p>ShmemPool</p></td>
+              <td>
+               <p>media capture</p></td>
+              <td>
+               <p>Object pool of shared memory frame buffers for transferring media capture frames from parent to child process</p></td>
+              <td></td>
+             </tr>
+             <tr class="row-even">
+              <td>
+               <p>TabShare</p></td>
+              <td>
+               <p>media capture</p></td>
+              <td>
+               <p>Captures tab content for sharing</p></td>
+              <td></td>
+             </tr>
+             <tr class="row-odd">
+              <td>
+               <p>MediaChild</p></td>
+              <td>
+               <p>media</p></td>
+              <td></td>
+              <td></td>
+             </tr>
+             <tr class="row-even">
+              <td>
+               <p>MediaParent</p></td>
+              <td>
+               <p>media</p></td>
+              <td></td>
+              <td></td>
+             </tr>
+             <tr class="row-odd">
+              <td>
+               <p>MediaManager</p></td>
+              <td>
+               <p>media</p></td>
+              <td></td>
+              <td></td>
+             </tr>
+             <tr class="row-even">
+              <td>
+               <p>MediaTrackGraph</p></td>
+              <td>
+               <p>media</p></td>
+              <td></td>
+              <td></td>
+             </tr>
+             <tr class="row-odd">
+              <td>
+               <p>cubeb</p></td>
+              <td>
+               <p>media</p></td>
+              <td></td>
+              <td></td>
+             </tr>
+             <tr class="row-even">
+              <td>
+               <p>MediaStream</p></td>
+              <td>
+               <p>media</p></td>
+              <td></td>
+              <td></td>
+             </tr>
+             <tr class="row-odd">
+              <td>
+               <p>MediaStreamTrack</p></td>
+              <td>
+               <p>media</p></td>
+              <td></td>
+              <td></td>
+             </tr>
+             <tr class="row-even">
+              <td>
+               <p>DriftCompensator</p></td>
+              <td>
+               <p>media</p></td>
+              <td></td>
+              <td></td>
+             </tr>
+             <tr class="row-odd">
+              <td>
+               <p>ForwardInputTrack</p></td>
+              <td>
+               <p>media</p></td>
+              <td></td>
+              <td></td>
+             </tr>
+             <tr class="row-even">
+              <td>
+               <p>MediaRecorder</p></td>
+              <td>
+               <p>media</p></td>
+              <td></td>
+              <td></td>
+             </tr>
+             <tr class="row-odd">
+              <td>
+               <p>MediaEncoder</p></td>
+              <td>
+               <p>media</p></td>
+              <td></td>
+              <td></td>
+             </tr>
+             <tr class="row-even">
+              <td>
+               <p>TrackEncoder</p></td>
+              <td>
+               <p>media</p></td>
+              <td></td>
+              <td></td>
+             </tr>
+             <tr class="row-odd">
+              <td>
+               <p>VP8TrackEncoder</p></td>
+              <td>
+               <p>media</p></td>
+              <td></td>
+              <td></td>
+             </tr>
+             <tr class="row-even">
+              <td>
+               <p>Muxer</p></td>
+              <td>
+               <p>media</p></td>
+              <td></td>
+              <td></td>
+             </tr>
+             <tr class="row-odd">
+              <td>
+               <p>MediaPipeline</p></td>
+              <td>
+               <p>network</p></td>
+              <td>
+               <p>Glue code between transport, media, and libwebrtc components</p></td>
+              <td></td>
+             </tr>
+             <tr class="row-even">
+              <td>
+               <p>WebAudioAPI</p></td>
+              <td></td>
+              <td></td>
+              <td></td>
+             </tr>
+             <tr class="row-odd">
+              <td>
+               <p>webrtc_trace</p></td>
+              <td>
+               <p>webrtc</p></td>
+              <td>
+               <p>libwebrtc logging</p></td>
+              <td>
+               <p>Prior to Firefox v123 it must be enabled from <a class="reference external" href="about:webrtc">about:webrtc</a> at runtime, or it must be set in the <code class="code docutils literal notranslate"><span class="pre">MOZ_LOG</span></code> environment variable at launch.</p></td>
+             </tr>
+             <tr class="row-even">
+              <td>
+               <p>RTCRtpTransceiver</p></td>
+              <td>
+               <p>JS API</p></td>
+              <td>
+               <p>implements the RTCRtpTransceiver object</p></td>
+              <td></td>
+             </tr>
+             <tr class="row-odd">
+              <td>
+               <p>HTMLMediaElement</p></td>
+              <td></td>
+              <td></td>
+              <td></td>
+             </tr>
+             <tr class="row-even">
+              <td>
+               <p>ForwardedInputTrack</p></td>
+              <td></td>
+              <td></td>
+              <td></td>
+             </tr>
+             <tr class="row-odd">
+              <td>
+               <p>HTMLMediaElementEvents</p></td>
+              <td></td>
+              <td></td>
+              <td></td>
+             </tr>
+            </tbody>
+           </table>
+          </section>
+          <section id="non-standard-logging-modules">
+           <span id="non-standard-loggin-modules"></span>
+           <h3>Non-standard Logging Modules<a class="headerlink" href="#non-standard-logging-modules" title="Link to this heading">?</a></h3>
+           <table class="docutils align-default" id="id24">
+            <caption>
+             <span class="caption-text">Standard Logging Modules</span><a class="headerlink" href="#id24" title="Link to this table">?</a>
+            </caption>
+            <thead>
+             <tr class="row-odd">
+              <th class="head">
+               <p>Module</p></th>
+              <th class="head">
+               <p>Component</p></th>
+              <th class="head">
+               <p>Function</p></th>
+              <th class="head">
+               <p>Notes</p></th>
+             </tr>
+            </thead>
+            <tbody>
+             <tr class="row-even">
+              <td>
+               <p>RTPLogger</p></td>
+              <td>
+               <p>network</p></td>
+              <td>
+               <p>Logs RTP and RTCP packet fragments</p></td>
+              <td>
+               <p>See <a class="reference external" href="#debugging-encrypted-packets">Debugging Encrypted Packets</a></p></td>
+             </tr>
+            </tbody>
+           </table>
+          </section>
+         </section>
+         <section id="examining-call-performance-issues">
+          <span id="id8"></span>
+          <h2>Examining Call Performance Issues<a class="headerlink" href="#examining-call-performance-issues" title="Link to this heading">?</a></h2>
+          <section id="enabling-call-stats-history">
+           <span id="id9"></span>
+           <h3>Enabling Call Stats History<a class="headerlink" href="#enabling-call-stats-history" title="Link to this heading">?</a></h3>
+           <p>Call stats history is enabled by default in Nightly. To enable in release builds open <a class="reference external" href="about:config">about:config</a>, and change “media.aboutwebrtc.hist.enabled” to true. This will keep a history window of stats for a number of recent calls, allowing for inspection in <a class="reference external" href="about:webrtc">about:webrtc</a> after a call has completed.</p>
+          </section>
+          <section id="dumping-call-stats">
+           <span id="id10"></span>
+           <h3>Dumping Call Stats<a class="headerlink" href="#dumping-call-stats" title="Link to this heading">?</a></h3>
+           <p>One can dump a JSON blob of call stats for an active call, or a recent call if call stats history is enabled. There are two buttons in <a class="reference external" href="about:webrtc">about:webrtc</a> to do this, “Copy Report” and “Copy Report History”. The former will create a copy of the most recent stats for the PeerConnection. The later will copy all the history of stats reports that <a class="reference external" href="about:webrtc">about:webrtc</a> has accumulated for that PeerConnection, this can be up to several minutes of stats.</p>
+          </section>
+          <section id="debugging-encrypted-packets">
+           <span id="id11"></span>
+           <h3>Debugging Encrypted Packets<a class="headerlink" href="#debugging-encrypted-packets" title="Link to this heading">?</a></h3>
+           <div class="admonition warning">
+            <p class="admonition-title">Warning</p>
+            <p>There is a <a class="reference external" href="https://blog.mozilla.org/webrtc/debugging-encrypted-rtp-is-more-fun-than-it-used-to-be/">blog post</a> covering dumping unencrypted partial RTP and RTCP packets in the logs. While the information presented in that post is still relevant, the command to extract the packet data in the blog is out of date. A working method is presented below;</p>
+           </div>
+           <p>Using the gecko logging system, unencrypted, mangled, partial, RTP-packets can be written out. This may be a good avenue of investigation for packet loss and recovery, simulcast, and feedback. Because the entirety of the packet is not guaranteed to be logged, this is less suitable for debugging issues with encoded media. These logged packets can be converted to PCAP files, which can then be explored in <a class="reference external" href="https://www.wireshark.org/">Wireshark</a>. The logs produced by this module can be quite large, making it easy to identify by file size which child process log files contain packet dumps.</p>
+           <p>To start RTP logging, one must enable the <code class="code docutils literal notranslate"><span class="pre">RtpLogger</span></code> log module. The <code class="code docutils literal notranslate"><span class="pre">sync</span></code> option should also be used, as it prevents undesirable interleaving of log messages. Here are the minimal log settings needed:</p>
+           <div class="highlight-sh notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="nv">MOZ_LOG</span><span class="o">=</span><span class="s1">'sync,RtpLogger:5'</span>
+</pre>
+            </div>
+           </div>
+           <p>In order to interpret the packet contents, one needs to refer to the SDP. Wireshark is unaware of the negotiated details, so it can not directly decode the media, nor can it decode the header extensions. The SDP can also be logged, and so the following is a more useful set of log settings:</p>
+           <div class="highlight-sh notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="nv">MOZ_LOG</span><span class="o">=</span><span class="s1">'sync,RtpLogger:5,jsep:5'</span>
+</pre>
+            </div>
+           </div>
+           <div class="admonition note">
+            <p class="admonition-title">Note</p>
+            <p>On macOS it is simple to install Wireshark and text2pcap with Homebrew:</p>
+            <div class="highlight-sh notranslate">
+             <div class="highlight">
+              <pre><span></span><span class="c1"># Use only one of the following:</span>
+<span class="c1"># ==============================</span>
+
+<span class="c1"># To install the Wireshark GUI application and the command line utilities:</span>
+brew<span class="w"> </span>install<span class="w"> </span>--cask<span class="w"> </span>wireshark
+
+<span class="c1"># To install only the command line utilities:</span>
+brew<span class="w"> </span>install<span class="w"> </span>wireshark
+</pre>
+             </div>
+            </div>
+           </div>
+           <p>One can use <code class="code docutils literal notranslate"><span class="pre">tee</span></code> to capture log output from a copy of Firefox launched from the command line, e.g. through <code class="code docutils literal notranslate"><span class="pre">mach</span></code>. Alternatively, one can set a log file through the environment variable <code class="code docutils literal notranslate"><span class="pre">MOZ_LOG_FILE</span></code> or through <a class="reference external" href="about:logging">about:logging</a>.</p>
+           <div class="admonition warning">
+            <p class="admonition-title">Warning</p>
+            <p>If log files are not being created by child processes, this is likely due to sandboxing of content processes. To work around this one must either select a location within the sandbox, disable the content sandbox, or launch Firefox from the command line, e.g. from a Firefox dev environment:</p>
+            <div class="highlight-default notranslate">
+             <div class="highlight">
+              <pre><span></span><span class="n">MOZ_LOG</span><span class="o">=</span><span class="n">sync</span><span class="p">,</span><span class="n">RtpLogger</span><span class="p">:</span><span class="mi">5</span><span class="p">,</span><span class="n">jsep</span><span class="p">:</span><span class="mi">5</span> <span class="n">MOZ_LOG_FILE</span><span class="o">=</span> <span class="o">./</span><span class="n">mach</span> <span class="n">run</span> <span class="mi">2</span><span class="o">&gt;&amp;</span><span class="mi">1</span> <span class="o">|</span> <span class="n">tee</span> <span class="n">your</span><span class="o">.</span><span class="n">log</span>
+</pre>
+             </div>
+            </div>
+           </div>
+           <p>To produce a PCAP file one needs to filter the logs to include only the RtpLogger log lines, reduce them down to the expected ingestion format for text2pcap, and finally to invoke text2pcap.</p>
+           <div class="highlight-sh notranslate">
+            <div class="highlight">
+             <pre><span></span>cat<span class="w"> </span>your.log<span class="w">  </span><span class="p">|</span><span class="w"> </span>rg<span class="w"> </span><span class="s1">'RtpLogger.*RTC?P_PACKET|&gt;&gt;\s(?P&lt;packet&gt;.+$)'</span><span class="w"> </span>--only-matching<span class="w">  </span>--replace<span class="w"> </span><span class="s1">'$packet'</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>text2pcap<span class="w"> </span>-D<span class="w"> </span>-n<span class="w"> </span>-l<span class="w"> </span><span class="m">1</span><span class="w"> </span>-i<span class="w"> </span><span class="m">17</span><span class="w"> </span>-u<span class="w"> </span><span class="m">1234</span>,1235<span class="w"> </span>-t<span class="w"> </span><span class="s1">'%H:%M:%S.'</span><span class="w"> </span>-<span class="w"> </span>your.output.pcap
+</pre>
+            </div>
+           </div>
+           <div class="admonition note">
+            <p class="admonition-title">Note</p>
+            <p>If <code class="code docutils literal notranslate"><span class="pre">rg</span></code>, a.k.a ripgrep, is not already available, one can install it via one of the following methods:</p>
+            <div class="highlight-sh notranslate">
+             <div class="highlight">
+              <pre><span></span><span class="c1"># Install through cargo on macOS, Linux, or Windows</span>
+cargo<span class="w"> </span>install<span class="w"> </span>ripgrep
+
+<span class="c1"># Install via Homebrew on macOS</span>
+brew<span class="w"> </span>install<span class="w"> </span>ripgrep
+
+<span class="c1"># ripgrep packages may be available through the package manager for your</span>
+<span class="c1"># Linux distro</span>
+</pre>
+             </div>
+            </div>
+           </div>
+           <p>The resulting PCAP file can be explored with Wireshark. Currently, one must refer to the SDP in order to interpret the RTP packets.</p>
+           <div class="highlight-sh notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="c1"># On most Linux distros</span>
+wireshark<span class="w"> </span>-d<span class="w"> </span><span class="s1">'udp.port==1234,rtp'</span><span class="w"> </span>your.output.pcap
+
+<span class="c1"># On macOS when installed via Homebrew</span>
+open<span class="w"> </span>/Applications/Wireshark.app<span class="w"> </span>--args<span class="w"> </span>-d<span class="w"> </span><span class="s1">'udp.port==1234,rtp'</span><span class="w"> </span>your.output.pcap
+</pre>
+            </div>
+           </div>
+          </section>
+         </section>
+         <section id="examining-codec-availability-and-capabilities">
+          <span id="id12"></span>
+          <h2>Examining Codec Availability and Capabilities<a class="headerlink" href="#examining-codec-availability-and-capabilities" title="Link to this heading">?</a></h2>
+          <p>When codec negotiation doesn’t happen as expected there are several helpful locations where one can find information. The SDP offer and answer contain the list of codecs that were in the initial offer, and the subset of those codecs that were selected in the answer.</p>
+          <p>The easiest way to get this information on a live call is through <a class="reference external" href="about:webrtc">about:webrtc</a>. Each RTCPeerConnection has its own subsection, that when expanded contains an SDP section. There are buttons to display the offer and the answer. Depending on which party was the offerer and which was the answerer one may have a local offer and a remote answer, or a remote offer and a local answer.</p>
+          <p>Firefox chooses which codecs to offer based on availability. Some codecs, like Opus or VP8, are always available. Some codecs are available in software and some codecs on some platforms are available in hardware. H264 support is provided by a third-party, and is automatically downloaded the first time its use is requested. This is a process which can take a variable amount of time depending on network circumstances.</p>
+          <div class="admonition note">
+           <p class="admonition-title">Note</p>
+           <p>A list of media codecs with playback support are available in the Media section of <a class="reference external" href="about:support#media">about:support#media</a> . Not all media codecs present and available to Firefox for playback are supported in WebRTC calls.</p>
+          </div>
+          <p>To check the current factors, including preferences, that are being used to calculate availability beyond codec presence, one can check the <cite>Media Context</cite> section of <a class="reference external" href="about:webrtc">about:webrtc</a>.</p>
+          <figure class="align-default">
+           <img alt="example about:webrtc media context values" src="../../_images/about_webrtc_media_context.png">
+          </figure>
+          <p id="running-webrtc-tests">For an in-depth reference covering the codecs available through WebRTC please see the MDN Page: <a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/Media/Formats/WebRTC_codecs">Codecs Used by WebRTC</a>.</p>
+         </section>
+         <section id="id13">
+          <h2>Running WebRTC Tests<a class="headerlink" href="#id13" title="Link to this heading">?</a></h2>
+          <p>There are a variety of tests providing coverage over WebRTC related code. The Web Platform Suite provides conformance tests for browsers. The <code class="code docutils literal notranslate"><span class="pre">gtest</span></code> suite is composed of unit tests. Crashtests are a type of regression test which are written to induce crashes. There are fuzzing tests which exercise APIs in ways that the authors did not foresee. All of the WebRTC tests can be run locally with <code class="code docutils literal notranslate"><span class="pre">mach</span></code> or in CI on <cite>Try</cite>. There is a detailed overview of all available test types including those not exercised by WebRTC code <a class="reference external" href="/testing/automated-testing/index.html#functional-testing">here</a>.</p>
+          <div class="admonition note">
+           <p class="admonition-title">Note</p>
+           <p>Running <code class="code docutils literal notranslate"><span class="pre">./mach</span> <span class="pre">&lt;verb&gt;</span> <span class="pre">--help</span></code> is an indispensable tool for discovering options that can streamline your testing process.</p>
+          </div>
+          <div class="admonition note">
+           <p class="admonition-title">Note</p>
+           <p>A test suite on <cite>Try</cite> maybe an aggregate of multiple logical test suites. For example, the <cite>mochitest-media</cite> suite on try includes both the WebRTC and playback mochitests.</p>
+          </div>
+          <div class="admonition warning">
+           <p class="admonition-title">Warning</p>
+           <p>WebRTC calls make use of a number of internal timers. Amongst the behaviors these timers control are transport selection, bandwidth estimation, packet loss determination, media adaptation, lip sync, connection timeout, and more. There are <cite>Try</cite> targets which are too slow to reliably run a number of the tests. Before running a specific test on <cite>Try</cite> for the first time, it may be best to check the relevant test suite manifest. This can be done easily with Searchfox.org by searching for and viewing a test file. If that test has been disabled on one or more platforms the details will appear as shown below:</p>
+           <figure class="align-default">
+            <img alt="Searchfox.org warning that the displayed test file has been disabled on Android" src="../../_images/searchfox_test_disabled_warning.png">
+           </figure>
+          </div>
+         </section>
+         <section id="test-atlas">
+          <span id="id14"></span>
+          <h2>Test Atlas<a class="headerlink" href="#test-atlas" title="Link to this heading">?</a></h2>
+          <table class="docutils align-default" id="id25">
+           <caption>
+            <span class="caption-text">WebRTC Test Locations</span><a class="headerlink" href="#id25" title="Link to this table">?</a>
+           </caption>
+           <colgroup>
+            <col style="width: 16.7%">
+            <col style="width: 16.7%">
+            <col style="width: 33.3%">
+            <col style="width: 16.7%">
+            <col style="width: 16.7%">
+           </colgroup>
+           <thead>
+            <tr class="row-odd">
+             <th class="head">
+              <p>Component</p></th>
+             <th class="head">
+              <p>Test type</p></th>
+             <th class="head">
+              <p>Test file location</p></th>
+             <th class="head">
+              <p>Try suite</p></th>
+             <th class="head">
+              <p>Treeherder Abbreviations</p></th>
+            </tr>
+           </thead>
+           <tbody>
+            <tr class="row-even">
+             <td>
+              <p>WebRTC</p></td>
+             <td>
+              <p>Mochitest</p></td>
+             <td>
+              <p>dom/media/webrtc/mochitests</p></td>
+             <td>
+              <p>mochitest-media</p></td>
+             <td>
+              <p><code class="code docutils literal notranslate"><span class="pre">mda</span></code>, <code class="code docutils literal notranslate"><span class="pre">M(mda)</span></code></p></td>
+            </tr>
+            <tr class="row-odd">
+             <td></td>
+             <td>
+              <p>Web Platform Test</p></td>
+             <td>
+              <p>testing/web-platform/tests/webrtc</p></td>
+             <td>
+              <p>wpt</p></td>
+             <td>
+              <p><code class="code docutils literal notranslate"><span class="pre">wpt</span></code>, <code class="code docutils literal notranslate"><span class="pre">W(wpt)</span></code></p></td>
+            </tr>
+            <tr class="row-even">
+             <td></td>
+             <td>
+              <p>Crashtest</p></td>
+             <td>
+              <p>dom/media/webrtc/tests/crashtests</p></td>
+             <td>
+              <p>crash</p></td>
+             <td>
+              <p><code class="code docutils literal notranslate"><span class="pre">R(C)</span></code></p></td>
+            </tr>
+            <tr class="row-odd">
+             <td>
+              <p>WebRTC Signalling</p></td>
+             <td>
+              <p>GTest</p></td>
+             <td>
+              <p>media/webrtc/signaling/gtest</p></td>
+             <td>
+              <p>gtest</p></td>
+             <td>
+              <p><code class="code docutils literal notranslate"><span class="pre">gtest</span></code></p></td>
+            </tr>
+            <tr class="row-even">
+             <td>
+              <p>WebRTC (gUM / gDDM)</p></td>
+             <td>
+              <p>Browser Chrome Test (mochitest)</p></td>
+             <td>
+              <p>browser/base/content/test/webrtc</p></td>
+             <td>
+              <p>browser-chrome</p></td>
+             <td>
+              <p><code class="code docutils literal notranslate"><span class="pre">bc</span></code>, <code class="code docutils literal notranslate"><span class="pre">M(bc)</span></code></p></td>
+            </tr>
+            <tr class="row-odd">
+             <td>
+              <p>WebRTC Transport</p></td>
+             <td>
+              <p>CPPUnit</p></td>
+             <td>
+              <p>dom/media/webrtc/transport/test</p></td>
+             <td>
+              <p>cppunit</p></td>
+             <td></td>
+            </tr>
+            <tr class="row-even">
+             <td></td>
+             <td>
+              <p>fuzztest</p></td>
+             <td>
+              <p>dom/media/webrtc/transport/fuzztest</p></td>
+             <td>
+              <p>fuzzing</p></td>
+             <td></td>
+            </tr>
+            <tr class="row-odd">
+             <td>
+              <p>SDP parser</p></td>
+             <td>
+              <p>Fuzzing</p></td>
+             <td>
+              <p>dom/media/webrtc/tests/fuzztests</p></td>
+             <td>
+              <p>fuzzing</p></td>
+             <td></td>
+            </tr>
+           </tbody>
+          </table>
+          <section id="web-platform-tests">
+           <span id="webrtc-web-platform-tests"></span>
+           <h3>Web Platform Tests<a class="headerlink" href="#web-platform-tests" title="Link to this heading">?</a></h3>
+           <p>The WPT suite comprises conformance tests for various W3C specs such as: CSS, JS APIs, and HTML. WebRTC is a JS API and as such its tests are of the <a class="reference external" href="https://web-platform-tests.org/writing-tests/testharness.html">testharness.js</a> type. There is detailed <code class="code docutils literal notranslate"><span class="pre">WPT</span></code> documentation available <a class="reference external" href="/web-platform/index.html#web-platform-tests">here</a> Web Platform Tests can be run locally from</p>
+           <div class="highlight-bash notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="c1"># Run the entire WebRTC WPT test suite</span>
+./mach<span class="w"> </span>wpt<span class="w"> </span>testing/web-platform/tests/webrtc
+
+<span class="c1"># Run a single test, e.g. RTCPeerConnection-createAnswer.html</span>
+./mach<span class="w"> </span>wpt<span class="w"> </span>testing/web-platform/tests/webrtc/RTCPeerConnection-createAnswer.html
+
+<span class="c1"># Run all of the PeerConnection tests, i.e. RTCPeerConnection-*.html</span>
+<span class="c1"># NOTE that the `mach` verb in use is `test` not `wpt`</span>
+./mach<span class="w"> </span><span class="nb">test</span><span class="w"> </span>testing/web-platform/tests/webrtc/RTCPeerConnection
+</pre>
+            </div>
+           </div>
+           <div class="admonition warning">
+            <p class="admonition-title">Warning</p>
+            <p>Running the <code class="code docutils literal notranslate"><span class="pre">WPT</span></code> tests locally can be very disruptive to one’s working desktop environment, as windows will frequently appear and grab focus. Using <code class="code docutils literal notranslate"><span class="pre">mach</span></code>’s <code class="code docutils literal notranslate"><span class="pre">--headless</span></code> flag will prevent this, and can be a great way to run them if one’s problem can be evaluated from command line output.</p>
+           </div>
+           <p>These tests are synced from the main <a class="reference external" href="https://github.com/web-platform-tests/wpt">Web Platform Test repository</a>, and likewise our changes are synced from our <a class="reference external" href="https://searchfox.org/mozilla-central/search?q=&amp;path=testing%2Fweb-platform%2Ftests%2Fwebrtc&amp;case=false&amp;regexp=false">in-tree copy</a> back to that repository.</p>
+           <div class="admonition warning">
+            <p class="admonition-title">Warning</p>
+            <p>Running the WebRTC mochitests in <cite>Try</cite> is done using the entire Web Platform Test suite, <code class="code docutils literal notranslate"><span class="pre">wpt</span></code>. As such, this can be slow.</p>
+           </div>
+           <div class="highlight-bash notranslate">
+            <div class="highlight">
+             <pre><span></span>./mach<span class="w"> </span>try<span class="w"> </span>fuzzy<span class="w"> </span>--query<span class="w"> </span><span class="s1">'wpt'</span>
+</pre>
+            </div>
+           </div>
+           <p>One can <a class="reference external" href="https://chromium.googlesource.com/chromium/src/+/refs/heads/main/docs/testing/web_platform_tests_wptrunner.md">run those same tests in Chromium</a>, Safari, or Servo if one needs to compare behavior between browsers. This can be done directly through <code class="code docutils literal notranslate"><span class="pre">mach</span></code>, see <a class="reference external" href="/web-platform/index.html#running-tests-in-other-browsers">running tests in other browsers</a> for more details.</p>
+          </section>
+          <section id="mochitests">
+           <span id="id15"></span>
+           <h3>Mochitests<a class="headerlink" href="#mochitests" title="Link to this heading">?</a></h3>
+           <p>The WebRTC mochitests are integration tests, regression tests, and sanity tests. The needs of these tests did not align with specification conformance testing in the WPT, Web Platform Test, suite. Before writing a new mochitest, one should consider if a test would be better expressed as a WPT, which all browsers can test against.</p>
+           <p>Locally running the WebRTC mochitests should be done in a Firefox dev environment using <code class="code docutils literal notranslate"><span class="pre">mach</span></code> as follows:</p>
+           <div class="highlight-bash notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="c1"># Run the whole suite</span>
+./mach<span class="w"> </span>mochitest<span class="w"> </span>dom/media/webrtc/tests/mochitests
+
+<span class="c1"># Run a single test, e.g. test_peerConnection_basicAudioVideo.html</span>
+./mach<span class="w"> </span>mochitest<span class="w"> </span>dom/media/webrtc/tests/mochitests/test_peerConnection_basicAudioVideo.html
+<span class="c1"># Or</span>
+./mach<span class="w"> </span>mochitest<span class="w"> </span>test_peerConnection_basicAudioVideo.html
+
+<span class="c1"># Run all of the PeerConnection tests, i.e. test_peerConnection_*.html</span>
+./mach<span class="w"> </span>mochitest<span class="w"> </span>test_peerConnection
+</pre>
+            </div>
+           </div>
+           <p>On <code class="code docutils literal notranslate"><span class="pre">try</span></code>, WebRTC mochitests are part of the larger media test suite. This suite can be easily selected with the following fuzzy query:</p>
+           <div class="highlight-bash notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="c1"># Run the media mochitest suite on all regular platforms</span>
+./mach<span class="w"> </span>try<span class="w"> </span>fuzzy<span class="w"> </span>--query<span class="w"> </span><span class="s1">'mochitest-media'</span>
+
+<span class="c1"># Run the media mochitest suite only on Linux which will resolve far faster</span>
+./mach<span class="w"> </span>try<span class="w"> </span>fuzzy<span class="w"> </span>--query<span class="w"> </span><span class="s1">'linux mochitest-media'</span>
+</pre>
+            </div>
+           </div>
+          </section>
+          <section id="gtests">
+           <span id="id16"></span>
+           <h3>GTests<a class="headerlink" href="#gtests" title="Link to this heading">?</a></h3>
+           <p>The gtests are all compiled into a single library target: <code class="code docutils literal notranslate"><span class="pre">xul-test</span></code>. This makes running gtests from <code class="code docutils literal notranslate"><span class="pre">mach</span></code> slightly different than the other test types.</p>
+           <div class="highlight-bash notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="c1"># Run a single test by using Prefix.TestName, e.g. JsepSessionTest.FullCall</span>
+<span class="c1"># https://searchfox.org/mozilla-central/rev/4d6a5b97428760d15bfcad13f8fc81439370a7ec/media/webrtc/signaling/gtest/jsep_session_unittest.cpp#1551</span>
+./mach<span class="w"> </span>gtest<span class="w"> </span><span class="s1">'JsepSessionTest.FullCall'</span>
+
+<span class="c1"># Run all the tests in a single Prefix, e.g. JsepSessionTest</span>
+./mach<span class="w"> </span>gtest<span class="w"> </span><span class="s1">'JsepSessiontTest.*'</span>
+
+<span class="c1"># Run all tests which have a Prefix.TestName containing the substring 'Jsep'</span>
+<span class="c1"># See the table of selectors below</span>
+./mach<span class="w"> </span>gtest<span class="w"> </span><span class="s1">'*Jsep*'</span>
+
+<span class="c1"># Run all the gtests for Firefox</span>
+./mach<span class="w"> </span>gtest
+</pre>
+            </div>
+           </div>
+           <p>Here is a list of helpful substring selectors for executing specific WebRTC gtests:</p>
+           <table class="docutils align-default" id="id26">
+            <caption>
+             <span class="caption-text">WebRTC GTest Selectors</span><a class="headerlink" href="#id26" title="Link to this table">?</a>
+            </caption>
+            <thead>
+             <tr class="row-odd">
+              <th class="head">
+               <p>Selector</p></th>
+              <th class="head">
+               <p>Description</p></th>
+              <th class="head">
+               <p>Files</p></th>
+             </tr>
+            </thead>
+            <tbody>
+             <tr class="row-even">
+              <td>
+               <p><code class="code docutils literal notranslate"><span class="pre">*Jsep*</span></code></p></td>
+              <td>
+               <p>JSEP (signalling) tests</p></td>
+              <td>
+               <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/media/webrtc/signaling/gtest/jsep_session_unittest.cpp">jsep_session_unittest.cpp</a> <a class="reference external" href="https://searchfox.org/mozilla-central/source/media/webrtc/signaling/gtest/jsep_track_unittest.cpp">jsep_trak_unittest.cpp</a></p></td>
+             </tr>
+             <tr class="row-odd">
+              <td>
+               <p><code class="code docutils literal notranslate"><span class="pre">*Sdp*</span></code></p></td>
+              <td>
+               <p>SDP parsing tests</p></td>
+              <td>
+               <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/media/webrtc/signaling/gtest/sdp_unittests.cpp">sdp_unittests.cpp</a></p></td>
+             </tr>
+             <tr class="row-even">
+              <td>
+               <p><code class="code docutils literal notranslate"><span class="pre">*MediaPipeline*</span></code></p></td>
+              <td>
+               <p>MediaPipline and MediaPipeline filter tests for RTP media handling</p></td>
+              <td>
+               <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/media/webrtc/signaling/gtest/mediapipeline_unittest.cpp">mediapipeline_unittest.cpp</a></p></td>
+             </tr>
+             <tr class="row-odd">
+              <td>
+               <p><code class="code docutils literal notranslate"><span class="pre">*AudioConduit*</span></code></p></td>
+              <td>
+               <p>AudioConduit tests for libwebrtc glue for RTP audio media</p></td>
+              <td>
+               <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/media/webrtc/signaling/gtest/audioconduit_unittests.cpp">audioconduit_unittests.cpp</a></p></td>
+             </tr>
+             <tr class="row-even">
+              <td>
+               <p><code class="code docutils literal notranslate"><span class="pre">*VideoConduit*</span></code></p></td>
+              <td>
+               <p>VideoConduit tests for libwebrtc glue for RTP video media</p></td>
+              <td>
+               <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/media/webrtc/signaling/gtest/videoconduit_unittests.cpp">videoconduit_unittests.cpp</a></p></td>
+             </tr>
+            </tbody>
+           </table>
+           <p>For more general information about gtests see the documentation <a class="reference external" href="/gtest/index.html">here</a>.</p>
+          </section>
+          <section id="fuzz-testing">
+           <h3>Fuzz Testing<a class="headerlink" href="#fuzz-testing" title="Link to this heading">?</a></h3>
+           <p>It is not common to need to run fuzz testing as it is run on a semi-continuous fashion in CI. It is more likely that one will need to respond to a bug filed by a fuzzing bot. If one is interested in fuzzing one should consult the excellent documentation available <a class="reference external" href="/tools/fuzzing/index.html">here</a>.</p>
+          </section>
+         </section>
+         <section id="code-atlas">
+          <span id="id17"></span>
+          <h2>Code Atlas<a class="headerlink" href="#code-atlas" title="Link to this heading">?</a></h2>
+          <p>There are a number of components that work together to create a successful WebRTC call. When debugging a call it can be difficult to see the larger puzzle for all the pieces. A listing of the WebRTC related source code directories is provided below to help one navigate.</p>
+          <table class="docutils align-default" id="id27">
+           <caption>
+            <span class="caption-text">WebRTC Code Atlas</span><a class="headerlink" href="#id27" title="Link to this table">?</a>
+           </caption>
+           <thead>
+            <tr class="row-odd">
+             <th class="head">
+              <p>Directory</p></th>
+             <th class="head">
+              <p>Component</p></th>
+             <th class="head">
+              <p>Description</p></th>
+             <th class="head">
+              <p>Notes</p></th>
+            </tr>
+           </thead>
+           <tbody>
+            <tr class="row-even">
+             <td>
+              <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/dom/media/webrtc">dom/media/webrtc</a></p></td>
+             <td>
+              <p>WebRTC</p></td>
+             <td>
+              <p>This is the primary directory for Firefox WebRTC code</p></td>
+             <td></td>
+            </tr>
+            <tr class="row-odd">
+             <td>
+              <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/dom/media/webrtc/common">dom/media/webrtc/common</a></p></td>
+             <td>
+              <p>WebRTC</p></td>
+             <td>
+              <p>This contains WebRTC related utility code</p></td>
+             <td></td>
+            </tr>
+            <tr class="row-even">
+             <td>
+              <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/dom/media/webrtc/jsapi">dom/media/webrtc/jsapi</a></p></td>
+             <td>
+              <p>JS API</p></td>
+             <td>
+              <p>This contains the C++ implementations of the JavaScript WebRTC interfaces</p></td>
+             <td></td>
+            </tr>
+            <tr class="row-odd">
+             <td>
+              <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/dom/media/webrtc/jsep">dom/media/webrtc/jsep</a></p></td>
+             <td>
+              <p>Signalling</p></td>
+             <td>
+              <p>This is the JSEP state engine implementation</p></td>
+             <td></td>
+            </tr>
+            <tr class="row-even">
+             <td>
+              <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/dom/media/webrtc/libwebrtcglue">media/webrtc/libwebrtcglue</a></p></td>
+             <td>
+              <p>WebRTC (various)</p></td>
+             <td>
+              <p>This is the glue code between libwebrtc and Firefox</p></td>
+             <td></td>
+            </tr>
+            <tr class="row-odd">
+             <td>
+              <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/dom/media/webrtc/sdp">dom/media/webrtc/sdp</a></p></td>
+             <td>
+              <p>Signalling</p></td>
+             <td>
+              <p>This contains the SDP parsing interface</p></td>
+             <td></td>
+            </tr>
+            <tr class="row-even">
+             <td>
+              <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/dom/media/webrtc/tests">dom/media/webrtc/tests</a></p></td>
+             <td>
+              <p>Tests</p></td>
+             <td>
+              <p>This contains <cite>some</cite> of the WebRTC related tests</p></td>
+             <td></td>
+            </tr>
+            <tr class="row-odd">
+             <td>
+              <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/dom/media/webrtc/third_party_build">dom/media/webrtc/third_party_build</a></p></td>
+             <td>
+              <p>Build</p></td>
+             <td>
+              <p>The scripting and configuration for vendoring new versions of libwebrtc are here</p></td>
+             <td>
+              <p>This is unlikely to be of concern for debugging</p></td>
+            </tr>
+            <tr class="row-even">
+             <td>
+              <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/dom/media/webrtc/transport">dom/media/webrtc/transport</a></p></td>
+             <td>
+              <p>Network</p></td>
+             <td>
+              <p>This contains the ICE implementation, the MDNS implementation, and transport code</p></td>
+             <td></td>
+            </tr>
+            <tr class="row-odd">
+             <td>
+              <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/dom/media/webrtc/transportbridge">dom/media/webrtc/transportbridge</a></p></td>
+             <td>
+              <p>WebRTC</p></td>
+             <td>
+              <p>This contains the MediaPipeline and MediaPipeline filter code which is glue between transport and the libwebrtc RTP stack</p></td>
+             <td></td>
+            </tr>
+            <tr class="row-even">
+             <td>
+              <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/third_party/libsrtp">third_party/libsrtp</a></p></td>
+             <td>
+              <p>Network</p></td>
+             <td>
+              <p>This is the SRTP implementation used by Firefox</p></td>
+             <td></td>
+            </tr>
+            <tr class="row-odd">
+             <td>
+              <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/third_party/libwebrtc">third_party/libwebrtc</a></p></td>
+             <td>
+              <p>WebRTC (various)</p></td>
+             <td>
+              <p>libwebrtc handles many aspects of WebRTC calls above the transport layer and below the presentation layer</p></td>
+             <td></td>
+            </tr>
+            <tr class="row-even">
+             <td>
+              <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/third_party/rust/webrtc-sdp">third_party/rust/webrtc-sdp</a></p></td>
+             <td>
+              <p>Signalling</p></td>
+             <td>
+              <p>webrtc-sdp is a Rust implementation of a WebRTC-only SDP parser</p></td>
+             <td></td>
+            </tr>
+            <tr class="row-odd">
+             <td>
+              <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/third_party/sipcc">third_party/sipcc</a></p></td>
+             <td>
+              <p>Signalling</p></td>
+             <td>
+              <p>sipcc is a C implementation of a general SDP parser</p></td>
+             <td>
+              <p>this carries many local modifications</p></td>
+            </tr>
+            <tr class="row-even">
+             <td>
+              <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/dom/media">dom/media</a></p></td>
+             <td>
+              <p>Media Capture</p></td>
+             <td>
+              <p>GetUserMedia and related classes are here</p></td>
+             <td>
+              <p>There are many other unrelated media source files here</p></td>
+            </tr>
+            <tr class="row-odd">
+             <td>
+              <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/dom/webidl">dom/webidl</a></p></td>
+             <td>
+              <p>WebIDL (JS API)</p></td>
+             <td>
+              <p>This contains the WebIDL definitions for the WebRTC JS API amongst many other WebIDL definitions</p></td>
+             <td>
+              <p><code class="code docutils literal notranslate"><span class="pre">RTC*.webidl</span></code></p></td>
+            </tr>
+           </tbody>
+          </table>
+         </section>
+         <section id="standards-documentation">
+          <span id="id18"></span>
+          <h2>Standards Documentation<a class="headerlink" href="#standards-documentation" title="Link to this heading">?</a></h2>
+          <p>When debugging API behavior it may be necessary to consult the specifications for WebRTC. The ECMAScript API is defined in several W3C standards, <a class="reference external" href="https://www.w3.org/TR/webrtc/">webrtc-pc</a>, and <a class="reference external" href="https://www.w3.org/TR/webrtc-stats/">webrtc-stats</a>. The number of IETF standards that are incorporated into WebRTC are too numerous to list here. One can find these standards in the <a class="reference external" href="https://www.w3.org/TR/webrtc/#normative-references">Normative References</a> section of the <code class="code docutils literal notranslate"><span class="pre">webrtc-pc</span></code> spec.</p>
+         </section>
+         <section id="appendix-delay-calculation">
+          <span id="delay-calculation"></span>
+          <h2>Appendix: Delay Calculation<a class="headerlink" href="#appendix-delay-calculation" title="Link to this heading">?</a></h2>
+          <p>For all intents and purposes jitter and RTT are additive in nature. If there was 25ms of jitter reported and a RTT of 272ms, one could estimate the expected delay from transmission at the send side to play out on receive side to be</p>
+          <div class="highlight-default notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="mi">25</span><span class="n">ms</span> <span class="o">+</span> <span class="p">(</span><span class="mi">272</span><span class="n">ms</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="mi">161</span><span class="n">ms</span>
+</pre>
+           </div>
+          </div>
+         </section>
+        </section>
+       </div>
+      </div>
+      <footer>
+       <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="debugging_on_windows.html" class="btn btn-neutral float-left" title="Debugging On Windows" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a> <a href="local_symbols.html" class="btn btn-neutral float-right" title="Symbolicating TreeHerder stacks locally" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+       </div>
+       <hr>
+       <div role="contentinfo">
+        <p></p>
+       </div> Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+      </footer>
+     </div>
+    </div>
+   </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ </body>
+</html>

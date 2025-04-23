@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en" data-content_root="./">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Phabricator Workflow Walk-through — Mozilla Conduit 0 documentation</title>
+  <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50">
+  <link rel="stylesheet" type="text/css" href="_static/classic.css?v=def86cc0">
+  <script src="_static/documentation_options.js?v=8dde47fa"></script>
+  <script src="_static/doctools.js?v=9a2dae69"></script>
+  <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+  <link rel="index" title="Index" href="genindex.html">
+  <link rel="search" title="Search" href="search.html">
+  <link rel="next" title="Windows 10 MozPhab Installation Guide" href="mozphab-windows.html">
+  <link rel="prev" title="Lando User Guide" href="lando-user.html"><!-- RTD Extra Head -->
+  <script type="application/json" id="READTHEDOCS_DATA">{"ad_free": false, "api_host": "https://readthedocs.org", "builder": "sphinx", "canonical_url": null, "docroot": "/", "features": {"docsearch_disabled": false}, "global_analytics_code": "UA-17997319-1", "language": "en", "page": "walkthrough", "programming_language": "words", "project": "moz-conduit", "proxied_api_host": "/_", "source_suffix": ".rst", "subprojects": {}, "theme": "default", "user_analytics_code": "", "version": "latest"}</script><!--
+Using this variable directly instead of using `JSON.parse` is deprecated.
+The READTHEDOCS_DATA global variable will be removed in the future.
+-->
+  <script type="text/javascript">
+READTHEDOCS_DATA = JSON.parse(document.getElementById('READTHEDOCS_DATA').innerHTML);
+</script><!-- end RTD <extrahead> -->
+  <script async type="text/javascript" src="/_/static/javascript/readthedocs-addons.js"></script>
+  <meta name="readthedocs-project-slug" content="moz-conduit">
+  <meta name="readthedocs-version-slug" content="latest">
+  <meta name="readthedocs-resolver-filename" content="/walkthrough.html">
+  <meta name="readthedocs-http-status" content="200">
+ </head>
+ <body>
+  <div class="related" role="navigation" aria-label="Related">
+   <h3>Navigation</h3>
+   <ul>
+    <li class="right" style="margin-right: 10px"><a href="genindex.html" title="General Index" accesskey="I">index</a></li>
+    <li class="right"><a href="mozphab-windows.html" title="Windows 10 MozPhab Installation Guide" accesskey="N">next</a> |</li>
+    <li class="right"><a href="lando-user.html" title="Lando User Guide" accesskey="P">previous</a> |</li>
+    <li class="nav-item nav-item-0"><a href="index.html">Mozilla Conduit 0 documentation</a> »</li>
+    <li class="nav-item nav-item-this"><a href="">Phabricator Workflow Walk-through</a></li>
+   </ul>
+  </div>
+  <div class="document">
+   <div class="documentwrapper">
+    <div class="bodywrapper">
+     <div class="body" role="main">
+      <section id="phabricator-workflow-walk-through">
+       <h1>Phabricator Workflow Walk-through<a class="headerlink" href="#phabricator-workflow-walk-through" title="Link to this heading">¶</a></h1>
+       <p><strong>IMPORTANT:</strong> Make sure you have <a class="reference internal" href="phabricator-user.html#creating-account"><span class="std std-ref">set up Phabricator</span></a> and <a class="reference internal" href="phabricator-user.html#setting-up-mozphab"><span class="std std-ref">set up MozPhab</span></a> before proceeding!</p>
+       <p>While some developers use bookmarks/etc to track changes, for this this guide we will use just repository heads: no bookmarks or labels. This essentially means “just start coding off tip and commit”. The <code class="docutils literal notranslate"><span class="pre">hg</span> <span class="pre">wip</span></code> alias provides a view of the repository that allows for keeping track of the work.</p>
+       <p>(If you want to dig deeper into the “to label or not to label” discussion, see <a class="reference external" href="https://mozilla-version-control-tools.readthedocs.io/en/latest/hgmozilla/workflows.html#to-label-or-not-to-label">this document</a>)</p>
+       <section id="landing-a-commit-to-mozilla-central">
+        <h2>Landing a commit to mozilla-central<a class="headerlink" href="#landing-a-commit-to-mozilla-central" title="Link to this heading">¶</a></h2>
+        <p>For this example we will craft one change for review. When we get feedback that changes are required we will amend our commit in-place.</p>
+        <p>We’ll use:</p>
+        <ul class="simple">
+         <li>
+          <p>One commit</p></li>
+         <li>
+          <p>One review request per commit</p></li>
+         <li>
+          <p><code class="docutils literal notranslate"><span class="pre">hg</span> <span class="pre">amend</span></code> to add fix-ups to our commit</p></li>
+         <li>
+          <p><code class="docutils literal notranslate"><span class="pre">moz-phab</span></code> to request code reviews</p></li>
+        </ul>
+        <section id="fixing-the-code">
+         <h3>Fixing the code<a class="headerlink" href="#fixing-the-code" title="Link to this heading">¶</a></h3>
+         <p>Let’s start with a clean checkout.</p>
+         <div class="highlight-default notranslate">
+          <div class="highlight">
+           <pre><span></span>$ hg wip
+@    460880 tip Merge inbound to mozilla-central.  a=merge
+|\
+~ ~
+
+$ vim dom/audiochannel/AudioChannelAgent.cpp
+# hack hack
+
+$ hg status
+M dom/audiochannel/AudioChannelAgent.cpp
+</pre>
+          </div>
+         </div>
+         <p>When we write the commit message we should follow the Firefox source tree’s common commit message format. We will include a Bug ID and list of reviewers. See the <a class="reference external" href="https://developer.mozilla.org/en-US/docs/Mozilla/Developer_guide/Committing_Rules_and_Responsibilities#Commit_message_restrictions">committing rules</a> for more information about proper commit message formatting.</p>
+         <div class="highlight-default notranslate">
+          <div class="highlight">
+           <pre><span></span>$ hg commit
+Bug 1445923 - WebAudio: Remove b2g dead code r?sylvestre
+
+
+Removed dead code from ...
+</pre>
+          </div>
+         </div>
+         <ul class="simple">
+          <li>
+           <p>You are allowed to skip the bug number and reviewer names if you don’t have them yet, but the <a class="reference external" href="https://lando.services.mozilla.com/">Lando automated landing system</a>, used later in this walk-through, will insist that you add them before the code can be landed.</p></li>
+         </ul>
+        </section>
+        <section id="requesting-a-review">
+         <h3>Requesting a Review<a class="headerlink" href="#requesting-a-review" title="Link to this heading">¶</a></h3>
+         <p>Before we request a review we should check for changes upstream.</p>
+         <div class="highlight-default notranslate">
+          <div class="highlight">
+           <pre><span></span>$ hg pull --rebase
+</pre>
+          </div>
+         </div>
+         <p>The <code class="docutils literal notranslate"><span class="pre">moz-phab</span></code> command will take care of creating a code review for us. It will automatically link the review to the BMO bug as well as notifying the reviewers.</p>
+         <div class="highlight-default notranslate">
+          <div class="highlight">
+           <pre><span></span>$ moz-phab
+Submitting 1 commit:
+(New) 460880:e376ef5bf453 Bug 1445923 - WebAudio: Remove b2g dead code r?sylvestre
+Submit to Phabricator (YES/No/Always)?
+
+...
+
+Completed
+(D55555) 460880:e376ef5bf453 Bug 1445923 - WebAudio: Remove b2g dead code r?sylvestre
+-&gt; https://phabricator.services.mozilla.com/D55555
+</pre>
+          </div>
+         </div>
+        </section>
+        <section id="addressing-feedback">
+         <h3>Addressing feedback<a class="headerlink" href="#addressing-feedback" title="Link to this heading">¶</a></h3>
+         <p>When it’s time to address feedback we use <code class="docutils literal notranslate"><span class="pre">hg</span> <span class="pre">amend</span></code>.</p>
+         <ul class="simple">
+          <li>
+           <p><code class="docutils literal notranslate"><span class="pre">hg</span> <span class="pre">commit</span> <span class="pre">--amend</span></code> also works, and allows you to update the commit description while amending the commit.</p></li>
+         </ul>
+         <div class="highlight-default notranslate">
+          <div class="highlight">
+           <pre><span></span>$ hg wip
+@  460881 tip Bug 1445923 - WebAudio: Remove b2g dead code r?sylvestre
+o    460880 Merge inbound to mozilla-central.  a=merge
+|\
+~ ~
+
+
+$ hg checkout 460881
+$ vim dom/audiochannel/AudioChannelAgent.cpp
+# fixup fixup
+
+$ hg amend
+</pre>
+          </div>
+         </div>
+         <p>Check off the Done item in the Phabricator UI.</p><a class="reference internal image-reference" href="_images/review-item-done.png"><img alt="Screenshot of a Done review item" class="align-center" src="_images/review-item-done.png" style="width: 800px;"> </a>
+         <p>Now run <code class="docutils literal notranslate"><span class="pre">moz-phab</span></code> a second time. Phabricator will automatically submit your Done items in the UI and notify your reviewers that you have made updates.</p>
+         <div class="highlight-default notranslate">
+          <div class="highlight">
+           <pre><span></span>$ moz-phab
+</pre>
+          </div>
+         </div>
+        </section>
+        <section id="landing-the-changes">
+         <h3>Landing the changes<a class="headerlink" href="#landing-the-changes" title="Link to this heading">¶</a></h3>
+         <p>Everything looks good: the reviewers have approved our changes. Let’s land our changes.</p>
+         <p>On your revision page in Phabricator click the “View Stack in Lando” link in the right-hand menu:</p><a class="reference internal image-reference" href="_images/view-in-lando.png"><img alt="Screenshot of a Phabricator Revision ready to land with Lando" class="align-center" src="_images/view-in-lando.png" style="width: 800px;"> </a>
+         <p>You will be taken to the Lando revision overview page. Press “Preview Landing” and give the change one last review: double-check the commit message, etc., before hitting the “Land” button.</p><a class="reference internal image-reference" href="_images/lando-land-it.png"><img alt="Screenshot of a revision in Lando that is ready to land" class="align-center" src="_images/lando-land-it.png" style="width: 800px;"> </a>
+         <p>Hit the “Land” button and Lando will automatically land your changes.</p>
+        </section>
+       </section>
+       <section id="where-to-go-from-here">
+        <h2>Where to go from here<a class="headerlink" href="#where-to-go-from-here" title="Link to this heading">¶</a></h2>
+        <p><code class="docutils literal notranslate"><span class="pre">moz-phab</span></code> has other features including the ability to update and land entire stacks of related commits. Check out the <a class="reference internal" href="phabricator-user.html#using-moz-phab"><span class="std std-ref">Submitting Patches</span></a> section for more information.</p>
+       </section>
+      </section>
+      <div class="clearer"></div>
+     </div>
+    </div>
+   </div>
+   <div class="sphinxsidebar" role="navigation" aria-label="Main">
+    <div class="sphinxsidebarwrapper">
+     <div>
+      <h3><a href="index.html">Table of Contents</a></h3>
+      <ul>
+       <li><a class="reference internal" href="#">Phabricator Workflow Walk-through</a>
+        <ul>
+         <li><a class="reference internal" href="#landing-a-commit-to-mozilla-central">Landing a commit to mozilla-central</a>
+          <ul>
+           <li><a class="reference internal" href="#fixing-the-code">Fixing the code</a></li>
+           <li><a class="reference internal" href="#requesting-a-review">Requesting a Review</a></li>
+           <li><a class="reference internal" href="#addressing-feedback">Addressing feedback</a></li>
+           <li><a class="reference internal" href="#landing-the-changes">Landing the changes</a></li>
+          </ul></li>
+         <li><a class="reference internal" href="#where-to-go-from-here">Where to go from here</a></li>
+        </ul></li>
+      </ul>
+     </div>
+     <div>
+      <h4>Previous topic</h4>
+      <p class="topless"><a href="lando-user.html" title="previous chapter">Lando User Guide</a></p>
+     </div>
+     <div>
+      <h4>Next topic</h4>
+      <p class="topless"><a href="mozphab-windows.html" title="next chapter">Windows 10 MozPhab Installation Guide</a></p>
+     </div>
+     <div role="note" aria-label="source link">
+      <h3>This Page</h3>
+      <ul class="this-page-menu">
+       <li><a href="_sources/walkthrough.rst.txt" rel="nofollow">Show Source</a></li>
+      </ul>
+     </div><search id="searchbox" style="display: none" role="search">
+      <h3 id="searchlabel">Quick search</h3>
+      <div class="searchformwrapper">
+       <form class="search" action="search.html" method="get">
+        <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"> <input type="submit" value="Go">
+       </form>
+      </div>
+     </search>
+     <script>document.getElementById('searchbox').style.display = "block"</script>
+    </div>
+   </div>
+   <div class="clearer"></div>
+  </div>
+  <div class="related" role="navigation" aria-label="Related">
+   <h3>Navigation</h3>
+   <ul>
+    <li class="right" style="margin-right: 10px"><a href="genindex.html" title="General Index">index</a></li>
+    <li class="right"><a href="mozphab-windows.html" title="Windows 10 MozPhab Installation Guide">next</a> |</li>
+    <li class="right"><a href="lando-user.html" title="Lando User Guide">previous</a> |</li>
+    <li class="nav-item nav-item-0"><a href="index.html">Mozilla Conduit 0 documentation</a> »</li>
+    <li class="nav-item nav-item-this"><a href="">Phabricator Workflow Walk-through</a></li>
+   </ul>
+  </div>
+  <div class="footer" role="contentinfo">
+   © Copyright 2017, Mozilla. Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.4.5.
+  </div>
+ </body>
+</html>

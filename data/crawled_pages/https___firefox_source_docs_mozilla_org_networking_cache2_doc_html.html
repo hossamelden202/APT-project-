@@ -1,0 +1,696 @@
+<!doctype html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HTTP Cache — Firefox Source Docs  documentation</title>
+  <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50">
+  <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094">
+  <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=fd3f3429">
+  <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b">
+  <link rel="stylesheet" type="text/css" href="../../_static/custom_theme.css?v=dc5ed815">
+  <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7">
+  <link rel="shortcut icon" href="../../_static/firefox.ico"><!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script src="../../_static/jquery.js?v=5d32c60e"></script>
+  <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+  <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+  <script src="../../_static/doctools.js?v=9a2dae69"></script>
+  <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+  <script src="../../_static/copybutton.js?v=30646c52"></script>
+  <script src="../../_static/design-tabs.js?v=36754332"></script>
+  <script src="../../_static/js/theme.js"></script>
+  <link rel="index" title="Index" href="../../genindex.html">
+  <link rel="search" title="Search" href="../../search.html">
+  <link rel="next" title="Http3Session and Streams" href="../http/http3.html">
+  <link rel="prev" title="Security and Networking Components" href="../sec-necko-components.html">
+ </head>
+ <body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+   <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <div class="wy-side-scroll">
+     <div class="wy-side-nav-search">
+      <a href="../../index.html" class="icon icon-home"> Firefox Source Docs <img src="../../_static/firefox-wordmark.svg" class="logo" alt="Logo"> </a><!-- -- This code is governed by the BSD license ---->
+      <div>
+       <h3>Quick search</h3>
+       <script>
+    (function () {
+      var cx = "dd12886298f75dbef";
+      var gcse = document.createElement("script");
+      gcse.async = true;
+      gcse.src = "https://cse.google.com/cse.js?cx=" + cx;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(gcse, s);
+    })();
+  </script><gcse:search></gcse:search>
+      </div>
+     </div>
+     <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+      <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../glossary/index.html">A Glossary of Common Terms</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../overview/index.html">A Quick Guide to Mozilla Applications</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../setup/index.html">Getting Set Up To Work On The Firefox Codebase</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Working On Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Working on Firefox</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../bug-mgmt/index.html">Bug Handling</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox User Guide</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../devtools-user/index.html">Firefox DevTools User Docs</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Source Code Documentation</span></p>
+      <ul class="current">
+       <li class="toctree-l1"><a class="reference internal" href="../../mots/index.html">Governance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../browser/index.html">Firefox Front-end</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../dom/index.html">DOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../editor/index.html">Editor</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../layout/index.html">Style system (CSS) &amp; Layout</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../gfx/index.html">Graphics</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../ipc/index.html">Processes, Threads and IPC</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../devtools/index.html">Firefox DevTools Contributor Docs</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../toolkit/index.html">Toolkit</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../js/index.html">SpiderMonkey</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../jsloader/index.html">JS Loader</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/geckoview/index.html">GeckoView</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/fenix/index.html">Fenix</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/focus-android/index.html">Focus for Android</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../dom/bindings/webidl/index.html">WebIDL</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../modules/libpref/index.html">libpref</a></li>
+       <li class="toctree-l1 current"><a class="reference internal" href="../index.html">Networking</a>
+        <ul class="current">
+         <li class="toctree-l2"><a class="reference internal" href="../index.html#how-tos">How-to’s</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../index.html#tutorials">Tutorials</a></li>
+         <li class="toctree-l2 current"><a class="reference internal" href="../index.html#deep-dives">Deep Dives</a>
+          <ul class="current">
+           <li class="toctree-l3 current"><a class="reference internal" href="../index.html#necko-design">Necko Design</a>
+            <ul class="current">
+             <li class="toctree-l4"><a class="reference internal" href="../sec-necko-components.html">Security and Networking Components</a></li>
+             <li class="toctree-l4 current"><a class="current reference internal" href="#">HTTP Cache</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="../http/http3.html">Http3Session and Streams</a></li>
+             <li class="toctree-l4"><a class="reference external" href="https://docs.google.com/presentation/d/1BRCK4WMYg-dUy07PB5H4jFVTpc4YnkQX8f5Y3KXqCs8">Necko Bird’s-eye View</a></li>
+             <li class="toctree-l4"><a class="reference external" href="https://docs.google.com/presentation/d/1iuYNLJfz24MN9SS5ljjhG07452-kZKtXmOeGjcc1-lU/">Gecko HTTP Walkthrough</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="../http/prioritization.html">Firefox Network Scheduling and Prioritization</a></li>
+            </ul></li>
+           <li class="toctree-l3"><a class="reference internal" href="../index.html#necko-features">Necko Features</a></li>
+          </ul></li>
+         <li class="toctree-l2"><a class="reference internal" href="../index.html#references">References</a></li>
+        </ul></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../remote/index.html">Remote Protocols</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../services/index.html">Services</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../permissions/index.html">Permissions</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../uriloader/index.html">File Handling</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../widget/cocoa/index.html">Firefox on macOS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../widget/windows/index.html">Firefox on Windows</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../toolkit/components/ml/index.html">Firefox AI Runtime</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../accessible/index.html">Accessibility</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../media/index.html">Media Playback</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../code-quality/index.html">Code quality</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../writing-rust-code/index.html">Writing Rust Code</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../rust-components/index.html">Rust Components</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/profiler/index.html">Gecko Profiler</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../performance/index.html">Performance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../storage/index.html">Database bindings (SQLite, KV, …)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../xpcom/index.html">XPCOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../nspr/index.html">NSPR</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../security/nss/index.html">Network Security Services (NSS)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../content-security/index.html">Web Security Checks in Gecko</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">The Firefox Build System</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mach/index.html">Mach</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/try/index.html">Pushing to Try</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../build/buildsystem/index.html">Build System</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../taskcluster/index.html">Firefox CI and Taskgraph</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/moztreedocs/index.html">Managing Documentation</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mozbuild/vendor/index.html">Vendoring Third Party Components</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Testing &amp; Test Infrastructure</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/automated-testing/index.html">Automated Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/treeherder-try/index.html">Understanding Treeherder Results</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/sheriffed-intermittents/index.html">Sheriffed intermittent failures</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/tests-for-new-config/index.html">Turning on Firefox tests for a new configuration</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/intermittent/index.html">Avoiding intermittent tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/testing-policy/index.html">Testing Policy</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/ci-configs/index.html">Configuration Changes</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/browser-chrome/index.html">Browser chrome mochitests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/chrome-tests/index.html">Chrome Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/marionette/index.html">Marionette</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/geckodriver/index.html">geckodriver</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/test-verification/index.html">Test Verification</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/webrender/index.html">WebRender Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/mochitest-plain/index.html">Mochitest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/xpcshell/index.html">XPCShell tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/tps/index.html">TPS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../web-platform/index.html">web-platform-tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../gtest/index.html">GTest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/fuzzing/index.html">Fuzzing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/sanitizer/index.html">Sanitizer</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/perfdocs/index.html">Performance Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/code-coverage/index.html">Code coverage</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing-rust-code/index.html">Testing &amp; Debugging Rust Code</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Releases &amp; Updates</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html">Mozilla Update Infrastructure</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html#watershed-updates">Watershed Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html#desupport-updates">Desupport Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/update-verify/index.html">Update Verify</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Localization &amp; Internationalization</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../intl/index.html">Internationalization</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../l10n/index.html">Localization</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox and Python</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mozbase/index.html">mozbase</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../python/index.html">Using third-party Python packages</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Metrics Collected in Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../metrics/index.html">Metrics</a></li>
+      </ul>
+     </div>
+    </div>
+   </nav>
+   <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+    <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+     <i data-toggle="wy-nav-top" class="fa fa-bars"></i> <a href="../../index.html">Firefox Source Docs</a>
+    </nav>
+    <div class="wy-nav-content">
+     <div class="rst-content">
+      <!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+      <div role="navigation" aria-label="Page navigation">
+       <ul class="wy-breadcrumbs">
+        <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+        <li class="breadcrumb-item"><a href="../index.html">Networking</a></li>
+        <li class="breadcrumb-item active">HTTP Cache</li>
+        <li class="wy-breadcrumbs-aside"><a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Developer+Infrastructure&amp;component=Firefox+Source+Docs%3A+Content&amp;short_desc=Documentation+issue+on+networking/cache2/doc&amp;comment=URL+=+https://firefox-source-docs.mozilla.org/networking/cache2/doc.html&amp;bug_file_loc=https://firefox-source-docs.mozilla.org/networking/cache2/doc.html" rel="nofollow">Report an issue</a> / <a href="../../_sources/networking/cache2/doc.rst.txt" rel="nofollow"> View page source</a></li>
+       </ul>
+       <hr>
+      </div>
+      <div role="main" class="document" itemscope itemtype="http://schema.org/Article">
+       <div itemprop="articleBody">
+        <section id="http-cache">
+         <h1>HTTP Cache<a class="headerlink" href="#http-cache" title="Link to this heading">?</a></h1>
+         <p>This document describes the <strong>HTTP cache implementation</strong>.</p>
+         <p>The code resides in <a class="reference external" href="https://searchfox.org/mozilla-central/source/netwerk/cache2">/netwerk/cache2 (searchfox)</a></p>
+         <section id="api">
+          <h2>API<a class="headerlink" href="#api" title="Link to this heading">?</a></h2>
+          <p>Here is a detailed description of the HTTP cache v2 API, examples included. This document only contains what cannot be found or may not be clear directly from the <a class="reference external" href="https://searchfox.org/mozilla-central/search?q=&amp;path=cache2%2FnsICache&amp;case=false&amp;regexp=false">IDL files</a> comments.</p>
+          <ul class="simple">
+           <li>
+            <p>The cache API is <strong>completely thread-safe</strong> and <strong>non-blocking</strong>.</p></li>
+           <li>
+            <p>There is <strong>no IPC support</strong>. It’s only accessible on the default chrome process.</p></li>
+           <li>
+            <p>When there is no profile the new HTTP cache works, but everything is stored only in memory not obeying any particular limits.</p></li>
+          </ul>
+         </section>
+         <section id="nsicachestorageservice">
+          <span id="id1"></span>
+          <h2>nsICacheStorageService<a class="headerlink" href="#nsicachestorageservice" title="Link to this heading">?</a></h2>
+          <ul>
+           <li>
+            <p>The HTTP cache entry-point. Accessible as a service only, fully thread-safe, scriptable.</p></li>
+           <li>
+            <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/netwerk/cache2/nsICacheStorageService.idl">nsICacheStorageService.idl (searchfox)</a></p></li>
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">"@mozilla.org/netwerk/cache-storage-service;1"</span></code></p></li>
+           <li>
+            <p>Provides methods accessing “storage” objects – see <cite>nsICacheStorage</cite> below – giving further access to cache entries – see <a class="reference internal" href="#nsicacheentry"><span class="std std-ref">nsICacheEntry</span></a> more below – per specific URL.</p></li>
+           <li>
+            <p>Currently we have 3 types of storages, all the access methods return an <a class="reference internal" href="#nsicachestorage"><span class="std std-ref">nsICacheStorage</span></a> object:</p>
+            <ul class="simple">
+             <li>
+              <p><strong>memory-only</strong> (<code class="docutils literal notranslate"><span class="pre">memoryCacheStorage</span></code>): stores data only in a memory cache, data in this storage are never put to disk</p></li>
+             <li>
+              <p><strong>disk</strong> (<code class="docutils literal notranslate"><span class="pre">diskCacheStorage</span></code>): stores data on disk, but for existing entries also looks into the memory-only storage; when instructed via a special argument also primarily looks into application caches</p></li>
+            </ul>
+            <div class="admonition note">
+             <p class="admonition-title">Note</p>
+             <p><strong>application cache</strong> (<code class="docutils literal notranslate"><span class="pre">appCacheStorage</span></code>): when a consumer has a specific <code class="docutils literal notranslate"><span class="pre">nsIApplicationCache</span></code> (i.e. a particular app cache version in a group) in hands, this storage will provide read and write access to entries in that application cache; when the app cache is not specified, this storage will operate over all existing app caches. <strong>This kind of storage is deprecated and will be removed</strong> in <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1694662">bug 1694662</a></p>
+            </div></li>
+           <li>
+            <p>The service also provides methods to clear the whole disk and memory cache content or purge any intermediate memory structures:</p>
+            <ul class="simple">
+             <li>
+              <p><code class="docutils literal notranslate"><span class="pre">clear</span></code>– after it returns, all entries are no longer accessible through the cache APIs; the method is fast to execute and non-blocking in any way; the actual erase happens in background</p></li>
+             <li>
+              <p><code class="docutils literal notranslate"><span class="pre">purgeFromMemory</span></code>– removes (schedules to remove) any intermediate cache data held in memory for faster access (more about the <a class="reference internal" href="#intermediate-memory-caching"><span class="std std-ref">Intermediate_Memory_Caching</span></a> below)</p></li>
+            </ul></li>
+          </ul>
+         </section>
+         <section id="nsiloadcontextinfo">
+          <span id="id2"></span>
+          <h2>nsILoadContextInfo<a class="headerlink" href="#nsiloadcontextinfo" title="Link to this heading">?</a></h2>
+          <ul>
+           <li>
+            <p>Distinguishes the scope of the storage demanded to open.</p></li>
+           <li>
+            <p>Mandatory argument to <code class="docutils literal notranslate"><span class="pre">*Storage</span></code> methods of <a class="reference internal" href="#nsicachestorageservice"><span class="std std-ref">nsICacheStorageService</span></a>.</p></li>
+           <li>
+            <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/netwerk/base/nsILoadContextInfo.idl">nsILoadContextInfo.idl (searchfox)</a></p></li>
+           <li>
+            <p>It is a helper interface wrapping following four arguments into a single one:</p>
+            <ul class="simple">
+             <li>
+              <p><strong>private-browsing</strong> boolean flag</p></li>
+             <li>
+              <p><strong>anonymous load</strong> boolean flag</p></li>
+             <li>
+              <p><strong>origin attributes</strong> js value</p></li>
+            </ul>
+            <div class="admonition note">
+             <p class="admonition-title">Note</p>
+             <p>Helper functions to create nsILoadContextInfo objects:</p>
+             <ul class="simple">
+              <li>
+               <p>C++ consumers: functions at <code class="docutils literal notranslate"><span class="pre">LoadContextInfo.h</span></code> exported header</p></li>
+              <li>
+               <p>JS consumers: <code class="docutils literal notranslate"><span class="pre">Services.loadContextInfo</span></code> which is an instance of <code class="docutils literal notranslate"><span class="pre">nsILoadContextInfoFactory</span></code>.</p></li>
+             </ul>
+            </div></li>
+           <li>
+            <p>Two storage objects created with the same set of <code class="docutils literal notranslate"><span class="pre">nsILoadContextInfo</span></code>arguments are identical, containing the same cache entries.</p></li>
+           <li>
+            <p>Two storage objects created with in any way different <code class="docutils literal notranslate"><span class="pre">nsILoadContextInfo</span></code>arguments are strictly and completely distinct and cache entries in them do not overlap even when having the same URIs.</p></li>
+          </ul>
+         </section>
+         <section id="nsicachestorage">
+          <span id="id3"></span>
+          <h2>nsICacheStorage<a class="headerlink" href="#nsicachestorage" title="Link to this heading">?</a></h2>
+          <ul class="simple">
+           <li>
+            <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/netwerk/cache2/nsICacheStorage.idl">nsICacheStorage.idl (searchfox)</a></p></li>
+           <li>
+            <p>Obtained from call to one of the <code class="docutils literal notranslate"><span class="pre">*Storage</span></code> methods on <a class="reference internal" href="#nsicachestorageservice"><span class="std std-ref">nsICacheStorageService</span></a>.</p></li>
+           <li>
+            <p>Represents a distinct storage area (or scope) to put and get cache entries mapped by URLs into and from it.</p></li>
+           <li>
+            <p><em>Similarity with the old cache</em>: this interface may be with some limitations considered as a mirror to <code class="docutils literal notranslate"><span class="pre">nsICacheSession</span></code>, but less generic and not inclining to abuse.</p></li>
+          </ul>
+         </section>
+         <section id="nsicacheentryopencallback">
+          <h2>nsICacheEntryOpenCallback<a class="headerlink" href="#nsicacheentryopencallback" title="Link to this heading">?</a></h2>
+          <ul>
+           <li>
+            <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/netwerk/cache2/nsICacheEntryOpenCallback.idl">nsICacheEntryOpenCallback.idl (searchfox)</a></p></li>
+           <li>
+            <p>The result of <code class="docutils literal notranslate"><span class="pre">nsICacheStorage.asyncOpenURI</span></code> is always and only sent to callbacks on this interface.</p></li>
+           <li>
+            <p>These callbacks are ensured to be invoked when <code class="docutils literal notranslate"><span class="pre">asyncOpenURI</span></code> returns <code class="docutils literal notranslate"><span class="pre">NS_OK</span></code>.</p></li>
+           <li>
+            <div class="admonition note">
+             <p class="admonition-title">Note</p>
+             <p>When the cache entry object is already present in memory or open as “force-new” (a.k.a “open-truncate”) this callback is invoked sooner then the <code class="docutils literal notranslate"><span class="pre">asyncOpenURI</span></code>method returns (i.e. immediately); there is currently no way to opt out of this feature (see <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=938186">bug 938186</a>).</p>
+            </div></li>
+          </ul>
+         </section>
+         <section id="nsicacheentry">
+          <span id="id4"></span>
+          <h2>nsICacheEntry<a class="headerlink" href="#nsicacheentry" title="Link to this heading">?</a></h2>
+          <ul class="simple">
+           <li>
+            <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/netwerk/cache2/nsICacheEntry.idl">nsICacheEntry.idl (searchfox)</a></p></li>
+           <li>
+            <p>Obtained asynchronously or pseudo-asynchronously by a call to <code class="docutils literal notranslate"><span class="pre">nsICacheStorage.asyncOpenURI</span></code>.</p></li>
+           <li>
+            <p>Provides access to a cached entry data and meta data for reading or writing or in some cases both, see below.</p></li>
+          </ul>
+         </section>
+         <section id="lifetime-of-a-new-entry">
+          <h2>Lifetime of a new entry<a class="headerlink" href="#lifetime-of-a-new-entry" title="Link to this heading">?</a></h2>
+          <ul>
+           <li>
+            <p>Such entry is initially empty (no data or meta data is stored in it).</p></li>
+           <li>
+            <p>The <code class="docutils literal notranslate"><span class="pre">aNew</span></code>argument in <code class="docutils literal notranslate"><span class="pre">onCacheEntryAvailable</span></code> is <code class="docutils literal notranslate"><span class="pre">true</span></code> for and only for new entries.</p></li>
+           <li>
+            <p>Only one consumer (the so called “<em>writer</em>”) may have such an entry available (obtained via <code class="docutils literal notranslate"><span class="pre">onCacheEntryAvailable</span></code>).</p></li>
+           <li>
+            <p>Other parallel openers of the same cache entry are blocked (wait) for invocation of their <code class="docutils literal notranslate"><span class="pre">onCacheEntryAvailable</span></code> until one of the following occurs:</p>
+            <ul>
+             <li>
+              <p>The <em>writer</em> simply throws the entry away: other waiting opener in line gets the entry again as “<em>new</em>”, the cycle repeats.</p>
+              <div class="admonition note">
+               <p class="admonition-title">Note</p>
+               <p>This applies in general, writers throwing away the cache entry means a failure to write the cache entry and a new writer is being looked for again, the cache entry remains empty (a.k.a. “new”).</p>
+              </div></li>
+             <li>
+              <p>The <em>writer</em> stored all necessary meta data in the cache entry and called <code class="docutils literal notranslate"><span class="pre">metaDataReady</span></code> on it: other consumers now get the entry and may examine and potentially modify the meta data and read the data (if any) of the cache entry.</p></li>
+             <li>
+              <p>When the <em>writer</em> has data (i.e. the response payload) to write to the cache entry, it <strong>must</strong> open the output stream on it <strong>before</strong> it calls <code class="docutils literal notranslate"><span class="pre">metaDataReady</span></code>.</p></li>
+            </ul></li>
+           <li>
+            <p>When the <em>writer</em> still keeps the cache entry and has open and keeps open the output stream on it, other consumers may open input streams on the entry. The data will be available as the <em>writer</em> writes data to the cache entry’s output stream immediately, even before the output stream is closed. This is called <a class="reference internal" href="#concurrent-read-and-write"><span class="std std-ref">concurrent read/write</span></a>.</p></li>
+          </ul>
+         </section>
+         <section id="concurrent-read-and-write">
+          <span id="id5"></span>
+          <h2>Concurrent read and write<a class="headerlink" href="#concurrent-read-and-write" title="Link to this heading">?</a></h2>
+          <p>The cache supports reading a cache entry data while it is still being written by the first consumer - the <em>writer</em>. This can only be engaged for resumable responses that (<a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=960902#c17">bug 960902</a>) don’t need revalidation. Reason is that when the writer is interrupted (by e.g. external canceling of the loading channel) concurrent readers would not be able to reach the remaining unread content.</p>
+          <div class="admonition note">
+           <p class="admonition-title">Note</p>
+           <p>This could be improved by keeping the network load running and being stored to the cache entry even after the writing channel has been canceled.</p>
+          </div>
+          <p>When the <em>writer</em> is interrupted, the first concurrent <em>reader</em> in line does a range request for the rest of the data - and becomes that way a new <em>writer</em>. The rest of the <em>readers</em> are still concurrently reading the content since output stream for the cache entry is again open and kept by the current <em>writer</em>.</p>
+         </section>
+         <section id="lifetime-of-an-existing-entry-with-only-a-partial-content">
+          <h2>Lifetime of an existing entry with only a partial content<a class="headerlink" href="#lifetime-of-an-existing-entry-with-only-a-partial-content" title="Link to this heading">?</a></h2>
+          <ul class="simple">
+           <li>
+            <p>Such a cache entry is first examined in the <code class="docutils literal notranslate"><span class="pre">nsICacheEntryOpenCallback.onCacheEntryCheck</span></code> callback, where it has to be checked for completeness.</p></li>
+           <li>
+            <p>In this case, the <code class="docutils literal notranslate"><span class="pre">Content-Length</span></code> (or different indicator) header doesn’t equal to the data size reported by the cache entry.</p></li>
+           <li>
+            <p>The consumer then indicates the cache entry needs to be revalidated by returning <code class="docutils literal notranslate"><span class="pre">ENTRY_NEEDS_REVALIDATION</span></code>from <code class="docutils literal notranslate"><span class="pre">onCacheEntryCheck</span></code>.</p></li>
+           <li>
+            <p>This consumer, from the point of view the cache, takes a role of the <em>writer</em>.</p></li>
+           <li>
+            <p>Other parallel consumers, if any, are blocked until the <em>writer</em> calls <code class="docutils literal notranslate"><span class="pre">setValid</span></code> on the cache entry.</p></li>
+           <li>
+            <p>The consumer is then responsible to validate the partial content cache entry with the network server and attempt to load the rest of the data.</p></li>
+           <li>
+            <p>When the server responds positively (in case of an HTTP server with a 206 response code) the <em>writer</em> (in this order) opens the output stream on the cache entry and calls <code class="docutils literal notranslate"><span class="pre">setValid</span></code> to unblock other pending openers.</p></li>
+           <li>
+            <p>Concurrent read/write is engaged.</p></li>
+          </ul>
+         </section>
+         <section id="lifetime-of-an-existing-entry-that-doesn-t-pass-server-revalidation">
+          <h2>Lifetime of an existing entry that doesn’t pass server revalidation<a class="headerlink" href="#lifetime-of-an-existing-entry-that-doesn-t-pass-server-revalidation" title="Link to this heading">?</a></h2>
+          <ul class="simple">
+           <li>
+            <p>Such a cache entry is first examined in the <code class="docutils literal notranslate"><span class="pre">nsICacheEntryOpenCallback.onCacheEntryCheck</span></code> callback, where the consumer finds out it must be revalidated with the server before use.</p></li>
+           <li>
+            <p>The consumer then indicates the cache entry needs to be revalidated by returning <code class="docutils literal notranslate"><span class="pre">ENTRY_NEEDS_REVALIDATION</span></code>from <code class="docutils literal notranslate"><span class="pre">onCacheEntryCheck</span></code>.</p></li>
+           <li>
+            <p>This consumer, from the point of view the cache, takes a role of the <em>writer</em>.</p></li>
+           <li>
+            <p>Other parallel consumers, if any, are blocked until the <em>writer</em> calls <code class="docutils literal notranslate"><span class="pre">setValid</span></code> on the cache entry.</p></li>
+           <li>
+            <p>The consumer is then responsible to validate the partial content cache entry with the network server.</p></li>
+           <li>
+            <p>The server responses with a 200 response which means the cached content is no longer valid and a new version must be loaded from the network.</p></li>
+           <li>
+            <p>The <em>writer</em> then calls <code class="docutils literal notranslate"><span class="pre">recreate</span></code>on the cache entry. This returns a new empty entry to write the meta data and data to, the <em>writer</em> exchanges its cache entry by this new one and handles it as a new one.</p></li>
+           <li>
+            <p>The <em>writer</em> then (in this order) fills the necessary meta data of the cache entry, opens the output stream on it and calls <code class="docutils literal notranslate"><span class="pre">metaDataReady</span></code> on it.</p></li>
+           <li>
+            <p>Any other pending openers, if any, are now given this new entry to examine and read as an existing entry.</p></li>
+          </ul>
+         </section>
+         <section id="adding-a-new-storage">
+          <h2>Adding a new storage<a class="headerlink" href="#adding-a-new-storage" title="Link to this heading">?</a></h2>
+          <p>Should there be a need to add a new distinct storage for which the current scoping model would not be sufficient - use one of the two following ways:</p>
+          <ol class="arabic simple">
+           <li>
+            <p><em>[preferred]</em> Add a new <code class="docutils literal notranslate"><span class="pre">&lt;Your&gt;Storage</span></code> method on <a class="reference internal" href="#nsicachestorageservice"><span class="std std-ref">nsICacheStorageService</span></a> and if needed give it any arguments to specify the storage scope even more. Implementation only should need to enhance the context key generation and parsing code and enhance current - or create new when needed - <a class="reference internal" href="#nsicachestorage"><span class="std std-ref">nsICacheStorage</span></a> implementations to carry any additional information down to the cache service.</p></li>
+           <li>
+            <p><em>[</em><strong>not</strong><em>preferred]</em> Add a new argument to <a class="reference internal" href="#nsiloadcontextinfo"><span class="std std-ref">nsILoadContextInfo</span></a>; <strong>be careful here</strong>, since some arguments on the context may not be known during the load time, what may lead to inter-context data leaking or implementation problems. Adding more distinction to <a class="reference internal" href="#nsiloadcontextinfo"><span class="std std-ref">nsILoadContextInfo</span></a> also affects all existing storages which may not be always desirable.</p></li>
+          </ol>
+          <p>See context keying details for more information.</p>
+         </section>
+         <section id="threading">
+          <h2>Threading<a class="headerlink" href="#threading" title="Link to this heading">?</a></h2>
+          <p>The cache API is fully thread-safe.</p>
+          <p>The cache is using a single background thread where any IO operations like opening, reading, writing and erasing happen. Also memory pool management, eviction, visiting loops happen on this thread.</p>
+          <p>The thread supports several priority levels. Dispatching to a level with a lower number is executed sooner then dispatching to higher number layers; also any loop on lower levels yields to higher levels so that scheduled deletion of 1000 files will not block opening cache entries.</p>
+          <ol class="arabic simple">
+           <li>
+            <p><strong>OPEN_PRIORITY:</strong> except opening priority cache files also file dooming happens here to prevent races</p></li>
+           <li>
+            <p><strong>READ_PRIORITY:</strong> top level documents and head blocking script cache files are open and read as the first</p></li>
+           <li>
+            <p><strong>OPEN</strong></p></li>
+           <li>
+            <p><strong>READ:</strong> any normal priority content, such as images are open and read here</p></li>
+           <li>
+            <p><strong>WRITE:</strong> writes are processed as last, we cache data in memory in the mean time</p></li>
+           <li>
+            <p><strong>MANAGEMENT:</strong> level for the memory pool and CacheEntry background operations</p></li>
+           <li>
+            <p><strong>CLOSE:</strong> file closing level</p></li>
+           <li>
+            <p><strong>INDEX:</strong> index is being rebuild here</p></li>
+           <li>
+            <p><strong>EVICT:</strong> files overreaching the disk space consumption limit are being evicted here</p></li>
+          </ol>
+          <p>NOTE: Special case for eviction - when an eviction is scheduled on the IO thread, all operations pending on the OPEN level are first merged to the OPEN_PRIORITY level. The eviction preparation operation - i.e. clearing of the internal IO state - is then put to the end of the OPEN_PRIORITY level. All this happens atomically.</p>
+         </section>
+         <section id="storage-and-entries-scopes">
+          <h2>Storage and entries scopes<a class="headerlink" href="#storage-and-entries-scopes" title="Link to this heading">?</a></h2>
+          <p>A <em>scope key</em> string used to map the storage scope is based on the arguments of <a class="reference internal" href="#nsiloadcontextinfo"><span class="std std-ref">nsILoadContextInfo</span></a>. The form is following (currently pending in <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=968593">bug 968593</a>):</p>
+          <div class="highlight-JavaScript notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="nx">a</span><span class="p">,</span><span class="nx">b</span><span class="p">,</span><span class="nx">i1009</span><span class="p">,</span><span class="nx">p</span><span class="p">,</span>
+</pre>
+           </div>
+          </div>
+          <ul class="simple">
+           <li>
+            <p>Regular expression: <code class="docutils literal notranslate"><span class="pre">(.([-,]+)?,)*</span></code></p></li>
+           <li>
+            <p>The first letter is an identifier, identifiers are to be alphabetically sorted and always terminate with ‘,’</p></li>
+           <li>
+            <p>a - when present the scope is belonging to an <strong>anonymous</strong> load</p></li>
+           <li>
+            <p>b - when present the scope is <strong>in browser element</strong> load</p></li>
+           <li>
+            <p>i - when present must have a decimal integer value that represents an app ID the scope belongs to, otherwise there is no app (app ID is considered <code class="docutils literal notranslate"><span class="pre">0</span></code>)</p></li>
+           <li>
+            <p>p - when present the scope is of a <strong>private browsing</strong> load, this never persists</p></li>
+          </ul>
+          <p><code class="docutils literal notranslate"><span class="pre">CacheStorageService</span></code>keeps a global hashtable mapped by the <em>scope key</em>. Elements in this global hashtable are hashtables of cache entries. The cache entries are mapped by concantation of Enhance ID and URI passed to <code class="docutils literal notranslate"><span class="pre">nsICacheStorage.asyncOpenURI</span></code>. So that when an entry is being looked up, first the global hashtable is searched using the <em>scope key</em>. An entries hashtable is found. Then this entries hashtable is searched using &lt;enhance-id:&gt;&lt;uri&gt; string. The elements in this hashtable are CacheEntry classes, see below.</p>
+          <p>The hash tables keep a strong reference to <code class="docutils literal notranslate"><span class="pre">CacheEntry</span></code> objects. The only way to remove <code class="docutils literal notranslate"><span class="pre">CacheEntry</span></code> objects from memory is by exhausting a memory limit for <a class="reference internal" href="#intermediate-memory-caching"><span class="std std-ref">Intermediate_Memory_Caching</span></a>, what triggers a background process of purging expired and then least used entries from memory. Another way is to directly call the <code class="docutils literal notranslate"><span class="pre">nsICacheStorageService.purge</span></code>method. That method is also called automatically on the <code class="docutils literal notranslate"><span class="pre">"memory-pressure"</span></code> indication.</p>
+          <p>Access to the hashtables is protected by a global lock. We also - in a thread-safe manner - count the number of consumers keeping a reference on each entry. The open callback actually doesn’t give the consumer directly the <code class="docutils literal notranslate"><span class="pre">CacheEntry</span></code> object but a small wrapper class that manages the ‘consumer reference counter’ on its cache entry. This both mechanisms ensure thread-safe access and also inability to have more then a single instance of a <code class="docutils literal notranslate"><span class="pre">CacheEntry</span></code> for a single &lt;scope+enhanceID+URL&gt; key.</p>
+          <p><code class="docutils literal notranslate"><span class="pre">CacheStorage</span></code>, implementing the <a class="reference internal" href="#nsicachestorage"><span class="std std-ref">nsICacheStorage</span></a> interface, is forwarding all calls to internal methods of <code class="docutils literal notranslate"><span class="pre">CacheStorageService</span></code> passing itself as an argument. <code class="docutils literal notranslate"><span class="pre">CacheStorageService</span></code> then generates the <em>scope key</em> using the <code class="docutils literal notranslate"><span class="pre">nsILoadContextInfo</span></code> of the storage. Note: CacheStorage keeps a thread-safe copy of <code class="docutils literal notranslate"><span class="pre">nsILoadContextInfo</span></code> passed to a <code class="docutils literal notranslate"><span class="pre">*Storage</span></code> method on <code class="docutils literal notranslate"><span class="pre">nsICacheStorageService</span></code>.</p>
+         </section>
+         <section id="invoking-open-callbacks">
+          <h2>Invoking open callbacks<a class="headerlink" href="#invoking-open-callbacks" title="Link to this heading">?</a></h2>
+          <p><code class="docutils literal notranslate"><span class="pre">CacheEntry</span></code>, implementing the <code class="docutils literal notranslate"><span class="pre">nsICacheEntry</span></code> interface, is responsible for managing the cache entry internal state and to properly invoke <code class="docutils literal notranslate"><span class="pre">onCacheEntryCheck</span></code> and <code class="docutils literal notranslate"><span class="pre">onCacheEntryAvaiable</span></code> callbacks to all callers of <code class="docutils literal notranslate"><span class="pre">nsICacheStorage.asyncOpenURI</span></code>.</p>
+          <ul class="simple">
+           <li>
+            <p>Keeps a FIFO of all openers.</p></li>
+           <li>
+            <p>Keeps its internal state like NOTLOADED, LOADING, EMPTY, WRITING, READY, REVALIDATING.</p></li>
+           <li>
+            <p>Keeps the number of consumers keeping a reference to it.</p></li>
+           <li>
+            <p>Refers a <code class="docutils literal notranslate"><span class="pre">CacheFile</span></code> object that holds actual data and meta data and, when told to, persists it to the disk.</p></li>
+          </ul>
+          <p>The openers FIFO is an array of <code class="docutils literal notranslate"><span class="pre">CacheEntry::Callback</span></code> objects. <code class="docutils literal notranslate"><span class="pre">CacheEntry::Callback</span></code> keeps a strong reference to the opener plus the opening flags. <code class="docutils literal notranslate"><span class="pre">nsICacheStorage.asyncOpenURI</span></code> forwards to <code class="docutils literal notranslate"><span class="pre">CacheEntry::AsyncOpen</span></code> and triggers the following pseudo-code:</p>
+          <p><strong>CacheStorage::AsyncOpenURI</strong> - the API entry point:</p>
+          <ul class="simple">
+           <li>
+            <p>globally atomic:</p>
+            <ul>
+             <li>
+              <p>look a given <code class="docutils literal notranslate"><span class="pre">CacheEntry</span></code> in <code class="docutils literal notranslate"><span class="pre">CacheStorageService</span></code> hash tables up</p></li>
+             <li>
+              <p>if not found: create a new one, add it to the proper hash table and set its state to NOTLOADED</p></li>
+             <li>
+              <p>consumer reference ++</p></li>
+            </ul></li>
+           <li>
+            <p>call to <cite>CacheEntry::AsyncOpen</cite></p></li>
+           <li>
+            <p>consumer reference –</p></li>
+          </ul>
+          <p><strong>CacheEntry::AsyncOpen</strong> (entry atomic):</p>
+          <ul class="simple">
+           <li>
+            <p>the opener is added to FIFO, consumer reference ++ (dropped back after an opener is removed from the FIFO)</p></li>
+           <li>
+            <p>state == NOTLOADED:</p>
+            <ul>
+             <li>
+              <p>state = LOADING</p></li>
+             <li>
+              <p>when OPEN_TRUNCATE flag was used:</p>
+              <ul>
+               <li>
+                <p><code class="docutils literal notranslate"><span class="pre">CacheFile</span></code> is created as ‘new’, state = EMPTY</p></li>
+              </ul></li>
+             <li>
+              <p>otherwise:</p>
+              <ul>
+               <li>
+                <p><code class="docutils literal notranslate"><span class="pre">CacheFile</span></code> is created and load on it started</p></li>
+               <li>
+                <p><code class="docutils literal notranslate"><span class="pre">CacheEntry::OnFileReady</span></code> notification is now expected</p></li>
+              </ul></li>
+            </ul></li>
+           <li>
+            <p>state == LOADING: just do nothing and exit</p></li>
+           <li>
+            <p>call to <cite>CacheEntry::InvokeCallbacks</cite></p></li>
+          </ul>
+          <p><strong>CacheEntry::InvokeCallbacks</strong> (entry atomic):</p>
+          <ul class="simple">
+           <li>
+            <p>called on:</p>
+            <ul>
+             <li>
+              <p>a new opener has been added to the FIFO via an <code class="docutils literal notranslate"><span class="pre">AsyncOpen</span></code> call</p></li>
+             <li>
+              <p>asynchronous result of CacheFile open <code class="docutils literal notranslate"><span class="pre">CacheEntry::OnFileReady&gt;</span></code></p></li>
+             <li>
+              <p>the writer throws the entry away - <code class="docutils literal notranslate"><span class="pre">CacheEntry::OnHandleClosed</span></code></p></li>
+             <li>
+              <p>the <strong>output stream</strong> of the entry has been <strong>opened</strong> or <strong>closed</strong></p></li>
+             <li>
+              <p><code class="docutils literal notranslate"><span class="pre">metaDataReady</span></code>or <code class="docutils literal notranslate"><span class="pre">setValid</span></code>on the entry has been called</p></li>
+             <li>
+              <p>the entry has been <strong>doomed</strong></p></li>
+            </ul></li>
+           <li>
+            <p>state == EMPTY:</p>
+            <ul>
+             <li>
+              <p>on OPER_READONLY flag use: onCacheEntryAvailable with <code class="docutils literal notranslate"><span class="pre">null</span></code>for the cache entry</p></li>
+             <li>
+              <p>otherwise:</p>
+              <ul>
+               <li>
+                <p>state = WRITING</p></li>
+               <li>
+                <p>opener is removed from the FIFO and remembered as the current ‘<em>writer</em>’</p></li>
+               <li>
+                <p>onCacheEntryAvailable with <code class="docutils literal notranslate"><span class="pre">aNew</span> <span class="pre">=</span> <span class="pre">true</span></code>and this entry is invoked (on the caller thread) for the <em>writer</em></p></li>
+              </ul></li>
+            </ul></li>
+           <li>
+            <p>state == READY:</p>
+            <ul>
+             <li>
+              <p>onCacheEntryCheck with the entry is invoked on the first opener in FIFO - on the caller thread if demanded</p></li>
+             <li>
+              <p>result == RECHECK_AFTER_WRITE_FINISHED:</p>
+              <ul>
+               <li>
+                <p>opener is left in the FIFO with a flag <code class="docutils literal notranslate"><span class="pre">RecheckAfterWrite</span></code></p></li>
+               <li>
+                <p>such openers are skipped until the output stream on the entry is closed, then <code class="docutils literal notranslate"><span class="pre">onCacheEntryCheck</span></code> is re-invoked on them</p></li>
+               <li>
+                <p>Note: here is a potential for endless looping when RECHECK_AFTER_WRITE_FINISHED is abused</p></li>
+              </ul></li>
+             <li>
+              <p>result == ENTRY_NEEDS_REVALIDATION:</p>
+              <ul>
+               <li>
+                <p>state = REVALIDATING, this prevents invocation of any callback until <code class="docutils literal notranslate"><span class="pre">CacheEntry::SetValid</span></code> is called</p></li>
+               <li>
+                <p>continue as in state ENTRY_WANTED (just below)</p></li>
+              </ul></li>
+             <li>
+              <p>result == ENTRY_WANTED:</p>
+              <ul>
+               <li>
+                <p>consumer reference ++ (dropped back when the consumer releases the entry)</p></li>
+               <li>
+                <p>onCacheEntryAvailable is invoked on the opener with <code class="docutils literal notranslate"><span class="pre">aNew</span> <span class="pre">=</span> <span class="pre">false</span></code>and the entry</p></li>
+               <li>
+                <p>opener is removed from the FIFO</p></li>
+              </ul></li>
+             <li>
+              <p>result == ENTRY_NOT_WANTED:</p>
+              <ul>
+               <li>
+                <p><code class="docutils literal notranslate"><span class="pre">onCacheEntryAvailable</span></code> is invoked on the opener with <code class="docutils literal notranslate"><span class="pre">null</span></code>for the entry</p></li>
+               <li>
+                <p>opener is removed from the FIFO</p></li>
+              </ul></li>
+            </ul></li>
+           <li>
+            <p>state == WRITING or REVALIDATING:</p>
+            <ul>
+             <li>
+              <p>do nothing and exit</p></li>
+            </ul></li>
+           <li>
+            <p>any other value of state is unexpected here (assertion failure)</p></li>
+           <li>
+            <p>loop this process while there are openers in the FIFO</p></li>
+          </ul>
+          <p><strong>CacheEntry::OnFileReady</strong> (entry atomic):</p>
+          <ul class="simple">
+           <li>
+            <p>load result == failure or the file has not been found on disk (is new): state = EMPTY</p></li>
+           <li>
+            <p>otherwise: state = READY since the cache file has been found and is usable containing meta data and data of the entry</p></li>
+           <li>
+            <p>call to <code class="docutils literal notranslate"><span class="pre">CacheEntry::InvokeCallbacks</span></code></p></li>
+          </ul>
+          <p><strong>CacheEntry::OnHandleClosed</strong> (entry atomic):</p>
+          <ul class="simple">
+           <li>
+            <p>Called when any consumer throws the cache entry away</p></li>
+           <li>
+            <p>If the handle is not the handle given to the current <em>writer</em>, then exit</p></li>
+           <li>
+            <p>state == WRITING: the writer failed to call <code class="docutils literal notranslate"><span class="pre">metaDataReady</span></code> on the entry - state = EMPTY</p></li>
+           <li>
+            <p>state == REVALIDATING: the writer failed the re-validation process and failed to call <code class="docutils literal notranslate"><span class="pre">setValid</span></code> on the entry - state = READY</p></li>
+           <li>
+            <p>call to <code class="docutils literal notranslate"><span class="pre">CacheEntry::InvokeCallbacks</span></code></p></li>
+          </ul>
+          <p><strong>All consumers release the reference:</strong></p>
+          <ul class="simple">
+           <li>
+            <p>the entry may now be purged (removed) from memory when found expired or least used on overrun of the <a class="reference internal" href="#intermediate-memory-caching"><span class="std std-ref">memory pool</span></a> limit</p></li>
+           <li>
+            <p>when this is a disk cache entry, its cached data chunks are released from memory and only meta data is kept</p></li>
+          </ul>
+         </section>
+         <section id="intermediate-memory-caching">
+          <span id="id6"></span>
+          <h2>Intermediate memory caching<a class="headerlink" href="#intermediate-memory-caching" title="Link to this heading">?</a></h2>
+          <p>Intermediate memory caching of frequently used metadata (a.k.a. disk cache memory pool).</p>
+          <p>For the disk cache entries we keep some of the most recent and most used cache entries’ meta data in memory for immediate zero-thread-loop opening. The default size of this meta data memory pool is only 250kB and is controlled by a new <code class="docutils literal notranslate"><span class="pre">browser.cache.disk.metadata_memory_limit</span></code> preference. When the limit is exceeded, we purge (throw away) first <strong>expired</strong> and then <strong>least used</strong> entries to free up memory again.</p>
+          <p>Only <code class="docutils literal notranslate"><span class="pre">CacheEntry</span></code> objects that are already loaded and filled with data and having the ‘consumer reference == 0’ (<a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=942835#c3">bug 942835</a>) can be purged.</p>
+          <p>The ‘least used’ entries are recognized by the lowest value of <a class="reference external" href="https://wiki.mozilla.org/User:Jesse/NewFrecency?title=User:Jesse/NewFrecency">frecency</a> we re-compute for each entry on its every access. The decay time is controlled by the <code class="docutils literal notranslate"><span class="pre">browser.cache.frecency_half_life_hours</span></code> preference and defaults to 6 hours. The best decay time will be based on results of <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=986728">an experiment</a>.</p>
+          <p>The memory pool is represented by two lists (strong referring ordered arrays) of <code class="docutils literal notranslate"><span class="pre">CacheEntry</span></code> objects:</p>
+          <ol class="arabic simple">
+           <li>
+            <p>Sorted by expiration time (that default to 0xFFFFFFFF)</p></li>
+           <li>
+            <p>Sorted by frecency (defaults to 0)</p></li>
+          </ol>
+          <p>We have two such pools, one for memory-only entries actually representing the memory-only cache and one for disk cache entries for which we only keep the meta data. Each pool has a different limit checking - the memory cache pool is controlled by <code class="docutils literal notranslate"><span class="pre">browser.cache.memory.capacity</span></code>, the disk entries pool is already described above. The pool can be accessed and modified only on the cache background thread.</p>
+         </section>
+        </section>
+       </div>
+      </div>
+      <footer>
+       <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../sec-necko-components.html" class="btn btn-neutral float-left" title="Security and Networking Components" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a> <a href="../http/http3.html" class="btn btn-neutral float-right" title="Http3Session and Streams" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+       </div>
+       <hr>
+       <div role="contentinfo">
+        <p></p>
+       </div> Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+      </footer>
+     </div>
+    </div>
+   </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ </body>
+</html>

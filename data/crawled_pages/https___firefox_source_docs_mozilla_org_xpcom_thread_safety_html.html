@@ -1,0 +1,521 @@
+<!doctype html>
+<html class="writer-html5" lang="en" data-content_root="../">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thread safety analysis in Gecko — Firefox Source Docs  documentation</title>
+  <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50">
+  <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094">
+  <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=fd3f3429">
+  <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b">
+  <link rel="stylesheet" type="text/css" href="../_static/custom_theme.css?v=dc5ed815">
+  <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7">
+  <link rel="shortcut icon" href="../_static/firefox.ico"><!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script src="../_static/jquery.js?v=5d32c60e"></script>
+  <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+  <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+  <script src="../_static/doctools.js?v=9a2dae69"></script>
+  <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+  <script src="../_static/copybutton.js?v=30646c52"></script>
+  <script src="../_static/design-tabs.js?v=36754332"></script>
+  <script src="../_static/js/theme.js"></script>
+  <link rel="index" title="Index" href="../genindex.html">
+  <link rel="search" title="Search" href="../search.html">
+  <link rel="next" title="XPCOM Collections" href="collections.html">
+  <link rel="prev" title="Reference Counting Helpers" href="refptr.html">
+ </head>
+ <body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+   <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <div class="wy-side-scroll">
+     <div class="wy-side-nav-search">
+      <a href="../index.html" class="icon icon-home"> Firefox Source Docs <img src="../_static/firefox-wordmark.svg" class="logo" alt="Logo"> </a><!-- -- This code is governed by the BSD license ---->
+      <div>
+       <h3>Quick search</h3>
+       <script>
+    (function () {
+      var cx = "dd12886298f75dbef";
+      var gcse = document.createElement("script");
+      gcse.async = true;
+      gcse.src = "https://cse.google.com/cse.js?cx=" + cx;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(gcse, s);
+    })();
+  </script><gcse:search></gcse:search>
+      </div>
+     </div>
+     <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+      <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../glossary/index.html">A Glossary of Common Terms</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../overview/index.html">A Quick Guide to Mozilla Applications</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../setup/index.html">Getting Set Up To Work On The Firefox Codebase</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Working On Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../contributing/index.html">Working on Firefox</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../bug-mgmt/index.html">Bug Handling</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox User Guide</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../devtools-user/index.html">Firefox DevTools User Docs</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Source Code Documentation</span></p>
+      <ul class="current">
+       <li class="toctree-l1"><a class="reference internal" href="../mots/index.html">Governance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../browser/index.html">Firefox Front-end</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../dom/index.html">DOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../editor/index.html">Editor</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../layout/index.html">Style system (CSS) &amp; Layout</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../gfx/index.html">Graphics</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../ipc/index.html">Processes, Threads and IPC</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../devtools/index.html">Firefox DevTools Contributor Docs</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../toolkit/index.html">Toolkit</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../js/index.html">SpiderMonkey</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../jsloader/index.html">JS Loader</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mobile/android/geckoview/index.html">GeckoView</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mobile/android/fenix/index.html">Fenix</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mobile/android/focus-android/index.html">Focus for Android</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../dom/bindings/webidl/index.html">WebIDL</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../modules/libpref/index.html">libpref</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../networking/index.html">Networking</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../remote/index.html">Remote Protocols</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../services/index.html">Services</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../permissions/index.html">Permissions</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../uriloader/index.html">File Handling</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../widget/cocoa/index.html">Firefox on macOS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../widget/windows/index.html">Firefox on Windows</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../toolkit/components/ml/index.html">Firefox AI Runtime</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../accessible/index.html">Accessibility</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../media/index.html">Media Playback</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../code-quality/index.html">Code quality</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../writing-rust-code/index.html">Writing Rust Code</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../rust-components/index.html">Rust Components</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/profiler/index.html">Gecko Profiler</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../performance/index.html">Performance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../storage/index.html">Database bindings (SQLite, KV, …)</a></li>
+       <li class="toctree-l1 current"><a class="reference internal" href="index.html">XPCOM</a>
+        <ul class="current">
+         <li class="toctree-l2 current"><a class="reference internal" href="index.html#consuming-xpcom-functionality">Consuming XPCOM functionality</a>
+          <ul class="current">
+           <li class="toctree-l3"><a class="reference internal" href="logging.html">Gecko Logging</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="stringguide.html">String Guide</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="refptr.html">Reference Counting Helpers</a></li>
+           <li class="toctree-l3 current"><a class="current reference internal" href="#"><strong>Thread safety analysis in Gecko</strong></a>
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="#annotating-locking-and-usage-requirements-in-class-definitions"><strong>Annotating locking and usage requirements in class definitions</strong></a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#how-to-annotate-different-locking-patterns-in-gecko"><strong>How to annotate different locking patterns in Gecko</strong></a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#known-limitations"><strong>Known limitations</strong></a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#classes-which-need-thread-safety-annotations"><strong>Classes which need thread-safety annotations</strong></a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#additional-notes"><strong>Additional Notes</strong></a></li>
+            </ul></li>
+           <li class="toctree-l3"><a class="reference internal" href="collections.html">XPCOM Collections</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="hashtables.html">XPCOM Hashtable Guide</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="hashtables_detailed.html">XPCOM Hashtable Technical Details</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="mozpromise.html">MozPromise: C++ promises in Gecko</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="sorting.html">Sorting and <code class="docutils literal notranslate"><span class="pre">nsTArray</span></code></a></li>
+           <li class="toctree-l3"><a class="reference internal" href="xpcomutils.html">XPCOMUtils module</a></li>
+          </ul></li>
+         <li class="toctree-l2"><a class="reference internal" href="index.html#tooling-around-xpcom">Tooling around XPCOM</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="index.html#writing-new-xpcom-interfaces-classes">Writing new XPCOM interfaces/classes</a></li>
+        </ul></li>
+       <li class="toctree-l1"><a class="reference internal" href="../nspr/index.html">NSPR</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../security/nss/index.html">Network Security Services (NSS)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../content-security/index.html">Web Security Checks in Gecko</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">The Firefox Build System</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../mach/index.html">Mach</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/try/index.html">Pushing to Try</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../build/buildsystem/index.html">Build System</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../taskcluster/index.html">Firefox CI and Taskgraph</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/moztreedocs/index.html">Managing Documentation</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mozbuild/vendor/index.html">Vendoring Third Party Components</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Testing &amp; Test Infrastructure</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/automated-testing/index.html">Automated Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/treeherder-try/index.html">Understanding Treeherder Results</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/sheriffed-intermittents/index.html">Sheriffed intermittent failures</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/tests-for-new-config/index.html">Turning on Firefox tests for a new configuration</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/intermittent/index.html">Avoiding intermittent tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/testing-policy/index.html">Testing Policy</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/ci-configs/index.html">Configuration Changes</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/browser-chrome/index.html">Browser chrome mochitests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/chrome-tests/index.html">Chrome Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/marionette/index.html">Marionette</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/geckodriver/index.html">geckodriver</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/test-verification/index.html">Test Verification</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/webrender/index.html">WebRender Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/mochitest-plain/index.html">Mochitest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/xpcshell/index.html">XPCShell tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/tps/index.html">TPS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../web-platform/index.html">web-platform-tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../gtest/index.html">GTest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/fuzzing/index.html">Fuzzing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/sanitizer/index.html">Sanitizer</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/perfdocs/index.html">Performance Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/code-coverage/index.html">Code coverage</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing-rust-code/index.html">Testing &amp; Debugging Rust Code</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Releases &amp; Updates</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../update-infrastructure/index.html">Mozilla Update Infrastructure</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../update-infrastructure/index.html#watershed-updates">Watershed Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../update-infrastructure/index.html#desupport-updates">Desupport Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/update-verify/index.html">Update Verify</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Localization &amp; Internationalization</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../intl/index.html">Internationalization</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../l10n/index.html">Localization</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox and Python</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../mozbase/index.html">mozbase</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../python/index.html">Using third-party Python packages</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Metrics Collected in Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../metrics/index.html">Metrics</a></li>
+      </ul>
+     </div>
+    </div>
+   </nav>
+   <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+    <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+     <i data-toggle="wy-nav-top" class="fa fa-bars"></i> <a href="../index.html">Firefox Source Docs</a>
+    </nav>
+    <div class="wy-nav-content">
+     <div class="rst-content">
+      <!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+      <div role="navigation" aria-label="Page navigation">
+       <ul class="wy-breadcrumbs">
+        <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+        <li class="breadcrumb-item"><a href="index.html">XPCOM</a></li>
+        <li class="breadcrumb-item active"><strong>Thread safety analysis in Gecko</strong></li>
+        <li class="wy-breadcrumbs-aside"><a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Developer+Infrastructure&amp;component=Firefox+Source+Docs%3A+Content&amp;short_desc=Documentation+issue+on+xpcom/thread-safety&amp;comment=URL+=+https://firefox-source-docs.mozilla.org/xpcom/thread-safety.html&amp;bug_file_loc=https://firefox-source-docs.mozilla.org/xpcom/thread-safety.html" rel="nofollow">Report an issue</a> / <a href="../_sources/xpcom/thread-safety.rst.txt" rel="nofollow"> View page source</a></li>
+       </ul>
+       <hr>
+      </div>
+      <div role="main" class="document" itemscope itemtype="http://schema.org/Article">
+       <div itemprop="articleBody">
+        <section id="thread-safety-analysis-in-gecko">
+         <h1><strong>Thread safety analysis in Gecko</strong><a class="headerlink" href="#thread-safety-analysis-in-gecko" title="Link to this heading">?</a></h1>
+         <p>Clang thread-safety analysis is supported in Gecko. This means builds will generate warnings when static analysis detects an issue with locking of mutex/monitor-protected members and data structures. Note that Chrome uses the same feature. An example warning:</p>
+         <div class="highlight-default notranslate">
+          <div class="highlight">
+           <pre><span></span><span class="n">warning</span><span class="p">:</span> <span class="n">dom</span><span class="o">/</span><span class="n">media</span><span class="o">/</span><span class="n">AudioStream</span><span class="o">.</span><span class="n">cpp</span><span class="p">:</span><span class="mi">504</span><span class="p">:</span><span class="mi">22</span> <span class="p">[</span><span class="o">-</span><span class="n">Wthread</span><span class="o">-</span><span class="n">safety</span><span class="o">-</span><span class="n">analysis</span><span class="p">]</span>
+<span class="n">reading</span> <span class="n">variable</span> <span class="s1">'mDataSource'</span> <span class="n">requires</span> <span class="n">holding</span> <span class="n">mutex</span> <span class="s1">'mMonitor'</span>
+</pre>
+          </div>
+         </div>
+         <p>If your patch causes warnings like this, you’ll need to resolve them; they will be errors on checkin.</p>
+         <p>This analysis depends on thread-safety attributions in the source. These have been added to Mozilla’s Mutex and Monitor classes and subclasses, but in practice the analysis is largely dependent on additions to the code being checked, in particular adding MOZ_GUARDED_BY(mutex) attributions on the definitions of member variables. Like this:</p>
+         <div class="highlight-default notranslate">
+          <div class="highlight">
+           <pre><span></span><span class="n">mozilla</span><span class="p">::</span><span class="n">Mutex</span> <span class="n">mLock</span><span class="p">;</span>
+<span class="nb">bool</span> <span class="n">mShutdown</span> <span class="n">MOZ_GUARDED_BY</span><span class="p">(</span><span class="n">mLock</span><span class="p">);</span>
+</pre>
+          </div>
+         </div>
+         <p>For background on Clang’s thread-safety support, see <a class="reference external" href="https://clang.llvm.org/docs/ThreadSafetyAnalysis.html">their documentation</a>.</p>
+         <p>Newly added Mutexes and Monitors <strong>MUST</strong> use thread-safety annotations, and we are enabling static checks to verify this. Legacy uses of Mutexes and Monitors are marked with MOZ_UNANNOTATED.</p>
+         <p>If you’re modifying code that has been annotated with MOZ_GUARDED_BY()/MOZ_REQUIRES()/etc, you should <strong>make sure that the annotations are updated properly</strong>; e.g. if you change the thread-usage of a member variable or method you should mark it accordingly, comment, and resolve any warnings. Since the warnings will be errors in autoland/m-c, you won’t be able to land code with active warnings.</p>
+         <section id="annotating-locking-and-usage-requirements-in-class-definitions">
+          <h2><strong>Annotating locking and usage requirements in class definitions</strong><a class="headerlink" href="#annotating-locking-and-usage-requirements-in-class-definitions" title="Link to this heading">?</a></h2>
+          <p>Values that require a lock to access, or which are simply used from more than one thread, should always have documentation in the definition about the locking requirements and/or what threads it’s touched from:</p>
+          <div class="highlight-default notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="o">//</span> <span class="n">This</span> <span class="n">array</span> <span class="ow">is</span> <span class="n">accessed</span> <span class="kn">from</span> <span class="nn">both</span> <span class="n">the</span> <span class="n">direct</span> <span class="n">video</span> <span class="n">thread</span><span class="p">,</span> <span class="ow">and</span> <span class="n">the</span> <span class="n">graph</span>
+<span class="o">//</span> <span class="n">thread</span><span class="o">.</span> <span class="n">Protected</span> <span class="n">by</span> <span class="n">mMutex</span><span class="o">.</span>
+
+<span class="n">nsTArray</span><span class="o">&lt;</span><span class="n">std</span><span class="p">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">ImageContainer</span><span class="p">::</span><span class="n">FrameID</span><span class="p">,</span> <span class="n">VideoChunk</span><span class="o">&gt;&gt;</span> <span class="n">mFrames</span>
+<span class="n">MOZ_GUARDED_BY</span><span class="p">(</span><span class="n">mMutex</span><span class="p">);</span>
+
+<span class="o">//</span> <span class="n">Set</span> <span class="n">on</span> <span class="n">MainThread</span><span class="p">,</span> <span class="n">deleted</span> <span class="n">on</span> <span class="n">either</span> <span class="n">MainThread</span> <span class="n">mainthread</span><span class="p">,</span> <span class="n">used</span> <span class="n">on</span>
+<span class="o">//</span> <span class="n">MainThread</span> <span class="ow">or</span> <span class="n">IO</span> <span class="n">Thread</span> <span class="ow">in</span> <span class="n">DoStopSession</span>
+<span class="n">nsCOMPtr</span><span class="o">&lt;</span><span class="n">nsITimer</span><span class="o">&gt;</span> <span class="n">mReconnectDelayTimer</span> <span class="n">MOZ_GUARDED_BY</span><span class="p">(</span><span class="n">mMutex</span><span class="p">);</span>
+</pre>
+           </div>
+          </div>
+          <p>It’s strongly recommended to group values by access pattern, but it’s <strong>critical</strong> to make it clear what the requirements to access a value are. With values protected by Mutexes and Monitors, adding a MOZ_GUARDED_BY(mutex/monitor) should be sufficient, though you may want to also document what threads access it, and if they read or write to it.</p>
+          <p>Values which have more complex access requirements (see single-writer and time-based-locking below) need clear documentation where they’re defined:</p>
+          <div class="highlight-default notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="n">MainThreadAndLockCapability</span><span class="o">&lt;</span><span class="n">Mutex</span><span class="o">&gt;</span> <span class="n">mMutex</span><span class="p">;</span>
+
+<span class="o">//</span> <span class="n">mResource</span> <span class="n">should</span> <span class="n">only</span> <span class="n">be</span> <span class="n">modified</span> <span class="n">on</span> <span class="n">the</span> <span class="n">main</span> <span class="n">thread</span> <span class="k">with</span> <span class="n">the</span> <span class="n">lock</span><span class="o">.</span>
+<span class="o">//</span> <span class="n">So</span> <span class="n">it</span> <span class="n">can</span> <span class="n">be</span> <span class="n">read</span> <span class="n">without</span> <span class="n">lock</span> <span class="n">on</span> <span class="n">the</span> <span class="n">main</span> <span class="n">thread</span> <span class="ow">or</span> <span class="n">on</span> <span class="n">other</span> <span class="n">threads</span>
+<span class="o">//</span> <span class="k">with</span> <span class="n">the</span> <span class="n">lock</span><span class="o">.</span>
+<span class="n">RefPtr</span><span class="o">&lt;</span><span class="n">ChannelMediaResource</span><span class="o">&gt;</span> <span class="n">mResource</span> <span class="n">MOZ_GUARDED_BY</span><span class="p">(</span><span class="n">mMutex</span><span class="p">);</span>
+</pre>
+           </div>
+          </div>
+          <p><strong>WARNING:</strong> thread-safety analysis is not magic; it depends on you telling it the requirements around access. If you don’t mark something as MOZ_GUARDED_BY() it won’t figure it out for you, and you can end up with a data race. When writing multithreaded code, you should always be thinking about which threads can access what and when, and document this.</p>
+         </section>
+         <section id="how-to-annotate-different-locking-patterns-in-gecko">
+          <h2><strong>How to annotate different locking patterns in Gecko</strong><a class="headerlink" href="#how-to-annotate-different-locking-patterns-in-gecko" title="Link to this heading">?</a></h2>
+          <p>Gecko uses a number of different locking patterns. They include:</p>
+          <ul class="simple">
+           <li>
+            <p><strong>Always Lock</strong> - Multiple threads may read and write the value</p></li>
+           <li>
+            <p><strong>Single Writer</strong> - One thread does all the writing, other threads read the value, but code on the writing thread also reads it without the lock</p></li>
+           <li>
+            <p><strong>Out-of-band invariants</strong> - A value may be accessed from other threads, but only after or before certain other events or in a certain state, like when after a listener has been added or before a processing thread has been shut down.</p></li>
+          </ul>
+          <p>The simplest and easiest to check with static analysis is <strong>Always Lock</strong>, and generally you should prefer this pattern. This is very simple; you add MOZ_GUARDED_BY(mutex/monitor), and must own the lock to access the value. This can be implemented by some combination of direct Lock/AutoLock calls in the method; an assertion that the lock is already held by the current thread, or annotating the method as requiring the lock (MOZ_REQUIRES(mutex)) in the method definition:</p>
+          <div class="highlight-default notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="o">//</span> <span class="n">Ensures</span> <span class="n">mSize</span> <span class="ow">is</span> <span class="n">initialized</span><span class="p">,</span> <span class="k">if</span> <span class="n">it</span> <span class="n">can</span> <span class="n">be</span><span class="o">.</span>
+<span class="o">//</span> <span class="n">mLock</span> <span class="n">must</span> <span class="n">be</span> <span class="n">held</span> <span class="n">when</span> <span class="n">this</span> <span class="ow">is</span> <span class="n">called</span><span class="p">,</span> <span class="ow">and</span> <span class="n">mInput</span> <span class="n">must</span> <span class="n">be</span> <span class="n">non</span><span class="o">-</span><span class="n">null</span><span class="o">.</span>
+<span class="n">void</span> <span class="n">EnsureSizeInitialized</span><span class="p">()</span> <span class="n">MOZ_REQUIRES</span><span class="p">(</span><span class="n">mLock</span><span class="p">);</span>
+<span class="o">...</span>
+<span class="o">//</span> <span class="n">This</span> <span class="n">lock</span> <span class="n">protects</span> <span class="n">mSeekable</span><span class="p">,</span> <span class="n">mInput</span><span class="p">,</span> <span class="n">mSize</span><span class="p">,</span> <span class="ow">and</span> <span class="n">mSizeInitialized</span><span class="o">.</span>
+<span class="n">Mutex</span> <span class="n">mLock</span><span class="p">;</span>
+<span class="n">int64_t</span> <span class="n">mSize</span> <span class="n">MOZ_GUARDED_BY</span><span class="p">(</span><span class="n">mLock</span><span class="p">);</span>
+</pre>
+           </div>
+          </div>
+          <p><strong>Single Writer</strong> is tricky for static analysis normally, since it doesn’t know what thread an access will occur on. In general, you should prefer using Always Lock in non-performance-sensitive code, especially since these mutexes are almost always uncontended and therefore cheap to lock.</p>
+          <p>To support this fairly common pattern in Mozilla code, there is a special EventTargetAndLockCapability thread-safety capability. This wraps a EventTargetCapability, and a lock into a single capability, such that each can be checked independently or combined together. For the common case where the main-thread is the writer thread, the MainThreadAndLockCapability can be used.</p>
+          <p>To get shared (i.e. read-only) access to the underlying data, one first either acquires the lock (which can be accessed using the Lock() method), or asserts that they are on the given EventTarget.</p>
+          <div class="highlight-default notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="n">MainThreadAndLockCapability</span><span class="o">&lt;</span><span class="n">Mutex</span><span class="o">&gt;</span> <span class="n">cap</span><span class="p">{</span><span class="s2">"..."</span><span class="p">};</span>
+<span class="o">//</span> <span class="o">...</span>
+<span class="p">{</span>
+  <span class="n">MutexAutoLock</span> <span class="n">lock</span><span class="p">(</span><span class="n">cap</span><span class="o">.</span><span class="n">Lock</span><span class="p">());</span>
+  <span class="n">cap</span><span class="o">.</span><span class="n">NoteLockHeld</span><span class="p">();</span>
+  <span class="o">//</span> <span class="o">..</span> <span class="n">At</span> <span class="n">this</span> <span class="n">point</span><span class="p">,</span> <span class="n">you</span> <span class="n">have</span> <span class="n">shared</span> <span class="n">access</span> <span class="n">to</span> <span class="n">data</span> <span class="n">guarded</span> <span class="n">by</span> <span class="n">cap</span><span class="o">.</span>
+<span class="p">}</span>
+<span class="o">//</span> <span class="o">..</span> <span class="ow">or</span> <span class="o">..</span>
+<span class="p">{</span>
+  <span class="n">AssertIsOnMainThread</span><span class="p">();</span>
+  <span class="n">cap</span><span class="o">.</span><span class="n">NoteOnMainThread</span><span class="p">();</span>
+  <span class="o">//</span> <span class="o">..</span> <span class="n">At</span> <span class="n">this</span> <span class="n">point</span><span class="p">,</span> <span class="n">you</span> <span class="n">have</span> <span class="n">shared</span> <span class="n">access</span> <span class="n">to</span> <span class="n">data</span> <span class="n">guarded</span> <span class="n">by</span> <span class="n">cap</span><span class="o">.</span>
+<span class="p">}</span>
+<span class="o">//</span> <span class="o">..</span> <span class="ow">or</span> <span class="o">..</span>
+<span class="p">{</span>
+  <span class="n">AssertIsOnMainThread</span><span class="p">();</span>
+  <span class="n">MutexAutoLock</span> <span class="n">lock</span><span class="p">(</span><span class="n">cap</span><span class="o">.</span><span class="n">Lock</span><span class="p">());</span>
+  <span class="n">cap</span><span class="o">.</span><span class="n">NoteExclusiveAccess</span><span class="p">();</span>
+  <span class="o">//</span> <span class="o">..</span> <span class="n">At</span> <span class="n">this</span> <span class="n">point</span><span class="p">,</span> <span class="n">you</span> <span class="n">have</span> <span class="n">exclusive</span> <span class="n">access</span> <span class="n">to</span> <span class="n">data</span> <span class="n">guarded</span> <span class="n">by</span> <span class="n">cap</span><span class="o">.</span>
+<span class="p">}</span>
+</pre>
+           </div>
+          </div>
+          <p>When not using the main thread, the EventTargetCapability to assert can be accessed with the Target() method.</p>
+          <p>In some cases, this check can misbehave - specifically when a method both accesses the value (without the lock held), then later acquires the lock to perform a mutation. In this case, you must call ClearCurrentAccess() to drop the Shared access before noting exclusive access.</p>
+          <div class="highlight-default notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="n">MainThreadAndLockCapability</span><span class="o">&lt;</span><span class="n">Mutex</span><span class="o">&gt;</span> <span class="n">cap</span><span class="p">{</span><span class="s2">"..."</span><span class="p">};</span>
+<span class="o">//</span> <span class="o">...</span>
+<span class="n">AssertIsOnMainThread</span><span class="p">();</span>
+<span class="n">cap</span><span class="o">.</span><span class="n">NoteOnMainThread</span><span class="p">();</span>
+<span class="o">//</span> <span class="o">..</span> <span class="n">access</span> <span class="n">some</span> <span class="n">data</span> <span class="n">guarded</span> <span class="n">by</span> <span class="n">cap</span>
+<span class="n">MutexAutoLock</span> <span class="n">lock</span><span class="p">(</span><span class="n">cap</span><span class="o">.</span><span class="n">Lock</span><span class="p">());</span>
+<span class="n">cap</span><span class="o">.</span><span class="n">ClearCurrentAccess</span><span class="p">();</span>  <span class="o">//</span> <span class="o">&lt;-</span> <span class="n">required</span> <span class="n">to</span> <span class="n">satisfy</span> <span class="n">the</span> <span class="n">static</span> <span class="n">analysis</span>
+<span class="n">cap</span><span class="o">.</span><span class="n">NoteExclusiveAccess</span><span class="p">();</span>
+</pre>
+           </div>
+          </div>
+          <p><strong>Out-of-band Invariants</strong> is used in a number of places (and may be combined with either of the above patterns). It’s using other knowledge about the execution pattern of the code to assert that it’s safe to avoid taking certain locks. A primary example is when a value can only be accessed from a single thread for part of its lifetime (this can also be referred to as “time-based locking”).</p>
+          <p>Note that thread-safety analysis always ignores constructors and destructors (which shouldn’t have races with other threads barring really odd usages). Since only a single thread can access during those time periods, locking is not required there. However, if a method is called from a constructor, that method may generate warnings since the compiler doesn’t know if it might be called from elsewhere:</p>
+          <div class="highlight-default notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="o">...</span>
+<span class="k">class</span> <span class="nc">nsFoo</span> <span class="p">{</span>
+<span class="n">public</span><span class="p">:</span>
+  <span class="n">nsFoo</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">mBar</span> <span class="o">=</span> <span class="n">true</span><span class="p">;</span> <span class="o">//</span> <span class="n">Ok</span> <span class="n">since</span> <span class="n">we</span><span class="s1">'re in the constructor, no warning</span>
+    <span class="n">Init</span><span class="p">();</span>
+  <span class="p">}</span>
+  <span class="n">void</span> <span class="n">Init</span><span class="p">()</span> <span class="p">{</span>  <span class="o">//</span> <span class="n">we</span><span class="s1">'re only called from the constructor</span>
+    <span class="o">//</span> <span class="n">This</span> <span class="n">causes</span> <span class="n">a</span> <span class="n">thread</span><span class="o">-</span><span class="n">safety</span> <span class="n">warning</span><span class="p">,</span> <span class="n">since</span> <span class="n">the</span> <span class="n">compiler</span>
+    <span class="o">//</span> <span class="n">can</span><span class="s1">'t prove that Init() is only called from the constructor</span>
+    <span class="n">mQuerty</span> <span class="o">=</span> <span class="n">true</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="o">...</span>
+  <span class="n">mMutex</span> <span class="n">mMutex</span><span class="p">;</span>
+  <span class="n">uint32_t</span> <span class="n">mBar</span> <span class="n">MOZ_GUARDED_BY</span><span class="p">(</span><span class="n">mMutex</span><span class="p">);</span>
+  <span class="n">uint32_t</span> <span class="n">mQuerty</span> <span class="n">MOZ_GUARDED_BY</span><span class="p">(</span><span class="n">mMutex</span><span class="p">);</span>
+<span class="p">}</span>
+</pre>
+           </div>
+          </div>
+          <p>Another example might be a value that’s used from other threads, but only if an observer has been installed. Thus code that always runs before the observer is installed, or after it’s removed, does not need to lock.</p>
+          <p>These patterns are impossible to statically check in most cases. If all the periods where it’s accessed from one thread only are on the same thread, you could use the Single Writer pattern support to cover this case. You would add AssertIsOnWritingThread() calls to methods that meet the criteria that only a single thread can access the value (but only if that holds). Unlike regular uses of SingleWriter, however, there’s no way to check if you added such an assertion to code that runs on the “right” thread, but during a period where another thread might modify it.</p>
+          <p>For this reason, we <strong>strongly</strong> suggest that you convert cases of Out-of-band-invariants/Time-based-locking to Always Lock if you’re refactoring the code or making major modifications. This is far less prone to error, and also to future changes breaking the assumptions about other threads accessing the value. In all but a few cases where code is on a very ‘hot’ path, this will have no impact on performance - taking an uncontended lock is cheap.</p>
+          <p>To quiet warnings where these patterns are in use, you’ll need to either add locks (preferred), or suppress the warnings with MOZ_NO_THREAD_SAFETY_ANALYSIS or MOZ_PUSH_IGNORE_THREAD_SAFETY/MOZ_POP_THREAD_SAFETY.</p>
+          <p><strong>This pattern especially needs good documentation in the code as to what threads will access what members under what conditions!</strong>:</p>
+          <div class="highlight-default notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="o">//</span> <span class="n">Can</span><span class="s1">'t be accessed by multiple threads yet</span>
+<span class="n">nsresult</span> <span class="n">nsAsyncStreamCopier</span><span class="p">::</span><span class="n">InitInternal</span><span class="p">(</span><span class="n">nsIInputStream</span><span class="o">*</span> <span class="n">source</span><span class="p">,</span>
+                                           <span class="n">nsIOutputStream</span><span class="o">*</span> <span class="n">sink</span><span class="p">,</span>
+                                           <span class="n">nsIEventTarget</span><span class="o">*</span> <span class="n">target</span><span class="p">,</span>
+                                           <span class="n">uint32_t</span> <span class="n">chunkSize</span><span class="p">,</span>
+                                           <span class="nb">bool</span> <span class="n">closeSource</span><span class="p">,</span>
+                                           <span class="nb">bool</span> <span class="n">closeSink</span><span class="p">)</span>
+      <span class="n">MOZ_NO_THREAD_SAFETY_ANALYSIS</span> <span class="p">{</span>
+</pre>
+           </div>
+          </div>
+          <p>and:</p>
+          <div class="highlight-default notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="o">//</span> <span class="n">We</span> <span class="n">can</span><span class="s1">'t be accessed by another thread because this hasn'</span><span class="n">t</span> <span class="n">been</span>
+<span class="o">//</span> <span class="n">added</span> <span class="n">to</span> <span class="n">the</span> <span class="n">public</span> <span class="nb">list</span> <span class="n">yet</span>
+<span class="n">MOZ_PUSH_IGNORE_THREAD_SAFETY</span>
+<span class="n">mRestrictedPortList</span><span class="o">.</span><span class="n">AppendElement</span><span class="p">(</span><span class="n">gBadPortList</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+<span class="n">MOZ_POP_THREAD_SAFETY</span>
+</pre>
+           </div>
+          </div>
+          <p>and:</p>
+          <div class="highlight-default notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="o">//</span> <span class="n">This</span> <span class="ow">is</span> <span class="n">called</span> <span class="n">on</span> <span class="n">entries</span> <span class="ow">in</span> <span class="n">another</span> <span class="n">entry</span><span class="s1">'s mCallback array, under the lock</span>
+<span class="o">//</span> <span class="n">of</span> <span class="n">that</span> <span class="n">other</span> <span class="n">entry</span><span class="o">.</span> <span class="n">No</span> <span class="n">other</span> <span class="n">threads</span> <span class="n">can</span> <span class="n">access</span> <span class="n">this</span> <span class="n">entry</span> <span class="n">at</span> <span class="n">this</span> <span class="n">time</span><span class="o">.</span>
+<span class="nb">bool</span> <span class="n">CacheEntry</span><span class="p">::</span><span class="n">Callback</span><span class="p">::</span><span class="n">DeferDoom</span><span class="p">(</span><span class="nb">bool</span><span class="o">*</span> <span class="n">aDoom</span><span class="p">)</span> <span class="n">const</span> <span class="p">{</span>
+</pre>
+           </div>
+          </div>
+         </section>
+         <section id="known-limitations">
+          <h2><strong>Known limitations</strong><a class="headerlink" href="#known-limitations" title="Link to this heading">?</a></h2>
+          <p><strong>Static analysis can’t handle all reasonable patterns.</strong> In particular, per their documentation, it can’t handle conditional locks, like:</p>
+          <div class="highlight-default notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="k">if</span> <span class="p">(</span><span class="n">OnMainThread</span><span class="p">())</span> <span class="p">{</span>
+  <span class="n">mMutex</span><span class="o">.</span><span class="n">Lock</span><span class="p">();</span>
+<span class="p">}</span>
+</pre>
+           </div>
+          </div>
+          <p>You should resolve this either via MOZ_NO_THREAD_SAFETY_ANALYSIS on the method, or MOZ_PUSH_IGNORE_THREAD_SAFETY/MOZ_POP_THREAD_SAFETY.</p>
+          <p><strong>Sometimes the analyzer can’t figure out that two objects are both the same Mutex</strong>, and it will warn you. You may be able to resolve this by making sure you’re using the same pattern to access the mutex:</p>
+          <div class="highlight-default notranslate">
+           <div class="highlight">
+            <pre><span></span>  <span class="n">mChan</span><span class="o">-&gt;</span><span class="n">mMonitor</span><span class="o">-&gt;</span><span class="n">AssertCurrentThreadOwns</span><span class="p">();</span>
+  <span class="o">...</span>
+  <span class="p">{</span>
+<span class="o">-</span>    <span class="n">MonitorAutoUnlock</span> <span class="n">guard</span><span class="p">(</span><span class="o">*</span><span class="n">monitor</span><span class="p">);</span>
+<span class="o">+</span>    <span class="n">MonitorAutoUnlock</span> <span class="n">guard</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="n">mChan</span><span class="o">-&gt;</span><span class="n">mMonitor</span><span class="o">.</span><span class="n">get</span><span class="p">()));</span> <span class="o">//</span> <span class="n">avoids</span> <span class="n">mutex</span> <span class="n">warning</span>
+    <span class="n">ok</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">SendUserMessage</span><span class="p">(</span><span class="n">port</span><span class="p">,</span> <span class="n">std</span><span class="p">::</span><span class="n">move</span><span class="p">(</span><span class="n">aMessage</span><span class="p">));</span>
+  <span class="p">}</span>
+</pre>
+           </div>
+          </div>
+          <p><strong>Maybe&lt;MutexAutoLock&gt;</strong> doesn’t tell the static analyzer when the mutex is owned or freed; follow locking via the MayBe&lt;&gt; by <strong>mutex-&gt;AssertCurrentThreadOwns();</strong> (and ditto for Monitors):</p>
+          <div class="highlight-default notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="n">Maybe</span><span class="o">&lt;</span><span class="n">MonitorAutoLock</span><span class="o">&gt;</span> <span class="n">lock</span><span class="p">(</span><span class="n">std</span><span class="p">::</span><span class="n">in_place</span><span class="p">,</span> <span class="o">*</span><span class="n">mMonitor</span><span class="p">);</span>
+<span class="n">mMonitor</span><span class="o">-&gt;</span><span class="n">AssertCurrentThreadOwns</span><span class="p">();</span> <span class="o">//</span> <span class="k">for</span> <span class="n">threadsafety</span> <span class="n">analysis</span>
+</pre>
+           </div>
+          </div>
+          <p>If you reset() the Maybe&lt;&gt;, you may need to surround it with MOZ_PUSH_IGNORE_THREAD_SAFETY and MOZ_POP_THREAD_SAFETY macros:</p>
+          <div class="highlight-default notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="n">MOZ_PUSH_IGNORE_THREAD_SAFETY</span>
+<span class="n">aLock</span><span class="o">.</span><span class="n">reset</span><span class="p">();</span>
+<span class="n">MOZ_POP_THREAD_SAFETY</span>
+</pre>
+           </div>
+          </div>
+          <p><strong>Passing a protected value by-reference</strong> sometimes will confuse the analyzer. Use MOZ_PUSH_IGNORE_THREAD_SAFETY and MOZ_POP_THREAD_SAFETY macros to resolve this.</p>
+         </section>
+         <section id="classes-which-need-thread-safety-annotations">
+          <h2><strong>Classes which need thread-safety annotations</strong><a class="headerlink" href="#classes-which-need-thread-safety-annotations" title="Link to this heading">?</a></h2>
+          <ul class="simple">
+           <li>
+            <p>Mutex</p></li>
+           <li>
+            <p>StaticMutex</p></li>
+           <li>
+            <p>RecursiveMutex</p></li>
+           <li>
+            <p>BaseProfilerMutex</p></li>
+           <li>
+            <p>Monitor</p></li>
+           <li>
+            <p>StaticMonitor</p></li>
+           <li>
+            <p>ReentrantMonitor</p></li>
+           <li>
+            <p>RWLock</p></li>
+           <li>
+            <dl class="simple">
+             <dt>
+              Anything that hides an internal Mutex/etc and presents a Mutex-like
+             </dt>
+             <dd>
+              <p>API (::Lock(), etc).</p>
+             </dd>
+            </dl></li>
+          </ul>
+         </section>
+         <section id="additional-notes">
+          <h2><strong>Additional Notes</strong><a class="headerlink" href="#additional-notes" title="Link to this heading">?</a></h2>
+          <p>Some code passes <strong>Proof-of-Lock</strong> AutoLock parameters, as a poor form of static analysis. While it’s hard to make mistakes if you pass an AutoLock reference, it is possible to pass a lock to the wrong Mutex/Monitor.</p>
+          <p>Proof-of-lock is basically redundant to MOZ_REQUIRES() and obsolete, and depends on the optimizer to remove it, and per above it can be misused, with effort. With MOZ_REQUIRES(), any proof-of-lock parameters can be removed, though you don’t have to do so immediately.</p>
+          <p>In any method taking an aProofOfLock parameter, add a MOZ_REQUIRES(mutex) to the definition (and optionally remove the proof-of-lock), or add a mMutex.AssertCurrentThreadOwns() to the method:</p>
+          <div class="highlight-default notranslate">
+           <div class="highlight">
+            <pre><span></span>   <span class="n">nsresult</span> <span class="n">DispatchLockHeld</span><span class="p">(</span><span class="n">already_AddRefed</span><span class="o">&lt;</span><span class="n">WorkerRunnable</span><span class="o">&gt;</span> <span class="n">aRunnable</span><span class="p">,</span>
+<span class="o">-</span>                            <span class="n">nsIEventTarget</span><span class="o">*</span> <span class="n">aSyncLoopTarget</span><span class="p">,</span>
+<span class="o">-</span>                            <span class="n">const</span> <span class="n">MutexAutoLock</span><span class="o">&amp;</span> <span class="n">aProofOfLock</span><span class="p">);</span>
+<span class="o">+</span>                            <span class="n">nsIEventTarget</span><span class="o">*</span> <span class="n">aSyncLoopTarget</span><span class="p">)</span> <span class="n">MOZ_REQUIRES</span><span class="p">(</span><span class="n">mMutex</span><span class="p">);</span>
+</pre>
+           </div>
+          </div>
+          <p>or (if for some reason it’s hard to specify the mutex in the header):</p>
+          <div class="highlight-default notranslate">
+           <div class="highlight">
+            <pre><span></span>   <span class="n">nsresult</span> <span class="n">DispatchLockHeld</span><span class="p">(</span><span class="n">already_AddRefed</span><span class="o">&lt;</span><span class="n">WorkerRunnable</span><span class="o">&gt;</span> <span class="n">aRunnable</span><span class="p">,</span>
+<span class="o">-</span>                            <span class="n">nsIEventTarget</span><span class="o">*</span> <span class="n">aSyncLoopTarget</span><span class="p">,</span>
+<span class="o">-</span>                            <span class="n">const</span> <span class="n">MutexAutoLock</span><span class="o">&amp;</span> <span class="n">aProofOfLock</span><span class="p">);</span>
+<span class="o">+</span>                            <span class="n">nsIEventTarget</span><span class="o">*</span> <span class="n">aSyncLoopTarget</span><span class="p">)</span> <span class="p">{</span>
+<span class="o">+</span>  <span class="n">mMutex</span><span class="o">.</span><span class="n">AssertCurrentThreadOwns</span><span class="p">();</span>
+</pre>
+           </div>
+          </div>
+          <p>In addition to MOZ_GUARDED_BY() there’s also MOZ_PT_GUARDED_BY(), which says that the pointer isn’t guarded, but the data pointed to by the pointer is.</p>
+          <p>Classes that expose a Mutex-like interface can be annotated like Mutex; see some of the examples in the tree that use MOZ_CAPABILITY and MOZ_ACQUIRE()/MOZ_RELEASE().</p>
+          <p>Shared locks are supported, though we don’t use them much. See RWLock.</p>
+         </section>
+        </section>
+       </div>
+      </div>
+      <footer>
+       <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="refptr.html" class="btn btn-neutral float-left" title="Reference Counting Helpers" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a> <a href="collections.html" class="btn btn-neutral float-right" title="XPCOM Collections" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+       </div>
+       <hr>
+       <div role="contentinfo">
+        <p></p>
+       </div> Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+      </footer>
+     </div>
+    </div>
+   </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ </body>
+</html>

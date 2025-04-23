@@ -1,0 +1,383 @@
+<!doctype html>
+<html>
+ <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FFI patterns #1 - Complex Rust data structures exposed seamlessly to C++ | Words</title>
+  <meta name="description" content="I’ve been meaning to post about this for a while. I plan to start a series ondifferent patterns for Rust / C++ FFI that are being used in Gecko.">
+  <link rel="stylesheet" href="/words/css/main.css">
+  <link rel="canonical" href="http://crisal.io/words/2020/02/28/C++-rust-ffi-patterns-1-complex-data-structures.html">
+  <link rel="alternate" type="application/rss+xml" title="Words" href="http://crisal.io/words/feed.xml">
+ </head>
+ <body>
+  <header class="site-header">
+   <div class="wrapper">
+    <a class="site-title" href="/words/">Words</a>
+    <nav class="site-nav">
+     <a href="#" class="menu-icon">
+      <svg viewBox="0 0 18 15">
+       <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z" /> <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z" /> <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z" />
+      </svg></a>
+     <div class="trigger">
+      <a class="page-link" href="/words/about/">About</a>
+     </div>
+    </nav>
+   </div>
+  </header>
+  <div class="page-content">
+   <div class="wrapper">
+    <div class="post">
+     <header class="post-header">
+      <p class="post-meta">Feb 28, 2020</p>
+      <h1 class="post-title">FFI patterns #1 - Complex Rust data structures exposed seamlessly to C++</h1>
+     </header>
+     <article class="post-content">
+      <p>I’ve been meaning to post about this for a while. I plan to start a series on different patterns for Rust / C++ FFI that are being used in Gecko.</p>
+      <p>I don’t know how many posts this would take, and given I’m a not-very-consistent writer, I think I’m going to start with the most complex one to get it done.</p>
+      <p>This is the pattern that Firefox’s style system uses.</p>
+      <h2 id="the-use-case">The use-case</h2>
+      <p>The use-case for this is one or more of the following:</p>
+      <ul>
+       <li>
+        <p>You have pretty complex Rust data structures that you need to expose to C++.</p></li>
+       <li>
+        <p>You can’t afford extra indirection / FFI calls / conversions / copies, or there’s too much API surface for it to be reasonable to add an extern function for each getter / setter / etc.</p></li>
+       <li>
+        <p>You want C++ code to be idiomatic, and not need wrappers around the Rust objects. That is, you want destructors, copy-constructors, copy-assignment, etc to <strong>just work</strong>, free your resources, etc.</p></li>
+      </ul>
+      <p>In our case, the style system <strong>needs to expose a bunch of complex, recursive, generic data-structures</strong> like <a href="https://searchfox.org/mozilla-central/rev/b2ccce862ef38d0d150fcac2b597f7f20091a0c7/servo/components/style/values/generics/calc.rs#54">calc nodes</a>, inside a manual-tagged-pointer for <a href="https://searchfox.org/mozilla-central/rev/b2ccce862ef38d0d150fcac2b597f7f20091a0c7/servo/components/style/values/computed/length_percentage.rs#105">LengthPercentage</a>. Or some other crazy tagged union types like <a href="https://searchfox.org/mozilla-central/rev/b2ccce862ef38d0d150fcac2b597f7f20091a0c7/servo/components/style/values/generics/transform.rs#160">transforms</a>, or text-shadows, which involve reference-counted lists, etc.</p>
+      <p>There are also <strong>hundreds of CSS properties</strong>, with <strong>thousands of consumers</strong> across the whole Gecko layout engine, and thus:</p>
+      <ul>
+       <li>
+        <p>We <strong>cannot rely on manual memory management</strong>, because some consumers will always get it wrong.</p></li>
+       <li>
+        <p>We <strong>cannot afford to add an extra indirection to each CSS value</strong>. Layout and painting are already memory-bound, we don’t want to make that worse.</p></li>
+      </ul>
+      <p>So this pattern seems like a good fit for us.</p>
+      <h2 id="the-plan">The plan</h2>
+      <p>The plan to accomplish it is not too complex on the surface:</p>
+      <ol>
+       <li>
+        <p>Get <a href="https://github.com/eqrion/cbindgen"><code class="language-plaintext highlighter-rouge">cbindgen</code></a> to generate a bunch of idiomatic C++ code based on our gazillion Rust types.</p></li>
+       <li>
+        <p>Have equivalent C++ implementations of your core Rust data-structures, with destructors / proper semantics, and so on.</p></li>
+       <li>
+        <p>Profit?</p></li>
+      </ol>
+      <p>We’ll go about all the details of how to make that happen, as well as a proper step-by-step example below.</p>
+      <h2 id="the-caveats">The caveats</h2>
+      <p>The plus side is of course that you win idiomatic C++ code, with all the gnarly boring stuff generated for you. You can poke at Rust structs directly, get pointers to them, copy them, all without having to define an FFI function for each operation you want to perform. Sounds amazing!</p>
+      <p>However, nothing is free, and if you go for this approach you need to consider the following caveats:</p>
+      <ul>
+       <li>
+        <p><strong>Passing structs by value on the FFI boundary between Rust and C++ becomes unsafe</strong>: You need to use references / pointers. The reason for this is that having destructors and such changes the C++ ABI. Having manual <code class="language-plaintext highlighter-rouge">Drop</code> / <code class="language-plaintext highlighter-rouge">Clone</code> implementations however doesn’t change the ABI in the same way in Rust (and I think that’s good, I don’t think Rust should be in the business of being ABI-compatible with C++). In Firefox we have a <a href="https://searchfox.org/mozilla-central/rev/b2ccce862ef38d0d150fcac2b597f7f20091a0c7/build/clang-plugin/NonTrivialTypeInFfiChecker.cpp">clang-based static analysis</a> to prevent people from shooting themselves in the foot.</p></li>
+       <li>
+        <p>You need to <strong>duplicate manual <code class="language-plaintext highlighter-rouge">Drop</code> implementations</strong> in C++. This is usually not a big deal (the only things that usually need manual drop implementations are data-structures or such). Here’s <a href="https://searchfox.org/mozilla-central/rev/b2ccce862ef38d0d150fcac2b597f7f20091a0c7/servo/ports/geckolib/cbindgen.toml#514">an</a> <a href="https://searchfox.org/mozilla-central/rev/b2ccce862ef38d0d150fcac2b597f7f20091a0c7/layout/style/ServoStyleConstsInlines.h#135">example</a> which I’ll talk about later.</p></li>
+      </ul>
+      <p>These haven’t been a problem in practice for us. It’s a bit more complex setup than just declaring and using FFI functions, but it pays off by not having to do manual memory management in C++.</p>
+      <h2 id="demo">Demo</h2>
+      <p>I’ve put a simple <a href="https://github.com/emilio/rust-cpp-ffi-examples/tree/master/complex-rust-to-cpp">demo</a> on a GitHub repo of a somewhat-minimal setup for this.</p>
+      <p>In practice there’s a few differences from the Firefox setup. On Firefox:</p>
+      <ul>
+       <li>The C++ code is not built from <code class="language-plaintext highlighter-rouge">build.rs</code> (as you may imagine).</li>
+       <li><code class="language-plaintext highlighter-rouge">cbindgen</code> is run as a CLI tool, because of that. We need the headers exported independently of the rust build.</li>
+       <li>We have bindings in <em>both</em> directions, actually, so we also use <a href="https://github.com/rust-lang/rust-bindgen"><code class="language-plaintext highlighter-rouge">rust-bindgen</code></a> to be able to poke at C++ structs and classes, for a variety of reasons.</li>
+      </ul>
+      <p>But those shouldn’t really matter for this example. Modulo those, it should hopefully be a good overview of how the setup works. Here’s the different parts of the demo, explained step by step.</p>
+      <h3 id="the-program-we-want-to-build">The program we want to build</h3>
+      <p>The program we want is simple enough… We want to expose a tree to C++, and want to run some calculations on that tree in C++.</p>
+      <p>If we weren’t interfacing with C++, our tree would look like this:</p>
+      <div class="language-rust highlighter-rouge">
+       <div class="highlight">
+        <pre class="highlight"><code><span class="nd">#[derive(Clone,</span> <span class="nd">Debug)]</span>
+<span class="k">pub</span> <span class="k">enum</span> <span class="n">TreeNode</span> <span class="p">{</span>
+    <span class="c">/// This node just has a value.</span>
+    <span class="nf">Leaf</span><span class="p">(</span><span class="nb">f32</span><span class="p">),</span>
+    <span class="c">/// This node sums all the children.</span>
+    <span class="nf">Sum</span><span class="p">(</span><span class="nb">Box</span><span class="o">&lt;</span><span class="p">[</span><span class="n">TreeNode</span><span class="p">]</span><span class="o">&gt;</span><span class="p">),</span>
+    <span class="c">/// This node returns 1 if the two things are the same, and zero otherwise.</span>
+    <span class="nf">Cmp</span><span class="p">(</span><span class="nb">Box</span><span class="o">&lt;</span><span class="n">TreeNode</span><span class="o">&gt;</span><span class="p">,</span> <span class="nb">Box</span><span class="o">&lt;</span><span class="n">TreeNode</span><span class="o">&gt;</span><span class="p">),</span>
+<span class="p">}</span>
+</code></pre>
+       </div>
+      </div>
+      <p>What we effectively want to do is something like:</p>
+      <div class="language-rust highlighter-rouge">
+       <div class="highlight">
+        <pre class="highlight"><code><span class="k">let</span> <span class="n">tree</span> <span class="o">=</span> <span class="nf">create_some_complex_tree</span><span class="p">();</span>
+<span class="k">let</span> <span class="n">value</span> <span class="o">=</span> <span class="k">unsafe</span> <span class="p">{</span> <span class="nf">let_cpp_compute_the_value</span><span class="p">(</span><span class="o">&amp;</span><span class="n">tree</span><span class="p">);</span> <span class="p">};</span>
+<span class="nd">assert_eq!</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">expected_value</span><span class="p">);</span>
+</code></pre>
+       </div>
+      </div>
+      <p>Or something like that.</p>
+      <h3 id="exposing-the-type-to-c">Exposing the type to C++</h3>
+      <p>Let’s see what <code class="language-plaintext highlighter-rouge">cbindgen</code> thinks about our <code class="language-plaintext highlighter-rouge">TreeNode</code> type. When running it on the following Rust file:</p>
+      <div class="language-rust highlighter-rouge">
+       <div class="highlight">
+        <pre class="highlight"><code><span class="nd">#[derive(Clone,</span> <span class="nd">Debug)]</span>
+<span class="k">pub</span> <span class="k">enum</span> <span class="n">TreeNode</span> <span class="p">{</span>
+    <span class="c">/// This node just has a value.</span>
+    <span class="nf">Leaf</span><span class="p">(</span><span class="nb">f32</span><span class="p">),</span>
+    <span class="c">/// This node sums all the children.</span>
+    <span class="nf">Sum</span><span class="p">(</span><span class="nb">Box</span><span class="o">&lt;</span><span class="p">[</span><span class="n">TreeNode</span><span class="p">]</span><span class="o">&gt;</span><span class="p">),</span>
+    <span class="c">/// This node returns 1 if the two things are the same, and zero otherwise.</span>
+    <span class="nf">Cmp</span><span class="p">(</span><span class="nb">Box</span><span class="o">&lt;</span><span class="n">TreeNode</span><span class="o">&gt;</span><span class="p">,</span> <span class="nb">Box</span><span class="o">&lt;</span><span class="n">TreeNode</span><span class="o">&gt;</span><span class="p">),</span>
+<span class="p">}</span>
+
+<span class="nd">#[no_mangle]</span>
+<span class="k">pub</span> <span class="k">extern</span> <span class="s">"C"</span> <span class="k">fn</span> <span class="nf">root</span><span class="p">(</span><span class="n">node</span><span class="p">:</span> <span class="o">&amp;</span><span class="n">TreeNode</span><span class="p">)</span> <span class="p">{}</span>
+</code></pre>
+       </div>
+      </div>
+      <p>We get back only this:</p>
+      <div class="language-cpp highlighter-rouge">
+       <div class="highlight">
+        <pre class="highlight"><code><span class="cp">#include &lt;cstdarg&gt;
+#include &lt;cstdint&gt;
+#include &lt;cstdlib&gt;
+#include &lt;new&gt;
+</span>
+<span class="k">struct</span> <span class="nc">TreeNode</span><span class="p">;</span>
+
+<span class="k">extern</span> <span class="s">"C"</span> <span class="p">{</span>
+
+<span class="kt">void</span> <span class="n">root</span><span class="p">(</span><span class="k">const</span> <span class="n">TreeNode</span> <span class="o">*</span><span class="n">node</span><span class="p">);</span>
+
+<span class="p">}</span> <span class="c1">// extern "C"</span>
+</code></pre>
+       </div>
+      </div>
+      <p>Well… That’s not great, but not quite unexpected.</p>
+      <p><strong>Our type needs a memory layout that C++ can understand</strong>. The default Rust struct layout is intentionally unspecified. Rust does a lot of smart stuff like reordering fields, packing enums, etc.</p>
+      <p>In order to dumb down rustc so that it can interoperate with C++ <strong>we need to tag the enum with the <code class="language-plaintext highlighter-rouge">#[repr]</code> attribute</strong>. I’ve gone with <code class="language-plaintext highlighter-rouge">#[repr(C, u8)]</code>, but we have other choices here, see <a href="https://github.com/rust-lang/rfcs/blob/master/text/2195-really-tagged-unions.md">this rfc</a> and the <a href="https://doc.rust-lang.org/nomicon/other-reprs.html">nomicon</a> for the details.</p>
+      <p>With that out of the way, the layout of <code class="language-plaintext highlighter-rouge">Box&lt;[TreeNode]&gt;</code> and <code class="language-plaintext highlighter-rouge">Box&lt;TreeNode&gt;</code> should be <a href="https://github.com/rust-lang/unsafe-code-guidelines/blob/master/reference/src/layout/pointers.md">well-defined</a>, so can cbindgen do the right thing for us?</p>
+      <p>The answer is “not quite”. <code class="language-plaintext highlighter-rouge">cbindgen</code> doesn’t understand <code class="language-plaintext highlighter-rouge">Box&lt;[T]&gt;</code> deeply enough, and assumes the type is not FFI-safe. I just <a href="https://github.com/eqrion/cbindgen/issues/480">filed an issue</a> on maybe getting some smarts for this, but cbindgen would need to generate a generic struct on its own which is not great…</p>
+      <p>So for now we’re going to do this manually.</p>
+      <h4 id="ownedslice"><code class="language-plaintext highlighter-rouge">OwnedSlice</code></h4>
+      <p><a href="https://github.com/emilio/rust-cpp-ffi-examples/blob/master/complex-rust-to-cpp/src/owned_slice.rs"><code class="language-plaintext highlighter-rouge">OwnedSlice&lt;T&gt;</code></a> is going to be our <strong>ffi-friendly replacement for <code class="language-plaintext highlighter-rouge">Box&lt;[T]&gt;</code></strong>. It’s a very straightforward type, taken <a href="https://searchfox.org/mozilla-central/rev/b2ccce862ef38d0d150fcac2b597f7f20091a0c7/servo/components/style_traits/owned_slice.rs">almost verbatim</a> from Firefox.</p>
+      <p>It has the <strong>same layout as <code class="language-plaintext highlighter-rouge">Box&lt;[T]&gt;</code></strong>, and we can use it on our <code class="language-plaintext highlighter-rouge">TreeNode</code>. It looks like:</p>
+      <div class="language-rust highlighter-rouge">
+       <div class="highlight">
+        <pre class="highlight"><code><span class="c">/// cbindgen:derive-eq=false</span>
+<span class="c">/// cbindgen:derive-neq=false</span>
+<span class="nd">#[repr(C)]</span>
+<span class="k">pub</span> <span class="k">struct</span> <span class="n">OwnedSlice</span><span class="o">&lt;</span><span class="n">T</span><span class="p">:</span> <span class="n">Sized</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="n">ptr</span><span class="p">:</span> <span class="n">NonNull</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="n">len</span><span class="p">:</span> <span class="nb">usize</span><span class="p">,</span>
+    <span class="mi">_</span><span class="n">phantom</span><span class="p">:</span> <span class="n">PhantomData</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre>
+       </div>
+      </div>
+      <p>Note those two <code class="language-plaintext highlighter-rouge">cbindgen:</code> annotations. We’ll get to those later.</p>
+      <p>The final <code class="language-plaintext highlighter-rouge">TreeNode</code> type looks like:</p>
+      <div class="language-rust highlighter-rouge">
+       <div class="highlight">
+        <pre class="highlight"><code><span class="nd">#[derive(Clone,</span> <span class="nd">Debug)]</span>
+<span class="nd">#[repr(C,</span> <span class="nd">u8)]</span>
+<span class="k">pub</span> <span class="k">enum</span> <span class="n">TreeNode</span> <span class="p">{</span>
+    <span class="c">/// This node just has a value.</span>
+    <span class="nf">Leaf</span><span class="p">(</span><span class="nb">f32</span><span class="p">),</span>
+    <span class="c">/// This node sums all the children.</span>
+    <span class="nf">Sum</span><span class="p">(</span><span class="n">OwnedSlice</span><span class="o">&lt;</span><span class="n">TreeNode</span><span class="o">&gt;</span><span class="p">),</span>
+    <span class="c">/// This node returns 1 if the two things are the same, and zero otherwise.</span>
+    <span class="nf">Cmp</span><span class="p">(</span><span class="nb">Box</span><span class="o">&lt;</span><span class="n">TreeNode</span><span class="o">&gt;</span><span class="p">,</span> <span class="nb">Box</span><span class="o">&lt;</span><span class="n">TreeNode</span><span class="o">&gt;</span><span class="p">),</span>
+<span class="p">}</span>
+</code></pre>
+       </div>
+      </div>
+      <p>And cbindgen generates the following for it (without any flags, we’ll see about that in a min):</p>
+      <div class="language-cpp highlighter-rouge">
+       <div class="highlight">
+        <pre class="highlight"><code><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="nc">T</span><span class="p">&gt;</span>
+<span class="k">struct</span> <span class="nc">Box</span><span class="p">;</span>
+
+<span class="k">struct</span> <span class="nc">TreeNode</span> <span class="p">{</span>
+  <span class="k">enum</span> <span class="k">class</span> <span class="nc">Tag</span> <span class="o">:</span> <span class="kt">uint8_t</span> <span class="p">{</span>
+    <span class="c1">/// This node just has a value.</span>
+    <span class="n">Leaf</span><span class="p">,</span>
+    <span class="c1">/// This node sums all the children.</span>
+    <span class="n">Sum</span><span class="p">,</span>
+    <span class="c1">/// This node returns 1 if the two things are the same, and zero otherwise.</span>
+    <span class="n">Cmp</span><span class="p">,</span>
+  <span class="p">};</span>
+
+  <span class="k">struct</span> <span class="nc">Leaf_Body</span> <span class="p">{</span>
+    <span class="kt">float</span> <span class="n">_0</span><span class="p">;</span>
+  <span class="p">};</span>
+
+  <span class="k">struct</span> <span class="nc">Sum_Body</span> <span class="p">{</span>
+    <span class="n">OwnedSlice</span><span class="o">&lt;</span><span class="n">TreeNode</span><span class="o">&gt;</span> <span class="n">_0</span><span class="p">;</span>
+  <span class="p">};</span>
+
+  <span class="k">struct</span> <span class="nc">Cmp_Body</span> <span class="p">{</span>
+    <span class="n">Box</span><span class="o">&lt;</span><span class="n">TreeNode</span><span class="o">&gt;</span> <span class="n">_0</span><span class="p">;</span>
+    <span class="n">Box</span><span class="o">&lt;</span><span class="n">TreeNode</span><span class="o">&gt;</span> <span class="n">_1</span><span class="p">;</span>
+  <span class="p">};</span>
+
+  <span class="n">Tag</span> <span class="n">tag</span><span class="p">;</span>
+  <span class="k">union</span> <span class="p">{</span>
+    <span class="n">Leaf_Body</span> <span class="n">leaf</span><span class="p">;</span>
+    <span class="n">Sum_Body</span> <span class="n">sum</span><span class="p">;</span>
+    <span class="n">Cmp_Body</span> <span class="n">cmp</span><span class="p">;</span>
+  <span class="p">};</span>
+<span class="p">};</span>
+</code></pre>
+       </div>
+      </div>
+      <p>It also generates bindings for <code class="language-plaintext highlighter-rouge">OwnedSlice</code>, which I’ve omitted for brevity.</p>
+      <h3 id="cbindgentoml"><code class="language-plaintext highlighter-rouge">cbindgen.toml</code></h3>
+      <p>We have the base type working, and it looks nice. But <strong>poking at it and using it from C++ is still very error-prone</strong>.</p>
+      <p><code class="language-plaintext highlighter-rouge">cbindgen</code> has a bunch of flags to make interacting with tagged enums and structs from C++ better. You can look at the <a href="https://github.com/eqrion/cbindgen/blob/master/docs.md">docs in the <code class="language-plaintext highlighter-rouge">cbindgen</code> repo</a>, but here are the ones we’re going to use:</p>
+      <div class="language-toml highlighter-rouge">
+       <div class="highlight">
+        <pre class="highlight"><code><span class="nn">[struct]</span>
+<span class="c"># generates operator==</span>
+<span class="py">derive_eq</span> <span class="p">=</span> <span class="kc">true</span>
+<span class="c"># generates operator!=</span>
+<span class="py">derive_neq</span> <span class="p">=</span> <span class="kc">true</span>
+
+<span class="nn">[enum]</span>
+<span class="c"># Generates IsFoo() methods.</span>
+<span class="py">derive_helper_methods</span> <span class="p">=</span> <span class="kc">true</span>
+<span class="c"># Generates `const T&amp; AsFoo() const` methods.</span>
+<span class="py">derive_const_casts</span> <span class="p">=</span> <span class="kc">true</span>
+<span class="c"># Adds an `assert(IsFoo())` on each `AsFoo()` method.</span>
+<span class="py">cast_assert_name</span> <span class="p">=</span> <span class="s">"assert"</span>
+<span class="c"># Generates destructors.</span>
+<span class="py">derive_tagged_enum_destructor</span> <span class="p">=</span> <span class="kc">true</span>
+<span class="c"># Generates copy-constructors.</span>
+<span class="py">derive_tagged_enum_copy_constructor</span> <span class="p">=</span> <span class="kc">true</span>
+<span class="c"># Generates copy-assignment operators.</span>
+<span class="py">derive_tagged_enum_copy_assignment</span> <span class="p">=</span> <span class="kc">true</span>
+<span class="c"># Generates a private default-constructor for enums that doesn't initialize</span>
+<span class="c"># anything. Either you do this or you provide your own default constructor.</span>
+<span class="py">private_default_tagged_enum_constructor</span> <span class="p">=</span> <span class="kc">true</span>
+</code></pre>
+       </div>
+      </div>
+      <p>This generates a bunch more code for <code class="language-plaintext highlighter-rouge">TreeNode</code>, as advertised. Our code still doesn’t compile though, given there’s only a forward-declaration for <code class="language-plaintext highlighter-rouge">Box</code>:</p>
+      <div class="language-cpp highlighter-rouge">
+       <div class="highlight">
+        <pre class="highlight"><code><span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="nc">T</span><span class="p">&gt;</span>
+<span class="k">struct</span> <span class="nc">Box</span><span class="p">;</span>
+</code></pre>
+       </div>
+      </div>
+      <h3 id="defining-box">Defining <code class="language-plaintext highlighter-rouge">Box</code>.</h3>
+      <p>We’re going to define a simple smart pointer type for <code class="language-plaintext highlighter-rouge">Box</code> that has the same semantics and layout as Rust (assuming sized types), and include it in a <code class="language-plaintext highlighter-rouge">forwards.h</code> file from cbindgen.toml.</p>
+      <p><a href="https://github.com/emilio/rust-cpp-ffi-examples/blob/master/complex-rust-to-cpp/cpp/my_ffi_forwards.h">The implementation</a> should be pretty straightforward so I won’t read through it.</p>
+      <p>This makes our bindings compile, but still <code class="language-plaintext highlighter-rouge">OwnedSlice</code> has issues.</p>
+      <h3 id="making-ownedslice-do-the-right-thing-from-c">Making <code class="language-plaintext highlighter-rouge">OwnedSlice</code> do the right thing from C++</h3>
+      <p>Remember those <code class="language-plaintext highlighter-rouge">cbindgen:</code> lines in <code class="language-plaintext highlighter-rouge">OwnedSlice</code>? Here’s where they come into play. The default <code class="language-plaintext highlighter-rouge">operator==</code> for <code class="language-plaintext highlighter-rouge">OwnedSlice</code> would have compared the pointer and length values, and that’s it. It wouldn’t have the same semantics as our rust type, which would compare the values individually.</p>
+      <p>Also, <code class="language-plaintext highlighter-rouge">OwnedSlice</code> doesn’t manage its contents properly yet. We can fix that easily, though.</p>
+      <p><code class="language-plaintext highlighter-rouge">cbindgen</code> has an <code class="language-plaintext highlighter-rouge">[export.body]</code> section that allows you to define stuff like methods, constructors, operators, etc. in the body of an item.</p>
+      <p>In this case, we just want a few basic things:</p>
+      <div class="language-toml highlighter-rouge">
+       <div class="highlight">
+        <pre class="highlight"><code><span class="nn">[export.body]</span>
+<span class="py">"OwnedSlice"</span> <span class="p">=</span> <span class="s">"""
+  inline void Clear();
+  inline void CopyFrom(const OwnedSlice&amp;);
+
+  // cpp shenanigans.
+  inline OwnedSlice();
+  inline ~OwnedSlice();
+  inline OwnedSlice(const OwnedSlice&amp;);
+  inline OwnedSlice&amp; operator=(const OwnedSlice&amp;);
+
+  std::span&lt;T&gt; AsSpan() {
+    return { ptr, len };
+  }
+
+  inline std::span&lt;const T&gt; AsSpan() const {
+    return { ptr, len };
+  }
+
+  bool IsEmpty() {
+    return AsSpan().empty();
+  }
+
+  inline bool operator==(const OwnedSlice&amp;) const;
+  inline bool operator!=(const OwnedSlice&amp;) const;
+"""</span>
+</code></pre>
+       </div>
+      </div>
+      <p>We’ll be using C++20’s <code class="language-plaintext highlighter-rouge">std::span</code> to allow ranged loops and such instead of implementing iterators ourselves (I’m lazy, turns out).</p>
+      <p>We’ve added a few inline methods to help with memory management that we now need to implement.</p>
+      <p>We’ll include the file with the implementation of these methods at the end of the <code class="language-plaintext highlighter-rouge">cbindgen</code>-generated file:</p>
+      <div class="language-toml highlighter-rouge">
+       <div class="highlight">
+        <pre class="highlight"><code><span class="py">trailer</span> <span class="p">=</span> <span class="s">"""
+#include "my_ffi_inlines.h"
+"""</span>
+</code></pre>
+       </div>
+      </div>
+      <p><a href="https://github.com/emilio/rust-cpp-ffi-examples/blob/master/complex-rust-to-cpp/cpp/my_ffi_inlines.h">That file</a> is also relatively straightforward, and it basically keeps the same invariants as the Rust counterpart does.</p>
+      <h3 id="the-actual-c-code">The actual C++ code.</h3>
+      <p>With these two building-blocks in place (<code class="language-plaintext highlighter-rouge">Box</code> and <code class="language-plaintext highlighter-rouge">OwnedSlice</code>), we can use our <code class="language-plaintext highlighter-rouge">TreeNode</code> from C++ the same way as any other idiomatic C++ struct.</p>
+      <p>C++ consumers of the <code class="language-plaintext highlighter-rouge">TreeNode</code> type can use it <strong>transparently</strong>, just like Rust consumers, without leaking resources or leaving dangling pointers around accidentally. Using it looks like reasonably modern C++.</p>
+      <p>The actual C++ code for our computation is <a href="https://github.com/emilio/rust-cpp-ffi-examples/blob/master/complex-rust-to-cpp/cpp/doit.cpp">here</a>.</p>
+      <p>If we wanted to add some idiomatic methods to <code class="language-plaintext highlighter-rouge">TreeNode</code>, we could do that using <code class="language-plaintext highlighter-rouge">[export.body]</code>, just like we’ve done with <code class="language-plaintext highlighter-rouge">OwnedSlice::AsSpan</code>.</p>
+      <p>This is as much as I can write today, you can see all the gory details in the <a href="https://github.com/emilio/rust-cpp-ffi-examples/tree/master/complex-rust-to-cpp">demo repo</a>. Hopefully I haven’t glanced over too much stuff.</p>
+      <h2 id="conclusion">Conclusion</h2>
+      <p>Of course this pattern is probably not worth it for just a single type, as it requires a bit of setup. But when you have a massive API surface (like we do in the Firefox style engine) the effort does pay off.</p>
+      <p>My favourite commit to link to is <a href="https://hg.mozilla.org/mozilla-central/rev/02c806cb81d9">this one</a> in which I switched Firefox to use <code class="language-plaintext highlighter-rouge">cbindgen</code> for the transform property. It:</p>
+      <ul>
+       <li>Modernized the existing (old) C++ code.</li>
+       <li>Improved performance.</li>
+       <li>Removed a lot of boring / repetitive / error-prone glue code.</li>
+      </ul>
+      <p>Over time, we’ve needed a couple more data structures. We have C++-compatible versions of:</p>
+      <ul>
+       <li>
+        <p><a href="https://searchfox.org/mozilla-central/rev/b2ccce862ef38d0d150fcac2b597f7f20091a0c7/servo/components/style_traits/owned_str.rs#17"><code class="language-plaintext highlighter-rouge">OwnedStr</code></a>: an owned utf-8 string (basically, <code class="language-plaintext highlighter-rouge">Box&lt;str&gt;</code>). It’s built on top of <code class="language-plaintext highlighter-rouge">OwnedSlice</code> so it doesn’t even need manual destructors and such, just some convenience methods to get the string as a Gecko substring.</p></li>
+       <li>
+        <p><a href="https://searchfox.org/mozilla-central/rev/b2ccce862ef38d0d150fcac2b597f7f20091a0c7/servo/components/servo_arc/lib.rs#78"><code class="language-plaintext highlighter-rouge">Arc</code></a>: We already had our own <code class="language-plaintext highlighter-rouge">Arc</code> copy for various reasons (to avoid weak reference count overhead, for other ffi shenanigans, and to add reference-count logging to detect leaks). Switching it to this model was trivial. There’s a <a href="https://crates.io/crates/triomphe">crates.io version</a> of this called Triomphe which Manish maintains.</p></li>
+       <li>
+        <p><a href="https://searchfox.org/mozilla-central/rev/b2ccce862ef38d0d150fcac2b597f7f20091a0c7/servo/components/style_traits/arc_slice.rs#30"><code class="language-plaintext highlighter-rouge">ArcSlice</code></a>: an <code class="language-plaintext highlighter-rouge">Arc&lt;[T]&gt;</code>, but stored as a thin pointer, built on top of that. It should also be buildable on top of Triomphe, though I don’t think Firefox’s version is general-purpose enough to put on crates.io. Maybe, though?</p></li>
+      </ul>
+      <p>We have destructors for a couple other structs for which we implement size optimizations manually like <code class="language-plaintext highlighter-rouge">LengthPercentage</code>, but that’s about it.</p>
+      <hr>
+      <p>I tried to explain the trade-offs of this approach to do FFI with C++ above, hopefully if you read until here now you have a better sense of them too, and if it fits your use-case you have the tools to do the right thing.</p>
+      <p>I personally don’t love to have duplicate code for our data-structures in both Rust and C++. But for us it works out alright: the benefits we get (nice idiomatic C++ code, having all our style system structs defined in Rust, which can use a bunch of proc macros, and having them interoperate seamlessly with C++) are definitely worth a couple duplicated boring lines.</p>
+      <p>Congratulations if you made it all the way here. I hope I didn’t write too many typos in the process, my English always sucks… Thanks to <a href="https://twitter.com/CodingExon">Daniel</a> for spotting a bunch already :)</p>
+      <p>Feel free to send comments or corrections to <a href="mailto:emilio@crisal.io">my email</a>, <a href="https://twitter.com/ecbos_">Twitter</a>, or to <a href="https://github.com/emilio/words">GitHub</a> directly, your call.</p>
+     </article>
+    </div>
+   </div>
+  </div>
+  <footer class="site-footer">
+   <div class="wrapper">
+    <h2 class="footer-heading">Words</h2>
+    <div class="footer-col-wrapper">
+     <div class="footer-col  footer-col-1">
+      <ul class="contact-list">
+       <li><a href="mailto:emilio@crisal.io">emilio@crisal.io</a></li>
+      </ul>
+     </div>
+     <div class="footer-col  footer-col-2">
+      <ul class="social-media-list">
+       <li><a href="https://github.com/emilio"> <span class="icon  icon--github">
+          <svg viewBox="0 0 16 16">
+           <path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z" />
+          </svg></span> <span class="username">emilio</span> </a></li>
+       <li><a href="https://twitter.com/ecbos_"> <span class="icon  icon--twitter">
+          <svg viewBox="0 0 16 16">
+           <path fill="#828282" d="M15.969,3.058c-0.586,0.26-1.217,0.436-1.878,0.515c0.675-0.405,1.194-1.045,1.438-1.809
+                  c-0.632,0.375-1.332,0.647-2.076,0.793c-0.596-0.636-1.446-1.033-2.387-1.033c-1.806,0-3.27,1.464-3.27,3.27 c0,0.256,0.029,0.506,0.085,0.745C5.163,5.404,2.753,4.102,1.14,2.124C0.859,2.607,0.698,3.168,0.698,3.767 c0,1.134,0.577,2.135,1.455,2.722C1.616,6.472,1.112,6.325,0.671,6.08c0,0.014,0,0.027,0,0.041c0,1.584,1.127,2.906,2.623,3.206 C3.02,9.402,2.731,9.442,2.433,9.442c-0.211,0-0.416-0.021-0.615-0.059c0.416,1.299,1.624,2.245,3.055,2.271 c-1.119,0.877-2.529,1.4-4.061,1.4c-0.264,0-0.524-0.015-0.78-0.046c1.447,0.928,3.166,1.469,5.013,1.469 c6.015,0,9.304-4.983,9.304-9.304c0-0.142-0.003-0.283-0.009-0.423C14.976,4.29,15.531,3.714,15.969,3.058z" />
+          </svg></span> <span class="username">ecbos_</span> </a></li>
+      </ul>
+     </div>
+     <div class="footer-col  footer-col-3">
+      <p class="text">Code is poetry</p>
+     </div>
+    </div>
+   </div>
+  </footer>
+ </body>
+</html>

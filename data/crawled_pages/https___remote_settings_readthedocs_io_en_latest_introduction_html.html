@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en" data-content_root="./">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>What is Remote Settings? — Remote Settings  documentation</title>
+  <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079">
+  <link rel="stylesheet" type="text/css" href="_static/basic.css?v=b08954a9">
+  <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=27fed22d">
+  <script src="_static/documentation_options.js?v=5929fcd5"></script>
+  <script src="_static/doctools.js?v=9bcbadda"></script>
+  <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+  <link rel="index" title="Index" href="genindex.html">
+  <link rel="search" title="Search" href="search.html">
+  <link rel="next" title="Getting Started" href="getting-started.html">
+  <link rel="prev" title="Welcome to Remote Settings documentation!" href="index.html">
+  <link rel="stylesheet" href="_static/custom.css" type="text/css">
+  <script async type="text/javascript" src="/_/static/javascript/readthedocs-addons.js"></script>
+  <meta name="readthedocs-project-slug" content="remote-settings">
+  <meta name="readthedocs-version-slug" content="latest">
+  <meta name="readthedocs-resolver-filename" content="/introduction.html">
+  <meta name="readthedocs-http-status" content="200">
+ </head>
+ <body>
+  <div class="document">
+   <div class="documentwrapper">
+    <div class="bodywrapper">
+     <div class="body" role="main">
+      <section id="what-is-remote-settings">
+       <span id="introduction"></span>
+       <h1>What is Remote Settings?<a class="headerlink" href="#what-is-remote-settings" title="Link to this heading">¶</a></h1>
+       <p>Basically, Remote Settings consists of two components: a remote server (REST API) powered by <a class="reference external" href="https://github.com/Kinto/kinto">Kinto</a> and a client (Gecko API).</p>
+       <p>Everything is done via a collection of records that is kept in sync between the client local database and the remote data.</p>
+       <div class="admonition note">
+        <p class="admonition-title">Note</p>
+        <p>See also <a class="reference external" href="https://blog.mathieu-leplatre.info/the-history-of-firefox-remote-settings.html">The History of Remote Settings</a></p>
+       </div>
+       <section id="why-is-it-better-than-building-my-own">
+        <h2>Why is it better than building my own?<a class="headerlink" href="#why-is-it-better-than-building-my-own" title="Link to this heading">¶</a></h2>
+        <p>Out of the box you get for free:</p>
+        <ul class="simple">
+         <li>
+          <p>Multi-signoff</p></li>
+         <li>
+          <p>Syncing of data - real time push based updates</p></li>
+         <li>
+          <p>Content signing - your data is signed server side and verified on the client side transparently</p></li>
+         <li>
+          <p>File attachment support</p></li>
+         <li>
+          <p>Target filtering (JEXL a-la Normandy)</p></li>
+         <li>
+          <p>Telemetry</p></li>
+        </ul>
+       </section>
+       <section id="what-does-the-workflow-look-like">
+        <h2>What does the workflow look like?<a class="headerlink" href="#what-does-the-workflow-look-like" title="Link to this heading">¶</a></h2>
+        <p>Once your collection is setup, a typical workflow would be:</p>
+        <ol class="arabic simple">
+         <li>
+          <p>Connect to the UI on the VPN</p></li>
+         <li>
+          <p>Make some changes</p></li>
+         <li>
+          <p>Request a review (with an optional comment)</p></li>
+        </ol>
+        <p>The people designated as reviewers will receive a notification email.</p>
+        <ol class="arabic simple" start="4">
+         <li>
+          <p>As a reviewer, you can preview the changes in a real browser</p></li>
+         <li>
+          <p>Once you verified that the changes have the expected effects, you can approve (or reject) the changes from the Admin UI</p></li>
+         <li>
+          <p>Changes will then be pulled by every Firefox clients on their next synchronization</p></li>
+        </ol>
+       </section>
+       <section id="what-does-the-client-api-look-like">
+        <h2>What does the client API look like?<a class="headerlink" href="#what-does-the-client-api-look-like" title="Link to this heading">¶</a></h2>
+        <p>On the client side, listen for changes via an event listener:</p>
+        <div class="highlight-javascript notranslate">
+         <div class="highlight">
+          <pre><span></span><span class="kd">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">RemoteSettings</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ChromeUtils</span><span class="p">.</span><span class="nx">importESModule</span><span class="p">(</span><span class="s2">"resource://services-settings/remote-settings.sys.mjs"</span><span class="p">)</span>
+
+<span class="nx">RemoteSettings</span><span class="p">(</span><span class="s2">"my-collection"</span><span class="p">)</span>
+<span class="w">  </span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s2">"sync"</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="nx">e</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">created</span><span class="p">,</span><span class="w"> </span><span class="nx">updated</span><span class="p">,</span><span class="w"> </span><span class="nx">deleted</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">e</span><span class="p">.</span><span class="nx">data</span><span class="p">;</span>
+<span class="w">    </span><span class="cm">/*</span>
+<span class="cm">      updated == [</span>
+
+<span class="cm">        {</span>
+<span class="cm">          old: {label: "Yahoo",  enabled: true,  weight: 10, id: "d0782d8d", last_modified: 1522764475905},</span>
+<span class="cm">          new: {label: "Google", enabled: true,  weight: 20, id: "8883955f", last_modified: 1521539068414},</span>
+<span class="cm">        },</span>
+<span class="cm">      ]</span>
+<span class="cm">     */</span>
+<span class="w">  </span><span class="p">});</span>
+</pre>
+         </div>
+        </div>
+        <p>Or get the current list of local records:</p>
+        <div class="highlight-javascript notranslate">
+         <div class="highlight">
+          <pre><span></span><span class="kd">const</span><span class="w"> </span><span class="nx">records</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">RemoteSettings</span><span class="p">(</span><span class="s2">"my-collection"</span><span class="p">).</span><span class="nx">get</span><span class="p">();</span>
+<span class="cm">/*</span>
+<span class="cm">  records == [</span>
+<span class="cm">    {label: "Yahoo",  enabled: true,  weight: 10, id: "d0782d8d", last_modified: 1522764475905},</span>
+<span class="cm">    {label: "Google", enabled: true,  weight: 20, id: "8883955f", last_modified: 1521539068414},</span>
+<span class="cm">    {label: "Ecosia", enabled: false, weight: 5,  id: "337c865d", last_modified: 1520527480321},</span>
+<span class="cm">  ]</span>
+<span class="cm">*/</span>
+</pre>
+         </div>
+        </div>
+        <div class="admonition note">
+         <p class="admonition-title">Note</p>
+         <ul class="simple">
+          <li>
+           <p><a class="reference external" href="https://firefox-source-docs.mozilla.org/services/settings/">Client API full reference</a></p></li>
+         </ul>
+        </div>
+       </section>
+       <section id="what-does-the-server-side-api-look-like">
+        <h2>What does the server side API look like?<a class="headerlink" href="#what-does-the-server-side-api-look-like" title="Link to this heading">¶</a></h2>
+        <p>If you want, like our <a class="reference external" href="https://github.com/Kinto/kinto-admin">Web UI</a>, to rely on the REST API for your integration, the <a class="reference internal" href="tutorial-multi-signoff.html#tutorial-multi-signoff"><span class="std std-ref">multi-signoff tutorial</span></a> gives a good overview.</p>
+        <p>Basically, creating a record would look like this:</p>
+        <div class="highlight-bash notranslate">
+         <div class="highlight">
+          <pre><span></span>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span><span class="si">${</span><span class="nv">SERVER</span><span class="si">}</span>/buckets/main-workspace/collections/<span class="si">${</span><span class="nv">COLLECTION</span><span class="si">}</span>/records<span class="w"> </span><span class="se">\</span>
+<span class="w">     </span>-H<span class="w"> </span><span class="s1">'Content-Type:application/json'</span><span class="w"> </span><span class="se">\</span>
+<span class="w">     </span>-d<span class="w"> </span><span class="s2">"{\"data\": {\"property\": </span><span class="nv">$i</span><span class="s2">}}"</span><span class="w"> </span><span class="se">\</span>
+<span class="w">     </span>-u<span class="w"> </span>us3r:p455w0rd
+</pre>
+         </div>
+        </div>
+        <p>Requesting review:</p>
+        <div class="highlight-bash notranslate">
+         <div class="highlight">
+          <pre><span></span>curl<span class="w"> </span>-X<span class="w"> </span>PATCH<span class="w"> </span><span class="si">${</span><span class="nv">SERVER</span><span class="si">}</span>/buckets/main-workspace/collections/<span class="si">${</span><span class="nv">COLLECTION</span><span class="si">}</span><span class="w"> </span><span class="se">\</span>
+<span class="w">     </span>-H<span class="w"> </span><span class="s1">'Content-Type:application/json'</span><span class="w"> </span><span class="se">\</span>
+<span class="w">     </span>-d<span class="w"> </span><span class="s1">'{"data": {"status": "to-review"}}'</span><span class="w"> </span><span class="se">\</span>
+<span class="w">     </span>-u<span class="w"> </span>us3r:p455w0rd
+</pre>
+         </div>
+        </div>
+        <p>Approving changes (different user):</p>
+        <div class="highlight-bash notranslate">
+         <div class="highlight">
+          <pre><span></span>curl<span class="w"> </span>-X<span class="w"> </span>PATCH<span class="w"> </span><span class="si">${</span><span class="nv">SERVER</span><span class="si">}</span>/buckets/main-workspace/collections/<span class="si">${</span><span class="nv">COLLECTION</span><span class="si">}</span><span class="w"> </span><span class="se">\</span>
+<span class="w">     </span>-H<span class="w"> </span><span class="s1">'Content-Type:application/json'</span><span class="w"> </span><span class="se">\</span>
+<span class="w">     </span>-d<span class="w"> </span><span class="s1">'{"data": {"status": "to-sign"}}'</span><span class="w"> </span><span class="se">\</span>
+<span class="w">     </span>-u<span class="w"> </span>another:p455w0rd
+</pre>
+         </div>
+        </div>
+        <p>And the record is now published:</p>
+        <div class="highlight-bash notranslate">
+         <div class="highlight">
+          <pre><span></span>curl<span class="w"> </span><span class="si">${</span><span class="nv">SERVER</span><span class="si">}</span>/buckets/main/collections/<span class="si">${</span><span class="nv">COLLECTION</span><span class="si">}</span>/records
+</pre>
+         </div>
+        </div>
+        <div class="admonition note">
+         <p class="admonition-title">Note</p>
+         <ul class="simple">
+          <li>
+           <p><a class="reference external" href="https://kinto.readthedocs.io/en/latest/api/1.x/index.html#full-reference">Kinto REST API reference</a></p></li>
+          <li>
+           <p><a class="reference external" href="https://github.com/Kinto/kinto-http.py">Python client</a></p></li>
+          <li>
+           <p><a class="reference external" href="https://github.com/Kinto/kinto-http.js">JavaScript client</a></p></li>
+         </ul>
+        </div>
+       </section>
+       <section id="awesome-how-do-i-get-started">
+        <h2>Awesome! How do I get started?<a class="headerlink" href="#awesome-how-do-i-get-started" title="Link to this heading">¶</a></h2>
+        <p>You’ll find out <a class="reference internal" href="getting-started.html#getting-started"><span class="std std-ref">in the next chapter</span></a>!</p>
+       </section>
+      </section>
+     </div>
+    </div>
+   </div>
+   <div class="sphinxsidebar" role="navigation" aria-label="Main">
+    <div class="sphinxsidebarwrapper">
+     <h1 class="logo"><a href="index.html">Remote Settings</a></h1><search id="searchbox" style="display: none" role="search">
+      <div class="searchformwrapper">
+       <form class="search" action="search.html" method="get">
+        <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"> <input type="submit" value="Go">
+       </form>
+      </div>
+     </search>
+     <script>document.getElementById('searchbox').style.display = "block"</script>
+     <h3>Navigation</h3>
+     <ul class="current">
+      <li class="toctree-l1 current"><a class="current reference internal" href="#">What is Remote Settings?</a>
+       <ul>
+        <li class="toctree-l2"><a class="reference internal" href="#why-is-it-better-than-building-my-own">Why is it better than building my own?</a></li>
+        <li class="toctree-l2"><a class="reference internal" href="#what-does-the-workflow-look-like">What does the workflow look like?</a></li>
+        <li class="toctree-l2"><a class="reference internal" href="#what-does-the-client-api-look-like">What does the client API look like?</a></li>
+        <li class="toctree-l2"><a class="reference internal" href="#what-does-the-server-side-api-look-like">What does the server side API look like?</a></li>
+        <li class="toctree-l2"><a class="reference internal" href="#awesome-how-do-i-get-started">Awesome! How do I get started?</a></li>
+       </ul></li>
+      <li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
+      <li class="toctree-l1"><a class="reference internal" href="case-studies.html">Case Studies</a></li>
+      <li class="toctree-l1"><a class="reference internal" href="support.html">Support</a></li>
+      <li class="toctree-l1"><a class="reference internal" href="monitoring.html">Monitoring</a></li>
+      <li class="toctree-l1"><a class="reference internal" href="target-filters.html">Target filters</a></li>
+      <li class="toctree-l1"><a class="reference internal" href="screencasts.html">Screencasts</a></li>
+      <li class="toctree-l1"><a class="reference internal" href="tutorial-dev-server.html">Use the Dev Server</a></li>
+      <li class="toctree-l1"><a class="reference internal" href="tutorial-local-server.html">Setup a Local Server</a></li>
+      <li class="toctree-l1"><a class="reference internal" href="tutorial-multi-signoff.html">Multi Signoff Workflow</a></li>
+      <li class="toctree-l1"><a class="reference internal" href="tutorial-attachments.html">Work with Attachments</a></li>
+      <li class="toctree-l1"><a class="reference internal" href="tutorial-dev-kinto-admin.html">Kinto Admin Development</a></li>
+      <li class="toctree-l1"><a class="reference internal" href="client-specifications.html">Client Specifications</a></li>
+     </ul>
+     <div class="relations">
+      <h3>Related Topics</h3>
+      <ul>
+       <li><a href="index.html">Documentation overview</a>
+        <ul>
+         <li>Previous: <a href="index.html" title="previous chapter">Welcome to Remote Settings documentation!</a></li>
+         <li>Next: <a href="getting-started.html" title="next chapter">Getting Started</a></li>
+        </ul></li>
+      </ul>
+     </div>
+    </div>
+   </div>
+   <div class="clearer"></div>
+  </div>
+  <div class="footer">
+   ©2015-2025, Mozilla Services. | Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.2.3</a> &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a> | <a href="_sources/introduction.rst.txt" rel="nofollow">Page source</a>
+  </div>
+ </body>
+</html>

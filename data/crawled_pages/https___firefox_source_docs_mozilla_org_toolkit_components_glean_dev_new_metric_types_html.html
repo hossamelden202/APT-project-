@@ -1,0 +1,540 @@
+<!doctype html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Adding a New Metric Type — Firefox Source Docs  documentation</title>
+  <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=fa44fd50">
+  <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=19f00094">
+  <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css?v=fd3f3429">
+  <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css?v=76b2166b">
+  <link rel="stylesheet" type="text/css" href="../../../../_static/custom_theme.css?v=dc5ed815">
+  <link rel="stylesheet" type="text/css" href="../../../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7">
+  <link rel="shortcut icon" href="../../../../_static/firefox.ico"><!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+  <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+  <script src="../../../../_static/documentation_options.js?v=5929fcd5"></script>
+  <script src="../../../../_static/doctools.js?v=9a2dae69"></script>
+  <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
+  <script src="../../../../_static/copybutton.js?v=30646c52"></script>
+  <script src="../../../../_static/design-tabs.js?v=36754332"></script>
+  <script src="../../../../_static/js/theme.js"></script>
+  <link rel="index" title="Index" href="../../../../genindex.html">
+  <link rel="search" title="Search" href="../../../../search.html">
+  <link rel="next" title="Preferences and Defines" href="preferences.html">
+  <link rel="prev" title="FOG Identifiers (Metric Ids, Submetric Ids, Ping Ids, …)" href="metric_ids.html">
+ </head>
+ <body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+   <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <div class="wy-side-scroll">
+     <div class="wy-side-nav-search">
+      <a href="../../../../index.html" class="icon icon-home"> Firefox Source Docs <img src="../../../../_static/firefox-wordmark.svg" class="logo" alt="Logo"> </a><!-- -- This code is governed by the BSD license ---->
+      <div>
+       <h3>Quick search</h3>
+       <script>
+    (function () {
+      var cx = "dd12886298f75dbef";
+      var gcse = document.createElement("script");
+      gcse.async = true;
+      gcse.src = "https://cse.google.com/cse.js?cx=" + cx;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(gcse, s);
+    })();
+  </script><gcse:search></gcse:search>
+      </div>
+     </div>
+     <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+      <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../glossary/index.html">A Glossary of Common Terms</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../overview/index.html">A Quick Guide to Mozilla Applications</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../setup/index.html">Getting Set Up To Work On The Firefox Codebase</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Working On Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../contributing/index.html">Working on Firefox</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../bug-mgmt/index.html">Bug Handling</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox User Guide</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../devtools-user/index.html">Firefox DevTools User Docs</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Source Code Documentation</span></p>
+      <ul class="current">
+       <li class="toctree-l1"><a class="reference internal" href="../../../../mots/index.html">Governance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../browser/index.html">Firefox Front-end</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../dom/index.html">DOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../editor/index.html">Editor</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../layout/index.html">Style system (CSS) &amp; Layout</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../gfx/index.html">Graphics</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../ipc/index.html">Processes, Threads and IPC</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../devtools/index.html">Firefox DevTools Contributor Docs</a></li>
+       <li class="toctree-l1 current"><a class="reference internal" href="../../../index.html">Toolkit</a>
+        <ul class="current">
+         <li class="toctree-l2"><a class="reference internal" href="../../../javascript-logging.html">JavaScript Logging</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../mozapps/extensions/addon-manager/index.html">Add-on Manager</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../backgroundtasks/index.html">Background Task Mode</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../crashes/crash-manager/index.html">Crash Manager</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../crashreporter/crashreporter/index.html">Crash Reporter</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../internal-urls.html">Internal URLs</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../search/index.html">Search Service</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../normandy/normandy/index.html">Shield Recipe Client</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../nimbus/docs/index.html">Nimbus</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../messaging-system/docs/index.html">Messaging System Schemas</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../pictureinpicture/pictureinpicture/index.html">Picture-in-Picture</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../prompts/prompts/index.html">Prompts</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../modules/subprocess/toolkit_modules/subprocess/index.html">Subprocess Module</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../telemetry/index.html">Telemetry</a></li>
+         <li class="toctree-l2 current"><a class="reference internal" href="../index.html">Firefox on Glean (FOG)</a>
+          <ul class="current">
+           <li class="toctree-l3"><a class="reference internal" href="../user/index.html">Using Firefox on Glean</a></li>
+           <li class="toctree-l3 current"><a class="reference internal" href="index.html">Developing Firefox on Glean</a>
+            <ul class="current">
+             <li class="toctree-l4"><a class="reference internal" href="builtin_pings.html">Built-in Pings</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="code_organization.html">FOG code organization</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="ipc.html">Inter-process Communication (IPC)</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="jog.html">Runtime Metric Definition Subsystem: JOG</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="local_glean.html">Developing with a local Glean build</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="metric_ids.html">FOG Identifiers (Metric Ids, Submetric Ids, Ping Ids, …)</a></li>
+             <li class="toctree-l4 current"><a class="current reference internal" href="#">Adding a New Metric Type</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="preferences.html">Preferences and Defines</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="storage.html">Storage</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="style_guide.html">FOG Documentation Style Guide</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="testing.html">Testing</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="updating_parser.html">Updating glean_parser</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="updating_sdk.html">Updating the Glean SDK</a></li>
+             <li class="toctree-l4"><a class="reference external" href="https://github.com/mozilla/glean/">Glean SDK Source</a></li>
+            </ul></li>
+          </ul></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../modules/toolkit_modules/index.html">Toolkit Modules</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../content/toolkit_widgets/index.html">Toolkit Widgets</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../resistfingerprinting/resistfingerprinting/index.html">Fingerprinting Resistance</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../url-classifier/url-classifier/index.html">URL Classifier</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../extensions/webextensions/index.html">WebExtensions API Development</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../../extensions/spellcheck/index.html">Managing the built-in en-US dictionary</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../mozapps/update/docs/index.html">Application Update</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../antitracking/anti-tracking/index.html">Anti-Tracking</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../translations/index.html">Translations</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../sessionstore/index.html">Session Store</a></li>
+        </ul></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../js/index.html">SpiderMonkey</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../jsloader/index.html">JS Loader</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../mobile/android/geckoview/index.html">GeckoView</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../mobile/android/fenix/index.html">Fenix</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../mobile/android/focus-android/index.html">Focus for Android</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../dom/bindings/webidl/index.html">WebIDL</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../modules/libpref/index.html">libpref</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../networking/index.html">Networking</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../remote/index.html">Remote Protocols</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../services/index.html">Services</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../permissions/index.html">Permissions</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../uriloader/index.html">File Handling</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../widget/cocoa/index.html">Firefox on macOS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../widget/windows/index.html">Firefox on Windows</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../ml/index.html">Firefox AI Runtime</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../accessible/index.html">Accessibility</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../media/index.html">Media Playback</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../code-quality/index.html">Code quality</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../writing-rust-code/index.html">Writing Rust Code</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../rust-components/index.html">Rust Components</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../tools/profiler/index.html">Gecko Profiler</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../performance/index.html">Performance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../storage/index.html">Database bindings (SQLite, KV, …)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../xpcom/index.html">XPCOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../nspr/index.html">NSPR</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../security/nss/index.html">Network Security Services (NSS)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../content-security/index.html">Web Security Checks in Gecko</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">The Firefox Build System</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../mach/index.html">Mach</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../tools/try/index.html">Pushing to Try</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../build/buildsystem/index.html">Build System</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../taskcluster/index.html">Firefox CI and Taskgraph</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../tools/moztreedocs/index.html">Managing Documentation</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../mozbuild/vendor/index.html">Vendoring Third Party Components</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Testing &amp; Test Infrastructure</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/automated-testing/index.html">Automated Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/treeherder-try/index.html">Understanding Treeherder Results</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/sheriffed-intermittents/index.html">Sheriffed intermittent failures</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/tests-for-new-config/index.html">Turning on Firefox tests for a new configuration</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/intermittent/index.html">Avoiding intermittent tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/testing-policy/index.html">Testing Policy</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/ci-configs/index.html">Configuration Changes</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/browser-chrome/index.html">Browser chrome mochitests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/chrome-tests/index.html">Chrome Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/marionette/index.html">Marionette</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/geckodriver/index.html">geckodriver</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/test-verification/index.html">Test Verification</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/webrender/index.html">WebRender Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/mochitest-plain/index.html">Mochitest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/xpcshell/index.html">XPCShell tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/tps/index.html">TPS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../web-platform/index.html">web-platform-tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../gtest/index.html">GTest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../tools/fuzzing/index.html">Fuzzing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../tools/sanitizer/index.html">Sanitizer</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/perfdocs/index.html">Performance Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../tools/code-coverage/index.html">Code coverage</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing-rust-code/index.html">Testing &amp; Debugging Rust Code</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Releases &amp; Updates</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../update-infrastructure/index.html">Mozilla Update Infrastructure</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../update-infrastructure/index.html#watershed-updates">Watershed Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../update-infrastructure/index.html#desupport-updates">Desupport Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../tools/update-verify/index.html">Update Verify</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Localization &amp; Internationalization</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../intl/index.html">Internationalization</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../l10n/index.html">Localization</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox and Python</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../mozbase/index.html">mozbase</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../python/index.html">Using third-party Python packages</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Metrics Collected in Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../metrics/index.html">Metrics</a></li>
+      </ul>
+     </div>
+    </div>
+   </nav>
+   <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+    <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+     <i data-toggle="wy-nav-top" class="fa fa-bars"></i> <a href="../../../../index.html">Firefox Source Docs</a>
+    </nav>
+    <div class="wy-nav-content">
+     <div class="rst-content">
+      <!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+      <div role="navigation" aria-label="Page navigation">
+       <ul class="wy-breadcrumbs">
+        <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+        <li class="breadcrumb-item"><a href="../../../index.html">Toolkit</a></li>
+        <li class="breadcrumb-item"><a href="../index.html">Firefox on Glean (FOG)</a></li>
+        <li class="breadcrumb-item"><a href="index.html">Developing Firefox on Glean</a></li>
+        <li class="breadcrumb-item active">Adding a New Metric Type</li>
+        <li class="wy-breadcrumbs-aside"><a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Developer+Infrastructure&amp;component=Firefox+Source+Docs%3A+Content&amp;short_desc=Documentation+issue+on+toolkit/components/glean/dev/new_metric_types&amp;comment=URL+=+https://firefox-source-docs.mozilla.org/toolkit/components/glean/dev/new_metric_types.html&amp;bug_file_loc=https://firefox-source-docs.mozilla.org/toolkit/components/glean/dev/new_metric_types.html" rel="nofollow">Report an issue</a> / <a href="../../../../_sources/toolkit/components/glean/dev/new_metric_types.md.txt" rel="nofollow"> View page source</a></li>
+       </ul>
+       <hr>
+      </div>
+      <div role="main" class="document" itemscope itemtype="http://schema.org/Article">
+       <div itemprop="articleBody">
+        <section id="adding-a-new-metric-type">
+         <h1>Adding a New Metric Type<a class="headerlink" href="#adding-a-new-metric-type" title="Link to this heading">?</a></h1>
+         <p>This document covers how to add a new metric type to FOG. You should only have to do this if a new metric type is added to the <a class="reference external" href="https://mozilla.github.io/glean/book/user/metrics/index.html">Glean SDK</a> and it is needed in Firefox Desktop.</p>
+         <section id="ipc">
+          <h2>IPC<a class="headerlink" href="#ipc" title="Link to this heading">?</a></h2>
+          <p>For detailed information about the IPC design, including a list of forbidden operations, please consult <a class="reference internal" href="ipc.html"><span class="std std-doc">the FOG IPC documentation</span></a>.</p>
+          <p>When adding a new metric type, the main IPC considerations are:</p>
+          <ul class="simple">
+           <li>
+            <p>Which operations are forbidden by default because they are not commutative?</p>
+            <ul>
+             <li>
+              <p>Most <code class="docutils literal notranslate"><span class="pre">set</span></code>-style operations cannot be reconciled sensibly across multiple processes.</p></li>
+             <li>
+              <p>However, through use of the <code class="docutils literal notranslate"><span class="pre">permit_non_commutative_operations_over_ipc</span></code> metric metadata property, these “forbidden by default” operations can still be used.</p></li>
+            </ul></li>
+           <li>
+            <p>What partial representation will this metric have in non-main processes? Put another way, what shape of storage will this take up in the <a class="reference external" href="https://hg.mozilla.org/mozilla-central/file/tip/toolkit/components/glean/api/src/ipc.rs">IPC Payload</a>?</p>
+            <ul>
+             <li>
+              <p>For example, Counters can aggregate all partial counts together to a single “partial sum”. So <a class="reference external" href="https://searchfox.org/mozilla-central/rev/803b368879fa332e8e2c1840bf1ec164f7ed2c32/toolkit/components/glean/api/src/ipc.rs#45">its representation</a> in the IPC Payload is just a single number per Counter.</p></li>
+             <li>
+              <p>In contrast, Timing Distributions’ bucket arrangements are known only to the core, so it can’t combine sample counts in child processes. Instead we record durations in the highest resolution (nanos), and send a stream of high-precision samples across IPC.</p></li>
+            </ul></li>
+          </ul>
+          <p>To implement IPC support in a metric type, we split FOG’s Rust implementation of the metric into three pieces:</p>
+          <ol class="arabic simple">
+           <li>
+            <p>An umbrella <code class="docutils literal notranslate"><span class="pre">enum</span></code> with the name <code class="docutils literal notranslate"><span class="pre">MetricTypeMetric</span></code>.</p>
+            <ul class="simple">
+             <li>
+              <p>It has a <code class="docutils literal notranslate"><span class="pre">Child</span></code> and a <code class="docutils literal notranslate"><span class="pre">Parent</span></code> variant.</p>
+              <ul>
+               <li>
+                <p>If there are non-commutative operations that need to be supported only occasionally, you will also need an <code class="docutils literal notranslate"><span class="pre">UnorderedChild</span></code> variant. It will be constructed via a <code class="docutils literal notranslate"><span class="pre">with_unordered_ipc</span></code> constructor called by Rust codegen.</p></li>
+              </ul></li>
+             <li>
+              <p>It is IPC-aware and is responsible for</p>
+              <ul>
+               <li>
+                <p>If on a non-parent-process, storing partial representations in the IPC Payload, and logging errors if forbidden non-test APIs are called. (Or panicking if test APIs are called.)</p></li>
+               <li>
+                <p>If on the parent process, dispatching API calls on its inner Rust Language Binding metric.</p></li>
+              </ul></li>
+            </ul></li>
+           <li>
+            <p>The parent-process implementation is supplied by <a class="reference external" href="https://crates.io/crates/glean/">the RLB</a>.</p>
+            <ul class="simple">
+             <li>
+              <p>For testing, it stores the <code class="docutils literal notranslate"><span class="pre">MetricId</span></code> that identifies this particular metric in a cross-process fashion.</p></li>
+             <li>
+              <p>For testing, it exposes a <code class="docutils literal notranslate"><span class="pre">child_metric()</span></code> function to create its <code class="docutils literal notranslate"><span class="pre">Child</span></code> equivalent.</p></li>
+             <li>
+              <p>For testing and if it supports operations in a non-parent-process, it exposes a <code class="docutils literal notranslate"><span class="pre">metric_id()</span></code> function to access the stored <code class="docutils literal notranslate"><span class="pre">MetricId</span></code>.</p></li>
+            </ul></li>
+           <li>
+            <p>The <code class="docutils literal notranslate"><span class="pre">MetricTypeIpc</span></code> is the non-parent-process implementation.</p>
+            <ul class="simple">
+             <li>
+              <p>If it does support operations in non-parent processes it stores the <code class="docutils literal notranslate"><span class="pre">MetricId</span></code> that identifies this particular metric in a cross-process fashion.</p></li>
+            </ul></li>
+          </ol>
+         </section>
+         <section id="mirrors">
+          <h2>Mirrors<a class="headerlink" href="#mirrors" title="Link to this heading">?</a></h2>
+          <p>FOG can mirror Glean metrics to Telemetry probes via the <a class="reference internal" href="../user/gifft.html"><span class="std std-doc">Glean Interface For Firefox Telemetry</span></a>.</p>
+          <p>Can this metric type be mirrored? Should it be mirrored?</p>
+          <p>If so, add an appropriate Telemetry probe for it to mirror to, documenting the compatibility in <a class="reference internal" href="../user/gifft.html"><span class="std std-doc">the GIFFT docs</span></a>. Also inform <a class="reference external" href="https://searchfox.org/mozilla-central/source/toolkit/components/glean/build_scripts/glean_parser_ext/run_glean_parser.py">toolkit/components/glean/build_scripts/glean_parser_ext/run_glean_parser.py</a> that your new type is mirrorable by placing its name in the part of <code class="docutils literal notranslate"><span class="pre">GIFFT_TYPES</span></code> that contains the mirrored probe type (Event, Histogram, Scalar).</p>
+          <section id="gifft-tests">
+           <h3>GIFFT Tests<a class="headerlink" href="#gifft-tests" title="Link to this heading">?</a></h3>
+           <p>If you add a GIFFT mirror, don’t forget to test that the mirror works. You should be able to do this by adding a task to <a class="reference external" href="https://hg.mozilla.org/mozilla-central/file/tip/toolkit/components/glean/tests/xpcshell/test_GIFFT.js"><code class="docutils literal notranslate"><span class="pre">toolkit/components/glean/tests/xpcshell/test_GIFFT.js</span></code></a>.</p>
+          </section>
+          <section id="gifft-c-state-typical-locking-and-shutdown">
+           <h3>GIFFT C++ State: Typical Locking and Shutdown<a class="headerlink" href="#gifft-c-state-typical-locking-and-shutdown" title="Link to this heading">?</a></h3>
+           <p>Some metric types (<code class="docutils literal notranslate"><span class="pre">labeled_*</span></code>, <code class="docutils literal notranslate"><span class="pre">timespan</span></code>, <code class="docutils literal notranslate"><span class="pre">timing_distribution</span></code>) require holding state in C++ to make GIFFT work. Pings also hold state to support <code class="docutils literal notranslate"><span class="pre">testBeforeNextSubmit()</span></code>. If your new metric type requires state in C++, the current state-of-the-art is a <code class="docutils literal notranslate"><span class="pre">StaticDataMutex</span></code>-locked <code class="docutils literal notranslate"><span class="pre">UniquePtr</span></code> to a <code class="docutils literal notranslate"><span class="pre">nsTHashTable</span></code>. Access to the inner map is guarded by the lock and is controlled and lazily-instantiated through a single access function. <a class="reference external" href="https://searchfox.org/mozilla-central/source/toolkit/components/glean/bindings/private/Ping.cpp">See Ping’s <code class="docutils literal notranslate"><span class="pre">GetCallbackMapLock()</span></code></a> for example.</p>
+           <p>It is important to clear this state to avoid leaks. (See <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1752417">bug 1752417</a>.) However, instrumentation may call metrics APIs at any time.</p>
+           <p>Therefore, GIFFT explicitly stops supporting these state-requiring operations after the <a class="reference external" href="https://searchfox.org/mozilla-central/source/xpcom/base/ShutdownPhase.h"><code class="docutils literal notranslate"><span class="pre">AppShutdownTelemetry</span></code> shutdown phase</a>. This is because during the next phase (<code class="docutils literal notranslate"><span class="pre">XPCOMWillShutdown</span></code>) we clear the state.</p>
+          </section>
+         </section>
+         <section id="rust">
+          <h2>Rust<a class="headerlink" href="#rust" title="Link to this heading">?</a></h2>
+          <p>FOG uses the Rust Language Binding APIs (the <code class="docutils literal notranslate"><span class="pre">glean</span></code> crate) with a layer of IPC on top.</p>
+          <p>The IPC additions and glean-core trait implementations are in the <a class="reference external" href="https://hg.mozilla.org/mozilla-central/file/tip/toolkit/components/glean/api/src/metrics"><code class="docutils literal notranslate"><span class="pre">private</span></code> module of the <code class="docutils literal notranslate"><span class="pre">fog</span></code> crate</a>.</p>
+          <p>Each metric type gets its own file, mimicking the structure in <a class="reference external" href="https://github.com/mozilla/glean/tree/main/glean-core/src/metrics"><code class="docutils literal notranslate"><span class="pre">glean_core</span></code></a> and <a class="reference external" href="https://github.com/mozilla/glean/tree/main/glean-core/rlb/src/private"><code class="docutils literal notranslate"><span class="pre">glean</span></code></a>. Unless, of course, that metric is a labeled metric type. Then the sub metric type gets its own file, and you need to add “Labeledness” to it by implementing <code class="docutils literal notranslate"><span class="pre">Sealed</span></code> for your new type following the pattern in <a class="reference external" href="https://hg.mozilla.org/mozilla-central/file/tip/toolkit/components/glean/api/src/private/labeled.rs"><code class="docutils literal notranslate"><span class="pre">api/src/private/labeled.rs</span></code></a>.</p>
+          <p>Every method on the metric type is public for now, including test methods, and is at least all the methods exposed via the <a class="reference external" href="https://github.com/mozilla/glean/tree/main/glean-core/src/traits">metric traits</a>.</p>
+          <p>To support IPC and the MLA FFI (see below) we identify metric instances by MetricId and store them in maps in <a class="reference external" href="https://hg.mozilla.org/mozilla-central/toolkit/components/glean/api/src/metrics.rs">the <code class="docutils literal notranslate"><span class="pre">__glean_metric_maps</span></code> mod of <code class="docutils literal notranslate"><span class="pre">metrics.rs</span></code></a>. This work is done by the <code class="docutils literal notranslate"><span class="pre">rust.py</span></code> and <code class="docutils literal notranslate"><span class="pre">rust(_pings).jinja2</span></code> extensions to <code class="docutils literal notranslate"><span class="pre">glean_parser</span></code> found <a class="reference external" href="https://searchfox.org/mozilla-central/source/toolkit/components/glean/build_scripts/glean_parser_ext">in the <code class="docutils literal notranslate"><span class="pre">build_scripts/glean_parser_ext/</span></code> folder</a>.</p>
+          <p>You shouldn’t have to edit these files for new metric types, as the original modifications to <code class="docutils literal notranslate"><span class="pre">glean_parser</span></code> for this type should already be generating correct code.</p>
+          <section id="rust-tests">
+           <h3>Rust Tests<a class="headerlink" href="#rust-tests" title="Link to this heading">?</a></h3>
+           <p>You should be able to smoke test the basic functionality in Rust unit tests. You can do this within the metric type implementation file directly.</p>
+          </section>
+         </section>
+         <section id="c-and-js">
+          <h2>C++ and JS<a class="headerlink" href="#c-and-js" title="Link to this heading">?</a></h2>
+          <p>The C++ and JS APIs are implemented <a class="reference internal" href="code_organization.html"><span class="std std-doc">atop the Rust API</span></a>. We treat them both together since, though they’re different languages, they’re both implemented in C++ and share much of their implementation.</p>
+          <p>The overall design is to build the C++ API atop the Multi-Language Architecture’s (MLA’s) FFI, then build the JS API atop the C++ API. This allows features like the <a class="reference internal" href="../user/gifft.html"><span class="std std-doc">Glean Interface For Firefox Telemetry (GIFFT)</span></a> that target only C++ and JS to be more simply implemented in the C++ layer. Exceptions to this (where the JS uses the FFI directly) are discouraged.</p>
+          <p>Each metric type has six pieces you’ll need to cover:</p>
+          <section id="mla-ffi">
+           <h3>1. MLA FFI<a class="headerlink" href="#mla-ffi" title="Link to this heading">?</a></h3>
+           <ul class="simple">
+            <li>
+             <p>Using our convenient macros, define the metric type’s Multi-Language Architecture FFI layer above the Rust API in <a class="reference external" href="https://hg.mozilla.org/mozilla-central/file/tip/toolkit/components/glean/api/src/ffi/"><code class="docutils literal notranslate"><span class="pre">api/src/ffi/</span></code></a>.</p></li>
+           </ul>
+          </section>
+          <section id="c-impl">
+           <h3>2. C++ Impl<a class="headerlink" href="#c-impl" title="Link to this heading">?</a></h3>
+           <ul class="simple">
+            <li>
+             <p>Implement a type called <code class="docutils literal notranslate"><span class="pre">XMetric</span></code> (e.g. <code class="docutils literal notranslate"><span class="pre">CounterMetric</span></code>) in <code class="docutils literal notranslate"><span class="pre">mozilla::glean::impl</span></code> in <a class="reference external" href="https://hg.mozilla.org/mozilla-central/file/tip/toolkit/components/glean/bindings/private/"><code class="docutils literal notranslate"><span class="pre">bindings/private/</span></code></a>.</p>
+             <ul>
+              <li>
+               <p>Its methods should be named the same as the ones in the Rust API, transformed to <code class="docutils literal notranslate"><span class="pre">CamelCase</span></code>.</p></li>
+              <li>
+               <p>They should all be public.</p></li>
+              <li>
+               <p>Multiplex the FFI’s <code class="docutils literal notranslate"><span class="pre">test_have</span></code> and <code class="docutils literal notranslate"><span class="pre">test_get</span></code> functions into a single <code class="docutils literal notranslate"><span class="pre">TestGetValue</span></code> function that returns a <code class="docutils literal notranslate"><span class="pre">mozilla::Maybe</span></code> wrapping the C++ type that best fits the metric type.</p></li>
+             </ul></li>
+            <li>
+             <p>Include the new metric type in <a class="reference external" href="https://hg.mozilla.org/mozilla-central/file/tip/toolkit/components/glean/bindings/MetricTypes.h"><code class="docutils literal notranslate"><span class="pre">bindings/MetricTypes.h</span></code></a>.</p></li>
+            <li>
+             <p>Include the new files in <a class="reference external" href="https://hg.mozilla.org/mozilla-central/file/tip/toolkit/components/glean/moz.build"><code class="docutils literal notranslate"><span class="pre">moz.build</span></code></a>. The header file should be added to <code class="docutils literal notranslate"><span class="pre">EXPORTS.mozilla.glean.bindings</span></code> and the <code class="docutils literal notranslate"><span class="pre">.cpp</span></code> file should be added to <code class="docutils literal notranslate"><span class="pre">UNIFIED_SOURCES</span></code>.</p></li>
+           </ul>
+          </section>
+          <section id="idl">
+           <h3>3. IDL<a class="headerlink" href="#idl" title="Link to this heading">?</a></h3>
+           <ul>
+            <li>
+             <p>Duplicate the public API (including its docs) to <a class="reference external" href="https://searchfox.org/mozilla-central/source/dom/webidl/GleanMetrics.webidl">dom/webidl/GleanMetrics.webidl</a> with the name <code class="docutils literal notranslate"><span class="pre">GleanX</span></code> (e.g. <code class="docutils literal notranslate"><span class="pre">GleanCounter</span></code>).</p>
+             <ul class="simple">
+              <li>
+               <p>Inherit from <code class="docutils literal notranslate"><span class="pre">GleanMetric</span></code>.</p></li>
+              <li>
+               <p>The naming style for methods here is <code class="docutils literal notranslate"><span class="pre">lowerCamelCase</span></code>.</p></li>
+              <li>
+               <p>If the metric method is a reserved word, prepend it with a <code class="docutils literal notranslate"><span class="pre">_</span></code>.</p></li>
+              <li>
+               <p>Web IDL bindings use <a class="reference internal" href="../../../../dom/webIdlBindings/index.html"><span class="std std-doc">their own mapping for types</span></a>. If you choose ones that most closely resemble the C++ types, you’ll make your life easier.</p></li>
+             </ul></li>
+            <li>
+             <p>Add a new mapping in <code class="docutils literal notranslate"><span class="pre">dom/bindings/Bindings.conf</span></code>:</p>
+             <div class="highlight-idl notranslate">
+              <div class="highlight">
+               <pre><span></span><span class="s1">'GleanX'</span><span class="o">:</span><span class="w"> </span>{
+<span class="w">    </span><span class="s1">'nativeType'</span><span class="o">:</span><span class="w"> </span><span class="s1">'mozilla::glean::GleanX'</span>,
+<span class="w">    </span><span class="s1">'headerFile'</span><span class="o">:</span><span class="w"> </span><span class="s1">'mozilla/glean/bindings/X.h'</span>,
+},
+</pre>
+              </div>
+             </div>
+             <ul class="simple">
+              <li>
+               <p>If you don’t, you will get a build error complaining <code class="docutils literal notranslate"><span class="pre">fatal</span> <span class="pre">error:</span> <span class="pre">'mozilla/dom/GleanX.h'</span> <span class="pre">file</span> <span class="pre">not</span> <span class="pre">found</span></code>.</p></li>
+             </ul></li>
+           </ul>
+          </section>
+          <section id="js-impl">
+           <h3>4. JS Impl<a class="headerlink" href="#js-impl" title="Link to this heading">?</a></h3>
+           <ul class="simple">
+            <li>
+             <p>Implement the <code class="docutils literal notranslate"><span class="pre">GleanX</span></code> (e.g. <code class="docutils literal notranslate"><span class="pre">GleanCounter</span></code>) type in the same header and <code class="docutils literal notranslate"><span class="pre">.cpp</span></code> as <code class="docutils literal notranslate"><span class="pre">XMetric</span></code> in <a class="reference external" href="https://searchfox.org/mozilla-central/source/toolkit/components/glean/bindings/private/">toolkit/components/glean/bindings/private/</a></p>
+             <ul>
+              <li>
+               <p>It should own an instance of and delegate method implementations to <code class="docutils literal notranslate"><span class="pre">XMetric</span></code>.</p></li>
+              <li>
+               <p>In the definition of <code class="docutils literal notranslate"><span class="pre">GleanX</span></code>, member identifiers are back to <code class="docutils literal notranslate"><span class="pre">CamelCase</span></code>.</p></li>
+              <li>
+               <p>Test-only methods can throw <code class="docutils literal notranslate"><span class="pre">DataError</span></code> on failure.</p></li>
+              <li>
+               <p>Review the <a class="reference internal" href="#/dom/webIdlBindings/index.html"><span class="xref myst">Web IDL Bindings documentation</span></a> for help with optional, nullable, and non-primitive types.</p></li>
+             </ul></li>
+           </ul>
+          </section>
+          <section id="tests">
+           <h3>6. Tests<a class="headerlink" href="#tests" title="Link to this heading">?</a></h3>
+           <p>Two languages means two test suites.</p>
+           <ul class="simple">
+            <li>
+             <p>Add a never-expiring test-only metric of your type to <a class="reference external" href="https://hg.mozilla.org/mozilla-central/file/tip/toolkit/components/glean/tests/test_metrics.yaml"><code class="docutils literal notranslate"><span class="pre">test_metrics.yaml</span></code></a>.</p>
+             <ul>
+              <li>
+               <p>Feel free to be clever with the name, but be sure to make clear that it is test-only.</p></li>
+             </ul></li>
+            <li>
+             <p><strong>C++ Tests (GTest)</strong> - Add a small test case to <a class="reference external" href="https://hg.mozilla.org/mozilla-central/file/tip/toolkit/components/glean/tests/gtest/TestFog.cpp"><code class="docutils literal notranslate"><span class="pre">gtest/TestFog.cpp</span></code></a>.</p>
+             <ul>
+              <li>
+               <p>For more details, peruse the <a class="reference internal" href="testing.html"><span class="std std-doc">testing docs</span></a>.</p></li>
+             </ul></li>
+            <li>
+             <p><strong>JS Tests (xpcshell)</strong> - Add a small test case to <a class="reference external" href="https://hg.mozilla.org/mozilla-central/file/tip/toolkit/components/glean/tests/xpcshell/test_Glean.js"><code class="docutils literal notranslate"><span class="pre">xpcshell/test_Glean.js</span></code></a> and <a class="reference external" href="https://hg.mozilla.org/mozilla-central/file/tip/toolkit/components/glean/tests/xpcshell/test_JOG.js"><code class="docutils literal notranslate"><span class="pre">xpcshell/test_JOG.js</span></code></a>. If your metric type has supported IPC operations, also add cases to the <code class="docutils literal notranslate"><span class="pre">IPC</span></code> variants of these test files.</p>
+             <ul>
+              <li>
+               <p>For more details, peruse the <a class="reference internal" href="testing.html"><span class="std std-doc">testing docs</span></a>.</p></li>
+             </ul></li>
+           </ul>
+          </section>
+          <section id="api-documentation">
+           <h3>7. API Documentation<a class="headerlink" href="#api-documentation" title="Link to this heading">?</a></h3>
+           <p>Metric API Documentation is centralized in <a class="reference external" href="https://mozilla.github.io/glean/book/user/metrics/index.html">the Glean SDK Book</a>.</p>
+           <p>You will need to craft a Pull Request against <a class="reference external" href="https://github.com/mozilla/glean/">the SDK</a> adding a C++ and JS example to the specific metric type’s API docs.</p>
+           <p>Add a notice at the top of both examples that these APIs are only available in Firefox Desktop:</p>
+           <div class="highlight-md notranslate">
+            <div class="highlight">
+             <pre><span></span>&lt;div data-lang="C++" class="tab"&gt;
+
+<span class="k">&gt; </span><span class="ge">**Note**: C++ APIs are only available in Firefox Desktop.</span>
+
+<span class="sb">```cpp</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"mozilla/glean/GleanMetrics.h"</span>
+
+<span class="n">mozilla</span><span class="o">::</span><span class="n">glean</span><span class="o">::</span><span class="n">category_name</span><span class="o">::</span><span class="n">metric_name</span><span class="p">.</span><span class="n">Api</span><span class="p">(</span><span class="n">args</span><span class="p">);</span>
+<span class="sb">```</span>
+
+There are test APIs available too:
+
+<span class="sb">```cpp</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"mozilla/glean/GleanMetrics.h"</span>
+
+<span class="n">ASSERT_EQ</span><span class="p">(</span><span class="n">value</span><span class="p">,</span><span class="w"> </span><span class="n">mozilla</span><span class="o">::</span><span class="n">glean</span><span class="o">::</span><span class="n">category_name</span><span class="o">::</span><span class="n">metric_name</span><span class="p">.</span><span class="n">TestGetValue</span><span class="p">().</span><span class="n">ref</span><span class="p">());</span>
+<span class="sb">```</span>
+&lt;/div&gt;
+
+// and again for &lt;div data-lang="JS"&gt;
+</pre>
+            </div>
+           </div>
+           <p>If you’re lucky, the Rust API will have already been added. Otherwise you’ll need to write an example for that one too.</p>
+          </section>
+          <section id="labeled-metrics-if-necessary">
+           <h3>8. Labeled metrics (if necessary)<a class="headerlink" href="#labeled-metrics-if-necessary" title="Link to this heading">?</a></h3>
+           <p>If your new metric type is Labeled, you have more work to do. I’m assuming you’ve already implemented the non-labeled sub metric type following the steps above. Now you must add “Labeledness” to it.</p>
+           <p>There are five pieces to this:</p>
+           <section id="id1">
+            <h4>Rust<a class="headerlink" href="#id1" title="Link to this heading">?</a></h4>
+            <ul class="simple">
+             <li>
+              <p>If your new labeled metric type supports IPC, you will need to build a type called <code class="docutils literal notranslate"><span class="pre">LabeledXMetric</span></code> in a file called <code class="docutils literal notranslate"><span class="pre">labeled_x.rs</span></code> (e.g. <a class="reference external" href="https://searchfox.org/mozilla-central/source/toolkit/components/glean/api/src/private/labeled_counter.rs">toolkit/components/glean/api/src/private/labeled_counter.rs</a>) that stores the submetric’s label between calls so it can supply it to the IPC payload.</p></li>
+             <li>
+              <p>If your new labeled metric type does not support IPC, you will still need a <code class="docutils literal notranslate"><span class="pre">LabeledXMetric</span></code> type, but this one can be a re-export of the unlabeled type by putting <code class="docutils literal notranslate"><span class="pre">pub</span> <span class="pre">use</span> <span class="pre">self::x::XMetric</span> <span class="pre">as</span> <span class="pre">LabeledXMetric;</span></code> in <a class="reference external" href="https://searchfox.org/mozilla-central/source/toolkit/components/glean/api/src/private/mod.rs">toolkit/components/glean/api/src/private/mod.rs</a> (e.g. <code class="docutils literal notranslate"><span class="pre">LabeledBooleanMetric</span></code>).</p></li>
+            </ul>
+           </section>
+           <section id="ffi">
+            <h4>FFI<a class="headerlink" href="#ffi" title="Link to this heading">?</a></h4>
+            <ul class="simple">
+             <li>
+              <p>To add the writeable storage Rust will use to store the dynamically-generated sub metric instances, add your sub metric type’s map as a list item in the <code class="docutils literal notranslate"><span class="pre">submetric_maps</span></code> <code class="docutils literal notranslate"><span class="pre">mod</span></code> of <a class="reference external" href="https://searchfox.org/mozilla-central/source/toolkit/components/glean/build_scripts/glean_parser_ext/templates/rust.jinja2">toolkit/components/glean/build_scripts/glean_parser_ext/templates/rust.jinja2</a>.</p></li>
+             <li>
+              <p>Following the pattern of the others, add a <code class="docutils literal notranslate"><span class="pre">fog_{your</span> <span class="pre">labeled</span> <span class="pre">metric</span> <span class="pre">name</span> <span class="pre">here}_get()</span></code> FFI API to <code class="docutils literal notranslate"><span class="pre">api/src/ffi/mod.rs</span></code>. This is what C++ and JS will use to allocate and retrieve sub metric instances by id.</p></li>
+             <li>
+              <p>Finally, augment the <code class="docutils literal notranslate"><span class="pre">with_metric!</span></code> macro to recognize that your type is sometimes labeled by using the <code class="docutils literal notranslate"><span class="pre">maybe_labeled_with_metric!</span></code> submacro in <a class="reference external" href="https://searchfox.org/mozilla-central/source/toolkit/components/glean/api/src/ffi/macros.rs">toolkit/components/glean/api/src/ffi/macros.rs</a>.</p></li>
+            </ul>
+           </section>
+           <section id="c">
+            <h4>C++<a class="headerlink" href="#c" title="Link to this heading">?</a></h4>
+            <ul class="simple">
+             <li>
+              <p>Following the pattern of the others, add a template specialization for both <code class="docutils literal notranslate"><span class="pre">Labeled&lt;YourSubMetric,</span> <span class="pre">E&gt;::{EnumGet|Get}</span></code> and <code class="docutils literal notranslate"><span class="pre">Labeled&lt;YourSubMetric,</span> <span class="pre">DynamicLabel&gt;</span></code> to <a class="reference external" href="https://searchfox.org/mozilla-central/source/toolkit/components/glean/bindings/private/Labeled.h">toolkit/components/glean/bindings/private/Labeled.h</a>. This will ensure C++ consumers can fetch or create sub metric instances.</p></li>
+             <li>
+              <p>For GIFFT, ensure the submetric type (e.g. <code class="docutils literal notranslate"><span class="pre">quantity</span></code> for <code class="docutils literal notranslate"><span class="pre">labeled_quantity</span></code>) is aware that its mirrors might be submetric mirrors (ie, check <code class="docutils literal notranslate"><span class="pre">IsSubmetricId(mId)</span></code> and, if so, look at the labeled mirror map).</p></li>
+            </ul>
+           </section>
+           <section id="js">
+            <h4>JS<a class="headerlink" href="#js" title="Link to this heading">?</a></h4>
+            <ul class="simple">
+             <li>
+              <p>Already handled for you since the JS types all inherit from <code class="docutils literal notranslate"><span class="pre">GleanMetric</span></code> and the JS template knows to add your new type to <code class="docutils literal notranslate"><span class="pre">NewSubMetricFromIds(...)</span></code> (see <code class="docutils literal notranslate"><span class="pre">GleanLabeled::NamedGetter</span></code> if you’re curious).</p></li>
+            </ul>
+           </section>
+           <section id="id2">
+            <h4>Tests<a class="headerlink" href="#id2" title="Link to this heading">?</a></h4>
+            <ul class="simple">
+             <li>
+              <p>The labeled variant will need tests the same as Step #6. A tip: be sure to test two labels with different values.</p></li>
+            </ul>
+           </section>
+          </section>
+         </section>
+         <section id="python-tests">
+          <h2>Python Tests<a class="headerlink" href="#python-tests" title="Link to this heading">?</a></h2>
+          <p>We have a suite of tests for ensuring code generation generates appropriate code. You should add a metric to <a class="reference internal" href="testing.html"><span class="std std-doc">that suite</span></a> for your new metric type. You will need to regenerate the expected files.</p>
+         </section>
+        </section>
+       </div>
+      </div>
+      <footer>
+       <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="metric_ids.html" class="btn btn-neutral float-left" title="FOG Identifiers (Metric Ids, Submetric Ids, Ping Ids, …)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a> <a href="preferences.html" class="btn btn-neutral float-right" title="Preferences and Defines" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+       </div>
+       <hr>
+       <div role="contentinfo">
+        <p></p>
+       </div> Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+      </footer>
+     </div>
+    </div>
+   </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ </body>
+</html>

@@ -1,0 +1,466 @@
+<!doctype html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Firefox for Android — Firefox Source Docs  documentation</title>
+  <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50">
+  <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094">
+  <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=fd3f3429">
+  <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b">
+  <link rel="stylesheet" type="text/css" href="../../_static/custom_theme.css?v=dc5ed815">
+  <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7">
+  <link rel="shortcut icon" href="../../_static/firefox.ico"><!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script src="../../_static/jquery.js?v=5d32c60e"></script>
+  <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+  <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+  <script src="../../_static/doctools.js?v=9a2dae69"></script>
+  <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+  <script src="../../_static/copybutton.js?v=30646c52"></script>
+  <script src="../../_static/design-tabs.js?v=36754332"></script>
+  <script src="../../_static/js/theme.js"></script>
+  <link rel="index" title="Index" href="../../genindex.html">
+  <link rel="search" title="Search" href="../../search.html">
+  <link rel="next" title="Firefox for iOS" href="../../overview/ios.html">
+  <link rel="prev" title="Firefox for Desktop" href="../../browser/overview.html">
+ </head>
+ <body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+   <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <div class="wy-side-scroll">
+     <div class="wy-side-nav-search">
+      <a href="../../index.html" class="icon icon-home"> Firefox Source Docs <img src="../../_static/firefox-wordmark.svg" class="logo" alt="Logo"> </a><!-- -- This code is governed by the BSD license ---->
+      <div>
+       <h3>Quick search</h3>
+       <script>
+    (function () {
+      var cx = "dd12886298f75dbef";
+      var gcse = document.createElement("script");
+      gcse.async = true;
+      gcse.src = "https://cse.google.com/cse.js?cx=" + cx;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(gcse, s);
+    })();
+  </script><gcse:search></gcse:search>
+      </div>
+     </div>
+     <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+      <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+      <ul class="current">
+       <li class="toctree-l1"><a class="reference internal" href="../../glossary/index.html">A Glossary of Common Terms</a></li>
+       <li class="toctree-l1 current"><a class="reference internal" href="../../overview/index.html">A Quick Guide to Mozilla Applications</a>
+        <ul class="current">
+         <li class="toctree-l2"><a class="reference internal" href="../../overview/gecko.html">Gecko</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../browser/overview.html">Firefox for Desktop</a></li>
+         <li class="toctree-l2 current"><a class="current reference internal" href="#">Firefox for Android</a>
+          <ul>
+           <li class="toctree-l3"><a class="reference internal" href="#mozilla-central-setup">Mozilla Central Setup</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#bootstrap">Bootstrap</a>
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="#a-you-will-not-change-or-debug-any-c-code">A- You will not change or debug any C++ code:</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#b-you-intend-to-change-or-debug-c-code">B- You intend to change or debug C++ code:</a></li>
+            </ul></li>
+           <li class="toctree-l3"><a class="reference internal" href="#build-from-the-command-line">Build from the command line</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#build-using-android-studio">Build Using Android Studio</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#mobile-devices-and-emulators">Mobile Devices and Emulators</a>
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="#custom-avd">Custom AVD</a></li>
+            </ul></li>
+           <li class="toctree-l3"><a class="reference internal" href="#custom-mozconfig-with-android-studio">Custom mozconfig with Android Studio</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#project-specific-instructions">Project-Specific Instructions</a></li>
+          </ul></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../overview/ios.html">Firefox for iOS</a></li>
+        </ul></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../setup/index.html">Getting Set Up To Work On The Firefox Codebase</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Working On Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Working on Firefox</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../bug-mgmt/index.html">Bug Handling</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox User Guide</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../devtools-user/index.html">Firefox DevTools User Docs</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Source Code Documentation</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mots/index.html">Governance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../browser/index.html">Firefox Front-end</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../dom/index.html">DOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../editor/index.html">Editor</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../layout/index.html">Style system (CSS) &amp; Layout</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../gfx/index.html">Graphics</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../ipc/index.html">Processes, Threads and IPC</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../devtools/index.html">Firefox DevTools Contributor Docs</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../toolkit/index.html">Toolkit</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../js/index.html">SpiderMonkey</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../jsloader/index.html">JS Loader</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="geckoview/index.html">GeckoView</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="fenix/index.html">Fenix</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="focus-android/index.html">Focus for Android</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../dom/bindings/webidl/index.html">WebIDL</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../modules/libpref/index.html">libpref</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../networking/index.html">Networking</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../remote/index.html">Remote Protocols</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../services/index.html">Services</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../permissions/index.html">Permissions</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../uriloader/index.html">File Handling</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../widget/cocoa/index.html">Firefox on macOS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../widget/windows/index.html">Firefox on Windows</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../toolkit/components/ml/index.html">Firefox AI Runtime</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../accessible/index.html">Accessibility</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../media/index.html">Media Playback</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../code-quality/index.html">Code quality</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../writing-rust-code/index.html">Writing Rust Code</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../rust-components/index.html">Rust Components</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/profiler/index.html">Gecko Profiler</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../performance/index.html">Performance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../storage/index.html">Database bindings (SQLite, KV, …)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../xpcom/index.html">XPCOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../nspr/index.html">NSPR</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../security/nss/index.html">Network Security Services (NSS)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../content-security/index.html">Web Security Checks in Gecko</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">The Firefox Build System</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mach/index.html">Mach</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/try/index.html">Pushing to Try</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../build/buildsystem/index.html">Build System</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../taskcluster/index.html">Firefox CI and Taskgraph</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/moztreedocs/index.html">Managing Documentation</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mozbuild/vendor/index.html">Vendoring Third Party Components</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Testing &amp; Test Infrastructure</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/automated-testing/index.html">Automated Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/treeherder-try/index.html">Understanding Treeherder Results</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/sheriffed-intermittents/index.html">Sheriffed intermittent failures</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/tests-for-new-config/index.html">Turning on Firefox tests for a new configuration</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/intermittent/index.html">Avoiding intermittent tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/testing-policy/index.html">Testing Policy</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/ci-configs/index.html">Configuration Changes</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/browser-chrome/index.html">Browser chrome mochitests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/chrome-tests/index.html">Chrome Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/marionette/index.html">Marionette</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/geckodriver/index.html">geckodriver</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/test-verification/index.html">Test Verification</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/webrender/index.html">WebRender Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/mochitest-plain/index.html">Mochitest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/xpcshell/index.html">XPCShell tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/tps/index.html">TPS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../web-platform/index.html">web-platform-tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../gtest/index.html">GTest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/fuzzing/index.html">Fuzzing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/sanitizer/index.html">Sanitizer</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/perfdocs/index.html">Performance Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/code-coverage/index.html">Code coverage</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing-rust-code/index.html">Testing &amp; Debugging Rust Code</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Releases &amp; Updates</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html">Mozilla Update Infrastructure</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html#watershed-updates">Watershed Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html#desupport-updates">Desupport Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/update-verify/index.html">Update Verify</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Localization &amp; Internationalization</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../intl/index.html">Internationalization</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../l10n/index.html">Localization</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox and Python</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mozbase/index.html">mozbase</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../python/index.html">Using third-party Python packages</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Metrics Collected in Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../metrics/index.html">Metrics</a></li>
+      </ul>
+     </div>
+    </div>
+   </nav>
+   <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+    <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+     <i data-toggle="wy-nav-top" class="fa fa-bars"></i> <a href="../../index.html">Firefox Source Docs</a>
+    </nav>
+    <div class="wy-nav-content">
+     <div class="rst-content">
+      <!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+      <div role="navigation" aria-label="Page navigation">
+       <ul class="wy-breadcrumbs">
+        <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+        <li class="breadcrumb-item"><a href="../../overview/index.html">A Quick Guide to Mozilla Applications</a></li>
+        <li class="breadcrumb-item active">Firefox for Android</li>
+        <li class="wy-breadcrumbs-aside"><a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Developer+Infrastructure&amp;component=Firefox+Source+Docs%3A+Content&amp;short_desc=Documentation+issue+on+mobile/android/index&amp;comment=URL+=+https://firefox-source-docs.mozilla.org/mobile/android/index.html&amp;bug_file_loc=https://firefox-source-docs.mozilla.org/mobile/android/index.html" rel="nofollow">Report an issue</a> / <a href="../../_sources/mobile/android/index.rst.txt" rel="nofollow"> View page source</a></li>
+       </ul>
+       <hr>
+      </div>
+      <div role="main" class="document" itemscope itemtype="http://schema.org/Article">
+       <div itemprop="articleBody">
+        <section id="firefox-for-android">
+         <h1>Firefox for Android<a class="headerlink" href="#firefox-for-android" title="Link to this heading">?</a></h1>
+         <p id="id1">Firefox for Android consists of three layers:</p>
+         <ul class="simple">
+          <li>
+           <p>GeckoView: This is a library that brings the Gecko API to Android.</p></li>
+          <li>
+           <p>Android Components: This is a library of reusable browser building blocks.</p></li>
+          <li>
+           <p>Frontend (Fenix): This refers to the frontend interface.</p></li>
+         </ul>
+         <p>All three components can be found in <code class="docutils literal notranslate"><span class="pre">mozilla-central</span></code>. To contribute to any of the three, you will need to get set up as a contributor to Firefox.</p>
+         <section id="mozilla-central-setup">
+          <h2>Mozilla Central Setup<a class="headerlink" href="#mozilla-central-setup" title="Link to this heading">?</a></h2>
+          <p id="id2">To set up Mozilla Central, you can follow the general instructions provided in the Mozilla Source Docs:</p>
+          <ul class="simple">
+           <li>
+            <p><a class="reference internal" href="../../setup/index.html#getting-set-up-to-work-on-the-firefox-codebase"><span class="std std-ref">Getting Set Up To Work On The Firefox Codebase</span></a></p></li>
+          </ul>
+          <p>Additionally, to set up specifically for mozilla-central, you can refer to the following guide:</p>
+          <ul class="simple">
+           <li>
+            <p><a class="reference internal" href="geckoview/contributor/contributing-to-mc.html#contribute-with-git"><span class="std std-ref">Quick Start Guide for Git Users</span></a></p></li>
+          </ul>
+         </section>
+         <section id="bootstrap">
+          <h2>Bootstrap<a class="headerlink" href="#bootstrap" title="Link to this heading">?</a></h2>
+          <p id="bootstrap-setup">Bootstrap configures everything for GeckoView and Fenix (Firefox for Android) development.</p>
+          <ul class="simple">
+           <li>
+            <p>Ensure you have <code class="docutils literal notranslate"><span class="pre">mozilla-central</span></code> checked out. If this is the first time you are doing this, it may take some time.</p></li>
+          </ul>
+          <div class="highlight-bash notranslate">
+           <div class="highlight">
+            <pre><span></span>git<span class="w"> </span>checkout<span class="w"> </span>central/default
+</pre>
+           </div>
+          </div>
+          <p>If you are on a mac, you will need to have the Xcode build tools installed. You can do this by either <a class="reference external" href="https://developer.apple.com/xcode/">installing Xcode</a> or installing only the tools from the command line by running <code class="docutils literal notranslate"><span class="pre">xcode-select</span> <span class="pre">--install</span></code> and following the on screen instructions.</p>
+          <p>If you are on a newer mac with an Apple Silicon M2 or M3 processor, you also need to install rosetta for backwards compatilibilty:</p>
+          <div class="highlight-bash notranslate">
+           <div class="highlight">
+            <pre><span></span>softwareupdate<span class="w"> </span>--install-rosetta
+</pre>
+           </div>
+          </div>
+          <p>You will need to <code class="docutils literal notranslate"><span class="pre">bootstrap</span></code> for GeckoView/Firefox for Android. The easiest way is to run the following command:</p>
+          <div class="highlight-bash notranslate">
+           <div class="highlight">
+            <pre><span></span>./mach<span class="w"> </span>--no-interactive<span class="w"> </span>bootstrap<span class="w"> </span>--application-choice<span class="o">=</span><span class="s2">"GeckoView/Firefox for Android"</span>
+</pre>
+           </div>
+          </div>
+          <div class="admonition note">
+           <p class="admonition-title">Note</p>
+           <ul class="simple">
+            <li>
+             <p>The <code class="docutils literal notranslate"><span class="pre">--no-interactive</span></code> argument will make <code class="docutils literal notranslate"><span class="pre">bootstrap</span></code> run start to finish without requiring any input from you. It will automatically accept any license agreements.</p></li>
+            <li>
+             <p>The <code class="docutils literal notranslate"><span class="pre">--application-choice="GeckoView/Firefox</span> <span class="pre">for</span> <span class="pre">Android"</span></code> argument is needed when using <code class="docutils literal notranslate"><span class="pre">--no-interactive</span></code> so that “bootstrapping” is done for the correct application (instead of the default).</p></li>
+           </ul>
+           <p>If you want to make all the selections yourself and/or read through the license agreements, you can simply run:</p>
+           <div class="highlight-bash notranslate">
+            <div class="highlight">
+             <pre><span></span>./mach<span class="w"> </span>bootstrap
+</pre>
+            </div>
+           </div>
+          </div>
+          <p>You should then choose one the following options:</p>
+          <section id="a-you-will-not-change-or-debug-any-c-code">
+           <h3>A- You will not change or debug any C++ code:<a class="headerlink" href="#a-you-will-not-change-or-debug-any-c-code" title="Link to this heading">?</a></h3>
+           <p>Choose: <code class="docutils literal notranslate"><span class="pre">3.</span> <span class="pre">GeckoView/Firefox</span> <span class="pre">for</span> <span class="pre">Android</span> <span class="pre">Artifact</span> <span class="pre">Mode</span></code></p>
+           <p>Artifact mode downloads pre-built C++ components rather than building them locally, trading bandwidth for time. (more on Artifact mode)</p>
+          </section>
+          <section id="b-you-intend-to-change-or-debug-c-code">
+           <h3>B- You intend to change or debug C++ code:<a class="headerlink" href="#b-you-intend-to-change-or-debug-c-code" title="Link to this heading">?</a></h3>
+           <p>Choose: <code class="docutils literal notranslate"><span class="pre">4.</span> <span class="pre">GeckoView/Firefox</span> <span class="pre">for</span> <span class="pre">Android</span></code></p>
+           <p>This will build GeckoView from scratch, and take more time than the option above.</p>
+           <p>Once <code class="docutils literal notranslate"><span class="pre">./mach</span> <span class="pre">bootstrap</span></code> is complete, it will automatically write the configuration into a new <code class="docutils literal notranslate"><span class="pre">mozconfig</span></code> file. If you already have a <code class="docutils literal notranslate"><span class="pre">mozconfig</span></code>, mach will instead output a new configuration that you should append to your existing file.</p>
+          </section>
+         </section>
+         <section id="build-from-the-command-line">
+          <h2>Build from the command line<a class="headerlink" href="#build-from-the-command-line" title="Link to this heading">?</a></h2>
+          <p id="build-from-cmd-line">In order to pick up the configuration changes we just made we need to build from the command line. This will update generated sources, compile native code, and produce GeckoView AARs and example and test APKs.</p>
+          <div class="highlight-bash notranslate">
+           <div class="highlight">
+            <pre><span></span>./mach<span class="w"> </span>build
+</pre>
+           </div>
+          </div>
+         </section>
+         <section id="build-using-android-studio">
+          <h2>Build Using Android Studio<a class="headerlink" href="#build-using-android-studio" title="Link to this heading">?</a></h2>
+          <ul class="simple" id="build-with-android-studio">
+           <li>
+            <p>Install <a class="reference external" href="https://developer.android.com/studio/install">Android Studio</a>.</p></li>
+           <li>
+            <p>If on Windows, create a JAVA_HOME environment variable and set it to the path of the Android Studio jbr. With the default installation locations, it is <code class="docutils literal notranslate"><span class="pre">C:\Program</span> <span class="pre">Files\Android\Android</span> <span class="pre">Studio\jbr</span></code>.</p></li>
+           <li>
+            <p>Choose File-&gt;Open from the toolbar</p></li>
+           <li>
+            <p>Navigate to the root of your <code class="docutils literal notranslate"><span class="pre">mozilla-central</span></code> source directory and click “Open”</p></li>
+           <li>
+            <p>Click yes if it asks if you want to use the gradle wrapper.</p>
+            <ul>
+             <li>
+              <p>If the gradle sync does not automatically start, select File &gt; Sync Project with Gradle Files.</p></li>
+            </ul></li>
+           <li>
+            <p>Wait for the project to index and gradle to sync. Once synced, the workspace will reconfigure to display the different projects.</p>
+            <ul>
+             <li>
+              <p>annotations contains custom Java annotations used inside GeckoView</p></li>
+             <li>
+              <p>app contains geckoview build settings and omnijar. omnijar contains the parts of Gecko and GeckoView that are not written in Java or Kotlin</p></li>
+             <li>
+              <p>geckoview is the GeckoView project. Here is all the Java files related to GeckoView</p></li>
+             <li>
+              <p>geckoview_example is an example browser built using GeckoView.</p></li>
+            </ul></li>
+          </ul>
+          <p>Now you’re set up and ready to go.</p>
+          <p><strong>Important: at this time, building from Android Studio or directly from Gradle does not (re-)compile native code, including C++ and Rust.</strong> This means you will need to run <code class="docutils literal notranslate"><span class="pre">mach</span> <span class="pre">build</span></code> yourself to pick up changes to native code. <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1509539">Bug 1509539</a> tracks making Android Studio and Gradle do this automatically.</p>
+          <p>If you want set up code formatting for Kotlin, please reference <a class="reference external" href="https://pinterest.github.io/ktlint/rules/configuration-intellij-idea/">IntelliJ IDEA configuration</a>.</p>
+         </section>
+         <section id="mobile-devices-and-emulators">
+          <h2>Mobile Devices and Emulators<a class="headerlink" href="#mobile-devices-and-emulators" title="Link to this heading">?</a></h2>
+          <p>The default mozconfig file, located in the root directory of your <code class="docutils literal notranslate"><span class="pre">mozilla-central</span></code> contains configurations for running mobile test devices in x86, arm64, and x86_64 architectures.</p>
+          <p>With the default mozconfig configurations, your machine’s architecture should match the test device’s architecture. On newer Macs built on Apple Silicon, the mozconfig will likely not need to be changed since it runs on arm64 and most mobile devices run on arm64.</p>
+          <p>If your machine has a different architecture compared to your physical test device, you should uncomment the option matching your test device. Usually, this means uncommenting the arm64 option:</p>
+          <div class="highlight-bash notranslate">
+           <div class="highlight">
+            <pre><span></span>ac_add_options<span class="w"> </span>--target<span class="o">=</span>aarch64
+</pre>
+           </div>
+          </div>
+          <p><strong>Note:</strong> When using an emulator, the mozconfig target configuration will most likely need to match the architecture of your machine.</p>
+          <section id="custom-avd">
+           <h3>Custom AVD<a class="headerlink" href="#custom-avd" title="Link to this heading">?</a></h3>
+           <p>There are several reasons creating a custom AVD can be required, like e.g. the default emulator setup might be too old for some tasks, and it might be required to run some newer versions of the APIs or others.</p>
+           <p>Assuming the following environment variables are already set (versions/OS may change):</p>
+           <div class="highlight-bash notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="nv">JAVA_HOME</span><span class="o">=</span><span class="nv">$HOME</span>/.mozbuild/jdk/jdk-17.0.12+7
+<span class="nv">ANDROID_HOME</span><span class="o">=</span><span class="nv">$HOME</span>/.mozbuild/android-sdk-linux
+<span class="nv">ANDROID_AVD_HOME</span><span class="o">=</span><span class="nv">$HOME</span>/.mozbuild/android-device/avd
+<span class="nv">PATH</span><span class="o">=</span><span class="nv">$ANDROID_HOME</span>/cmdline-tools/12.0/bin/:<span class="nv">$PATH</span>
+</pre>
+            </div>
+           </div>
+           <p>You can identify usable packages already installed on your system via</p>
+           <div class="highlight-bash notranslate">
+            <div class="highlight">
+             <pre><span></span>sdkmanager<span class="w"> </span>--list
+</pre>
+            </div>
+           </div>
+           <p>It will output list of available and installed packages. Packages of interest are <code class="docutils literal notranslate"><span class="pre">system-images</span></code> and follow the rule <code class="docutils literal notranslate"><span class="pre">system-images;android-API;pkg;arch</span></code> where</p>
+           <ul class="simple">
+            <li>
+             <p><code class="docutils literal notranslate"><span class="pre">API</span></code> is the <a class="reference external" href="https://developer.android.com/tools/releases/platforms">Android API level</a></p></li>
+            <li>
+             <p><code class="docutils literal notranslate"><span class="pre">pkg</span></code> is the set of package installed, e.g., <code class="docutils literal notranslate"><span class="pre">default</span></code>, <code class="docutils literal notranslate"><span class="pre">google_apis</span></code>, <code class="docutils literal notranslate"><span class="pre">google_apis_playstore</span></code></p></li>
+            <li>
+             <p>the last one being the emulator architecture and usually stick to <code class="docutils literal notranslate"><span class="pre">x86_64</span></code>.</p></li>
+           </ul>
+           <p>The system image package you will use needs to be installed, so if it is not already in the list above, please use (in this example it installs the package for Android 14 (API level 34), <code class="docutils literal notranslate"><span class="pre">default</span></code> package and <code class="docutils literal notranslate"><span class="pre">x86_64</span></code> arch).</p>
+           <div class="highlight-bash notranslate">
+            <div class="highlight">
+             <pre><span></span>sdkmanager<span class="w"> </span><span class="s2">"system-images;android-34;default;x86_64"</span>
+</pre>
+            </div>
+           </div>
+           <p>Then the AVD can be created with:</p>
+           <div class="highlight-bash notranslate">
+            <div class="highlight">
+             <pre><span></span>avdmanager<span class="w"> </span>create<span class="w"> </span>avd<span class="w"> </span>--name<span class="w"> </span>android14-x86_64<span class="w"> </span>--package<span class="w"> </span><span class="s2">"system-images;android-34;default;x86_64"</span>
+</pre>
+            </div>
+           </div>
+           <p>The name passed in argument can be whatever you want and the package is one of the installed list. It is then required to modify entries within <a class="reference external" href="https://searchfox.org/mozilla-central/rev/d56687458d4e6e8882c4b740e78413a0f0a69d59/testing/mozbase/mozrunner/mozrunner/devices/android_device.py#101-175">android_device.py</a> to be able to make use of <code class="docutils literal notranslate"><span class="pre">mach</span> <span class="pre">android-emulator</span></code>, changing the definition to match the name of the AVD created above. Example below:</p>
+           <div class="highlight-diff notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="gh">diff --git a/testing/mozbase/mozrunner/mozrunner/devices/android_device.py b/testing/mozbase/mozrunner/mozrunner/devices/android_device.py</span>
+<span class="gh">index 4f883261d45c1..07f91c1ab800e 100644</span>
+<span class="gd">--- a/testing/mozbase/mozrunner/mozrunner/devices/android_device.py</span>
+<span class="gi">+++ b/testing/mozbase/mozrunner/mozrunner/devices/android_device.py</span>
+<span class="gu">@@ -151,7 +151,7 @@ AVD_DICT = {</span>
+<span class="w"> </span>    ),
+<span class="w"> </span>    "x86_64": AvdInfo(
+<span class="w"> </span>        "Android x86_64",
+<span class="gd">-        "mozemulator-x86_64",</span>
+<span class="gi">+        "android14-x86_64",</span>
+<span class="w"> </span>        [
+<span class="w"> </span>            "-skip-adb-auth",
+<span class="w"> </span>            "-verbose",
+</pre>
+            </div>
+           </div>
+           <p>Once the avd is created, it can be customized by changing the <code class="docutils literal notranslate"><span class="pre">config.ini</span></code> file (located under <code class="docutils literal notranslate"><span class="pre">$ANDROID_AVD_HOME/&lt;avd-name&gt;.avd/</span></code>, e.g., <code class="docutils literal notranslate"><span class="pre">$HOME/.mozbuild/android-device/avd/android14-x86_64/config.ini</span></code> in the above example). It is recommended to enable physical keyboard by changing the value <code class="docutils literal notranslate"><span class="pre">hw.keyboard</span></code> to <code class="docutils literal notranslate"><span class="pre">yes</span></code> (otherwise only virtual keyboard input will work).</p>
+          </section>
+         </section>
+         <section id="custom-mozconfig-with-android-studio">
+          <h2>Custom mozconfig with Android Studio<a class="headerlink" href="#custom-mozconfig-with-android-studio" title="Link to this heading">?</a></h2>
+          <p>Out of the box, Android Studio will use the default mozconfig file, normally located at <code class="docutils literal notranslate"><span class="pre">mozconfig</span></code> in the root directory of your <code class="docutils literal notranslate"><span class="pre">mozilla-central</span></code> checkout.</p>
+          <p>To make Android Studio use a mozconfig in a custom location, you can add the following to your <code class="docutils literal notranslate"><span class="pre">local.properties</span></code>:</p>
+          <div class="highlight-default notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="n">mozilla</span><span class="o">-</span><span class="n">central</span><span class="o">.</span><span class="n">mozconfig</span><span class="o">=</span><span class="n">relative</span><span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">mozconfig</span>
+</pre>
+           </div>
+          </div>
+          <p>Note that, when running mach from the command line, this value will be ignored, and the mozconfig from the mach environment will be used instead.</p>
+          <p>To override the mozconfig used by mach, you can use the <cite>MOZCONFIG</cite> environment variable, for example:</p>
+          <div class="highlight-default notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="n">MOZCONFIG</span><span class="o">=</span><span class="n">debug</span><span class="o">.</span><span class="n">mozconfig</span> <span class="o">./</span><span class="n">mach</span> <span class="n">build</span>
+</pre>
+           </div>
+          </div>
+         </section>
+         <section id="project-specific-instructions">
+          <h2>Project-Specific Instructions<a class="headerlink" href="#project-specific-instructions" title="Link to this heading">?</a></h2>
+          <p>Now that you’re prepared and set up, you can access specific project instructions below:</p>
+          <ul class="simple">
+           <li>
+            <p>GeckoView: <a class="reference internal" href="geckoview/contributor/index.html#contributing-to-geckoview"><span class="std std-ref">Contributing to GeckoView</span></a></p></li>
+           <li>
+            <p>Android Components: <a class="reference external" href="https://mozac.org/">Mozilla Android Components</a></p></li>
+           <li>
+            <p>Frontend: <a class="reference internal" href="fenix.html#building-firefox-for-android"><span class="std std-ref">Building Firefox for Android</span></a></p></li>
+          </ul>
+         </section>
+        </section>
+       </div>
+      </div>
+      <footer>
+       <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../../browser/overview.html" class="btn btn-neutral float-left" title="Firefox for Desktop" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a> <a href="../../overview/ios.html" class="btn btn-neutral float-right" title="Firefox for iOS" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+       </div>
+       <hr>
+       <div role="contentinfo">
+        <p></p>
+       </div> Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+      </footer>
+     </div>
+    </div>
+   </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ </body>
+</html>

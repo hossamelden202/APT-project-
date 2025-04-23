@@ -1,0 +1,1302 @@
+<!doctype html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Creating a new Android feature using existing JavaScript toolkit code — Firefox Source Docs  documentation</title>
+  <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=fa44fd50">
+  <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=19f00094">
+  <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css?v=fd3f3429">
+  <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css?v=76b2166b">
+  <link rel="stylesheet" type="text/css" href="../../../../_static/custom_theme.css?v=dc5ed815">
+  <link rel="stylesheet" type="text/css" href="../../../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7">
+  <link rel="shortcut icon" href="../../../../_static/firefox.ico"><!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+  <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+  <script src="../../../../_static/documentation_options.js?v=5929fcd5"></script>
+  <script src="../../../../_static/doctools.js?v=9a2dae69"></script>
+  <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
+  <script src="../../../../_static/copybutton.js?v=30646c52"></script>
+  <script src="../../../../_static/design-tabs.js?v=36754332"></script>
+  <script src="../../../../_static/js/theme.js"></script>
+  <link rel="index" title="Index" href="../../../../genindex.html">
+  <link rel="search" title="Search" href="../../../../search.html">
+  <link rel="next" title="Design docs" href="../design/index.html">
+  <link rel="prev" title="Debugging Native Code" href="native-debugging.html">
+ </head>
+ <body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+   <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <div class="wy-side-scroll">
+     <div class="wy-side-nav-search">
+      <a href="../../../../index.html" class="icon icon-home"> Firefox Source Docs <img src="../../../../_static/firefox-wordmark.svg" class="logo" alt="Logo"> </a><!-- -- This code is governed by the BSD license ---->
+      <div>
+       <h3>Quick search</h3>
+       <script>
+    (function () {
+      var cx = "dd12886298f75dbef";
+      var gcse = document.createElement("script");
+      gcse.async = true;
+      gcse.src = "https://cse.google.com/cse.js?cx=" + cx;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(gcse, s);
+    })();
+  </script><gcse:search></gcse:search>
+      </div>
+     </div>
+     <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+      <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../glossary/index.html">A Glossary of Common Terms</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../overview/index.html">A Quick Guide to Mozilla Applications</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../setup/index.html">Getting Set Up To Work On The Firefox Codebase</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Working On Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../contributing/index.html">Working on Firefox</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../bug-mgmt/index.html">Bug Handling</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox User Guide</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../devtools-user/index.html">Firefox DevTools User Docs</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Source Code Documentation</span></p>
+      <ul class="current">
+       <li class="toctree-l1"><a class="reference internal" href="../../../../mots/index.html">Governance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../browser/index.html">Firefox Front-end</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../dom/index.html">DOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../editor/index.html">Editor</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../layout/index.html">Style system (CSS) &amp; Layout</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../gfx/index.html">Graphics</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../ipc/index.html">Processes, Threads and IPC</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../devtools/index.html">Firefox DevTools Contributor Docs</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../toolkit/index.html">Toolkit</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../js/index.html">SpiderMonkey</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../jsloader/index.html">JS Loader</a></li>
+       <li class="toctree-l1 current"><a class="reference internal" href="../index.html">GeckoView</a>
+        <ul class="current">
+         <li class="toctree-l2 current"><a class="reference internal" href="../index.html#documentation">Documentation</a>
+          <ul class="current">
+           <li class="toctree-l3"><a class="reference internal" href="../consumer/index.html">Using GeckoView</a></li>
+           <li class="toctree-l3 current"><a class="reference internal" href="index.html">Contributing to GeckoView</a>
+            <ul class="current">
+             <li class="toctree-l4"><a class="reference internal" href="apilint.html">apilint release process</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="contributing-to-mc.html">Mozilla Central Contributor Guide</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="for-gecko-engineers.html">GeckoView For Gecko Engineers</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="geckoview-architecture.html">Architecture overview</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="geckoview-quick-start.html">Contributor Guide</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="junit.html">Junit Test Framework</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="native-debugging.html">Debugging Native Code</a></li>
+             <li class="toctree-l4 current"><a class="current reference internal" href="#">Creating a new Android feature using existing JavaScript toolkit code</a></li>
+            </ul></li>
+           <li class="toctree-l3"><a class="reference internal" href="../design/index.html">Design docs</a></li>
+           <li class="toctree-l3"><a class="reference external" href="https://mozilla.github.io/geckoview/javadoc/mozilla-central/org/mozilla/geckoview/doc-files/CHANGELOG">Changelog</a></li>
+           <li class="toctree-l3"><a class="reference external" href="https://mozilla.github.io/geckoview/javadoc/mozilla-central/index.html">API Javadoc</a></li>
+          </ul></li>
+         <li class="toctree-l2"><a class="reference internal" href="../index.html#more-information">More information</a></li>
+        </ul></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../fenix/index.html">Fenix</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../focus-android/index.html">Focus for Android</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../dom/bindings/webidl/index.html">WebIDL</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../modules/libpref/index.html">libpref</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../networking/index.html">Networking</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../remote/index.html">Remote Protocols</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../services/index.html">Services</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../permissions/index.html">Permissions</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../uriloader/index.html">File Handling</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../widget/cocoa/index.html">Firefox on macOS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../widget/windows/index.html">Firefox on Windows</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../toolkit/components/ml/index.html">Firefox AI Runtime</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../accessible/index.html">Accessibility</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../media/index.html">Media Playback</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../code-quality/index.html">Code quality</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../writing-rust-code/index.html">Writing Rust Code</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../rust-components/index.html">Rust Components</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../tools/profiler/index.html">Gecko Profiler</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../performance/index.html">Performance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../storage/index.html">Database bindings (SQLite, KV, …)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../xpcom/index.html">XPCOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../nspr/index.html">NSPR</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../security/nss/index.html">Network Security Services (NSS)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../content-security/index.html">Web Security Checks in Gecko</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">The Firefox Build System</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../mach/index.html">Mach</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../tools/try/index.html">Pushing to Try</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../build/buildsystem/index.html">Build System</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../taskcluster/index.html">Firefox CI and Taskgraph</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../tools/moztreedocs/index.html">Managing Documentation</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../mozbuild/vendor/index.html">Vendoring Third Party Components</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Testing &amp; Test Infrastructure</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/automated-testing/index.html">Automated Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/treeherder-try/index.html">Understanding Treeherder Results</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/sheriffed-intermittents/index.html">Sheriffed intermittent failures</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/tests-for-new-config/index.html">Turning on Firefox tests for a new configuration</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/intermittent/index.html">Avoiding intermittent tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/testing-policy/index.html">Testing Policy</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/ci-configs/index.html">Configuration Changes</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/browser-chrome/index.html">Browser chrome mochitests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/chrome-tests/index.html">Chrome Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/marionette/index.html">Marionette</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/geckodriver/index.html">geckodriver</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/test-verification/index.html">Test Verification</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/webrender/index.html">WebRender Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/mochitest-plain/index.html">Mochitest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/xpcshell/index.html">XPCShell tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/tps/index.html">TPS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../web-platform/index.html">web-platform-tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../gtest/index.html">GTest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../tools/fuzzing/index.html">Fuzzing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../tools/sanitizer/index.html">Sanitizer</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/perfdocs/index.html">Performance Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../tools/code-coverage/index.html">Code coverage</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing-rust-code/index.html">Testing &amp; Debugging Rust Code</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Releases &amp; Updates</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../update-infrastructure/index.html">Mozilla Update Infrastructure</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../update-infrastructure/index.html#watershed-updates">Watershed Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../update-infrastructure/index.html#desupport-updates">Desupport Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../tools/update-verify/index.html">Update Verify</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Localization &amp; Internationalization</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../intl/index.html">Internationalization</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../l10n/index.html">Localization</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox and Python</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../mozbase/index.html">mozbase</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../python/index.html">Using third-party Python packages</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Metrics Collected in Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../metrics/index.html">Metrics</a></li>
+      </ul>
+     </div>
+    </div>
+   </nav>
+   <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+    <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+     <i data-toggle="wy-nav-top" class="fa fa-bars"></i> <a href="../../../../index.html">Firefox Source Docs</a>
+    </nav>
+    <div class="wy-nav-content">
+     <div class="rst-content">
+      <!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+      <div role="navigation" aria-label="Page navigation">
+       <ul class="wy-breadcrumbs">
+        <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+        <li class="breadcrumb-item"><a href="../index.html">GeckoView</a></li>
+        <li class="breadcrumb-item"><a href="index.html">Contributing to GeckoView</a></li>
+        <li class="breadcrumb-item active">Creating a new Android feature using existing JavaScript toolkit code</li>
+        <li class="wy-breadcrumbs-aside"><a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Developer+Infrastructure&amp;component=Firefox+Source+Docs%3A+Content&amp;short_desc=Documentation+issue+on+mobile/android/geckoview/contributor/translations-toolkit-to-fenix&amp;comment=URL+=+https://firefox-source-docs.mozilla.org/mobile/android/geckoview/contributor/translations-toolkit-to-fenix.html&amp;bug_file_loc=https://firefox-source-docs.mozilla.org/mobile/android/geckoview/contributor/translations-toolkit-to-fenix.html" rel="nofollow">Report an issue</a> / <a href="../../../../_sources/mobile/android/geckoview/contributor/translations-toolkit-to-fenix.md.txt" rel="nofollow"> View page source</a></li>
+       </ul>
+       <hr>
+      </div>
+      <div role="main" class="document" itemscope itemtype="http://schema.org/Article">
+       <div itemprop="articleBody">
+        <section id="creating-a-new-android-feature-using-existing-javascript-toolkit-code">
+         <h1>Creating a new Android feature using existing JavaScript toolkit code<a class="headerlink" href="#creating-a-new-android-feature-using-existing-javascript-toolkit-code" title="Link to this heading">?</a></h1>
+         <p><strong>Author</strong>: <a class="reference external" href="mailto:ohall%40mozilla.com">Olivia Hall</a></p>
+         <section id="usage">
+          <h2>Usage<a class="headerlink" href="#usage" title="Link to this heading">?</a></h2>
+          <p>The focus of this guide is on how to connect Gecko JavaScript toolkit features to Fenix UI. The goal is to provide a cursory overview of the steps, architecture, and implementation details.</p>
+          <div class="admonition note">
+           <p class="admonition-title">Note</p>
+           <p>Toolkit code in this document refers to JavaScript cross-platform browser code located in the <a class="reference external" href="https://searchfox.org/mozilla-central/source/toolkit">toolkit directory</a>.</p>
+          </div>
+         </section>
+         <section id="outline">
+          <h2>Outline<a class="headerlink" href="#outline" title="Link to this heading">?</a></h2>
+          <p>The translations feature on Android will be used as an example feature to illustrate implementation specific details and also architecture.</p>
+          <p>This document will provide an overview on how to bring an existing JavaScript toolkit feature to Android.</p>
+          <p>This guide will cover each step by layer in the stack:</p>
+          <ul class="simple">
+           <li>
+            <p>Toolkit - <a class="reference internal" href="#identifying-and-preparing-toolkit-code">Identifying and preparing toolkit code</a></p></li>
+           <li>
+            <p>GeckoView - <a class="reference internal" href="#writing-geckoview-apis-to-call-toolkit-code">Writing GeckoView APIs to call toolkit code</a></p></li>
+           <li>
+            <p>Android Components - <a class="reference internal" href="#connecting-geckoview-apis-in-android-components">Connecting GeckoView APIs in Android Components</a></p></li>
+           <li>
+            <p>Fenix - <a class="reference internal" href="#using-the-new-android-components-apis-in-fenix">Using the new Android Components APIs in Fenix</a></p></li>
+           <li>
+            <p>Release - <a class="reference internal" href="#other-considerations">Other considerations</a></p></li>
+          </ul>
+          <div class="admonition note">
+           <p class="admonition-title">Note</p>
+           <p>This guide is not intended to be all encompassing or cover every scenario, but to provide a concrete view with examples on how to bring a JavaScript toolkit feature to Android.</p>
+          </div>
+          <div class="admonition seealso">
+           <p class="admonition-title">See also</p>
+           <p>For an alternative approach to connecting with Gecko on the C++ side, please see <a class="reference internal" href="geckoview-architecture.html#jni"><span class="std std-ref">this documentation for connecting to C++ code to Java using the JNI</span></a>.</p>
+          </div>
+         </section>
+         <section id="overview">
+          <h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">?</a></h2>
+          <p>The architecture diagram below outlines the different layers a feature must cross to reach from toolkit all the way to the Fenix UI. The layers include toolkit, GeckoView (GV), Android Components (AC), and finally Fenix. The languages traversed include JavaScript, Java, and Kotlin.</p>
+          <div class="admonition important">
+           <p class="admonition-title">Important</p>
+           <p>This document will traverse layer-by-layer and emphasize key and noteworthy points to attempt to provide a holistic overview of the steps necessary to build a feature. Consulting and revisiting this diagram while reading each section will hopefully help build a mental model of the feature as a whole.</p>
+          </div>
+          <p>Some key files or components for the translations feature include:</p>
+          <p><strong>Toolkit:</strong></p>
+          <ul class="simple">
+           <li>
+            <p><a class="reference external" href="https://searchfox.org/mozilla-central/rev/a965e3c683ecc035dee1de72bd33a8d91b1203ed/toolkit/components/translations/actors/TranslationsParent.sys.mjs">TranslationsParent.sys.mjs</a> - Primary entryway into toolkit for this feature and where most of the key calls (such as <code class="docutils literal notranslate"><span class="pre">translate()</span></code>) or messages (such as <code class="docutils literal notranslate"><span class="pre">TranslationsParent:OfferTranslation</span></code>) originate from.</p></li>
+          </ul>
+          <p><strong>GeckoView:</strong></p>
+          <ul class="simple">
+           <li>
+            <p><a class="reference external" href="https://searchfox.org/mozilla-central/rev/a965e3c683ecc035dee1de72bd33a8d91b1203ed/mobile/shared/modules/geckoview/GeckoViewTranslations.sys.mjs">GeckoViewTranslations.sys.mjs</a> - JavaScript side module which both listens to relevant messages and calls <code class="docutils literal notranslate"><span class="pre">TranslationsParent</span></code>.</p></li>
+           <li>
+            <p><a class="reference external" href="https://searchfox.org/mozilla-central/rev/a965e3c683ecc035dee1de72bd33a8d91b1203ed/mobile/android/geckoview/src/main/java/org/mozilla/geckoview/TranslationsController.java">TranslationsController.java</a> - Java side class which coordinates both <a class="reference internal" href="geckoview-architecture.html#view-runtime-and-session"><span class="std std-ref">session and runtime</span></a> specific calls, listens for events, as well as defines a delegate.</p></li>
+          </ul>
+          <p><strong>Android Components:</strong></p>
+          <ul class="simple">
+           <li>
+            <p><a class="reference external" href="https://searchfox.org/mozilla-central/rev/a965e3c683ecc035dee1de72bd33a8d91b1203ed/mobile/android/android-components/components/browser/state/src/main/java/mozilla/components/browser/state/engine/middleware/TranslationsMiddleware.kt#1">TranslationsMiddleware.kt</a> - Observes translations specific actions and reacts accordingly.</p></li>
+           <li>
+            <p><a class="reference external" href="https://searchfox.org/mozilla-central/rev/a965e3c683ecc035dee1de72bd33a8d91b1203ed/mobile/android/android-components/components/browser/state/src/main/java/mozilla/components/browser/state/reducer/TranslationsStateReducer.kt#1">TranslationsStateReducer.kt</a> - Observes translations specific actions and updates the data model state.</p></li>
+           <li>
+            <p><a class="reference external" href="https://searchfox.org/mozilla-central/rev/a965e3c683ecc035dee1de72bd33a8d91b1203ed/mobile/android/android-components/components/browser/state/src/main/java/mozilla/components/browser/state/state/TranslationsBrowserState.kt">TranslationsBrowserState.kt</a> - Global or whole browser data model for translations.(Generally runtime information.)</p></li>
+           <li>
+            <p><a class="reference external" href="https://searchfox.org/mozilla-central/rev/a965e3c683ecc035dee1de72bd33a8d91b1203ed/mobile/android/android-components/components/browser/state/src/main/java/mozilla/components/browser/state/state/TranslationsState.kt">TranslationsState.kt</a> - Session specific data model for translations.</p></li>
+          </ul>
+          <p><strong>Fenix:</strong></p>
+          <ul class="simple">
+           <li>
+            <p><a class="reference external" href="https://searchfox.org/mozilla-central/rev/a965e3c683ecc035dee1de72bd33a8d91b1203ed/mobile/android/fenix/app/src/main/java/org/mozilla/fenix/translations/TranslationsDialogBinding.kt">TranslationsDialogBinding.kt</a> - Observes the various translations state and sends <code class="docutils literal notranslate"><span class="pre">TranslationsDialogActions</span></code>.</p></li>
+           <li>
+            <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/mobile/android/fenix/app/src/main/java/org/mozilla/fenix/translations/TranslationsDialogStore.kt">TranslationsDialogStore.kt</a> - Middleware which tracks translations state for the dialog and defines <code class="docutils literal notranslate"><span class="pre">TranslationsDialogActions</span></code>.</p></li>
+           <li>
+            <p><a class="reference external" href="https://searchfox.org/mozilla-central/rev/a965e3c683ecc035dee1de72bd33a8d91b1203ed/mobile/android/fenix/app/src/main/java/org/mozilla/fenix/translations/TranslationsDialogFragment.kt">TranslationsDialogFragment.kt</a> - Fragment which displays the UI, observes certain states to react, and sends actions.</p></li>
+          </ul>
+          <p><img alt="Diagram shows summary of classes, modules, files, and relationships to illustrate information flow from Fenix to toolkit." src="../../../../_images/translations-toolkit-to-fenix-diagram.png"></p>
+          <section id="summary-of-key-calls-from-fenix-to-toolkit-for-a-translation">
+           <h3>Summary of key calls from Fenix to toolkit for a translation<a class="headerlink" href="#summary-of-key-calls-from-fenix-to-toolkit-for-a-translation" title="Link to this heading">?</a></h3>
+           <p>Abbreviated pseduo-call stack for what happens when Fenix’s translation dialog is opened and translate is pressed:</p>
+           <p><strong>Fenix:</strong></p>
+           <ul class="simple">
+            <li>
+             <p><a class="reference external" href="https://searchfox.org/mozilla-central/rev/044802a2108a5163bd5288ea18eb6a88234d45f0/mobile/android/fenix/app/src/main/java/org/mozilla/fenix/translations/TranslationsDialogFragment.kt#100"><code class="docutils literal notranslate"><span class="pre">TranslationsDialogFragment.kt</span> <span class="pre">-</span> <span class="pre">onCreateView</span></code></a></p></li>
+            <li>
+             <p><a class="reference external" href="https://searchfox.org/mozilla-central/rev/044802a2108a5163bd5288ea18eb6a88234d45f0/mobile/android/fenix/app/src/main/java/org/mozilla/fenix/translations/TranslationsDialogFragment.kt#390"><code class="docutils literal notranslate"><span class="pre">TranslationsDialogFragment.kt</span> <span class="pre">-</span> <span class="pre">TranslationsOptionsDialogContent</span></code></a></p></li>
+            <li>
+             <p><a class="reference external" href="https://searchfox.org/mozilla-central/rev/044802a2108a5163bd5288ea18eb6a88234d45f0/mobile/android/fenix/app/src/main/java/org/mozilla/fenix/translations/TranslationsDialogFragment.kt#350"><code class="docutils literal notranslate"><span class="pre">TranslationsDialogFragment.kt</span> <span class="pre">-</span> <span class="pre">private</span> <span class="pre">fun</span> <span class="pre">translate</span></code></a></p></li>
+            <li>
+             <p><a class="reference external" href="https://searchfox.org/mozilla-central/rev/044802a2108a5163bd5288ea18eb6a88234d45f0/mobile/android/fenix/app/src/main/java/org/mozilla/fenix/translations/TranslationsDialogStore.kt#317,326"><code class="docutils literal notranslate"><span class="pre">TranslationsDialogStore.kt</span> <span class="pre">-</span> <span class="pre">TranslationsDialogAction.TranslateAction</span></code></a></p></li>
+            <li>
+             <p><a class="reference external" href="https://searchfox.org/mozilla-central/rev/044802a2108a5163bd5288ea18eb6a88234d45f0/mobile/android/fenix/app/src/main/java/org/mozilla/fenix/translations/TranslationsDialogMiddleware.kt#76"><code class="docutils literal notranslate"><span class="pre">TranslationsDialogMiddleware.kt</span> <span class="pre">-</span> <span class="pre">TranslationsDialogAction.TranslateAction</span></code></a></p></li>
+           </ul>
+           <p><strong>Android Components:</strong></p>
+           <ul class="simple">
+            <li>
+             <p><a class="reference external" href="https://searchfox.org/mozilla-central/rev/044802a2108a5163bd5288ea18eb6a88234d45f0/mobile/android/android-components/components/browser/state/src/main/java/mozilla/components/browser/state/engine/middleware/EngineDelegateMiddleware.kt#49"><code class="docutils literal notranslate"><span class="pre">EngineDelegateMiddleware.kt</span> <span class="pre">-</span> <span class="pre">TranslationsAction.TranslateAction</span></code></a></p></li>
+            <li>
+             <p><a class="reference external" href="https://searchfox.org/mozilla-central/rev/044802a2108a5163bd5288ea18eb6a88234d45f0/mobile/android/android-components/components/browser/state/src/main/java/mozilla/components/browser/state/engine/middleware/EngineDelegateMiddleware.kt#163"><code class="docutils literal notranslate"><span class="pre">EngineDelegateMiddleware.kt</span> <span class="pre">-</span> <span class="pre">private</span> <span class="pre">fun</span> <span class="pre">translate</span></code></a></p></li>
+            <li>
+             <p><a class="reference external" href="https://searchfox.org/mozilla-central/rev/044802a2108a5163bd5288ea18eb6a88234d45f0/mobile/android/android-components/components/browser/engine-gecko/src/main/java/mozilla/components/browser/engine/gecko/GeckoEngineSession.kt#979"><code class="docutils literal notranslate"><span class="pre">GeckoEngineSession.kt</span> <span class="pre">-</span> <span class="pre">override</span> <span class="pre">fun</span> <span class="pre">requestTranslate</span></code></a></p></li>
+           </ul>
+           <p><strong>GeckoView:</strong></p>
+           <ul class="simple">
+            <li>
+             <p><a class="reference external" href="https://searchfox.org/mozilla-central/rev/044802a2108a5163bd5288ea18eb6a88234d45f0/mobile/android/geckoview/src/main/java/org/mozilla/geckoview/TranslationsController.java#743"><code class="docutils literal notranslate"><span class="pre">TranslationsController.java</span> <span class="pre">-</span> <span class="pre">public</span> <span class="pre">@NonNull</span> <span class="pre">GeckoResult&lt;Void&gt;</span> <span class="pre">translate</span></code></a></p></li>
+            <li>
+             <p><a class="reference external" href="https://searchfox.org/mozilla-central/rev/044802a2108a5163bd5288ea18eb6a88234d45f0/mobile/shared/modules/geckoview/GeckoViewTranslations.sys.mjs#42"><code class="docutils literal notranslate"><span class="pre">GeckoViewTranslations.sys.mjs</span> <span class="pre">-</span> <span class="pre">onEvent</span> <span class="pre">case</span> <span class="pre">"GeckoView:Translations:Translate"</span></code></a></p></li>
+           </ul>
+           <p><strong>Toolkit:</strong></p>
+           <ul class="simple">
+            <li>
+             <p><a class="reference external" href="https://searchfox.org/mozilla-central/rev/044802a2108a5163bd5288ea18eb6a88234d45f0/toolkit/components/translations/actors/TranslationsParent.sys.mjs#2561"><code class="docutils literal notranslate"><span class="pre">TranslationsParent.sys.mjs</span> <span class="pre">-</span> <span class="pre">async</span> <span class="pre">translate(fromLanguage,</span> <span class="pre">toLanguage,</span> <span class="pre">reportAsAutoTranslate)</span></code></a></p></li>
+           </ul>
+          </section>
+         </section>
+         <section id="identifying-and-preparing-toolkit-code">
+          <h2>Identifying and preparing toolkit code<a class="headerlink" href="#identifying-and-preparing-toolkit-code" title="Link to this heading">?</a></h2>
+          <section id="overview-of-directory-structure">
+           <h3>Overview of directory structure<a class="headerlink" href="#overview-of-directory-structure" title="Link to this heading">?</a></h3>
+           <table class="docutils align-default">
+            <thead>
+             <tr class="row-odd">
+              <th class="head text-left">
+               <p>Directory</p></th>
+              <th class="head text-left">
+               <p>Platform</p></th>
+              <th class="head text-left">
+               <p>Description</p></th>
+              <th class="head text-left">
+               <p>Sample Key Files<sup>+</sup></p></th>
+             </tr>
+            </thead>
+            <tbody>
+             <tr class="row-even">
+              <td class="text-left">
+               <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/toolkit">toolkit</a></p></td>
+              <td class="text-left">
+               <p>Cross platform</p></td>
+              <td class="text-left">
+               <p>Browser code that may be used on all platforms.</p></td>
+              <td class="text-left">
+               <p><code class="docutils literal notranslate"><span class="pre">*Parent.sys.mjs</span></code>, <code class="docutils literal notranslate"><span class="pre">*Child.sys.mjs</span></code>, <code class="docutils literal notranslate"><span class="pre">*Utils.mjs</span></code></p></td>
+             </tr>
+             <tr class="row-odd">
+              <td class="text-left">
+               <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/browser">browser</a></p></td>
+              <td class="text-left">
+               <p>Desktop</p></td>
+              <td class="text-left">
+               <p>Desktop specific browser and chrome (view layer) code.</p></td>
+              <td class="text-left">
+               <p>Similar to toolkit + <code class="docutils literal notranslate"><span class="pre">*.js</span></code>, <code class="docutils literal notranslate"><span class="pre">*.xhtml</span></code></p></td>
+             </tr>
+             <tr class="row-even">
+              <td class="text-left">
+               <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/mobile">mobile</a></p></td>
+              <td class="text-left">
+               <p>Android and iOS</p></td>
+              <td class="text-left">
+               <p>Area related to mobile platforms.</p></td>
+              <td class="text-left">
+               <p>Varies based on directory</p></td>
+             </tr>
+             <tr class="row-odd">
+              <td class="text-left">
+               <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/mobile/android/geckoview">geckoview</a> and <a class="reference external" href="https://searchfox.org/mozilla-central/source/mobile/android">mobile/android</a></p></td>
+              <td class="text-left">
+               <p>Android</p></td>
+              <td class="text-left">
+               <p>GeckoView code provides a Java API surface to interface with Gecko. Much of the top level mobile/android code is under the GeckoView purview.</p></td>
+              <td class="text-left">
+               <p><code class="docutils literal notranslate"><span class="pre">GeckoView*.sys.mjs</span></code>, <code class="docutils literal notranslate"><span class="pre">GeckoView*Child.sys.mjs</span></code>, <code class="docutils literal notranslate"><span class="pre">GeckoView*Parent.sys.mjs</span></code>,<code class="docutils literal notranslate"><span class="pre">*Controller.java</span></code></p></td>
+             </tr>
+             <tr class="row-even">
+              <td class="text-left">
+               <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/mobile/android/android-*s">android-components</a></p></td>
+              <td class="text-left">
+               <p>Android</p></td>
+              <td class="text-left">
+               <p>Android’s code is a reusable Android library that aims to provide a toolbox of building blocks relevant to building a browser. Includes reusable UI and connections to GeckoView as a browser engine.</p></td>
+              <td class="text-left">
+               <p><code class="docutils literal notranslate"><span class="pre">*Middleware.kt</span></code>, <code class="docutils literal notranslate"><span class="pre">*StateReducer.kt</span></code>, <code class="docutils literal notranslate"><span class="pre">*State.kt</span></code></p></td>
+             </tr>
+             <tr class="row-odd">
+              <td class="text-left">
+               <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/mobile/android/fenix">fenix</a></p></td>
+              <td class="text-left">
+               <p>Android</p></td>
+              <td class="text-left">
+               <p>Chrome (view layer) code connected to Android’s to form the <a class="reference external" href="https://www.mozilla.org/en-US/firefox/browsers/mobile/android/">Firefox on Android</a> experience.</p></td>
+              <td class="text-left">
+               <p><code class="docutils literal notranslate"><span class="pre">*DialogBinding.kt</span></code> , <code class="docutils literal notranslate"><span class="pre">*DialogStore.kt</span></code>, <code class="docutils literal notranslate"><span class="pre">*Fragment.kt</span></code></p></td>
+             </tr>
+             <tr class="row-even">
+              <td class="text-left">
+               <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/mobile/android/focus-android">focus-android</a></p></td>
+              <td class="text-left">
+               <p>Android</p></td>
+              <td class="text-left">
+               <p>Chrome (view layer) code connected to Android’s to form the <a class="reference external" href="https://www.mozilla.org/en-US/firefox/browsers/mobile/focus/">Focus (aka Klar)</a> experience.</p></td>
+              <td class="text-left">
+               <p>Same as Fenix</p></td>
+             </tr>
+            </tbody>
+           </table>
+           <p>(<sup>+</sup> Where <code class="docutils literal notranslate"><span class="pre">*</span></code> is the Component name.)</p>
+          </section>
+          <section id="identifying-toolkit-code">
+           <h3>Identifying toolkit code<a class="headerlink" href="#identifying-toolkit-code" title="Link to this heading">?</a></h3>
+           <p>The first step is to identify toolkit code to see if the module is already in the <a class="reference external" href="https://searchfox.org/mozilla-central/source/toolkit"><code class="docutils literal notranslate"><span class="pre">toolkit</span></code> directory.</a> (See above table for summary of locations.) If this is the case, then it should already be possible to connect it to GeckoView without too many adjustments.</p>
+           <p>Some adjustments to the toolkit code might also be necessary for it to run on Android. For example, Android does not have a <code class="docutils literal notranslate"><span class="pre">gBrowser</span></code> and code calling <code class="docutils literal notranslate"><span class="pre">gBrowser</span></code> will need to be changed. These minor adjustments can usually be quickly identified through testing. These issues are usually fixed through availability checks or use of <code class="docutils literal notranslate"><span class="pre">AppConstants.platform</span> <span class="pre">\!==</span> <span class="pre">"android"</span></code> style checks.</p>
+           <p>An example of this in translations is that the <code class="docutils literal notranslate"><span class="pre">TranslationsParent</span></code> only offers a translation if the user is on the same page. Important to note is that the Android paradigm for windows is different from desktop. For Android, there is always <a class="reference internal" href="geckoview-architecture.html#window-model"><span class="std std-ref">one window for one tab</span></a>. Because of that, branching behavior to check if on the same current page was added to Android:</p>
+           <p><a class="reference external" href="https://searchfox.org/mozilla-central/rev/dd8b64a6198ff599a5eb2ca096845ebd6997457f/toolkit/components/translations/actors/TranslationsParent.sys.mjs#735"><code class="docutils literal notranslate"><span class="pre">TranslationsParent.sys.mjs</span></code></a>:</p>
+           <div class="highlight-js notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="c1">// Only offer the translation if it's still the current page.</span>
+<span class="kd">let</span><span class="w"> </span><span class="nx">isCurrentPage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span><span class="p">;</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">AppConstants</span><span class="p">.</span><span class="nx">platform</span><span class="w"> </span><span class="o">!==</span><span class="w"> </span><span class="s2">"android"</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">isCurrentPage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">documentURI</span><span class="p">.</span><span class="nx">spec</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">browsingContext</span>
+<span class="w">    </span><span class="p">.</span><span class="nx">topChromeWindow</span><span class="p">.</span><span class="nx">gBrowser</span><span class="p">.</span><span class="nx">selectedBrowser</span>
+<span class="w">    </span><span class="p">.</span><span class="nx">documentURI</span><span class="p">.</span><span class="nx">spec</span><span class="p">;</span>
+<span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="c1">// In Android, the active window is the active tab.</span>
+<span class="w">  </span><span class="nx">isCurrentPage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">documentURI</span><span class="p">.</span><span class="nx">spec</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="nx">browser</span><span class="p">.</span><span class="nx">documentURI</span><span class="p">.</span><span class="nx">spec</span><span class="p">;</span>
+<span class="p">}</span>
+</pre>
+            </div>
+           </div>
+           <p>An alternative adjustment may also be performing stricter availability checks. For example, on Android, <code class="docutils literal notranslate"><span class="pre">BrowserHandler</span></code>was sometimes not available and was causing an issue when checking for <code class="docutils literal notranslate"><span class="pre">kiosk</span></code> mode (a desktop feature).</p>
+           <p><a class="reference external" href="https://searchfox.org/mozilla-central/rev/dd8b64a6198ff599a5eb2ca096845ebd6997457f/toolkit/components/translations/actors/TranslationsParent.sys.mjs#647"><code class="docutils literal notranslate"><span class="pre">TranslationsParent.sys.mjs</span></code></a>:</p>
+           <div class="highlight-js notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="c1">// Check that the component is available before de-lazifying lazy.BrowserHandler.</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">Cc</span><span class="p">[</span><span class="s2">"@mozilla.org/browser/clh;1"</span><span class="p">]</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nx">lazy</span><span class="p">.</span><span class="nx">BrowserHandler</span><span class="o">?</span><span class="p">.</span><span class="nx">kiosk</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="c1">// Pop-ups should not be shown in kiosk mode.</span>
+<span class="w">  </span><span class="k">return</span><span class="p">;</span>
+<span class="p">}</span>
+</pre>
+            </div>
+           </div>
+           <p>Larger refactoring or additions to the toolkit code might include updating functions to connect more elegantly to a GeckoView API or adding GeckoView specific modules or actors to coordinate <code class="docutils literal notranslate"><span class="pre">toolkit</span></code> calls.</p>
+           <p>Another situation is sometimes there can also be code that could be cross platform and moved to <code class="docutils literal notranslate"><span class="pre">toolkit</span></code> from, for example, <code class="docutils literal notranslate"><span class="pre">browser</span></code>. In that case, evaluating if the non-cross platform specific code can and should be moved to <code class="docutils literal notranslate"><span class="pre">toolkit</span></code> is the first step. Be sure to consult with relevant <a class="reference external" href="https://firefox-source-docs.mozilla.org/mots/index.html">code owners</a>, review groups, and other stakeholders during the evaluation process to ensure refactoring or moving code is the best course of action.</p>
+           <p>It might also be necessary to inspect desktop chrome (view layer) code (found in the <code class="docutils literal notranslate"><span class="pre">browser</span></code> directory) and move segments to <code class="docutils literal notranslate"><span class="pre">toolkit</span></code> as well. Sometimes there will be chrome level code that prepares raw information into a presentation data structure that could be helpful in <code class="docutils literal notranslate"><span class="pre">toolkit</span></code> for joint use. An example in translations was moving <code class="docutils literal notranslate"><span class="pre">getLanguageList</span></code> from <code class="docutils literal notranslate"><span class="pre">browser</span></code> to <code class="docutils literal notranslate"><span class="pre">toolkit</span></code>, as seen in this <a class="reference external" href="https://phabricator.services.mozilla.com/D190118">patch</a>.</p>
+           <p>Adding or moving code that is useful and usable on all layers to <code class="docutils literal notranslate"><span class="pre">toolkit</span></code> helps lower the maintenance burden for all teams. A central source of behavior prevents introduction of novel solutions for the same problem and diverging behavior (and bugs!) between desktop and other platforms.</p>
+           <div class="admonition tip">
+            <p class="admonition-title">Tip</p>
+            <p><strong>Aside on chrome (view layer) code:</strong> One important difference between Android and desktop UI is that desktop chrome is drawn using XUL and other web technologies, while Android uses Android OS base UI platform components. Because of this difference, Android uses a delegate pattern to draw UI on the application layer. As seen later, <code class="docutils literal notranslate"><span class="pre">onTranslateOffer</span></code> will be a delegate used to inform the AC and then Fenix layer to draw UI to popup and offer a translation.</p>
+           </div>
+           <p>Some of these changes and why they are helpful will become more clear later when designing the GeckoView APIs. For example, it might be better to combine a sequence of toolkit calls into one function. That function will then be the only function linked to the public Java surface. This will improve performance and make the API usage clearer.</p>
+           <p>One way to begin to get a sense of how the toolkit code works on Android during early development is to create a GeckoView module or connect to an existing module, add a message receiver in the module, add a message sender on the Java side, and call the message sender from Java. Important to note is GeckoView uses the <a class="reference external" href="https://firefox-source-docs.mozilla.org/dom/ipc/jsactors.html">actor pair architecture</a> and <a class="reference external" href="https://gist.github.com/agi/c900f3e473ff681158c0c907e34780e4#actors">modules</a>.</p>
+           <p>Two examples of different options on how to perform this connection are outlined below in the <a class="reference internal" href="#example-directly-connecting-toolkit-actors">example directly connecting toolkit actors</a> and the <a class="reference internal" href="#example-using-a-geckoview-module-to-call-toolkit">example using a GeckoView module to call toolkit</a>. Testing this way while outlining the APIs will help provide a feedback loop on what functionality is needed.</p>
+          </section>
+          <section id="example-directly-connecting-toolkit-actors">
+           <h3>Example directly connecting toolkit actors<a class="headerlink" href="#example-directly-connecting-toolkit-actors" title="Link to this heading">?</a></h3>
+           <p>There was not a translations example available for this situation, so in this example, the toolkit Parent and Child actors are in use with <a class="reference external" href="https://searchfox.org/mozilla-central/source/mobile/shared/modules/geckoview/GeckoViewAutocomplete.sys.mjs">GeckoViewAutocomplete.sys.mjs</a> coordinating on the JavaScript side and <a class="reference external" href="https://searchfox.org/mozilla-central/source/mobile/android/geckoview/src/main/java/org/mozilla/geckoview/Autocomplete.java">Autocomplete.java</a> on the Java side.</p>
+           <p>First, items must be declared statically in <a class="reference external" href="https://gist.github.com/agi/c900f3e473ff681158c0c907e34780e4#actors">geckoview.js</a> to register them.</p>
+           <p><a class="reference external" href="https://searchfox.org/mozilla-central/rev/a965e3c683ecc035dee1de72bd33a8d91b1203ed/mobile/shared/chrome/geckoview/geckoview.js#786"><code class="docutils literal notranslate"><span class="pre">geckoview.js</span></code>:</a></p>
+           <div class="highlight-js notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s2">"GeckoViewAutocomplete"</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">actors</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nx">FormAutofill</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">parent</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">          </span><span class="nx">esModuleURI</span><span class="o">:</span><span class="w"> </span><span class="s2">"resource://autofill/FormAutofillParent.sys.mjs"</span><span class="p">,</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="nx">child</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">          </span><span class="nx">esMoaduleURI</span><span class="o">:</span><span class="w"> </span><span class="s2">"resource://autofill/FormAutofillChild.sys.mjs"</span><span class="p">,</span>
+<span class="w">          </span><span class="nx">events</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nx">focusin</span><span class="o">:</span><span class="w"> </span><span class="p">{},</span>
+<span class="w">            </span><span class="s2">"form-submission-detected"</span><span class="o">:</span><span class="w"> </span><span class="p">{},</span>
+<span class="w">          </span><span class="p">},</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="nx">allFrames</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">        </span><span class="nx">messageManagerGroups</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"browsers"</span><span class="p">],</span>
+<span class="w">      </span><span class="p">},</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="p">},</span>
+</pre>
+            </div>
+           </div>
+          </section>
+          <section id="example-using-a-geckoview-module-to-call-toolkit">
+           <h3>Example using a GeckoView module to call toolkit<a class="headerlink" href="#example-using-a-geckoview-module-to-call-toolkit" title="Link to this heading">?</a></h3>
+           <p>The example shows connecting a GeckoView module for use and how toolkit calls may be referenced.</p>
+           <p><a class="reference external" href="https://searchfox.org/mozilla-central/rev/a965e3c683ecc035dee1de72bd33a8d91b1203ed/mobile/shared/chrome/geckoview/geckoview.js#856"><code class="docutils literal notranslate"><span class="pre">geckoview.js</span></code></a>:</p>
+           <div class="highlight-js notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s2">"GeckoViewTranslations"</span><span class="p">,</span>
+<span class="w">  </span><span class="nx">onInit</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">resource</span><span class="o">:</span><span class="w"> </span><span class="s2">"resource://gre/modules/GeckoViewTranslations.sys.mjs"</span><span class="p">,</span>
+<span class="p">},</span>
+</pre>
+            </div>
+           </div>
+           <p><a class="reference external" href="https://searchfox.org/mozilla-central/rev/a965e3c683ecc035dee1de72bd33a8d91b1203ed/mobile/shared/modules/geckoview/GeckoViewTranslations.sys.mjs"><code class="docutils literal notranslate"><span class="pre">GeckoViewTranslations.sys.mjs</span></code></a>:</p>
+           <div class="highlight-js notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="c1">// TranslationsParent is in toolkit</span>
+<span class="nx">ChromeUtils</span><span class="p">.</span><span class="nx">defineESModuleGetters</span><span class="p">(</span><span class="nx">lazy</span><span class="p">,</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">TranslationsParent</span><span class="o">:</span><span class="w"> </span><span class="s2">"resource://gre/actors/TranslationsParent.sys.mjs"</span><span class="p">,</span>
+<span class="p">});</span>
+
+<span class="err">…</span>
+<span class="c1">// Static call example</span>
+<span class="nx">lazy</span><span class="p">.</span><span class="nx">TranslationsParent</span><span class="p">.</span><span class="nx">getIsTranslationsEngineSupported</span><span class="p">()</span>
+
+<span class="c1">// Actor call example was registered in ActorManagerParent.sys.mjs</span>
+<span class="k">this</span><span class="p">.</span><span class="nx">getActor</span><span class="p">(</span><span class="s2">"Translations"</span><span class="p">).</span><span class="nx">restorePage</span><span class="p">();</span>
+
+<span class="c1">// Setting up a Java API (see below) can also be used for more control of calling a specific function. The idea here is just to set up a framework for exploring that could become the foundation of the final API.</span>
+</pre>
+            </div>
+           </div>
+           <p>Connecting the relevant toolkit code to the GeckoView side during the early exploratory process can yield early information on what is working and what will need special attention.</p>
+          </section>
+         </section>
+         <section id="writing-geckoview-apis-to-call-toolkit-code">
+          <h2>Writing GeckoView APIs to call toolkit code<a class="headerlink" href="#writing-geckoview-apis-to-call-toolkit-code" title="Link to this heading">?</a></h2>
+          <p>Designing a GeckoView API should take considerable thought and care. GeckoView is a public API that anyone can use to use Gecko on Android. As such, well designed APIs should expose necessary functionality, be well documented for different product usage, and be extensible for future expansions. API changes are publicly listed in a CHANGELOG and also an API hash is generated for each change (<a class="reference internal" href="geckoview-quick-start.html#updating-the-changelog-and-api-documentation"><span class="std std-ref">see contributor guide for details</span></a>). See this <a class="reference internal" href="geckoview-architecture.html#api"><span class="std std-ref">GeckoView architecture guide</span></a> for more information.</p>
+          <section id="outline-toolkit-calls-and-data">
+           <h3>Outline Toolkit Calls and Data<a class="headerlink" href="#outline-toolkit-calls-and-data" title="Link to this heading">?</a></h3>
+           <p>One way to begin is to outline all of the toolkit function calls or messages that the feature will need to interact with. This can be achieved through looking at the feature designs and listing each piece of functionality or through looking at desktop code and creating a list of what was called. For example, with translations, calling the toolkit translate function was an easily identifiable call to list on this document. Additionally, functions should be noted if they should be called automatically under certain conditions, such as when an <code class="docutils literal notranslate"><span class="pre">onLoad</span></code> event occurs. For example, the <code class="docutils literal notranslate"><span class="pre">TranslationsParent</span></code> sends a state message that GeckoView listens to and reacts to by activating a delegate call. On the Android Components side, this delegate’s message is used to update various state stores and sometimes UI.</p>
+           <p>It is also helpful to note if the call should be a <a class="reference internal" href="geckoview-architecture.html#view-runtime-and-session"><span class="std std-ref">session or runtime call</span></a>. Session calls require the state of the page to be known. For example, requesting a page restore. These calls should not outlive the session. Runtime calls do not require the state of the page. They can be statically declared functions or anything else that does not depend on session state. For example, changing a preference.</p>
+           <div class="admonition tip">
+            <p class="admonition-title">Tip</p>
+            <p><strong>Aside on preferences:</strong> Generally Gecko preferences can be connected specifically on the Java side in <a class="reference external" href="https://searchfox.org/mozilla-central/source/mobile/android/geckoview/src/main/java/org/mozilla/geckoview/GeckoRuntimeSettings.java">GeckoRuntimeSettings.java</a>, but some cases may wish to run through the toolkit if there is additional setting/getting logic.</p>
+           </div>
+           <p>This call and message identification step is important and should not be skipped because it will help drive API design decisions. Be sure to note any missing calls or data that the feature needs and does not already exist in the toolkit. New toolkit calls or the GeckoView module can help fill out these gaps. This process is iterative, but a good foundation of what is needed will help with organization.</p>
+           <section id="example-early-outline-of-toolkit-calls-for-translations">
+            <h4>Example early outline of toolkit calls for translations:<a class="headerlink" href="#example-early-outline-of-toolkit-calls-for-translations" title="Link to this heading">?</a></h4>
+            <div class="highlight-default notranslate">
+             <div class="highlight">
+              <pre><span></span><span class="n">Toolkit</span> <span class="n">outline</span><span class="p">:</span>
+
+<span class="n">Session</span><span class="p">:</span>
+
+<span class="o">*</span> <span class="n">void</span> <span class="n">translate</span><span class="p">(</span><span class="n">fromLanguage</span><span class="p">,</span> <span class="n">toLanguage</span><span class="p">)</span>
+  <span class="o">*</span> <span class="n">Will</span> <span class="n">cause</span> <span class="n">a</span> <span class="n">TranslationsParent</span><span class="p">:</span><span class="n">LanguageState</span> <span class="n">state</span> <span class="n">change</span><span class="o">.</span>
+<span class="o">*</span> <span class="n">void</span> <span class="n">restorePage</span><span class="p">()</span>
+  <span class="o">*</span> <span class="n">Will</span> <span class="n">cause</span> <span class="n">a</span> <span class="n">TranslationsParent</span><span class="p">:</span><span class="n">LanguageState</span> <span class="n">state</span> <span class="n">change</span><span class="o">.</span>
+
+<span class="n">Runtime</span><span class="p">:</span>
+
+<span class="o">*</span> <span class="nb">bool</span> <span class="n">getIsTranslationsEngineSupported</span><span class="p">()</span>
+<span class="o">*</span> <span class="n">string</span><span class="p">[]</span> <span class="n">getPreferredLanguages</span><span class="p">()</span>
+<span class="o">*</span> <span class="n">long</span> <span class="n">getExpectedTranslationDownloadSize</span><span class="p">(</span><span class="n">fromLanguage</span><span class="p">,</span> <span class="n">toLanguage</span><span class="p">)</span>
+  <span class="o">*</span> <span class="n">ToDo</span><span class="p">:</span> <span class="n">Not</span> <span class="n">yet</span> <span class="n">a</span> <span class="n">toolkit</span> <span class="n">option</span> <span class="n">because</span> <span class="n">download</span> <span class="n">size</span> <span class="ow">is</span> <span class="n">particularly</span> <span class="n">important</span> <span class="n">on</span> <span class="n">Android</span><span class="o">.</span>
+
+<span class="n">Messages</span> <span class="n">to</span> <span class="n">listen</span> <span class="n">to</span><span class="p">:</span>
+
+<span class="o">*</span> <span class="n">TranslationsParent</span><span class="p">:</span><span class="n">LanguageState</span>
+  <span class="o">*</span> <span class="n">Provides</span> <span class="n">information</span> <span class="n">about</span> <span class="n">the</span> <span class="n">translation</span> <span class="n">state</span> <span class="n">on</span> <span class="n">the</span> <span class="n">page</span><span class="o">.</span>
+<span class="o">*</span> <span class="n">TranslationsParent</span><span class="p">:</span><span class="n">OfferTranslation</span>
+  <span class="o">*</span> <span class="n">Whether</span> <span class="n">the</span> <span class="n">page</span> <span class="n">should</span> <span class="n">recommend</span> <span class="n">a</span> <span class="n">translation</span><span class="o">.</span>
+
+<span class="n">Data</span> <span class="n">objects</span><span class="p">:</span>
+
+<span class="o">*</span> <span class="n">Language</span>
+  <span class="o">*</span> <span class="n">String</span> <span class="n">display</span> <span class="n">name</span>
+  <span class="o">*</span> <span class="n">String</span> <span class="n">BCP</span> <span class="mi">47</span> <span class="n">Code</span>
+</pre>
+             </div>
+            </div>
+            <p>This list will change and grow as more details are uncovered.</p>
+           </section>
+          </section>
+          <section id="map-toolkit-calls-to-java-equivalent">
+           <h3>Map toolkit calls to Java equivalent<a class="headerlink" href="#map-toolkit-calls-to-java-equivalent" title="Link to this heading">?</a></h3>
+           <p>At this point, it is now possible to begin outlining the GeckoView API for functions that should be called directly as well as begin designing the delegate.</p>
+           <p>The GeckoView Java side uses a <code class="docutils literal notranslate"><span class="pre">GeckoResult</span></code> as a message wrapper to communicate with the GeckoView JavaScript side. The JavaScript side will send a callback to the <code class="docutils literal notranslate"><span class="pre">GeckoResult</span></code> for an <code class="docutils literal notranslate"><span class="pre">onEvent</span></code> message or else send a new message to Java using the <a class="reference internal" href="geckoview-architecture.html#eventdispatcher"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">EventDispatcher</span></code></span></a>. A <code class="docutils literal notranslate"><span class="pre">GeckoResult</span></code> is similar to a JavaScript promise and allows results to be returned asynchronously. In general, the return type of the <code class="docutils literal notranslate"><span class="pre">GeckoResult</span></code> will be the same data type as on the JavaScript side. Mapping can be used to change or format results. A <code class="docutils literal notranslate"><span class="pre">GeckoBundle</span></code> is used to serialize this information. Recommend also renaming functions on the Java side to match current naming patterns. Decisions will also need to be made if the result should be deserialized into a data object. If a data object is needed, implementing <code class="docutils literal notranslate"><span class="pre">fromBundle</span></code> and <code class="docutils literal notranslate"><span class="pre">toBundle</span></code> on the object is the typical setup.</p>
+           <p>For example, the JS toolkit signature <code class="docutils literal notranslate"><span class="pre">string[]</span> <span class="pre">getPreferredLanguages()</span></code> could have a GeckoView Java corresponding caller signature be <code class="docutils literal notranslate"><span class="pre">GeckoResult&lt;List&lt;String&gt;&gt;</span> <span class="pre">preferredLanguages</span></code> or <code class="docutils literal notranslate"><span class="pre">GeckoResult&lt;List&lt;Language&gt;&gt;</span> <span class="pre">preferredLanguages</span></code>.</p>
+          </section>
+          <section id="a-quick-overview-of-geckoview-delegates">
+           <h3>A quick overview of GeckoView delegates<a class="headerlink" href="#a-quick-overview-of-geckoview-delegates" title="Link to this heading">?</a></h3>
+           <p>If the application needs to listen to an event or react to information, then there is a good chance the API will also need <a class="reference internal" href="geckoview-architecture.html#delegates"><span class="std std-ref">a delegate</span></a>. GeckoView only provides base functionality. Embedders of GeckoView, such as Android Components, which powers Fenix, need to implement the specifics of what the reaction should be to an event. If the app needs to do something in response to an event, such as paint UI, then the embedding application needs to implement the delegate.</p>
+           <p>For example, a UI/UX requirement for translations might be: “When the user visits a page not in their set of expected known languages, then pop-up the translate feature dialog.” GeckoView does not implement this UI, but provides a mechanism for this to occur and others to implement the work. So, in this case, in toolkit, there is already a message called <code class="docutils literal notranslate"><span class="pre">TranslationsParent:OfferTranslation</span></code> that signals when a translation should be offered. To implement the functionality, a listener on the GeckoView JavaScript side should be set up to tell the GeckoView Java delegate that the event occurred. If the embedder implements this delegate, then that app can react as needed to this information.</p>
+          </section>
+          <section id="example-outline-of-mapping-toolkit-calls-to-new-api">
+           <h3>Example outline of mapping toolkit calls to new API<a class="headerlink" href="#example-outline-of-mapping-toolkit-calls-to-new-api" title="Link to this heading">?</a></h3>
+           <p>Notice for this outline that the original toolkit calls outlined above are now outlined with how they will be presented in the public API. <code class="docutils literal notranslate"><span class="pre">GeckoResult&lt;Void&gt;</span></code> is used if we just need to know the call successfully resolved, <code class="docutils literal notranslate"><span class="pre">void</span></code> if no feedback is required to the caller, <code class="docutils literal notranslate"><span class="pre">GeckoResult&lt;T&gt;</span></code> is used if a return value is required.</p>
+           <p>For the delegate outline, notice that each is reacting to a specific message broadcast by the <code class="docutils literal notranslate"><span class="pre">TranslationsParent</span></code>. Other message types or signals could also be used to activate the delegate.</p>
+           <div class="highlight-default notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="n">GeckoView</span> <span class="n">API</span> <span class="n">outline</span><span class="p">:</span>
+
+<span class="n">Session</span><span class="p">:</span>
+
+<span class="o">*</span> <span class="n">GeckoResult</span><span class="o">&lt;</span><span class="n">Void</span><span class="o">&gt;</span> <span class="n">translate</span><span class="p">(</span><span class="n">String</span> <span class="n">fromLanguage</span><span class="p">,</span> <span class="n">String</span> <span class="n">toLanguage</span><span class="p">,</span> <span class="n">TranslationOptions</span> <span class="n">options</span><span class="p">)</span>
+  <span class="o">*</span> <span class="n">The</span> <span class="n">use</span> <span class="n">of</span> <span class="n">options</span> <span class="ow">is</span> <span class="n">to</span> <span class="n">make</span> <span class="n">this</span> <span class="n">function</span> <span class="n">more</span> <span class="n">extensible</span><span class="o">.</span>
+  <span class="o">*</span> <span class="n">Toolkit</span> <span class="n">call</span><span class="p">:</span> <span class="n">translate</span><span class="p">(</span><span class="n">fromLanguage</span><span class="p">,</span> <span class="n">toLanguage</span><span class="p">)</span>
+<span class="o">*</span> <span class="n">GeckoResult</span><span class="o">&lt;</span><span class="n">Void</span><span class="o">&gt;</span> <span class="n">restoreOriginalPage</span><span class="p">()</span>
+  <span class="o">*</span> <span class="n">Toolkit</span> <span class="n">call</span><span class="p">:</span> <span class="n">void</span> <span class="n">restorePage</span><span class="p">()</span>
+
+<span class="n">Runtime</span><span class="p">:</span>
+
+<span class="o">*</span> <span class="n">GeckoResult</span><span class="o">&lt;</span><span class="n">Boolean</span><span class="o">&gt;</span> <span class="n">isTranslationsEngineSupported</span><span class="p">()</span>
+  <span class="o">*</span> <span class="n">Toolkit</span> <span class="n">call</span><span class="p">:</span> <span class="nb">bool</span> <span class="n">getIsTranslationsEngineSupported</span><span class="p">()</span>
+<span class="o">*</span> <span class="n">GeckoResult</span><span class="o">&lt;</span><span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;&gt;</span> <span class="n">preferredLanguages</span>
+  <span class="o">*</span> <span class="n">Toolkit</span> <span class="n">call</span><span class="p">:</span> <span class="n">string</span><span class="p">[]</span> <span class="n">getPreferredLanguages</span>
+<span class="o">*</span> <span class="n">GeckoResult</span><span class="o">&lt;</span><span class="n">Long</span><span class="o">&gt;</span> <span class="n">checkPairDownloadSize</span><span class="p">(</span><span class="n">String</span> <span class="n">fromLanguage</span><span class="p">,</span> <span class="n">String</span> <span class="n">toLanguage</span><span class="p">)</span>
+  <span class="o">*</span> <span class="n">Toolkit</span> <span class="n">call</span><span class="p">:</span> <span class="n">Needs</span> <span class="n">to</span> <span class="n">be</span> <span class="n">created</span><span class="o">.</span>
+<span class="o">*</span> <span class="n">GeckoResult</span><span class="o">&lt;</span><span class="n">List</span><span class="o">&lt;</span><span class="n">LanguageModel</span><span class="o">&gt;&gt;</span> <span class="n">listModelDownloadStates</span><span class="p">()</span>
+  <span class="o">*</span> <span class="n">Toolkit</span> <span class="n">call</span><span class="p">:</span> <span class="n">Needs</span> <span class="n">to</span> <span class="n">be</span> <span class="n">created</span><span class="o">.</span>
+
+<span class="n">Delegate</span><span class="p">:</span>
+
+<span class="o">*</span> <span class="n">void</span> <span class="n">onOfferTranslate</span><span class="p">(</span><span class="n">GeckoSession</span> <span class="n">session</span><span class="p">)</span>
+  <span class="o">*</span> <span class="n">Will</span> <span class="n">listen</span> <span class="n">to</span> <span class="n">message</span> <span class="n">TranslationsParent</span><span class="p">:</span><span class="n">LanguageState</span>
+<span class="o">*</span> <span class="n">void</span> <span class="n">onTranslationStateChange</span><span class="p">(</span><span class="n">GeckoSession</span> <span class="n">session</span><span class="p">,</span> <span class="n">TranslationState</span> <span class="n">translationState</span><span class="p">)</span>
+  <span class="o">*</span> <span class="n">Will</span> <span class="n">listen</span> <span class="n">to</span> <span class="n">message</span> <span class="n">TranslationsParent</span><span class="p">:</span><span class="n">OfferTranslation</span>
+
+</pre>
+            </div>
+           </div>
+           <p>Notice in the example that most items directly map from a JavaScript to a Java equivalent, but others needed a new object. Usually the function name is kept similar, but might be refined to make more sense in context. The state listeners were mapped to what will be a delegate.</p>
+           <div class="admonition seealso">
+            <p class="admonition-title">See also</p>
+            <p>See the <a class="reference external" href="https://docs.google.com/document/d/1pMn3IZthtsWPzg-tBGRGoeWebIaI8KJt42odiMTjMII/edit?tab=t.0#heading=h.rkn3k63wwhae">GeckoView Translations API RFC</a> for a more extended example. Or other <a class="reference external" href="https://firefox-source-docs.mozilla.org/mobile/android/geckoview/design/index.html">design documents here</a>.</p>
+           </div>
+          </section>
+          <section id="proposed-api-review">
+           <h3>Proposed API Review<a class="headerlink" href="#proposed-api-review" title="Link to this heading">?</a></h3>
+           <p>It is highly recommended that you send a draft of proposed GeckoView API changes or additions to <a class="reference external" href="https://firefox-source-docs.mozilla.org/mots/index.html#core-geckoview">geckoview-reviewers</a> before implementing. The <a class="reference external" href="https://docs.google.com/document/d/1oHc4BbqM8pzEtVIq-MD1s2itRYAGTVQ8LkyHvy4s168/edit?tab=t.0#heading=h.ls1dr18v7zrx">RFC template may be found here</a>. This is especially important for non-trivial additions or changes. Some examples of non-trivial changes are introducing an API to support a new end-to-end feature, introduction of a new class or module, significant updates to an existing API, or introduction of an API that traverses multiple layers. Examples of trivial changes are introducing a new preference setting API, adding or updating parameters or responses, or minor updates to reflect changes in Gecko. (Also, extremely important note, public APIs cannot be directly changed, they must go through a <a class="reference internal" href="geckoview-quick-start.html#updating-the-changelog-and-api-documentation"><span class="std std-ref">deprecation process</span></a> to avoid <a class="reference external" href="https://firefox-source-docs.mozilla.org/mobile/android/geckoview/design/breaking-changes.rst">breaking changes</a>.) The review group can provide comments and recommendations before implementing. This can save time and potential issues during code review.</p>
+           <div class="admonition important">
+            <p class="admonition-title">Important</p>
+            <p>Highly recommend creating an <a class="reference external" href="https://docs.google.com/document/d/1oHc4BbqM8pzEtVIq-MD1s2itRYAGTVQ8LkyHvy4s168/edit?tab=t.0#heading=h.ls1dr18v7zrx">RFC</a> for proposed GeckoView API additions or changes and consult <a class="reference external" href="https://firefox-source-docs.mozilla.org/mots/index.html#core-geckoview">Core: GeckoView</a> for recommendations.</p>
+            <p>The group can help ensure the API will meet the existing architecture requirements.</p>
+           </div>
+          </section>
+          <section id="overview-of-implementing-apis">
+           <h3>Overview of Implementing APIs<a class="headerlink" href="#overview-of-implementing-apis" title="Link to this heading">?</a></h3>
+           <p>After creating a list of the toolkit endpoints and GeckoView API endpoints and asking for review from <code class="docutils literal notranslate"><span class="pre">geckoview-reviewers</span></code>, now is a good time to begin implementing the connections. The goal of this part of the guide is to provide a gist of how an Android implementation is set up and key structures. There is a lot of variety in how APIs are implemented based on existing frameworks and requirements, so no guide can cover them all. However, hopefully this overview will outline the general structure of a possible solution.</p>
+           <p>Generally, a new Java class should be made to encompass the API, unless the feature is small or an extension of an existing feature. A rule of thumb is for a small change related to content, the API might simply be placed on <code class="docutils literal notranslate"><span class="pre">GeckoSession.java</span></code> and, for a small change related to settings, the API might be placed on <code class="docutils literal notranslate"><span class="pre">GeckoRuntime.java</span></code>. In the case of translations, which is a bigger feature, a <code class="docutils literal notranslate"><span class="pre">TranslationsController</span></code> class, which has both a session and runtime component was selected. The purpose of the <code class="docutils literal notranslate"><span class="pre">TranslationsController</span></code> is to organize and coordinate any calls involving translations in a contained manner. Much of the work was patterned similarly to the <code class="docutils literal notranslate"><span class="pre">WebExtensionsController</span></code>. Please see the <a class="reference external" href="https://docs.google.com/document/d/1pMn3IZthtsWPzg-tBGRGoeWebIaI8KJt42odiMTjMII/edit?tab=t.0#heading=h.rkn3k63wwhae">design document</a> for more details. Deciding how a new feature should be structured would be a good discussion in the recommended API RFC.</p>
+           <div class="admonition seealso">
+            <p class="admonition-title">See also</p>
+            <p>Please see the <a class="reference internal" href="geckoview-quick-start.html"><span class="std std-doc">GeckoView Contributor Guide</span></a> for more information on the specifics of linting, testing, generating API keys or the <a class="reference internal" href="junit.html"><span class="std std-doc">Junit Test Framework</span></a> guide for testing basics.</p>
+           </div>
+           <section id="session-api-example">
+            <h4>Session API Example<a class="headerlink" href="#session-api-example" title="Link to this heading">?</a></h4>
+            <p>One of the requirements of the translations feature is to translate a page. For GeckoView, this is a session level API.</p>
+            <p>Adding a new module on the JS side:</p>
+            <p><a class="reference external" href="https://searchfox.org/mozilla-central/rev/0b189f017bc9d48b62012205c5b9f8a8b560497b/mobile/shared/modules/geckoview/GeckoViewTranslations.sys.mjs#44"><code class="docutils literal notranslate"><span class="pre">GeckoViewTranslations.sys.mjs</span></code></a>:</p>
+            <div class="highlight-js notranslate">
+             <div class="highlight">
+              <pre><span></span><span class="c1">// Notice the use of GeckoViewModule to inherit behaviors`</span>
+<span class="k">export</span><span class="w"> </span><span class="kd">class</span><span class="w"> </span><span class="nx">GeckoViewTranslations</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nx">GeckoViewModule</span><span class="w"> </span><span class="p">{</span>
+<span class="nx">onInit</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">     </span><span class="nx">debug</span><span class="sb">`onInit`</span><span class="p">;</span>
+<span class="w">     </span><span class="c1">// This listener is going to be listening for messages from</span>
+<span class="w">     </span><span class="c1">// the Java side`</span>
+<span class="w">     </span><span class="k">this</span><span class="p">.</span><span class="nx">registerListener</span><span class="p">([</span><span class="s2">"GeckoView:Translations:Translate"</span><span class="p">,]);</span>
+
+<span class="p">...</span>
+
+<span class="nx">onEvent</span><span class="p">(</span><span class="nx">aEvent</span><span class="p">,</span><span class="w"> </span><span class="nx">aData</span><span class="p">,</span><span class="w"> </span><span class="nx">aCallback</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">debug</span><span class="sb">`onEvent: event=</span><span class="si">${</span><span class="nx">aEvent</span><span class="si">}</span><span class="sb">, data=</span><span class="si">${</span><span class="nx">aData</span><span class="si">}</span><span class="sb">`</span><span class="p">;</span>
+<span class="w">    </span><span class="k">switch</span><span class="w"> </span><span class="p">(</span><span class="nx">aEvent</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">case</span><span class="w"> </span><span class="s2">"GeckoView:Translations:Translate"</span><span class="o">:</span>
+<span class="w">            </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="k">this</span><span class="p">.</span><span class="nx">getActor</span><span class="p">(</span><span class="s2">"Translations"</span><span class="p">).</span><span class="nx">translate</span><span class="p">(</span>
+<span class="w">                  </span><span class="nx">aData</span><span class="p">.</span><span class="nx">fromLanguage</span><span class="p">,</span>
+<span class="w">                  </span><span class="nx">aData</span><span class="p">.</span><span class="nx">toLanguage</span><span class="p">,</span>
+<span class="w">                  </span><span class="cm">/* reportAsAutoTranslate */</span><span class="w"> </span><span class="kc">false</span>
+<span class="w">                </span><span class="p">).</span><span class="nx">then</span><span class="p">(</span>
+<span class="w">                </span><span class="p">()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">aCallback</span><span class="p">.</span><span class="nx">onSuccess</span><span class="p">(),</span>
+<span class="w">                </span><span class="c1">// An error occurred calling translate</span>
+<span class="w">                </span><span class="nx">error</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">aCallback</span><span class="p">.</span><span class="nx">onError</span><span class="p">(</span><span class="sb">`Could not translate: </span><span class="si">${</span><span class="nx">error</span><span class="si">}</span><span class="sb">`</span><span class="p">)</span>
+<span class="w">                </span><span class="p">);</span>
+<span class="w">            </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="nx">error</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">              </span><span class="c1">// This will let us know a problem occurred with finding the actor.</span>
+<span class="w">              </span><span class="nx">aCallback</span><span class="p">.</span><span class="nx">onError</span><span class="p">(</span><span class="nx">C</span><span class="sb">`ould not translate: </span><span class="si">${</span><span class="nx">error</span><span class="si">}</span><span class="sb">`</span><span class="p">);</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">    </span><span class="k">break</span><span class="p">;</span>
+<span class="p">...</span>
+</pre>
+             </div>
+            </div>
+            <p>Be sure to add to <code class="docutils literal notranslate"><span class="pre">mozbuild</span></code> this new file and register it in <code class="docutils literal notranslate"><span class="pre">geckoview.js</span></code>.</p>
+            <p>Now that there is a JS listener, now add the Java side:</p>
+            <p><a class="reference external" href="https://searchfox.org/mozilla-central/rev/bee16356819e33a1a4f219b4df9d20d1713bc3d1/mobile/android/geckoview/src/main/java/org/mozilla/geckoview/TranslationsController.java#808"><code class="docutils literal notranslate"><span class="pre">TranslationsController.java</span></code></a>:</p>
+            <div class="highlight-java notranslate">
+             <div class="highlight">
+              <pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">TranslationsController</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kd">class</span> <span class="nc">SessionTranslation</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">    </span><span class="c1">// Needs to match what the JS side is listening for</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">TRANSLATE_EVENT</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"GeckoView:Translations:Translate"</span><span class="p">;</span>
+
+<span class="w">    </span><span class="c1">// Be sure to register this in GeckoSession.java.</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="nf">SessionTranslation</span><span class="p">(</span><span class="kd">final</span><span class="w"> </span><span class="n">GeckoSession</span><span class="w"> </span><span class="n">session</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">mSession</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">session</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="nd">@AnyThread</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="nd">@NonNull</span><span class="w"> </span><span class="n">GeckoResult</span><span class="o">&lt;</span><span class="n">Void</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">baseTranslate</span><span class="p">(</span>
+<span class="w">      </span><span class="nd">@NonNull</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">fromLanguage</span><span class="p">,</span>
+<span class="w">      </span><span class="nd">@NonNull</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">toLanguage</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">        </span><span class="kd">final</span><span class="w"> </span><span class="n">GeckoBundle</span><span class="w"> </span><span class="n">bundle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">GeckoBundle</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+<span class="w">        </span><span class="n">bundle</span><span class="p">.</span><span class="na">putString</span><span class="p">(</span><span class="s">"fromLanguage"</span><span class="p">,</span><span class="w"> </span><span class="n">fromLanguage</span><span class="p">);</span>
+<span class="w">        </span><span class="n">bundle</span><span class="p">.</span><span class="na">putString</span><span class="p">(</span><span class="s">"toLanguage"</span><span class="p">,</span><span class="w"> </span><span class="n">toLanguage</span><span class="p">);</span>
+
+<span class="w">        </span><span class="c1">// The GeckoResult will not resolve until the JS callback.onSuccess() returns.</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">mSession</span>
+<span class="w">        </span><span class="p">.</span><span class="na">getEventDispatcher</span><span class="p">()</span>
+<span class="w">        </span><span class="p">.</span><span class="na">queryVoid</span><span class="p">(</span><span class="n">TRANSLATE_EVENT</span><span class="p">,</span><span class="w"> </span><span class="n">bundle</span><span class="p">)</span>
+<span class="w">        </span><span class="p">.</span><span class="na">map</span><span class="p">(</span>
+<span class="w">          </span><span class="n">result</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">result</span><span class="p">,</span>
+<span class="w">          </span><span class="n">exception</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">TranslationsException</span><span class="p">(</span><span class="n">TranslationsException</span><span class="p">.</span><span class="na">ERROR_COULD_NOT_TRANSLATE</span><span class="p">));</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre>
+             </div>
+            </div>
+            <p>Be sure to register this new session messenger in GeckoSession.java and add appropriate getters and setters. This function can now be called on the Java side from anywhere suitable.</p>
+            <div class="admonition seealso">
+             <p class="admonition-title">See also</p>
+             <p>See <a class="reference external" href="https://phabricator.services.mozilla.com/D189228">the patch for initially adding the GeckoView session APIs</a> for a more extended example with more details.</p>
+            </div>
+           </section>
+           <section id="session-delegate-api-example">
+            <h4>Session Delegate API Example<a class="headerlink" href="#session-delegate-api-example" title="Link to this heading">?</a></h4>
+            <p>Adding a delegate that listens to an event is similar to the session API example, with just the addition of listening for the code. In this example, an <code class="docutils literal notranslate"><span class="pre">Offer</span></code> event listener is set up on the Java session side of the translations controller. The JavaScript side then registers a listener for the toolkit parent’s message and sends an <code class="docutils literal notranslate"><span class="pre">Offer</span></code> message to the Java side</p>
+           </section>
+           <section id="example-setting-up-the-delegate-and-listener-for-the-triggering-event">
+            <h4>Example setting up the delegate and listener for the triggering event:<a class="headerlink" href="#example-setting-up-the-delegate-and-listener-for-the-triggering-event" title="Link to this heading">?</a></h4>
+            <ul class="simple">
+             <li>
+              <p>Notice <code class="docutils literal notranslate"><span class="pre">onOfferTranslate</span></code> is only a stub. The implementation will be set up in the embedding application.</p></li>
+            </ul>
+            <p><a class="reference external" href="https://searchfox.org/mozilla-central/rev/bee16356819e33a1a4f219b4df9d20d1713bc3d1/mobile/android/geckoview/src/main/java/org/mozilla/geckoview/TranslationsController.java#927"><code class="docutils literal notranslate"><span class="pre">TranslationsController.java</span></code></a>:</p>
+            <div class="highlight-java notranslate">
+             <div class="highlight">
+              <pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">TranslationsController</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kd">class</span> <span class="nc">SessionTranslation</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">    </span><span class="c1">// Event that the Java side will respond to.</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">ON_OFFER_EVENT</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"GeckoView:Translations:Offer"</span><span class="p">;</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="nf">SessionTranslation</span><span class="p">(</span><span class="kd">final</span><span class="w"> </span><span class="n">GeckoSession</span><span class="w"> </span><span class="n">session</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">          </span><span class="n">mSession</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">session</span><span class="p">;</span>
+<span class="w">          </span><span class="c1">// The handler is how we can listen for changes.</span>
+<span class="w">          </span><span class="n">mHandler</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">SessionTranslation</span><span class="p">.</span><span class="na">Handler</span><span class="p">(</span><span class="n">mSession</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="nd">@AnyThread</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="nd">@NonNull</span><span class="w"> </span><span class="n">Handler</span><span class="w"> </span><span class="nf">getHandler</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">          </span><span class="k">return</span><span class="w"> </span><span class="n">mHandler</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="nd">@AnyThread</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">interface</span> <span class="nc">Delegate</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// Notice this is a stub. The implementation will be provided by the GeckoView embedder.</span>
+<span class="w">        </span><span class="k">default</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">onOfferTranslate</span><span class="p">(</span><span class="nd">@NonNull</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">GeckoSession</span><span class="w"> </span><span class="n">session</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// Setup a handler to listen for events.</span>
+<span class="w">    </span><span class="kd">static</span><span class="w"> </span><span class="kd">class</span> <span class="nc">Handler</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">GeckoSessionHandler</span><span class="o">&lt;</span><span class="n">SessionTranslation</span><span class="p">.</span><span class="na">Delegate</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kd">private</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">GeckoSession</span><span class="w"> </span><span class="n">mSession</span><span class="p">;</span>
+<span class="w">        </span><span class="kd">private</span><span class="w"> </span><span class="nf">Handler</span><span class="p">(</span><span class="kd">final</span><span class="w"> </span><span class="n">GeckoSession</span><span class="w"> </span><span class="n">session</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">          </span><span class="kd">super</span><span class="p">(</span>
+<span class="w">          </span><span class="s">"GeckoViewTranslations"</span><span class="p">,</span>
+<span class="w">          </span><span class="n">session</span><span class="p">,</span>
+<span class="w">          </span><span class="k">new</span><span class="w"> </span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="p">{</span>
+<span class="w">          </span><span class="n">ON_OFFER_EVENT</span><span class="p">,</span>
+<span class="w">          </span><span class="p">});</span>
+<span class="w">          </span><span class="n">mSession</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">session</span><span class="p">;</span>
+<span class="w">      </span><span class="p">}</span>
+
+<span class="w">      </span><span class="nd">@Override</span>
+<span class="w">      </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">handleMessage</span><span class="p">(</span>
+<span class="w">      </span><span class="kd">final</span><span class="w"> </span><span class="n">Delegate</span><span class="w"> </span><span class="n">delegate</span><span class="p">,</span>
+<span class="w">      </span><span class="kd">final</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">event</span><span class="p">,</span>
+<span class="w">      </span><span class="kd">final</span><span class="w"> </span><span class="n">GeckoBundle</span><span class="w"> </span><span class="n">message</span><span class="p">,</span>
+<span class="w">      </span><span class="kd">final</span><span class="w"> </span><span class="n">EventCallback</span><span class="w"> </span><span class="n">callback</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">delegate</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="n">Log</span><span class="p">.</span><span class="na">w</span><span class="p">(</span><span class="n">LOGTAG</span><span class="p">,</span><span class="w"> </span><span class="s">"The translations session delegate is not set."</span><span class="p">);</span>
+<span class="w">                </span><span class="k">return</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ON_OFFER_EVENT</span><span class="p">.</span><span class="na">equals</span><span class="p">(</span><span class="n">event</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="c1">// Trigger delegate because the condition was met.</span>
+<span class="w">                </span><span class="n">delegate</span><span class="p">.</span><span class="na">onOfferTranslate</span><span class="p">(</span><span class="n">mSession</span><span class="p">);</span>
+<span class="w">        </span><span class="k">return</span><span class="p">;</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre>
+             </div>
+            </div>
+            <p><a class="reference external" href="https://searchfox.org/mozilla-central/rev/0b189f017bc9d48b62012205c5b9f8a8b560497b/mobile/shared/modules/geckoview/GeckoViewTranslations.sys.mjs#111"><code class="docutils literal notranslate"><span class="pre">GeckoViewTranslations.sys.mjs</span></code></a>:</p>
+            <div class="highlight-js notranslate">
+             <div class="highlight">
+              <pre><span></span><span class="nx">onEnable</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">debug</span><span class="w"> </span><span class="sb">`onEnable`</span><span class="p">;</span>
+<span class="w">   </span><span class="c1">// The event from the parent.</span>
+<span class="w">   </span><span class="k">this</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s2">"TranslationsParent:OfferTranslation"</span><span class="p">,</span><span class="w"> </span><span class="k">this</span><span class="p">);</span>
+<span class="w"> </span><span class="p">}</span>
+
+
+<span class="w"> </span><span class="nx">onDisable</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">debug</span><span class="w"> </span><span class="sb">`onDisable`</span><span class="p">;</span>
+<span class="w">  </span><span class="k">this</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">removeEventListener</span><span class="p">(</span><span class="s2">"TranslationsParent:OfferTranslation"</span><span class="p">,</span><span class="k">this</span><span class="p">);</span>
+<span class="w"> </span><span class="p">}</span>
+
+<span class="nx">handleEvent</span><span class="p">(</span><span class="nx">aEvent</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">debug</span><span class="sb">`handleEvent: </span><span class="si">${</span><span class="nx">aEvent</span><span class="p">.</span><span class="nx">type</span><span class="si">}</span><span class="sb">`</span><span class="p">;</span>
+<span class="w">  </span><span class="k">switch</span><span class="w"> </span><span class="p">(</span><span class="nx">aEvent</span><span class="p">.</span><span class="nx">type</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="s2">"TranslationsParent:OfferTranslation"</span><span class="o">:</span>
+<span class="w">     </span><span class="c1">// Send the event to GeckoView’s Java-side.</span>
+<span class="w">     </span><span class="k">this</span><span class="p">.</span><span class="nx">eventDispatcher</span><span class="p">.</span><span class="nx">sendRequest</span><span class="p">({</span>
+<span class="w">       </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="s2">"GeckoView:Translations:Offer"</span><span class="p">,</span>
+<span class="w">       </span><span class="p">});</span>
+<span class="w">     </span><span class="k">break</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre>
+             </div>
+            </div>
+            <div class="admonition seealso">
+             <p class="admonition-title">See also</p>
+             <p>See <a class="reference external" href="https://phabricator.services.mozilla.com/D189228">the patch for initially adding the GeckoView session APIs</a> for a more extended example with more details.</p>
+            </div>
+           </section>
+           <section id="runtime-api-example">
+            <h4>Runtime API Example<a class="headerlink" href="#runtime-api-example" title="Link to this heading">?</a></h4>
+            <p>A runtime endpoint is similar to a session endpoint, with a few key differences. The differences are a different event dispatcher and events are listened to differently.</p>
+            <p><a class="reference external" href="https://searchfox.org/mozilla-central/rev/0b189f017bc9d48b62012205c5b9f8a8b560497b/mobile/shared/modules/geckoview/GeckoViewTranslations.sys.mjs#145"><code class="docutils literal notranslate"><span class="pre">GeckoViewTranslations.sys.mjs</span></code></a>:</p>
+            <div class="highlight-js notranslate">
+             <div class="highlight">
+              <pre><span></span><span class="k">export</span><span class="w"> </span><span class="kd">const</span><span class="w"> </span><span class="nx">GeckoViewTranslationsSettings</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">  </span><span class="k">async</span><span class="w"> </span><span class="nx">onEvent</span><span class="p">(</span><span class="nx">aEvent</span><span class="p">,</span><span class="w"> </span><span class="nx">aData</span><span class="p">,</span><span class="w"> </span><span class="nx">aCallback</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">debug</span><span class="sb">`onEvent </span><span class="si">${</span><span class="nx">aEvent</span><span class="si">}</span><span class="sb"> </span><span class="si">${</span><span class="nx">aData</span><span class="si">}</span><span class="sb">`</span><span class="p">;</span>
+<span class="w">      </span><span class="k">switch</span><span class="w"> </span><span class="p">(</span><span class="nx">aEvent</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">case</span><span class="w"> </span><span class="s2">"GeckoView:Translations:IsTranslationEngineSupported"</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">         </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<span class="w">           </span><span class="nx">aCallback</span><span class="p">.</span><span class="nx">onSuccess</span><span class="p">(</span><span class="nx">lazy</span><span class="p">.</span><span class="nx">TranslationsParent</span><span class="p">.</span><span class="nx">getIsTranslationsEngineSupported</span><span class="p">());</span>
+<span class="w">         </span><span class="p">...</span>
+<span class="p">}</span>
+</pre>
+             </div>
+            </div>
+            <p>Registered in <a class="reference external" href="https://searchfox.org/mozilla-central/rev/0b189f017bc9d48b62012205c5b9f8a8b560497b/mobile/shared/components/geckoview/GeckoViewStartup.sys.mjs#204"><code class="docutils literal notranslate"><span class="pre">GeckoViewStartup.sys.mjs</span></code></a>:</p>
+            <div class="highlight-js notranslate">
+             <div class="highlight">
+              <pre><span></span><span class="nx">GeckoViewUtils</span><span class="p">.</span><span class="nx">addLazyGetter</span><span class="p">(</span><span class="k">this</span><span class="p">,</span><span class="w"> </span><span class="s2">"GeckoViewTranslationsSettings"</span><span class="p">,</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="nx">module</span><span class="o">:</span><span class="w"> </span><span class="s2">"resource://gre/modules/GeckoViewTranslations.sys.mjs"</span><span class="p">,</span>
+<span class="w">	</span><span class="nx">ged</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">		</span><span class="s2">"GeckoView:Translations:IsTranslationEngineSupported"</span><span class="p">,</span>
+<span class="w">		</span><span class="s2">"GeckoView:Translations:PreferredLanguages"</span><span class="p">,</span>
+<span class="w">		</span><span class="s2">"GeckoView:Translations:ManageModel"</span><span class="p">,</span>
+<span class="w">		</span><span class="s2">"GeckoView:Translations:TranslationInformation"</span><span class="p">,</span>
+<span class="w">		</span><span class="s2">"GeckoView:Translations:ModelInformation"</span><span class="p">,</span>
+<span class="w">	</span><span class="p">],</span>
+<span class="p">});</span>
+</pre>
+             </div>
+            </div>
+            <p><a class="reference external" href="https://searchfox.org/mozilla-central/rev/bee16356819e33a1a4f219b4df9d20d1713bc3d1/mobile/android/geckoview/src/main/java/org/mozilla/geckoview/TranslationsController.java#43"><code class="docutils literal notranslate"><span class="pre">TranslationsController.java</span></code></a>:</p>
+            <div class="highlight-java notranslate">
+             <div class="highlight">
+              <pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">TranslationsController</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kd">class</span> <span class="nc">RuntimeTranslation</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Events dispatched to toolkit translations</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">ENGINE_SUPPORTED_EVENT</span><span class="w"> </span><span class="o">=</span>
+<span class="w">    </span><span class="s">"GeckoView:Translations:IsTranslationEngineSupported"</span><span class="p">;</span>
+
+<span class="w">    </span><span class="nd">@AnyThread</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="nd">@NonNull</span><span class="w"> </span><span class="n">GeckoResult</span><span class="o">&lt;</span><span class="n">Boolean</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">isTranslationsEngineSupported</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Notice this isn’t the same event dispatcher as the session dispatcher and how to get the return value.</span>
+<span class="w">      </span><span class="k">return</span><span class="w"> </span><span class="n">EventDispatcher</span><span class="p">.</span><span class="na">getInstance</span><span class="p">()</span>
+<span class="w">        </span><span class="p">.</span><span class="na">queryBoolean</span><span class="p">(</span><span class="n">ENGINE_SUPPORTED_EVENT</span><span class="p">)</span>
+<span class="w">        </span><span class="p">.</span><span class="na">map</span><span class="p">(</span>
+<span class="w">          </span><span class="n">result</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">result</span><span class="p">,</span>
+<span class="w">          </span><span class="n">exception</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">TranslationsException</span><span class="p">(</span><span class="n">TranslationsException</span><span class="p">.</span><span class="na">ERROR_ENGINE_NOT_SUPPORTED</span><span class="p">));</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre>
+             </div>
+            </div>
+            <div class="admonition seealso">
+             <p class="admonition-title">See also</p>
+             <p>See the <a class="reference external" href="https://phabricator.services.mozilla.com/D189229">initial translations runtime patch</a> for more on this example.</p>
+            </div>
+           </section>
+           <section id="testing">
+            <h4>Testing<a class="headerlink" href="#testing" title="Link to this heading">?</a></h4>
+            <p>On the GeckoView side, the most common test is a junit or plain mochitest. Cross-platform tests generally run as well. The tests for the GeckoView side of translations may be found in <a class="reference external" href="http://TranslationsTests.kt">TranslationsTests.kt</a> or <a class="reference external" href="https://searchfox.org/mozilla-central/source/mobile/shared/modules/geckoview/test/mochitest/test_geckoview_translations.html">test_geckoview_translations.html</a> for reference.</p>
+            <div class="admonition seealso">
+             <p class="admonition-title">See also</p>
+             <p>See <a class="reference internal" href="junit.html#the-test-runner-extension"><span class="std std-ref">junit testing guide</span></a> for more details.</p>
+            </div>
+           </section>
+           <section id="geckoview-example">
+            <h4>GeckoView Example<a class="headerlink" href="#geckoview-example" title="Link to this heading">?</a></h4>
+            <p>It is highly recommended at this point to make a minimal menu option in GeckoView Example (GVE) in <code class="docutils literal notranslate"><span class="pre">GeckoViewActivity.java</span></code> to help with testing any new feature. It is an important step because it can be used to validate the API as well as for later use when determining which layer of the Android stack that the bug is on. This UI is only for internal testing and can be adjusted by simply adding an option on the menu.</p>
+            <p>Example add a new item to the GVE menu with some basic test functionality:</p>
+            <p><a class="reference external" href="https://searchfox.org/mozilla-central/rev/206eaea9a2fd4307da16e1614cd934920368165a/mobile/android/geckoview_example/src/main/java/org/mozilla/geckoview_example/GeckoViewActivity.java#1340"><code class="docutils literal notranslate"><span class="pre">GeckoViewActivity.java</span></code></a>:</p>
+            <div class="highlight-java notranslate">
+             <div class="highlight">
+              <pre><span></span><span class="c1">// Member variables to help manage states for UI</span>
+<span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">mDetectedLanguage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">null</span><span class="p">;</span>
+<span class="kd">private</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="n">mExpectedTranslate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span><span class="p">;</span>
+<span class="n">session</span><span class="p">.</span><span class="na">setTranslationsSessionDelegate</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">ExampleTranslationsSessionDelegate</span><span class="p">());</span>
+
+<span class="c1">// Implement the delegate for what makes sense in this sample</span>
+<span class="kd">private</span><span class="w"> </span><span class="kd">class</span> <span class="nc">ExampleTranslationsSessionDelegate</span>
+<span class="w">    </span><span class="kd">implements</span><span class="w"> </span><span class="n">TranslationsController</span><span class="p">.</span><span class="na">SessionTranslation</span><span class="p">.</span><span class="na">Delegate</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nd">@Override</span>
+<span class="w">  </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">onOfferTranslate</span><span class="p">(</span><span class="nd">@NonNull</span><span class="w"> </span><span class="n">GeckoSession</span><span class="w"> </span><span class="n">session</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">Log</span><span class="p">.</span><span class="na">i</span><span class="p">(</span><span class="n">LOGTAG</span><span class="p">,</span><span class="w"> </span><span class="s">"onOfferTranslate"</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="nd">@Override</span>
+<span class="w">  </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">onExpectedTranslate</span><span class="p">(</span><span class="nd">@NonNull</span><span class="w"> </span><span class="n">GeckoSession</span><span class="w"> </span><span class="n">session</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">Log</span><span class="p">.</span><span class="na">i</span><span class="p">(</span><span class="n">LOGTAG</span><span class="p">,</span><span class="w"> </span><span class="s">"onExpectedTranslate"</span><span class="p">);</span>
+<span class="w">    </span><span class="n">mExpectedTranslate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="nd">@Override</span>
+<span class="w">  </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">onTranslationStateChange</span><span class="p">(</span>
+<span class="w">      </span><span class="nd">@NonNull</span><span class="w"> </span><span class="n">GeckoSession</span><span class="w"> </span><span class="n">session</span><span class="p">,</span>
+<span class="w">      </span><span class="nd">@Nullable</span><span class="w"> </span><span class="n">TranslationsController</span><span class="p">.</span><span class="na">SessionTranslation</span><span class="p">.</span><span class="na">TranslationState</span><span class="w"> </span><span class="n">translationState</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">Log</span><span class="p">.</span><span class="na">i</span><span class="p">(</span><span class="n">LOGTAG</span><span class="p">,</span><span class="w"> </span><span class="s">"onTranslationStateChange"</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">translationState</span><span class="p">.</span><span class="na">detectedLanguages</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="n">mDetectedLanguage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">translationState</span><span class="p">.</span><span class="na">detectedLanguages</span><span class="p">.</span><span class="na">docLangTag</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// Manage state of menu item</span>
+<span class="kd">public</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="nf">onPrepareOptionsMenu</span><span class="p">(</span><span class="n">Menu</span><span class="w"> </span><span class="n">menu</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">menu</span><span class="p">.</span><span class="na">findItem</span><span class="p">(</span><span class="n">R</span><span class="p">.</span><span class="na">id</span><span class="p">.</span><span class="na">translate</span><span class="p">).</span><span class="na">setVisible</span><span class="p">(</span><span class="n">mExpectedTranslate</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="c1">// Manage action of menu item</span>
+<span class="kd">public</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="nf">onOptionsItemSelected</span><span class="p">(</span><span class="n">MenuItem</span><span class="w"> </span><span class="n">item</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="p">...</span>
+<span class="w">  </span><span class="k">case</span><span class="w"> </span><span class="n">R</span><span class="p">.</span><span class="na">id</span><span class="p">.</span><span class="na">translate</span><span class="p">:</span>
+<span class="w">    </span><span class="n">translate</span><span class="p">(</span><span class="n">session</span><span class="p">);</span>
+<span class="w">    </span><span class="k">break</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">// Menu action</span>
+<span class="kd">private</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">translate</span><span class="p">(</span><span class="n">GeckoSession</span><span class="w"> </span><span class="n">session</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="c1">// Specific UI details, logs, etc.</span>
+<span class="w">  </span><span class="c1">// Call the related API</span>
+<span class="w">  </span><span class="n">session</span><span class="p">.</span><span class="na">getSessionTranslation</span><span class="p">().</span><span class="na">translate</span><span class="p">(</span><span class="n">fromLang</span><span class="p">,</span><span class="w"> </span><span class="n">toLang</span><span class="p">,</span><span class="w"> </span><span class="kc">null</span><span class="p">);</span>
+<span class="p">}</span>
+</pre>
+             </div>
+            </div>
+            <div class="admonition seealso">
+             <p class="admonition-title">See also</p>
+             <p>See <a class="reference external" href="https://phabricator.services.mozilla.com/D189228">example PR for more details</a>.</p>
+            </div>
+           </section>
+          </section>
+         </section>
+         <section id="connecting-geckoview-apis-in-android-components">
+          <h2>Connecting GeckoView APIs in Android Components<a class="headerlink" href="#connecting-geckoview-apis-in-android-components" title="Link to this heading">?</a></h2>
+          <p>Now that the basic GeckoView APIs are set up, the next step is to bring them to Android Components (AC). Android Components provides a set of tools for Fenix, Focus, and any other consumer to use to create their own browser. It does everything from orchestrating calls from Gecko to providing basic reusable UI. Any browser implementation could theoretically be substituted in its browser engine. Because of that, it is important to note then that any code outside of the <code class="docutils literal notranslate"><span class="pre">gecko</span></code> folder namespace should use generic and browser implementation agnostic language.</p>
+          <p>Generally, many of the design decisions in GeckoView will have a parallel in Android Components. For example, session items should be added to <code class="docutils literal notranslate"><span class="pre">GeckoEngineSession</span></code> and runtime items should be connected to <code class="docutils literal notranslate"><span class="pre">GeckoEngine</span></code>. This guide will briefly outline how this typically works.</p>
+          <section id="connecting-to-geckoenginesession">
+           <h3>Connecting to GeckoEngineSession<a class="headerlink" href="#connecting-to-geckoenginesession" title="Link to this heading">?</a></h3>
+           <p>This example shows how to connect the basic <code class="docutils literal notranslate"><span class="pre">translate</span></code> function established in GeckoView to Android components. This is a session level API.</p>
+           <p>In <a class="reference external" href="https://searchfox.org/mozilla-central/rev/0b189f017bc9d48b62012205c5b9f8a8b560497b/mobile/android/android-components/components/concept/engine/src/main/java/mozilla/components/concept/engine/EngineSession.kt#1018"><code class="docutils literal notranslate"><span class="pre">EngineSession.kt</span></code></a>:</p>
+           <div class="highlight-kotlin notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="kd">abstract</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">requestTranslate</span><span class="p">(</span>
+<span class="w">    </span><span class="n">fromLanguage</span><span class="p">:</span><span class="w"> </span><span class="kt">String</span><span class="p">,</span>
+<span class="w">    </span><span class="n">toLanguage</span><span class="p">:</span><span class="w"> </span><span class="kt">String</span><span class="p">,</span>
+<span class="w">    </span><span class="n">options</span><span class="p">:</span><span class="w"> </span><span class="n">TranslationOptions?,</span>
+<span class="p">)</span>
+</pre>
+            </div>
+           </div>
+           <p>In <a class="reference external" href="https://searchfox.org/mozilla-central/rev/0b189f017bc9d48b62012205c5b9f8a8b560497b/mobile/android/android-components/components/browser/engine-gecko/src/main/java/mozilla/components/browser/engine/gecko/GeckoEngineSession.kt#979"><code class="docutils literal notranslate"><span class="pre">GeckoEngineSession.kt</span></code></a> implement the method:</p>
+           <div class="highlight-kotlin notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="kd">override</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">requestTranslate</span><span class="p">(</span>
+<span class="n">fromLanguage</span><span class="p">:</span><span class="w"> </span><span class="kt">String</span><span class="p">,</span>
+<span class="n">toLanguage</span><span class="p">:</span><span class="w"> </span><span class="kt">String</span><span class="p">,</span>
+<span class="n">options</span><span class="p">:</span><span class="w"> </span><span class="n">TranslationOptions?,</span>
+<span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="c1">// Note: Simplified for clarity</span>
+
+<span class="w">  </span><span class="c1">// Here we have access to GeckoView and can perform the call</span>
+<span class="w">  </span><span class="n">geckoSession</span><span class="p">.</span><span class="na">sessionTranslation</span><span class="o">!!</span><span class="p">.</span><span class="na">translate</span><span class="p">(</span><span class="n">fromLanguage</span><span class="p">,</span><span class="w"> </span><span class="n">toLanguage</span><span class="p">,</span><span class="w"> </span><span class="n">geckoOptions</span><span class="p">).</span><span class="na">then</span><span class="p">({</span>
+
+<span class="w">  </span><span class="c1">// This is a common pattern for allowing observers to react to the change</span>
+<span class="w">  </span><span class="c1">// Especially important is the store dispatcher which is observing to update session state. That state can then be used to show the waiting UI.</span>
+<span class="w">    </span><span class="n">notifyObservers</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="n">onTranslateComplete</span><span class="p">(</span><span class="n">TranslationOperation</span><span class="p">.</span><span class="na">TRANSLATE</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">      </span><span class="n">GeckoResult</span><span class="o">&lt;</span><span class="n">Void</span><span class="o">&gt;</span><span class="p">()</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="c1">// Similarly, this is a way to transmit an issue occurred</span>
+<span class="w">      </span><span class="n">throwable</span><span class="w"> </span><span class="o">-&gt;</span>
+<span class="w">        </span><span class="n">logger</span><span class="p">.</span><span class="na">error</span><span class="p">(</span><span class="s">"Request for translation failed: "</span><span class="p">,</span><span class="w"> </span><span class="n">throwable</span><span class="p">)</span>
+<span class="w">        </span><span class="n">notifyObservers</span><span class="w"> </span><span class="p">{</span>
+<span class="w">          </span><span class="n">onTranslateException</span><span class="p">(</span><span class="n">TranslationOperation</span><span class="p">.</span><span class="na">TRANSLATE</span><span class="p">,</span><span class="w"> </span><span class="n">throwable</span><span class="p">.</span><span class="na">intoTranslationError</span><span class="p">())</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">      </span><span class="n">GeckoResult</span><span class="p">()</span>
+<span class="w">  </span><span class="p">})</span>
+<span class="p">}</span>
+</pre>
+            </div>
+           </div>
+           <div class="admonition seealso">
+            <p class="admonition-title">See also</p>
+            <p>For more details on this session example <a class="reference external" href="https://github.com/mozilla-mobile/firefox-android/pull/4231/files">see this pull request</a>.</p>
+           </div>
+          </section>
+          <section id="managing-state">
+           <h3>Managing State<a class="headerlink" href="#managing-state" title="Link to this heading">?</a></h3>
+           <p>This guide will only provide code examples on the basics of connecting the GV API to AC. However, for completeness, this section will outline the importance of managing state in AC. In general, AC uses Flux architecture to coordinate data flow. If an action occurs that will change the state or require a reaction, then setting up an observer is the typical pattern. One of the key observers is almost always a store dispatcher which will dispatch an action to the store. The action will then be watched for by a state reducer. The state reducer then will properly update the data store model with the correct information.</p>
+           <p>Recommend reviewing <a class="reference external" href="https://firefox-source-docs.mozilla.org/mobile/android/fenix/architecture-overview.html">Fenix’s Architecture Overview</a> for more information, as the concepts apply the same to Android Components.</p>
+           <p>Briefly, an example outline of how state propagates through the app:</p>
+           <ul class="simple">
+            <li>
+             <p>Translate was <a class="reference external" href="https://searchfox.org/mozilla-central/rev/0b189f017bc9d48b62012205c5b9f8a8b560497b/mobile/android/android-components/components/browser/engine-gecko/src/main/java/mozilla/components/browser/engine/gecko/GeckoEngineSession.kt#1003">completed for the session</a>, which calls: <code class="docutils literal notranslate"><span class="pre">notifyObservers{onTranslateComplete}</span></code></p></li>
+            <li>
+             <p>An <a class="reference external" href="https://searchfox.org/mozilla-central/rev/0b189f017bc9d48b62012205c5b9f8a8b560497b/mobile/android/android-components/components/browser/state/src/main/java/mozilla/components/browser/state/engine/EngineObserver.kt#489">observer</a> of <code class="docutils literal notranslate"><span class="pre">onTranslateComplete</span></code> then calls: <code class="docutils literal notranslate"><span class="pre">store.dispatch(TranslationsAction.TranslateSuccessAction(tabId)</span></code></p></li>
+            <li>
+             <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/mobile/android/android-components/components/browser/state/src/main/java/mozilla/components/browser/state/reducer/TranslationsStateReducer.kt#113">Reducers</a> and <a class="reference external" href="https://searchfox.org/mozilla-central/source/mobile/android/android-components/components/browser/state/src/main/java/mozilla/components/browser/state/engine/middleware/TranslationsMiddleware.kt#323">Middleware</a> for the <code class="docutils literal notranslate"><span class="pre">TranslateSuccessAction:</span></code></p>
+             <ul>
+              <li>
+               <p>Send <a class="reference external" href="https://searchfox.org/mozilla-central/source/mobile/android/fenix/app/src/main/java/org/mozilla/fenix/telemetry/TelemetryMiddleware.kt#174">telemetry</a></p></li>
+              <li>
+               <p>Update the state of <code class="docutils literal notranslate"><span class="pre">isTranslated</span></code> on <code class="docutils literal notranslate"><span class="pre">SessionState.translationsState</span></code> to <code class="docutils literal notranslate"><span class="pre">true</span></code></p>
+               <ul>
+                <li>
+                 <p>Store <a class="reference external" href="https://searchfox.org/mozilla-central/rev/0b189f017bc9d48b62012205c5b9f8a8b560497b/mobile/android/fenix/app/src/main/java/org/mozilla/fenix/translations/TranslationsDialogBinding.kt#135">observers</a> connected to <a class="reference external" href="https://searchfox.org/mozilla-central/rev/0b189f017bc9d48b62012205c5b9f8a8b560497b/mobile/android/fenix/app/src/main/java/org/mozilla/fenix/translations/TranslationsDialogFragment.kt#203">UI</a> will react to <code class="docutils literal notranslate"><span class="pre">isTranslated</span></code></p></li>
+               </ul></li>
+             </ul></li>
+           </ul>
+          </section>
+          <section id="connecting-a-session-delegate">
+           <h3>Connecting a Session Delegate<a class="headerlink" href="#connecting-a-session-delegate" title="Link to this heading">?</a></h3>
+           <p>A delegate can be implemented as a session or runtime delegate depending on the area of code. This should have already been established in the GeckoView layer, but this pattern will propagate on into Android Components.</p>
+           <p>For example, <code class="docutils literal notranslate"><span class="pre">onOfferTranslate</span></code> needs to be implemented in AC.</p>
+           <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/mobile/android/android-components/components/browser/engine-gecko/src/main/java/mozilla/components/browser/engine/gecko/translate/GeckoTranslateSessionDelegate.kt"><code class="docutils literal notranslate"><span class="pre">GeckoTranslateSessionDelegate.kt</span></code></a> is created in the Gecko namespace:</p>
+           <div class="highlight-kotlin notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="kd">internal</span><span class="w"> </span><span class="kd">class</span><span class="w"> </span><span class="nc">GeckoTranslateSessionDelegate</span><span class="p">(</span>
+<span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">engineSession</span><span class="p">:</span><span class="w"> </span><span class="n">GeckoEngineSession</span><span class="p">,</span>
+<span class="p">)</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">TranslationsController</span><span class="p">.</span><span class="na">SessionTranslation</span><span class="p">.</span><span class="na">Delegate</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">  </span><span class="kd">override</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onOfferTranslate</span><span class="p">(</span><span class="n">session</span><span class="p">:</span><span class="w"> </span><span class="n">GeckoSession</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Using the notify observers pattern to tell other areas of the app a translation offer occurred</span>
+<span class="w">    </span><span class="n">engineSession</span><span class="p">.</span><span class="na">notifyObservers</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="n">onTranslateOffer</span><span class="p">()</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre>
+            </div>
+           </div>
+           <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/mobile/android/android-components/components/browser/engine-gecko/src/main/java/mozilla/components/browser/engine/gecko/GeckoEngineSession.kt"><code class="docutils literal notranslate"><span class="pre">GeckoEngineSession.kt</span></code></a>:</p>
+           <div class="highlight-kotlin notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="c1">// Register delegate</span>
+<span class="n">geckoSession</span><span class="p">.</span><span class="na">translationsSessionDelegate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GeckoTranslateSessionDelegate</span><span class="p">(</span><span class="k">this</span><span class="p">)</span>
+</pre>
+            </div>
+           </div>
+           <p><a class="reference external" href="https://searchfox.org/mozilla-central/rev/0b189f017bc9d48b62012205c5b9f8a8b560497b/mobile/android/android-components/components/browser/state/src/main/java/mozilla/components/browser/state/engine/EngineObserver.kt#480"><code class="docutils literal notranslate"><span class="pre">EngineObserver.kt</span></code></a></p>
+           <div class="highlight-kotlin notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="kd">override</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onTranslateOffer</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="c1">// Send a TranslateOfferAction that will eventually be used to update the translations session store</span>
+<span class="w">  </span><span class="n">store</span><span class="p">.</span><span class="na">dispatch</span><span class="p">(</span><span class="n">TranslationsAction</span><span class="p">.</span><span class="na">TranslateOfferAction</span><span class="p">(</span><span class="n">tabId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">tabId</span><span class="p">,</span><span class="w"> </span><span class="n">isOfferTranslate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="p">))</span>
+<span class="p">}</span>
+</pre>
+            </div>
+           </div>
+           <p><a class="reference external" href="https://searchfox.org/mozilla-central/rev/0b189f017bc9d48b62012205c5b9f8a8b560497b/mobile/android/android-components/components/browser/state/src/main/java/mozilla/components/browser/state/reducer/TranslationsStateReducer.kt#41"><code class="docutils literal notranslate"><span class="pre">TranslationsStateReducer.kt</span></code></a>:</p>
+           <div class="highlight-kotlin notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="k">is</span><span class="w"> </span><span class="n">TranslationsAction</span><span class="p">.</span><span class="na">TranslateOfferAction</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="n">state</span><span class="p">.</span><span class="na">copyWithTranslationsState</span><span class="p">(</span><span class="n">action</span><span class="p">.</span><span class="na">tabId</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	  </span><span class="nb">it</span><span class="p">.</span><span class="na">copy</span><span class="p">(</span>
+<span class="w">		</span><span class="n">isOfferTranslate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">action</span><span class="p">.</span><span class="na">isOfferTranslate</span><span class="p">,)</span>
+<span class="w">	</span><span class="p">}</span>
+<span class="p">}</span>
+</pre>
+            </div>
+           </div>
+           <p>The <code class="docutils literal notranslate"><span class="pre">isOfferTranslate</span></code> on the <code class="docutils literal notranslate"><span class="pre">TranslationsState</span></code> can then be used by Fenix in the UI to respond appropriately and offer a translation.</p>
+          </section>
+          <section id="connecting-to-geckoengine">
+           <h3>Connecting to GeckoEngine<a class="headerlink" href="#connecting-to-geckoengine" title="Link to this heading">?</a></h3>
+           <p>This part is similar in form as adding a session AC API and will be skipped in this guide. However, in general, the interface will be placed in <code class="docutils literal notranslate"><span class="pre">Engine.kt</span></code> (analogous to <code class="docutils literal notranslate"><span class="pre">EngineSession.kt</span></code> earlier) and <code class="docutils literal notranslate"><span class="pre">GeckoEngine.kt</span></code> for the implementation (similar to <code class="docutils literal notranslate"><span class="pre">GeckoEngineSession.kt</span></code>).</p>
+           <div class="admonition seealso">
+            <p class="admonition-title">See also</p>
+            <p>See this <a class="reference external" href="https://github.com/mozilla-mobile/firefox-android/pull/4521/files">example pull request</a> with more details for a concrete example.</p>
+           </div>
+          </section>
+          <section id="id1">
+           <h3>Testing<a class="headerlink" href="#id1" title="Link to this heading">?</a></h3>
+           <p>Tests on the AC side generally correspond to the filename where it was added. For example, translation tests may be found in <a class="reference external" href="https://searchfox.org/mozilla-central/rev/0b189f017bc9d48b62012205c5b9f8a8b560497b/mobile/android/android-components/components/browser/engine-gecko/src/test/java/mozilla/components/browser/engine/gecko/GeckoEngineTest.kt#3550">GeckoEngineTest.kt</a>, <a class="reference external" href="https://searchfox.org/mozilla-central/source/mobile/android/android-components/components/browser/engine-gecko/src/test/java/mozilla/components/browser/engine/gecko/translate/GeckoTranslateSessionDelegateTest.kt">GeckoTranslateSessionDelegateTest.kt</a>, <a class="reference external" href="https://searchfox.org/mozilla-central/source/mobile/android/android-components/components/browser/state/src/test/java/mozilla/components/browser/state/action/TranslationsActionTest.kt">TranslationsActionTest.kt</a>, and <a class="reference external" href="https://searchfox.org/mozilla-central/source/mobile/android/android-components/components/browser/state/src/test/java/mozilla/components/browser/state/engine/middleware/TranslationsMiddlewareTest.kt">TranslationsMiddlewareTest.kt</a>.</p>
+           <div class="admonition seealso">
+            <p class="admonition-title">See also</p>
+            <p>See <a class="reference external" href="https://firefox-source-docs.mozilla.org/mobile/android/fenix/Development-Test-Plan.html">Fenix’s testing guidelines for more information.</a></p>
+           </div>
+          </section>
+          <section id="reference-browser-or-sample-browser">
+           <h3>Reference Browser or Sample Browser<a class="headerlink" href="#reference-browser-or-sample-browser" title="Link to this heading">?</a></h3>
+           <p>Like the GeckoView Example (GVE) browser, there is also an Android Components layer test browser called Reference Browser, also known as sample browser. It is highly recommended that you add a minimal UI to check the AC connection at this step. Again, for the same reasons as GVE, it is useful for both testing and debugging which layer of the Android stack an issue is occurring on.</p>
+           <p>To add a menu option to Reference Browser:</p>
+           <p><a class="reference external" href="https://searchfox.org/mozilla-central/rev/206eaea9a2fd4307da16e1614cd934920368165a/mobile/android/android-components/samples/browser/src/main/java/org/mozilla/samples/browser/DefaultComponents.kt#321"><code class="docutils literal notranslate"><span class="pre">DefaultComponents.kt</span></code></a>:</p>
+           <div class="highlight-kotlin notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="w"> </span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">menuItems</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="n">lazy</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="p">...,</span>
+<span class="w">  </span><span class="n">SimpleBrowserMenuItem</span><span class="p">(</span><span class="s">"Translate (auto)"</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="kd">var</span><span class="w"> </span><span class="nv">detectedFrom</span><span class="w"> </span><span class="o">=</span>
+<span class="w">          </span><span class="n">store</span><span class="p">.</span><span class="na">state</span><span class="p">.</span><span class="na">selectedTab</span><span class="o">?.</span><span class="na">translationsState</span><span class="o">?.</span><span class="na">translationEngineState</span>
+<span class="w">              </span><span class="o">?.</span><span class="na">detectedLanguages</span><span class="o">?.</span><span class="na">documentLangTag</span>
+<span class="w">              </span><span class="o">?:</span><span class="w"> </span><span class="s">"en"</span>
+<span class="w">      </span><span class="kd">var</span><span class="w"> </span><span class="nv">detectedTo</span><span class="w"> </span><span class="o">=</span>
+<span class="w">          </span><span class="n">store</span><span class="p">.</span><span class="na">state</span><span class="p">.</span><span class="na">selectedTab</span><span class="o">?.</span><span class="na">translationsState</span><span class="o">?.</span><span class="na">translationEngineState</span>
+<span class="w">              </span><span class="o">?.</span><span class="na">detectedLanguages</span><span class="o">?.</span><span class="na">userPreferredLangTag</span>
+<span class="w">              </span><span class="o">?:</span><span class="w"> </span><span class="s">"en"</span>
+<span class="w">      </span><span class="n">sessionUseCases</span><span class="p">.</span><span class="na">translate</span><span class="p">.</span><span class="na">invoke</span><span class="p">(</span>
+<span class="w">          </span><span class="n">fromLanguage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">detectedFrom</span><span class="p">,</span>
+<span class="w">          </span><span class="n">toLanguage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">detectedTo</span><span class="p">,</span>
+<span class="w">          </span><span class="n">options</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">      </span><span class="p">)</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="p">}</span>
+</pre>
+            </div>
+           </div>
+           <div class="admonition seealso">
+            <p class="admonition-title">See also</p>
+            <p>Please <a class="reference external" href="https://github.com/mozilla-mobile/firefox-android/pull/4231/files#diff-3f5014b9ddff0dd60214e8d40638a54391901e134646fd22de888a35fbcc98f7">see this PR</a> for an extended example.</p>
+           </div>
+          </section>
+         </section>
+         <section id="using-the-new-android-components-apis-in-fenix">
+          <h2>Using the new Android Components APIs in Fenix<a class="headerlink" href="#using-the-new-android-components-apis-in-fenix" title="Link to this heading">?</a></h2>
+          <p>Now that the Android Components connection has been established, it is now possible to add the feature to Fenix. This part is highly dependent on the UI/UX designs and objectives for the feature. This section will only show a cursory example of how AC and Fenix UI may interact as a reference.</p>
+          <section id="example-translating">
+           <h3>Example Translating<a class="headerlink" href="#example-translating" title="Link to this heading">?</a></h3>
+           <div class="admonition note">
+            <p class="admonition-title">Note</p>
+            <p>This example uses a Fenix layer store and action for the dialog as well (<code class="docutils literal notranslate"><span class="pre">TranslationsDialogState</span></code>, <code class="docutils literal notranslate"><span class="pre">TranslationsDialogAction</span></code>, and <code class="docutils literal notranslate"><span class="pre">TranslationsDialogMiddleware</span></code>). In many cases, using the Android Components browser state is appropriate as well. Translations added this framework because there was potentially more UI state than captured in the Android Components options. However, for these examples, either the extra Fenix framework or directly using the AC framework would have been good choices.</p>
+           </div>
+           <p>Use cases should only be established for reference browser work. It isn’t an active pattern Fenix is using anymore, but translations did use it for the Reference Browser.</p>
+           <p>Fenix’s <code class="docutils literal notranslate"><span class="pre">TranslationsDialogAction.TranslateAction</span></code> maps directly to AC’s <code class="docutils literal notranslate"><span class="pre">TranslationsAction.TranslateAction</span></code> in order to pass and capture some additional <code class="docutils literal notranslate"><span class="pre">TranslationsDialogState</span></code> information. <code class="docutils literal notranslate"><span class="pre">TranslationsDialogBinding</span></code> helps map over state into <code class="docutils literal notranslate"><span class="pre">TranslationsDialogState</span></code>.</p>
+           <div class="admonition seealso">
+            <p class="admonition-title">See also</p>
+            <p>See <a class="reference external" href="https://firefox-source-docs.mozilla.org/mobile/android/fenix/architecture-overview.html">Fenix Architecture Overview</a> for more guidance.</p>
+           </div>
+           <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/mobile/android/fenix/app/src/main/java/org/mozilla/fenix/translations/TranslationsDialogFragment.kt"><code class="docutils literal notranslate"><span class="pre">TranslationsDialogFragment.kt</span></code></a>:</p>
+           <div class="highlight-kotlin notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="kd">private</span><span class="w"> </span><span class="kd">lateinit</span><span class="w"> </span><span class="kd">var</span><span class="w"> </span><span class="nv">translationsDialogStore</span><span class="p">:</span><span class="w"> </span><span class="n">TranslationsDialogStore</span>
+
+<span class="kd">override</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onCreateView</span><span class="p">(</span>
+<span class="n">inflater</span><span class="p">:</span><span class="w"> </span><span class="n">LayoutInflater</span><span class="p">,</span>
+<span class="n">container</span><span class="p">:</span><span class="w"> </span><span class="n">ViewGroup?,</span>
+<span class="n">savedInstanceState</span><span class="p">:</span><span class="w"> </span><span class="n">Bundle?,</span>
+<span class="p">):</span><span class="w"> </span><span class="n">View</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ComposeView</span><span class="p">(</span><span class="n">requireContext</span><span class="p">()).</span><span class="na">apply</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">translationsDialogStore</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">TranslationsDialogStore</span><span class="p">(</span>
+<span class="w">    </span><span class="n">TranslationsDialogState</span><span class="p">(),</span>
+<span class="w">    </span><span class="n">listOf</span><span class="p">(</span>
+<span class="w">        </span><span class="n">TranslationsDialogMiddleware</span><span class="p">(</span>
+<span class="w">        </span><span class="c1">// If we weren’t using the translationsDialogStore, then the calls could also be made from the browserStore.</span>
+<span class="w">        </span><span class="n">browserStore</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">browserStore</span><span class="p">,</span>
+<span class="w">      </span><span class="n">settings</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">requireContext</span><span class="p">().</span><span class="na">settings</span><span class="p">(),),),)</span>
+<span class="p">}</span>
+
+<span class="c1">// Simplified to avoid some error states or branching behavior</span>
+<span class="c1">// This can be called to complete a translation.</span>
+<span class="kd">private</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">translate</span><span class="p">(</span>
+<span class="n">translationsDialogState</span><span class="p">:</span><span class="w"> </span><span class="n">TranslationsDialogState? </span><span class="o">=</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="n">onShowDownloadLanguageFileDialog</span><span class="p">:</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="kt">Unit</span><span class="p">,</span>
+<span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">translationsDialogStore</span><span class="p">.</span><span class="na">dispatch</span><span class="p">(</span><span class="n">TranslationsDialogAction</span><span class="p">.</span><span class="na">TranslateAction</span><span class="p">)</span>
+<span class="p">}</span>
+</pre>
+            </div>
+           </div>
+           <p>Managing state is also extremely important with the UI.</p>
+           <p>This snippet checks for the translations state to change and passes it on to the Fenix store:</p>
+           <p><a class="reference external" href="https://searchfox.org/mozilla-central/rev/0b189f017bc9d48b62012205c5b9f8a8b560497b/mobile/android/fenix/app/src/main/java/org/mozilla/fenix/translations/TranslationsDialogBinding.kt"><code class="docutils literal notranslate"><span class="pre">TranslationsDialogBinding.kt</span></code></a>:</p>
+           <div class="highlight-kotlin notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="c1">// Session Translations State Behavior (Tab)</span>
+<span class="c1">// This is the AC state information</span>
+<span class="kd">val</span><span class="w"> </span><span class="nv">sessionTranslationsState</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">state</span><span class="p">.</span><span class="na">sessionState</span><span class="p">.</span><span class="na">translationsState</span>
+
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">translationsDialogStore</span><span class="p">.</span><span class="na">state</span><span class="p">.</span><span class="na">isTranslated</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">translationsDialogStore</span><span class="p">.</span><span class="na">dispatch</span><span class="p">(</span>
+<span class="w">    </span><span class="n">TranslationsDialogAction</span><span class="p">.</span><span class="na">UpdateTranslated</span><span class="p">(</span>
+<span class="w">    </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">  </span><span class="p">),)</span>
+<span class="p">}</span>
+</pre>
+            </div>
+           </div>
+           <p>From there, an observer can monitor <code class="docutils literal notranslate"><span class="pre">isTranslated</span></code> and react appropriately.</p>
+           <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/mobile/android/fenix/app/src/main/java/org/mozilla/fenix/translations/TranslationsDialogFragment.kt"><code class="docutils literal notranslate"><span class="pre">TranslationsDialogFragment.kt</span></code></a>:</p>
+           <div class="highlight-kotlin notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="kd">val</span><span class="w"> </span><span class="nv">translationsDialogState</span><span class="w"> </span><span class="o">=</span>
+<span class="n">translationsDialogStore</span><span class="p">.</span><span class="na">observeAsComposableState</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nb">it</span><span class="w"> </span><span class="p">}.</span><span class="na">value</span>
+<span class="p">...</span>
+
+<span class="n">TranslationsOptionsDialogContent</span><span class="p">(</span>
+<span class="w">  </span><span class="n">isTranslated</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">translationsDialogState</span><span class="o">?.</span><span class="na">isTranslated</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="p">...</span>
+</pre>
+            </div>
+           </div>
+          </section>
+         </section>
+         <section id="other-considerations">
+          <h2>Other Considerations<a class="headerlink" href="#other-considerations" title="Link to this heading">?</a></h2>
+          <p>This section contains a few other considerations that a project requiring traversing from the toolkit layer to the Fenix layer may encounter. For example, the need for QA testing requests or experimentation. These considerations are project dependent and depend on the scope of the new feature. This section aims to only touch on each of these subjects and provide a few translation specific examples for reference. Be sure to check with each of these partners for the exact procedure on each of these considerations because they are subject to change after writing.</p>
+          <section id="qa-testing-requests">
+           <h3>QA Testing Requests<a class="headerlink" href="#qa-testing-requests" title="Link to this heading">?</a></h3>
+           <p>QA testing is an important part of releasing well polished and robust features. Recommend communicating early with quality engineering to request additional manual testing.</p>
+           <div class="admonition seealso">
+            <p class="admonition-title">See also</p>
+            <p>Please see <a class="reference external" href="https://docs.google.com/document/d/1oz1YyaaBI-oHUDsktWA-dLtX7WzhYqs7C121yOPKo2w/edit?tab=t.0">guidance on how to file a QA request</a>.</p>
+           </div>
+           <p>The translations feature was released in four waves. Three of those waves had specific QA tickets:</p>
+           <ul class="simple">
+            <li>
+             <p><a class="reference external" href="https://docs.google.com/document/d/1S53TTm2jAs2OFUMkqz-irchaUul9nJSZu7h6B0zN94k/edit?tab=t.0#heading=h.rpzvwe6807u2">Background overview of feature</a> provided for testing</p></li>
+            <li>
+             <p><a class="reference external" href="https://mozilla-hub.atlassian.net/browse/QA-2218">QA-2218</a> - Website Translations for Fenix on Android (wave 1): Basic Feature and Page Settings</p></li>
+            <li>
+             <p><a class="reference external" href="https://mozilla-hub.atlassian.net/browse/QA-2414">QA-2414</a> - Website Translations for Fenix on Android (wave 2): Global Settings and Bug Fixes</p></li>
+            <li>
+             <p><a class="reference external" href="https://mozilla-hub.atlassian.net/browse/QA-2415">QA-2415</a> - Website Translations for Fenix on Android (wave 3): Downloads and Bug Fixes</p></li>
+           </ul>
+          </section>
+          <section id="accessibility-testing-requests">
+           <h3>Accessibility Testing Requests<a class="headerlink" href="#accessibility-testing-requests" title="Link to this heading">?</a></h3>
+           <p>Ensuring the implementation meets or exceeds all accessibility requirements is a critical step before release. Request accessibility and a11y testing by reaching out to an accessibility engineer and filing the appropriate request. UX accessibility design review should have also occurred on the original feature designs as well.</p>
+           <p>The Bugzilla request for a11y review of translations on Android may be found at bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1887140">1887140</a>.</p>
+          </section>
+          <section id="support-documents">
+           <h3>Support Documents<a class="headerlink" href="#support-documents" title="Link to this heading">?</a></h3>
+           <p>If the feature requires any new public documentation or how-to-guides such as a SUMO article, then review the <a class="reference external" href="https://mozilla-hub.atlassian.net/wiki/spaces/MSS/pages/21430745/Mozilla+Knowledge+Base+and+Support+Content">SUMO Content Request guidelines</a> and file a <a class="reference external" href="https://bugzilla.mozilla.org/enter_bug.cgi?product=support.mozilla.org&amp;amp;component=Knowledge+Base+Content">SUMO Content Request</a>. This step may often be handled by a UX or product partner, so be sure to coordinate with these partners to avoid duplicate requests.</p>
+           <p>For example, here is the final <a class="reference external" href="https://support.mozilla.org/en-US/kb/android-translation">Translations on Android SUMO knowledge base article</a> and <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1855500">Bugzilla ticket</a>.</p>
+          </section>
+          <section id="experiments">
+           <h3>Experiments<a class="headerlink" href="#experiments" title="Link to this heading">?</a></h3>
+           <p>Choosing to do an experiment or rollout release also adds additional considerations for planning. The translations team chose to have an <a class="reference external" href="https://experimenter.services.mozilla.com/nimbus/full-page-translations-in-android/summary">experiment to look for potential bugs</a>, an <a class="reference external" href="https://experimenter.services.mozilla.com/nimbus/full-page-translations-on-android-v2/summary">additional experiment with additional features</a>, and finally a <a class="reference external" href="https://experimenter.services.mozilla.com/nimbus/full-page-translations-on-android-basic-translations-enabled-rollout/summary">rollout</a>.</p>
+           <p>An important first step is filling out an <a class="reference external" href="https://docs.google.com/document/d/1GpQ-6FLfpHwkS1Kek37Euv-PuSctbDMviJUjNlx0CJk/edit?tab=t.0">experiment design document</a> and coordinating with various product, UX, QE, and experiment partners. A few engineering considerations when planning for an experiment are to ensure proper telemetry is added early, and deciding where best to gate the feature area. Having many feature areas gated under experimentation control provided the translations project maximum flexibility for staging releases of various portions of the feature.</p>
+           <p><code class="docutils literal notranslate"><span class="pre">Nimbus.fml.yaml</span></code> is where a feature will usually be defined for a Fenix experiment. Here is an <a class="reference external" href="https://searchfox.org/mozilla-central/rev/a965e3c683ecc035dee1de72bd33a8d91b1203ed/mobile/android/fenix/app/nimbus.fml.yaml#367-409">example of the translations feature definition</a>. Experiment switching can be tested using <a class="reference external" href="https://experimenter.info/nimbus-cli/install/">nimbus-cli</a>. Enrollment and rollout should be coordinated with product and UX partners.</p>
+          </section>
+         </section>
+        </section>
+       </div>
+      </div>
+      <footer>
+       <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="native-debugging.html" class="btn btn-neutral float-left" title="Debugging Native Code" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a> <a href="../design/index.html" class="btn btn-neutral float-right" title="Design docs" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+       </div>
+       <hr>
+       <div role="contentinfo">
+        <p></p>
+       </div> Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+      </footer>
+     </div>
+    </div>
+   </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ </body>
+</html>

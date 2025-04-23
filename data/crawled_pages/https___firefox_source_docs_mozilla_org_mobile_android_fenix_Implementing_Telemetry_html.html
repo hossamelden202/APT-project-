@@ -1,0 +1,363 @@
+<!doctype html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Implementing Telemetry — Firefox Source Docs  documentation</title>
+  <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50">
+  <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094">
+  <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=fd3f3429">
+  <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b">
+  <link rel="stylesheet" type="text/css" href="../../../_static/custom_theme.css?v=dc5ed815">
+  <link rel="stylesheet" type="text/css" href="../../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7">
+  <link rel="shortcut icon" href="../../../_static/firefox.ico"><!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+  <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+  <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+  <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+  <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+  <script src="../../../_static/copybutton.js?v=30646c52"></script>
+  <script src="../../../_static/design-tabs.js?v=36754332"></script>
+  <script src="../../../_static/js/theme.js"></script>
+  <link rel="index" title="Index" href="../../../genindex.html">
+  <link rel="search" title="Search" href="../../../search.html">
+  <link rel="next" title="Implementing a Nimbus Experiment" href="Implementing-a-Nimbus-Experiment.html">
+  <link rel="prev" title="Firefox for Android (Fenix Project)" href="Home.html">
+ </head>
+ <body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+   <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <div class="wy-side-scroll">
+     <div class="wy-side-nav-search">
+      <a href="../../../index.html" class="icon icon-home"> Firefox Source Docs <img src="../../../_static/firefox-wordmark.svg" class="logo" alt="Logo"> </a><!-- -- This code is governed by the BSD license ---->
+      <div>
+       <h3>Quick search</h3>
+       <script>
+    (function () {
+      var cx = "dd12886298f75dbef";
+      var gcse = document.createElement("script");
+      gcse.async = true;
+      gcse.src = "https://cse.google.com/cse.js?cx=" + cx;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(gcse, s);
+    })();
+  </script><gcse:search></gcse:search>
+      </div>
+     </div>
+     <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+      <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../glossary/index.html">A Glossary of Common Terms</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../overview/index.html">A Quick Guide to Mozilla Applications</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../setup/index.html">Getting Set Up To Work On The Firefox Codebase</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Working On Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../contributing/index.html">Working on Firefox</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../bug-mgmt/index.html">Bug Handling</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox User Guide</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../devtools-user/index.html">Firefox DevTools User Docs</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Source Code Documentation</span></p>
+      <ul class="current">
+       <li class="toctree-l1"><a class="reference internal" href="../../../mots/index.html">Governance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../browser/index.html">Firefox Front-end</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../dom/index.html">DOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../editor/index.html">Editor</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../layout/index.html">Style system (CSS) &amp; Layout</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../gfx/index.html">Graphics</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../ipc/index.html">Processes, Threads and IPC</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../devtools/index.html">Firefox DevTools Contributor Docs</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../toolkit/index.html">Toolkit</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../js/index.html">SpiderMonkey</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../jsloader/index.html">JS Loader</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../geckoview/index.html">GeckoView</a></li>
+       <li class="toctree-l1 current"><a class="reference internal" href="index.html">Fenix</a>
+        <ul class="current">
+         <li class="toctree-l2"><a class="reference internal" href="Acronym-dictionary.html">Acronym Dictionary</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Addressing-a-performance-regression.html">Addressing a performance regression</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Architecture-Decisions.html">Architecture Decisions</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="architecture-overview.html">Architecture Overview</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Crash-Monitoring.html">Crash Monitoring</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Creating-a-release-branch.html">Creating a release branch</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Data-Practices.html">Data practises</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Development-Test-Plan.html">Development Test Plan</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Fennec-Migration.html">Fennec Legacy: Migration</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Firebase-Cloud-Messaging-for-WebPush.html">Firebase Cloud Messaging for WebPush</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Firefox-for-Android-Team-Processes.html">Firefox for Android Team Processes</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Home.html">Home</a></li>
+         <li class="toctree-l2 current"><a class="current reference internal" href="#">Implementing Telemetry</a>
+          <ul>
+           <li class="toctree-l3"><a class="reference internal" href="#things-to-note-before-implementation">Things to note before implementation:</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#procedure-to-follow-before-implementing-the-telemetry">Procedure to follow before implementing the telemetry:</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#procedure-to-follow-when-implementing-a-glean-telemetry-event">Procedure to follow when implementing a Glean telemetry event</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#review">Review</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#after-merge">After Merge</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#renewing-expiring-telemetry">Renewing Expiring Telemetry</a></li>
+          </ul></li>
+         <li class="toctree-l2"><a class="reference internal" href="Implementing-a-Nimbus-Experiment.html">Implementing a Nimbus Experiment</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="List-of-fenix-threads.html">List of Fenix Threads</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Logging-Crash-Information.html">Logging Crash Information</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Metric-Feature-Tags.html">Metric Feature Tags</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Secret-settings-debug-menu-instructions.html">Debug settings menu instructions</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Telemetry-implementation%2C-reviews%2C-renewals.html">Telemetry - Implementation, Reviews, Renewals</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Telemetry-implementation%2C-reviews%2C-renewals.html#creating-glean-annotations">Creating Glean Annotations</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Telemetry-implementation%2C-reviews%2C-renewals.html#data-review">Data review</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Telemetry-implementation%2C-reviews%2C-renewals.html#renewing-existing-telemetry">Renewing existing telemetry</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Test-telemetry-pings.html">Test Telemetry Pings</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Working-with-Strings.html">Working with Strings</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="adjust.html">Adjust</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="certificates.html">Certificates</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="crash-reporting.html">Crash Reporting</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="experiments.html">Experiments</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="manual-testing.html">Manual Testing</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="metrics.html">Metrics Definitions</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="release-checklist.html">Release Checklist</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="substituting-local-gv.html">Substituting Local GeckoView</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="syncIntegrationTests.html">Sync Integration Tests</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="telemetry.html">Telemetry</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="UI-Tests.html">UI Tests</a></li>
+        </ul></li>
+       <li class="toctree-l1"><a class="reference internal" href="../focus-android/index.html">Focus for Android</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../dom/bindings/webidl/index.html">WebIDL</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../modules/libpref/index.html">libpref</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../networking/index.html">Networking</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../remote/index.html">Remote Protocols</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../services/index.html">Services</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../permissions/index.html">Permissions</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../uriloader/index.html">File Handling</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../widget/cocoa/index.html">Firefox on macOS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../widget/windows/index.html">Firefox on Windows</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../toolkit/components/ml/index.html">Firefox AI Runtime</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../accessible/index.html">Accessibility</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../media/index.html">Media Playback</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../code-quality/index.html">Code quality</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../writing-rust-code/index.html">Writing Rust Code</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../rust-components/index.html">Rust Components</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../tools/profiler/index.html">Gecko Profiler</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../performance/index.html">Performance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../storage/index.html">Database bindings (SQLite, KV, …)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../xpcom/index.html">XPCOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../nspr/index.html">NSPR</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../security/nss/index.html">Network Security Services (NSS)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../content-security/index.html">Web Security Checks in Gecko</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">The Firefox Build System</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../mach/index.html">Mach</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../tools/try/index.html">Pushing to Try</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../build/buildsystem/index.html">Build System</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../taskcluster/index.html">Firefox CI and Taskgraph</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../tools/moztreedocs/index.html">Managing Documentation</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../mozbuild/vendor/index.html">Vendoring Third Party Components</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Testing &amp; Test Infrastructure</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/automated-testing/index.html">Automated Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/treeherder-try/index.html">Understanding Treeherder Results</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/sheriffed-intermittents/index.html">Sheriffed intermittent failures</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/tests-for-new-config/index.html">Turning on Firefox tests for a new configuration</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/intermittent/index.html">Avoiding intermittent tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/testing-policy/index.html">Testing Policy</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/ci-configs/index.html">Configuration Changes</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/browser-chrome/index.html">Browser chrome mochitests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/chrome-tests/index.html">Chrome Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/marionette/index.html">Marionette</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/geckodriver/index.html">geckodriver</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/test-verification/index.html">Test Verification</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/webrender/index.html">WebRender Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/mochitest-plain/index.html">Mochitest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/xpcshell/index.html">XPCShell tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/tps/index.html">TPS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../web-platform/index.html">web-platform-tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../gtest/index.html">GTest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../tools/fuzzing/index.html">Fuzzing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../tools/sanitizer/index.html">Sanitizer</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/perfdocs/index.html">Performance Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../tools/code-coverage/index.html">Code coverage</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing-rust-code/index.html">Testing &amp; Debugging Rust Code</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Releases &amp; Updates</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../update-infrastructure/index.html">Mozilla Update Infrastructure</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../update-infrastructure/index.html#watershed-updates">Watershed Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../update-infrastructure/index.html#desupport-updates">Desupport Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../tools/update-verify/index.html">Update Verify</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Localization &amp; Internationalization</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../intl/index.html">Internationalization</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../l10n/index.html">Localization</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox and Python</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../mozbase/index.html">mozbase</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../python/index.html">Using third-party Python packages</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Metrics Collected in Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../metrics/index.html">Metrics</a></li>
+      </ul>
+     </div>
+    </div>
+   </nav>
+   <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+    <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+     <i data-toggle="wy-nav-top" class="fa fa-bars"></i> <a href="../../../index.html">Firefox Source Docs</a>
+    </nav>
+    <div class="wy-nav-content">
+     <div class="rst-content">
+      <!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+      <div role="navigation" aria-label="Page navigation">
+       <ul class="wy-breadcrumbs">
+        <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+        <li class="breadcrumb-item"><a href="index.html">Fenix</a></li>
+        <li class="breadcrumb-item active">Implementing Telemetry</li>
+        <li class="wy-breadcrumbs-aside"><a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Developer+Infrastructure&amp;component=Firefox+Source+Docs%3A+Content&amp;short_desc=Documentation+issue+on+mobile/android/fenix/Implementing-Telemetry&amp;comment=URL+=+https://firefox-source-docs.mozilla.org/mobile/android/fenix/Implementing-Telemetry.html&amp;bug_file_loc=https://firefox-source-docs.mozilla.org/mobile/android/fenix/Implementing-Telemetry.html" rel="nofollow">Report an issue</a> / <a href="../../../_sources/mobile/android/fenix/Implementing-Telemetry.md.txt" rel="nofollow"> View page source</a></li>
+       </ul>
+       <hr>
+      </div>
+      <div role="main" class="document" itemscope itemtype="http://schema.org/Article">
+       <div itemprop="articleBody">
+        <section id="implementing-telemetry">
+         <h1>Implementing Telemetry<a class="headerlink" href="#implementing-telemetry" title="Link to this heading">?</a></h1>
+         <section id="things-to-note-before-implementation">
+          <h2>Things to note before implementation:<a class="headerlink" href="#things-to-note-before-implementation" title="Link to this heading">?</a></h2>
+          <ul class="simple">
+           <li>
+            <p>Understand that telemetry is important, it is not just a checkmark for feature completion.</p></li>
+           <li>
+            <p>The consumer of the telemetry is the data science team.</p></li>
+           <li>
+            <p>When in doubt, please follow the example implementation, documentation and data review format linked below.</p></li>
+           <li>
+            <p>Avoid using SharedPreferences.</p></li>
+           <li>
+            <p>Write unit tests.</p></li>
+          </ul>
+         </section>
+         <section id="procedure-to-follow-before-implementing-the-telemetry">
+          <h2>Procedure to follow before implementing the telemetry:<a class="headerlink" href="#procedure-to-follow-before-implementing-the-telemetry" title="Link to this heading">?</a></h2>
+          <ol class="arabic simple">
+           <li>
+            <p>Contact Product team to understand the feature that we are adding telemetry to.</p></li>
+           <li>
+            <p>Contact the Data Science team to get the full requirements. This includes:</p></li>
+          </ol>
+          <ul class="simple">
+           <li>
+            <p>The categories that the Data Science team expects data from?</p></li>
+           <li>
+            <p>What are the telemetries the Data Science team expects in each category?</p></li>
+           <li>
+            <p>What type of data for each telemetry?</p></li>
+          </ul>
+          <ol class="arabic simple" start="3">
+           <li>
+            <p>Work with the Data Science team to raise/lower expectations. Refine the requirements until every telemetry is clearly specified. This includes:</p></li>
+          </ol>
+          <ul class="simple">
+           <li>
+            <p>Inform the Data Science team which telemetry is not achievable. (if exists)</p></li>
+           <li>
+            <p>Inform the Data Science team other possible telemetry that they might not know about.</p></li>
+           <li>
+            <p>Inform the Data Science team what might not make sense to collection. (Ex: B always happens when A happens)</p></li>
+           <li>
+            <p>Help the Data Science team collect the best telemetry data possible.</p></li>
+          </ul>
+          <ol class="arabic simple" start="4">
+           <li>
+            <p>Consult with the Glean team if there’s any questions. (Ex: What type of data to use)</p></li>
+          </ol>
+         </section>
+         <section id="procedure-to-follow-when-implementing-a-glean-telemetry-event">
+          <h2>Procedure to follow when implementing a Glean telemetry event<a class="headerlink" href="#procedure-to-follow-when-implementing-a-glean-telemetry-event" title="Link to this heading">?</a></h2>
+          <ul class="simple">
+           <li>
+            <p>A full example of adding an event with keys can be found <a class="reference external" href="https://github.com/mozilla-mobile/android-components/pull/10837">here</a> (Android Components), <a class="reference external" href="https://github.com/mozilla-mobile/fenix/pull/20909">here</a> (Fenix) and <a class="reference external" href="https://github.com/mozilla/glean-annotations/pull/77">here</a> (Glean Annotation)</p></li>
+          </ul>
+          <ol class="arabic simple">
+           <li>
+            <p>Create an event in <a class="reference external" href="https://github.com/mozilla-mobile/fenix/blob/master/app/metrics.yaml">metrics.yaml</a> and do a project rebuild to generate the event</p></li>
+           <li>
+            <p>To add feature tags see steps <a class="reference external" href="https://github.com/mozilla-mobile/fenix/wiki/Metric-Feature-Tags">here</a>.</p></li>
+           <li>
+            <p>Send the event from the proper place in the code with the appropriate generated method (e.g. <code class="docutils literal notranslate"><span class="pre">GeneratedClassMetrics.generatedEvent.record()</span></code>)</p></li>
+           <li>
+            <p>Create pull requests</p></li>
+           <li>
+            <p>Submit a data review (<a class="reference external" href="https://github.com/mozilla-mobile/fenix/pull/20909#issuecomment-902119039">example here</a>). There’s also a <a class="reference external" href="https://chuttenblog.wordpress.com/2021/09/07/this-week-in-glean-data-reviews-are-important-glean-parser-makes-them-easy/">command-line tool for generating Data Review Requests</a></p></li>
+           <li>
+            <p>Update the <a class="reference external" href="https://github.com/mozilla-mobile/fenix/blob/master/app/metrics.yaml">metrics.yaml</a> with the data review</p></li>
+           <li>
+            <p>For startup metrics, make sure to <a class="reference external" href="https://github.com/mozilla-mobile/fenix/wiki/Test-telemetry-pings">manually test it</a></p></li>
+          </ol>
+         </section>
+         <section id="review">
+          <h2>Review<a class="headerlink" href="#review" title="Link to this heading">?</a></h2>
+          <p>See example <a class="reference external" href="https://github.com/mozilla-mobile/fenix/pull/20909">here</a></p>
+          <ul class="simple">
+           <li>
+            <p>Add a developer that understands telemetry to review your change.</p></li>
+           <li>
+            <p>Add a developer from the Glean team as reviewer if needed.</p></li>
+           <li>
+            <p>Data review format <a class="reference external" href="https://github.com/mozilla/data-review/blob/main/request.md">here</a>. (<a class="reference external" href="https://github.com/mozilla-mobile/fenix/pull/20909#issuecomment-902119039">example here</a>)</p></li>
+          </ul>
+         </section>
+         <section id="after-merge">
+          <h2>After Merge<a class="headerlink" href="#after-merge" title="Link to this heading">?</a></h2>
+          <ol class="arabic simple">
+           <li>
+            <p>Make a note to revisit your telemetry changes when it makes it to beta/release.</p></li>
+          </ol>
+          <ul class="simple">
+           <li>
+            <p>for events, go to Glean dictionary and find the event you want to verify. Click on the Looker link on the bottom of the page to confirm that the event is being reported. (For example, for credit_cards.modified, the Glean dictionary link is https://dictionary.telemetry.mozilla.org/apps/fenix/metrics/credit_cards_modified. On the bottom click on the “credit_cards.modified” link next to Looker to see event count)</p></li>
+           <li>
+            <p>for metrics, create a query (ex: https://sql.telemetry.mozilla.org/queries/82373) to confirm that metric is being reported.</p></li>
+          </ul>
+          <ol class="arabic simple" start="2">
+           <li>
+            <p>Work with the data science team to make sure that they are seeing data that meet their requirements.</p></li>
+          </ol>
+         </section>
+         <section id="renewing-expiring-telemetry">
+          <h2>Renewing Expiring Telemetry<a class="headerlink" href="#renewing-expiring-telemetry" title="Link to this heading">?</a></h2>
+          <p>See steps <a class="reference external" href="https://github.com/mozilla-mobile/fenix/wiki/Creating-a-release-branch#renew-telemetry">here</a></p>
+         </section>
+        </section>
+       </div>
+      </div>
+      <footer>
+       <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Home.html" class="btn btn-neutral float-left" title="Firefox for Android (Fenix Project)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a> <a href="Implementing-a-Nimbus-Experiment.html" class="btn btn-neutral float-right" title="Implementing a Nimbus Experiment" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+       </div>
+       <hr>
+       <div role="contentinfo">
+        <p></p>
+       </div> Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+      </footer>
+     </div>
+    </div>
+   </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ </body>
+</html>

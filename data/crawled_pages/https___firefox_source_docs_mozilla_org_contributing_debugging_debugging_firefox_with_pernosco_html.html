@@ -1,0 +1,331 @@
+<!doctype html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Debugging Firefox with Pernosco — Firefox Source Docs  documentation</title>
+  <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50">
+  <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094">
+  <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=fd3f3429">
+  <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b">
+  <link rel="stylesheet" type="text/css" href="../../_static/custom_theme.css?v=dc5ed815">
+  <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7">
+  <link rel="shortcut icon" href="../../_static/firefox.ico"><!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script src="../../_static/jquery.js?v=5d32c60e"></script>
+  <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+  <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+  <script src="../../_static/doctools.js?v=9a2dae69"></script>
+  <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+  <script src="../../_static/copybutton.js?v=30646c52"></script>
+  <script src="../../_static/design-tabs.js?v=36754332"></script>
+  <script src="../../_static/js/theme.js"></script>
+  <link rel="index" title="Index" href="../../genindex.html">
+  <link rel="search" title="Search" href="../../search.html">
+  <link rel="next" title="Debugging Firefox with rr" href="debugging_firefox_with_rr.html">
+  <link rel="prev" title="Debugging Firefox with LLDB" href="debugging_firefox_with_lldb.html">
+ </head>
+ <body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+   <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <div class="wy-side-scroll">
+     <div class="wy-side-nav-search">
+      <a href="../../index.html" class="icon icon-home"> Firefox Source Docs <img src="../../_static/firefox-wordmark.svg" class="logo" alt="Logo"> </a><!-- -- This code is governed by the BSD license ---->
+      <div>
+       <h3>Quick search</h3>
+       <script>
+    (function () {
+      var cx = "dd12886298f75dbef";
+      var gcse = document.createElement("script");
+      gcse.async = true;
+      gcse.src = "https://cse.google.com/cse.js?cx=" + cx;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(gcse, s);
+    })();
+  </script><gcse:search></gcse:search>
+      </div>
+     </div>
+     <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+      <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../glossary/index.html">A Glossary of Common Terms</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../overview/index.html">A Quick Guide to Mozilla Applications</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../setup/index.html">Getting Set Up To Work On The Firefox Codebase</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Working On Firefox</span></p>
+      <ul class="current">
+       <li class="toctree-l1 current"><a class="reference internal" href="../index.html">Working on Firefox</a>
+        <ul class="current">
+         <li class="toctree-l2"><a class="reference internal" href="../contribution_quickref.html">Firefox Contributors’ Quick Reference</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../stack_quickref.html">Working with stack of patches Quick Reference</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../pocket-guide-shipping-firefox.html">Pocket Guide: Shipping Firefox</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../editor.html">Editor / IDE integration</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../reviews.html">Getting reviews</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../levelling-up.html">Levelling up</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../how_to_submit_a_patch.html">How to submit a patch</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../data-review.html">Data Review</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../Code_Review_FAQ.html">Code Review FAQ</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../reviewer_checklist.html">Reviewer Checklist</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../vcs/mercurial.html">Mercurial Overview</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../vcs/mercurial_bundles.html">Mercurial Bundles</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="capturing_minidump.html">Capturing a minidump</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="debugging_a_hang_on_macos.html">Debugging A Hang On macOS</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="debugging_a_minidump.html">Debugging A Minidump</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="debugging_firefox_with_gdb.html">Debugging Firefox with GDB</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="debugging_firefox_with_lldb.html">Debugging Firefox with LLDB</a></li>
+         <li class="toctree-l2 current"><a class="current reference internal" href="#">Debugging Firefox with Pernosco</a>
+          <ul>
+           <li class="toctree-l3"><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#workflow">Workflow</a>
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="#install-your-pernosco-configuration">Install your Pernosco configuration</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#gather-a-local-trace">Gather a Local Trace</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#upload-the-trace">Upload the trace</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#wait-for-email">Wait for email</a></li>
+            </ul></li>
+           <li class="toctree-l3"><a class="reference internal" href="#treeherder-workflow">Treeherder Workflow</a></li>
+          </ul></li>
+         <li class="toctree-l2"><a class="reference internal" href="debugging_firefox_with_rr.html">Debugging Firefox with rr</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="debugging_firefox_with_valgrind.html">Debugging Firefox with Valgrind</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="debugging_on_macos.html">Debugging On macOS</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="debugging_on_windows.html">Debugging On Windows</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="debugging_webrtc_calls.html">Debugging WebRTC Calls</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="local_symbols.html">Symbolicating TreeHerder stacks locally</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="process_dump_task_manager.html">How to get a process dump with Windows Task Manager</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="stacktrace_report.html">How to get a stacktrace for a bug report</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="stacktrace_windbg.html">How to get a stacktrace with WinDbg</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="understanding_crash_reports.html">Understanding Crash Reports</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../signing/signing_macos_build.html">Signing Local macOS Builds</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../directory_structure.html">Firefox Source Code Directory Structure</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../build/artifact_builds.html">Understanding Artifact Builds</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../build/building_mobile_firefox.html">Firefox for Mobile Devices</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../build/supported.html">Supported Build Hosts and Targets</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../engineering_show_and_tell.html">Engineering Show and Tell</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../filing-good-bugs.html">Filing good bugs</a></li>
+        </ul></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../bug-mgmt/index.html">Bug Handling</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox User Guide</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../devtools-user/index.html">Firefox DevTools User Docs</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Source Code Documentation</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mots/index.html">Governance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../browser/index.html">Firefox Front-end</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../dom/index.html">DOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../editor/index.html">Editor</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../layout/index.html">Style system (CSS) &amp; Layout</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../gfx/index.html">Graphics</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../ipc/index.html">Processes, Threads and IPC</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../devtools/index.html">Firefox DevTools Contributor Docs</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../toolkit/index.html">Toolkit</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../js/index.html">SpiderMonkey</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../jsloader/index.html">JS Loader</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/geckoview/index.html">GeckoView</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/fenix/index.html">Fenix</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/focus-android/index.html">Focus for Android</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../dom/bindings/webidl/index.html">WebIDL</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../modules/libpref/index.html">libpref</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../networking/index.html">Networking</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../remote/index.html">Remote Protocols</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../services/index.html">Services</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../permissions/index.html">Permissions</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../uriloader/index.html">File Handling</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../widget/cocoa/index.html">Firefox on macOS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../widget/windows/index.html">Firefox on Windows</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../toolkit/components/ml/index.html">Firefox AI Runtime</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../accessible/index.html">Accessibility</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../media/index.html">Media Playback</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../code-quality/index.html">Code quality</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../writing-rust-code/index.html">Writing Rust Code</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../rust-components/index.html">Rust Components</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/profiler/index.html">Gecko Profiler</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../performance/index.html">Performance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../storage/index.html">Database bindings (SQLite, KV, …)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../xpcom/index.html">XPCOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../nspr/index.html">NSPR</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../security/nss/index.html">Network Security Services (NSS)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../content-security/index.html">Web Security Checks in Gecko</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">The Firefox Build System</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mach/index.html">Mach</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/try/index.html">Pushing to Try</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../build/buildsystem/index.html">Build System</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../taskcluster/index.html">Firefox CI and Taskgraph</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/moztreedocs/index.html">Managing Documentation</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mozbuild/vendor/index.html">Vendoring Third Party Components</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Testing &amp; Test Infrastructure</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/automated-testing/index.html">Automated Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/treeherder-try/index.html">Understanding Treeherder Results</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/sheriffed-intermittents/index.html">Sheriffed intermittent failures</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/tests-for-new-config/index.html">Turning on Firefox tests for a new configuration</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/intermittent/index.html">Avoiding intermittent tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/testing-policy/index.html">Testing Policy</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/ci-configs/index.html">Configuration Changes</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/browser-chrome/index.html">Browser chrome mochitests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/chrome-tests/index.html">Chrome Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/marionette/index.html">Marionette</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/geckodriver/index.html">geckodriver</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/test-verification/index.html">Test Verification</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/webrender/index.html">WebRender Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/mochitest-plain/index.html">Mochitest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/xpcshell/index.html">XPCShell tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/tps/index.html">TPS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../web-platform/index.html">web-platform-tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../gtest/index.html">GTest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/fuzzing/index.html">Fuzzing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/sanitizer/index.html">Sanitizer</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/perfdocs/index.html">Performance Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/code-coverage/index.html">Code coverage</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing-rust-code/index.html">Testing &amp; Debugging Rust Code</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Releases &amp; Updates</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html">Mozilla Update Infrastructure</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html#watershed-updates">Watershed Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html#desupport-updates">Desupport Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/update-verify/index.html">Update Verify</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Localization &amp; Internationalization</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../intl/index.html">Internationalization</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../l10n/index.html">Localization</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox and Python</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mozbase/index.html">mozbase</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../python/index.html">Using third-party Python packages</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Metrics Collected in Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../metrics/index.html">Metrics</a></li>
+      </ul>
+     </div>
+    </div>
+   </nav>
+   <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+    <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+     <i data-toggle="wy-nav-top" class="fa fa-bars"></i> <a href="../../index.html">Firefox Source Docs</a>
+    </nav>
+    <div class="wy-nav-content">
+     <div class="rst-content">
+      <!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+      <div role="navigation" aria-label="Page navigation">
+       <ul class="wy-breadcrumbs">
+        <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+        <li class="breadcrumb-item"><a href="../index.html">Working on Firefox</a></li>
+        <li class="breadcrumb-item active">Debugging Firefox with Pernosco</li>
+        <li class="wy-breadcrumbs-aside"><a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Developer+Infrastructure&amp;component=Firefox+Source+Docs%3A+Content&amp;short_desc=Documentation+issue+on+contributing/debugging/debugging_firefox_with_pernosco&amp;comment=URL+=+https://firefox-source-docs.mozilla.org/contributing/debugging/debugging_firefox_with_pernosco.html&amp;bug_file_loc=https://firefox-source-docs.mozilla.org/contributing/debugging/debugging_firefox_with_pernosco.html" rel="nofollow">Report an issue</a> / <a href="../../_sources/contributing/debugging/debugging_firefox_with_pernosco.rst.txt" rel="nofollow"> View page source</a></li>
+       </ul>
+       <hr>
+      </div>
+      <div role="main" class="document" itemscope itemtype="http://schema.org/Article">
+       <div itemprop="articleBody">
+        <section id="debugging-firefox-with-pernosco">
+         <h1>Debugging Firefox with Pernosco<a class="headerlink" href="#debugging-firefox-with-pernosco" title="Link to this heading">?</a></h1>
+         <p>This page is intended to help Firefox/Gecko developers get started using <a class="reference external" href="https://pernos.co/">Pernosco</a> to debug Firefox.</p>
+         <p>Mozilla employees have a paid subscription to Pernosco, and are encouraged to use it. Contributors can use Pernosco as well. <a class="reference external" href="https://pernos.co/pricing/">A free account</a> comes with 5 uploads to see if it is suitable for your workflow.</p>
+         <section id="prerequisites">
+          <h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading">?</a></h2>
+          <ul class="simple">
+           <li>
+            <p>You need the ability to produce an <code class="code docutils literal notranslate"><span class="pre">rr</span></code> trace. See <a class="reference internal" href="debugging_firefox_with_rr.html"><span class="doc">Debugging Firefox with rr</span></a></p></li>
+           <li>
+            <p>Employees, you can also generate traces for Pernosco for some CI job failures via Treeherder.</p></li>
+          </ul>
+         </section>
+         <section id="workflow">
+          <h2>Workflow<a class="headerlink" href="#workflow" title="Link to this heading">?</a></h2>
+          <p>At a high level, working with Pernosco consists of recording a trace then uploading the trace for processing.</p>
+          <section id="install-your-pernosco-configuration">
+           <h3>Install your Pernosco configuration<a class="headerlink" href="#install-your-pernosco-configuration" title="Link to this heading">?</a></h3>
+           <p>If you are using your own Pernoso account, follow the instructions <a class="reference external" href="https://pernos.co/account">here</a> to install your credentials.</p>
+           <p>Mozilla employees, see the <a class="reference external" href="https://docs.google.com/document/d/1cb-mkNyJYMudpS0a-R6zxy0kOMIRUSKrxxL-E9zFGKE/edit">Pernosco install and configuration doc</a> for credentials.</p>
+           <p>In general, you will want:</p>
+           <blockquote>
+            <div>
+             <ul class="simple">
+              <li>
+               <p>Your email in <code class="code docutils literal notranslate"><span class="pre">~/.config/pernosco/user</span></code></p></li>
+              <li>
+               <p>Your group in <code class="code docutils literal notranslate"><span class="pre">~/.config/pernosco/group</span></code></p></li>
+              <li>
+               <p>Your key in <code class="code docutils literal notranslate"><span class="pre">~/.config/pernosco/user_secret_key</span></code></p></li>
+             </ul>
+            </div>
+           </blockquote>
+          </section>
+          <section id="gather-a-local-trace">
+           <h3>Gather a Local Trace<a class="headerlink" href="#gather-a-local-trace" title="Link to this heading">?</a></h3>
+           <p>In general, to gather a trace follow the instruction for recording <code class="code docutils literal notranslate"><span class="pre">rr</span></code> traces in <a class="reference internal" href="debugging_firefox_with_rr.html"><span class="doc">Debugging Firefox with rr</span></a>. However, to gather a local rr trace that’s compatible with Pernosco you need to disable some incompatible CPU features (currently only AVX-512)</p>
+           <p>On an Intel machine, you can disable this at the command line. To simplify things a shell script <code class="code docutils literal notranslate"><span class="pre">pernosco-record</span></code> can be created like so,</p>
+           <div class="highlight-bash notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="ch">#!/bin/bash</span>
+
+rr<span class="w"> </span>record<span class="w"> </span>--disable-avx-512<span class="w"> </span><span class="s2">"</span><span class="nv">$@</span><span class="s2">"</span>
+</pre>
+            </div>
+           </div>
+           <p>replacing plain <code class="code docutils literal notranslate"><span class="pre">rr</span></code> in command lines (<code class="code docutils literal notranslate"><span class="pre">mach</span> <span class="pre">--debugger</span> <span class="pre">pernosco-record</span></code>)</p>
+           <p>On AMD Zen Machines, you can disable AVX-512 and 5 level page tables at boot.</p>
+           <p>On a Debian derived distro this involves editing <code class="code docutils literal notranslate"><span class="pre">/etc/default/grub</span></code> and adding <code class="code docutils literal notranslate"><span class="pre">clearcpuid=304,no5lvl</span></code> to <code class="code docutils literal notranslate"><span class="pre">GRUB_CMDLINE_LINUX_DEFAULT</span></code>, then running <code class="code docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">update-grub</span></code> after.</p>
+          </section>
+          <section id="upload-the-trace">
+           <h3>Upload the trace<a class="headerlink" href="#upload-the-trace" title="Link to this heading">?</a></h3>
+           <p>Find the trace you’re interested in <code class="code docutils literal notranslate"><span class="pre">~/.local/share/rr/&lt;trace&gt;</span></code>, and call <code class="code docutils literal notranslate"><span class="pre">pernosco-submit</span></code></p>
+           <div class="highlight-bash notranslate">
+            <div class="highlight">
+             <pre><span></span>pernosco-submit<span class="w"> </span>upload<span class="w"> </span>~/.local/share/rr/&lt;trace&gt;<span class="w"> </span>PATH_TO_CENTRAL<span class="w"> </span>--title<span class="w"> </span><span class="s2">"Name Of Trace"</span>
+</pre>
+            </div>
+           </div>
+           <p>where <code class="code docutils literal notranslate"><span class="pre">PATH</span> <span class="pre">TO</span> <span class="pre">CENTRAL</span></code> is the path to the source of your build, checked out to the revision matching the build.</p>
+           <p>The last trace recorded is always symlinked, so you can use <code class="code docutils literal notranslate"><span class="pre">~/.local/share/rr/latest-trace</span></code> too.</p>
+          </section>
+          <section id="wait-for-email">
+           <h3>Wait for email<a class="headerlink" href="#wait-for-email" title="Link to this heading">?</a></h3>
+           <p>After the trace is processed, you’ll get an email with a link to your trace. Good hunting!</p>
+          </section>
+         </section>
+         <section id="treeherder-workflow">
+          <h2>Treeherder Workflow<a class="headerlink" href="#treeherder-workflow" title="Link to this heading">?</a></h2>
+          <p>You can also try to get traces generated via the Treeherder interface. On a failing test that is eligible, in “Artifacts and Debugging Tools”, you’ll see a link to</p><a class="reference internal image-reference" href="../../_images/record-this-failure.png"><img alt="../../_images/record-this-failure.png" src="../../_images/record-this-failure.png" style="width: 35%;"></a>
+          <p>This link brings you to the self-service reproducer:</p><a class="reference internal image-reference" href="../../_images/self-service.png"><img alt="../../_images/self-service.png" src="../../_images/self-service.png" style="width: 60%;"></a>
+          <p>Select a test and a count, and whether or not chaos-mode should be used, then click reproduce. At this point there is a <strong>long</strong> wait; the page will notify you when reproduction has started with an <code class="code docutils literal notranslate"><span class="pre">alert</span></code> dialog.</p>
+         </section>
+        </section>
+       </div>
+      </div>
+      <footer>
+       <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="debugging_firefox_with_lldb.html" class="btn btn-neutral float-left" title="Debugging Firefox with LLDB" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a> <a href="debugging_firefox_with_rr.html" class="btn btn-neutral float-right" title="Debugging Firefox with rr" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+       </div>
+       <hr>
+       <div role="contentinfo">
+        <p></p>
+       </div> Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+      </footer>
+     </div>
+    </div>
+   </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ </body>
+</html>

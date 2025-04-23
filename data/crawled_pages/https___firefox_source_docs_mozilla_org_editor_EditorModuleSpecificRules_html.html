@@ -1,0 +1,336 @@
+<!doctype html>
+<html class="writer-html5" lang="en" data-content_root="../">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Editor module specific rules — Firefox Source Docs  documentation</title>
+  <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50">
+  <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094">
+  <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=fd3f3429">
+  <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b">
+  <link rel="stylesheet" type="text/css" href="../_static/custom_theme.css?v=dc5ed815">
+  <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7">
+  <link rel="shortcut icon" href="../_static/firefox.ico"><!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script src="../_static/jquery.js?v=5d32c60e"></script>
+  <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+  <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+  <script src="../_static/doctools.js?v=9a2dae69"></script>
+  <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+  <script src="../_static/copybutton.js?v=30646c52"></script>
+  <script src="../_static/design-tabs.js?v=36754332"></script>
+  <script src="../_static/js/theme.js"></script>
+  <link rel="index" title="Index" href="../genindex.html">
+  <link rel="search" title="Search" href="../search.html">
+  <link rel="next" title="IME handling guide" href="IMEHandlingGuide.html">
+  <link rel="prev" title="Editor module structure" href="EditorModuleStructure.html">
+ </head>
+ <body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+   <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <div class="wy-side-scroll">
+     <div class="wy-side-nav-search">
+      <a href="../index.html" class="icon icon-home"> Firefox Source Docs <img src="../_static/firefox-wordmark.svg" class="logo" alt="Logo"> </a><!-- -- This code is governed by the BSD license ---->
+      <div>
+       <h3>Quick search</h3>
+       <script>
+    (function () {
+      var cx = "dd12886298f75dbef";
+      var gcse = document.createElement("script");
+      gcse.async = true;
+      gcse.src = "https://cse.google.com/cse.js?cx=" + cx;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(gcse, s);
+    })();
+  </script><gcse:search></gcse:search>
+      </div>
+     </div>
+     <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+      <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../glossary/index.html">A Glossary of Common Terms</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../overview/index.html">A Quick Guide to Mozilla Applications</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../setup/index.html">Getting Set Up To Work On The Firefox Codebase</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Working On Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../contributing/index.html">Working on Firefox</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../bug-mgmt/index.html">Bug Handling</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox User Guide</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../devtools-user/index.html">Firefox DevTools User Docs</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Source Code Documentation</span></p>
+      <ul class="current">
+       <li class="toctree-l1"><a class="reference internal" href="../mots/index.html">Governance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../browser/index.html">Firefox Front-end</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../dom/index.html">DOM</a></li>
+       <li class="toctree-l1 current"><a class="reference internal" href="index.html">Editor</a>
+        <ul class="current">
+         <li class="toctree-l2"><a class="reference internal" href="EditorModuleStructure.html">Editor module structure</a></li>
+         <li class="toctree-l2 current"><a class="current reference internal" href="#">Editor module specific rules</a>
+          <ul>
+           <li class="toctree-l3"><a class="reference internal" href="#treat-other-browsers-behavior-as-standard-if-the-behavior-is-reasonable">Treat other browsers behavior as standard if the behavior is reasonable</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#don-t-make-methods-of-editor-classes-public-if-they-are-used-only-by-helper-classes">Don’t make methods of editor classes public if they are used only by helper classes</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#steps-to-handle-one-editor-command-or-operation">Steps to handle one editor command or operation</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#don-t-update-selection-immediately">Don’t update Selection immediately</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#don-t-add-new-things-into-onendhandlingtopleveleditsubaction">Don’t add new things into OnEndHandlingTopLevelEditSubAction()</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#don-t-use-ns-warn-if-for-checking-ns-failed-iserr-and-failed">Don’t use NS_WARN_IF for checking NS_FAILED, isErr() and Failed()</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#return-ns-error-editor-destroyed-when-editor-gets-destroyed">Return NS_ERROR_EDITOR_DESTROYED when editor gets destroyed</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#use-reference-instead-of-pointer-as-far-as-possible">Use reference instead of pointer as far as possible</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#use-editorutils-or-htmleditutils-for-stateless-methods">Use <code class="docutils literal notranslate"><span class="pre">EditorUtils</span></code> or <code class="docutils literal notranslate"><span class="pre">HTMLEditUtils</span></code> for stateless methods</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#don-t-use-bool-argument">Don’t use bool argument</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#don-t-use-out-parameters">Don’t use out parameters</a></li>
+          </ul></li>
+         <li class="toctree-l2"><a class="reference internal" href="IMEHandlingGuide.html">IME handling guide</a></li>
+        </ul></li>
+       <li class="toctree-l1"><a class="reference internal" href="../layout/index.html">Style system (CSS) &amp; Layout</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../gfx/index.html">Graphics</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../ipc/index.html">Processes, Threads and IPC</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../devtools/index.html">Firefox DevTools Contributor Docs</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../toolkit/index.html">Toolkit</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../js/index.html">SpiderMonkey</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../jsloader/index.html">JS Loader</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mobile/android/geckoview/index.html">GeckoView</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mobile/android/fenix/index.html">Fenix</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mobile/android/focus-android/index.html">Focus for Android</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../dom/bindings/webidl/index.html">WebIDL</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../modules/libpref/index.html">libpref</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../networking/index.html">Networking</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../remote/index.html">Remote Protocols</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../services/index.html">Services</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../permissions/index.html">Permissions</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../uriloader/index.html">File Handling</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../widget/cocoa/index.html">Firefox on macOS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../widget/windows/index.html">Firefox on Windows</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../toolkit/components/ml/index.html">Firefox AI Runtime</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../accessible/index.html">Accessibility</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../media/index.html">Media Playback</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../code-quality/index.html">Code quality</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../writing-rust-code/index.html">Writing Rust Code</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../rust-components/index.html">Rust Components</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/profiler/index.html">Gecko Profiler</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../performance/index.html">Performance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../storage/index.html">Database bindings (SQLite, KV, …)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../xpcom/index.html">XPCOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../nspr/index.html">NSPR</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../security/nss/index.html">Network Security Services (NSS)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../content-security/index.html">Web Security Checks in Gecko</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">The Firefox Build System</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../mach/index.html">Mach</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/try/index.html">Pushing to Try</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../build/buildsystem/index.html">Build System</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../taskcluster/index.html">Firefox CI and Taskgraph</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/moztreedocs/index.html">Managing Documentation</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mozbuild/vendor/index.html">Vendoring Third Party Components</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Testing &amp; Test Infrastructure</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/automated-testing/index.html">Automated Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/treeherder-try/index.html">Understanding Treeherder Results</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/sheriffed-intermittents/index.html">Sheriffed intermittent failures</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/tests-for-new-config/index.html">Turning on Firefox tests for a new configuration</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/intermittent/index.html">Avoiding intermittent tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/testing-policy/index.html">Testing Policy</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/ci-configs/index.html">Configuration Changes</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/browser-chrome/index.html">Browser chrome mochitests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/chrome-tests/index.html">Chrome Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/marionette/index.html">Marionette</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/geckodriver/index.html">geckodriver</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/test-verification/index.html">Test Verification</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/webrender/index.html">WebRender Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/mochitest-plain/index.html">Mochitest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/xpcshell/index.html">XPCShell tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/tps/index.html">TPS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../web-platform/index.html">web-platform-tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../gtest/index.html">GTest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/fuzzing/index.html">Fuzzing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/sanitizer/index.html">Sanitizer</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/perfdocs/index.html">Performance Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/code-coverage/index.html">Code coverage</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing-rust-code/index.html">Testing &amp; Debugging Rust Code</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Releases &amp; Updates</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../update-infrastructure/index.html">Mozilla Update Infrastructure</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../update-infrastructure/index.html#watershed-updates">Watershed Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../update-infrastructure/index.html#desupport-updates">Desupport Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/update-verify/index.html">Update Verify</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Localization &amp; Internationalization</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../intl/index.html">Internationalization</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../l10n/index.html">Localization</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox and Python</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../mozbase/index.html">mozbase</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../python/index.html">Using third-party Python packages</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Metrics Collected in Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../metrics/index.html">Metrics</a></li>
+      </ul>
+     </div>
+    </div>
+   </nav>
+   <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+    <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+     <i data-toggle="wy-nav-top" class="fa fa-bars"></i> <a href="../index.html">Firefox Source Docs</a>
+    </nav>
+    <div class="wy-nav-content">
+     <div class="rst-content">
+      <!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+      <div role="navigation" aria-label="Page navigation">
+       <ul class="wy-breadcrumbs">
+        <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+        <li class="breadcrumb-item"><a href="index.html">Editor</a></li>
+        <li class="breadcrumb-item active">Editor module specific rules</li>
+        <li class="wy-breadcrumbs-aside"><a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Developer+Infrastructure&amp;component=Firefox+Source+Docs%3A+Content&amp;short_desc=Documentation+issue+on+editor/EditorModuleSpecificRules&amp;comment=URL+=+https://firefox-source-docs.mozilla.org/editor/EditorModuleSpecificRules.html&amp;bug_file_loc=https://firefox-source-docs.mozilla.org/editor/EditorModuleSpecificRules.html" rel="nofollow">Report an issue</a> / <a href="../_sources/editor/EditorModuleSpecificRules.rst.txt" rel="nofollow"> View page source</a></li>
+       </ul>
+       <hr>
+      </div>
+      <div role="main" class="document" itemscope itemtype="http://schema.org/Article">
+       <div itemprop="articleBody">
+        <section id="editor-module-specific-rules">
+         <h1>Editor module specific rules<a class="headerlink" href="#editor-module-specific-rules" title="Link to this heading">?</a></h1>
+         <p>The editor module has not been maintained aggressively about a decade. Therefore, this module needs to be treated as a young module or in a transition period to align the behavior to the other browsers and take modern C++ style.</p>
+         <p>Undoubtedly, this editor module is under rewritten for modern and optimized for current specs. Additionally, this module does really complicated things which may cause security issues. Therefore, there are specific rules:</p>
+         <section id="treat-other-browsers-behavior-as-standard-if-the-behavior-is-reasonable">
+          <h2>Treat other browsers behavior as standard if the behavior is reasonable<a class="headerlink" href="#treat-other-browsers-behavior-as-standard-if-the-behavior-is-reasonable" title="Link to this heading">?</a></h2>
+          <p>The editing behavior is not standardized since as you see too many lines in the editor classes, the number of cases which need to handle edge cases is crazy and that makes it impossible to standardize. Additionally, our editor behavior is not so stable. Some behaviors were aligned to Internet Explorer, some other behaviors were not for making “better” UX for users of email composer and HTML composer which were in SeaMonkey, and the other browser engines (Blink and WebKit) have same roots but the behavior is different from both IE and Gecko.</p>
+          <p>Therefore, there were no reference behavior.</p>
+          <p>In these days, compatibility between browsers becomes more important, and fortunately, the behavior of Blink (Chrome/Chromium) which has the biggest market share is more reasonable than ours in a lot of cases. Therefore, if we get web-compat issue reports, we should align the behavior to Blink in theory.</p>
+          <p>However, if Blink’s behavior is also odd, this is the worst case. In this case, we should try to align the behavior to WebKit if and only if WebKit’s behavior is different from Blink and reasonable, or doing something “better” for hiding the issue from web-apps and file an issue to the Editing Working Group with creating a “tentative” web-platform test.</p>
+         </section>
+         <section id="don-t-make-methods-of-editor-classes-public-if-they-are-used-only-by-helper-classes">
+          <h2>Don’t make methods of editor classes public if they are used only by helper classes<a class="headerlink" href="#don-t-make-methods-of-editor-classes-public-if-they-are-used-only-by-helper-classes" title="Link to this heading">?</a></h2>
+          <p>Although this is a silly rule. Of course, APIs of editor classes need to be public for the other modules. However, the other methods which are used only by helper classes in the editor module –the methods may be crashed if called by the other modules because editor classes store and guarantee the colleagues (e.g., <code class="docutils literal notranslate"><span class="pre">Selection</span></code>) when it starts to handle an edit action (edit command or operation)– does not want to do it for the performance reason. Therefore, such methods are now declared as protected methods and the caller classes are registered as friends.</p>
+          <p>For solving this issue, we could split the editor classes one is exported and the other is not exposed, and make the former to proxies and own the latter. However, this approach might cause performance regressions and requires a lot of line changes (at least each method definition and warning messages at the caller sides). Tracked in <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1555916">bug 1555916</a>.</p>
+         </section>
+         <section id="steps-to-handle-one-editor-command-or-operation">
+          <h2>Steps to handle one editor command or operation<a class="headerlink" href="#steps-to-handle-one-editor-command-or-operation" title="Link to this heading">?</a></h2>
+          <p>One edit command or operation is called “edit action” in the editor module. Handling it starts when an XPCOM method or a public method which is named as <code class="docutils literal notranslate"><span class="pre">*AsAction</span></code>. Those methods create <code class="docutils literal notranslate"><span class="pre">AutoEditActionDataSetter</span></code> in the stack first, then, call one of <code class="docutils literal notranslate"><span class="pre">CanHandle()</span></code>, <code class="docutils literal notranslate"><span class="pre">CanHandleAndMaybeDispatchBeforeInputEvent()</span></code> or <code class="docutils literal notranslate"><span class="pre">CanHandleAndFlushPendingNotifications()</span></code>. If <code class="docutils literal notranslate"><span class="pre">CanHandleAndMaybeDispatchBeforeInputEvent()</span></code> causes dispatching <code class="docutils literal notranslate"><span class="pre">beforeinput</span></code> event and if the event is consumed by the web app, it returns <code class="docutils literal notranslate"><span class="pre">NS_ERROR_EDITOR_ACTION_CANCELED</span></code>. In this case, the method can do anything due to the <code class="docutils literal notranslate"><span class="pre">beforeinput</span></code> event definition.</p>
+          <p>At this time, <code class="docutils literal notranslate"><span class="pre">AutoEditActionDataSetter</span></code> stores <code class="docutils literal notranslate"><span class="pre">Selection</span></code> etc which are required for handling the edit action in it and set <code class="docutils literal notranslate"><span class="pre">EditorBase::mEditActionData</span></code> to its address. Then all methods of editor can access the objects via the pointer (typically wrapped in inline methods) and the lifetime of the objects are guaranteed.</p>
+          <p>Then, the methods call one or more edit-sub action handlers. E.g., when user types a character with a non-collapsed selection range, editor needs to delete the selected content first and insert the character there. For implementing this behavior, “insert text” edit action handler needs to call “delete selection” sub-action handler and “insert text” sub-action handler. The sub-edit action handlers are named as <code class="docutils literal notranslate"><span class="pre">*AsSubAction</span></code>.</p>
+          <p>The callers of edit sub-action handlers or the handlers themselves create <code class="docutils literal notranslate"><span class="pre">AutoPlaceholderBatch</span></code> in the stack. This creates a placeholder transaction to make all transactions undoable with one “undo” command.</p>
+          <p>Then, each edit sub-action handler creates <code class="docutils literal notranslate"><span class="pre">AutoEditSubActionNotifier</span></code> in the stack and if it’s the topmost edit sub-action handling, <code class="docutils literal notranslate"><span class="pre">OnStartToHandleTopLevelEditSubAction()</span></code> is called at the creation and <code class="docutils literal notranslate"><span class="pre">OnEndHandlingTopLevelEditSubAction()</span></code> is called at the destruction. The latter will clean up the modified range, e.g., remove unnecessary empty nodes.</p>
+          <p>Finally, the edit sub-actions does something while <code class="docutils literal notranslate"><span class="pre">AutoEditSubActionNotifier</span></code> is alive. Helper methods of edit sub-action handlers are typically named as <code class="docutils literal notranslate"><span class="pre">*WithTransaction</span></code> because they are done with transaction classes for making everything undoable.</p>
+         </section>
+         <section id="don-t-update-selection-immediately">
+          <h2>Don’t update Selection immediately<a class="headerlink" href="#don-t-update-selection-immediately" title="Link to this heading">?</a></h2>
+          <p>Changing the ranges of <code class="docutils literal notranslate"><span class="pre">Selection</span></code> is expensive (due ot validating new range, notifying new selected or unselected frames, notifying selection listeners, etc), and retrieving current <code class="docutils literal notranslate"><span class="pre">Selection</span></code> ranges at staring to handle something makes the code statefull which is harder to debug when you investigate a bug. Therefore, each method should return new caret position or update ranges given as in/out parameter of <code class="docutils literal notranslate"><span class="pre">AutoRangeArray</span></code>. <code class="docutils literal notranslate"><span class="pre">Result&lt;CaretPoint,</span> <span class="pre">nsresult&gt;</span></code> is a good result type for the former, and the latter is useful style if the method needs to keep <code class="docutils literal notranslate"><span class="pre">Selection</span></code> similar to given ranges, e.g., when paragraphs around selection are changed to different type of blocks. Finally, edit sub-action handler methods should update <code class="docutils literal notranslate"><span class="pre">Selection</span></code> before destroying <code class="docutils literal notranslate"><span class="pre">AutoEditSubActionNotifier</span></code> whose post-processing requires <code class="docutils literal notranslate"><span class="pre">Selection</span></code>.</p>
+         </section>
+         <section id="don-t-add-new-things-into-onendhandlingtopleveleditsubaction">
+          <h2>Don’t add new things into OnEndHandlingTopLevelEditSubAction()<a class="headerlink" href="#don-t-add-new-things-into-onendhandlingtopleveleditsubaction" title="Link to this heading">?</a></h2>
+          <p>When the topmost edit sub-action is handled, <code class="docutils literal notranslate"><span class="pre">OnEndHandlingTopLevelEditSubAction</span></code> is called and it cleans up something in (or around) the modified range. However, this “post-processing” approach makes it harder to change the behavior for fixing web-compat issues. For example, it deletes empty nodes in the range, but if only some empty nodes are inserted intentionally, it doesn’t have the details and may unexpectedly delete necessary empty nodes.</p>
+          <p>Instead, new things should be done immediately at or after modifying the DOM tree, and if it requires to disable the post-processing, add new <code class="docutils literal notranslate"><span class="pre">bool</span></code> flag to <code class="docutils literal notranslate"><span class="pre">EditorBase::TopLevelEditSubActionData</span></code> and when it’s set, make <code class="docutils literal notranslate"><span class="pre">OnEndHandlingTopLevelEditSubAction</span></code> stop doing something.</p>
+         </section>
+         <section id="don-t-use-ns-warn-if-for-checking-ns-failed-iserr-and-failed">
+          <h2>Don’t use NS_WARN_IF for checking NS_FAILED, isErr() and Failed()<a class="headerlink" href="#don-t-use-ns-warn-if-for-checking-ns-failed-iserr-and-failed" title="Link to this heading">?</a></h2>
+          <p>The warning messages like <code class="docutils literal notranslate"><span class="pre">NS_FAILED(rv)</span></code> does not help except the line number, and in the cases of that we get web-compat reports, somewhere in the editor modules may get unexpected result. For saving the investigation time of web-compat issues, each failure should warn which method call failed, for example:</p>
+          <div class="highlight-cpp notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="n">nsresult</span><span class="w"> </span><span class="n">rv</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">DoSomething</span><span class="p">();</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">NS_FAILED</span><span class="p">(</span><span class="n">rv</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">NS_WARNING</span><span class="p">(</span><span class="s">"HTMLEditor::DoSomething() failed"</span><span class="p">);</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">rv</span><span class="p">;</span>
+<span class="p">}</span>
+</pre>
+           </div>
+          </div>
+          <p>These warnings will let you know the stack of failure in debug build. In other words, when you investigate a web-compat issue in editor, you should do the steps to reproduce in debug build first. Then, you’d see failure point stack in the terminal.</p>
+         </section>
+         <section id="return-ns-error-editor-destroyed-when-editor-gets-destroyed">
+          <h2>Return NS_ERROR_EDITOR_DESTROYED when editor gets destroyed<a class="headerlink" href="#return-ns-error-editor-destroyed-when-editor-gets-destroyed" title="Link to this heading">?</a></h2>
+          <p>The most critical error while an editor class method is running is what the editor instance is destroyed by the web app. This can be checked with a call of <code class="docutils literal notranslate"><span class="pre">EditorBase::Destroyed()</span></code> and if it returns <code class="docutils literal notranslate"><span class="pre">true</span></code>, methods should return <code class="docutils literal notranslate"><span class="pre">NS_ERROR_EDITOR_DESTROYED</span></code> with stopping handling anything. Then, all callers which handle the error result properly will stop handling too. Finally, public methods should return <code class="docutils literal notranslate"><span class="pre">EditorBase::ToGenericNSResult(rv)</span></code> instead of exposing an internal error of the editor module.</p>
+          <p>Note that destroying the editor is intentional thing for the web app. Thus we should not throw exception for this failure reason. Therefore, the public methods shouldn’t return error.</p>
+          <p>When you make a method return <code class="docutils literal notranslate"><span class="pre">NS_ERROR_EDITOR_DESTROYED</span></code> properly, you should mark the method as <code class="docutils literal notranslate"><span class="pre">[[nodiscard]]</span></code>. In other words, if you see <code class="docutils literal notranslate"><span class="pre">[[nodiscard]]</span></code> in method definition and it returns <code class="docutils literal notranslate"><span class="pre">nsresult</span></code> or <code class="docutils literal notranslate"><span class="pre">Result&lt;*,</span> <span class="pre">nsresult&gt;</span></code>, the method callers do not need to check <code class="docutils literal notranslate"><span class="pre">Destroyed()</span></code> by themselves.</p>
+         </section>
+         <section id="use-reference-instead-of-pointer-as-far-as-possible">
+          <h2>Use reference instead of pointer as far as possible<a class="headerlink" href="#use-reference-instead-of-pointer-as-far-as-possible" title="Link to this heading">?</a></h2>
+          <p>When you create or redesign a method, it should take references instead of pointers if they take. This rule forces that the caller to do null-check and this avoids a maybe unexpected case like:</p>
+          <div class="highlight-cpp notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="kr">inline</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">IsBRElement</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">nsINode</span><span class="o">*</span><span class="w"> </span><span class="n">aNode</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">aNode</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">aNode</span><span class="o">-&gt;</span><span class="n">IsHTMLElement</span><span class="p">(</span><span class="n">nsGkAtoms</span><span class="o">::</span><span class="n">br</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">DoSomethingExceptIfBRElement</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">nsINode</span><span class="o">*</span><span class="w"> </span><span class="n">aNode</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">IsBRElement</span><span class="p">(</span><span class="n">aNode</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="c1">// Do something for non-BR element node.</span>
+<span class="p">}</span>
+</pre>
+           </div>
+          </div>
+          <p>In this case, <code class="docutils literal notranslate"><span class="pre">DoSomethingExceptIfBRElement</span></code> expects that <code class="docutils literal notranslate"><span class="pre">aNode</span></code> is never <code class="docutils literal notranslate"><span class="pre">nullptr</span></code> but it could be at least in build time. Using reference fixes this mistake at build time.</p>
+         </section>
+         <section id="use-editorutils-or-htmleditutils-for-stateless-methods">
+          <h2>Use <code class="docutils literal notranslate"><span class="pre">EditorUtils</span></code> or <code class="docutils literal notranslate"><span class="pre">HTMLEditUtils</span></code> for stateless methods<a class="headerlink" href="#use-editorutils-or-htmleditutils-for-stateless-methods" title="Link to this heading">?</a></h2>
+          <p>When you create a new static method to the editor classes or a new inline method in cpp file which defines the editor classes, please check if it’s a common method which may be used from other places in the editor module. If it’s possible to be used only in <code class="docutils literal notranslate"><span class="pre">HTMLEditor</span></code> or its helper classes, the method should be in <code class="docutils literal notranslate"><span class="pre">HTMLEditUtils</span></code>. If it’s possible be used in <code class="docutils literal notranslate"><span class="pre">EditorBase</span></code> or <code class="docutils literal notranslate"><span class="pre">TextEditor</span></code> or their helper classes, it should be in <code class="docutils literal notranslate"><span class="pre">EditorUtils</span></code>.</p>
+         </section>
+         <section id="don-t-use-bool-argument">
+          <h2>Don’t use bool argument<a class="headerlink" href="#don-t-use-bool-argument" title="Link to this heading">?</a></h2>
+          <p>If you create a new method which take one or more <code class="docutils literal notranslate"><span class="pre">bool</span></code> arguments, use <code class="docutils literal notranslate"><span class="pre">enum</span> <span class="pre">class</span></code> instead since <code class="docutils literal notranslate"><span class="pre">true</span></code> or <code class="docutils literal notranslate"><span class="pre">false</span></code> in the caller side is not easy to read. For example, you must not be able to understand what this example mean:</p>
+          <div class="highlight-cpp notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">IsEmpty</span><span class="p">(</span><span class="n">aNode</span><span class="p">,</span><span class="w"> </span><span class="nb">true</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+</pre>
+           </div>
+          </div>
+          <p>For avoiding this issue, you should create new <code class="docutils literal notranslate"><span class="pre">enum</span> <span class="pre">class</span></code> for each. E.g.,</p>
+          <div class="highlight-cpp notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">IsEmpty</span><span class="p">(</span><span class="n">aNode</span><span class="p">,</span><span class="w"> </span><span class="n">TreatSingleBR</span><span class="o">::</span><span class="n">AsVisible</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+</pre>
+           </div>
+          </div>
+          <p>Basically, both <code class="docutils literal notranslate"><span class="pre">enum</span> <span class="pre">class</span></code> name and its value names explains what it means fluently. However, if it’s impossible, use <code class="docutils literal notranslate"><span class="pre">No</span></code> and <code class="docutils literal notranslate"><span class="pre">Yes</span></code> for the value like:</p>
+          <div class="highlight-cpp notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">DoSomething</span><span class="p">(</span><span class="n">aNode</span><span class="p">,</span><span class="w"> </span><span class="n">OnlyIfEmpty</span><span class="o">::</span><span class="n">Yes</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+</pre>
+           </div>
+          </div>
+         </section>
+         <section id="don-t-use-out-parameters">
+          <h2>Don’t use out parameters<a class="headerlink" href="#don-t-use-out-parameters" title="Link to this heading">?</a></h2>
+          <p>In most cases, editor methods meet error of low level APIs, thus editor methods usually return error code. On the other hand, a lot of code need to return computed things, e.g., new caret position, whether it’s handled, ignored or canceled, a target node looked for, etc. We used <code class="docutils literal notranslate"><span class="pre">nsresult</span></code> for the return value type and out parameters for the other results, but it makes callers scattering a lot of auto variables and reusing them makes the code harder to understand.</p>
+          <p>Now we can use <code class="docutils literal notranslate"><span class="pre">mozilla::Result&lt;Foo,</span> <span class="pre">nsresult&gt;</span></code> instead.</p>
+         </section>
+        </section>
+       </div>
+      </div>
+      <footer>
+       <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="EditorModuleStructure.html" class="btn btn-neutral float-left" title="Editor module structure" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a> <a href="IMEHandlingGuide.html" class="btn btn-neutral float-right" title="IME handling guide" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+       </div>
+       <hr>
+       <div role="contentinfo">
+        <p></p>
+       </div> Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+      </footer>
+     </div>
+    </div>
+   </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ </body>
+</html>

@@ -1,0 +1,500 @@
+<!doctype html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Debugging Firefox with GDB — Firefox Source Docs  documentation</title>
+  <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50">
+  <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094">
+  <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=fd3f3429">
+  <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b">
+  <link rel="stylesheet" type="text/css" href="../../_static/custom_theme.css?v=dc5ed815">
+  <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7">
+  <link rel="shortcut icon" href="../../_static/firefox.ico"><!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script src="../../_static/jquery.js?v=5d32c60e"></script>
+  <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+  <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+  <script src="../../_static/doctools.js?v=9a2dae69"></script>
+  <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+  <script src="../../_static/copybutton.js?v=30646c52"></script>
+  <script src="../../_static/design-tabs.js?v=36754332"></script>
+  <script src="../../_static/js/theme.js"></script>
+  <link rel="index" title="Index" href="../../genindex.html">
+  <link rel="search" title="Search" href="../../search.html">
+  <link rel="next" title="Debugging Firefox with LLDB" href="debugging_firefox_with_lldb.html">
+  <link rel="prev" title="Debugging A Minidump" href="debugging_a_minidump.html">
+ </head>
+ <body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+   <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <div class="wy-side-scroll">
+     <div class="wy-side-nav-search">
+      <a href="../../index.html" class="icon icon-home"> Firefox Source Docs <img src="../../_static/firefox-wordmark.svg" class="logo" alt="Logo"> </a><!-- -- This code is governed by the BSD license ---->
+      <div>
+       <h3>Quick search</h3>
+       <script>
+    (function () {
+      var cx = "dd12886298f75dbef";
+      var gcse = document.createElement("script");
+      gcse.async = true;
+      gcse.src = "https://cse.google.com/cse.js?cx=" + cx;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(gcse, s);
+    })();
+  </script><gcse:search></gcse:search>
+      </div>
+     </div>
+     <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+      <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../glossary/index.html">A Glossary of Common Terms</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../overview/index.html">A Quick Guide to Mozilla Applications</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../setup/index.html">Getting Set Up To Work On The Firefox Codebase</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Working On Firefox</span></p>
+      <ul class="current">
+       <li class="toctree-l1 current"><a class="reference internal" href="../index.html">Working on Firefox</a>
+        <ul class="current">
+         <li class="toctree-l2"><a class="reference internal" href="../contribution_quickref.html">Firefox Contributors’ Quick Reference</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../stack_quickref.html">Working with stack of patches Quick Reference</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../pocket-guide-shipping-firefox.html">Pocket Guide: Shipping Firefox</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../editor.html">Editor / IDE integration</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../reviews.html">Getting reviews</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../levelling-up.html">Levelling up</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../how_to_submit_a_patch.html">How to submit a patch</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../data-review.html">Data Review</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../Code_Review_FAQ.html">Code Review FAQ</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../reviewer_checklist.html">Reviewer Checklist</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../vcs/mercurial.html">Mercurial Overview</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../vcs/mercurial_bundles.html">Mercurial Bundles</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="capturing_minidump.html">Capturing a minidump</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="debugging_a_hang_on_macos.html">Debugging A Hang On macOS</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="debugging_a_minidump.html">Debugging A Minidump</a></li>
+         <li class="toctree-l2 current"><a class="current reference internal" href="#">Debugging Firefox with GDB</a>
+          <ul>
+           <li class="toctree-l3"><a class="reference internal" href="#where-can-i-find-general-gdb-documentation">Where can I find general gdb documentation?</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#how-to-debug-firefox-with-gdb">How to debug Firefox with gdb?</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#advanced-gdb-configuration">Advanced gdb configuration</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#how-to-debug-a-firefox-in-the-field-not-compiled-on-the-host">How to debug a Firefox in the field (not compiled on the host)</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#how-do-i-pass-arguments-in-prun">How do I pass arguments in prun?</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#why-breakpoints-seem-to-not-be-hit">Why breakpoints seem to not be hit?</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#how-do-i-display-an-nsstring">How do I display an nsString?</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#how-do-i-determine-the-concrete-type-of-an-object-pointed-to-by-an-interface-pointer">How do I determine the concrete type of an object pointed to by an interface pointer?</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#how-can-i-debug-javascript-from-gdb">How can I debug JavaScript from gdb?</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#how-can-i-debug-race-conditions">How can I debug race conditions</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#i-keep-getting-a-sigsys-or-sigsegv-in-js-jit-code-under-gdb-even-though-there-is-no-crash-when-gdb-is-not-attached-how-do-i-fix-it">I keep getting a SIGSYS, or SIGSEGV in JS/JIT code under gdb even though there is no crash when gdb is not attached. How do I fix it?</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#how-do-i-get-useful-stack-traces-inside-system-libraries">How do I get useful stack traces inside system libraries?</a>
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="#fedora">Fedora</a></li>
+            </ul></li>
+           <li class="toctree-l3"><a class="reference internal" href="#disabling-multiprocess">Disabling multiprocess</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#see-also">See also</a></li>
+          </ul></li>
+         <li class="toctree-l2"><a class="reference internal" href="debugging_firefox_with_lldb.html">Debugging Firefox with LLDB</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="debugging_firefox_with_pernosco.html">Debugging Firefox with Pernosco</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="debugging_firefox_with_rr.html">Debugging Firefox with rr</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="debugging_firefox_with_valgrind.html">Debugging Firefox with Valgrind</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="debugging_on_macos.html">Debugging On macOS</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="debugging_on_windows.html">Debugging On Windows</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="debugging_webrtc_calls.html">Debugging WebRTC Calls</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="local_symbols.html">Symbolicating TreeHerder stacks locally</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="process_dump_task_manager.html">How to get a process dump with Windows Task Manager</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="stacktrace_report.html">How to get a stacktrace for a bug report</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="stacktrace_windbg.html">How to get a stacktrace with WinDbg</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="understanding_crash_reports.html">Understanding Crash Reports</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../signing/signing_macos_build.html">Signing Local macOS Builds</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../directory_structure.html">Firefox Source Code Directory Structure</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../build/artifact_builds.html">Understanding Artifact Builds</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../build/building_mobile_firefox.html">Firefox for Mobile Devices</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../build/supported.html">Supported Build Hosts and Targets</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../engineering_show_and_tell.html">Engineering Show and Tell</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../filing-good-bugs.html">Filing good bugs</a></li>
+        </ul></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../bug-mgmt/index.html">Bug Handling</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox User Guide</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../devtools-user/index.html">Firefox DevTools User Docs</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Source Code Documentation</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mots/index.html">Governance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../browser/index.html">Firefox Front-end</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../dom/index.html">DOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../editor/index.html">Editor</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../layout/index.html">Style system (CSS) &amp; Layout</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../gfx/index.html">Graphics</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../ipc/index.html">Processes, Threads and IPC</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../devtools/index.html">Firefox DevTools Contributor Docs</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../toolkit/index.html">Toolkit</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../js/index.html">SpiderMonkey</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../jsloader/index.html">JS Loader</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/geckoview/index.html">GeckoView</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/fenix/index.html">Fenix</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/focus-android/index.html">Focus for Android</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../dom/bindings/webidl/index.html">WebIDL</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../modules/libpref/index.html">libpref</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../networking/index.html">Networking</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../remote/index.html">Remote Protocols</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../services/index.html">Services</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../permissions/index.html">Permissions</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../uriloader/index.html">File Handling</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../widget/cocoa/index.html">Firefox on macOS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../widget/windows/index.html">Firefox on Windows</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../toolkit/components/ml/index.html">Firefox AI Runtime</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../accessible/index.html">Accessibility</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../media/index.html">Media Playback</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../code-quality/index.html">Code quality</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../writing-rust-code/index.html">Writing Rust Code</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../rust-components/index.html">Rust Components</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/profiler/index.html">Gecko Profiler</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../performance/index.html">Performance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../storage/index.html">Database bindings (SQLite, KV, …)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../xpcom/index.html">XPCOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../nspr/index.html">NSPR</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../security/nss/index.html">Network Security Services (NSS)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../content-security/index.html">Web Security Checks in Gecko</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">The Firefox Build System</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mach/index.html">Mach</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/try/index.html">Pushing to Try</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../build/buildsystem/index.html">Build System</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../taskcluster/index.html">Firefox CI and Taskgraph</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/moztreedocs/index.html">Managing Documentation</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mozbuild/vendor/index.html">Vendoring Third Party Components</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Testing &amp; Test Infrastructure</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/automated-testing/index.html">Automated Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/treeherder-try/index.html">Understanding Treeherder Results</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/sheriffed-intermittents/index.html">Sheriffed intermittent failures</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/tests-for-new-config/index.html">Turning on Firefox tests for a new configuration</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/intermittent/index.html">Avoiding intermittent tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/testing-policy/index.html">Testing Policy</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/ci-configs/index.html">Configuration Changes</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/browser-chrome/index.html">Browser chrome mochitests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/chrome-tests/index.html">Chrome Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/marionette/index.html">Marionette</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/geckodriver/index.html">geckodriver</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/test-verification/index.html">Test Verification</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/webrender/index.html">WebRender Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/mochitest-plain/index.html">Mochitest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/xpcshell/index.html">XPCShell tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/tps/index.html">TPS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../web-platform/index.html">web-platform-tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../gtest/index.html">GTest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/fuzzing/index.html">Fuzzing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/sanitizer/index.html">Sanitizer</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/perfdocs/index.html">Performance Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/code-coverage/index.html">Code coverage</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing-rust-code/index.html">Testing &amp; Debugging Rust Code</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Releases &amp; Updates</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html">Mozilla Update Infrastructure</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html#watershed-updates">Watershed Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html#desupport-updates">Desupport Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/update-verify/index.html">Update Verify</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Localization &amp; Internationalization</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../intl/index.html">Internationalization</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../l10n/index.html">Localization</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox and Python</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mozbase/index.html">mozbase</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../python/index.html">Using third-party Python packages</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Metrics Collected in Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../metrics/index.html">Metrics</a></li>
+      </ul>
+     </div>
+    </div>
+   </nav>
+   <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+    <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+     <i data-toggle="wy-nav-top" class="fa fa-bars"></i> <a href="../../index.html">Firefox Source Docs</a>
+    </nav>
+    <div class="wy-nav-content">
+     <div class="rst-content">
+      <!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+      <div role="navigation" aria-label="Page navigation">
+       <ul class="wy-breadcrumbs">
+        <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+        <li class="breadcrumb-item"><a href="../index.html">Working on Firefox</a></li>
+        <li class="breadcrumb-item active">Debugging Firefox with GDB</li>
+        <li class="wy-breadcrumbs-aside"><a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Developer+Infrastructure&amp;component=Firefox+Source+Docs%3A+Content&amp;short_desc=Documentation+issue+on+contributing/debugging/debugging_firefox_with_gdb&amp;comment=URL+=+https://firefox-source-docs.mozilla.org/contributing/debugging/debugging_firefox_with_gdb.html&amp;bug_file_loc=https://firefox-source-docs.mozilla.org/contributing/debugging/debugging_firefox_with_gdb.html" rel="nofollow">Report an issue</a> / <a href="../../_sources/contributing/debugging/debugging_firefox_with_gdb.rst.txt" rel="nofollow"> View page source</a></li>
+       </ul>
+       <hr>
+      </div>
+      <div role="main" class="document" itemscope itemtype="http://schema.org/Article">
+       <div itemprop="articleBody">
+        <section id="debugging-firefox-with-gdb">
+         <h1>Debugging Firefox with GDB<a class="headerlink" href="#debugging-firefox-with-gdb" title="Link to this heading">?</a></h1>
+         <p>This page details how you can more easily debug Firefox with gdb. <a class="reference internal" href="debugging_firefox_with_rr.html#debugging-firefox-with-rr"><span class="std std-ref">rr</span></a> is most often a better choice to debug a problem, but sometimes it isn’t possible to use it, such as attempting to reproduce a race condition or when performance is important to reproduce an issue. <code class="docutils literal notranslate"><span class="pre">rr</span></code> chaos mode allows reproducing a lot of issues though, and should be tried.</p>
+         <section id="where-can-i-find-general-gdb-documentation">
+          <h2>Where can I find general gdb documentation?<a class="headerlink" href="#where-can-i-find-general-gdb-documentation" title="Link to this heading">?</a></h2>
+          <p>Using GDB is beyond the scope of this document. Documentation is likely available on your system if you have GDB installed, in the form of <strong>info,</strong> <strong>man</strong> pages, or the gnome help browser. Additionally, you can use a graphical front-end to GDB like <a class="reference external" href="https://www.gnu.org/software/ddd/">ddd</a> or <a class="reference external" href="https://sourceware.org/insight/">insight</a>. For more information see <a class="reference external" href="https://sourceware.org/gdb/current/onlinedocs/gdb/">https://sourceware.org/gdb/current/onlinedocs/gdb/</a></p>
+         </section>
+         <section id="how-to-debug-firefox-with-gdb">
+          <h2>How to debug Firefox with gdb?<a class="headerlink" href="#how-to-debug-firefox-with-gdb" title="Link to this heading">?</a></h2>
+          <p>Firefox is a multiprocess application, with a parent process, and several child processes, each specialized and sandboxed differently.</p>
+          <div class="highlight-bash notranslate">
+           <div class="highlight">
+            <pre><span></span>$<span class="w"> </span>./mach<span class="w"> </span>run<span class="w"> </span>--debugger<span class="o">=</span>gdb
+</pre>
+           </div>
+          </div>
+          <p>allows running Firefox in gdb, and debug the parent process. You can substitute <code class="docutils literal notranslate"><span class="pre">run</span></code> with another action, such as <code class="docutils literal notranslate"><span class="pre">test</span></code>, <code class="docutils literal notranslate"><span class="pre">mochitest</span></code>, <code class="docutils literal notranslate"><span class="pre">xpcshell-test</span></code>, etc.</p>
+          <p>Debugging child processes can be done by attaching the debugger.</p>
+          <div class="highlight-bash notranslate">
+           <div class="highlight">
+            <pre><span></span>$<span class="w"> </span>gdb<span class="w"> </span>--pid<span class="w"> </span>&lt;pid&gt;
+</pre>
+           </div>
+          </div>
+          <p>There’s a number of ways to find the PID of a process: hovering over a tab for a content process, opening <code class="docutils literal notranslate"><span class="pre">about:processes</span></code>, using <code class="docutils literal notranslate"><span class="pre">ps</span> <span class="pre">...</span> <span class="pre">|</span> <span class="pre">grep</span> <span class="pre">firefox</span></code> on the command line, etc.</p>
+          <p>Sometimes, it is desirable to attach to a child process at startup, to diagnose something very close to the start of the process. Setting the environment variable <code class="docutils literal notranslate"><span class="pre">MOZ_DEBUG_CHILD_PROCESS=10</span></code> will make each new process print an few informative lines, including the process type and its PID. The process with then sleep for a number of seconds equal to the value of the environment variable, allowing to attach a debugger.</p>
+          <div class="highlight-bash notranslate">
+           <div class="highlight">
+            <pre><span></span>$<span class="w"> </span><span class="nv">MOZ_DEBUG_CHILD_PROCESS</span><span class="o">=</span><span class="m">10</span><span class="w"> </span>./mach<span class="w"> </span>run
+...
+...
+...
+
+CHILDCHILDCHILDCHILD<span class="w"> </span><span class="o">(</span>process<span class="w"> </span><span class="nb">type</span><span class="w"> </span>tab<span class="o">)</span>
+debug<span class="w"> </span>me<span class="w"> </span>@<span class="w"> </span><span class="m">65230</span>
+
+...
+...
+...
+</pre>
+           </div>
+          </div>
+          <p>Attaching gdb to Firefox might fail on Linux distributions that enable common kernel hardening features such as the Yama security module. If you encounter the following error when attaching:</p>
+          <div class="highlight-bash notranslate">
+           <div class="highlight">
+            <pre><span></span>$<span class="w"> </span>gdb<span class="w"> </span>--pid<span class="w"> </span>&lt;pid&gt;
+...
+...
+
+Attaching<span class="w"> </span>to<span class="w"> </span>process<span class="w"> </span>&lt;pid&gt;
+ptrace:<span class="w"> </span>Operation<span class="w"> </span>not<span class="w"> </span>permitted.
+</pre>
+           </div>
+          </div>
+          <p>Check the contents of <cite>/proc/sys/kernel/yama/ptrace_scope</cite>. If it set to <cite>1</cite> you won’t be able to attach to processes, set it to <cite>0</cite> from a root shell:</p>
+          <div class="highlight-bash notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="se">\#</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="m">0</span><span class="w"> </span>&gt;<span class="w"> </span>/proc/sys/kernel/yama/ptrace_scope
+</pre>
+           </div>
+          </div>
+          <p>If you still can’t attach check your setup carefully. Do not, under any circumstances, run gdb as root. Since gdb can execute arbitrary code and spawn shells it can be extremely dangerous to use it with root permissions.</p>
+         </section>
+         <section id="advanced-gdb-configuration">
+          <h2>Advanced gdb configuration<a class="headerlink" href="#advanced-gdb-configuration" title="Link to this heading">?</a></h2>
+          <p>The preferred method, is using the <a class="reference internal" href="../../mach/index.html#mach"><span class="std std-ref">Mach</span></a> command-line tool to run the debugger, which can bypass several optional defaults. Use “mach help run” to get more details. If inside the source directory, you would use “./mach”. Please note that <a class="reference internal" href="../../setup/configuring_build_options.html#configuring-build-options"><span class="std std-ref">mach is aware of mozconfigs</span></a>.</p>
+          <div class="highlight-bash notranslate">
+           <div class="highlight">
+            <pre><span></span>$<span class="w"> </span>./mach<span class="w"> </span>run<span class="w"> </span>--debug<span class="w"> </span><span class="o">[</span>arguments<span class="w"> </span>to<span class="w"> </span>pass<span class="w"> </span>to<span class="w"> </span>firefox<span class="o">]</span>
+</pre>
+           </div>
+          </div>
+          <p>If you need to direct arguments to gdb, you can use ‘–debugger-args’ options via the command line parser, taking care to adhere to shell splitting rules. For example, if you wanted to run the command ‘show args’ when gdb starts, you would use:</p>
+          <div class="highlight-bash notranslate">
+           <div class="highlight">
+            <pre><span></span>$<span class="w"> </span>./mach<span class="w"> </span>run<span class="w"> </span>--debug<span class="w"> </span>--debugger-args<span class="w"> </span><span class="s2">"-ex 'show args'"</span>
+</pre>
+           </div>
+          </div>
+          <p>Alternatively, you can run gdb directly against Firefox. However, you won’t get some of the more useful capabilities this way. For example, mach sets an environment variable (see below) to stop the JS engine from generating synthetic segfaults to support the slower script dialoging mechanism.</p>
+          <div class="highlight-default notranslate">
+           <div class="highlight">
+            <pre><span></span>(gdb) $OBJDIR/dist/bin/firefox
+</pre>
+           </div>
+          </div>
+         </section>
+         <section id="how-to-debug-a-firefox-in-the-field-not-compiled-on-the-host">
+          <h2>How to debug a Firefox in the field (not compiled on the host)<a class="headerlink" href="#how-to-debug-a-firefox-in-the-field-not-compiled-on-the-host" title="Link to this heading">?</a></h2>
+          <p>If you need to attach to a Firefox process live on a machine, and this Firefox was built by Mozilla, or by certain Linux distros, it’s possible to get symbols and sources using the Mozilla symbol server, see <a class="reference internal" href="../../toolkit/crashreporter/crashreporter/Using_the_Mozilla_symbol_server.html#downloading-symbols-on-linux-mac-os-x"><span class="std std-ref">this section</span></a> for setup instructions, it’s just a matter of sourcing a python script in <code class="docutils literal notranslate"><span class="pre">.gdbinit</span></code>.</p>
+          <p>Debugging then works as usual, except the build probably has a very high optimization level.</p>
+         </section>
+         <section id="how-do-i-pass-arguments-in-prun">
+          <h2>How do I pass arguments in prun?<a class="headerlink" href="#how-do-i-pass-arguments-in-prun" title="Link to this heading">?</a></h2>
+          <p>Set the arguments in GDB before calling prun. Here’s an example on how to do that:</p>
+          <div class="highlight-default notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="p">(</span><span class="n">gdb</span><span class="p">)</span> <span class="nb">set</span> <span class="n">args</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">www</span><span class="o">.</span><span class="n">mozilla</span><span class="o">.</span><span class="n">org</span>
+<span class="p">(</span><span class="n">gdb</span><span class="p">)</span> <span class="n">prun</span>
+</pre>
+           </div>
+          </div>
+         </section>
+         <section id="why-breakpoints-seem-to-not-be-hit">
+          <h2>Why breakpoints seem to not be hit?<a class="headerlink" href="#why-breakpoints-seem-to-not-be-hit" title="Link to this heading">?</a></h2>
+          <p>The most likely cause is that <cite>gdb</cite> hasn’t been attached to the process in which the code to diagnose is ran. Enabling the relevant <cite>MOZ_LOG</cite> modules can help, since by default it prints the process type and pid of all logging statements.</p>
+          <p><cite>break list</cite> will display a list of breakpoints, and whether or not they’re enabled. C++ namespaces need to be specified entirely, and it’s sometimes hard to break in lambda. Breaking by line number is an alternative strategy that often works in this case.</p>
+         </section>
+         <section id="how-do-i-display-an-nsstring">
+          <h2>How do I display an nsString?<a class="headerlink" href="#how-do-i-display-an-nsstring" title="Link to this heading">?</a></h2>
+          <div class="highlight-default notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="p">(</span><span class="n">gdb</span><span class="p">)</span> <span class="n">p</span> <span class="n">ToNewCString</span><span class="p">(</span><span class="n">string</span><span class="p">);</span>
+</pre>
+           </div>
+          </div>
+          <p>This leaks a bit of memory but it doesn’t really matter.</p>
+         </section>
+         <section id="how-do-i-determine-the-concrete-type-of-an-object-pointed-to-by-an-interface-pointer">
+          <h2>How do I determine the concrete type of an object pointed to by an interface pointer?<a class="headerlink" href="#how-do-i-determine-the-concrete-type-of-an-object-pointed-to-by-an-interface-pointer" title="Link to this heading">?</a></h2>
+          <p>You can determine the concrete type of any object pointed to, by an XPCOM interface pointer, by looking at the mangled name of the symbol for the object’s vtable:</p>
+          <div class="highlight-default notranslate">
+           <div class="highlight">
+            <pre><span></span>(gdb) p aKidFrame
+$1 = (nsIFrame *) 0x85058d4
+(gdb) x/wa *(void**)aKidFrame
+0x4210d380 &lt;__vt_14nsRootBoxFrame&gt;: 0x0
+(gdb) p *(nsRootBoxFrame*)aKidFrame
+ [ all the member variables of aKidFrame ]
+</pre>
+           </div>
+          </div>
+          <p>Or use the gdb command <code class="docutils literal notranslate"><span class="pre">set</span> <span class="pre">print</span> <span class="pre">object</span> <span class="pre">on</span></code>.</p>
+         </section>
+         <section id="how-can-i-debug-javascript-from-gdb">
+          <h2>How can I debug JavaScript from gdb?<a class="headerlink" href="#how-can-i-debug-javascript-from-gdb" title="Link to this heading">?</a></h2>
+          <p>If you have JavaScript Engine code on the stack, you’ll probably want a JS stack in addition to the C++ stack.</p>
+          <div class="highlight-default notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="p">(</span><span class="n">gdb</span><span class="p">)</span> <span class="n">call</span> <span class="n">DumpJSStack</span><span class="p">()</span>
+</pre>
+           </div>
+          </div>
+          <p>Please note that if <cite>gdb</cite> has been attached to a process, the stack might be printed in the terminal window in which Firefox was started.</p>
+          <p>See <a class="reference external" href="https://developer.mozilla.org/en-US/docs/Mozilla/Debugging/Debugging_JavaScript">this MDN page</a> for more JS debugging tricks.</p>
+         </section>
+         <section id="how-can-i-debug-race-conditions">
+          <h2>How can I debug race conditions<a class="headerlink" href="#how-can-i-debug-race-conditions" title="Link to this heading">?</a></h2>
+          <p>Try <a class="reference internal" href="debugging_firefox_with_rr.html#debugging-firefox-with-rr"><span class="std std-ref">rr</span></a> first. If this doesn’t work, good luck, maybe try <a class="reference internal" href="../../xpcom/logging.html#gecko-logging"><span class="std std-ref">logging</span></a> or sprinkling assertions.</p>
+         </section>
+         <section id="i-keep-getting-a-sigsys-or-sigsegv-in-js-jit-code-under-gdb-even-though-there-is-no-crash-when-gdb-is-not-attached-how-do-i-fix-it">
+          <h2>I keep getting a SIGSYS, or SIGSEGV in JS/JIT code under gdb even though there is no crash when gdb is not attached. How do I fix it?<a class="headerlink" href="#i-keep-getting-a-sigsys-or-sigsegv-in-js-jit-code-under-gdb-even-though-there-is-no-crash-when-gdb-is-not-attached-how-do-i-fix-it" title="Link to this heading">?</a></h2>
+          <p>Allow gdb to read mozilla-central’s .gdbinit, located at <cite>build/.gdbinit</cite>. In your own <cite>.gdbinit</cite>, add the line:</p>
+          <blockquote>
+           <div>
+            <div class="highlight-default notranslate">
+             <div class="highlight">
+              <pre><span></span><span class="n">add</span><span class="o">-</span><span class="n">auto</span><span class="o">-</span><span class="n">load</span><span class="o">-</span><span class="n">safe</span><span class="o">-</span><span class="n">path</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">mozilla</span><span class="o">-</span><span class="n">central</span>
+</pre>
+             </div>
+            </div>
+           </div>
+          </blockquote>
+         </section>
+         <section id="how-do-i-get-useful-stack-traces-inside-system-libraries">
+          <h2>How do I get useful stack traces inside system libraries?<a class="headerlink" href="#how-do-i-get-useful-stack-traces-inside-system-libraries" title="Link to this heading">?</a></h2>
+          <p>Many Linux distributions provide separate packages with debugging information for system libraries, such as gdb, Valgrind, profiling tools, etc., to give useful stack traces via system libraries.</p>
+          <p>The modern way to do this is to enable <code class="docutils literal notranslate"><span class="pre">debuginfod</span></code>. This can be done by adding:</p>
+          <blockquote>
+           <div>
+            <div class="highlight-default notranslate">
+             <div class="highlight">
+              <pre><span></span><span class="nb">set</span> <span class="n">debuginfod</span> <span class="n">enabled</span> <span class="n">on</span>
+</pre>
+             </div>
+            </div>
+           </div>
+          </blockquote>
+          <p>in your <code class="docutils literal notranslate"><span class="pre">.gdbinit</span></code>, but there might be distro-specific instructions. Alternatively, you can install the packages that contain the debug symbols for the libraries you want to debug.</p>
+          <p>When using <code class="docutils literal notranslate"><span class="pre">debuginfod</span></code>, the correct information will be downloaded automatically when needed (and subsequently cached).</p>
+          <p>If you’re not sure what to use, there’s a federated debuginfod server that provides debug information for most mainstream distributions. You can use it by adding the following line to your <code class="docutils literal notranslate"><span class="pre">.gdbinit</span></code> file:</p>
+          <blockquote>
+           <div>
+            <div class="highlight-default notranslate">
+             <div class="highlight">
+              <pre><span></span><span class="nb">set</span> <span class="n">debuginfod</span> <span class="n">urls</span> <span class="s2">"https://debuginfod.elfutils.org/"</span>
+</pre>
+             </div>
+            </div>
+           </div>
+          </blockquote>
+          <p>Keep in mind that it might take a while to download debug information the very first time. This queries all the servers of multiple distributions sequentially and debug information tends to be large. It will be cached for the next run though.</p>
+          <section id="fedora">
+           <h3>Fedora<a class="headerlink" href="#fedora" title="Link to this heading">?</a></h3>
+           <p>On Fedora, you need to enable the debuginfo repositories, as the packages are in separate repositories. Enable them permanently, so when you get updates you also get security updates for these packages. A way to do this is edit <code class="docutils literal notranslate"><span class="pre">/etc/yum.repos.d/fedora.repo</span></code> and <code class="docutils literal notranslate"><span class="pre">fedora-updates.repo</span></code> to change the <code class="docutils literal notranslate"><span class="pre">enabled=0</span></code> line in the debuginfo section to <code class="docutils literal notranslate"><span class="pre">enabled=1</span></code>. This may then flag a conflict when upgrading to a new distribution version. You would the need to perform this edit again.</p>
+           <p>You can finally install debuginfo packages with yum or other package management tools. The best way is install the <code class="docutils literal notranslate"><span class="pre">yum-utils</span></code> package, and then use the <code class="docutils literal notranslate"><span class="pre">debuginfo-install</span></code> command to install all the debuginfo:</p>
+           <div class="highlight-bash notranslate">
+            <div class="highlight">
+             <pre><span></span>$<span class="w"> </span>yum<span class="w"> </span>install<span class="w"> </span>yum-utils
+$<span class="w"> </span>debuginfo-install<span class="w"> </span>firefox
+</pre>
+            </div>
+           </div>
+           <p>This can be done manually using:</p>
+           <div class="highlight-bash notranslate">
+            <div class="highlight">
+             <pre><span></span>$<span class="w"> </span>yum<span class="w"> </span>install<span class="w"> </span>GConf2-debuginfo<span class="w"> </span>ORBit2-debuginfo<span class="w"> </span>atk-debuginfo<span class="w"> </span><span class="se">\</span>
+cairo-debuginfo<span class="w"> </span>dbus-debuginfo<span class="w"> </span>expat-debuginfo<span class="w"> </span><span class="se">\</span>
+fontconfig-debuginfo<span class="w"> </span>freetype-debuginfo<span class="w"> </span>gcc-debuginfo<span class="w"> </span>glib2-debuginfo<span class="w"> </span><span class="se">\</span>
+glibc-debuginfo<span class="w"> </span>gnome-vfs2-debuginfo<span class="w"> </span>gtk2-debuginfo<span class="w"> </span>gtk2-engines-debuginfo<span class="w"> </span><span class="se">\</span>
+hal-debuginfo<span class="w"> </span>libX11-debuginfo<span class="w"> </span>libXcursor-debuginfo<span class="w"> </span>libXext-debuginfo<span class="w"> </span><span class="se">\</span>
+libXfixes-debuginfo<span class="w"> </span>libXft-debuginfo<span class="w"> </span>libXi-debuginfo<span class="w"> </span>libXinerama-debuginfo<span class="w"> </span><span class="se">\</span>
+libXrender-debuginfo<span class="w"> </span>libbonobo-debuginfo<span class="w"> </span>libgnome-debuginfo<span class="w"> </span><span class="se">\</span>
+libselinux-debuginfo<span class="w"> </span>pango-debuginfo<span class="w"> </span>popt-debuginfo<span class="w"> </span>scim-bridge-debuginfo
+</pre>
+            </div>
+           </div>
+          </section>
+         </section>
+         <section id="disabling-multiprocess">
+          <h2>Disabling multiprocess<a class="headerlink" href="#disabling-multiprocess" title="Link to this heading">?</a></h2>
+          <p><code class="docutils literal notranslate"><span class="pre">mach</span> <span class="pre">run</span></code> and <code class="docutils literal notranslate"><span class="pre">mach</span> <span class="pre">test</span></code> both accept a <code class="docutils literal notranslate"><span class="pre">--disable-e10s</span></code> argument. Some debuggers can’t catch child-process crashes without it. This is sometimes a viable alternative to attaching, but these days it changes enough thing that it’s not always a usable option.</p>
+         </section>
+         <section id="see-also">
+          <h2>See also<a class="headerlink" href="#see-also" title="Link to this heading">?</a></h2>
+          <ul class="simple">
+           <li>
+            <p><a class="reference external" href="https://mikeconley.ca/blog/2014/04/25/electrolysis-debugging-child-processes-of-content-for-make-benefit-glorious-browser-of-firefox">Mike Conley’s blog post</a></p></li>
+           <li>
+            <p><a class="reference external" href="https://wiki.mozilla.org/Performance:Tools">Performance tools</a></p></li>
+           <li>
+            <p><a class="reference external" href="https://blog.mozilla.com/sfink/2011/02/22/fun-with-gdb/">Fun with gdb</a> by Steve Fink</p></li>
+          </ul>
+         </section>
+        </section>
+       </div>
+      </div>
+      <footer>
+       <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="debugging_a_minidump.html" class="btn btn-neutral float-left" title="Debugging A Minidump" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a> <a href="debugging_firefox_with_lldb.html" class="btn btn-neutral float-right" title="Debugging Firefox with LLDB" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+       </div>
+       <hr>
+       <div role="contentinfo">
+        <p></p>
+       </div> Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+      </footer>
+     </div>
+    </div>
+   </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ </body>
+</html>

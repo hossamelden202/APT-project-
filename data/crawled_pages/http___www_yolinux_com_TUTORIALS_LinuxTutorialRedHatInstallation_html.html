@@ -1,0 +1,1851 @@
+<!doctype html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="en">
+ <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Linux Tutorial - Fedora Core and Red Hat Linux CD Installation, Version Upgrade, Configuration and Basic Administration</title>
+  <link rel="canonical" href="http://www.yolinux.com/TUTORIALS/LinuxTutorialRedHatInstallation.html">
+  <meta name="keywords" content="Installation,redhat,linux,howto,help,tutorial,pitfalls">
+  <meta name="description" content="Fedora Core and Red Hat Linux installation for enterprise 5, 4 and legacy versions 9.0, 8.0, 7.3, 7.2, 7.1, 7.0, 6.2, 6.1, 6.0 and 5.2. The Tutorial covers many of the pitfalls users encounter during installation. The tutorial covers lilo and Grub configuration, hard drive management, options and post installation configuration. The YoLinux.com portal covers topics from desktop to servers and from developers to users">
+  <meta name="author" content="Greg Ippolito">
+  <link type="image/x-icon" rel="shortcut icon" href="/favicon.ico">
+  <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="../css/yolinux-res.css">
+ </head>
+ <body>
+  <a name="TOP"></a>
+  <div class="container-fluid">
+   <div class="row" itemprop="breadcrumb">
+    <ol class="yo-breadcrumb" itemscope itemtype="http://schema.org/BreadcrumbList">
+     <li class="yo-breadcrumb" itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a rel="home" itemprop="item" href="/"><span itemprop="name">Home</span></a>
+      <meta itemprop="position" content="1"></li>
+     <li class="yo-breadcrumb" itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a itemprop="item" href="/TUTORIALS/"><span itemprop="name">Tutorials</span></a>
+      <meta itemprop="position" content="2"></li>
+     <li class="yo-breadcrumb active" itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a itemprop="item" href="/TUTORIALS/LinuxTutorialRedHatInstallation.html"><span itemprop="name">Red Hat Install</span></a>
+      <meta itemprop="position" content="3"></li>
+    </ol>
+   </div>
+   <div class="row">
+    <div class="col-sm-3 top-space">
+     <a href="http://www.yolinux.com/"><img src="images/YoLinux_Tutorial_logo.png" alt="Yolinux.com Tutorial" border="0"></a>
+    </div>
+    <div class="col-sm-9">
+     <h1>Fedora Core and Red Hat Linux CD Installation, Version Upgrade, Configuration and Basic Administration</h1>
+     <p>This tutorial covers the installation and/or upgrades, configuration and basic administration of Red Hat Enterprise Linux 3-5, Fedora Core 1-6, Red Hat 5.0-9.0 (legacy) CD-ROM distribution.</p>
+     <p></p>
+     <div class="ad-head" align="center">
+      <iframe class="adframe" scrolling="no" allowtransparency="true" marginheight="0" marginwidth="0" width="720" frameborder="0" height="90" style="border:none;width:720;height:90;padding:0;" src="/ADVERTISING/iframe728x90px-ValueClick.html"> </iframe>
+     </div>
+     <p></p>
+    </div><!-- end of col-sm-9 -->
+   </div><!-- end of row -->
+   <div class="row">
+    <div class="col-sm-6">
+     <b>Contents:</b>
+     <ul>
+      <li># <a href="#CONFIGOPTIONS">Configuration Options</a></li>
+      <li># <a href="#HARDWARE">Hardware considerations</a></li>
+      <li># <a href="#DOCUMENTATION">Documentation on the installation CD</a></li>
+      <li># <a href="#BACKUP">MS/Windows Backup and Recovery Plan - (if something fails in dual boot installation)</a></li>
+      <li># <a href="#INSTALL">Installation</a></li>
+      <li># <a href="#LILOGRUB">Lilo, Grub and boot loaders</a></li>
+      <li># <a href="#FINISH">Completing Install</a></li>
+      <li># <a href="#CREATEBOOTFLOPPY">Creating a Linux install boot floppy for Linux Installation</a></li>
+      <li># <a href="#POSTINSTALL">Post Installation Configuration</a></li>
+      <li># <a href="#NVIDIA">NVidia Graphics driver installation</a></li>
+      <li># <a href="#SERVICES">System services</a></li>
+      <li># <a href="#FEATURES">Features and Changes</a></li>
+      <li># <a href="#PITFALLS">Pitfalls and Fixes</a></li>
+      <li># <a href="#RECONFIG">System Re-Configuration</a></li>
+      <li># <a href="#BASICADMIN">Basic System Administration</a></li>
+      <li># <a href="#LINKS">Links</a></li>
+      <li># <a href="#BOOKS">Books and references</a></li>
+     </ul>
+    </div><!-- end of col-sm-6 -->
+    <div class="col-sm-6">
+     <!-- ValueClick Media 300x250 Medium Rectangle CODE for YoLinux.com -->
+     <script language="javascript" src="http://media.fastclick.net/w/get.media?sid=51962&amp;m=6&amp;tp=8&amp;d=j&amp;t=n"></script>
+     <noscript>
+      <a rel="nofollow" href="http://media.fastclick.net/w/click.here?sid=51962&amp;m=6&amp;c=1" target="_blank"> <img src="http://media.fastclick.net/w/get.media?sid=51962&amp;m=6&amp;tp=8&amp;d=s&amp;c=1" width="300" height="250" border="1"></a>
+     </noscript><!-- ValueClick Media 300x250 Medium Rectangle CODE for YoLinux.com -->
+    </div><!-- end of col-sm-6 -->
+   </div><!-- end of row -->
+   <div class="row">
+    <!-- Navigation Menu bar -->
+    <div class="row row-nav-height">
+     <nav class="navbar-inverse navbar-custom">
+      <div class="navbar-header">
+       <button type="button" data-target="#navbarCollapse" data-toggle="collapse" class="navbar-toggle"><span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span></button><a class="navbar-brand" href="/"><span class="glyphicon glyphicon-home"></span> YoLinux Home</a>
+      </div>
+      <form class="navbar-form navbar-left" method="post" action="/cgi-bin/htsearch">
+       <div class="input-group">
+        <input type="hidden" name="method" value="all"> <input type="hidden" name="format" value="long"> <input type="hidden" name="sort" value="score"> <input type="hidden" name="config" value="htdig-yolinux"> <input type="hidden" name="restrict" value=""> <input type="hidden" name="exclude" value=""> <input type="text" class="form-control" placeholder="Search" size="20" maxlength="80" name="words">
+        <div class="input-group-btn">
+         <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+        </div>
+       </div>
+      </form>
+      <div id="navbarCollapse" class="collapse navbar-collapse">
+       <ul class="nav navbar-nav navbar-right">
+        <li><a href="/TUTORIALS/" title="YoLinux Web Site Tutorials Index"><span class="glyphicon glyphicon-list-alt"></span> <span class="nav-label">Linux Tutorials</span></a></li>
+        <li><a href="/YoLinux-Terms.html" title="YoLinux.com terms of use"><span class="glyphicon glyphicon-info-sign"></span> <span class="nav-label">Terms</span></a></li>
+        <li><a href="/privacy.html" title="YoLinux.com privacy policy"><span class="glyphicon glyphicon-briefcase"></span> <span class="nav-label">Privacy Policy</span></a></li>
+        <li><a href="/YoLinux-Advertising.html" title="Advertising rates for YoLinux.com"><span class="glyphicon glyphicon-blackboard"></span> <span class="nav-label">Advertising</span></a></li>
+        <li><a href="/YoLinuxEmailForm.html" title="Send us an email"><span class="glyphicon glyphicon-envelope"></span> <span class="nav-label">Contact</span></a></li>
+       </ul>
+      </div><!-- end navbarCollapse -->
+     </nav>
+    </div><!-- end of row --> <!-- End of Navigation menu bar -->
+   </div>
+   <div class="yo-row">
+    <div id="leftcol">
+     <div class="sectionv1">
+      <p><font size="-1"> <b>Related YoLinux Tutorials:</b> </font></p>
+      <p><font size="-1">°<a href="LinuxTutorialNetworking.html">Linux Networking</a> </font></p>
+      <p><font size="-1">°<a href="LinuxTutorialInternetSecurity.html">Securing Linux</a> </font></p>
+      <p><font size="-1">°<a href="LinuxSecurityTools.html">Linux Security Tools</a> </font></p>
+      <p><font size="-1">°<a href="LinuxTutorialIptablesNetworkGateway.html">Internet Gateway</a> </font></p>
+      <p><font size="-1">°<a href="/TUTORIALS/">YoLinux Tutorials Index</a> </font></p>
+      <hr>
+     </div><!-- end of section 1 -->
+     <div class="sectionv2">
+      <p>
+       <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+       <ins class="adsbygoogle" style="display:inline-block;width:160px;height:600px" data-ad-client="ca-pub-8567479315106986" data-ad-slot="8947481941"></ins>
+       <script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script></p><!-- END CODE -->
+      <hr>
+      <p><a href="http://yolinux.tradepub.com/">Free Information Technology Magazines and Document Downloads<br><img src="images/TradePubMagazines.gif" border="0" alt="TradePub link image"></a></p>
+     </div><!-- end of section v2 -->
+    </div><!-- end leftcol -->
+    <div id="content">
+     <a name="CONFIGOPTIONS"></a>
+     <div class="labelbar">
+      Configuration options:
+     </div>
+     <p>You have two choices, a single Operating System (OS) or a multi-boot system.</p>
+     <p>Many desktop users like to run Linux in addition to Windows on an existing PC. An additional hard drive may be used for Linux or an existing drive may be sectioned into two or more partitions. Linux may also reside as the only operating system on the computer as is preferred by those creating a server. Using a separate drive for Linux is the easiest and the preferred multi-boot configuration because it allows the original Windows drive to remain intact.</p>
+     <p>Another dual boot system option is to install the Linux boot loader on a floppy or CD. See the <a href="LinuxTutorialRecoveryAndBootDisk.html">YoLinux.com tutorial on creating a boot floppy</a> The boot process will be controlled by the MS/Windows boot loader. In order to boot the Linux drive, insert the floppy or CD with the Linux boot loader (Lilo or Grub) and boot from the floppy or CD. The Linux boot loader can be installed on the MBR of the floppy.</p>
+     <p>Note: Re-partitioning a drive will destroy all data on the drive unless a tool such as partition magic or fips is used. The Red Hat CD-ROM includes the repartitioning tool "fips" in the dosutils directory. See <tt>/dosutils/fipsdocs</tt>. This tool is unsupported. Partition Magic would be a wiser choice for those pursuing this approach. For dual boot installations, MS/Windows can be re-installed allowing the Microsoft installer to repartition the drive.</p>
+     <p>For those creating a dual boot system with Microsoft Windows and versions of Fedora Core or Red Hat Linux (8/9) with the GRUB boot loader, install Windows first and then let the Linux installation handle the dual boot configuration. It's that easy.</p>
+     <p>Details: When creating a dual boot system with Windows NT or Windows 2000, the NT loader resides on the Master Boot Record (MBR). Upon boot-up, the NT loader is activated and then it loads lilo or Grub to boot Linux. (Lilo is the older Linux boot loader. Red Hat 7.2 introduced Grub as the default boot loader.) In this instance, lilo (or Grub) does not reside on the Master Boot Record (MBR) as it would for a Windows 95 or Linux only installation. Instead lilo (or Grub) will install on the first sector of the root partition.</p>
+     <p>Upgrades: I have been upgrading versions of Red Hat since 5.2. Each release can upgrade to the next. Fedora Core is the upgrade path to Red Hat 9.0.</p>
+     <p><a name="HARDWARE"></a></p>
+     <div class="labelbar">
+      Hardware considerations:
+     </div>
+     <p>The latest releases of the Linux kernel will have the best chance at supporting newer hardware. Older versions may require downloading drivers separately and introducing them during install. Thus the latest release of Fedora Core will have the best chance of supporting the latest graphics cards and SATA chipsets. Other Linux OSs which tend to include the latest kernels and thus the latest hardware support, are SuSE and Ubuntu Linux.</p>
+     <p>Most PC motherboard support two IDE connectors, a primary and a secondary. Each IDE connector has a ribbon cable which can support two devices. A typical PC with one hard drive and one CD-ROM can thus support two more devices. A jumper on the device will set the device to be either the master or slave device on that IDE connection. (You can't have both devices configured as master or slave on one IDE ribbon cable, you may have a maximum of one of each.)</p>
+     <p>Also check the <a href="http://www.redhat.com/support/hardware/intel/62/rh6.2-hcl-i.ld.html">hardware compatibility list</a> before you begin.</p>
+     <p><b>AMD x86_64:</b> The wonderful thing about this hardware and a release of Linux compiled for this hardware is that it runs all your old i386 32 bit applications. In order to run third party browser plug-ins for which there is no source (Macromedia Flash, Real Player, ...) do NOT install the x86_64 version of the browser but instead, manually install the i386 32 bit version after the OS installation. I run Fedora Core 3 x86_64 on an AMD Athelon 64 but installed and run the i386 Fedora Core 3 RPM for the firefox browser. This allows all of the 32 bit plug-ins to integrate with the browser and operate successfully. One can also run programs compiled for i686 (<tt>/lib/i686/</tt>). How's that for compatibility!! The Fedora Core 3 Linux release has <tt>/usr/lib64/</tt> as well as <tt>/usr/lib/</tt>. You will also find <tt>/usr/X11R6/lib64/</tt> and <tt>/usr/X11R6/lib/</tt> as well as compatibility libraries for i386 (i.e. <tt>/usr/lib/gcc-lib/i386-redhat-linux/...</tt>). The compilers gcc/g++ will compile a 64-bit executable. Given the option "-m32", the compiler will generate 32-bit executables. It's the ultimate developers platform as well!! I even have no problem running some old Red Hat Powertools 7.1 RPMs. Due to the native and highly integrated x86 32 bit processing with new 64 bit extensions, there is no 32 emulation or noticeable loss of speed when running 32 bit apps. The advantage of compiled 64 bit applications running on this chip is the 64 bit addressability (64 bits can address more memory and larger file systems) and handling of larger data chunks with a single operation.</p>
+     <p>This information should also be true for the Intel EM64T architecture.</p>
+     <p><a name="DOCUMENTATION"></a></p>
+     <div class="labelbar">
+      Documentation on the Installation CD:
+     </div>
+     <p>Online manuals can be read from the Linux CD-ROM by any operating system. From Windows you can look at your Linux CD and open the files with a web browser.</p>
+     <p><b>Fedora Core 1-6:</b></p>
+     <p>Release notes are on the first CD. For documentation see <a href="http://docs.fedoraproject.org/">http://docs.fedoraproject.org/</a></p>
+     <p><b>RH 8.0, 9.0:</b></p>
+     <p>Documentation is contained on a CD separate from the 3 installation CD's.</p>
+     <p><b>RH 7.2:</b></p>
+     <p>Red Hat 7.2 has an identical layout to 7.1. Documentation is held on a dedicated CD with the same paths and files (If you substitute 7.2 for 7.1).</p>
+     <p><b>RH 7.1:</b> <small> </small></p>
+     <pre class="code"><small>CDROM:\RH-DOCS\rhl-cg-en-7.1\index.html     <b>- Red Hat Configuration Guide: RAID, Samba, Printers, Linuxconf, PGP</b>
+CDROM:\RH-DOCS\rhl-gsg-en-7.1\index.html    <b>- Getting Started Guide: Gnome, KDE, Web, e-mail, Audio, Video, Gimp, ...</b>
+CDROM:\RH-DOCS\rhl-ig-x86-en-7.1\index.html <b>- Red Hat Linux x86 Installation Guide</b>
+CDROM:\RH-DOCS\rhl-rg-en-7.1\index.html     <b>- Red Hat Reference Guide: CCVS (Credit Card Verification System), 
+                                              Kerberos, LDAP, Powertools</b>
+CDROM:\FAQS\...                    <b>- Frequently Asked Questions</b>
+CDROM:\HOWTOS\INDEX.html           <b>- How To documentation from the "Linux Documentation Project"</b>
+</small></pre><small> </small> The Red Hat 7.1 release put all documents on a separate CD labeled "Documentation CD". 
+     <p></p>
+     <p><b>RH 6.2:</b> <small> </small></p>
+     <pre class="code"><small>CDROM:\doc\gsg\index.htm           - Red Hat Getting Started Guide
+CDROM:\doc\install-guide\index.htm - RH Installation Guide
+CDROM:\doc\ref-guide\index.htm     - RH Reference Guide
+</small></pre><small> </small> Note: RH 6.2 did NOT include the HOWTO section. See: <a href="http://en.tldp.org/HOWTO/">http://en.tldp.org/HOWTO/</a>
+     <p></p>
+     <p>All releases contain documentation on DEC/Alpha installations in: <small> </small></p>
+     <pre class="code"><small>CDROM:\doc\alpha\
+</small></pre><small> </small>
+     <p></p>
+     <p><b>RH 6.1:</b> <small> </small></p>
+     <pre class="code"><small>CDROM:\doc\rhinst\index.htm - Install Guide
+CDROM:\doc\rhgsg\index.htm - Getting Started Guide
+CDROM:\doc\rhref\index.htm - Reference Guide
+</small></pre><small> </small>
+     <p></p>
+     <p><b>RH 6.0:</b> introduced the ``Getting Started Guide'' in: <small> </small></p>
+     <pre class="code"><small>CDROM:\doc\rhgsg\index.htm
+</small></pre><small> </small>
+     <p></p>
+     <p><b>RH 5.2/6.0:</b> <small> </small></p>
+     <pre class="code"><small>CDROM:\doc\rhmanual\manual\index.htm - REDHAT manual. 
+CDROM:\doc\HOWTO\...   		- RH 5.2/6.0/6.1
+CDROM:\FAQ\HTML\Index.htm 	- RH 5.2/6.0/6.1
+</small></pre><small> </small>
+     <p></p>
+     <p><a name="BACKUP"></a></p>
+     <div class="labelbar">
+      MS/Windows Backup and Recovery Plan: (if something fails in dual boot installation):
+     </div>
+     <p>For those who will be creating a dual boot computer and wish to maintain a windows partition or drive:</p>
+     <ol>
+      <li>Backup important partitions.</li>
+      <li>Create a DOS boot floppy to restore a ``Master Boot Record'' if it gets corrupted.</li>
+      <li>Create DOS/Windows recovery disks for DOS/Windows partitions. (For dual boot configurations)</li>
+     </ol>
+     <p>It would be wise to make a backup of anything important that may reside on disks or partitions you don't intend on disturbing. The Linux installation has the option of installing one of the operating system loaders Lilo or GRUB. GRUB was introduced as the default Linux boot loader in Red Hat 7.2. The boot loader allows one to boot one or more operating systems and is usually installed on the master boot record of the hard drive (boot drive). In the case of Windows NT (or variants), the Microsoft boot loader is used to launch the Linux boot loader which will then boots Linux. As a precaution, it would be wise to have a rescue plan for the Master Boot Record.</p>
+     <p>DOS recovery disk: From DOS create a floppy:</p>
+     <dl>
+      <dd>
+       <pre class="code">C:\&gt;FORMAT /U A:/S
+C:\&gt;COPY C:\DOS\FDISK.EXE A:\
+C:\&gt;COPY C:\DOS\FORMAT.COM A:\
+C:\&gt;COPY C:\DOS\MSD.EXE A:\
+</pre>
+      </dd>
+     </dl>
+     <p>This creates a boot floppy with some rescue tools. To restore a Master Boot Record, boot the PC from the floppy and enter the following shell command:</p>
+     <ul>
+      <li>DOS/Win9X: 
+       <pre class="code">   A:\&gt;FDISK /MBR C:
+<br></pre></li>
+      <li>Win 2000/NT: (boot from CD and enter "Recovery Console") 
+       <pre class="code">   fixmbr
+<br></pre></li>
+      <li>Win XP: (boot from CD and enter "Recovery Console") 
+       <pre class="code">   bootcfg /rebuild
+<br></pre></li>
+     </ul>
+     <p><b>Explanation of MBR:</b> The Master Boot Record is on a sector of your hard drive which cannot be seen from your file system. It is separate. Upon booting, the system reads the MBR first. This points the computer to the portion of the disk where the operating system resides and the OS is loaded from there. When running a dual boot system, LILO (or Grub) in the MBR can point to more than one operating system from which to boot.</p>
+     <p><b>Windows 95 recovery diskette:</b> To create a windows ``start-up'' disk, select ``Start'' + ``Settings'' + ``Control Panel'' + ``Add/Remove Programs'' then select the ``Startup Disk'' tab. This may require your Windows 95 CD-ROM.</p>
+     <p><b>Red Hat re-install on an existing system:</b> Save configuration info</p>
+     <ul>
+      <li>Configuration files are held in the directory <tt>/etc/</tt>. Save a backup or hard copy of the "conf" files you need to re-configure your system. The command <tt>ls -lrt</tt> will list files in a reverse time ordered fashion. The newer files are listed last and are the ones most likely changed.</li>
+      <li>Backup or print file <tt>/etc/sysconfig/rhn/systemid</tt> to preserve the configuration information for <tt>up2date</tt>. See <a href="#UP2DATEPITFALL">pitfall</a></li>
+     </ul>
+     <p><a name="INSTALL"></a></p>
+     <div class="labelbar">
+      Installation:
+     </div>
+     <p>I highly recommend that you choose "Custom Installation" mode and not Server or Workstation . <b>Server and Workstation installation modes add pre-configured disk partitions which may wipe out stuff on drives you did not intend to disturb.</b>A server-class installation does NOT install a GUI interface nor does it install X-windows. To install everything choose the "Custom" installation option. You can always turn off or ignore services and software you don't need.</p>
+     <p><b><font color="#ff0000">[Potential Pitfall]:</font></b> (RH 7.1) <b>A server-class installation WILL erase all partitions both Linux and Non-Linux from every one of your computer's hard drives.</b> This method will also put Lilo (or Grub) on the MBR. (Not good for Windows NT dual boot)</p>
+     <p>The "Automatic Partitioning" option (RH 7.1 and greater) is used by workstation, server and laptop class pre-configured installations and has the consequences of overwriting the MBR and re-partitioning all your drives. The "Manual" partition option is much more flexible. <br>
+       Two manual partition tools are available:</p>
+     <ol>
+      <li>"Disk Druid" - I use this one</li>
+      <li>fdisk</li>
+     </ol> The auto option creates two partitions (<tt>/boot</tt> and <tt>/</tt>) and represents the most simple of installations. It is ideal for single user systems. A server or shared system may want to separate the users from the operating system by placing <tt>/home</tt> on a separate partition as well as <tt>/var</tt> and <tt>/opt</tt>. (More on this later) 
+     <p>Upgrades will be logged to the file <tt>/tmp/upgrade.log</tt>.</p>
+     <p>Linux installation is fairly intuitive except managing the disk partitions. The Linux CD-ROM is a boot disk, thus stick it in and re-boot your computer and the install menu will appear. If this does not work check your BIOS to see if your CD-ROM is in the list of boot devices. In my BIOS configuration I had to change the boot device default from <tt>A,C,SCSI</tt> to <tt>CDROM,C,A</tt>. After the installation was complete I changed it back. If you cannot boot from the CD-ROM, see instructions in section titled ``<a href="#CREATEBOOTFLOPPY">Creating a Linux boot floppy for Linux Installation</a>'' in this guide. Most hardware is auto-detected during installation. The user is queried for the rest.</p>
+     <p><b><font color="#ff0000">[Potential Pitfall]:</font></b> (RH 7.2) RAID disk configuration requires text mode installation. Graphical GUI does NOT support RAID.</p>
+     <p><b><font color="#ff0000">[Potential Pitfall]:</font></b> (RH 6.1 and later) If the installation program presents itself as a text based console (DOS like) interface instead of a graphical based interface, chances are that the install program could not detect your graphics card and does not have the drivers for it.</p>
+     <p><b>Disk Druid:</b> This is the disk partition manager. IDE drives are referred to as hda for the first drive, hdb for the second etc ... IDE uses separate ribbon cables for primary and secondary drives. The partitions on each drive are referred numerically. The first partition on the first drive is referred to as hda1, the second as hda2, the third as hda3 etc ... SCSI drives would be identified as sda, sdb ...</p>
+     <p>Linux IDE naming conventions:</p>
+     <dl>
+      <dd>
+       <table class="box">
+        <tbody>
+         <tr>
+          <th>Device</th>
+          <th>Description</th>
+          <th>Configuration</th>
+         </tr>
+         <tr>
+          <td>/dev/hda</td>
+          <td>1st (Primary) IDE controller</td>
+          <td>Master</td>
+         </tr>
+         <tr>
+          <td>/dev/hdb</td>
+          <td>1st (Primary) IDE controller</td>
+          <td>Slave</td>
+         </tr>
+         <tr>
+          <td>/dev/hdc</td>
+          <td>2nd (Secondary) IDE controller</td>
+          <td>Master</td>
+         </tr>
+         <tr>
+          <td>/dev/hdd</td>
+          <td>2nd (Secondary) IDE controller</td>
+          <td>Slave</td>
+         </tr>
+        </tbody>
+       </table>
+      </dd>
+     </dl>
+     <p>If the CD-ROM was <b>NOT</b> recognized, restart from the Linux boot floppy and enter at the ``boot:'' prompt, <tt>linux hd<b>X</b>=cdrom</tt>, where <b>X</b> is a,b,c or d as described above. <a name="PARTITIONS"></a></p>
+     <p>Partitions: You will add at least three partitions. The first will be unnamed as a Linux swap partition of a given size i.e. 127Mb. (I'm generous and use at least twice the value of RAM memory on my system.) Add another as <tt>/boot</tt> of type ext2 Linux native and the third as <tt>/</tt>, Linux native ext3 (Red Hat native journaled file system) or LVM (logical volume manager: allows growing a file system by adding extra drives. Introduced in Red Hat Enterprise Linux 3 and Fedora Core) and [*] growable. The "growable" option takes whatever size is given as a minimum and actually allows the partition to take up the rest of the drive without actually specifying how much space is left. Use the space bar to toggle your choices between un-selected [ ] and selected [*]. (For RH 6.1 pick the select button.)</p>
+     <p></p>
+     <dl>
+      <dd>
+       <table class="box">
+        <tbody>
+         <tr bgcolor="#dfdfdf">
+          <th>Mount Point</th>
+          <th>Size</th>
+          <th>Growable</th>
+          <th>Type</th>
+         </tr>
+         <tr>
+          <td valign="top"><tt>/boot</tt></td>
+          <td valign="top">23Mb (RH9)<br>
+            75Mb (RHEL4)</td>
+          <td valign="top"><tt>[ ]</tt></td>
+          <td valign="top">Linux native (ext2)<br>
+            (no need to journal <tt>/boot</tt>)</td>
+         </tr>
+         <tr>
+          <td valign="top"><tt>_________</tt></td>
+          <td valign="top">512 (for 256 Mb RAM)<br>
+            (Use RAM memory * 2)</td>
+          <td><tt>[ ]</tt></td>
+          <td>Linux swap</td>
+         </tr>
+         <tr>
+          <td valign="top"><tt>/</tt></td>
+          <td>100</td>
+          <td valign="top"><tt>[*]</tt></td>
+          <td valign="top">Linux native (ext3 or LVM)</td>
+         </tr>
+        </tbody>
+       </table>
+      </dd>
+     </dl> The size of "<tt>/</tt>" set to 500 min. is arbitrary as the installer will use whatever is available because "Growable" is selected. 
+     <p>RHEL 4 defaults: boot-75Mb <br>
+       RH 5.2/6.0 defaults: boot-16Mb, swap-127Mb</p>
+     <p>Descriptions:</p>
+     <ul>
+      <li>Swap - used for virtual memory (Use the larger value: 2 x physical memory or 127Mb. Red Hat 7.1 directions recommends at least 254Mb.</li>
+      <li><tt>/boot</tt> - Bootable operating system kernel is placed here. No need for a journaled file system thus you can use ext2. (ext3 will also work)</li>
+      <li><tt>/</tt> - All the rest of the UNIX files are placed under this directory 
+       <ul>
+        <small>
+         <li><tt>/home</tt> - User directories. Server configurations often make this a separate partition so that user's disk resources are limited. Another way to limit user disk resources is to use the quota feature. See <a href="LinuxTutorialQuotas.html">YoLinux.com quota tutorial</a></li>
+         <li><tt>/opt</tt> - Optional software added to the system. (Software which didn't come with the OS. Some user <tt>/usr/local</tt>.)</li>
+         <li><tt>/var</tt> - Files with variable or changing state and size (log files, print spool files, etc.) Server configurations often make this a separate partition so that bloated log files, spooled print jobs, etc are limited to the amount of space they can consume.</li>
+         <li><tt>/tmp</tt> - Temporary space used by the system and user services.</li>
+         <li><tt>/sbin</tt> - System admin commands</li>
+         <li><tt>/bin</tt> - Binaries (commands/executables) which everyone uses.</li>
+         <li><tt>/etc</tt> - Configuration files.</li>
+         <li><tt>/usr</tt> - User binaries (commands), documentation, ...</li>
+         <li><tt>/...</tt> - The rest: /dev - devices, /lib - libraries, /mnt - device mount point, /lost+found - repository of corrupt but repaired files, ...</li></small>
+       </ul><small> </small></li>
+     </ul>
+     <p></p>
+     <p><b>Server installations: </b> It is common practice to create more partitions to isolate user, system and temporary file directories. In this way, a user would not be able to fill up a drive and lock-up the computer, nor would the installation of large software packages or the generation of temporary files or log files. Create separate partitions for <tt>/home</tt> (user space), <tt>/opt</tt> (optional, non-standard software packages) or <tt>/usr/local</tt>, <tt>/tmp</tt>, <tt>/var</tt> etc... Making <tt>/home</tt> and <tt>/opt</tt> a separate partition from <tt>/</tt> also helps Linux upgrades which can be set to write over and upgrade all partitions except <tt>/home</tt> and <tt>/opt</tt>. Separating partitions and placing them on separate disk drives can also increase performance by reducing the load on a single drive.</p>
+     <p><b>My Workstation:</b> If the installation is for your very own workstation which no one else is using, you can get away with three partitions, "<tt>/boot</tt>", "<tt>/</tt>" and swap. It gives ultimate disk flexibility (all disk space is available for whatever you want) but no protection from your own stupidity is enforced.</p>
+     <p><b>Other partitioning tools: fdisk </b> is another disk partitioning tool.DOS, Linux and other version of fdisk exist. I recommend Red Hat s Disk Druid .</p>
+     <p><b>Note:</b> The placement of <b>/boot</b> is limited by the Disk Druid tool to account for BIOS limitations. Although unlikely, you may not have these BIOS limitations, in which case, use fdisk to partition the drive and no limitations will be imposed.</p>
+     <p><b>Note:</b> The <b>/opt</b> directory is often used to create a separate directory structure for commercial and "optional" software which is not part of the base install. This way it is a separate self-contained environment which is easy to backup and restore separately from the rest of the system. The directory structure will often mimic the <tt>/</tt> directory with <tt>/opt/bin</tt>, <tt>/opt/etc</tt>, <tt>/opt/lib</tt> etc...</p>
+     <p><b>Specialized device drivers:</b> If your hardware is on the bleeding edge and does not have support built in with the Red Hat installation CD, then you must provide the device driver during installation. Typically the Red Hat installation software will recognize that it does not have a driver for the hardware detected. For example: Red Hat 8.0 and the Adaptec U320 SCSI driver:</p>
+     <ul>
+      <li>Download the <a href="http://people.freebsd.org/%7Egibbs/linux/">host bus adapter floppy image</a>.</li>
+      <li>Unzip the file: <tt>gzip -d <i>aicXX..-i686-rh8.0</i>.img.gz</tt></li>
+      <li>Copy floppy image to floppy: <tt>dd if=<i>aicXX..-i686-rh8.0</i>.img of=/dev/fd0 bs=1440k</tt></li>
+     </ul> The Red Hat installation program will request the missing driver. Load the floppy when asked: "No drivers found - would you like to select drivers now?". Select "yes". Press "F2" to provide the SCSI driver on a floppy and continue with the installation. 
+     <p><b>Other Installation Methods:</b> This tutorial covers installation from a CR-ROM. It should be pointed out that Linux may also be installed from an NFS server, by FTP, SMB (a windows shared drive) and from a local hard drive.</p>
+     <p><b><font color="#ff0000">[Potential Pitfall]:</font></b> If using IDE, note that most BIOS's requires <tt>/boot</tt> be installed on a drive attached to the Primary controller. If using two IDE hard drives it might be best to place them on the primary controller and place the CD-ROM on the Secondary .</p>
+     <p><b><font color="#ff0000">[Potential Pitfall]:</font></b> When using SCSI devices, the <tt>/boot</tt> partition must reside on SCSI ID 0 or 1.</p>
+     <p><b><font color="#ff0000">[Potential Pitfall RH7.0 and earlier]:</font></b> <b>NOTE:</b> The <tt>/boot</tt> partition must be completely placed within the first 1024 cylinders of the disk. This drive geometry information is presented by Disk Druid under the heading <b>Geom</b>. The symbols [C / H / S] represent [Cylinders / Heads / Sectors] of the drive. (This is one reason why it may be easiest to install Linux on a separate drive and place the <tt>/boot</tt> partition at the beginning of the drive.) RH 7.1 introduced a newer version of LILO with LBA32 support which corrects this limitation. Red Hat 7.2 has even fewer restrictions. In fact RH 7.2 introduces new features which allow flexibility in choosing location and placement of file systems, boot loaders and kernel on your drive.</p>
+     <p><b><font color="#ff0000">[Potential Pitfall]:</font></b> I had one installation where I selected the "Check for bad blocks" while formatting and it caused the install to lock up. On this particular system I had to skip this check.</p>
+     <p><b><font color="#ff0000">[Potential Pitfall]:</font></b> If the hard drive was 100% entirely formatted for windows, there will be no space for Linux partitions. During the install you must select the windows partition and delete it before adding new partitions and assigning percentages.</p>
+     <p><b>Lets Do The Install:</b> Partitions and mount points which are already allocated, are listed at the top of the screen. Use the "Tab" key to get to "Add" if you want to create a new partition for Linux. Use the "Tab" key to get to "Delete" , if you are going to put Linux on a partition previously used for DOS and then "Add" it as a new Linux partition. <br>
+       Tab to the hard drive selection box which will have all drives selected.</p>
+     <pre class="code">       [*] hda<br>       [*] hdb<br></pre>
+     <p>Tab to the drive you don't want to use and press the space bar to un-select.</p>
+     <pre class="code">       [ ] hda<br>       [*] hdb<br></pre>
+     <p>Now add the partitions for <tt>/boot</tt>, <tt>/root</tt> (optional), "<tt>/</tt>" and swap (and any others you wish to add) as described above.</p>
+     <p><b>Lilo Text Boot Options:</b></p>
+     <ul>
+      <li><tt>boot: text</tt> <b>- No GUI. Console text mode only.</b></li>
+      <li><tt>boot: linux text console=ttyS0</tt> <b>- For use with a serial terminal</b></li>
+      <li><tt>boot: linux isa</tt> <b>- To explicitly request ISA configuration dialog</b></li>
+      <li><tt>boot: linux mediacheck</tt> <b>- Check ISO CD integrity</b></li>
+     </ul>
+     <p><b>Red Hat 7.2 upgrade/install: EXT3</b> The 7.2 upgrade allows one to upgrade the Linux EXT2 file system to EXT3. EXT3 is a journaled file system which is crash resistant, insuring the integrity of the data even if the system crashes during a system write because it journals the transaction before it undertakes a disk write. I recommend the EXT3 upgrade. The RH 7.2 EXT3 upgrade will also disable periodic file system checks as it assumes that file system integrity is maintained. (See autofsck) Use tune2fs (-c or -i) to re-enable check. EXT3 is the default file system for a fresh Red Hat 7.2 installation. EXT3 may be installed in one of three modes:</p>
+     <ul>
+      <li>ordered: Default. Crash will result in a valid non-corrupted file system.</li>
+      <li>journal: slow</li>
+      <li>writeback: Fast but NOT crashproof.</li>
+     </ul> The option is also specified in the file <tt>/etc/fstab</tt> with the string <tt>'data=ordered'</tt>. 
+     <p>Also note that Red Hat 7.2 does NOT include a "Powertools" CD. Most of the "Powertools" packages have been included as part of the base installation.</p>
+     <p><a name="LILOGRUB"></a></p>
+     <div class="labelbar">
+      Lilo, Grub and boot loaders:
+     </div>
+     <p>Lilo is the Linux bootstrap loader used by the Red Hat distribution up to and including version 7.1. Red Hat version 7.2 defaults to the use of Grub as the default boot loader. Grub supports a password that controls access to a Grub shell.</p>
+     <p>Lilo and Grub are the Linux bootstrap loaders that actually loads and starts the kernel. Only one bootloader, Lilo or GRUB, is used. The Linux install will ask if you want to place lilo (or Grub) on the master boot record (MBR). The answer of course is YES (Unless you are installing Windows NT/2000. See special install section for dual booting with these operating systems). If you do not install Lilo (or Grub) on the MBR, you can boot Linux from a boot floppy which can be generated during the install.</p>
+     <p>Other bootstrap loaders are available. A DOS program called <b>loadlin</b> can boot Linux from DOS. Loadlin can be found on the Red Hat CD under CDROM:\dosutils\. Both loadlin.exe and the Linux kernel must be loaded on a DOS partition.</p>
+     <p><b>SCSI and lilo:</b> The choice of selecting "Use Linear Mode" during lilo install is a little complicated. PCs running Microsoft operating systems use a SCSI BIOS based LBA mode to access drives of more than 1,024 MB. This is the default selection for most PCs. Check your SCSI BIOS if you are un-sure. <br><b>RH 5.2:</b> Use the Linux default lilo setting of [*] "Use Linear Mode" . <br><b>RH 6.0:</b> The default was changed to [ ] where Linear mode is un-selected. This is incompatible with most Microsoft OS's. If you are dual booting with Windows, you will probably want to set to [*] "Use Linear Mode" . <br><b>RH 6.2/7.1:</b> The default "Use Linear Mode" is pre-selected. This is compatible with LBA mode. (It implies LBA mode).</p>
+     <p><b><font color="#ff0000">[Potential Pitfall]</font>:</b> If the system boots to a prompt "LI" and a blinking cursor and is stuck, you chose the wrong option for your SCSI configuration.</p>
+     <p>Systems using Unixware or older PCs with smaller drives may NOT be using LBA and thus Use Linear Mode must be unselected. If this selection is incorrect, your machine will not boot and the Master Boot Record will have to be restored and lilo will have to be re-installed.</p>
+     <p>Adaptec SCSI card users: Press ctrl-A on boot up to enter the SCSI card BIOS set-up. This is where you chose LBA mode or not. ( &gt; 1 Gb addressing)</p>
+     <p><b><font color="#ff0000">[Potential Pitfall]</font>:</b> Adding an extra drive on which to install Linux: If the drive is a pre-formatted drive for Microsoft Windows, and if you boot Windows after installing the drive you may experience the following problem. Windows will recognize and assign a letter to the new drive and may re-assign the letters assigned to your CD-ROM and previous drives. If installing a new pre-formatted drive, DO NOT boot to Windows. It would be best to boot from the Linux CD-ROM. The Linux install will allow you to assign the new drive as a Linux drive. Thus when booted to Windows (after the Linux install), the system will not recognize the new Linux drive and therefore will not reassign your drive letters.</p>
+     <p>Pitfall Fix: If you do reboot to Windows and Windows re-assigns your drive letters for your CD-ROM, restore the settings by:</p>
+     <ul>
+      <li>"Start" + "Settings" + "Control Panel"</li>
+      <li>Select "System"</li>
+      <li>Select the tab "Device Manager" and select the CD-ROM</li>
+      <li>Set the drive letter to the letter of your choice.</li>
+     </ul>
+     <p><b>Kernel Boot Options:</b> (see <tt>/etc/grub.conf</tt> or <tt>/etc/lilo.conf</tt>)</p>
+     <ul>
+      <li>nosysinfo :Disable NPL thread support. Used for RH 9.0 to fix incompatibility of Java version earlier than 1.4.1.</li>
+      <li>root=LABEL=/ :Location of root of filesystem.</li>
+     </ul>
+     <p><b>GRUB:</b> GRUB allows one to boot one of many operating systems installed on the hard drives. GRUB can hide partitions from operating systems which is important when cohabitating with a Microsoft operating system. You can use a partition to install an operating system and hide the other partitions from it. (<a href="http://www.gnu.org/software/grub/grub.html">GNU: GRUB home page</a>)</p>
+     <p>Grub was introduced with Red Hat 7.2 as the default boot loader. It's configuration file is <tt>/boot/grub/grub.conf</tt>. While lilo requires reconfiguration with new information loaded on the MBR for each new kernel, grub does not. Grub requires that the new kernel information be entered in the configuration file <tt>/boot/grub/grub.conf</tt>.</p>
+     <p>A Red Hat7.2 installation using lilo may be switched to grub using the command <tt>/sbin/grub-install</tt>. (i.e. <tt>/sbin/grub-install /dev/hda</tt> Specify the drive on which the boot loader will be installed on it's MBR.)</p>
+     <p>GRUB Menu:</p>
+     <ol>
+      <li>Select kernel</li>
+      <li>Press 'e' to edit entry</li>
+      <li>Use arrow keys to navigate to kernel line. i.e. <tt>kernel /vmlinuz-2.4.7-1 ro root=/dev/hda2</tt></li>
+      <li>Add argument 'single' to the end of the line. Then press return.</li>
+      <li>Press 'b' to boot.</li>
+     </ol>
+     <p>The Red Hat 7.3 Installation/Upgrade offers three choices:</p>
+     <ol>
+      <li>Update current: Update boot loader currently on the system.</li>
+      <li>Skip update</li>
+      <li>New boot loader configuration: Choose this if you wish to update from Lilo to Grub.</li>
+     </ol>
+     <p><a name="FINISH"></a></p>
+     <div class="labelbar">
+      Completing Install:
+     </div>
+     <p><font color="#ff0000">[Potential Pitfall RH7.2 Upgrade]</font>: After Grub/Lilo options have been entered the installation software examines your system for packages to upgrade. <b>Be Patient.</b> It may appear that the system locked up but it is just working on the upgrade. It takes a while.</p>
+     <p><b>Linux System Kernel Note:</b> The default Linux kernel installed supports a multitude of devices using loadable modules. In order to keep the kernel small, maximize device support and minimize memory usage, the appropriate module is loaded at run time. The kernel may be optimized for performance by compiling in support for the specific devices needed. Video drivers are not controlled by the kernel but by the X-window application program.</p>
+     <p>Kernel boot options are set in the config file <tt>/etc/grub.conf</tt> <br>
+       i.e.: <tt>kernel /boot/vmlinuz-2.6.10-1.770_FC3 ro root=LABEL=/ rhgb quiet</tt></p>
+     <ul>
+      <li>Remove "<tt>quiet</tt>" if you would like to see the kernel boot information.</li>
+      <li>Add "<tt>vga=788</tt>" to set a larger text console at boot.</li>
+      <li>Disable SeLinux mode, add: "<tt>selinux=0</tt>" or (preferred) set in <tt>/etc/selinux/config</tt>: 
+       <ul>
+        <li>Security policy is enforced: <tt>SELINUX=enforcing</tt></li>
+        <li>Security policy is disabled: <tt>SELINUX=disabled</tt></li>
+        <li>Print warnings instead of enforcing: <tt>SELINUX=permissive</tt></li>
+       </ul></li>
+      <li>Graphical Boot Loader: "<tt>rhgb</tt>"</li>
+      <li>Remove "<tt>hiddenmenu</tt>" to see Grub boot menu.</li>
+     </ul>
+     <p><b>Note:</b> Install output is written to five of the virtual consoles. Note these key bindings are for the installation only.</p>
+     <dl>
+      <dd>
+       <table class="box">
+        <tbody>
+         <tr>
+          <th>Console #</th>
+          <td>Key</td>
+          <th>Output</th>
+         </tr>
+         <tr>
+          <td>1</td>
+          <td>Alt-F1</td>
+          <td>Installation Dialog</td>
+         </tr>
+         <tr>
+          <td>2</td>
+          <td>Alt-F2</td>
+          <td>Shell Prompt</td>
+         </tr>
+         <tr>
+          <td>3</td>
+          <td>Alt-F3</td>
+          <td>Install Log</td>
+         </tr>
+         <tr>
+          <td>4</td>
+          <td>Alt-F4</td>
+          <td>System Log<br>
+            (from OS kernel)</td>
+         </tr>
+         <tr>
+          <td>5</td>
+          <td>Alt-F5</td>
+          <td>Other Messages</td>
+         </tr>
+         <tr>
+          <td>7</td>
+          <td>Alt-F7</td>
+          <td>X Graphical Display (new to RH 9.0)</td>
+         </tr>
+        </tbody>
+       </table>
+      </dd>
+     </dl>
+     <p>After installation the X-window system will use ctrl-Alt-F1 as the system console terminal, ctrl-Alt-F2 to F6 for virtual consoles and ctrl-Alt-F7 for the X-window display. ctrl-Alt-Backspace will kill the X-Window session. <br>
+       Note: RHEL6 configures ctrl-Alt-F1 for the X-window display and ctrl-Alt-F2 to F7 for virtual consoles. <br>
+       Screen shots of the installer can be made using "Shift" + "Print Screen". Screen shots will be saved to <tt>/root/anaconda-screenshots</tt>.</p>
+     <p><b>Mouse:</b> If your connector at the end of your mouse is round, you have a PS/2 bus mouse. Many UNIX programs require three mouse keys. If yours has only two, choose the three button emulation. In emulation mode, pressing both mouse buttons at the same time is the same as pressing the middle button on a three button mouse. The typical X-Window interface uses button 1 to select (i.e. text), button 2 to paste and button 3 to pull up optional menus.</p>
+     <p><b>Printers:</b> Note that DOS calls your printer port "lpt1". Linux refers to your first printer as /dev/lp0. The numbering of all Linux devices starts with 0. (0, 1, 2, 3...) The printer will also be assigned a given name. A printer of the name "lp" will be considered the default printer. Another printer definition may be duplicated under this name to make it the default. (Create a default printer of this name "lp" and life gets easier because many applications such as Adobe Acrobat reader rely on this default.)</p>
+     <p>Upgrade Note: Some really old versions of Linux began printer numbering at lpt1. If upgraded, this would have to be changed to reflect a newer version of Linux.</p>
+     <p><b>Unix Time:</b> Most web servers use UTC (Universal Coordinated Time) and an environment variable representing one's time zone as an offset and whether Daylight Savings Time is observed. This is used to calculate the displayed time. UTC is the method used by standard UNIX to measure time internally. It is the total number of seconds from January 1, 1970.</p>
+     <p><b>Authentication:</b> The basic standard authentication configuration uses the installation defaults:</p>
+     <ul>
+      <li>"Enable MD5 passwords"</li>
+      <li>"Enable Shadow passwords"</li>
+     </ul> The other options are NIS, LDAP and Kerberos. All three rely on the configuration of an authentication server for this purpose. The MD5/Shadow configuration is a stand alone password authentication system residing on the Linux systems and is only effective for that system. 
+     <ul>
+      <li>NIS is the SUN "yellow pages" authentication server configuration which is most commonly used with the NFS file sharing infrastructure.</li>
+      <li>LDAP uses an authentication server which holds a database of logins and passwords.</li>
+      <li>Kerberos is MIT's high security network based authentication scheme.</li>
+     </ul>
+     <p><b>Sample Network Configuration:</b></p>
+     <ul>
+      <li>IP address: <tt>192.168.100.101</tt></li>
+      <li>netmask: <tt>255.255.255.0</tt></li>
+      <li>Network address (lowest): <tt>192.168.100.0</tt></li>
+      <li>Broadcast address (highest): <tt>192.168.100.255</tt></li>
+     </ul> The networking addresses beginning with "192.168." are reserved for private local networks. 
+     <p><a name="CREATEBOOTFLOPPY"></a></p>
+     <div class="labelbar">
+      Creating a boot floppy for Linux Installation:
+     </div>
+     <p>This is only necessary if you can not boot from the CD-ROM.</p>
+     <p>Creating Linux install diskette from a Microsoft OS: Use rawrite to load the file boot.img to the diskette from the CD-ROM (D:\ in this example):</p>
+     <p></p>
+     <pre class="code">       C:\&gt; D:<br>       D:\&gt; CD \DOSUTILS<br>       D:\DOSUTILS&gt; RAWRITE D:\IMAGES\BOOT.IMG A:<br>    <br></pre>
+     <p>RAWRITE does not work with NT/2000. Use winimage.</p>
+     <p>Creating Linux install diskette on Unix/Linux:</p>
+     <pre class="code">       mount -t iso9660 -o ro /dev/cdrom /mnt/cdrom<br>       cd /cdrom/images<br>       dd if=boot.img of=/dev/fd0 bs=1440k<br></pre>
+     <p>The <tt>-o ro</tt> option mounts the CR-ROM as Read Only.</p>
+     <p><a name="POSTINSTALL"></a></p>
+     <div class="labelbar">
+      Post Installation Configuration:
+     </div>
+     <p>Post Install: (perform these functions as root user)</p>
+     <p><b>Login:</b></p>
+     <ul>
+      <li>Upon boot (if text mode) the loader (LILO) will show the prompt "<b>boot:</b>". Press Return to take the default or type ? or tab to see all possible selections then type the selection. i.e. type <tt>linux</tt> to boot Linux or <tt>dos</tt> (default name given for the Microsoft partition), or win95" if that is the name you gave for MS/Windows 95 upon Linux partitioning and install. The defaults and configuration of lilo may be altered. See the section on lilo and <tt>/etc/lilo.conf</tt>.</li>
+      <li>At the <b>Login:</b> prompt, enter the user id root and give the password you chose during install. This will log you into the system in command console mode. (If set to text mode <a href="LinuxTutorialInitProcess.html">init level 3</a>)</li>
+     </ul><b>X-Windows:</b>
+     <ul>
+      <li><b>startx</b> : This command start the graphical user interface X- windows system.</li>
+      <li>If X windows fails: 
+       <ul>
+        <li>RH8.0: Use the X windows configuration tool <tt>/usr/bin/redhat-config-xfree86</tt>. This will edit the configuration file <tt>/etc/X11/XF86Config</tt></li>
+        <li>RH7.3-: If this fails one can reconfigure X windows with the command <b>Xconfigurator</b>. (or you can also use XF86setup or xf86config which performs a similar function) This produces the same graphics setup interface as the installation. <b>Xconfigurator</b> generates the file <tt>/usr/X11R6/lib/X11/XF86Config</tt> (This is linked to <tt>/etc/X11</tt>) (See <tt>/usr/X11R6/lib/X11/doc/README.Config</tt>)</li>
+       </ul></li>
+      <li>The <tt>/etc/X11/XF86Config</tt> file holds X-windows configuration information about the graphics card, monitor, mouse and keyboard.</li>
+      <li>For my 17 inch monitor (1280x1024 resolution) I configured X-Windows for a resolution of 1024x768 for better readability.</li>
+      <li>If you find that the text and other details on the screen are too small, use Xconfigurator to set up a configuration file using a lower resolution. You can save multiple configuration files and rename them to <tt>/etc/X11/XF86Config</tt> when needed.</li>
+      <li>To exit out of X-windows and the GNOME interface gracefully, select the GNOME Start icon (left side of tool bar) and select log out . Changes to the XF86Config configuration file will not be implemented by X-windows until it is halted and restarted. This can be done by rebooting the system (<tt>shutdown -h now</tt>) or logout and go to a console terminal (ctrl-alt-F5) and login as root. The command "<tt>init 3</tt>" (Red Hat systems) will bring the system out of X-Window mode. The command "<tt>init 5</tt>" will bring it back. See the <a href="LinuxTutorialInitProcess.html">YoLinux.com tutorial on the Linux init process</a> for more info.</li>
+      <li>The key sequence &lt;ctrl&gt;-&lt;alt&gt;-&lt;F2&gt; will allow you jump out of a mis-configured X-windows session and go to a console. If the X-window session is inoperable you can kill the process from this new console. The command <tt>ps -a</tt> will reveal the startx process id (PID). Then <tt>kill &lt;process id number&gt;</tt>. Your initial console upon boot is ctrl-Alt-F1. Use ctrl-Alt-F7 to return to the X-window session. The simplest and recommended method to kill the X-Window session is to use the key sequence ctrl-Alt-Backspace.</li>
+     </ul>
+     <p><b>Leaving the system:</b> (UNIX text console commands)</p>
+     <ul>
+      <li><b>exit</b> : This is the command to logoff. This allows one to re-login as new user</li>
+      <li><b>/sbin/shutdown -h now</b> : shutdown the system. (Must beroot) Wait for the message: 
+       <ul>
+        <li>RH 5.2: System halted .</li>
+        <li>RH 6.0+, FC: Power Down .</li>
+        <li>Do NOT turn the power off without doing this first.</li>
+       </ul></li>
+     </ul>
+     <p><b>Red Hat 9.0:</b> Support dropped for wu-ftpd (use vsftpd instead), Window Maker and sndconfig.</p>
+     <p><b>Red Hat 8.0:</b> Nautilus application and system configuration tool is invoked with the "Start here" icon. RH 8.0 introduces a new default printer manager: <tt>cups</tt>. See config files <tt>/etc/cups/...</tt>. Man pages exist for most of these config files. (i.e. <tt>man printers.conf</tt>) The older lpd can still be optionally installed.</p>
+     <p><b>Red Hat 7.2 upgrade:</b> After X login, a dialog box asks the user if they wish to upgrade their file manager to Nautilus. (your choice) Nautilus is a very MS/XP like interface which provides a combined file and system manager GUI tool with a web like interface. Nautilus is invoked with the "Start here" icon.</p>
+     <p><a name="NVIDIA"></a></p>
+     <div class="labelbar">
+      Installing NVidia Graphics card drivers:
+     </div>
+     <p>The commercially supported proprietary graphics drivers for NVidia graphics cards are not included with the Red Hat distribution. Only a basic driver is available. (Good enough for the 2-D world) The NVidia drivers are libraries and loadable modules which are tightly integrated with the kernel for ultimate OpenGL, 3D and DRI integration and performance. To install the NVidia graphics drivers, boot the kernel which you wish to use with the NVidia drivers. The NVidia driver installer will use the running kernel as it's target. The NVidia installer is a console (non X-Window graphics) shell script program which will detect which kernel you are running and download the appropriate drivers. If you are running a known kernel (i.e. a prebuilt Red Hat kernel) it will install a prebuilt driver. If you are running a custom kernel you MUST have the appropriate kernel source available as it will attempt to rebuild the kernel from source with the appropriate NVidia kernel modifications and support. Installation:</p>
+     <ol>
+      <li>Download the NVidia installer script from: 
+       <ul>
+        <li><a href="http://www.nvidia.com/content/drivers/drivers.asp">http://www.nvidia.com/content/drivers/drivers.asp</a> <br><b>or</b></li>
+        <li><a href="http://www.nvidia.com/object/linux.html">http://www.nvidia.com/object/linux.html</a>.</li>
+       </ul></li>
+      <li>Enter console mode without running W-Windows: <tt>ctrl + alt + F1</tt></li>
+      <li>As root bring the system to init level 3 by: 
+       <ul>
+        <li>Boot with <tt>/etc/inittab</tt> entry: 
+         <pre class="code">        id:3:initdefault:<br>        </pre><b>OR</b></li>
+        <li>Issue the command: <tt>init 3</tt></li>
+       </ul></li>
+      <li>Run the NVidia installer in console mode: <tt>sh NVIDIA-Linux-x86-1.0-4496-pkg2.run</tt></li>
+      <li>Bring system to init level 5: 
+       <ul>
+        <li>Reboot with <tt>/etc/inittab</tt> entry: 
+         <pre class="code">        id:5:initdefault:<br>        </pre><b>OR</b></li>
+        <li>Issue the command: <tt>init 5</tt></li>
+       </ul></li>
+      <li>Edit file <tt>/etc/X11/XF86Config</tt> to tweak options. (<a href="src/etc-X11-XF86Config-NVidia-Quadro-Pro-DualMonitor-RH8.0-NVDriver1.0-4363.txt">Sample for NVidia Quadro Pro Dual Monitor</a>)</li>
+     </ol>
+     <p>Using <a href="Linux-RedHat-RPM-YUM.html#YUM">YUM</a> to install nVidia drivers for kernel currently running:</p>
+     <ul>
+      <li><tt>yum install nvidia-glx kernel-module-nvidia-`(uname -r)`</tt></li>
+      <li><tt>yum install kernel-module-nvidia-`(rpm -q --queryformat="%{version}-%{release}\n" kernel | tail -n 1)`</tt></li>
+     </ul>
+     <p><font color="#ff0000">[Potential Pitfall]</font>: File <tt>/etc/X11/xorg.conf</tt> <br>
+       If not updated, change in the "Device" section, from:</p>
+     <pre class="code">   Driver      "nv"</pre> to: 
+     <pre class="code">   Driver      "nvidia"</pre>
+     <p><font color="#ff0000">[Potential Pitfall]</font>: If switching init levels does not work, then changes may be required to udev in which case you need to reboot the system so that the device path is generated: <tt>/etc/udev/devices/nvidia*</tt> <br>
+       Module loading may be forced by adding the following entry to the end of <tt>/etc/rc.local</tt>, <tt>/sbin/modprobe nvidia</tt></p>
+     <p><font color="#ff0000">[Potential Pitfall]</font>: NVidia Quadro Pro dual monitor cards may produce stretched images in Open Office or Adobe Acrobat reader. <br>
+       See: <a href="LinuxAndDualMonitors.html">YoLinux.com: Dual Monitor Configuration - Fix for dual monitor configuration and pitfalls</a></p>
+     <p>Links:</p>
+     <ul>
+      <li><a href="http://www.fedorafaq.org/custom_nvidia.html">FedoraFaq.org: How to do a custom installation of the nVidia drivers</a></li>
+      <li><a href="http://www.fedorafaq.org/#nvidia">FedoraFaq.org: Enabling Fedora core 3 nVidia 3D support</a></li>
+     </ul>
+     <p><a name="SERVICES"></a></p>
+     <div class="labelbar">
+      System Services:
+     </div>
+     <p>After installation of Linux one should determine which system services one needs. Each available service has a start script in the directory <tt>/etc/rc.d.init.d/</tt>. See the YoLinux.com <a href="LinuxTutorialInitProcess.html">init process tutorials</a>. <br>
+       It is easiest to use the Red Hat GUI tool:</p>
+     <ul>
+      <li>Fedora Core 3: <tt>/usr/bin/system-config-services</tt></li>
+      <li>Red Hat 8/9, FC 1: <tt>/usr/bin/redhat-config-services</tt></li>
+     </ul> Recommended basic services include: anacron, atd, autofs, cron, gpm, iptables, keytable, kudzu, microcode_ctl, network, random, rawdevices, syslog and xfs. 
+     <p><a name="FEATURES"></a></p>
+     <div class="labelbar">
+      Features and Changes:
+     </div>
+     <p>Red Hat Enterprise / CentOS:</p>
+     <ul>
+      <li>Red Hat Enterprise 5: 
+       <ul>
+        <li>Includes OpenMPI</li>
+        <li>Subversion uses Berkeley DB rather than FSFS default</li>
+        <li>Includes the Red Hat Directory server rather than OpenLDAP</li>
+        <li>Global Filesystem GFS2</li>
+        <li>Compiz 3D desktop</li>
+        <li>Dogtail disability access support</li>
+        <li>Apache 2.2 and PHP 5.1</li>
+        <li>NFS mount/umount now is /sbin/mount.nfs/umount.nfs</li>
+        <li>CUPS web interface http://localhost:631</li>
+        <li>up2date deprecated in favor of yum</li>
+       </ul></li>
+     </ul>
+     <p></p>
+     <hr size="5">
+     <p>Fedora / Red Hat Legacy:</p>
+     <ul>
+      <li>Fedora Core 6: 
+       <ul>
+        <li>Unified kernel supports both SMP and uniprocessor hardware. Separate kernels no longer required.</li>
+        <li>Interface: Improved desktop look and feel, window manager (Compiz) , improved X-windows, fonts (default font: DejaVu), artwork/graphics.</li>
+        <li>Improved printer support (CUPS 1.2), improved YUM, Evolution, Nautilus</li>
+        <li>New applications: GnuCash, virt-manager (for Xen), SELinux graphical troubleshooting tool, integrated smartcard (Coolkey), cluster volume manager (lvm2-cluster).</li>
+        <li>Totem now default media player (not Helix)</li>
+        <li>Improved performance: ext3 file system, dynamic linking (DT_GNU_HASH), Fontconfig, NFS (CacheFS), CUPS.</li>
+       </ul></li>
+      <li>Fedora Core 5: 
+       <ul>
+        <li>FC5 includes Mono and Mono applications.</li>
+        <li>FC5 includes mySQL5, the Geronimo J2EE server.</li>
+        <li>FORTRAN 90/95 upgraded from FORTRAN 77</li>
+        <li>Changes to the SELinux reference policy.</li>
+        <li>Wireless support for Broadcom 43xx wireless chipsets.</li>
+       </ul></li>
+      <li>Fedora Core 4: 
+       <ul>
+        <li>Introduces gcc version 4, Eclipse IDE with CDT and valgrind.</li>
+        <li>Introduces <a href="http://www.gnome.org/projects/evince/">Evince</a> (and <a href="http://poppler.freedesktop.org/">poppler libraries</a>) to replace gv and xpdf.</li>
+        <li>No Mozilla, gv (ghostscript front-end), fvwm2 desktop, cdp (CD player, introduces apolos)</li>
+       </ul></li>
+      <li>Fedora Core 3: Stable (similar to RHEL4) 
+       <ul>
+        <li>Ships with SELinux (Security Enhanced Linux) which works.</li>
+        <li>Introduces Firefox browser. Previously Mozilla only.</li>
+       </ul></li>
+      <li>Fedora Core 2: 
+       <ul>
+        <li>System configuration GUI tools name changes from <tt>redhat-config-<i>xxxx</i></tt> to <tt>system-config-<i>xxxx</i></tt>.</li>
+        <li>SELinux introduced. Needs work.</li>
+        <li>Ships with Linux kernel 2.6 and ALSA (sound)</li>
+        <li>No longer ships with <a href="http://www.xfree86.org/">XFree86</a>. Now shipping with <a href="http://www.x.org">Xorg</a> release of X-Windows.</li>
+       </ul></li>
+      <li>Fedora Core 1: 
+       <ul>
+        <li>Name changes to Fedora Core and confuses the Linux world.</li>
+       </ul></li>
+      <li>Red Hat 9.0: Stable (similar to RHEL3) 
+       <ul>
+        <li>Introduces vsftpd. Was wu-ftpd.</li>
+        <li>Introduces Apache 2.0, Subversion CM.</li>
+        <li>LDAP default configuration changes. May require database dump and reload.</li>
+        <li>NPL: Native POSIX Thread Library</li>
+        <li>Networking now uses <tt>/etc/sysconfig/network-scripts/route-<i>interfacename</i></tt> rather than <tt>/etc/sysconfig/static-routes</tt>.</li>
+        <li>CUPS print spooler is default.</li>
+       </ul></li>
+      <li>Red Hat 8.0: Stable 
+       <ul>
+        <li>They stop shipping LDAP admin tool gq.</li>
+        <li>Ships with OpenOffice</li>
+        <li>Apache RPM is now called httpd.</li>
+        <li>Netscape browser no longer ships with OS.</li>
+        <li>Introduces UML (User mode Linux)</li>
+        <li>No longer ships with xmms MP3 plug-ins. Find and load.</li>
+       </ul></li>
+      <li>Red Hat 7.3: Stable 
+       <ul>
+        <li>Introduces CUPS print spooler.</li>
+       </ul></li>
+      <li>Red Hat 7.2: 
+       <ul>
+        <li>Kernel 2.4</li>
+       </ul></li>
+      <li>Red Hat 7.1: 
+       <ul>
+        <li>Linux Firewall: Introduces iptables. Earlier version used ipchains.</li>
+        <li>Introduces DNS bind 9. Previous versions used bind 8.</li>
+        <li>Introduces LDAP 2.0.</li>
+       </ul></li>
+      <li>Red Hat 7.0: 
+       <ul>
+        <li>Introduces xinetd. Previously used inetd.</li>
+        <li>Default web server directory changes from <tt>/home/httpd/html/</tt> to <tt>/var/www/html/</tt>.</li>
+       </ul></li>
+      <li>Red Hat 6: 
+       <ul>
+        <li>Introduces Gnome desktop.</li>
+        <li>Linux Firewall: Introduces ipchains. Earlier version used ipfwadm.</li>
+        <li>Red Hat 6.2 introduces Judzu for device discovery and initialization.</li>
+       </ul></li>
+     </ul>
+     <p><a name="PITFALLS"></a></p>
+     <div class="labelbar">
+      Pitfalls and Fixes:
+     </div>
+     <p></p>
+     <ul>
+      <li>General Pitfalls: 
+       <ul>
+        <li><font color="#ff0000">[Pitfall]</font>: Installation locks up and you have no keyboard or mouse control. I have found this problem when using a USB mouse on RHEL4 and FC4. Install the OS with a PS2 mouse and plug-in the USB mouse after installation and boot. The USB can even be a hot plug-in while the system is running.</li>
+        <li><font color="#ff0000">[Pitfall]</font>: Man pages don't display properly. Escape characters are not interpreted properly. A quick fix is to set the lang environment variable: <tt>export LANG=C</tt></li>
+        <li>A service will not start upon system boot. i.e. After an upgrade from RH7.2 to 9.0 my web server would not start even after using the command <tt>chkconfig --add httpd</tt>. I had to force the entry with <tt>chkconfig --level 345 httpd on</tt>. This can happen to any service and this is how to fix it.</li>
+       </ul></li>
+      <li>Platform x86_64 Pitfalls: 
+       <ul>
+        <li>Don't install 64 bit versions of Mozilla or Firefox. See <a href="LinuxTutorialMozillaConfiguration.html#X86_64">Mozilla/Firefox x86_64 Platform Pitfalls and Fixes</a></li>
+       </ul></li>
+      <li>Video Problems: 
+       <ul>
+        <li>If the Installation program does not recognize your graphics card, the installer defaults to a text console mode rather than use the GUI mode. It will also not install a proper video driver and your system will not boot to the graphics mode and you will not have a graphical desktop. You can edit the X-windows configuration file and specify a basic VGA graphics driver which can give you simple 2-D graphics. The VGA mode is supported by all the graphics cards I have encountered. <br>
+          Edit file: <tt>/etc/X11/xorg.conf</tt>
+         <dl>
+          <dd>
+           <table class="code">
+            <tbody>
+             <tr class="code">
+              <td>
+               <pre class="code">..<br>...<br><br>Section "Device"<br>    Identifier   "Videocard0"<br>    Driver       "vesa"<br>    VendorName   "Videocard vendor"<br>    BoardName    "Generic"<br>EndSection<br><br>...<br>..<br></pre></td>
+             </tr>
+            </tbody>
+           </table> Specify the generic VGA video driver.
+          </dd>
+         </dl></li>
+       </ul></li>
+      <li>Sound/Audio Problems: 
+       <ul>
+        <li>Default settings may have sound muted. Run <tt>/usr/bin/alsamixer</tt>, <tt>/usr/bin/kmix</tt> (KDE sound/volume mixer), or <tt>/usr/bin/gnome-volume-control</tt> (GNOME desktop sound/volume mixer) and make sure that the Master and PCM volume settings are not muted.</li>
+        <li>RH 8.0: Test audio with <tt>/usr/bin/redhat-config-soundcard</tt>. Just a testing tool. Does not alter <tt>/etc/modules.conf</tt> <br>
+          Also: <tt>/sbin/sndconfig</tt>. (sndconfig support dropped in RH 9.0) alters <tt>/etc/modules.conf</tt>.</li>
+        <li>To set all controls to maximum volume: <tt>aumix -v100 -w100 -b100 -s100</tt></li>
+        <li>Check permissions on devices: <tt>/dev/dsp, /dev/sndstat, /dev/mixer</tt></li>
+        <li>Check the file <tt>/etc/modules.conf</tt> to see if your system is loading the proper module to support your sound card. If edited, re-boot so your kernel will pick up the changes.</li>
+        <li>Test under user id root. If it works when logged in as root but not as a regular system user, it is a security configuration problem. The user does not have the privaleges to access the hardware devices necessary. See the <a href="LinuxTutorialManagingGroups.html">YoLinux.com Tutorial on Managing Group Access</a>.</li>
+        <li>If you can not get your sound card to work try entering your BIOS configuration and removing "plug-and-play" support.</li>
+        <li><font color="#ff0000">[Pitfall]</font> My sound card would not record using the microphone after installation. The final resolution was that it was a conflict with the motherboard built-in sound card support. The BIOS allowed me to select an IRQ for the on-board sound device. By selecting a new IRQ, the PCI sound card began working flawlessly. The BIOS option of disabling the motherboard device did nothing.</li>
+       </ul></li>
+      <li>Fedora Core: 
+       <ul>
+        <li>FC-4 uses GCC 4. Compatability library RPMs allow running older software. Install RPM packages: <tt>compat-gcc-32, compat-libstdc++-33, compat-libstdc++-296</tt></li>
+        <li>System won't shut down? Using Hyperthreading? Add "<tt>acpi=ht</tt> to the line "<tt>kernel /boot/...</tt> in file <tt>/etc/grub.conf</tt></li>
+        <li>Nautilus default behavior was changed to open new windows for each sub directory you enter. VERY ANNOYING!! Make it operate normally by selecting "Edit" + "Preferences" + select "Behavior tab" and choose option "Always open in browser windows"</li>
+        <li>I downloaded and burned ISO CD's. During install one is offered the choice to verify the CD. It failed verification but installed ok. I'm not sure what to make of it. <br>
+          Update: <a href="http://www.fedorafaq.org/#mediacheck"><tt>linux mediacheck nocddma</tt></a></li>
+        <li>FC 3: The x86_64 version of gftp crashes and is not functional. Download and install the 32 bit version: 
+         <ul>
+          <li><tt>rpm -e gftp-2.0.17-3</tt></li>
+          <li><tt>rpm -ivh gftp-2.0.17-3.i386.rpm</tt></li>
+         </ul></li>
+        <li>One of the first things you will notice is that the boot screen is now hidden from view by a graphical boot screen. You can revert back to the text console boot screen by editing <tt>/etc/sysconfig/init</tt> <br>
+          Change "<tt>GRAPHICAL=yes</tt>" to "<tt>GRAPHICAL=no</tt>".</li>
+       </ul></li>
+      <li>Upgrade/Install: RH 9.0: 
+       <ul>
+        <li><font color="#ff0000">[Pitfall]</font> Post install/RPM upgrade. Do not use <tt>rpm -Uvh glibc*</tt>, use the command <tt>rpm -Fvh glibc*</tt>. This "Freshen" option will upgrade previous files if they exist. Also see: <small><a href="https://bugzilla.redhat.com/bugzilla/show_bug.cgi?id=88456">https://bugzilla.redhat.com/bugzilla/show_bug.cgi?id=88456</a></small></li>
+        <li><font color="#ff0000">[Pitfall]</font> Java version older than 1.4.1 will be incompatible with the kernel NPTL threads library of the Red Hat 9.0 kernel. One can disable NPTL by the following: 
+         <ul>
+          <li>Kernel option: <tt>nosysinfo</tt> <br>
+            (use in <tt>/etc/grub.conf</tt>)</li>
+          <li>Set environment variable: 
+           <ul>
+            <li><tt>export LD_ASSUME_KERNEL=2.42</tt></li>
+            <li><tt>export LD_ASSUME_KERNEL=2.25</tt></li>
+           </ul></li>
+         </ul></li>
+        <li><font color="#ff0000">[Pitfall]</font> Ximian Gnome RPMs are not compatible with RH 9.0 Gnome due to version conflicts. Remove before upgrading or install new version after upgrade.</li>
+        <li><font color="#ff0000">[Pitfall]</font> If upgrading from RH 6.2, all upgrades must be installed first or upgrade will fail.</li>
+        <li><font color="#ff0000">[Pitfall]</font> Installing X-CdRoast may conflict with the archive CD burning facility within Nautilus. (using folder burn)</li>
+        <li>Mozilla browser plug-in problems? Upgrade from 1.2.1 to 1.31</li>
+        <li>Xmms MP3 plug-ins: xmms-1.2.7-rh8-rh9-rpm - Red Hat 8/9 RPMs - Download xmms-mpg123-1.2.7-21. Red Hat 9.0 install will include xmms-1.2.7-21, xmms-skins and xmms-devel.</li>
+        <li>See <a href="LinuxTutorialMozillaConfiguration.html#PLUGGERFIX">fix for Mozilla plug-in "plugger"</a>.</li>
+       </ul></li>
+      <li>Upgrade/Install: RH 8.0: 
+       <ul>
+        <a name="ADAPTECDATACORRUPTION"></a>
+        <li><font color="#ff0000"><b>[Huge Problem Pitfall]</b></font>: Systems using Adaptec SCSI chipsets (U320) with aic79xx drivers beware!!! You may get file corruption problems while handling large files (&gt;.4Gb). Red Hat 8.0 ships with the Adaptec driver 1.0.0. At this time the latest driver from the <a href="http://linux.adaptec.com/">Adaptec open source support web site</a> is version 1.1.0. Use at least version 1.3.0 available from the Adaptec Linux driver home page <a href="http://people.freebsd.org/%7Egibbs/linux/">http://people.freebsd.org/~gibbs/linux/</a>. Red Hat 9.0 is also a problem. Installation drivers and Red Hat RPM's are also available from this site. Also see <a href="http://bugzilla.redhat.com">http://bugzilla.redhat.com</a> bug #97786</li>
+        <li><font color="#ff0000">[Potential Pitfall]</font>: Java based GUI installer for Borland Togethersoft would not work on KDE desktop (messed up/locked up display) but it would for Gnome. FYI.</li>
+        <li>The configuration tools for RH 8.0 are all new. See <a href="#RECONFIG">System Re-Configuration section below</a>.</li>
+        <li><font color="#ff0000">[Potential Pitfall]</font>: Desktop application launch icons located in <tt>$HOME/.gnome-desktop/</tt> no longer allow a command to be prefixed with "<tt>cd $HOME;</tt>". Only a single command may be referenced. It is no longer required. (It use to be required so that applications were not launched from the sub directory.)</li>
+        <li>Many applications one expects with Red Hat Linux were missing but are still available from previous 7.x releases or from the application web sites: 
+         <ul>
+          <li>xmmx MP3 player mpg123 rpm's - Red Hat had MPEG licensing issues</li>
+          <li>xanim-2.80.1-12.i386.rpm - Video player - last shipped with RH 7.1 Powertools</li>
+          <li>xine-0.9.8-4.i386.rpm - xine-devel-0.9.8-4.i386.rpm - MPEG video player (RH 7.3) <br>
+           Dependancies: Alsa-lib - aalib - libfame - flac - xvidcore - xine-libs - xine</li>
+          <li>xpaint-2.6.1-1.i386.rpm - RH 7.1 graphics paint program</li>
+          <li>gq-0.4.0-5.i386.rpm - LDAP admin tool - last shipped with RH 7.3</li>
+          <li>kwintv-0.8.5-5.i386.rpm - TV viewer for Hauppauge TV card - Last shipped with RH 7.1 Powertools</li>
+         </ul></li>
+        <li>Many Red Hat clone distributions were required to remove trademarked Red Hat logos and replace them with their own. (i.e. Cheap Bytes calls their Red Hat distribution "Pink Tie".) To restore the installation to a Red Hat clone download and install the following RPMs: (Use command: <tt>rpm -ivh --force <i>name-of-rpm</i>.rpm</tt>) <small>
+          <ul>
+           <li><tt>redhat-logos-1.1.6-2.noarch.rpm</tt></li>
+           <li><tt>redhat-artwork-0.47-3.i386.rpm</tt></li>
+           <li><tt>redhat-release-8.0-8.noarch.rpm</tt></li>
+           <li><tt>initscripts-6.95-1.i386.rpm</tt></li>
+          </ul></small> (Provide your own graphics and text to customize your system.)</li>
+        <li><font color="#ff0000">[Potential Pitfall]</font>: Case study - Dell Precision 340 with IDE hard drives, CD and DVD, Adaptec SCSI 29160. The SCSI module would not load even though it is listed in the <tt>/etc/modules.conf</tt>. The SCSI driver module (aic????) was not listed as loaded when the <tt>/sbin/lsmod</tt> command was issued. I had to add an entry to the file: <tt>/etc/rc.d/rc.local</tt>: <br><tt>insmod aic7xxx</tt></li>
+        <li><font color="#ff0000">[Potential Pitfall]</font>: My upgrade corrupted the RPM database. Once that is gone, the installation, maintenance and upgrades of rpm packages is impossible. At this point I re-installed. I believe that my disk approached 100% capacity. Make sure you have enough space. I had close to 1Gb free but it may not have been enough. (???) <a name="UP2DATEPITFALL"></a></li>
+        <li><font color="#ff0000">[Potential Pitfall]</font>: My <tt>up2date</tt>, configuration no longer worked after the new installation. To recover my old configuration I edited the file <tt>/etc/sysconfig/rhn/systemid</tt> and changed the string values for checksum, system_id, profile_name and username to values from my backup.</li>
+        <li><font color="#ff0000">[Potential Pitfall]</font>: The default installation uses Unicode instead of ASCII representation. (UTF-8 is the ASCII compatible Unicode encoding.) Some applications do not utilize Unicode and thus must be directed to use English ASCII. <br>
+          Turn off localization: <tt>env LANG=C abiword</tt> <br><b>OR</b> <br>
+          define localization: (ISO 3166, 639) <tt>env LANG=en_US abiword</tt> <br>
+          The GUI tool <tt>redhat-config-language</tt> can change your system language settings. For more info see "<tt>man locale</tt>".</li>
+        <li><font color="#ff0000">[Potential Pitfall]</font>: The default Red Hat 8.0 behavior for regular expression computation is <b>NOT</b> backwards compliant with UNIX. Tools which use regular expression syntax such as grep, awk, sed,... Red Hat 8.0 will <b>NOT</b> perform as expected for the default locale <tt>en_US.UTF-8</tt> <tt>LANG</tt> assignment. It will behave in a case insensitive fashion. (Usually one uses <tt>grep -i</tt> to force case insensitivity.) Example: <br>
+          File: <tt>testRegEx.txt</tt> You can also set the environment variable <tt>LC_ALL=C</tt> which overrides the <tt>LANG</tt> environment variable.. 
+         <dl>
+          <dd>
+           <pre class="code-box">XYZ<br>abc<br>abcXYZ <br></pre>
+          </dd>
+         </dl> Test grep: 
+         <dl>
+          <dd>
+           <pre class="code">[prompt]$ grep [A-Z] testRegEx.txt<br>XYZ<br>abc<br>abcXYZ<br>[prompt]$ export LANG=C<br>[prompt]$ grep [A-Z] testRegEx.txt<br>XYZ<br>abcXYZ<br></pre>
+          </dd>
+         </dl> The default locale, <tt>en_US.UTF-8</tt> will result in "unspecified" behavior while "<tt>C</tt>" or <tt>POSIX</tt> will result in specific and expected (traditional) behavior. Beware of the default!! Red Hat Bugzilla #76328 (Closed bug. Red Hat is hiding behind the phrase that "unspecified behavior is POSIX compliant.") It should be noted that shell scripts should specify the <tt>LANG</tt> environment variable to ensure expected behavior.</li>
+        <li><font color="#ff0000">[Potential Pitfall]</font>: Apache 2.0 is now included and in not compatible with old modules. If using Tomcat servlets or any module which is Apache 1.3 dependent, do NOT upgrade Apache (RPM <tt>httpd</tt>).</li>
+        <li><font color="#ff0000">[Pitfall]</font>: The "vi" editor goes into a funky highlight mode when editing specialty files such as html. This is due to a symbolic link of vi to /usr/bin/vim. To get non-highlighted old fashioned "vi" operation use the command: <tt>unalias vi</tt>. The <tt>vi</tt> command will now reference <tt>/bin/vi</tt> <br><b>OR</b><br>
+          See <a href="LinuxTutorialAdvanced_vi.html#EXRC">setting default vim color scheme</a>.</li>
+        <li><font color="#ff0000">[Pitfall]</font>: Rumor (??) Don't run the Gnome Galeon browser and Mozilla at the same system.</li>
+       </ul></li>
+      <li>Upgrade: RH 7.3: 
+       <ul>
+        <li><font color="#ff0000">[Potential Pitfall]</font> Upgrade from Red Hat 7.1 to 7.3 broke the "Photo Album" web cgi I was using due to bugs in Image Magick. To fix this I had to reinstall the old version by performing the following steps: 
+         <ol>
+          <li><tt>rpm -e ImageMagick ImageMagick-perl ImageMagick-devel xfig</tt></li>
+          <li><tt>ln -s /usr/lib/libbz2.so.1.0.2 /usr/lib/libbz2.so.1.0</tt></li>
+          <li><tt>rpm -ivh --nodeps ImageMagick-5.3.7-1.i386.rpm ImageMagick-devel-5.3.7-1.i386.rpm ImageMagick-perl-5.3.7-1.i386.rpm</tt></li>
+         </ol></li>
+        <li><font color="#ff0000">[Pitfall]</font> Application xCdRoast fix: <br>
+          My launcher now states: <tt>cd $HOME/;xhost +localhost;/usr/bin/xcdroast</tt> <br>
+          The wrapper controlling xCdRoast is like "sudo" in that it executes the application with root privileges. This of course may conflict with the application owner of the X-windowing system process (unless you are operating as root to begin with). You must first grant access to root to access the display with the <tt>xhost</tt> command. Starting xCdRoast from the menu worked. The only problem was launching by command.</li>
+        <li><font color="#ff0000">[Pitfall]</font> Some KDE applications did not work due to overprotective (for a private workstation) directory permissions. To fix this: 
+         <pre class="code">      <b>[ root prompt]#</b> cd /usr/lib<br>      <b>[ root prompt]#</b> chmod -R ugo+x kde2-compat<br>      </pre></li>
+        <li><font color="#ff0000">[Pitfall]</font> On one desktop machine, all the desktop icons where duplicated. This is because Nautilus and Gnome were both displaying the desktop icons. To fix this, turn off the rendering of desktop icons by Nautilus. Select the "Start Here" icon on the desktop tool bar or choose the menu "Programs" + "Applications" + "Nautilus" to start the Nautilus manager. From the Nautilus manager window toolbar, select "Preferences" + "Edit Preferences...". Select "Window and Desktop" from the left panel and un-select the option "Use Nautilus to draw the desktop".</li>
+        <li><font color="#ff0000">[Pitfall]</font> Some of my desktop icons (launchers "lost" their graphic and one even got renamed. (What is going on??) Each upgrade seems to lose a few graphics and gain a few new ones. The files to repair are found in $HOME/.gnome-desktop/ (i.e. <tt>/home/user1/.gnome-desktop/</tt>) You can also right click the icon select "properties" and use the gui tool. Icons are located in <tt>/usr/share/pixmaps/</tt>. Due to all the changes I have begun using my own repository <tt>/opt/share/pixmaps/</tt>.</li>
+        <li><font color="#ff0000">[Pitfall]</font> I'm often the type who installs everything and turns on what is needed. I am starting to re-think this strategy. My upgrade of a system from 7.1 to 7.3 took <b>3.5 hours!!!!!</b> This is of course dependent on the speed of your system. This was a 350MHz, 256Mb, IDE system. The more you have loaded or the more packages you choose to install, the longer it takes to upgrade. The upgrade prompt "Preparing to install..." held for 20 minutes. At first I thought the system froze. BEWARE!!!</li>
+        <li><font color="#ff0000">[Pitfall]</font> In the beginning of the upgrade, the system prompts "Boot from ATAPI CD-ROM:". Press "Enter" right away with no delay!! Otherwise it continues to boot from the hard drive with your existing installation rather than performing the upgrade. This message of course only applies to systems with an ATAPI CD-ROM.</li>
+        <li><font color="#ff0000">[Pitfall]</font> After the boot loader configuration screen appears, the upgrade pauses to search for packages to upgrade. Have patience. The message "Finding packages to upgrade..." will appear. It took over 10 minutes!!! Another penalty of having too much loaded.</li>
+       </ul></li>
+      <li>Install: RH 7.2: 
+       <ul>
+        <li>CD-Rom mounting problems: SCSI subsystem used with IDE drives to support CD-Rom burning. If module does not install properly the drive will not mount. To see if module was loaded use the command <tt>lsmod</tt> and look for module <tt>sr_mod</tt>. If it is not listed then it did not load. One may manually load the module by issuing the commands <tt>depmod</tt> and then <tt>modprobe sr_mod</tt>. The CD-Rom should then be mountable.</li>
+        <li>Desktop/Gnome problems: 
+         <ul>
+          <li>Desktop Launcher icon labels: Many began to display "<i>application-label</i>.desktop" instead of just the application label. Change the contents of the configuration file <tt>$HOME/.gnome-desktop/<i>application-label</i>.desktop</tt> <br>
+            From: 
+           <dl>
+            <dd>
+             <pre class="code-box">[Desktop Entry]<br>Name[en_US.ISO8859-1]=<i><b>application-label</b></i>
+Exec=cd $HOME;/usr/bin/<i><b>application</b></i>
+Icon=/usr/share/pixmaps/<i><b>application</b></i>.png<br>Terminal=false<br>MultipleArgs=false<br>Type=Application<br>           </pre>
+            </dd>
+           </dl> To: 
+           <dl>
+            <dd>
+             <pre class="code-box">[Desktop Entry]<br>Name=<i><b>application-label</b></i>                              <b><i>- Add this line</i></b>
+Name[en_US.ISO8859-1]=<i><b>application-label</b></i>
+Exec=cd $HOME;/usr/bin/<i><b>application</b></i>
+Icon=/usr/share/pixmaps/<i><b>application</b></i>.png<br>Terminal=false<br>MultipleArgs=false<br>Type=Application<br>           </pre>
+            </dd>
+           </dl></li>
+         </ul></li>
+        <li>To generate a desktop launcher I created a toolbar launcher and then moved it to the desktop with a drag and drop. (The menus have changed)</li>
+        <li>Interface change: Note that the graphical symbol "X" to kill the window moved from the top right to the top left corner of the window.</li>
+        <li><font color="#ff0000">[Pitfall]</font>: My start script for xinetd on one of my servers would give the following error: <br>
+         <dl>
+          <dd>
+           <tt>[: =: unary operator expected</tt>
+          </dd>
+         </dl> My fix was to edit the script <tt>/etc/rc.d/init.d/xinetd</tt>. Comment out the line: <br>
+         <dl>
+          <dd>
+           <tt>[ ${NETWORKING} = "yes" ] || exit 0</tt>
+          </dd>
+         </dl> by placing a "#" at the beginning of the line. Why is it that one server does not have this problem but another does, and the script is identical on both machines??? Somehow the environment variable is messed up on one causing the environment variable to become blank resulting in the "=" operator to only operate on a single operand (thus an error).</li>
+        <li><font color="#ff0000">[Pitfall]</font>: After upgrade from 7.1 to 7.2, Gimp hung when I attempted to launch it. To fix this problem I removed the xsane plug-in: <tt>rm /usr/lib/gimp/1.2/plug-ins/xsane</tt></li>
+        <li><font color="#ff0000">[Pitfall]</font>: After upgrade from 7.1 to 7.2, the toolbar application, "panel", would crash upon desktop start-up. (Not sure why but my guess is that the old settings were incompatible) To fix this, I created a new user and logged in as this user. The toolbar was displayed correctly. Starting up under my own id then launched the toolbar correctly. I then changed a bunch of the tool bar properties. This temporarily cleaned up the problem by writing a new and correct configuration. <br><b>Permanent panel fix:</b> Update gnome with <a href="http://www.gnome.org/%7Ekmaraas/">Gnome 1.4.0.6-1 RPM's</a>. This was required even after using up2date (on Feb 1, 2002) to get all the latest Red Hat fixes. Check your version of gnome with the command: <tt>rpm -q gnome-core</tt> You may also have to copy a new version of the panel config file to your directory: <tt>cp -p /etc/gnome/panel-config/panel $HOME/.gnome/panel</tt></li>
+        <li><font color="#ff0000">[Pitfall]</font>: When I upgraded to Red Hat 7.2 from 7.1, both of my TV viewing programs, KwinTV and Zapping, behaved flaky with poor tuning. The only solution I could find was to remove them both (<tt>rpm -e kwintv zapping</tt>) and then re-install them.</li>
+        <li><font color="#ff0000">[Pitfall]</font>: The "vi" editor goes into a funky highlight mode when editing html files. To get non-highlighted old fashioned "vi" operation use the command: <tt>ex -v <i>file-name</i></tt> <br>
+          Add to the file <tt>$HOME/.bashrc</tt>: <tt>alias vi='ex -v'</tt></li>
+        <li><font color="#ff0000">[Pitfall]</font>: Installing on Red Hat Linux on one of those $250.00 BTC-USA/VIA Linux computers from Fryes? They have a <a href="BTUSA-VIA-ModemDriver.zip">Linux VIA modem driver</a> which I could not compile because of incompatible structure definitions in the include (.h) header files. Give up and buy a Linux compatible modem. Could not get the microphone to work either. BTC Support: <tt>(510)657-3856 x356</tt></li>
+       </ul></li>
+      <li>Install: RH 7.1: 
+       <ul>
+        <li><font color="#ff0000">[Pitfall]</font> Linux now supports more APM features, but that is both good and bad. APM (Advanced Power Management) is good for laptops but often bad for desktops as the hardware may support it poorly. APM controls screen blanking and power saving features required by laptops. On the desktop it has been a source of many random lock-ups I experienced just after or near the end of the boot sequence. I STRONGLY recommend that you boot and enter your bios and turn off all APM features. You may just find that boot reliability goes from flaky to flawless. <br>
+          Apm standby: <tt>apm -S</tt> <br>
+          Apm suspend: <tt>apm -s</tt></li>
+        <li><font color="#ff0000">[Pitfall]</font> <a href="LinuxTutorialIptablesNetworkGateway.html#CHAINSTABLES">Note on iptables and ipchains support.</a></li>
+        <li><font color="#ff0000">[Pitfall]</font> In a fresh install of RH 7.1 I found that the DNS service "Bind" (named) could not be added to the init process using the <tt>chkconfig --add named</tt> command. Use the command <tt>chkconfig --level 345 named on</tt> to force bind to start upon system boot.</li>
+        <li><font color="#ff0000">[Pitfall]</font> Your mail server no longer works. See the <a href="LinuxTutorialMailMTA.html#RH71CHANGE">configuration changes to the default sendmail configuration</a>.</li>
+        <li><font color="#ff0000">[Pitfall]</font> While performing an upgrade to Red Hat 7.1, the package to manage iptables (the firewall facility in the new kernel) was not included. You must manually include this facility by selecting the package. It seems that an upgrade looks at your configuration and upgrades the packages that you have installed on your system. The previous versions of Red Hat used kernel 2.2 which used ipchains and thus did not support iptables. Iptables were included for the first time in the kernel 2.4 used by Red Hat 7.1. <br>
+          Check your installation by using the command: <tt>rpm -q iptables ipchains</tt> <br>
+          Thus after the upgrade, manually install the RPM: <tt>rpm -ivh iptables-XXX.i386.rpm</tt></li>
+        <li><font color="#ff0000">[Pitfall]</font> The upgrade created a new <tt>/etc/printcap.local</tt> file. The old <tt>/etc/printcap</tt> file was saved to <tt>/etc/printcap.save</tt>. This is a good thing as all references to printers except <b>lp</b> were deleted. The configuration tool <tt>/usr/bin/printtool</tt> is no longer used. The new tool is <tt>/usr/sbin/printconf-gui</tt>. (The 7.1 upgrade replaced printtool with a script which starts printconf-gui.) I'm confused as this new tool still uses the file <tt>/etc/printcap</tt>. I started the tool <tt>/usr/sbin/printconf-gui</tt> and then selected "File" + "Save Changes" to re-generate the <tt>/etc/printcap</tt> file. The man page for lpd suggests that the file <tt>/etc/printcap</tt> is indeed the proper configuration file for the lpd daemon. This file is constructed each time the lpd daemon is run, thus it is useless to edit this file. Use the GUI tool. <br>
+          For more info see <a href="http://www.redhat.com/docs/manuals/linux/RHL-7.1-Manual/custom-guide/printconf.html#PRINTCONF-LOCAL-PRINTER">RH 7.1 manual: Printer Configuration</a></li>
+        <li><font color="#ff0000">[Pitfall]</font> The default upgrade to Gnome has mysteriously made the autohide feature of the toolbar useless. The autohide feature is turned on by a right-mouse-button-click on the Gnome toolbar + "Properties" + "Hiding policy" + "Auto hide". The toolbar will unhide but it is always displayed below other applications so it can't be seen or used. <br>
+          To fix this stupid behavior: 
+         <ul>
+          <li>Start the Gnome Control Center: select the toolbox on the toolbar.</li>
+          <li>Select tree items (LHS) "Desktop" + subitem "Panel".</li>
+          <li>Then select tab (RHS) "Miscellaneous"</li>
+          <li>Un-select the button "Keep panel below windows (GNOME compliant window managers only)"</li>
+          <li>Complete this action by selecting "Ok".</li>
+         </ul></li>
+        <li><font color="#ff0000">[Pitfall]</font> Reducing system overhead: While performing an upgrade, the installation will add some packages to your init procedure even if it was not included in the init process previously. The installation assumes that if it is installed, you want to use it. To clean this up use the chkconfig command: i.e. <tt>chkconfig --del sshd</tt> (server daemon which allows remote login) and <tt>chkconfig --del sendmail</tt> (mail server). I performed this on my workstation to disable FreeWnn (Kana-to-Kanji conversion system. That's what I get for installing everything!!), pppoe (point to point over ethernet), medusa, nfslock (I'm not running NFS), netfs (mounts NFS and SMB), autofs (NFS) and portmap (RPC's used by NFS). One can also use the GUI tool <tt>/usr/sbin/ntsysv</tt>. 
+         <p>In the end my workstation runs init scripts crond, anacron, atd, crond, gpm, keytable, kudzu, lpd, network, portsentry (my add-on - not typical), random, rawdevices, reconfig, syslog, xfs, iptables, autofs and xinetd upon system boot. My server on the other hand runs a whole lot more and omits the font server xfs. Your choices will be based upon your requirements.</p>
+         <p>Tripwire is a great file system monitoring tool for a server but really un-necessary for a dial-up PPP system or a system which is rarely connected to the internet. It is used to detect file changes by hackers. The default is to use cron to run tripwire every day. This behavior can be changed to run tripwire weekly or monthly by moving the script <tt>/etc/cron.daily/tripwire-check</tt> to the <tt>/etc/cron.weekly/</tt> directory.</p></li>
+        <li><font color="#ff0000">[Note and Pitfall]</font> The inetd daemon and the configuration file <tt>/etc/inetd.conf</tt> has been replaced by xinetd which uses files located in the directory <tt>/etc/xinetd.d/</tt>. Xinetd has access control mechanisms, logging capabilities, the ability to make services available based on time, and can place limits on the number of servers that can be started, etc... and thus a worthy upgrade from inetd. <br>
+          For more info on xinetd see the <a href="LinuxTutorialNetworking.html#INET">YoLinux.com Networking Tutorial</a>. 
+         <p>The pitfall: The services are all disabled upon install. I found that the wu-ftpd default was that the service was turned off. <br>
+           To turn on the FTP service:</p>
+         <ul>
+          <li>Edit the file <tt>/etc/xinetd.d/wu-ftpd</tt> and change the line: 
+           <p><tt>disable = yes</tt> to <br><tt>disable = no</tt> Then restart the daemon: <tt> /etc/rc.d/init.d/xinetd restart</tt>. <br><b>OR</b></p></li>
+          <li>Use the command: <tt>chconfig wu-ftpd on</tt> <br>
+            This command will also restart the xinetd process to pick up the new configuration.</li>
+         </ul> The ftp server is now available.</li>
+        <li><font color="#ff0000">[Note and Pitfall]</font> The locations of some the applications have changed with release 7.1. If you have created a launcher icon and hard-coded the full path name, it may not work. I noticed that xpaint moved from <tt>/usr/X11R6/bin/</tt> to <tt>/usr/bin/</tt> and some of my network utilities moved from <tt>/usr/sbin/</tt> to <tt>/usr/bin/</tt>.</li>
+       </ul>
+       <p></p></li>
+      <li>Install: RH 7.0: 
+       <ul>
+        <li><font color="#ff0000">[Pitfall]</font> Sendmail hangs for a while before allowing Linux to complete the boot process. This is often due to the fact that you have given your computer a name but it is unknown to the networking software on your system. Add the computer name to the <tt>/etc/hosts</tt> file. 
+         <pre class="code">      127.0.0.1	  <i>&lt;put-your-computer-name-here&gt;</i>    localhost<br>      </pre> The host name is often assigned during install and can be found in the <tt>/etc/HOSTNAME</tt> file. It can be assigned/re-assigned using the <a href="http://man.yolinux.com/cgi-bin/man2html?cgi_command=hostname">hostname</a> command or by using the GUI admin tool "/bin/linuxconf". (Note that <tt>linuxconf</tt> is no longer included with Red Hat Linux 7.3+) <br>
+          Note that there may be NO blank spaces in the host name.</li>
+       </ul>
+       <p></p></li>
+      <li>Install: RH 6.2, 7.0: 
+       <ul>
+        <li><font color="#ff0000">[Pitfall]</font> Apache fails due to an improper configuration file option. Edit file <tt>/etc/httpd/conf/httpd.conf</tt>. Uncomment the line: 
+         <pre class="code">      ServerName localhost <br>      </pre> by removing the "#" at the beginning of the line.</li>
+       </ul>
+       <p></p></li>
+      <li>Install: RH 6.2: 
+       <ul>
+        <li><font color="#ff0000">[Pitfall]</font> Desktop application launching icons (GMC) may fail due to an update in their format. <br>
+          Edit the files in <tt>$HOME/.gnome-desktop/<app>
+           .desktop
+          </app></tt> so that the line: <br><tt> Name=&lt;application&gt; </tt> <br>
+          is changed to: <br><tt>Name[en_US.ISO8859-1]=&lt;application&gt;</tt> <br>
+          Then right click on the desktop and select "Rescan Desktop Directory".</li>
+        <li><font color="#ff0000">[Pitfall]</font> For a more robust desktop, change the default window manager from "Enlightenment" to "Sawmill". After about three days of heavy desktop use, "Enlightenment" will start to get flaky. <br>
+          Note: Red Hat 7.0 makes Sawfish (the current version of Sawmill) the default window manager. They must have had a similar experience.</li>
+       </ul>
+       <p></p></li>
+      <li>Upgrade: RH 6.1: 
+       <ul>
+        <li><font color="#ff0000">[Pitfall]</font> The SAMBA upgrade was incomplete. The <tt>/etc/sb.conf</tt> file gets backed up as <tt>/etc/smb.conf.rpmsave</tt> but a new samba configuration file (<tt>smb.conf</tt>) was not generated. Copy the <tt>smb.conf.rpmsave</tt> to <tt>smb.conf</tt>.</li>
+        <li><font color="#ff0000">[Pitfall]</font> Fix for SAMBA if it is not initiated upon boot. <br><tt>chkconfig --level 345 smb on</tt></li>
+        <li><font color="#ff0000">[Pitfall]</font> Printing or serial ports ignored: Add the following line to the file <tt>/etc/conf.modules</tt>: <br><tt>alias parport_lowlevel parport_pc</tt> <br>
+          This configures the kernel upon system boot to auto-detect and configure system serial ports. This may also effect modem use. <br>
+          Note: Newer kernels such as 2.2.17 use <tt>/etc/modules.conf</tt>.</li>
+       </ul>
+       <p></p></li>
+      <li>Upgrade: RH 5.2 to 6.0: 
+       <ul>
+        <li><font color="#ff0000">[Pitfall]</font> The RH 6.0 installation/upgrade manual states the following but will cause X-windows to fail. Don't do it. 
+         <p><small> The upgrade will not touch your video settings held in /etc/X11/XF86Config. In order to use the new font server add the following line: </small></p>
+         <pre class="code"><small>    FontPath  tcp/localhost:7100"<br>        </small></pre><small> Next set the system configuration to run the font server at boot time: <tt>/sbin/chkconfig --add xfs</tt> <br>
+           Note: you can add or remove any system services to be started (at boot time) in this manner. </small>
+         <p></p>
+         <p></p></li>
+        <li><font color="#ff0000">[Pitfall]</font> RH 6.0 upgrade - I added everything for my upgrade. The news server and server for plan calendars were not configured and caused errors upon boot thus slowing the boot process. <br>
+          To remedy the situation: <tt>chkconfig --del innd </tt> and <tt>chkconfig --del netplan </tt> <br>
+          This removes the background daemons/services from the system boot process.</li>
+       </ul></li>
+     </ul>
+     <p></p>
+     <hr size="5">
+     <p><b>Release Updates and fixes:</b> After a successful installation or update, it is wise to check the Red Hat web site for updates to the CD release. See: <a href="http://www.redhat.com/security/updates/">http://www.redhat.com/security/updates/</a>. <br>
+       You can also directly download update RPM's using FTP:</p>
+     <dl>
+      <dd>
+       <small>
+        <pre class="code"><b>[root prompt]#</b> ftp updates.redhat.com<br>Connected to updates.redhat.com.<br>220 Red Hat FTP server ready. All transfers are logged.<br>...<br>Name (updates.redhat.com:ipp): <b>anonymous</b>
+Password:                      <b>-<i>Enter your email address</i></b>
+230-	THE SOFTWARE AVAILABLE FROM THIS SITE IS PROVIDED AND LICENSED
+230-	"AS IS" WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR
+230-	IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+230-	OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+230 Login successful. Have fun.
+Remote system type is UNIX.
+Using binary mode to transfer files.
+ftp&gt; <b>cd 7.3/en/os/i386/</b>
+250 Directory successfully changed.
+ftp&gt; <b>prompt</b>
+ftp&gt; <b>mget apache*</b>       <b>-<i>Example: download apache upgrades</i></b>
+ftp&gt; <b>bye</b>
+221 Goodbye.
+<b>[root prompt]#</b> <br></pre></small>
+      </dd>
+     </dl>
+     <p><a name="RECONFIG"></a></p>
+     <div class="labelbar">
+      System Re-Configuration: (Must be root)
+     </div>
+     <p>During the Red Hat installation process, a series of configuration tools were used to configure the mouse, keyboard, video etc. These can be run separately at any time after the installation. Use the following commands to re-configure the system for new or replaced hardware devices or to correct inappropriate settings.</p>
+     <p></p>
+     <dl>
+      <dd>
+       <table class="box">
+        <tbody>
+         <tr>
+          <th>Device</th>
+          <th>Linux Configuration Tool</th>
+         </tr>
+         <tr>
+          <td valign="top">System Configuration<br>
+            All: keyboard, mouse, ...</td>
+          <td>/usr/bin/system-config-<i>item-to-configure</i> (FC 2/3) <br>
+            /usr/bin/redhat-config-<i>item-to-configure</i> (RH 8.0/9.0/FC1 - see below) <br>
+            /usr/sbin/setup</td>
+         </tr>
+         <tr>
+          <td valign="top">Video card,monitor</td>
+          <td>/usr/bin/system-config-display (FC 2/3)<br>
+            redhat-config-xfree86 (Red Hat 8.0/9.0)<br>
+            /usr/bin/X11/Xconfigurator (Red Hat 6.x,7.x)<br>
+            /usr/X11R6/bin/xf86config (From XFree86.org)</td>
+         </tr>
+         <tr>
+          <td valign="top">Keyboard</td>
+          <td>/usr/bin/system-config-keyboard (FC 2/3)<br>
+            /usr/bin/redhat-config-keyboard (RH 8.0/9.0/FC1)<br>
+            /usr/sbin/kdbconfig</td>
+         </tr>
+         <tr>
+          <td valign="top">Gnome Desktop Keyboard Properties</td>
+          <td>/usr/bin/gnome-accessibility-keyboard-properties (RH 9.0, FC 2/3)</td>
+         </tr>
+         <tr>
+          <td valign="top">Gnome Desktop Keybinding Properties</td>
+          <td>/usr/bin/gnome-keybinding-properties (RH 9.0, FC 2/3)</td>
+         </tr>
+         <tr>
+          <td valign="top">Mouse</td>
+          <td>/usr/bin/system-config-mouse (FC 2/3)<br>
+            /usr/bin/redhat-config-mouse (RH 8/9/FC1)<br>
+            /usr/sbin/mouseconfig (Removed in RH 9.0)<br>
+            Which Red Hat genius devised a mouse configuration tool which requires a mouse!!! They really need to bring back a console based mouse configuration tool.</td>
+         </tr>
+         <tr>
+          <td valign="top">Date / Time / Time zone</td>
+          <td>/usr/bin/system-config-data (FC 2/3)<br>
+            /usr/bin/redhat-config-date (RH 8.0/9.0/FC1)<br>
+            dateconfig (RH 7.2)<br>
+            /usr/sbin/timeconfig (Pre 7.2)</td>
+         </tr>
+         <tr>
+          <td valign="top">Sound Card</td>
+          <td>/usr/bin/system-config-soundcard (FC 2/3)<br>
+            /usr/bin/redhat-config-soundcard (RH 8.0/9.0 - test only)<br>
+            /usr/sbin/sndconfig (still used in 8.0)</td>
+         </tr>
+         <tr>
+          <td valign="top">Network Card</td>
+          <td>/usr/bin/system-config-network (FC 2/3)<br>
+            /usr/bin/redhat-config-network (/usr/bin/neat) (RH 7.2+)<br>
+            /usr/bin/redhat-config-network-tui (text console RH 9.0)<br>
+            /usr/sbin/netconfig (console. First interface only - eth0)<br>
+            /usr/bin/netcfg (GUI) (no longer available with RH 7.2)<br>
+            /usr/bin/redhat-control-network (Start/Stop network interfaces RH 9.0)<br>
+            redhat-config-network-druid (Configure CIPE,Ethernet,modem,token Ring,Wireless or DSL)</td>
+         </tr>
+         <tr>
+          <td valign="top">System services<br>
+            (processes started at boot)</td>
+          <td>/usr/bin/system-config-services (FC 2/3)<br>
+            /usr/bin/redhat-config-services (RH 8.0/9.0, FC1)<br>
+            serviceconf (RH 7.2)<br>
+            /usr/sbin/ntsysv<br>
+            /usr/X11R6/bin/tksysv (GUI)</td>
+         </tr>
+         <tr>
+          <td valign="top">System Start</td>
+          <td>/usr/bin/system-config-kickstart (FC 2/3)<br>
+            /usr/bin/redhat-kickstart (RH 8.0 only)</td>
+         </tr>
+         <tr>
+          <td valign="top">Printer</td>
+          <td>/usr/bin/system-config-printer (FC 2/3)<br>
+            /usr/bin/redhat-config-printer (RH 8.0/9.0, FC1) Configures lpd service. Modifies <tt>/etc/printcap</tt> file. <br>
+            /usr/bin/redhat-config-printer-gui (RH 8.0/9.0, FC1) (Exact same as above) <br>
+            /usr/bin/printtool (Also the exact same as above) <br>
+            Red Hat 7.1: /usr/sbin/printconf-gui (Yes, in RH 8.0+ this is also the exact same as above) <br>
+            /usr/sbin/printconf-gui (Was a text mode tool introduced with Red Hat 7.2 In RH 8.0+ it is the same as above) 
+           <p>/usr/bin/redhat-switch-printer (RH 8.0+) Choose printing service: lpd or <a href="http://www.cups.org/">CUPS</a> <br>
+             (Can also set environment variable to set default printer: <tt>export PRINTER="lpHP"</tt>)</p></td>
+         </tr>
+         <tr>
+          <td valign="top">RH 7.1: System security. <br>
+            Choose and configure NIS, LDAP or Hesiod for authentication.</td>
+          <td>/usr/bin/system-config-authentication (FC 2/3)<br>
+            /usr/bin/authconfig-gtk (RH 8.0)<br>
+            /usr/sbin/authconfig (console tool)</td>
+         </tr>
+         <tr>
+          <td valign="top">RH 8.0+: System security. Firewall configuration.<br>
+            Note this will configure your system to use iptables.</td>
+          <td>/usr/bin/system-config-securitylevel (FC 2/3)<br>
+            /usr/bin/redhat-config-securitylevel</td>
+         </tr>
+         <tr>
+          <td valign="top">RH 7.1: System security. Firewall configuration.<br>
+            Note this will configure your system to use ipchains and NOT iptables.</td>
+          <td>/usr/sbin/lokkit<br>
+            /usr/sbin/gnome-lokkit</td>
+         </tr>
+         <tr>
+          <td valign="top">System Management</td>
+          <td>/bin/linuxconf<br>
+            (No longer included with Red Hat 7.3+)</td>
+         </tr>
+         <tr>
+          <td valign="top"><a href="LinuxTutorialRecoveryAndBootDisk.html">Make an Emergency/Recover boot floppy</a></td>
+          <td>/sbin/mkbootdisk <i>2.2.16-3</i><br>
+            (Enter release of kernel.<br>
+            See directory /boot)</td>
+         </tr>
+         <tr>
+          <td valign="top">users/groups</td>
+          <td>/usr/bin/system-config-users (FC 2/3)<br>
+            /usr/bin/redhat-config-users</td>
+         </tr>
+         <tr>
+          <td valign="top">Set/Change Root Password</td>
+          <td>/usr/bin/system-config-rootpassword (FC 2/3)<br>
+            /usr/bin/redhat-config-rootpassword (RH 8.0/9.0, FC1)</td>
+         </tr>
+         <tr>
+          <td valign="top">System Log File Viewer<br>
+            Scan, search boot, cron, kernel start logs, mail, mysql, rpm (current list of all packages installed), security, system, XFree86,... logs</td>
+          <td>/usr/bin/redhat-logviewer (RH 8.0+)</td>
+         </tr>
+         <tr>
+          <td valign="top">System Proc Files<br>
+            (Kernel tuning parameters. You need to know what your are doing here!!)</td>
+          <td>/usr/bin/redhat-config-proc (RH 8.0+)</td>
+         </tr>
+         <tr>
+          <td valign="top">Package Manager GUI - Add/Remove application/service packages</td>
+          <td>/usr/bin/gpk-application (RHEL6/7: RPM package gnome-packagekit)<br>
+            /usr/bin/system-config-packages (FC 2/3)<br>
+            /usr/bin/redhat-config-packages (RH 8.0/9.0, FC1)</td>
+         </tr>
+         <tr>
+          <td valign="top">Desktop Switching Tool</td>
+          <td>/usr/bin/switchdesk-gnome (RH 8.0+)<br>
+            /usr/bin/switchdesk (Same tool as above)<br>
+            Can choose Gnome, KDE, TWM. Choose TWM for sparse lightweight desktop.</td>
+         </tr>
+        </tbody>
+       </table>
+      </dd>
+     </dl>
+     <p></p>
+     <h4>Red Hat Linux Server Services Configuration:</h4>
+     <p></p>
+     <dl>
+      <dd>
+       <table class="box">
+        <tbody>
+         <tr>
+          <th>Server Service</th>
+          <th>Linux Configuration Tool</th>
+         </tr>
+         <tr>
+          <td valign="top">httpd Apache Web Server Configuration</td>
+          <td>/usr/bin/system-config-httpd (FC 2/3)<br>
+            /usr/bin/redhat-config-httpd (RH 8.0/9.0, FC1)</td>
+         </tr>
+         <tr>
+          <td valign="top">named DNS Bind</td>
+          <td>/usr/bin/system-config-bind (FC 2/3)<br>
+            /usr/bin/redhat-config-bind (RH 8.0/9.0, FC1)</td>
+         </tr>
+         <tr>
+          <td valign="top">nfsd NFS File Server</td>
+          <td>/usr/bin/system-config-nfs (FC 2/3)<br>
+            /usr/bin/redhat-config-nfs (RH 8.0/9.0, FC1)</td>
+         </tr>
+         <tr>
+          <td valign="top">SMTP Mail</td>
+          <td>/usr/bin/system-switch-mail (FC 2/3)<br>
+            /usr/bin/redhat-switch-mail (RH 9.0, FC1)<br>
+            /usr/bin/redhat-switch-mail-nox<br>
+            /usr/bin/redhat-config-switchmail (RH 8.0+)<br>
+            /usr/bin/redhat-config-switchmail-gnome</td>
+         </tr>
+        </tbody>
+       </table>
+      </dd>
+     </dl>
+     <p>For GNOME Desktop configuration commands (sound, keyboard, fonts, properties, ...) see the <a href="GNOME.html#CONFIGCOMMANDS">YoLinux.com Tutorial on the GNOME Desktop: Configuration Commands</a></p>
+     <p><a name="ADDREMOVESOFTWARE"></a></p>
+     <div class="labelbar">
+      Adding and Removing Installation Packages:
+     </div>
+     <p>For adding or removing software packages see the YoLinux.com system administration <a href="Linux-RedHat-RPM-YUM.html#RPM">guide on Red Hat Package Manager</a> (RPM)</p>
+     <p>To Add or remove packages or entire package groups offered during installation, use the GUI tool <tt>/usr/sbin/system-config-packages</tt>:</p><img class="img-responsive" src="images/system-config-packages.gif" alt="Red Hat system-config-packages">
+     <p>Select the "Details" link to see all the RPM packages associated with the group:</p><img class="img-responsive" src="images/system-config-packages-Details.gif" alt="Red Hat system-config-packages">
+     <p>Check the box so RPM will install the Linux program. Installing Linux programs is that easy!</p>
+     <p><a name="CLONE"></a></p>
+     <div class="labelbar">
+      Cloning The Drive To Duplicating The Installation:
+     </div>
+     <p></p>
+     <ul>
+      <li><a href="http://www.symantec.com/product/">Symantec</a> (Norton) Ghost (commercial)</li>
+      <li><a href="http://www.feyrer.de/g4u/">g4u</a> - Harddisk Image Cloning for PCs (open source)</li>
+     </ul>
+     <p><a name="BASICADMIN"></a></p>
+     <div class="labelbar">
+      Basic System Administration:
+     </div>
+     <p></p>
+     <h3>Editing files:</h3>
+     <p></p>
+     <dl>
+      <dd>
+       Many editors come with the basic Linux install. Basic console text editors include jed, joe, pico, emacs and vi. (Listed from easiest to most difficult to master) GUI X-window editors (which may be used after X-Windows has started - using the startx command or init level 5) include gedit (Gnome/RH8.0 default), gnp (gnotepad), nedit, editor, edit and xemacs. These editors may be invoked from the command line or from the desktop tollbar. Man pages should be available for the editors. By far the easiest to use is <b>gedit</b>. ("Toolbar Start Icon" + "Accessories" + "Text Editor+")
+      </dd>
+     </dl>
+     <p></p>
+     <h3>Linux command shell mode:</h3>
+     <dl>
+      <dd>
+       <p>By default, when you first log in, the system is in the UNIX command shell mode. After X-windows is started, the GNOME desktop will offer you a command shell by selecting the computer terminal icon on the toollbar. (RH5.2 puts a shell on your desktop by default.) The default shell is bash. For more information type: <tt>man <a href="http://man.yolinux.com/cgi-bin/man2html?cgi_command=bash">bash</a></tt> .</p>
+      </dd>
+     </dl>
+     <p></p>
+     <h3>Information, documentation and help:</h3>
+     <ul>
+      <li>Documentation can be found locally in <a href="file:///usr/doc/">/usr/doc/</a>. (also/usr/doc/HOWTO/) It is easiest to view this with a browser. <br>
+        Beginning with Red Hat 7.1 the documentation is located in directory <a href="file:///usr/share/doc/">/usr/share/doc/</a></li>
+      <li>Many commands have a simple help facility built in. Try the <tt>--help</tt> option. For example try <tt>cat --help, ls --help</tt> or even <tt>man --help</tt>.</li>
+      <li>Information on a Linux subject or on individual commands is available with the UNIX "man" command. To find commands which refer to a subject, enter <tt>man -k &lt;subject&gt;</tt>. To view a Linux manual page on a particular command, enter <tt>man &lt;UNIX command&gt;</tt> . The pages scroll using Page Up/Down keys and arrow keys. To exit type the letter q . Use the command <tt>man <a href="http://man.yolinux.com/cgi-bin/man2html?cgi_command=man">man</a></tt> for more information.</li>
+      <li>/etc/cron.weekly/makewhatis.cron : This sets up manual page index for man -k subject help facility. <br>
+        It is recommended that after installation that you execute the script to configure the database rather than wait a week for it to execute automatically. Issue the command (as root): <tt>/etc/cron.weekly/makewhatis.cron</tt></li>
+      <li>/etc/cron.daily/updatedb.cron : Sets up index for <b>locate</b> command. (Creates data file <tt>/var/lib/locatedb</tt>)</li>
+     </ul>
+     <p></p>
+     <h3>Security and permissions:</h3>
+     <p></p>
+     <dl>
+      <dd>
+       UNIX controls file, directory and device access by user id and group membership. File, directory and device permissions may be granted or denied for reading (r), writing (w) and executing (x). These permissions may be granted to a specific user (u), group (g) or all other users (o). Directory listings can show this with letters representing permissions. For example: -rw-r--r-- which shows that the owner (user) has read and write privileges while the group members and all other users have read only privileges. The symbols display access privileges in the order of owner, group and other. Users are listed in the file <tt>/etc/passwd</tt>. Groups and group members are listed in the file <tt>/etc/group</tt>. 
+       <p>See man pages:</p>
+       <ul>
+        <li><a href="http://man.yolinux.com/cgi-bin/man2html?cgi_command=chmod">chmod</a> - Change/modify file access permissions.</li>
+        <li><a href="http://man.yolinux.com/cgi-bin/man2html?cgi_command=group">group</a></li>
+        <li><a href="http://man.yolinux.com/cgi-bin/man2html?cgi_command=ls">ls</a> - list files</li>
+       </ul>
+       <p><b>Note on root id:</b> The login id root is all powerful and should be used for system administration only. For regular user operation of the system, it is best to create a new user.</p>
+       <p>All users are a member of a group. New users will be added to a group of the same name as the user (each user had his own group). Membership in other groups may be added. This is often done to give a group of users access to a file or device which is accessible to all group members. See the <a href="LinuxTutorialManagingGroups.html">tutorial on managing groups.</a></p>
+       <p>For a complete tutorial on protecting your system while connected to the internet, see the <a href="LinuxTutorialInternetSecurity.html">YoLinux.com Internet Security Tutorial</a>.</p>
+      </dd>
+     </dl>
+     <p></p>
+     <h3>Device access:</h3>
+     <dl>
+      <dd>
+       Devices such as diskettes and CR-ROMs are often used by desktop users. It is common to have these devices owned by the groups floppy and cdrom respectively. The device permissions are set such that the device is accessible only by group members. To grant access to a device, add a user to the respective group. Unlike desktop systems, user access to these devices in a server environment is often not a good idea. See the YoLinux.com tutorial <a href="LinuxTutorialManagingGroups.html">Managing Group Access</a>.
+      </dd>
+     </dl>
+     <p><a name="WINPARTITION"></a></p>
+     <p></p>
+     <h3>Mounting a Windows partition:</h3>
+     <dl>
+      <dd>
+       <p>Use the command: <tt>mount -t vfat /dev/hda1 /mnt/C</tt> <br>
+         Mount MS/windows partition with long filenames so Linux can look at it if Win95 is on your 1st partition on the first drive. Use option "-t umsdos" for DOS/Win 3.1partition. (i.e. On my SCSI based system: <tt>mount -t umsdos</tt> <tt>/dev/sda3 /mnt/C</tt>) This requires that one create the directory mount point first (<tt>mkdir /mnt/C</tt> ) This mount can be made permanent by making the following entry to the <tt>/etc/fstab</tt> file:</p>
+       <pre class="code">    /dev/hda1 /C vfat defaults 0 0<br></pre> For more information see the man pages for <a href="http://man.yolinux.com/cgi-bin/man2html?cgi_command=mount">mount</a>, <a href="http://man.yolinux.com/cgi-bin/man2html?cgi_command=umount">umount</a>, <a href="http://man.yolinux.com/cgi-bin/man2html?cgi_command=fstab">fstab</a> and <a href="http://man.yolinux.com/cgi-bin/man2html?cgi_command=dump">dump</a>. 
+       <p>Note: The "umount" command is NOT "unmount". Notice the difference in spelling.</p>
+       <dl>
+        <dd>
+         <tt> umount /mnt/C</tt>
+        </dd>
+       </dl><a href="LinuxTutorialMicrosoftWindowsNetworkIntegration.html#MOUNTNTFS">How to mount NTFS drives used for MS/Windows NT, 2000 (not ME) and XP</a>.
+      </dd>
+     </dl>
+     <p></p>
+     <h3>Support for other file systems:</h3>
+     <p>Partial list:</p>
+     <dl>
+      <dd>
+       <table class="box">
+        <tbody>
+         <tr>
+          <td>Filesystem</td>
+          <td>Filesystem Description</td>
+         </tr>
+         <tr>
+          <td>ext2</td>
+          <td>Linux</td>
+         </tr>
+         <tr>
+          <td>msdos</td>
+          <td>Basic Microsoft DOS</td>
+         </tr>
+         <tr>
+          <td>umsdos</td>
+          <td>DOS with ling file names and Linux extensions</td>
+         </tr>
+         <tr>
+          <td>vfat</td>
+          <td>Windows 95</td>
+         </tr>
+         <tr>
+          <td>iso9660</td>
+          <td>CD: Auto detects "High Sierra" and "Rock Ridge"</td>
+         </tr>
+         <tr>
+          <td>hpfs</td>
+          <td>OS/2 (Read only)</td>
+         </tr>
+         <tr>
+          <td>sysv</td>
+          <td>Commercial System V Unix</td>
+         </tr>
+         <tr>
+          <td>nfs</td>
+          <td>Network File System (remote mounts)</td>
+         </tr>
+         <tr>
+          <td>smb</td>
+          <td>Windows for workgroups, NT and LAN manager</td>
+         </tr>
+         <tr>
+          <td>ncpfs</td>
+          <td>Novel Netware NCP file system</td>
+         </tr>
+        </tbody>
+       </table> Also see: <a href="http://man.yolinux.com/cgi-bin/man2html?cgi_command=fs">fs man page</a>.
+      </dd>
+     </dl>
+     <p></p>
+     <h3>Windows upgrade on a Dual Boot system:</h3>
+     <dl>
+      <dd>
+       <ul>
+        <li><a href="LinuxTutorialRecoveryAndBootDisk.html">Create a Linux boot disk</a>.</li>
+        <li>Re-write the DOS boot loader onto the hard drive: <tt>fdisk /mbr</tt></li>
+        <li>Upgrade Windows.</li>
+        <li>Boot system with Linux boot disk.</li>
+        <li>Run <tt>/sbin/lilo -v</tt> to re-install Linux boot loader onto hard drive. <br>
+          or<br><tt>/sbin/grub-install</tt> (Grub was introduced in Red Hat 7.2)</li>
+       </ul>
+      </dd>
+     </dl>
+     <p></p>
+     <h3>Setting graphical Login screen as default:</h3>
+     <dl>
+      <dd>
+       This may be configured during installation but can be changed. Do this only after X-windows is properly configured to the proper resolution. Init level 3 will boot the system to a console mode. Edit file <tt>/etc/inittab</tt> and change the following entry <tt>id:3:initdefault:</tt> to <tt>id:5:initdefault:</tt> . This will start X-windows upon boot-up by default without having to initiate it manually with the <tt>startx</tt> command.
+      </dd>
+     </dl>
+     <p></p>
+     <h3>Desktop choices:</h3>
+     <dl>
+      <dd>
+       The basic choices are GNOME (default), KDE and FVWM2 (default for RH 5.2 and earlier. Also called Another Level). You may choose a different desktop by selecting from the Start or selection menu, "System" + "Desktop Switching Tool" . Other desktop GUIs available on the system include AfterStep (clone of the NextStep interface), WindowMaker, FVWM95 (also a clone of the Windows 95/NT 4.0 interface) and MWM (Motif Window Manager based on Open Source Lesstif). 
+       <p><b>Tip:</b> Gnome toolbar help on Red Hat 7.1 - right-mouse-click within the toolbar + "Panel" + "Panel manual".</p>
+       <p><b><font color="#ff0000">[Potential Pitfall]:</font></b> RH 6.1 has a slight bug in that it allows you to select the Win 95 interface (FVWM2) but you cant get back. The selection process is controlled by your <tt>$HOME/.Xclients</tt> script which calls <tt>.Xclient-$HOSTNAME:0</tt> or <tt>.Xclients-default</tt> file. Use one of the following entries in your <tt>.Xclients-default</tt> file to restore your configuration:</p>
+       <ul>
+        <li><tt>exec gnome-session</tt></li>
+        <li><tt>exec startkde</tt></li>
+       </ul> FVWM2 uses a script rather than a single line command.
+      </dd>
+     </dl>
+     <p></p>
+     <h3>Minimal desktop graphics for limited resources:</h3>
+     <dl>
+      <dd>
+       If your system is slow and limited you can still run a graphical desktop, just not Gnome or KDE. Boot to init level 3 (console only not init level 5 with graphics) and issue the following commands: 
+       <ul>
+        <li>Start X-Windows: <tt>xinit</tt></li>
+        <li>Start a very lean window manager: <tt>mwm</tt></li>
+       </ul> Use the right mouse button to bring up a menu.
+      </dd>
+     </dl>
+     <p></p>
+     <h3>Soft Paws:</h3>
+     <dl>
+      <dd>
+       Left Handed users might want to use the mouse on the opposite side. To revers the mouse button order, issue the command: 
+       <pre class="code">   gpm -B 321<br></pre>
+      </dd>
+     </dl>
+     <p></p>
+     <h3>CD player:</h3>
+     <dl>
+      <dd>
+       <li>Red Hat 8.0: <br><tt>/usr/bin/gnome-cd</tt>
+        <p></p></li>
+       <li>Red Hat 6.x, 7.x: <br><tt>/usr/bin/gtcd</tt>: "Start" + "Programs" + "Multimedia" + "CD Player" 
+        <p>To use a free CDDB internet database set the server to: <tt>freedb.freedb.org</tt> port 8880</p></li>
+      </dd>
+     </dl>
+     <p></p>
+     <h3>X-Window scripts:</h3>
+     <dl>
+      <dd>
+       The X-Window initialization script is <tt>/etc/X11/xinit/xinitrc</tt>. The user script is <tt>~/.xinit</tt>. Programs you wish to autostart should be placed in your xinit script. The desktop system you choose will probably also have a script as well. For KDE see <tt>~/.kde/Autostart</tt>. 
+       <p>See <a href="http://tldp.yolinux.com/HOWTO/XWindow-User-HOWTO.html#s5">X-Window User HOWTO</a> for more information.</p>
+      </dd>
+     </dl>
+     <p></p>
+     <h3>Adding an application to the start menus:</h3>
+     <dl>
+      <dd>
+       "Gnome start button" + "Settings" + "Menu Editor". You will have to be root to add to system menus. 
+       <br>
+        User menus unique to the login account are held in <tt>$HOME/.gnome/apps/<i>&lt;application&gt;</i>.desktop</tt>
+      </dd>
+     </dl>
+     <p></p>
+     <h3>Apache Web server (httpd):</h3>
+     <p></p>
+     <dl>
+      <dd>
+       Fedora Core 1/2/3 and Red Hat 7.x/8.0/9.0 file locations: <small> </small>
+       <pre class="code"><small>   /var/www/html/          <b>- Web pages go here. Home page is index.html</b>
+            icons/         <b>- Graphical icons used by the server</b>
+            cgi-bin/       <b>- Location for CGI programs</b>
+
+   /var/log/httpd/access_log  <b>- Server log files</b>
+                  error_log
+</small></pre>
+       <p>Red Hat 6.x and earlier file locations: <small> </small></p>
+       <pre class="code"><small>   /home/httpd/html/          <b>- Web pages go here. Home page is index.html</b>
+               icons/         <b>- Graphical icons used by the server</b>
+               cgi-bin/       <b>- Location for CGI programs</b>
+
+   /var/log/httpd/access_log  <b>- Server log files</b>
+                  error_log
+</small></pre>
+       <p><a href="http://man.yolinux.com/cgi-bin/man2html?cgi_command=httpd">See httpd man page.</a> <br><a href="http://httpd.apache.org/docs/">See Apache online manual</a> <br><a href="LinuxTutorialWebSiteConfig.html">YoLinux.com Web site configuration tutorial</a></p>
+      </dd>
+     </dl>
+     <p></p>
+     <h3>RPM - Red Hat Package Manager:</h3>
+     <dl>
+      <dd>
+       The <tt>rpm</tt> command is used to manage software applications and system modules. See the <a href="Linux-RedHat-RPM-YUM.html#RPM">YoLinux.com package management Tutorial - rpm</a>
+      </dd>
+     </dl>
+     <p></p>
+     <h3>Linux devices:</h3>
+     <dl>
+      <dd>
+       If you are missing a device: (i.e. <tt>/dev/radio</tt>) 
+       <pre class="code">     cd /dev<br>     ./MAKEDEV radio<br></pre>
+      </dd>
+     </dl>
+     <p></p>
+     <h3>Something Cool:</h3>
+     <dl>
+      <dd>
+       Slide Show: 
+       <ol>
+        <li>Put a bunch of JPEG files in a directory (i.e. develop photos and get the "Kodak Picture CD")</li>
+        <li>Start photo viewer application: 
+         <ul>
+          <li>RH 8.0: Start GQview - (<tt>/usr/bin/gqview</tt>) or GUI desktop select the "start icon" + "Graphics" + "GQview".) 
+           <ul>
+            <li>Open the folder/directory where the photos reside.</li>
+            <li>Select "Edit Options" 
+             <ul>
+              <li>Tab "General": Select "Repeat" and choose delay in seconds.</li>
+              <li>Tab "Image": Select "Fit image to window" and "Expand images for zoom to fit"</li>
+             </ul></li>
+            <li>Select "View" + "Toggle Slide Show"</li>
+            <li>Select "View" + "Full Screen"</li>
+           </ul><br><b>OR</b></li>
+          <li>RH 7.x: Start Gtk-See (<tt>/usr/bin/gtksee</tt> or select "The paw/start icon" + "Programs" + "Graphics" + "Gtk-See".) 
+           <ul>
+            <li>Open the folder/directory where the photos reside.</li>
+            <li>Select "Tools" + "Slide Show" or ctrl-S</li>
+            <li>Select the "Full Screen" icon.</li>
+           </ul></li>
+         </ul></li>
+        <li>Use the right mouse button to bring up a menu.</li>
+        <li>Enjoy!</li>
+       </ol>
+      </dd>
+     </dl>
+     <p></p>
+     <h3>Admin Tutorials:</h3> YoLinux.com Tutorials: 
+     <ul>
+      <li><a href="LinuxTutorialInitProcess.html">Init process tutorial</a> - Tutorial on how to add/remove background processes/services which start on system boot-up.</li>
+      <li><a href="LinuxTutorialManagingGroups.html">Managing Group Access</a> - Granting and administering file and device access.</li>
+      <li><a href="LinuxTutorialSysAdmin.html">System Administration</a></li>
+      <li><a href="LinuxTutorialQuotas.html">File System Quotas</a> - Limiting a user's disk usage.</li>
+      <li><a href="LinuxTutorialNetworking.html">Networking </a></li>
+      <li><a href="LinuxTutorialIptablesNetworkGateway.html">Set up Linux as an internet gateway for home or office</a></li>
+      <li><a href="LinuxTutorialWebSiteConfig.html">Internet Web Server and Domain Configuration</a></li>
+      <li><a href="LinuxTutorialMicrosoftWindowsNetworkIntegration.html">Configuring a Linux workstation for interoperability with the MS/Windows environment</a></li>
+      <li><a href="index.html">List of all YoLinux.com tutorials</a></li>
+     </ul>
+     <p>Links:</p>
+     <ul>
+      <li><a href="http://tldp.yolinux.com/HOWTO/Config-HOWTO.html">Configuration HOWTO</a> - Guido Gonzato</li>
+      <li><a href="http://tldp.yolinux.com/HOWTO/Bash-Prompt-HOWTO.html">Bash Prompt HOWTO</a> - Giles Orr</li>
+      <li><a href="http://tldp.yolinux.com/HOWTO/Printing-HOWTO.html">Linux Printing HOWTO</a> - Grant Taylor</li>
+      <li><a href="http://tldp.yolinux.com/HOWTO/Text-Terminal-HOWTO.html">Text-Terminal-HOWTO</a> - David S. Lawyer</li>
+     </ul>
+     <p></p>
+     <hr>
+     <p><a name="LINKS"></a></p>
+     <div class="labelbar">
+      Linux Installation Related Links:
+     </div>
+     <p></p>
+     <ul>
+      <li><a href="http://www.littlewhitedog.com/reviews_other_00011.asp">Dual boot Linux with Win2k</a></li>
+      <li><a href="http://tldp.yolinux.com/HOWTO/Installation-HOWTO.html">Linux Installation HOWTO</a> - Eric S. Raymond</li>
+      <li><a href="http://tldp.yolinux.com/HOWTO/PLIP-Install-HOWTO.html">PLIP Install HOWTO</a> - Install over the network - Gilles Lamiral</li>
+      <li><a href="http://tldp.yolinux.com/HOWTO/Unix-and-Internet-Fundamentals-HOWTO.html">Unix and Internet Fundamentals HOWTO</a> - Eric S. Raymond (for beginners)</li>
+      <li><a href="http://tldp.yolinux.com/HOWTO/BootPrompt-HOWTO.html">Linux BootPrompt-HowTo</a> - Paul Gortmaker</li>
+      <li><a href="http://tldp.yolinux.com/HOWTO/Bootdisk-HOWTO.html">Linux Bootdisk HOWTO</a> - Tom Fawcett</li>
+      <li><a href="http://tldp.yolinux.com/HOWTO/Multi-Disk-HOWTO.html">Multi Disk System Tuning</a> - How best to use multiple disks and partitions - Stein Gjoen</li>
+      <li><a href="http://tldp.yolinux.com/HOWTO/Large-Disk-HOWTO.html">Linux Large Disk HOWTO</a> - Andries Brouwer</li>
+      <li><a href="http://tldp.yolinux.com/HOWTO/Filesystems-HOWTO.html">Filesystems HOWTO</a> - Martin Hinner</li>
+      <li><a href="http://tldp.yolinux.com/HOWTO/Diskless-HOWTO.html">Diskless Nodes HOW-TO</a> - Robert Nemkin, Al Vasudevan, Markus Gutschke, Ken Yap, Gero Kuhlmann</li>
+      <li><a href="http://tldp.yolinux.com/HOWTO/Diskless-root-NFS-HOWTO.html">Root over nfs clients and server Howto</a> - Hans de Goede</li>
+      <li><a href="http://tldp.yolinux.com/HOWTO/MultiOS-HOWTO.html">Managing Multiple Operating Systems HOWTO</a> - Robert W. Schultz</li>
+      <li><a href="http://tldp.yolinux.com/HOWTO/Busmouse-HOWTO.html">Linux Busmouse HOWTO</a> - Chris Bagwell</li>
+      <li><a href="http://tldp.yolinux.com/HOWTO/Hardware-HOWTO.html">Linux Hardware Compatibility HOWTO</a> - Patrick Reijnen</li>
+      <li><a href="http://tldp.yolinux.com/HOWTO/Plug-and-Play-HOWTO.html">Linux Plug-and-Play-HOWTO</a> - David S.Lawyer</li>
+      <li><a href="http://tldp.yolinux.com/HOWTO/XFree86-HOWTO.html">Linux XFree86 HOWTO</a> - V 4 - Eric S. Raymond</li>
+      <li><a href="http://tldp.yolinux.com/HOWTO/XFree86-Touch-Screen-HOWTO.html">Linux Touch Screen HOWTO</a> - Christoph Baumann</li>
+      <li><a href="http://tldp.yolinux.com/HOWTO/XFree86-Video-Timings-HOWTO.html">XFree86 Video Timings HOWTO</a> - Eric S. Raymond</li>
+      <li><a href="http://www.linux-usb.org/USB-guide/book1.html">USB Device Guide</a></li>
+     </ul>
+     <p>Laptop Guides:</p>
+     <ul>
+      <li><a href="http://tldp.yolinux.com/HOWTO/Laptop-HOWTO.html">Linux Laptop HOWTO</a> - Werner Heuser</li>
+      <li><a href="http://tldp.yolinux.com/HOWTO/PCMCIA-HOWTO.html">Linux PCMCIA HOWTO</a> - David Hinds</li>
+     </ul>
+     <p>Red Hat Installation Guide:</p>
+     <ul>
+      <li><a href="http://www.redhat.com/docs/manuals/linux/RHL-7.1-Manual/install-guide/">RH 7.1 Install Guide</a></li>
+      <li><a href="http://www.redhat.com/docs/manuals/linux/RHL-7-Manual/install-guide/">RH 7.0 Install Guide i386</a> - <a href="http://www.redhat.com/docs/manuals/linux/RHL-7-Manual/alpha-install-guide/index.html">[Alpha]</a></li>
+      <li><a href="http://www.redhat.com/docs/manuals/linux/RHL-6.2-Manual/install-guide/">RH 6.2 Install Guide i386</a> - <a href="http://www.redhat.com/docs/manuals/linux/RHL-6.2-Manual/multi-arch/index.html">[Alpha/SPARC]</a></li>
+      <li><a href="http://www.redhat.com/docs/manuals/linux/RHL-6.1-Manual/install-guide/">RH 6.1 Install Guide</a></li>
+     </ul>
+     <p>Installation guides for other distributions:</p>
+     <ul>
+      <li><a href="http://www.ubuntu.com/">Ubuntu</a></li>
+      <li><a href="http://www.debian.org/">Debian GNU</a>: 
+       <ul>
+        <li><a href="http://www.debian.org/releases/stable/installmanual">Installation Guide</a></li>
+        <li><a href="http://www.debian.org/releases/stable/#new-inst">Installation Instructions for all hardware platforms and all languages</a></li>
+        <li><a href="http://www.debian.org/doc/FAQ/">Debian FAQ</a></li>
+       </ul></li>
+      <li><a href="http://slackware.com/">Slackware</a>: 
+       <ul>
+        <li><a href="http://slackware.com/install/">Installation Help</a></li>
+       </ul></li>
+      <li><a href="http://www.novell.com/linux/">S.u.S.E.</a>:</li>
+     </ul>
+     <p></p>
+     <hr>
+     <p><a name="BOOKS"></a></p>
+     <div class="labelbar-h2">
+      <img src="images/book40.gif">Books:
+     </div>
+     <p></p>
+     <table cellpadding="5" class="box" width="100%">
+      <tbody>
+       <tr>
+        <td><img src="../BOOKS/1936280639.jpg" alt="Amazon book image"></td>
+        <td valign="top">"Fedora 18 Desktop Handbook" <br>
+          by Richard Petersen <br>
+          Surfing Turtle Press, ISBN# 1936280639 <br>
+          (Mar 6, 2013) 
+         <p></p></td>
+        <td valign="top"><a rel="nofollow" href="http://www.amazon.com/gp/redirect.html?ie=UTF8&amp;location=http://www.amazon.com/exec/obidos/ASIN/1936280639/&amp;tag=yolinux-20"><img src="images/Amazon-BuyABook88x31.gif" alt="Amazon.com"></a> <br></td>
+       </tr>
+       <tr>
+        <td><img src="../BOOKS/1936280698.jpg" alt="Amazon book image"></td>
+        <td valign="top">"Fedora 18 Networking and Servers" <br>
+          by Richard Petersen <br>
+          Surfing Turtle Press, ISBN# 1936280698 <br>
+          (March 29, 2013) 
+         <p></p></td>
+        <td valign="top"><a rel="nofollow" href="http://www.amazon.com/gp/redirect.html?ie=UTF8&amp;location=http://www.amazon.com/exec/obidos/ASIN/1936280698/&amp;tag=yolinux-20"><img src="images/Amazon-BuyABook88x31.gif" alt="Amazon.com"></a> <br></td>
+       </tr>
+       <tr>
+        <td><img src="../BOOKS/1936280167.jpg" alt="Amazon book image"></td>
+        <td valign="top">"Fedora 14 Desktop Handbook" <br>
+          by Richard Petersen <br>
+          Surfing Turtle Press, ISBN# 1936280167 <br>
+          (Nov 30, 2010) 
+         <p></p></td>
+        <td valign="top"><a rel="nofollow" href="http://www.amazon.com/gp/redirect.html?ie=UTF8&amp;location=http://www.amazon.com/exec/obidos/ASIN/1936280167/&amp;tag=yolinux-20"><img src="images/Amazon-BuyABook88x31.gif" alt="Amazon.com"></a> <br></td>
+       </tr>
+       <tr>
+        <td><img src="../BOOKS/1936280221.jpg" alt="Amazon book image"></td>
+        <td valign="top">"Fedora 14 Administration and Security" <br>
+          by Richard Petersen <br>
+          Surfing Turtle Press, ISBN# 1936280221 <br>
+          (Jan 6, 2011) 
+         <p></p></td>
+        <td valign="top"><a rel="nofollow" href="http://www.amazon.com/gp/redirect.html?ie=UTF8&amp;location=http://www.amazon.com/exec/obidos/ASIN/1936280221/&amp;tag=yolinux-20"><img src="images/Amazon-BuyABook88x31.gif" alt="Amazon.com"></a> <br></td>
+       </tr>
+       <tr>
+        <td><img src="../BOOKS/1936280191.jpg" alt="Amazon book image"></td>
+        <td valign="top">"Fedora 14 Networking and Servers" <br>
+          by Richard Petersen <br>
+          Surfing Turtle Press, ISBN# 1936280191 <br>
+          (Dec 26, 2010) 
+         <p></p></td>
+        <td valign="top"><a rel="nofollow" href="http://www.amazon.com/gp/redirect.html?ie=UTF8&amp;location=http://www.amazon.com/exec/obidos/ASIN/1936280191/&amp;tag=yolinux-20"><img src="images/Amazon-BuyABook88x31.gif" alt="Amazon.com"></a> <br></td>
+       </tr>
+       <tr>
+        <td><img src="../BOOKS/0470413395.jpg" alt="Amazon book image"></td>
+        <td valign="top">"Fedora 10 and Red Hat Enterprise Linux Bible" <br>
+          by Christopher Negus <br>
+          Wiley, ISBN# 0470413395 
+         <p></p></td>
+        <td valign="top"><a rel="nofollow" href="http://www.amazon.com/gp/redirect.html?ie=UTF8&amp;location=http://www.amazon.com/exec/obidos/ASIN/0470413395/&amp;tag=yolinux-20"><img src="images/Amazon-BuyABook88x31.gif" alt="Amazon.com"></a> <br></td>
+       </tr>
+       <tr>
+        <td><img src="../BOOKS/047008278X.01.MZZZZZZZ.jpg"></td>
+        <td valign="top">"Red Hat Fedora 6 and Enterprise Linux Bible" <br>
+          by Christopher Negus <br>
+          Sams, ISBN# 047008278X 
+         <p></p></td>
+        <td valign="top"><a rel="nofollow" href="http://www.amazon.com/gp/redirect.html?ie=UTF8&amp;location=http://www.amazon.com/exec/obidos/ASIN/047008278X/&amp;tag=yolinux-20"><img src="images/Amazon-BuyABook88x31.gif" alt="Amazon.com"></a> <br></td>
+       </tr>
+       <tr>
+        <td><img src="../BOOKS/0071486429.01.MZZZZZZZ.jpg"></td>
+        <td valign="top">"Fedora 7 &amp; Red Hat Enterprise Linux: The Complete Reference" <br>
+          by Richard Petersen <br>
+          Sams, ISBN# 0071486429 
+         <p></p></td>
+        <td valign="top"><a rel="nofollow" href="http://www.amazon.com/gp/redirect.html?ie=UTF8&amp;location=http://www.amazon.com/exec/obidos/ASIN/0071486429/&amp;tag=yolinux-20"><img src="images/Amazon-BuyABook88x31.gif" alt="Amazon.com"></a> <br></td>
+       </tr>
+       <tr>
+        <td><img src="../BOOKS/0672329298.01.MZZZZZZZ.jpg"></td>
+        <td valign="top">"Red Hat Fedora Core 6 Unleashed" <br>
+          by Paul Hudson, Andrew Hudson <br>
+          Sams, ISBN# 0672329298 
+         <p></p></td>
+        <td valign="top"><a rel="nofollow" href="http://www.amazon.com/gp/redirect.html?ie=UTF8&amp;location=http://www.amazon.com/exec/obidos/ASIN/0672329298/&amp;tag=yolinux-20"><img src="images/Amazon-BuyABook88x31.gif" alt="Amazon.com"></a> <br></td>
+       </tr>
+       <tr>
+        <td><img src="../BOOKS/0672327082.01.MZZZZZZZ.jpg"></td>
+        <td valign="top">"Red Hat Linux Fedora 3 Unleashed" <br>
+          by Bill Ball, Hoyt Duff <br>
+          Sams, ISBN# 0672327082 
+         <p></p></td>
+        <td valign="top"><a rel="nofollow" href="http://www.amazon.com/gp/redirect.html?ie=UTF8&amp;location=http://www.amazon.com/exec/obidos/ASIN/0672327082/&amp;tag=yolinux-20"><img src="images/Amazon-BuyABook88x31.gif" alt="Amazon.com"></a> <br></td>
+       </tr>
+       <tr>
+        <td><img src="../BOOKS/0672325888.01.MZZZZZZZ.jpg"></td>
+        <td valign="top">"Red Hat Linux 9 Unleashed" <br>
+          by Bill Ball, Hoyt Duff <br>
+          Sams, ISBN# 0672325888 
+         <p>I have the Red Hat 6 version and I have found it to be very helpful. I have found it to be way more complete than the other Linux books. It is the most complete general Linux book in publication. While other books in the "Unleashed" series have disapointed me, this book is the best out there.</p></td>
+        <td valign="top"><a rel="nofollow" href="http://www.amazon.com/gp/redirect.html?ie=UTF8&amp;location=http://www.amazon.com/exec/obidos/ASIN/0672325888/&amp;tag=yolinux-20"><img src="images/Amazon-BuyABook88x31.gif" alt="Amazon.com"></a> <br></td>
+       </tr>
+       <tr>
+        <td><img src="../BOOKS/032121918X.01.MZZZZZZZ.jpg"></td>
+        <td valign="top">"Red Hat Linux 9 (Visual QuickPro Guide)" <br>
+          by Harold Davis <br>
+          ISBN #032121918X, Peachpit Press, Addison Wesley 
+         <p>The best basic Linux book around for the GUI generation. This book can be best described as a guide to using the GUI configuration tools.</p></td>
+        <td valign="top"><a rel="nofollow" href="http://www.amazon.com/gp/redirect.html?ie=UTF8&amp;location=http://www.amazon.com/exec/obidos/ASIN/032121918X/&amp;tag=yolinux-20"><img src="images/Amazon-BuyABook88x31.gif" alt="Amazon.com"></a> <br></td>
+       </tr>
+       <tr>
+        <td><img src="../BOOKS/0782129358.01.MZZZZZZZ.jpg"></td>
+        <td valign="top">"Linux! I Didn't Know You Could Do That.." <br>
+          by Nicholas D. Wells <br>
+          ISBN #0782129358, SYBEX Inc. 
+         <p>This book covers Linux applications from games and multimedia to networking tools. This book covers what the others don't.</p></td>
+        <td valign="top"><a rel="nofollow" href="http://www.amazon.com/gp/redirect.html?ie=UTF8&amp;location=http://www.amazon.com/exec/obidos/ASIN/0782129358/&amp;tag=yolinux-20"><img src="images/Amazon-BuyABook88x31.gif" alt="Amazon.com"></a> <br></td>
+       </tr>
+       <tr>
+        <td><img src="../BOOKS/0764541331.01.MZZZZZZZ.jpg"></td>
+        <td valign="top">"Red Hat Linux 9 Professional Secrets" <br>
+          by Naba Barkakati <br>
+          ISBN #0764541331, John Wiley and Sons</td>
+        <td valign="top"><a rel="nofollow" href="http://www.amazon.com/gp/redirect.html?ie=UTF8&amp;location=http://www.amazon.com/exec/obidos/ASIN/0764541331/&amp;tag=yolinux-20"><img src="images/Amazon-BuyABook88x31.gif" alt="Amazon.com"></a> <br></td>
+       </tr>
+      </tbody>
+     </table>
+     <p></p>
+     <div class="lineHR">
+      <p></p>
+      <div id="disqus_thread"></div>
+      <script>
+
+/**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables.
+*
+*  When url or identifier are not defined, the Disqus embed will use the window URL as the main identifier when creating a thread.
+*/ 
+/*
+var disqus_config = function () {
+this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = '//yolinux.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+      <noscript>
+       Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+      </noscript>
+     </div>
+    </div><!-- end content -->
+    <div id="rightcol">
+     <!-- AddThis Button BEGIN -->
+     <div id="bookmark">
+      &nbsp;&nbsp;&nbsp; 
+      <br><a rel="nofollow" href="http://www.addthis.com/bookmark.php?v=250&amp;pub=yolinux" onmouseover="return addthis_open(this, '', '[URL]', '[TITLE]')" onmouseout="addthis_close()" onclick="return addthis_sendto()"><img src="http://s7.addthis.com/static/btn/lg-bookmark-en.gif" width="125" height="16" alt="Bookmark and Share" style="border:0"></a>
+      <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js?pub=yolinux">
+</script>
+     </div><!-- AddThis Button END -->
+     <p></p>
+     <p><font color="#505050">Advertisements</font></p><iframe class="adframe" scrolling="no" allowtransparency="true" marginheight="0" marginwidth="0" width="160" frameborder="0" height="600" style="border:none;width:160;height:600;padding:0;" src="/ADVERTISING/iframe160px-MediaDotNet.html"> </iframe>
+     <p></p><!-- 
+<script type="text/javascript">
+var jobthread_widget_title = "Jobs";
+var jobthread_widget_outer_style = "background-color:#dddddd;border:1px solid #999999;width:160px;";
+var jobthread_widget_inner_style = "background-color:#ffffff;color:#666666;border:1px solid #999999;margin-left:10px;margin-right:10px;padding:10px 10px 2px 8px;font:11px Arial, Helvetica, Sans-serif;line-height:16px;";
+var jobthread_widget_title_style = "color:#313131;font-weight:bold;";
+var jobthread_widget_link_style = "color:#0464bb;font-size:11px;font-weight:normal;text-decoration:none;border:none;";
+var jobthread_widget_top_style = "padding-top:8px;";
+var jobthread_widget_bottom_style = "padding-bottom:4px;";
+</script>
+<script type="text/javascript" src="http://edge.jobthread.com/widget/?id=c0e4b3&num_jobs=10"></script>
+//-->
+     <p></p>
+     <p>&nbsp;</p>
+    </div><!-- end rightcol  -->
+   </div><!-- end row -->
+   <div class="row">
+    <div id="yo-footer">
+     <div class="col-sm-4">
+      <font size="-1" color="#ffcc33"> <b> <a class="footer" href="http://www.yolinux.com">YoLinux.com Home Page</a> <br><a class="footer" href="http://www.yolinux.com/TUTORIALS/">YoLinux Tutorial Index</a> | <a class="footer" href="http://www.yolinux.com/YoLinux-Terms.html">Terms</a> <br><a class="footer" href="http://www.yolinux.com/privacy.html">Privacy Policy</a> | <a class="footer" href="http://www.yolinux.com/YoLinux-Advertising.html">Advertise with us</a> | <a class="footer" href="http://www.yolinux.com/YoLinuxEmailForm.html">Feedback Form</a> | </b> <br>
+        Unauthorized copying or redistribution prohibited. </font>
+     </div><!-- end col-sm-4 -->
+     <div class="col-sm-4">
+      <table class="borderless">
+       <tbody>
+        <tr>
+         <td align="center" valign="bottom">
+          <script src="http://www.stumbleupon.com/hostedbadge.php?s=5"></script></td>
+         <td align="center" valign="bottom">
+          <p></p></td>
+        </tr>
+       </tbody>
+      </table>
+     </div><!-- end col-sm-4 -->
+     <div class="col-sm-4">
+      <div align="right">
+       <font size="-1" color="#ffcc33"><a class="footer" href="#TOP">to top of page</a></font>
+       <br>
+       <script type="text/javascript"><!--
+google_ad_client = "pub-8567479315106986";
+/* 234x60, created 4/23/10 */
+google_ad_slot = "8214196957";
+google_ad_width = 234;
+google_ad_height = 60;
+//-->
+</script>
+       <script type="text/javascript" src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+      </div>
+     </div><!-- end col-sm-4 -->
+    </div><!-- end yo-footer -->
+   </div>
+   <div id="copyright">
+    <p class="copyright">Copyright © 1999 - 2017 by <i>Greg Ippolito</i></p>
+   </div>
+  </div><!-- end container-fluid --> <!-- bootstrap nav -->
+  <script src="/js/jquery.min.js"></script>
+  <script src="/js/bootstrap.min.js"></script><!-- Start Quantcast tag -->
+  <script type="text/javascript">
+  var _qevents = _qevents || [];
+
+  (function() {
+   var elem = document.createElement('script');
+
+   elem.src = (document.location.protocol == "https:" ? "https://secure" : "http://edge") + ".quantserve.com/quant.js";
+   elem.async = true;
+   elem.type = "text/javascript";
+   var scpt = document.getElementsByTagName('script')[0];
+   scpt.parentNode.insertBefore(elem, scpt);  
+  })();
+</script>
+  <script type="text/javascript">
+_qevents.push( { qacct:"p-ebIBcaVUngFBQ"} );
+</script>
+  <noscript>
+   <div style="display: none;">
+    <img src="//pixel.quantserve.com/pixel/p-ebIBcaVUngFBQ.gif" height="1" width="1" alt="Quantcast">
+   </div>
+  </noscript><!-- End Quantcast tag --> <!-- Start Google +1 tag --> <!-- Place this tag in your head or just before your close body tag -->
+  <script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script><!-- End Google +1 tag --> <!-- Start Google Analytics tag -->
+  <script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+  <script type="text/javascript">
+var pageTracker = _gat._getTracker("UA-3317450-1");
+pageTracker._initData();
+pageTracker._trackPageview();
+</script><!-- End Google Analytics tag --> <!-- Start Advertise.com InterYield tag --> <!-- script src="http://interyield.td573.com/InterYield/bindevent.do?e=click&affiliate=gregipIY&subid=yolinux&ecpm=0&debug=false&snoozeMinutes=1&adCountIntervalHours=24&maxAdCountsPerInterval=2&pop=under&attributionDisabled=true&endpoint=http%3A%2F%2Finteryield.td573.com" type="text/javascript"></script --> <!-- End Advertise.com InterYield tag --> <!-- Google auto ads - turn it on -->
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <script>
+     (adsbygoogle = window.adsbygoogle || []).push({
+          google_ad_client: "ca-pub-8567479315106986",
+          enable_page_level_ads: true
+     });
+</script>
+ </body>
+</html>

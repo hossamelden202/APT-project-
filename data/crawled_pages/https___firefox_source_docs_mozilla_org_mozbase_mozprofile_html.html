@@ -1,0 +1,919 @@
+<!doctype html>
+<html class="writer-html5" lang="en" data-content_root="../">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>mozprofile — Create and modify Mozilla application profiles — Firefox Source Docs  documentation</title>
+  <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50">
+  <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094">
+  <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=fd3f3429">
+  <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b">
+  <link rel="stylesheet" type="text/css" href="../_static/custom_theme.css?v=dc5ed815">
+  <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7">
+  <link rel="shortcut icon" href="../_static/firefox.ico"><!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script src="../_static/jquery.js?v=5d32c60e"></script>
+  <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+  <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+  <script src="../_static/doctools.js?v=9a2dae69"></script>
+  <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+  <script src="../_static/copybutton.js?v=30646c52"></script>
+  <script src="../_static/design-tabs.js?v=36754332"></script>
+  <script src="../_static/js/theme.js"></script>
+  <link rel="index" title="Index" href="../genindex.html">
+  <link rel="search" title="Search" href="../search.html">
+  <link rel="next" title="mozprocess — Launch and manage processes" href="mozprocess.html">
+  <link rel="prev" title="mozpower — Power-usage testing" href="mozpower.html">
+ </head>
+ <body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+   <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <div class="wy-side-scroll">
+     <div class="wy-side-nav-search">
+      <a href="../index.html" class="icon icon-home"> Firefox Source Docs <img src="../_static/firefox-wordmark.svg" class="logo" alt="Logo"> </a><!-- -- This code is governed by the BSD license ---->
+      <div>
+       <h3>Quick search</h3>
+       <script>
+    (function () {
+      var cx = "dd12886298f75dbef";
+      var gcse = document.createElement("script");
+      gcse.async = true;
+      gcse.src = "https://cse.google.com/cse.js?cx=" + cx;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(gcse, s);
+    })();
+  </script><gcse:search></gcse:search>
+      </div>
+     </div>
+     <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+      <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../glossary/index.html">A Glossary of Common Terms</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../overview/index.html">A Quick Guide to Mozilla Applications</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../setup/index.html">Getting Set Up To Work On The Firefox Codebase</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Working On Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../contributing/index.html">Working on Firefox</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../bug-mgmt/index.html">Bug Handling</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox User Guide</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../devtools-user/index.html">Firefox DevTools User Docs</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Source Code Documentation</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../mots/index.html">Governance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../browser/index.html">Firefox Front-end</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../dom/index.html">DOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../editor/index.html">Editor</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../layout/index.html">Style system (CSS) &amp; Layout</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../gfx/index.html">Graphics</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../ipc/index.html">Processes, Threads and IPC</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../devtools/index.html">Firefox DevTools Contributor Docs</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../toolkit/index.html">Toolkit</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../js/index.html">SpiderMonkey</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../jsloader/index.html">JS Loader</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mobile/android/geckoview/index.html">GeckoView</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mobile/android/fenix/index.html">Fenix</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mobile/android/focus-android/index.html">Focus for Android</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../dom/bindings/webidl/index.html">WebIDL</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../modules/libpref/index.html">libpref</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../networking/index.html">Networking</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../remote/index.html">Remote Protocols</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../services/index.html">Services</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../permissions/index.html">Permissions</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../uriloader/index.html">File Handling</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../widget/cocoa/index.html">Firefox on macOS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../widget/windows/index.html">Firefox on Windows</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../toolkit/components/ml/index.html">Firefox AI Runtime</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../accessible/index.html">Accessibility</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../media/index.html">Media Playback</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../code-quality/index.html">Code quality</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../writing-rust-code/index.html">Writing Rust Code</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../rust-components/index.html">Rust Components</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/profiler/index.html">Gecko Profiler</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../performance/index.html">Performance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../storage/index.html">Database bindings (SQLite, KV, …)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../xpcom/index.html">XPCOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../nspr/index.html">NSPR</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../security/nss/index.html">Network Security Services (NSS)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../content-security/index.html">Web Security Checks in Gecko</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">The Firefox Build System</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../mach/index.html">Mach</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/try/index.html">Pushing to Try</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../build/buildsystem/index.html">Build System</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../taskcluster/index.html">Firefox CI and Taskgraph</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/moztreedocs/index.html">Managing Documentation</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mozbuild/vendor/index.html">Vendoring Third Party Components</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Testing &amp; Test Infrastructure</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/automated-testing/index.html">Automated Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/treeherder-try/index.html">Understanding Treeherder Results</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/sheriffed-intermittents/index.html">Sheriffed intermittent failures</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/tests-for-new-config/index.html">Turning on Firefox tests for a new configuration</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/intermittent/index.html">Avoiding intermittent tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/testing-policy/index.html">Testing Policy</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/ci-configs/index.html">Configuration Changes</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/browser-chrome/index.html">Browser chrome mochitests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/chrome-tests/index.html">Chrome Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/marionette/index.html">Marionette</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/geckodriver/index.html">geckodriver</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/test-verification/index.html">Test Verification</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/webrender/index.html">WebRender Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/mochitest-plain/index.html">Mochitest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/xpcshell/index.html">XPCShell tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/tps/index.html">TPS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../web-platform/index.html">web-platform-tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../gtest/index.html">GTest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/fuzzing/index.html">Fuzzing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/sanitizer/index.html">Sanitizer</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/perfdocs/index.html">Performance Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/code-coverage/index.html">Code coverage</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing-rust-code/index.html">Testing &amp; Debugging Rust Code</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Releases &amp; Updates</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../update-infrastructure/index.html">Mozilla Update Infrastructure</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../update-infrastructure/index.html#watershed-updates">Watershed Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../update-infrastructure/index.html#desupport-updates">Desupport Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/update-verify/index.html">Update Verify</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Localization &amp; Internationalization</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../intl/index.html">Internationalization</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../l10n/index.html">Localization</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox and Python</span></p>
+      <ul class="current">
+       <li class="toctree-l1 current"><a class="reference internal" href="index.html">mozbase</a>
+        <ul class="current">
+         <li class="toctree-l2"><a class="reference internal" href="manifestparser.html">Managing lists of tests</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="gettinginfo.html">Getting information on the system under test</a></li>
+         <li class="toctree-l2 current"><a class="reference internal" href="setuprunning.html">Set up and running</a>
+          <ul class="current">
+           <li class="toctree-l3"><a class="reference internal" href="mozfile.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mozfile</span></code> — File utilities for use in Mozilla testing</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="mozgeckoprofiler.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mozgeckoprofiler.rst</span></code> — Gecko Profiler utilities</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="mozinstall.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mozinstall</span></code> — Install and uninstall Gecko-based applications</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="mozpower.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mozpower</span></code> — Power-usage testing</a></li>
+           <li class="toctree-l3 current"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mozprofile</span></code> — Create and modify Mozilla application profiles</a>
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="#module-mozprofile.addons">Addons</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#module-mozprofile.cli">Command Line Interface</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#module-mozprofile.permissions">Permissions</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#module-mozprofile.prefs">Preferences</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#module-mozprofile.profile">Profile</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#resources">Resources</a></li>
+            </ul></li>
+           <li class="toctree-l3"><a class="reference internal" href="mozprocess.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mozprocess</span></code> — Launch and manage processes</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="mozrunner.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mozrunner</span></code> — Manage remote and local gecko processes</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="mozcrash.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mozcrash</span></code> — Print stack traces from minidumps left behind by crashed processes</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="mozdebug.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mozdebug</span></code> — Configure and launch compatible debuggers.</a></li>
+          </ul></li>
+         <li class="toctree-l2"><a class="reference internal" href="servingcontent.html">Handling content for the browser</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="loggingreporting.html">Logging and reporting</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="devicemanagement.html">Device management</a></li>
+        </ul></li>
+       <li class="toctree-l1"><a class="reference internal" href="../python/index.html">Using third-party Python packages</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Metrics Collected in Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../metrics/index.html">Metrics</a></li>
+      </ul>
+     </div>
+    </div>
+   </nav>
+   <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+    <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+     <i data-toggle="wy-nav-top" class="fa fa-bars"></i> <a href="../index.html">Firefox Source Docs</a>
+    </nav>
+    <div class="wy-nav-content">
+     <div class="rst-content">
+      <!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+      <div role="navigation" aria-label="Page navigation">
+       <ul class="wy-breadcrumbs">
+        <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+        <li class="breadcrumb-item"><a href="index.html">mozbase</a></li>
+        <li class="breadcrumb-item"><a href="setuprunning.html">Set up and running</a></li>
+        <li class="breadcrumb-item active"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mozprofile</span></code> — Create and modify Mozilla application profiles</li>
+        <li class="wy-breadcrumbs-aside"><a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Developer+Infrastructure&amp;component=Firefox+Source+Docs%3A+Content&amp;short_desc=Documentation+issue+on+mozbase/mozprofile&amp;comment=URL+=+https://firefox-source-docs.mozilla.org/mozbase/mozprofile.html&amp;bug_file_loc=https://firefox-source-docs.mozilla.org/mozbase/mozprofile.html" rel="nofollow">Report an issue</a> / <a href="../_sources/mozbase/mozprofile.rst.txt" rel="nofollow"> View page source</a></li>
+       </ul>
+       <hr>
+      </div>
+      <div role="main" class="document" itemscope itemtype="http://schema.org/Article">
+       <div itemprop="articleBody">
+        <section id="mozprofile-create-and-modify-mozilla-application-profiles">
+         <h1><code class="xref py py-mod docutils literal notranslate"><span class="pre">mozprofile</span></code> — Create and modify Mozilla application profiles<a class="headerlink" href="#mozprofile-create-and-modify-mozilla-application-profiles" title="Link to this heading">?</a></h1>
+         <p><a class="reference external" href="https://hg.mozilla.org/mozilla-central/file/tip/testing/mozbase/mozprofile">Mozprofile</a> is a python tool for creating and managing profiles for Mozilla’s applications (Firefox, Thunderbird, etc.). In addition to creating profiles, mozprofile can install <a class="reference external" href="https://developer.mozilla.org/en/addons">addons</a> and set preferences. Mozprofile can be utilized from the command line or as an API.</p>
+         <p>The preferred way of setting up profile data (addons, permissions, preferences etc) is by passing them to the <a class="reference internal" href="#profile">profile</a> constructor.</p>
+         <section id="module-mozprofile.addons">
+          <span id="addons"></span>
+          <h2>Addons<a class="headerlink" href="#module-mozprofile.addons" title="Link to this heading">?</a></h2>
+          <dl class="py exception">
+           <dt class="sig sig-object py" id="mozprofile.addons.AddonFormatError">
+            <em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mozprofile.addons.</span></span><span class="sig-name descname"><span class="pre">AddonFormatError</span></span><a class="headerlink" href="#mozprofile.addons.AddonFormatError" title="Link to this definition">?</a>
+           </dt>
+           <dd>
+            <p>Exception for not well-formed add-on manifest files</p>
+           </dd>
+          </dl>
+          <dl class="py class">
+           <dt class="sig sig-object py" id="mozprofile.addons.AddonManager">
+            <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mozprofile.addons.</span></span><span class="sig-name descname"><span class="pre">AddonManager</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">profile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">restore</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mozprofile.addons.AddonManager" title="Link to this definition">?</a>
+           </dt>
+           <dd>
+            <p>Handles all operations regarding addons in a profile including: installing and cleaning addons</p>
+            <dl class="py method">
+             <dt class="sig sig-object py" id="mozprofile.addons.AddonManager.addon_details">
+              <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">addon_details</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">addon_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mozprofile.addons.AddonManager.addon_details" title="Link to this definition">?</a>
+             </dt>
+             <dd>
+              <p>Returns a dictionary of details about the addon.</p>
+              <dl class="field-list simple">
+               <dt class="field-odd">
+                Parameters<span class="colon">:</span>
+               </dt>
+               <dd class="field-odd">
+                <p><strong>addon_path</strong> – path to the add-on directory or XPI</p>
+               </dd>
+              </dl>
+              <p>Returns:</p>
+              <div class="highlight-default notranslate">
+               <div class="highlight">
+                <pre><span></span><span class="p">{</span><span class="s1">'id'</span><span class="p">:</span>      <span class="sa">u</span><span class="s1">'rainbow@colors.org'</span><span class="p">,</span> <span class="c1"># id of the addon</span>
+ <span class="s1">'version'</span><span class="p">:</span> <span class="sa">u</span><span class="s1">'1.4'</span><span class="p">,</span>                <span class="c1"># version of the addon</span>
+ <span class="s1">'name'</span><span class="p">:</span>    <span class="sa">u</span><span class="s1">'Rainbow'</span><span class="p">,</span>            <span class="c1"># name of the addon</span>
+ <span class="s1">'unpack'</span><span class="p">:</span>  <span class="kc">False</span> <span class="p">}</span>                <span class="c1"># whether to unpack the addon</span>
+</pre>
+               </div>
+              </div>
+             </dd>
+            </dl>
+            <dl class="py method">
+             <dt class="sig sig-object py" id="mozprofile.addons.AddonManager.clean">
+              <span class="sig-name descname"><span class="pre">clean</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#mozprofile.addons.AddonManager.clean" title="Link to this definition">?</a>
+             </dt>
+             <dd>
+              <p>Clean up addons in the profile.</p>
+             </dd>
+            </dl>
+            <dl class="py method">
+             <dt class="sig sig-object py" id="mozprofile.addons.AddonManager.get_addon_path">
+              <span class="sig-name descname"><span class="pre">get_addon_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">addon_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mozprofile.addons.AddonManager.get_addon_path" title="Link to this definition">?</a>
+             </dt>
+             <dd>
+              <p>Returns the path to the installed add-on</p>
+              <dl class="field-list simple">
+               <dt class="field-odd">
+                Parameters<span class="colon">:</span>
+               </dt>
+               <dd class="field-odd">
+                <p><strong>addon_id</strong> – id of the add-on to retrieve the path from</p>
+               </dd>
+              </dl>
+             </dd>
+            </dl>
+            <dl class="py method">
+             <dt class="sig sig-object py" id="mozprofile.addons.AddonManager.install">
+              <span class="sig-name descname"><span class="pre">install</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">addons</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mozprofile.addons.AddonManager.install" title="Link to this definition">?</a>
+             </dt>
+             <dd>
+              <p>Installs addons from a filepath or directory of addons in the profile.</p>
+              <dl class="field-list simple">
+               <dt class="field-odd">
+                Parameters<span class="colon">:</span>
+               </dt>
+               <dd class="field-odd">
+                <ul class="simple">
+                 <li>
+                  <p><strong>addons</strong> – paths to .xpi or addon directories</p></li>
+                 <li>
+                  <p><strong>unpack</strong> – whether to unpack unless specified otherwise in the install.rdf</p></li>
+                </ul>
+               </dd>
+              </dl>
+             </dd>
+            </dl>
+            <dl class="py method">
+             <dt class="sig sig-object py" id="mozprofile.addons.AddonManager.is_addon">
+              <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_addon</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">addon_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mozprofile.addons.AddonManager.is_addon" title="Link to this definition">?</a>
+             </dt>
+             <dd>
+              <p>Checks if the given path is a valid addon</p>
+              <dl class="field-list simple">
+               <dt class="field-odd">
+                Parameters<span class="colon">:</span>
+               </dt>
+               <dd class="field-odd">
+                <p><strong>addon_path</strong> – path to the add-on directory or XPI</p>
+               </dd>
+              </dl>
+             </dd>
+            </dl>
+            <dl class="py method">
+             <dt class="sig sig-object py" id="mozprofile.addons.AddonManager.remove_addon">
+              <span class="sig-name descname"><span class="pre">remove_addon</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">addon_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mozprofile.addons.AddonManager.remove_addon" title="Link to this definition">?</a>
+             </dt>
+             <dd>
+              <p>Remove the add-on as specified by the id</p>
+              <dl class="field-list simple">
+               <dt class="field-odd">
+                Parameters<span class="colon">:</span>
+               </dt>
+               <dd class="field-odd">
+                <p><strong>addon_id</strong> – id of the add-on to be removed</p>
+               </dd>
+              </dl>
+             </dd>
+            </dl>
+           </dd>
+          </dl>
+          <p>Addons may be installed individually or from a manifest.</p>
+          <p>Example:</p>
+          <div class="highlight-default notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="kn">from</span> <span class="nn">mozprofile</span> <span class="kn">import</span> <span class="n">FirefoxProfile</span>
+
+<span class="c1"># create new profile to pass to mozmill/mozrunner</span>
+<span class="n">profile</span> <span class="o">=</span> <span class="n">FirefoxProfile</span><span class="p">(</span><span class="n">addons</span><span class="o">=</span><span class="p">[</span><span class="s2">"adblock.xpi"</span><span class="p">])</span>
+</pre>
+           </div>
+          </div>
+         </section>
+         <section id="module-mozprofile.cli">
+          <span id="command-line-interface"></span>
+          <h2>Command Line Interface<a class="headerlink" href="#module-mozprofile.cli" title="Link to this heading">?</a></h2>
+          <p>Creates and/or modifies a Firefox profile. The profile can be modified by passing in addons to install or preferences to set. If no profile is specified, a new profile is created and the path of the resulting profile is printed.</p>
+          <dl class="py exception">
+           <dt class="sig sig-object py" id="mozprofile.cli.KeyValueParseError">
+            <em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mozprofile.cli.</span></span><span class="sig-name descname"><span class="pre">KeyValueParseError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">errors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mozprofile.cli.KeyValueParseError" title="Link to this definition">?</a>
+           </dt>
+           <dd>
+            <p>Error when parsing strings of serialized key-values.</p>
+           </dd>
+          </dl>
+          <dl class="py class">
+           <dt class="sig sig-object py" id="mozprofile.cli.MozProfileCLI">
+            <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mozprofile.cli.</span></span><span class="sig-name descname"><span class="pre">MozProfileCLI</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">args</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['doc',</span> <span class="pre">'--upload',</span> <span class="pre">'--no-open',</span> <span class="pre">'--no-serve',</span> <span class="pre">'--write-url',</span> <span class="pre">'/builds/worker/firefox-source-docs-url.txt',</span> <span class="pre">'--dump-trees=/builds/worker/artifacts/trees.json']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_options</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mozprofile.cli.MozProfileCLI" title="Link to this definition">?</a>
+           </dt>
+           <dd>
+            <p>The Command Line Interface for <code class="docutils literal notranslate"><span class="pre">mozprofile</span></code>.</p>
+            <dl class="py method">
+             <dt class="sig sig-object py" id="mozprofile.cli.MozProfileCLI.preferences">
+              <span class="sig-name descname"><span class="pre">preferences</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#mozprofile.cli.MozProfileCLI.preferences" title="Link to this definition">?</a>
+             </dt>
+             <dd>
+              <p>profile preferences</p>
+             </dd>
+            </dl>
+            <dl class="py method">
+             <dt class="sig sig-object py" id="mozprofile.cli.MozProfileCLI.profile">
+              <span class="sig-name descname"><span class="pre">profile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">restore</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mozprofile.cli.MozProfileCLI.profile" title="Link to this definition">?</a>
+             </dt>
+             <dd>
+              <p>create the profile</p>
+             </dd>
+            </dl>
+            <dl class="py method">
+             <dt class="sig sig-object py" id="mozprofile.cli.MozProfileCLI.profile_args">
+              <span class="sig-name descname"><span class="pre">profile_args</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#mozprofile.cli.MozProfileCLI.profile_args" title="Link to this definition">?</a>
+             </dt>
+             <dd>
+              <p>arguments to instantiate the profile class</p>
+             </dd>
+            </dl>
+            <dl class="py attribute">
+             <dt class="sig sig-object py" id="mozprofile.cli.MozProfileCLI.profile_class">
+              <span class="sig-name descname"><span class="pre">profile_class</span></span><a class="headerlink" href="#mozprofile.cli.MozProfileCLI.profile_class" title="Link to this definition">?</a>
+             </dt>
+             <dd>
+              <p>alias of <a class="reference internal" href="#mozprofile.profile.Profile" title="mozprofile.profile.Profile"><code class="xref py py-class docutils literal notranslate"><span class="pre">Profile</span></code></a></p>
+             </dd>
+            </dl>
+           </dd>
+          </dl>
+          <dl class="py function">
+           <dt class="sig sig-object py" id="mozprofile.cli.cli">
+            <span class="sig-prename descclassname"><span class="pre">mozprofile.cli.</span></span><span class="sig-name descname"><span class="pre">cli</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">args</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['doc',</span> <span class="pre">'--upload',</span> <span class="pre">'--no-open',</span> <span class="pre">'--no-serve',</span> <span class="pre">'--write-url',</span> <span class="pre">'/builds/worker/firefox-source-docs-url.txt',</span> <span class="pre">'--dump-trees=/builds/worker/artifacts/trees.json']</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mozprofile.cli.cli" title="Link to this definition">?</a>
+           </dt>
+           <dd>
+            <p>Handles the command line arguments for <code class="docutils literal notranslate"><span class="pre">mozprofile</span></code> via <code class="docutils literal notranslate"><span class="pre">sys.argv</span></code></p>
+           </dd>
+          </dl>
+          <dl class="py function">
+           <dt class="sig sig-object py" id="mozprofile.cli.parse_key_value">
+            <span class="sig-prename descclassname"><span class="pre">mozprofile.cli.</span></span><span class="sig-name descname"><span class="pre">parse_key_value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">strings</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">separator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'='</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'key,</span> <span class="pre">value'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mozprofile.cli.parse_key_value" title="Link to this definition">?</a>
+           </dt>
+           <dd>
+            <p>Parse string-serialized key-value pairs in the form of <cite>key = value</cite>.</p>
+            <dl class="field-list simple">
+             <dt class="field-odd">
+              Parameters<span class="colon">:</span>
+             </dt>
+             <dd class="field-odd">
+              <ul class="simple">
+               <li>
+                <p><strong>strings</strong> (<em>list</em>) – List of strings to parse.</p></li>
+               <li>
+                <p><strong>separator</strong> (<em>str</em>) – Identifier used to split the strings.</p></li>
+              </ul>
+             </dd>
+             <dt class="field-even">
+              Returns<span class="colon">:</span>
+             </dt>
+             <dd class="field-even">
+              <p>A list of (&lt;key&gt;, &lt;value&gt;) tuples. Whitespace is not stripped.</p>
+             </dd>
+             <dt class="field-odd">
+              Return type<span class="colon">:</span>
+             </dt>
+             <dd class="field-odd">
+              <p>list</p>
+             </dd>
+             <dt class="field-even">
+              Raises<span class="colon">:</span>
+             </dt>
+             <dd class="field-even">
+              <p><a class="reference internal" href="#mozprofile.cli.KeyValueParseError" title="mozprofile.cli.KeyValueParseError"><strong>KeyValueParseError</strong></a> –</p>
+             </dd>
+            </dl>
+           </dd>
+          </dl>
+          <dl class="py function">
+           <dt class="sig sig-object py" id="mozprofile.cli.parse_preferences">
+            <span class="sig-prename descclassname"><span class="pre">mozprofile.cli.</span></span><span class="sig-name descname"><span class="pre">parse_preferences</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prefs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'--setpref='</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mozprofile.cli.parse_preferences" title="Link to this definition">?</a>
+           </dt>
+           <dd>
+            <p>Parse preferences specified on the command line.</p>
+            <dl class="field-list simple">
+             <dt class="field-odd">
+              Parameters<span class="colon">:</span>
+             </dt>
+             <dd class="field-odd">
+              <p><strong>prefs</strong> (<em>list</em>) – A list of strings, usually of the form “&lt;pref&gt;=&lt;value&gt;”.</p>
+             </dd>
+             <dt class="field-even">
+              Returns<span class="colon">:</span>
+             </dt>
+             <dd class="field-even">
+              <p></p>
+              <dl class="simple">
+               <dt>
+                A dictionary of the form {&lt;pref&gt;: &lt;value&gt;} where values have been
+               </dt>
+               <dd>
+                <p>cast.</p>
+               </dd>
+              </dl>
+              <p></p>
+             </dd>
+             <dt class="field-odd">
+              Return type<span class="colon">:</span>
+             </dt>
+             <dd class="field-odd">
+              <p>dict</p>
+             </dd>
+            </dl>
+           </dd>
+          </dl>
+          <p>The profile to be operated on may be specified with the <code class="docutils literal notranslate"><span class="pre">--profile</span></code> switch. If a profile is not specified, one will be created in a temporary directory which will be echoed to the terminal:</p>
+          <div class="highlight-default notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="p">(</span><span class="n">mozmill</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">mozprofile</span>
+<span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">tmp4q1iEU</span><span class="o">.</span><span class="n">mozrunner</span>
+<span class="p">(</span><span class="n">mozmill</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">ls</span> <span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">tmp4q1iEU</span><span class="o">.</span><span class="n">mozrunner</span>
+<span class="n">user</span><span class="o">.</span><span class="n">js</span>
+</pre>
+           </div>
+          </div>
+          <p>To run mozprofile from the command line enter: <code class="docutils literal notranslate"><span class="pre">mozprofile</span> <span class="pre">--help</span></code> for a list of options.</p>
+         </section>
+         <section id="module-mozprofile.permissions">
+          <span id="permissions"></span>
+          <h2>Permissions<a class="headerlink" href="#module-mozprofile.permissions" title="Link to this heading">?</a></h2>
+          <p>add permissions to the profile</p>
+          <dl class="py exception">
+           <dt class="sig sig-object py" id="mozprofile.permissions.BadPortLocationError">
+            <em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mozprofile.permissions.</span></span><span class="sig-name descname"><span class="pre">BadPortLocationError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">given_port</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mozprofile.permissions.BadPortLocationError" title="Link to this definition">?</a>
+           </dt>
+           <dd>
+            <p>Location has invalid port value.</p>
+           </dd>
+          </dl>
+          <dl class="py exception">
+           <dt class="sig sig-object py" id="mozprofile.permissions.DuplicateLocationError">
+            <em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mozprofile.permissions.</span></span><span class="sig-name descname"><span class="pre">DuplicateLocationError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mozprofile.permissions.DuplicateLocationError" title="Link to this definition">?</a>
+           </dt>
+           <dd>
+            <p>Same location defined twice.</p>
+           </dd>
+          </dl>
+          <dl class="py class">
+           <dt class="sig sig-object py" id="mozprofile.permissions.Location">
+            <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mozprofile.permissions.</span></span><span class="sig-name descname"><span class="pre">Location</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scheme</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">host</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">port</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mozprofile.permissions.Location" title="Link to this definition">?</a>
+           </dt>
+           <dd>
+            <p>Represents a location line in server-locations.txt.</p>
+            <dl class="py method">
+             <dt class="sig sig-object py" id="mozprofile.permissions.Location.isEqual">
+              <span class="sig-name descname"><span class="pre">isEqual</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">location</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mozprofile.permissions.Location.isEqual" title="Link to this definition">?</a>
+             </dt>
+             <dd>
+              <p>compare scheme://host:port, but ignore options</p>
+             </dd>
+            </dl>
+           </dd>
+          </dl>
+          <dl class="py exception">
+           <dt class="sig sig-object py" id="mozprofile.permissions.LocationsSyntaxError">
+            <em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mozprofile.permissions.</span></span><span class="sig-name descname"><span class="pre">LocationsSyntaxError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lineno</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">err</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mozprofile.permissions.LocationsSyntaxError" title="Link to this definition">?</a>
+           </dt>
+           <dd>
+            <p>Signifies a syntax error on a particular line in server-locations.txt.</p>
+           </dd>
+          </dl>
+          <dl class="py exception">
+           <dt class="sig sig-object py" id="mozprofile.permissions.MissingPrimaryLocationError">
+            <em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mozprofile.permissions.</span></span><span class="sig-name descname"><span class="pre">MissingPrimaryLocationError</span></span><a class="headerlink" href="#mozprofile.permissions.MissingPrimaryLocationError" title="Link to this definition">?</a>
+           </dt>
+           <dd>
+            <p>No primary location defined in locations file.</p>
+           </dd>
+          </dl>
+          <dl class="py exception">
+           <dt class="sig sig-object py" id="mozprofile.permissions.MultiplePrimaryLocationsError">
+            <em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mozprofile.permissions.</span></span><span class="sig-name descname"><span class="pre">MultiplePrimaryLocationsError</span></span><a class="headerlink" href="#mozprofile.permissions.MultiplePrimaryLocationsError" title="Link to this definition">?</a>
+           </dt>
+           <dd>
+            <p>More than one primary location defined.</p>
+           </dd>
+          </dl>
+          <dl class="py class">
+           <dt class="sig sig-object py" id="mozprofile.permissions.Permissions">
+            <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mozprofile.permissions.</span></span><span class="sig-name descname"><span class="pre">Permissions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">locations</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mozprofile.permissions.Permissions" title="Link to this definition">?</a>
+           </dt>
+           <dd>
+            <p>Allows handling of permissions for <code class="docutils literal notranslate"><span class="pre">mozprofile</span></code></p>
+            <dl class="py method">
+             <dt class="sig sig-object py" id="mozprofile.permissions.Permissions.network_prefs">
+              <span class="sig-name descname"><span class="pre">network_prefs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">proxy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mozprofile.permissions.Permissions.network_prefs" title="Link to this definition">?</a>
+             </dt>
+             <dd>
+              <p>take known locations and generate preferences to handle permissions and proxy returns a tuple of prefs, user_prefs</p>
+             </dd>
+            </dl>
+            <dl class="py method">
+             <dt class="sig sig-object py" id="mozprofile.permissions.Permissions.pac_prefs">
+              <span class="sig-name descname"><span class="pre">pac_prefs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_proxy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mozprofile.permissions.Permissions.pac_prefs" title="Link to this definition">?</a>
+             </dt>
+             <dd>
+              <p>return preferences for Proxy Auto Config.</p>
+             </dd>
+            </dl>
+           </dd>
+          </dl>
+          <dl class="py class">
+           <dt class="sig sig-object py" id="mozprofile.permissions.ServerLocations">
+            <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mozprofile.permissions.</span></span><span class="sig-name descname"><span class="pre">ServerLocations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mozprofile.permissions.ServerLocations" title="Link to this definition">?</a>
+           </dt>
+           <dd>
+            <p>Iterable collection of locations. Use provided functions to add new locations, rather that manipulating _locations directly, in order to check for errors and to ensure the callback is called, if given.</p>
+            <dl class="py method">
+             <dt class="sig sig-object py" id="mozprofile.permissions.ServerLocations.read">
+              <span class="sig-name descname"><span class="pre">read</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_for_primary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mozprofile.permissions.ServerLocations.read" title="Link to this definition">?</a>
+             </dt>
+             <dd>
+              <p>Reads the file and adds all valid locations to the <code class="docutils literal notranslate"><span class="pre">self._locations</span></code> array.</p>
+              <dl class="field-list simple">
+               <dt class="field-odd">
+                Parameters<span class="colon">:</span>
+               </dt>
+               <dd class="field-odd">
+                <ul class="simple">
+                 <li>
+                  <p><strong>filename</strong> – in the format of <a class="reference external" href="http://searchfox.org/mozilla-central/source/build/pgo/server-locations.txt#noqa">server-locations.txt</a></p></li>
+                 <li>
+                  <p><strong>check_for_primary</strong> – if True, a <code class="docutils literal notranslate"><span class="pre">MissingPrimaryLocationError</span></code> exception is raised if no primary is found</p></li>
+                </ul>
+               </dd>
+              </dl>
+              <p>The only exception is that the port, if not defined, defaults to 80 or 443.</p>
+              <p>FIXME: Shouldn’t this default to the protocol-appropriate port? Is there any reason to have defaults at all?</p>
+             </dd>
+            </dl>
+           </dd>
+          </dl>
+          <p>You can set permissions by creating a <code class="docutils literal notranslate"><span class="pre">ServerLocations</span></code> object that you pass to the <code class="docutils literal notranslate"><span class="pre">Profile</span></code> constructor. Hosts can be added to it with <code class="docutils literal notranslate"><span class="pre">add_host(host,</span> <span class="pre">port)</span></code>. <code class="docutils literal notranslate"><span class="pre">port</span></code> can be 0.</p>
+         </section>
+         <section id="module-mozprofile.prefs">
+          <span id="preferences"></span>
+          <h2>Preferences<a class="headerlink" href="#module-mozprofile.prefs" title="Link to this heading">?</a></h2>
+          <p>user preferences</p>
+          <dl class="py class">
+           <dt class="sig sig-object py" id="mozprofile.prefs.Preferences">
+            <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mozprofile.prefs.</span></span><span class="sig-name descname"><span class="pre">Preferences</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prefs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mozprofile.prefs.Preferences" title="Link to this definition">?</a>
+           </dt>
+           <dd>
+            <p>assembly of preferences from various sources</p>
+            <dl class="py method">
+             <dt class="sig sig-object py" id="mozprofile.prefs.Preferences.add">
+              <span class="sig-name descname"><span class="pre">add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prefs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cast</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mozprofile.prefs.Preferences.add" title="Link to this definition">?</a>
+             </dt>
+             <dd>
+              <dl class="field-list simple">
+               <dt class="field-odd">
+                Parameters<span class="colon">:</span>
+               </dt>
+               <dd class="field-odd">
+                <ul class="simple">
+                 <li>
+                  <p><strong>prefs</strong></p></li>
+                 <li>
+                  <p><strong>cast</strong> – whether to cast strings to value, e.g. ‘1’ -&gt; 1</p></li>
+                </ul>
+               </dd>
+              </dl>
+             </dd>
+            </dl>
+            <dl class="py method">
+             <dt class="sig sig-object py" id="mozprofile.prefs.Preferences.add_file">
+              <span class="sig-name descname"><span class="pre">add_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mozprofile.prefs.Preferences.add_file" title="Link to this definition">?</a>
+             </dt>
+             <dd>
+              <p>a preferences from a file</p>
+              <dl class="field-list simple">
+               <dt class="field-odd">
+                Parameters<span class="colon">:</span>
+               </dt>
+               <dd class="field-odd">
+                <p><strong>path</strong></p>
+               </dd>
+              </dl>
+             </dd>
+            </dl>
+            <dl class="py method">
+             <dt class="sig sig-object py" id="mozprofile.prefs.Preferences.cast">
+              <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cast</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mozprofile.prefs.Preferences.cast" title="Link to this definition">?</a>
+             </dt>
+             <dd>
+              <p>interpolate a preference from a string from the command line or from e.g. an .ini file, there is no good way to denote what type the preference value is, as natively it is a string</p>
+              <ul class="simple">
+               <li>
+                <p>integers will get cast to integers</p></li>
+               <li>
+                <p>true/false will get cast to True/False</p></li>
+               <li>
+                <p>anything enclosed in single quotes will be treated as a string with the ‘’s removed from both sides</p></li>
+              </ul>
+             </dd>
+            </dl>
+            <dl class="py method">
+             <dt class="sig sig-object py" id="mozprofile.prefs.Preferences.read">
+              <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">read</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mozprofile.prefs.Preferences.read" title="Link to this definition">?</a>
+             </dt>
+             <dd>
+              <p>read preferences from a file</p>
+             </dd>
+            </dl>
+            <dl class="py method">
+             <dt class="sig sig-object py" id="mozprofile.prefs.Preferences.read_ini">
+              <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">read_ini</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">section</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mozprofile.prefs.Preferences.read_ini" title="Link to this definition">?</a>
+             </dt>
+             <dd>
+              <p>read preferences from an .ini file</p>
+             </dd>
+            </dl>
+            <dl class="py method">
+             <dt class="sig sig-object py" id="mozprofile.prefs.Preferences.read_json">
+              <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">read_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mozprofile.prefs.Preferences.read_json" title="Link to this definition">?</a>
+             </dt>
+             <dd>
+              <p>read preferences from a JSON blob</p>
+             </dd>
+            </dl>
+            <dl class="py method">
+             <dt class="sig sig-object py" id="mozprofile.prefs.Preferences.read_prefs">
+              <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">read_prefs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pref_setter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'user_pref'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interpolation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mozprofile.prefs.Preferences.read_prefs" title="Link to this definition">?</a>
+             </dt>
+             <dd>
+              <p>Read preferences from (e.g.) prefs.js</p>
+              <dl class="field-list simple">
+               <dt class="field-odd">
+                Parameters<span class="colon">:</span>
+               </dt>
+               <dd class="field-odd">
+                <ul class="simple">
+                 <li>
+                  <p><strong>path</strong> – The path to the preference file to read.</p></li>
+                 <li>
+                  <p><strong>pref_setter</strong> – The name of the function used to set preferences in the preference file.</p></li>
+                 <li>
+                  <p><strong>interpolation</strong> – If provided, a dict that will be passed to str.format to interpolate preference values.</p></li>
+                </ul>
+               </dd>
+              </dl>
+             </dd>
+            </dl>
+            <dl class="py method">
+             <dt class="sig sig-object py" id="mozprofile.prefs.Preferences.write">
+              <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">write</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pref_string</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'user_pref(%s,</span> <span class="pre">%s);'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mozprofile.prefs.Preferences.write" title="Link to this definition">?</a>
+             </dt>
+             <dd>
+              <p>write preferences to a file</p>
+             </dd>
+            </dl>
+           </dd>
+          </dl>
+          <dl class="py exception">
+           <dt class="sig sig-object py" id="mozprofile.prefs.PreferencesReadError">
+            <em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mozprofile.prefs.</span></span><span class="sig-name descname"><span class="pre">PreferencesReadError</span></span><a class="headerlink" href="#mozprofile.prefs.PreferencesReadError" title="Link to this definition">?</a>
+           </dt>
+           <dd>
+            <p>read error for preferences files</p>
+           </dd>
+          </dl>
+          <p>Preferences can be set in several ways:</p>
+          <ul class="simple">
+           <li>
+            <p>using the API: You can make a dictionary with the preferences and pass it to the <code class="docutils literal notranslate"><span class="pre">Profile</span></code> constructor. You can also add more preferences with the <code class="docutils literal notranslate"><span class="pre">Profile.set_preferences</span></code> method.</p></li>
+           <li>
+            <p>using a JSON blob file: <code class="docutils literal notranslate"><span class="pre">mozprofile</span> <span class="pre">--preferences</span> <span class="pre">myprefs.json</span></code></p></li>
+           <li>
+            <p>using a <code class="docutils literal notranslate"><span class="pre">.ini</span></code> file: <code class="docutils literal notranslate"><span class="pre">mozprofile</span> <span class="pre">--preferences</span> <span class="pre">myprefs.ini</span></code></p></li>
+           <li>
+            <p>via the command line: <code class="docutils literal notranslate"><span class="pre">mozprofile</span> <span class="pre">--pref</span> <span class="pre">key:value</span> <span class="pre">--pref</span> <span class="pre">key:value</span> <span class="pre">[...]</span></code></p></li>
+          </ul>
+          <p>When setting preferences from an <code class="docutils literal notranslate"><span class="pre">.ini</span></code> file or the <code class="docutils literal notranslate"><span class="pre">--pref</span></code> switch, the value will be interpolated as an integer or a boolean (<code class="docutils literal notranslate"><span class="pre">true</span></code>/<code class="docutils literal notranslate"><span class="pre">false</span></code>) if possible.</p>
+         </section>
+         <section id="module-mozprofile.profile">
+          <span id="profile"></span>
+          <h2>Profile<a class="headerlink" href="#module-mozprofile.profile" title="Link to this heading">?</a></h2>
+          <dl class="py class">
+           <dt class="sig sig-object py" id="mozprofile.profile.FirefoxProfile">
+            <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mozprofile.profile.</span></span><span class="sig-name descname"><span class="pre">FirefoxProfile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">profile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">addons</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preferences</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">locations</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proxy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">restore</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allowlistpaths</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mozprofile.profile.FirefoxProfile" title="Link to this definition">?</a>
+           </dt>
+           <dd>
+            <p>Specialized Profile subclass for Firefox</p>
+           </dd>
+          </dl>
+          <dl class="py class">
+           <dt class="sig sig-object py" id="mozprofile.profile.Profile">
+            <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mozprofile.profile.</span></span><span class="sig-name descname"><span class="pre">Profile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">profile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">addons</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preferences</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">locations</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proxy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">restore</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allowlistpaths</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mozprofile.profile.Profile" title="Link to this definition">?</a>
+           </dt>
+           <dd>
+            <p>Handles all operations regarding profile.</p>
+            <p>Creating new profiles, installing add-ons, setting preferences and handling cleanup.</p>
+            <p>The files associated with the profile will be removed automatically after the object is garbage collected:</p>
+            <div class="highlight-default notranslate">
+             <div class="highlight">
+              <pre><span></span><span class="n">profile</span> <span class="o">=</span> <span class="n">Profile</span><span class="p">()</span>
+<span class="nb">print</span> <span class="n">profile</span><span class="o">.</span><span class="n">profile</span>  <span class="c1"># this is the path to the created profile</span>
+<span class="k">del</span> <span class="n">profile</span>
+<span class="c1"># the profile path has been removed from disk</span>
+</pre>
+             </div>
+            </div>
+            <p><a class="reference internal" href="#mozprofile.profile.Profile.cleanup" title="mozprofile.profile.Profile.cleanup"><code class="xref py py-meth docutils literal notranslate"><span class="pre">cleanup()</span></code></a> is called under the hood to remove the profile files. You can ensure this method is called (even in the case of exception) by using the profile as a context manager:</p>
+            <div class="highlight-default notranslate">
+             <div class="highlight">
+              <pre><span></span><span class="k">with</span> <span class="n">Profile</span><span class="p">()</span> <span class="k">as</span> <span class="n">profile</span><span class="p">:</span>
+    <span class="c1"># do things with the profile</span>
+    <span class="k">pass</span>
+<span class="c1"># profile.cleanup() has been called here</span>
+</pre>
+             </div>
+            </div>
+            <dl class="py method">
+             <dt class="sig sig-object py" id="mozprofile.profile.Profile.clean_preferences">
+              <span class="sig-name descname"><span class="pre">clean_preferences</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#mozprofile.profile.Profile.clean_preferences" title="Link to this definition">?</a>
+             </dt>
+             <dd>
+              <p>Removed preferences added by mozrunner.</p>
+             </dd>
+            </dl>
+            <dl class="py method">
+             <dt class="sig sig-object py" id="mozprofile.profile.Profile.cleanup">
+              <span class="sig-name descname"><span class="pre">cleanup</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#mozprofile.profile.Profile.cleanup" title="Link to this definition">?</a>
+             </dt>
+             <dd>
+              <p>Cleanup operations for the profile.</p>
+             </dd>
+            </dl>
+            <dl class="py method">
+             <dt class="sig sig-object py" id="mozprofile.profile.Profile.pop_preferences">
+              <span class="sig-name descname"><span class="pre">pop_preferences</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mozprofile.profile.Profile.pop_preferences" title="Link to this definition">?</a>
+             </dt>
+             <dd>
+              <p>pop the last set of preferences added returns True if popped</p>
+             </dd>
+            </dl>
+            <dl class="py method">
+             <dt class="sig sig-object py" id="mozprofile.profile.Profile.set_persistent_preferences">
+              <span class="sig-name descname"><span class="pre">set_persistent_preferences</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">preferences</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mozprofile.profile.Profile.set_persistent_preferences" title="Link to this definition">?</a>
+             </dt>
+             <dd>
+              <p>Adds preferences dict to profile preferences and save them during a profile reset</p>
+             </dd>
+            </dl>
+            <dl class="py method">
+             <dt class="sig sig-object py" id="mozprofile.profile.Profile.set_preferences">
+              <span class="sig-name descname"><span class="pre">set_preferences</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">preferences</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'user.js'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mozprofile.profile.Profile.set_preferences" title="Link to this definition">?</a>
+             </dt>
+             <dd>
+              <p>Adds preferences dict to profile preferences</p>
+             </dd>
+            </dl>
+            <dl class="py method">
+             <dt class="sig sig-object py" id="mozprofile.profile.Profile.summary">
+              <span class="sig-name descname"><span class="pre">summary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">return_parts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mozprofile.profile.Profile.summary" title="Link to this definition">?</a>
+             </dt>
+             <dd>
+              <p>returns string summarizing profile information. if return_parts is true, return the (Part_name, value) list of tuples instead of the assembled string</p>
+             </dd>
+            </dl>
+           </dd>
+          </dl>
+          <dl class="py class">
+           <dt class="sig sig-object py" id="mozprofile.profile.ThunderbirdProfile">
+            <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mozprofile.profile.</span></span><span class="sig-name descname"><span class="pre">ThunderbirdProfile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">profile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">addons</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preferences</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">locations</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proxy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">restore</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allowlistpaths</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mozprofile.profile.ThunderbirdProfile" title="Link to this definition">?</a>
+           </dt>
+           <dd>
+            <p>Specialized Profile subclass for Thunderbird</p>
+           </dd>
+          </dl>
+          <dl class="py function">
+           <dt class="sig sig-object py" id="mozprofile.profile.create_profile">
+            <span class="sig-prename descclassname"><span class="pre">mozprofile.profile.</span></span><span class="sig-name descname"><span class="pre">create_profile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mozprofile.profile.create_profile" title="Link to this definition">?</a>
+           </dt>
+           <dd>
+            <p>Create a profile given an application name.</p>
+            <dl class="field-list simple">
+             <dt class="field-odd">
+              Parameters<span class="colon">:</span>
+             </dt>
+             <dd class="field-odd">
+              <ul class="simple">
+               <li>
+                <p><strong>app</strong> – String name of the application to create a profile for, e.g ‘firefox’.</p></li>
+               <li>
+                <p><strong>kwargs</strong> – Same as the arguments for the Profile class (optional).</p></li>
+              </ul>
+             </dd>
+             <dt class="field-even">
+              Returns<span class="colon">:</span>
+             </dt>
+             <dd class="field-even">
+              <p>An application specific Profile instance</p>
+             </dd>
+             <dt class="field-odd">
+              Raises<span class="colon">:</span>
+             </dt>
+             <dd class="field-odd">
+              <p>NotImplementedError</p>
+             </dd>
+            </dl>
+           </dd>
+          </dl>
+         </section>
+         <section id="resources">
+          <h2>Resources<a class="headerlink" href="#resources" title="Link to this heading">?</a></h2>
+          <p>Other Mozilla programs offer additional and overlapping functionality for profiles. There is also substantive documentation on profiles and their management.</p>
+          <ul class="simple">
+           <li>
+            <p>profile <a class="reference external" href="http://support.mozilla.com/en-US/kb/Profiles">documentation</a></p></li>
+          </ul>
+         </section>
+        </section>
+       </div>
+      </div>
+      <footer>
+       <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="mozpower.html" class="btn btn-neutral float-left" title="mozpower — Power-usage testing" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a> <a href="mozprocess.html" class="btn btn-neutral float-right" title="mozprocess — Launch and manage processes" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+       </div>
+       <hr>
+       <div role="contentinfo">
+        <p></p>
+       </div> Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+      </footer>
+     </div>
+    </div>
+   </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ </body>
+</html>

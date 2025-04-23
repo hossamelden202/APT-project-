@@ -1,0 +1,39 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+ <head>
+  <script src="http://maps.google.com/maps?file=api&amp;v=1&amp;key=ABQIAAAAoPtiJ3rhDrmatiI7pi6rdxRZQEWoveYygAIRT4P9oqf29sQIShQkHTfXQm-s45ginL6Fehb7lnYZ-w" type="text/javascript"></script>
+ </head>
+ <body>
+  <div id="map" style="width: 800px; height: 600px"></div>
+  <script type="text/javascript">
+    //<![CDATA[
+    
+    var map = new GMap(document.getElementById("map"));
+    map.addControl(new GLargeMapControl());
+    map.addControl(new GMapTypeControl());
+    map.centerAndZoom(new GPoint(-122.119003,45.577522), 4);
+
+// Create a marker whose info window displays the given number.
+function createMarker(point, link, hikeTitle) {
+  var marker = new GMarker(point);
+
+  // Show this marker's index in the info window when it is clicked.
+  	var html ="<a href=" + link + "><b>" + hikeTitle + "</b></a><br>"
+  GEvent.addListener(marker, 'click', function() {
+	marker.openInfoWindowHtml(html);
+  });
+
+  return marker;
+}
+
+var marker = createMarker(new GPoint(-122.119003,45.577522), "MultnomahFalls.html", "Multnomah Falls");
+  map.addOverlay(marker);
+
+    //]]>
+    </script>
+  <br>
+  <form action="http://maps.google.com/maps" method="get">
+   Enter your starting address: <input type="text" size="60" name="saddr"> <input type="hidden" name="daddr" value="45.577522,-122.119003"> <input type="submit" value="Get Directions">
+  </form>
+ </body>
+</html>

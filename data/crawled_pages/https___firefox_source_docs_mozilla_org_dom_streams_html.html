@@ -1,0 +1,512 @@
+<!doctype html>
+<html class="writer-html5" lang="en" data-content_root="../">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Implementing specifications using WHATWG Streams API — Firefox Source Docs  documentation</title>
+  <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50">
+  <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094">
+  <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=fd3f3429">
+  <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b">
+  <link rel="stylesheet" type="text/css" href="../_static/custom_theme.css?v=dc5ed815">
+  <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7">
+  <link rel="shortcut icon" href="../_static/firefox.ico"><!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script src="../_static/jquery.js?v=5d32c60e"></script>
+  <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+  <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+  <script src="../_static/doctools.js?v=9a2dae69"></script>
+  <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+  <script src="../_static/copybutton.js?v=30646c52"></script>
+  <script src="../_static/design-tabs.js?v=36754332"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/npm/mermaid@11.2.0/dist/mermaid.esm.min.mjs"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/npm/@mermaid-js/layout-elk@0.1.4/dist/mermaid-layout-elk.esm.min.mjs"></script>
+  <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.2.0/dist/mermaid.esm.min.mjs";import elkLayouts from "https://cdn.jsdelivr.net/npm/@mermaid-js/layout-elk@0.1.4/dist/mermaid-layout-elk.esm.min.mjs";mermaid.registerLayoutLoaders(elkLayouts);mermaid.initialize({startOnLoad:false});</script>
+  <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+  <script type="module">
+import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.2.0/dist/mermaid.esm.min.mjs";
+window.addEventListener("load", () => mermaid.run());
+</script>
+  <script src="../_static/js/theme.js"></script>
+  <link rel="index" title="Index" href="../genindex.html">
+  <link rel="search" title="Search" href="../search.html">
+  <link rel="next" title="Use Counters" href="use-counters.html">
+  <link rel="prev" title="Federated Credential Management" href="fedcm.html">
+ </head>
+ <body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+   <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <div class="wy-side-scroll">
+     <div class="wy-side-nav-search">
+      <a href="../index.html" class="icon icon-home"> Firefox Source Docs <img src="../_static/firefox-wordmark.svg" class="logo" alt="Logo"> </a><!-- -- This code is governed by the BSD license ---->
+      <div>
+       <h3>Quick search</h3>
+       <script>
+    (function () {
+      var cx = "dd12886298f75dbef";
+      var gcse = document.createElement("script");
+      gcse.async = true;
+      gcse.src = "https://cse.google.com/cse.js?cx=" + cx;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(gcse, s);
+    })();
+  </script><gcse:search></gcse:search>
+      </div>
+     </div>
+     <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+      <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../glossary/index.html">A Glossary of Common Terms</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../overview/index.html">A Quick Guide to Mozilla Applications</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../setup/index.html">Getting Set Up To Work On The Firefox Codebase</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Working On Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../contributing/index.html">Working on Firefox</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../bug-mgmt/index.html">Bug Handling</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox User Guide</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../devtools-user/index.html">Firefox DevTools User Docs</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Source Code Documentation</span></p>
+      <ul class="current">
+       <li class="toctree-l1"><a class="reference internal" href="../mots/index.html">Governance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../browser/index.html">Firefox Front-end</a></li>
+       <li class="toctree-l1 current"><a class="reference internal" href="index.html">DOM</a>
+        <ul class="current">
+         <li class="toctree-l2"><a class="reference internal" href="ipc/index.html">DOM IPC</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="navigation/index.html">DOM Navigation</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="push/index.html">Push</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="scriptSecurity/index.html">Script Security</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="scriptSecurity/xray_vision.html">Xray Vision</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="workersAndStorage/index.html">DOM Workers &amp; Storage</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="webIdlBindings/index.html">Web IDL bindings</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="ioutils_migration.html">IOUtils Migration Guide</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="fedcm.html">Federated Credential Management</a></li>
+         <li class="toctree-l2 current"><a class="current reference internal" href="#">Implementing specifications using WHATWG Streams API</a>
+          <ul>
+           <li class="toctree-l3"><a class="reference internal" href="#calling-functions-on-stream-objects">Calling functions on stream objects</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#creating-a-stream">Creating a stream</a>
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="#implementing-the-callbacks">Implementing the callbacks</a></li>
+            </ul></li>
+           <li class="toctree-l3"><a class="reference internal" href="#exposing-existing-xpcom-streams-as-whatwg-streams">Exposing existing XPCOM streams as WHATWG Streams</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#mapping-spec-terms-to-functions">Mapping spec terms to functions</a></li>
+          </ul></li>
+         <li class="toctree-l2"><a class="reference internal" href="use-counters.html">Use Counters</a></li>
+        </ul></li>
+       <li class="toctree-l1"><a class="reference internal" href="../editor/index.html">Editor</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../layout/index.html">Style system (CSS) &amp; Layout</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../gfx/index.html">Graphics</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../ipc/index.html">Processes, Threads and IPC</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../devtools/index.html">Firefox DevTools Contributor Docs</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../toolkit/index.html">Toolkit</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../js/index.html">SpiderMonkey</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../jsloader/index.html">JS Loader</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mobile/android/geckoview/index.html">GeckoView</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mobile/android/fenix/index.html">Fenix</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mobile/android/focus-android/index.html">Focus for Android</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="bindings/webidl/index.html">WebIDL</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../modules/libpref/index.html">libpref</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../networking/index.html">Networking</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../remote/index.html">Remote Protocols</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../services/index.html">Services</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../permissions/index.html">Permissions</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../uriloader/index.html">File Handling</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../widget/cocoa/index.html">Firefox on macOS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../widget/windows/index.html">Firefox on Windows</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../toolkit/components/ml/index.html">Firefox AI Runtime</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../accessible/index.html">Accessibility</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../media/index.html">Media Playback</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../code-quality/index.html">Code quality</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../writing-rust-code/index.html">Writing Rust Code</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../rust-components/index.html">Rust Components</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/profiler/index.html">Gecko Profiler</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../performance/index.html">Performance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../storage/index.html">Database bindings (SQLite, KV, …)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../xpcom/index.html">XPCOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../nspr/index.html">NSPR</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../security/nss/index.html">Network Security Services (NSS)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../content-security/index.html">Web Security Checks in Gecko</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">The Firefox Build System</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../mach/index.html">Mach</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/try/index.html">Pushing to Try</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../build/buildsystem/index.html">Build System</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../taskcluster/index.html">Firefox CI and Taskgraph</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/moztreedocs/index.html">Managing Documentation</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mozbuild/vendor/index.html">Vendoring Third Party Components</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Testing &amp; Test Infrastructure</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/automated-testing/index.html">Automated Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/treeherder-try/index.html">Understanding Treeherder Results</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/sheriffed-intermittents/index.html">Sheriffed intermittent failures</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/tests-for-new-config/index.html">Turning on Firefox tests for a new configuration</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/intermittent/index.html">Avoiding intermittent tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/testing-policy/index.html">Testing Policy</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/ci-configs/index.html">Configuration Changes</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/browser-chrome/index.html">Browser chrome mochitests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/chrome-tests/index.html">Chrome Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/marionette/index.html">Marionette</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/geckodriver/index.html">geckodriver</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/test-verification/index.html">Test Verification</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/webrender/index.html">WebRender Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/mochitest-plain/index.html">Mochitest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/xpcshell/index.html">XPCShell tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/tps/index.html">TPS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../web-platform/index.html">web-platform-tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../gtest/index.html">GTest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/fuzzing/index.html">Fuzzing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/sanitizer/index.html">Sanitizer</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/perfdocs/index.html">Performance Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/code-coverage/index.html">Code coverage</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing-rust-code/index.html">Testing &amp; Debugging Rust Code</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Releases &amp; Updates</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../update-infrastructure/index.html">Mozilla Update Infrastructure</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../update-infrastructure/index.html#watershed-updates">Watershed Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../update-infrastructure/index.html#desupport-updates">Desupport Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/update-verify/index.html">Update Verify</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Localization &amp; Internationalization</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../intl/index.html">Internationalization</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../l10n/index.html">Localization</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox and Python</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../mozbase/index.html">mozbase</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../python/index.html">Using third-party Python packages</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Metrics Collected in Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../metrics/index.html">Metrics</a></li>
+      </ul>
+     </div>
+    </div>
+   </nav>
+   <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+    <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+     <i data-toggle="wy-nav-top" class="fa fa-bars"></i> <a href="../index.html">Firefox Source Docs</a>
+    </nav>
+    <div class="wy-nav-content">
+     <div class="rst-content">
+      <!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+      <div role="navigation" aria-label="Page navigation">
+       <ul class="wy-breadcrumbs">
+        <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+        <li class="breadcrumb-item"><a href="index.html">DOM</a></li>
+        <li class="breadcrumb-item active">Implementing specifications using WHATWG Streams API</li>
+        <li class="wy-breadcrumbs-aside"><a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Developer+Infrastructure&amp;component=Firefox+Source+Docs%3A+Content&amp;short_desc=Documentation+issue+on+dom/streams&amp;comment=URL+=+https://firefox-source-docs.mozilla.org/dom/streams.html&amp;bug_file_loc=https://firefox-source-docs.mozilla.org/dom/streams.html" rel="nofollow">Report an issue</a> / <a href="../_sources/dom/streams.md.txt" rel="nofollow"> View page source</a></li>
+       </ul>
+       <hr>
+      </div>
+      <div role="main" class="document" itemscope itemtype="http://schema.org/Article">
+       <div itemprop="articleBody">
+        <section id="implementing-specifications-using-whatwg-streams-api">
+         <h1>Implementing specifications using WHATWG Streams API<a class="headerlink" href="#implementing-specifications-using-whatwg-streams-api" title="Link to this heading">?</a></h1>
+         <p><a class="reference external" href="https://streams.spec.whatwg.org/">Streams API</a> is <a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/API/Streams_API">a modern way to produce and consume data progressively and asynchronously</a>. Multiple specifications are starting to use it, namely <a class="reference external" href="https://fetch.spec.whatwg.org/">Fetch</a>, <a class="reference external" href="https://fs.spec.whatwg.org/">File Stream</a>, <a class="reference external" href="https://w3c.github.io/webtransport/">WebTransport</a>, and so on. This documentation will briefly explain how to implement such specifications in Gecko.</p>
+         <section id="calling-functions-on-stream-objects">
+          <h2>Calling functions on stream objects<a class="headerlink" href="#calling-functions-on-stream-objects" title="Link to this heading">?</a></h2>
+          <p>You can mostly follow the steps in a given spec as-is, as the implementation in Gecko is deliberately written in a way that a given spec prose can match 1:1 to a function call. Let’s say the spec says:</p>
+          <blockquote>
+           <div>
+            <p><a class="reference external" href="https://streams.spec.whatwg.org/#readablestream-enqueue">Enqueue</a> <code class="docutils literal notranslate"><span class="pre">view</span></code> into <code class="docutils literal notranslate"><span class="pre">stream</span></code>.</p>
+           </div>
+          </blockquote>
+          <p>The prose can be written in C++ as:</p>
+          <div class="highlight-cpp notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="n">stream</span><span class="o">-&gt;</span><span class="n">EnqueueNative</span><span class="p">(</span><span class="n">cx</span><span class="p">,</span><span class="w"> </span><span class="n">view</span><span class="p">,</span><span class="w"> </span><span class="n">rv</span><span class="p">);</span>
+</pre>
+           </div>
+          </div>
+          <p>Note that the function name ends with <code class="docutils literal notranslate"><span class="pre">Native</span></code> to disambiguate itself from the Web IDL <code class="docutils literal notranslate"><span class="pre">enqueue</span></code> method. See the <a class="reference internal" href="#mapping-spec-terms-to-functions">list below</a> for the complete mapping between spec terms and functions.</p>
+         </section>
+         <section id="creating-a-stream">
+          <h2>Creating a stream<a class="headerlink" href="#creating-a-stream" title="Link to this heading">?</a></h2>
+          <p>The stream creation can be generally done by calling <code class="docutils literal notranslate"><span class="pre">CreateNative()</span></code>. You may need to call something else if the spec:</p>
+          <ul class="simple">
+           <li>
+            <p>Wants a byte stream and uses the term “Set up with byte reading support”. In that case you need to call <code class="docutils literal notranslate"><span class="pre">ByteNative</span></code> variant.</p></li>
+           <li>
+            <p>Defines a new interface that inherits the base stream interfaces. In this case you need to define a subclass and call <code class="docutils literal notranslate"><span class="pre">SetUpNative()</span></code> inside its init method.</p>
+            <ul>
+             <li>
+              <p>To make the cycle collection happy, you need to pass <code class="docutils literal notranslate"><span class="pre">HoldDropJSObjectsCaller::Explicit</span></code> to the superclass constructor and call <code class="docutils literal notranslate"><span class="pre">mozilla::HoldJSObjects(this)</span></code>/<code class="docutils literal notranslate"><span class="pre">mozilla::DropJSObjects(this)</span></code> respectively in the constructor/destructor.</p></li>
+            </ul></li>
+          </ul>
+          <p>Both <code class="docutils literal notranslate"><span class="pre">CreateNative()</span></code>/<code class="docutils literal notranslate"><span class="pre">SetUpNative()</span></code> functions require an argument to implement custom algorithms for callbacks, whose corresponding spec phrases could be:</p>
+          <blockquote>
+           <div>
+            <ol class="arabic simple">
+             <li>
+              <p>Let <code class="docutils literal notranslate"><span class="pre">readable</span></code> be a <a class="reference external" href="https://webidl.spec.whatwg.org/#new">new</a> <a class="reference external" href="https://streams.spec.whatwg.org/#readablestream"><code class="docutils literal notranslate"><span class="pre">ReadableStream</span></code></a>.</p></li>
+             <li>
+              <p>Let <code class="docutils literal notranslate"><span class="pre">pullAlgorithm</span></code> be the following steps:</p>
+              <ol class="arabic simple">
+               <li>
+                <p>(…)</p></li>
+              </ol></li>
+             <li>
+              <p>Set up <code class="docutils literal notranslate"><span class="pre">stream</span></code> with <code class="docutils literal notranslate"><span class="pre">pullAlgorithm</span></code> set to <code class="docutils literal notranslate"><span class="pre">pullAlgorithm</span></code>.</p></li>
+            </ol>
+           </div>
+          </blockquote>
+          <p>This can roughly translate to the following C++:</p>
+          <div class="highlight-cpp notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">MySourceAlgorithms</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">UnderlyingSourceAlgorithmsWrapper</span><span class="w"> </span><span class="p">{</span>
+<span class="w">   </span><span class="n">already_AddRefed</span><span class="o">&lt;</span><span class="n">Promise</span><span class="o">&gt;</span><span class="w"> </span><span class="n">PullCallbackImpl</span><span class="p">(</span>
+<span class="w">      </span><span class="n">JSContext</span><span class="o">*</span><span class="w"> </span><span class="n">aCx</span><span class="p">,</span><span class="w"> </span><span class="n">ReadableStreamControllerBase</span><span class="o">&amp;</span><span class="w"> </span><span class="n">aController</span><span class="p">,</span>
+<span class="w">      </span><span class="n">ErrorResult</span><span class="o">&amp;</span><span class="w"> </span><span class="n">aRv</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="n">already_AddRefed</span><span class="o">&lt;</span><span class="n">ReadableStream</span><span class="o">&gt;</span><span class="w"> </span><span class="n">CreateMyReadableStream</span><span class="p">(</span>
+<span class="w">   </span><span class="n">JSContext</span><span class="o">*</span><span class="w"> </span><span class="n">aCx</span><span class="p">,</span><span class="w"> </span><span class="n">nsIGlobalObject</span><span class="o">*</span><span class="w"> </span><span class="n">aGlobal</span><span class="p">,</span><span class="w"> </span><span class="n">ErrorResult</span><span class="o">&amp;</span><span class="w"> </span><span class="n">aRv</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">   </span><span class="c1">// Step 2: Let pullAlgorithm be the following steps:</span>
+<span class="w">   </span><span class="k">auto</span><span class="w"> </span><span class="n">algorithms</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">MakeRefPtr</span><span class="o">&lt;</span><span class="n">MySourceAlgorithms</span><span class="o">&gt;</span><span class="p">();</span>
+
+<span class="w">   </span><span class="c1">// Step 1: Let readable be a new ReadableStream.</span>
+<span class="w">   </span><span class="c1">// Step 3: Set up stream with pullAlgorithm set to pullAlgorithm.</span>
+<span class="w">   </span><span class="n">RefPtr</span><span class="o">&lt;</span><span class="n">ReadableStream</span><span class="o">&gt;</span><span class="w"> </span><span class="n">readable</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ReadableStream</span><span class="o">::</span><span class="n">CreateNative</span><span class="p">(</span>
+<span class="w">      </span><span class="n">aCx</span><span class="p">,</span>
+<span class="w">      </span><span class="n">aGlobal</span><span class="p">,</span>
+<span class="w">      </span><span class="o">*</span><span class="n">algorithms</span><span class="p">,</span>
+<span class="w">      </span><span class="cm">/* aHighWaterMark */</span><span class="w"> </span><span class="n">Nothing</span><span class="p">(),</span>
+<span class="w">      </span><span class="cm">/* aSizeAlgorithm */</span><span class="w"> </span><span class="k">nullptr</span><span class="p">,</span>
+<span class="w">      </span><span class="n">aRv</span>
+<span class="w">   </span><span class="p">);</span>
+<span class="p">}</span>
+</pre>
+           </div>
+          </div>
+          <p>Note that the <code class="docutils literal notranslate"><span class="pre">new</span> <span class="pre">ReadableStream()</span></code> and “Set up” steps are done together inside <code class="docutils literal notranslate"><span class="pre">CreateNative()</span></code> for convenience. For subclasses this needs to be split again:</p>
+          <div class="highlight-cpp notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">MyReadableStream</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">ReadableStream</span><span class="w"> </span><span class="p">{</span>
+<span class="w"> </span><span class="k">public</span><span class="o">:</span>
+<span class="w">   </span><span class="n">MyReadableStream</span><span class="p">(</span><span class="n">nsIGlobalObject</span><span class="o">*</span><span class="w"> </span><span class="n">aGlobal</span><span class="p">)</span>
+<span class="w">      </span><span class="o">:</span><span class="w"> </span><span class="n">ReadableStream</span><span class="p">(</span><span class="n">aGlobal</span><span class="p">,</span><span class="w"> </span><span class="n">ReadableStream</span><span class="o">::</span><span class="n">HoldDropJSObjectsCaller</span><span class="o">::</span><span class="n">Explicit</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="n">mozilla</span><span class="o">::</span><span class="n">HoldJSObjects</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+<span class="w">   </span><span class="p">}</span>
+
+<span class="w">   </span><span class="o">~</span><span class="n">MyReadableStream</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="n">mozilla</span><span class="o">::</span><span class="n">DropJSObjects</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+<span class="w">   </span><span class="p">}</span>
+
+<span class="w">   </span><span class="kt">void</span><span class="w"> </span><span class="n">Init</span><span class="p">(</span><span class="n">ErrorResult</span><span class="o">&amp;</span><span class="w"> </span><span class="n">aRv</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="c1">// Step 2: Let pullAlgorithm be the following steps:</span>
+<span class="w">      </span><span class="k">auto</span><span class="w"> </span><span class="n">algorithms</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">MakeRefPtr</span><span class="o">&lt;</span><span class="n">MySourceAlgorithms</span><span class="o">&gt;</span><span class="p">();</span>
+
+<span class="w">      </span><span class="c1">// Step 3: Set up stream with pullAlgorithm set to pullAlgorithm.</span>
+<span class="w">      </span><span class="c1">//</span>
+<span class="w">      </span><span class="c1">// NOTE:</span>
+<span class="w">      </span><span class="c1">// For now there's no SetUpNative but only SetUpByteNative.</span>
+<span class="w">      </span><span class="c1">// File a bug on DOM: Streams if you need to create a subclass</span>
+<span class="w">      </span><span class="c1">// for non-byte ReadableStream.</span>
+<span class="w">      </span><span class="n">SetUpNative</span><span class="p">(</span><span class="n">aCx</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">algorithms</span><span class="p">,</span><span class="w"> </span><span class="n">Nothing</span><span class="p">(),</span><span class="w"> </span><span class="k">nullptr</span><span class="p">,</span><span class="w"> </span><span class="n">aRv</span><span class="p">);</span>
+<span class="w">   </span><span class="p">}</span>
+<span class="p">}</span>
+</pre>
+           </div>
+          </div>
+          <p>After creating the stream with the algorithms, the rough flow will look like this:</p>
+          <pre class="mermaid">        sequenceDiagram
+   JavaScript-&gt;&gt;ReadableStream: await reader.read()
+   ReadableStream-&gt;&gt;UnderlyingSourceAlgorithmsWrapper: PullCallback()
+   UnderlyingSourceAlgorithmsWrapper-&gt;&gt;(Data source): (implementation detail)
+   NOTE left of (Data source): (Can be file IO, network IO, etc.)
+   (Data source)-&gt;&gt;UnderlyingSourceAlgorithmsWrapper: (notifies back)
+   UnderlyingSourceAlgorithmsWrapper-&gt;&gt;ReadableStream: EnqueueNative()
+   ReadableStream-&gt;&gt;JavaScript: Resolves reader.read()
+    </pre>
+          <section id="implementing-the-callbacks">
+           <h3>Implementing the callbacks<a class="headerlink" href="#implementing-the-callbacks" title="Link to this heading">?</a></h3>
+           <p>As the flow says, the real implementation will be done inside the algorithms, in this case PullCallbackImpl(). Let’s say there’s a spec term:</p>
+           <blockquote>
+            <div>
+             <ol class="arabic simple">
+              <li>
+               <p>Let <code class="docutils literal notranslate"><span class="pre">pullAlgorithm</span></code> be the following steps:</p>
+               <ol class="arabic simple">
+                <li>
+                 <p><a class="reference external" href="https://streams.spec.whatwg.org/#readablestream-enqueue">Enqueue</a> a JavaScript string value “Hello Fox!”.</p></li>
+               </ol></li>
+             </ol>
+            </div>
+           </blockquote>
+           <p>This can translate to the following C++:</p>
+           <div class="highlight-cpp notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">MySourceAlgorithms</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">UnderlyingSourceAlgorithmsWrapper</span><span class="w"> </span><span class="p">{</span>
+<span class="w">   </span><span class="c1">// Step 1: Let `pullAlgorithm` be the following steps:</span>
+<span class="w">   </span><span class="n">already_AddRefed</span><span class="o">&lt;</span><span class="n">Promise</span><span class="o">&gt;</span><span class="w"> </span><span class="n">PullCallbackImpl</span><span class="p">(</span>
+<span class="w">      </span><span class="n">JSContext</span><span class="o">*</span><span class="w"> </span><span class="n">aCx</span><span class="p">,</span><span class="w"> </span><span class="n">ReadableStreamControllerBase</span><span class="o">&amp;</span><span class="w"> </span><span class="n">aController</span><span class="p">,</span><span class="w"> </span><span class="n">ErrorResult</span><span class="o">&amp;</span><span class="w"> </span><span class="n">aRv</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="n">RefPtr</span><span class="o">&lt;</span><span class="n">ReadableStream</span><span class="o">&gt;</span><span class="w"> </span><span class="n">stream</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">aController</span><span class="p">.</span><span class="n">Stream</span><span class="p">();</span>
+
+<span class="w">      </span><span class="c1">// Step 1.1: Enqueue a JavaScript string value "Hello Fox!".</span>
+<span class="w">      </span><span class="n">JS</span><span class="o">::</span><span class="n">Rooted</span><span class="o">&lt;</span><span class="n">JSString</span><span class="o">*&gt;</span><span class="w"> </span><span class="n">hello</span><span class="p">(</span><span class="n">aCx</span><span class="p">,</span><span class="w"> </span><span class="n">JS_NewStringCopyZ</span><span class="p">(</span><span class="n">aCx</span><span class="p">,</span><span class="w"> </span><span class="s">"Hello Fox!"</span><span class="p">));</span>
+<span class="w">      </span><span class="n">stream</span><span class="o">-&gt;</span><span class="n">EnqueueNative</span><span class="p">(</span><span class="n">aCx</span><span class="p">,</span><span class="w"> </span><span class="n">JS</span><span class="o">::</span><span class="n">StringValue</span><span class="p">(</span><span class="n">hello</span><span class="p">),</span><span class="w"> </span><span class="n">aRv</span><span class="p">);</span>
+
+<span class="w">      </span><span class="c1">// Return a promise if the task is asynchronous, or nullptr if not.</span>
+<span class="w">      </span><span class="k">return</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
+
+<span class="w">      </span><span class="c1">// NOTE:</span>
+<span class="w">      </span><span class="c1">// Please don't use aController directly, as it's more for JavaScript.</span>
+<span class="w">      </span><span class="c1">// The *Native() functions are safer with additional assertions and more</span>
+<span class="w">      </span><span class="c1">// automatic state management.</span>
+<span class="w">      </span><span class="c1">// Please file a bug if there's no *Native() function that fulfills your need.</span>
+<span class="w">      </span><span class="c1">// In the future this function should receive a ReadableStream instead.</span>
+
+<span class="w">      </span><span class="c1">// Also note that you'll need to touch JS APIs frequently as the functions</span>
+<span class="w">      </span><span class="c1">// often expect JS::Value.</span>
+<span class="w">   </span><span class="p">};</span>
+<span class="p">};</span>
+</pre>
+            </div>
+           </div>
+           <p>Note that <code class="docutils literal notranslate"><span class="pre">PullCallbackImpl</span></code> returns a promise. The function will not be called again until the promise resolves. The call sequence would be roughly look like the following with repeated read requests:</p>
+           <ol class="arabic simple">
+            <li>
+             <p><code class="docutils literal notranslate"><span class="pre">await</span> <span class="pre">read()</span></code> from JS</p></li>
+            <li>
+             <p><code class="docutils literal notranslate"><span class="pre">PullCallbackImpl()</span></code> call, which returns a Promise</p></li>
+            <li>
+             <p>The second <code class="docutils literal notranslate"><span class="pre">await</span> <span class="pre">read()</span></code> from JS</p></li>
+            <li>
+             <p>(Time flies)</p></li>
+            <li>
+             <p>The promise resolves</p></li>
+            <li>
+             <p>The second <code class="docutils literal notranslate"><span class="pre">PullCallbackImpl()</span></code> call</p></li>
+           </ol>
+           <p>The same applies to write and transform callbacks in <code class="docutils literal notranslate"><span class="pre">WritableStream</span></code> and <code class="docutils literal notranslate"><span class="pre">TransformStream</span></code>, except they use <code class="docutils literal notranslate"><span class="pre">UnderlyingSinkAlgorithmsWrapper</span></code> and <code class="docutils literal notranslate"><span class="pre">TransformerAlgorithmsWrapper</span></code> respectively.</p>
+          </section>
+         </section>
+         <section id="exposing-existing-xpcom-streams-as-whatwg-streams">
+          <h2>Exposing existing XPCOM streams as WHATWG Streams<a class="headerlink" href="#exposing-existing-xpcom-streams-as-whatwg-streams" title="Link to this heading">?</a></h2>
+          <p>You may simply want to expose an existing XPCOM stream to JavaScript without any more customization. Fortunately there are some helper functions for this. You can use:</p>
+          <ul class="simple">
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">InputToReadableStreamAlgorithms</span></code> to send data from nsIAsyncInputStream to ReadableStream</p></li>
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">WritableStreamToOutputAlgorithms</span></code> to receive data from WritableStream to nsIAsyncOutputStream</p></li>
+          </ul>
+          <p>The usage would look like the following:</p>
+          <div class="highlight-cpp notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="c1">// For nsIAsyncInputStream:</span>
+<span class="n">already_AddRefed</span><span class="o">&lt;</span><span class="n">ReadableStream</span><span class="o">&gt;</span><span class="w"> </span><span class="n">ConvertInputStreamToReadableStream</span><span class="p">(</span>
+<span class="w">   </span><span class="n">JSContext</span><span class="o">*</span><span class="w"> </span><span class="n">aCx</span><span class="p">,</span><span class="w"> </span><span class="n">nsIGlobalObject</span><span class="o">*</span><span class="w"> </span><span class="n">aGlobal</span><span class="p">,</span><span class="w"> </span><span class="n">nsIAsyncInputStream</span><span class="o">*</span><span class="w"> </span><span class="n">aInput</span><span class="p">,</span>
+<span class="w">   </span><span class="n">ErrorResult</span><span class="o">&amp;</span><span class="w"> </span><span class="n">aRv</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">   </span><span class="k">auto</span><span class="w"> </span><span class="n">algorithms</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">MakeRefPtr</span><span class="o">&lt;</span><span class="n">InputToReadableStreamAlgorithms</span><span class="o">&gt;</span><span class="p">(</span>
+<span class="w">         </span><span class="n">stream</span><span class="o">-&gt;</span><span class="n">GetParentObject</span><span class="p">(),</span><span class="w"> </span><span class="n">aInput</span><span class="p">);</span>
+<span class="w">   </span><span class="k">return</span><span class="w"> </span><span class="n">do_AddRef</span><span class="p">(</span><span class="n">ReadableStream</span><span class="o">::</span><span class="n">CreateNative</span><span class="p">(</span><span class="n">aCx</span><span class="p">,</span><span class="w"> </span><span class="n">aGlobal</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">algorithms</span><span class="p">,</span>
+<span class="w">                                                 </span><span class="n">Nothing</span><span class="p">(),</span><span class="w"> </span><span class="k">nullptr</span><span class="p">,</span><span class="w"> </span><span class="n">aRv</span><span class="p">));</span>
+<span class="p">}</span>
+
+<span class="c1">// For nsIAsyncOutputStream</span>
+<span class="n">already_AddRefed</span><span class="o">&lt;</span><span class="n">ReadableStream</span><span class="o">&gt;</span><span class="w"> </span><span class="n">ConvertOutputStreamToWritableStream</span><span class="p">(</span>
+<span class="w">   </span><span class="n">JSContext</span><span class="o">*</span><span class="w"> </span><span class="n">aCx</span><span class="p">,</span><span class="w"> </span><span class="n">nsIGlobalObject</span><span class="o">*</span><span class="w"> </span><span class="n">aGlobal</span><span class="p">,</span><span class="w"> </span><span class="n">nsIAsyncOutputStream</span><span class="o">*</span><span class="w"> </span><span class="n">aInput</span><span class="p">,</span>
+<span class="w">   </span><span class="n">ErrorResult</span><span class="o">&amp;</span><span class="w"> </span><span class="n">aRv</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">   </span><span class="k">auto</span><span class="w"> </span><span class="n">algorithms</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">MakeRefPtr</span><span class="o">&lt;</span><span class="n">WritableStreamToOutputAlgorithms</span><span class="o">&gt;</span><span class="p">(</span>
+<span class="w">         </span><span class="n">stream</span><span class="o">-&gt;</span><span class="n">GetParentObject</span><span class="p">(),</span><span class="w"> </span><span class="n">aInput</span><span class="p">);</span>
+<span class="w">   </span><span class="k">return</span><span class="w"> </span><span class="n">do_AddRef</span><span class="p">(</span><span class="n">WritableStream</span><span class="o">::</span><span class="n">CreateNative</span><span class="p">(</span><span class="n">aCx</span><span class="p">,</span><span class="w"> </span><span class="n">aGlobal</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">algorithms</span><span class="p">,</span>
+<span class="w">                                                 </span><span class="n">Nothing</span><span class="p">(),</span><span class="w"> </span><span class="k">nullptr</span><span class="p">,</span><span class="w"> </span><span class="n">aRv</span><span class="p">));</span>
+<span class="p">}</span>
+</pre>
+           </div>
+          </div>
+         </section>
+         <section id="mapping-spec-terms-to-functions">
+          <h2>Mapping spec terms to functions<a class="headerlink" href="#mapping-spec-terms-to-functions" title="Link to this heading">?</a></h2>
+          <ol class="arabic simple">
+           <li>
+            <p><a class="reference external" href="https://streams.spec.whatwg.org/#other-specs-rs">ReadableStream</a></p>
+            <ul class="simple">
+             <li>
+              <p><a class="reference external" href="https://streams.spec.whatwg.org/#readablestream-set-up">Set up</a>: <a class="reference external" href="https://searchfox.org/mozilla-central/rev/31f5847a4494b3646edabbdd7ea39cb88509afe2/dom/streams/ReadableStream.h#132"><code class="docutils literal notranslate"><span class="pre">CreateNative()</span></code></a></p></li>
+             <li>
+              <p><a class="reference external" href="https://streams.spec.whatwg.org/#readablestream-set-up-with-byte-reading-support">Set up with byte reading support</a>:</p>
+              <ul>
+               <li>
+                <p><a class="reference external" href="https://searchfox.org/mozilla-central/rev/31f5847a4494b3646edabbdd7ea39cb88509afe2/dom/streams/ReadableStream.h#143"><code class="docutils literal notranslate"><span class="pre">CreateByteNative()</span></code></a>: You can call this when the spec uses the term with <code class="docutils literal notranslate"><span class="pre">new</span> <span class="pre">ReadableStream</span></code>.</p></li>
+               <li>
+                <p><a class="reference external" href="https://searchfox.org/mozilla-central/rev/31f5847a4494b3646edabbdd7ea39cb88509afe2/dom/streams/ReadableStream.h#150"><code class="docutils literal notranslate"><span class="pre">SetUpByteNative()</span></code></a>: You need to use this instead when the spec uses the term with a subclass of <code class="docutils literal notranslate"><span class="pre">ReadableStream</span></code>. Call this inside the constructor of the subclass.</p></li>
+              </ul></li>
+             <li>
+              <p><a class="reference external" href="https://streams.spec.whatwg.org/#readablestream-close">Close</a>: <a class="reference external" href="https://searchfox.org/mozilla-central/rev/31f5847a4494b3646edabbdd7ea39cb88509afe2/dom/streams/ReadableStream.h#160"><code class="docutils literal notranslate"><span class="pre">CloseNative()</span></code></a></p></li>
+             <li>
+              <p><a class="reference external" href="https://streams.spec.whatwg.org/#readablestream-error">Error</a>: <a class="reference external" href="https://searchfox.org/mozilla-central/rev/31f5847a4494b3646edabbdd7ea39cb88509afe2/dom/streams/ReadableStream.h#163"><code class="docutils literal notranslate"><span class="pre">ErrorNative()</span></code></a></p></li>
+             <li>
+              <p><a class="reference external" href="https://streams.spec.whatwg.org/#readablestream-enqueue">Enqueue</a>: <a class="reference external" href="https://searchfox.org/mozilla-central/rev/31f5847a4494b3646edabbdd7ea39cb88509afe2/dom/streams/ReadableStream.h#167"><code class="docutils literal notranslate"><span class="pre">EnqueueNative()</span></code></a></p></li>
+             <li>
+              <p><a class="reference external" href="https://streams.spec.whatwg.org/#readablestream-get-a-reader">Get a reader</a>: <a class="reference external" href="https://searchfox.org/mozilla-central/rev/31f5847a4494b3646edabbdd7ea39cb88509afe2/dom/streams/ReadableStream.h#177"><code class="docutils literal notranslate"><span class="pre">GetReader()</span></code></a></p>
+              <ul>
+               <li>
+                <p><a class="reference external" href="https://streams.spec.whatwg.org/#readablestreamdefaultreader-read-a-chunk">Read a chunk</a> on reader: <a class="reference external" href="https://searchfox.org/mozilla-central/rev/31f5847a4494b3646edabbdd7ea39cb88509afe2/dom/streams/ReadableStreamDefaultReader.h#81"><code class="docutils literal notranslate"><span class="pre">ReadChunk()</span></code></a> on ReadableStreamDefaultReader</p></li>
+              </ul></li>
+            </ul></li>
+           <li>
+            <p><a class="reference external" href="https://streams.spec.whatwg.org/#other-specs-ws">WritableStream</a></p>
+            <ul class="simple">
+             <li>
+              <p><a class="reference external" href="https://streams.spec.whatwg.org/#writablestream-set-up">Set up</a>:</p>
+              <ul>
+               <li>
+                <p><a class="reference external" href="https://searchfox.org/mozilla-central/rev/31f5847a4494b3646edabbdd7ea39cb88509afe2/dom/streams/WritableStream.h#182"><code class="docutils literal notranslate"><span class="pre">CreateNative()</span></code></a>: You can call this when the spec uses the term with <code class="docutils literal notranslate"><span class="pre">new</span> <span class="pre">WritableStream</span></code>.</p></li>
+               <li>
+                <p><a class="reference external" href="https://searchfox.org/mozilla-central/rev/31f5847a4494b3646edabbdd7ea39cb88509afe2/dom/streams/WritableStream.h#174"><code class="docutils literal notranslate"><span class="pre">SetUpNative()</span></code></a>: You need to use this instead when the spec uses the term with a subclass of <code class="docutils literal notranslate"><span class="pre">WritableStream</span></code>. Call this inside the constructor of the subclass.</p></li>
+              </ul></li>
+             <li>
+              <p><a class="reference external" href="https://streams.spec.whatwg.org/#writablestream-error">Error</a>: <a class="reference external" href="https://searchfox.org/mozilla-central/rev/31f5847a4494b3646edabbdd7ea39cb88509afe2/dom/streams/WritableStream.h#192"><code class="docutils literal notranslate"><span class="pre">ErrorNative()</span></code></a></p></li>
+            </ul></li>
+           <li>
+            <p><a class="reference external" href="https://streams.spec.whatwg.org/#other-specs-ts">TransformStream</a>: For now this just uses the functions in TransfromStreamDefaultController, which will be provided as an argument of transform or flush algorithms.</p>
+            <ul class="simple">
+             <li>
+              <p><a class="reference external" href="https://streams.spec.whatwg.org/#transformstream-enqueue">Enqueue</a>: <a class="reference external" href="https://searchfox.org/mozilla-central/rev/31f5847a4494b3646edabbdd7ea39cb88509afe2/dom/streams/TransformStreamDefaultController.h#47"><code class="docutils literal notranslate"><span class="pre">Enqueue()</span></code></a> on TransformStreamDefaultController</p></li>
+             <li>
+              <p><a class="reference external" href="https://streams.spec.whatwg.org/#transformstream-terminate">Terminate</a>: <a class="reference external" href="https://searchfox.org/mozilla-central/rev/31f5847a4494b3646edabbdd7ea39cb88509afe2/dom/streams/TransformStreamDefaultController.h#51"><code class="docutils literal notranslate"><span class="pre">Terminate()</span></code></a> on TransformStreamDefaultController</p></li>
+             <li>
+              <p><a class="reference external" href="https://streams.spec.whatwg.org/#transformstream-error">Error</a>: <a class="reference external" href="https://searchfox.org/mozilla-central/rev/31f5847a4494b3646edabbdd7ea39cb88509afe2/dom/streams/TransformStreamDefaultController.h#49"><code class="docutils literal notranslate"><span class="pre">Error()</span></code></a> on TransformStreamDefaultController</p></li>
+            </ul></li>
+          </ol>
+          <p>The mapping is only implemented on demand and does not cover every function in the spec. Please file a bug on <a class="reference external" href="https://bugzilla.mozilla.org/describecomponents.cgi?product=Core&amp;amp;component=DOM%3A%20Streams#DOM%3A%20Streams">DOM: Streams</a> component in Bugzilla if you need something that is missing here.</p>
+         </section>
+        </section>
+       </div>
+      </div>
+      <footer>
+       <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="fedcm.html" class="btn btn-neutral float-left" title="Federated Credential Management" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a> <a href="use-counters.html" class="btn btn-neutral float-right" title="Use Counters" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+       </div>
+       <hr>
+       <div role="contentinfo">
+        <p></p>
+       </div> Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+      </footer>
+     </div>
+    </div>
+   </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ </body>
+</html>

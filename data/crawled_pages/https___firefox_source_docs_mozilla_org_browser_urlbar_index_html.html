@@ -1,0 +1,659 @@
+<!doctype html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Address Bar — Firefox Source Docs  documentation</title>
+  <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50">
+  <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094">
+  <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=fd3f3429">
+  <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b">
+  <link rel="stylesheet" type="text/css" href="../../_static/custom_theme.css?v=dc5ed815">
+  <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7">
+  <link rel="shortcut icon" href="../../_static/firefox.ico"><!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script src="../../_static/jquery.js?v=5d32c60e"></script>
+  <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+  <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+  <script src="../../_static/doctools.js?v=9a2dae69"></script>
+  <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+  <script src="../../_static/copybutton.js?v=30646c52"></script>
+  <script src="../../_static/design-tabs.js?v=36754332"></script>
+  <script src="../../_static/js/theme.js"></script>
+  <link rel="index" title="Index" href="../../genindex.html">
+  <link rel="search" title="Search" href="../../search.html">
+  <link rel="next" title="Nontechnical Overview" href="nontechnical-overview.html">
+  <link rel="prev" title="Firefox Front-end" href="../index.html">
+ </head>
+ <body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+   <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <div class="wy-side-scroll">
+     <div class="wy-side-nav-search">
+      <a href="../../index.html" class="icon icon-home"> Firefox Source Docs <img src="../../_static/firefox-wordmark.svg" class="logo" alt="Logo"> </a><!-- -- This code is governed by the BSD license ---->
+      <div>
+       <h3>Quick search</h3>
+       <script>
+    (function () {
+      var cx = "dd12886298f75dbef";
+      var gcse = document.createElement("script");
+      gcse.async = true;
+      gcse.src = "https://cse.google.com/cse.js?cx=" + cx;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(gcse, s);
+    })();
+  </script><gcse:search></gcse:search>
+      </div>
+     </div>
+     <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+      <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../glossary/index.html">A Glossary of Common Terms</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../overview/index.html">A Quick Guide to Mozilla Applications</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../setup/index.html">Getting Set Up To Work On The Firefox Codebase</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Working On Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Working on Firefox</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../bug-mgmt/index.html">Bug Handling</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox User Guide</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../devtools-user/index.html">Firefox DevTools User Docs</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Source Code Documentation</span></p>
+      <ul class="current">
+       <li class="toctree-l1"><a class="reference internal" href="../../mots/index.html">Governance</a></li>
+       <li class="toctree-l1 current"><a class="reference internal" href="../index.html">Firefox Front-end</a>
+        <ul class="current">
+         <li class="toctree-l2 current"><a class="current reference internal" href="#">Address Bar</a>
+          <ul>
+           <li class="toctree-l3"><a class="reference internal" href="#where-to-start">Where to Start</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#codebase">Codebase</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#table-of-contents">Table of Contents</a>
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="nontechnical-overview.html">Nontechnical Overview</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="overview.html">Architecture Overview</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="lifetime.html">Search Lifecycle</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="utilities.html">Utilities</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="telemetry.html">Telemetry</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="firefox-suggest-telemetry.html">Firefox Suggest Telemetry</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="debugging.html">Debugging &amp; Logging</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="ranking.html">Ranking</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="dynamic-result-types.html">Dynamic Result Types</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="preferences.html">Preferences</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="testing.html">Testing</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="contact.html">Getting in Touch</a></li>
+            </ul></li>
+           <li class="toctree-l3"><a class="reference internal" href="#api-reference">API Reference</a>
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="UrlbarController.html">UrlbarController Reference</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="UrlbarInput.html">UrlbarInput Reference</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="UrlbarView.html">UrlbarView Reference</a></li>
+            </ul></li>
+          </ul></li>
+         <li class="toctree-l2"><a class="reference internal" href="../BrowserUsageTelemetry.html">Browser Usage Telemetry</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../FrontendCodeReviewBestPractices.html">Frontend Code Review Best Practices</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../CommandLineParameters.html">Command Line Parameters</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../BrowserStartup.html">Browser Startup</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../CategoryManagerIndirection.html">Category manager indirection (callModulesFromCategory)</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../components/customizableui/docs/index.html">CustomizableUI Component</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../components/enterprisepolicies/docs/index.html">Enterprise Policies</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../extensions/formautofill/docs/index.html">Form Autofill</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../extensions/newtab/docs/index.html">Firefox Home (New Tab)</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../components/aboutwelcome/docs/index.html">Firefox Welcome Experience (about:welcome)</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../installer/windows/installer/index.html">Installer</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../components/attribution/docs/index.html">Installation Attribution</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../toolkit/mozapps/defaultagent/default-browser-agent/index.html">Default Browser Agent</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../components/migration/docs/index.html">Migration</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../components/pagedata/docs/index.html">PageDataService</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../places/index.html">Places</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../components/asrouter/docs/index.html">Messaging System</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../search/index.html">Search</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../base/tabbrowser/index.html">tabbrowser</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../touchbar/index.html">Touch Bar</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../components/uitour/docs/index.html">UITour</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../branding/docs/index.html">Firefox Branding</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../components/storybook/docs/README.storybook.stories.html">Storybook for Firefox</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../components/storybook/docs/README.reusable-widgets.stories.html">Reusable UI widgets</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../components/storybook/docs/README.other-widgets.stories.html">Other types of UI Widgets</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../components/storybook/docs/README.lit-guide.stories.html">Lit</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../components/storybook/docs/README.xul-and-html.stories.html">XUL and HTML</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../toolkit/themes/shared/design-system/docs/README.design-tokens.stories.html">Design tokens</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../toolkit/themes/shared/design-system/docs/README.json-design-tokens.stories.html">JSON design tokens</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../components/backup/docs/index.html">Backup Component</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../components/sidebar/docs/index.html">Sidebar</a></li>
+        </ul></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../dom/index.html">DOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../editor/index.html">Editor</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../layout/index.html">Style system (CSS) &amp; Layout</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../gfx/index.html">Graphics</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../ipc/index.html">Processes, Threads and IPC</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../devtools/index.html">Firefox DevTools Contributor Docs</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../toolkit/index.html">Toolkit</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../js/index.html">SpiderMonkey</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../jsloader/index.html">JS Loader</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/geckoview/index.html">GeckoView</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/fenix/index.html">Fenix</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/focus-android/index.html">Focus for Android</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../dom/bindings/webidl/index.html">WebIDL</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../modules/libpref/index.html">libpref</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../networking/index.html">Networking</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../remote/index.html">Remote Protocols</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../services/index.html">Services</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../permissions/index.html">Permissions</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../uriloader/index.html">File Handling</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../widget/cocoa/index.html">Firefox on macOS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../widget/windows/index.html">Firefox on Windows</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../toolkit/components/ml/index.html">Firefox AI Runtime</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../accessible/index.html">Accessibility</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../media/index.html">Media Playback</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../code-quality/index.html">Code quality</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../writing-rust-code/index.html">Writing Rust Code</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../rust-components/index.html">Rust Components</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/profiler/index.html">Gecko Profiler</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../performance/index.html">Performance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../storage/index.html">Database bindings (SQLite, KV, …)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../xpcom/index.html">XPCOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../nspr/index.html">NSPR</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../security/nss/index.html">Network Security Services (NSS)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../content-security/index.html">Web Security Checks in Gecko</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">The Firefox Build System</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mach/index.html">Mach</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/try/index.html">Pushing to Try</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../build/buildsystem/index.html">Build System</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../taskcluster/index.html">Firefox CI and Taskgraph</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/moztreedocs/index.html">Managing Documentation</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mozbuild/vendor/index.html">Vendoring Third Party Components</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Testing &amp; Test Infrastructure</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/automated-testing/index.html">Automated Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/treeherder-try/index.html">Understanding Treeherder Results</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/sheriffed-intermittents/index.html">Sheriffed intermittent failures</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/tests-for-new-config/index.html">Turning on Firefox tests for a new configuration</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/intermittent/index.html">Avoiding intermittent tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/testing-policy/index.html">Testing Policy</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/ci-configs/index.html">Configuration Changes</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/browser-chrome/index.html">Browser chrome mochitests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/chrome-tests/index.html">Chrome Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/marionette/index.html">Marionette</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/geckodriver/index.html">geckodriver</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/test-verification/index.html">Test Verification</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/webrender/index.html">WebRender Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/mochitest-plain/index.html">Mochitest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/xpcshell/index.html">XPCShell tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/tps/index.html">TPS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../web-platform/index.html">web-platform-tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../gtest/index.html">GTest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/fuzzing/index.html">Fuzzing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/sanitizer/index.html">Sanitizer</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/perfdocs/index.html">Performance Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/code-coverage/index.html">Code coverage</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing-rust-code/index.html">Testing &amp; Debugging Rust Code</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Releases &amp; Updates</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html">Mozilla Update Infrastructure</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html#watershed-updates">Watershed Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html#desupport-updates">Desupport Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/update-verify/index.html">Update Verify</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Localization &amp; Internationalization</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../intl/index.html">Internationalization</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../l10n/index.html">Localization</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox and Python</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mozbase/index.html">mozbase</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../python/index.html">Using third-party Python packages</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Metrics Collected in Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../metrics/index.html">Metrics</a></li>
+      </ul>
+     </div>
+    </div>
+   </nav>
+   <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+    <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+     <i data-toggle="wy-nav-top" class="fa fa-bars"></i> <a href="../../index.html">Firefox Source Docs</a>
+    </nav>
+    <div class="wy-nav-content">
+     <div class="rst-content">
+      <!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+      <div role="navigation" aria-label="Page navigation">
+       <ul class="wy-breadcrumbs">
+        <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+        <li class="breadcrumb-item"><a href="../index.html">Firefox Front-end</a></li>
+        <li class="breadcrumb-item active">Address Bar</li>
+        <li class="wy-breadcrumbs-aside"><a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Developer+Infrastructure&amp;component=Firefox+Source+Docs%3A+Content&amp;short_desc=Documentation+issue+on+browser/urlbar/index&amp;comment=URL+=+https://firefox-source-docs.mozilla.org/browser/urlbar/index.html&amp;bug_file_loc=https://firefox-source-docs.mozilla.org/browser/urlbar/index.html" rel="nofollow">Report an issue</a> / <a href="../../_sources/browser/urlbar/index.rst.txt" rel="nofollow"> View page source</a></li>
+       </ul>
+       <hr>
+      </div>
+      <div role="main" class="document" itemscope itemtype="http://schema.org/Article">
+       <div itemprop="articleBody">
+        <section id="address-bar">
+         <h1>Address Bar<a class="headerlink" href="#address-bar" title="Link to this heading">?</a></h1>
+         <p>This document describes the implementation of Firefox’s address bar, also known as the quantumbar or urlbar. The address bar was also called the awesomebar until Firefox 68, when it was substantially rewritten.</p>
+         <p>The address bar is a specialized search access point that aggregates data from several different sources, including:</p>
+         <blockquote>
+          <div>
+           <ul class="simple">
+            <li>
+             <p>Places (Firefox’s history and bookmarks system)</p></li>
+            <li>
+             <p>Search engines (including search suggestions)</p></li>
+            <li>
+             <p>WebExtensions</p></li>
+            <li>
+             <p>Open tabs</p></li>
+           </ul>
+          </div>
+         </blockquote>
+         <section id="where-to-start">
+          <h2>Where to Start<a class="headerlink" href="#where-to-start" title="Link to this heading">?</a></h2>
+          <p>If you want a high level, nontechnical summary of how the address bar works, read <a class="reference internal" href="nontechnical-overview.html"><span class="doc">Nontechnical Overview</span></a>.</p>
+          <p>If you are interested in the technical details, you might want to skip ahead to <a class="reference internal" href="overview.html"><span class="doc">Architecture Overview</span></a>.</p>
+         </section>
+         <section id="codebase">
+          <h2>Codebase<a class="headerlink" href="#codebase" title="Link to this heading">?</a></h2>
+          <p>The address bar code lives in <a class="reference external" href="https://searchfox.org/mozilla-central/source/browser/components/urlbar/">browser/components/urlbar</a>.</p>
+         </section>
+         <section id="table-of-contents">
+          <h2>Table of Contents<a class="headerlink" href="#table-of-contents" title="Link to this heading">?</a></h2>
+          <div class="toctree-wrapper compound">
+           <ul>
+            <li class="toctree-l1"><a class="reference internal" href="nontechnical-overview.html">Nontechnical Overview</a>
+             <ul>
+              <li class="toctree-l2"><a class="reference internal" href="nontechnical-overview.html#terminology">Terminology</a></li>
+              <li class="toctree-l2"><a class="reference internal" href="nontechnical-overview.html#maximum-result-count">Maximum Result Count</a></li>
+              <li class="toctree-l2"><a class="reference internal" href="nontechnical-overview.html#search-strings">Search Strings</a></li>
+              <li class="toctree-l2"><a class="reference internal" href="nontechnical-overview.html#top-sites">Top Sites</a></li>
+              <li class="toctree-l2"><a class="reference internal" href="nontechnical-overview.html#searches">Searches</a></li>
+              <li class="toctree-l2"><a class="reference internal" href="nontechnical-overview.html#the-heuristic-result">The Heuristic Result</a></li>
+              <li class="toctree-l2"><a class="reference internal" href="nontechnical-overview.html#result-composition">Result Composition</a>
+               <ul>
+                <li class="toctree-l3"><a class="reference internal" href="nontechnical-overview.html#heuristic-result">1. Heuristic Result</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="nontechnical-overview.html#extension-omnibox-results">2. Extension Omnibox Results</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="nontechnical-overview.html#search-suggestions">3. Search Suggestions</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="nontechnical-overview.html#general-results">4. General Results</a>
+                 <ul>
+                  <li class="toctree-l4"><a class="reference internal" href="nontechnical-overview.html#adaptive-history">Adaptive History</a></li>
+                  <li class="toctree-l4"><a class="reference internal" href="nontechnical-overview.html#open-and-remote-tabs">Open and Remote Tabs</a></li>
+                  <li class="toctree-l4"><a class="reference internal" href="nontechnical-overview.html#sponsored-and-firefox-suggest-results">Sponsored and Firefox Suggest Results</a></li>
+                  <li class="toctree-l4"><a class="reference internal" href="nontechnical-overview.html#frecency">Frecency</a></li>
+                 </ul></li>
+                <li class="toctree-l3"><a class="reference internal" href="nontechnical-overview.html#preferences-that-affect-result-composition">Preferences that Affect Result Composition</a></li>
+               </ul></li>
+              <li class="toctree-l2"><a class="reference internal" href="nontechnical-overview.html#result-composition-nuances">Result Composition Nuances</a></li>
+              <li class="toctree-l2"><a class="reference internal" href="nontechnical-overview.html#other-result-types">Other Result Types</a>
+               <ul>
+                <li class="toctree-l3"><a class="reference internal" href="nontechnical-overview.html#search-interventions">Search Interventions</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="nontechnical-overview.html#search-tips">Search Tips</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="nontechnical-overview.html#tab-to-search">Tab to Search</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="nontechnical-overview.html#search-engine-offers">Search Engine Offers</a></li>
+               </ul></li>
+              <li class="toctree-l2"><a class="reference internal" href="nontechnical-overview.html#search-mode">Search Mode</a></li>
+             </ul></li>
+            <li class="toctree-l1"><a class="reference internal" href="overview.html">Architecture Overview</a>
+             <ul>
+              <li class="toctree-l2"><a class="reference internal" href="overview.html#the-urlbarquerycontext">The UrlbarQueryContext</a></li>
+              <li class="toctree-l2"><a class="reference internal" href="overview.html#the-model">The Model</a>
+               <ul>
+                <li class="toctree-l3"><a class="reference internal" href="overview.html#urlbarprovider">UrlbarProvider</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="overview.html#urlbarmuxer">UrlbarMuxer</a></li>
+               </ul></li>
+              <li class="toctree-l2"><a class="reference internal" href="overview.html#the-controller">The Controller</a></li>
+              <li class="toctree-l2"><a class="reference internal" href="overview.html#the-view">The View</a>
+               <ul>
+                <li class="toctree-l3"><a class="reference internal" href="overview.html#id1">UrlbarInput.sys.mjs</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="overview.html#id2">UrlbarView.sys.mjs</a></li>
+               </ul></li>
+              <li class="toctree-l2"><a class="reference internal" href="overview.html#urlbarresult">UrlbarResult</a></li>
+             </ul></li>
+            <li class="toctree-l1"><a class="reference internal" href="lifetime.html">Search Lifecycle</a></li>
+            <li class="toctree-l1"><a class="reference internal" href="utilities.html">Utilities</a>
+             <ul>
+              <li class="toctree-l2"><a class="reference internal" href="utilities.html#id1">UrlbarPrefs.sys.mjs</a></li>
+              <li class="toctree-l2"><a class="reference internal" href="utilities.html#id2">UrlbarUtils.sys.mjs</a></li>
+             </ul></li>
+            <li class="toctree-l1"><a class="reference internal" href="telemetry.html">Telemetry</a>
+             <ul>
+              <li class="toctree-l2"><a class="reference internal" href="telemetry.html#histograms">Histograms</a>
+               <ul>
+                <li class="toctree-l3"><a class="reference internal" href="telemetry.html#places-autocomplete-1st-result-time-ms">PLACES_AUTOCOMPLETE_1ST_RESULT_TIME_MS</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="telemetry.html#places-autocomplete-6-first-results-time-ms">PLACES_AUTOCOMPLETE_6_FIRST_RESULTS_TIME_MS</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="telemetry.html#fx-urlbar-selected-result-method">FX_URLBAR_SELECTED_RESULT_METHOD</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="telemetry.html#fx-urlbar-zero-prefix-dwell-time-ms">FX_URLBAR_ZERO_PREFIX_DWELL_TIME_MS</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="telemetry.html#places-frecency-recalc-chunk-time-ms">PLACES_FRECENCY_RECALC_CHUNK_TIME_MS</a></li>
+               </ul></li>
+              <li class="toctree-l2"><a class="reference internal" href="telemetry.html#scalars">Scalars</a>
+               <ul>
+                <li class="toctree-l3"><a class="reference internal" href="telemetry.html#urlbar-abandonment">urlbar.abandonment</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="telemetry.html#urlbar-autofill-deletion">urlbar.autofill_deletion</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="telemetry.html#urlbar-engagement">urlbar.engagement</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="telemetry.html#urlbar-impression">urlbar.impression.*</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="telemetry.html#urlbar-persistedsearchterms-revert-by-popup-count">urlbar.persistedsearchterms.revert_by_popup_count</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="telemetry.html#urlbar-persistedsearchterms-view-count">urlbar.persistedsearchterms.view_count</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="telemetry.html#urlbar-tips">urlbar.tips</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="telemetry.html#urlbar-searchmode">urlbar.searchmode.*</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="telemetry.html#urlbar-picked">urlbar.picked.*</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="telemetry.html#urlbar-picked-searchmode">urlbar.picked.searchmode.*</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="telemetry.html#urlbar-tabtosearch">urlbar.tabtosearch.*</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="telemetry.html#urlbar-zeroprefix-abandonment">urlbar.zeroprefix.abandonment</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="telemetry.html#urlbar-zeroprefix-engagement">urlbar.zeroprefix.engagement</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="telemetry.html#urlbar-zeroprefix-exposure">urlbar.zeroprefix.exposure</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="telemetry.html#urlbar-quickaction-picked">urlbar.quickaction.picked</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="telemetry.html#urlbar-unifiedsearchbutton-opened">urlbar.unifiedsearchbutton.opened</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="telemetry.html#urlbar-unifiedsearchbutton-picked">urlbar.unifiedsearchbutton.picked</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="telemetry.html#places">places.*</a></li>
+               </ul></li>
+              <li class="toctree-l2"><a class="reference internal" href="telemetry.html#search-engagement-telemetry">Search Engagement Telemetry</a></li>
+              <li class="toctree-l2"><a class="reference internal" href="telemetry.html#custom-pings-for-contextual-services">Custom pings for Contextual Services</a></li>
+              <li class="toctree-l2"><a class="reference internal" href="telemetry.html#other-telemetry-relevant-to-the-address-bar">Other telemetry relevant to the Address Bar</a>
+               <ul>
+                <li class="toctree-l3"><a class="reference internal" href="telemetry.html#search-telemetry">Search Telemetry</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="telemetry.html#contextual-services-topsites">contextual.services.topsites.*</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="telemetry.html#telemetry-environment">Telemetry Environment</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="telemetry.html#firefox-suggest">Firefox Suggest</a></li>
+               </ul></li>
+             </ul></li>
+            <li class="toctree-l1"><a class="reference internal" href="firefox-suggest-telemetry.html">Firefox Suggest Telemetry</a>
+             <ul>
+              <li class="toctree-l2"><a class="reference internal" href="firefox-suggest-telemetry.html#histograms">Histograms</a>
+               <ul>
+                <li class="toctree-l3"><a class="reference internal" href="firefox-suggest-telemetry.html#fx-urlbar-merino-latency-ms">FX_URLBAR_MERINO_LATENCY_MS</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="firefox-suggest-telemetry.html#fx-urlbar-merino-latency-weather-ms">FX_URLBAR_MERINO_LATENCY_WEATHER_MS</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="firefox-suggest-telemetry.html#fx-urlbar-merino-response">FX_URLBAR_MERINO_RESPONSE</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="firefox-suggest-telemetry.html#fx-urlbar-merino-response-weather">FX_URLBAR_MERINO_RESPONSE_WEATHER</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="firefox-suggest-telemetry.html#fx-urlbar-quick-suggest-remote-settings-latency-ms">FX_URLBAR_QUICK_SUGGEST_REMOTE_SETTINGS_LATENCY_MS</a></li>
+               </ul></li>
+              <li class="toctree-l2"><a class="reference internal" href="firefox-suggest-telemetry.html#scalars">Scalars</a>
+               <ul>
+                <li class="toctree-l3"><a class="reference internal" href="firefox-suggest-telemetry.html#browser-ui-interaction-preferences-panesearch">browser.ui.interaction.preferences_paneSearch</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="firefox-suggest-telemetry.html#contextual-services-quicksuggest-block-dynamic-wikipedia">contextual.services.quicksuggest.block_dynamic_wikipedia</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="firefox-suggest-telemetry.html#contextual-services-quicksuggest-block-nonsponsored">contextual.services.quicksuggest.block_nonsponsored</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="firefox-suggest-telemetry.html#contextual-services-quicksuggest-block-nonsponsored-bestmatch">contextual.services.quicksuggest.block_nonsponsored_bestmatch</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="firefox-suggest-telemetry.html#contextual-services-quicksuggest-block-sponsored">contextual.services.quicksuggest.block_sponsored</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="firefox-suggest-telemetry.html#contextual-services-quicksuggest-block-sponsored-bestmatch">contextual.services.quicksuggest.block_sponsored_bestmatch</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="firefox-suggest-telemetry.html#contextual-services-quicksuggest-block-weather">contextual.services.quicksuggest.block_weather</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="firefox-suggest-telemetry.html#contextual-services-quicksuggest-click">contextual.services.quicksuggest.click</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="firefox-suggest-telemetry.html#contextual-services-quicksuggest-click-dynamic-wikipedia">contextual.services.quicksuggest.click_dynamic_wikipedia</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="firefox-suggest-telemetry.html#contextual-services-quicksuggest-click-nav-notmatched">contextual.services.quicksuggest.click_nav_notmatched</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="firefox-suggest-telemetry.html#contextual-services-quicksuggest-click-nav-shown-heuristic">contextual.services.quicksuggest.click_nav_shown_heuristic</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="firefox-suggest-telemetry.html#contextual-services-quicksuggest-click-nav-shown-nav">contextual.services.quicksuggest.click_nav_shown_nav</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="firefox-suggest-telemetry.html#contextual-services-quicksuggest-click-nav-superceded">contextual.services.quicksuggest.click_nav_superceded</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="firefox-suggest-telemetry.html#contextual-services-quicksuggest-click-nonsponsored">contextual.services.quicksuggest.click_nonsponsored</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="firefox-suggest-telemetry.html#contextual-services-quicksuggest-click-nonsponsored-bestmatch">contextual.services.quicksuggest.click_nonsponsored_bestmatch</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="firefox-suggest-telemetry.html#contextual-services-quicksuggest-click-sponsored">contextual.services.quicksuggest.click_sponsored</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="firefox-suggest-telemetry.html#contextual-services-quicksuggest-click-sponsored-bestmatch">contextual.services.quicksuggest.click_sponsored_bestmatch</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="firefox-suggest-telemetry.html#contextual-services-quicksuggest-click-weather">contextual.services.quicksuggest.click_weather</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="firefox-suggest-telemetry.html#contextual-services-quicksuggest-exposure-weather">contextual.services.quicksuggest.exposure_weather</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="firefox-suggest-telemetry.html#contextual-services-quicksuggest-help">contextual.services.quicksuggest.help</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="firefox-suggest-telemetry.html#contextual-services-quicksuggest-help-dynamic-wikipedia">contextual.services.quicksuggest.help_dynamic_wikipedia</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="firefox-suggest-telemetry.html#contextual-services-quicksuggest-help-nonsponsored">contextual.services.quicksuggest.help_nonsponsored</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="firefox-suggest-telemetry.html#contextual-services-quicksuggest-help-nonsponsored-bestmatch">contextual.services.quicksuggest.help_nonsponsored_bestmatch</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="firefox-suggest-telemetry.html#contextual-services-quicksuggest-help-sponsored">contextual.services.quicksuggest.help_sponsored</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="firefox-suggest-telemetry.html#contextual-services-quicksuggest-help-sponsored-bestmatch">contextual.services.quicksuggest.help_sponsored_bestmatch</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="firefox-suggest-telemetry.html#contextual-services-quicksuggest-help-weather">contextual.services.quicksuggest.help_weather</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="firefox-suggest-telemetry.html#contextual-services-quicksuggest-impression">contextual.services.quicksuggest.impression</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="firefox-suggest-telemetry.html#contextual-services-quicksuggest-impression-dynamic-wikipedia">contextual.services.quicksuggest.impression_dynamic_wikipedia</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="firefox-suggest-telemetry.html#contextual-services-quicksuggest-impression-nav-notmatched">contextual.services.quicksuggest.impression_nav_notmatched</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="firefox-suggest-telemetry.html#contextual-services-quicksuggest-impression-nav-shown">contextual.services.quicksuggest.impression_nav_shown</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="firefox-suggest-telemetry.html#contextual-services-quicksuggest-impression-nav-superceded">contextual.services.quicksuggest.impression_nav_superceded</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="firefox-suggest-telemetry.html#contextual-services-quicksuggest-impression-nonsponsored">contextual.services.quicksuggest.impression_nonsponsored</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="firefox-suggest-telemetry.html#contextual-services-quicksuggest-impression-nonsponsored-bestmatch">contextual.services.quicksuggest.impression_nonsponsored_bestmatch</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="firefox-suggest-telemetry.html#contextual-services-quicksuggest-impression-sponsored">contextual.services.quicksuggest.impression_sponsored</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="firefox-suggest-telemetry.html#contextual-services-quicksuggest-impression-sponsored-bestmatch">contextual.services.quicksuggest.impression_sponsored_bestmatch</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="firefox-suggest-telemetry.html#contextual-services-quicksuggest-impression-weather">contextual.services.quicksuggest.impression_weather</a></li>
+               </ul></li>
+              <li class="toctree-l2"><a class="reference internal" href="firefox-suggest-telemetry.html#events">Events</a>
+               <ul>
+                <li class="toctree-l3"><a class="reference internal" href="firefox-suggest-telemetry.html#contextservices-quicksuggest-data-collect-toggled">contextservices.quicksuggest.data_collect_toggled</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="firefox-suggest-telemetry.html#contextservices-quicksuggest-enable-toggled">contextservices.quicksuggest.enable_toggled</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="firefox-suggest-telemetry.html#contextservices-quicksuggest-engagement">contextservices.quicksuggest.engagement</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="firefox-suggest-telemetry.html#contextservices-quicksuggest-impression-cap">contextservices.quicksuggest.impression_cap</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="firefox-suggest-telemetry.html#contextservices-quicksuggest-opt-in-dialog">contextservices.quicksuggest.opt_in_dialog</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="firefox-suggest-telemetry.html#contextservices-quicksuggest-sponsored-toggled">contextservices.quicksuggest.sponsored_toggled</a></li>
+               </ul></li>
+              <li class="toctree-l2"><a class="reference internal" href="firefox-suggest-telemetry.html#environment">Environment</a>
+               <ul>
+                <li class="toctree-l3"><a class="reference internal" href="firefox-suggest-telemetry.html#browser-urlbar-quicksuggest-onboardingdialogchoice">browser.urlbar.quicksuggest.onboardingDialogChoice</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="firefox-suggest-telemetry.html#browser-urlbar-quicksuggest-datacollection-enabled">browser.urlbar.quicksuggest.dataCollection.enabled</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="firefox-suggest-telemetry.html#browser-urlbar-suggest-quicksuggest">browser.urlbar.suggest.quicksuggest</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="firefox-suggest-telemetry.html#browser-urlbar-suggest-quicksuggest-nonsponsored">browser.urlbar.suggest.quicksuggest.nonsponsored</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="firefox-suggest-telemetry.html#browser-urlbar-suggest-quicksuggest-sponsored">browser.urlbar.suggest.quicksuggest.sponsored</a></li>
+               </ul></li>
+              <li class="toctree-l2"><a class="reference internal" href="firefox-suggest-telemetry.html#the-quick-suggest-ping">The “quick-suggest” Ping</a></li>
+              <li class="toctree-l2"><a class="reference internal" href="firefox-suggest-telemetry.html#nimbus-exposure-event">Nimbus Exposure Event</a></li>
+              <li class="toctree-l2"><a class="reference internal" href="firefox-suggest-telemetry.html#merino-search-queries">Merino Search Queries</a>
+               <ul>
+                <li class="toctree-l3"><a class="reference internal" href="firefox-suggest-telemetry.html#merino-api">Merino API</a></li>
+               </ul></li>
+             </ul></li>
+            <li class="toctree-l1"><a class="reference internal" href="debugging.html">Debugging &amp; Logging</a></li>
+            <li class="toctree-l1"><a class="reference internal" href="ranking.html">Ranking</a>
+             <ul>
+              <li class="toctree-l2"><a class="reference internal" href="ranking.html#frecency-implementation">Frecency implementation</a>
+               <ul>
+                <li class="toctree-l3"><a class="reference internal" href="ranking.html#how-frecency-for-a-page-is-calculated">How frecency for a page is calculated</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="ranking.html#when-frecency-for-a-page-is-calculated">When frecency for a page is calculated</a></li>
+               </ul></li>
+              <li class="toctree-l2"><a class="reference internal" href="ranking.html#adaptive-input-history">Adaptive Input History</a></li>
+             </ul></li>
+            <li class="toctree-l1"><a class="reference internal" href="dynamic-result-types.html">Dynamic Result Types</a>
+             <ul>
+              <li class="toctree-l2"><a class="reference internal" href="dynamic-result-types.html#motivation">Motivation</a></li>
+              <li class="toctree-l2"><a class="reference internal" href="dynamic-result-types.html#id1">Dynamic Result Types</a></li>
+              <li class="toctree-l2"><a class="reference internal" href="dynamic-result-types.html#getting-started">Getting Started</a></li>
+              <li class="toctree-l2"><a class="reference internal" href="dynamic-result-types.html#implementation-steps">Implementation Steps</a>
+               <ul>
+                <li class="toctree-l3"><a class="reference internal" href="dynamic-result-types.html#register-the-dynamic-result-type">1. Register the dynamic result type</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="dynamic-result-types.html#register-the-view-template">2. Register the view template</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="dynamic-result-types.html#add-the-provider">3. Add the provider</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="dynamic-result-types.html#implement-the-provider-s-getviewupdate-method">4. Implement the provider’s getViewUpdate method</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="dynamic-result-types.html#style-the-results">5. Style the results</a>
+                 <ul>
+                  <li class="toctree-l4"><a class="reference internal" href="dynamic-result-types.html#dynamictype-row-attribute">dynamicType Row Attribute</a></li>
+                  <li class="toctree-l4"><a class="reference internal" href="dynamic-result-types.html#child-element-class">Child Element Class</a></li>
+                 </ul></li>
+               </ul></li>
+              <li class="toctree-l2"><a class="reference internal" href="dynamic-result-types.html#view-templates">View Templates</a>
+               <ul>
+                <li class="toctree-l3"><a class="reference internal" href="dynamic-result-types.html#properties">Properties</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="dynamic-result-types.html#example">Example</a></li>
+               </ul></li>
+              <li class="toctree-l2"><a class="reference internal" href="dynamic-result-types.html#view-update-objects">View Update Objects</a>
+               <ul>
+                <li class="toctree-l3"><a class="reference internal" href="dynamic-result-types.html#id3">Properties</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="dynamic-result-types.html#id4">Example</a></li>
+               </ul></li>
+              <li class="toctree-l2"><a class="reference internal" href="dynamic-result-types.html#accessibility">Accessibility</a>
+               <ul>
+                <li class="toctree-l3"><a class="reference internal" href="dynamic-result-types.html#id5">Example</a></li>
+               </ul></li>
+              <li class="toctree-l2"><a class="reference internal" href="dynamic-result-types.html#mimicking-built-in-address-bar-results">Mimicking Built-in Address Bar Results</a>
+               <ul>
+                <li class="toctree-l3"><a class="reference internal" href="dynamic-result-types.html#url-navigation">URL Navigation</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="dynamic-result-types.html#text-highlighting">Text Highlighting</a></li>
+               </ul></li>
+              <li class="toctree-l2"><a class="reference internal" href="dynamic-result-types.html#appendix-a-examples">Appendix A: Examples</a></li>
+             </ul></li>
+            <li class="toctree-l1"><a class="reference internal" href="preferences.html">Preferences</a>
+             <ul>
+              <li class="toctree-l2"><a class="reference internal" href="preferences.html#user-exposed">User Exposed</a></li>
+              <li class="toctree-l2"><a class="reference internal" href="preferences.html#hidden">Hidden</a></li>
+              <li class="toctree-l2"><a class="reference internal" href="preferences.html#experimental">Experimental</a></li>
+             </ul></li>
+            <li class="toctree-l1"><a class="reference internal" href="testing.html">Testing</a>
+             <ul>
+              <li class="toctree-l2"><a class="reference internal" href="testing.html#common-tests">Common Tests</a>
+               <ul>
+                <li class="toctree-l3"><a class="reference internal" href="testing.html#mochitests">Mochitests</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="testing.html#xpcshell">XPCShell</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="testing.html#when-to-write-a-xpcshell-or-mochitest">When To Write a XPCShell or Mochitest?</a></li>
+               </ul></li>
+              <li class="toctree-l2"><a class="reference internal" href="testing.html#how-to-write-a-test">How To Write a Test</a>
+               <ul>
+                <li class="toctree-l3"><a class="reference internal" href="testing.html#test-boilerplate">Test Boilerplate</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="testing.html#manifest">Manifest</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="testing.html#manifest-metadata">Manifest Metadata</a></li>
+               </ul></li>
+              <li class="toctree-l2"><a class="reference internal" href="testing.html#common-test-utilities">Common Test Utilities</a>
+               <ul>
+                <li class="toctree-l3"><a class="reference internal" href="testing.html#head-js-and-common-head-js">head.js and common-head.js</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="testing.html#urlbartestutils">UrlbarTestUtils</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="testing.html#browsertestutils">BrowserTestUtils</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="testing.html#testutils">TestUtils</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="testing.html#placestestutils">PlacesTestUtils</a></li>
+                <li class="toctree-l3"><a class="reference internal" href="testing.html#eventutils">EventUtils</a></li>
+               </ul></li>
+             </ul></li>
+            <li class="toctree-l1"><a class="reference internal" href="contact.html">Getting in Touch</a></li>
+           </ul>
+          </div>
+         </section>
+         <section id="api-reference">
+          <h2>API Reference<a class="headerlink" href="#api-reference" title="Link to this heading">?</a></h2>
+          <div class="toctree-wrapper compound">
+           <ul>
+            <li class="toctree-l1"><a class="reference internal" href="UrlbarController.html">UrlbarController Reference</a>
+             <ul>
+              <li class="toctree-l2"><a class="reference internal" href="UrlbarController.html#UrlbarController"><code class="docutils literal notranslate"><span class="pre">UrlbarController</span></code></a>
+               <ul>
+                <li class="toctree-l3"><a class="reference internal" href="UrlbarController.html#UrlbarController.UrlbarController"><code class="docutils literal notranslate"><span class="pre">UrlbarController.UrlbarController</span></code></a></li>
+                <li class="toctree-l3"><a class="reference internal" href="UrlbarController.html#UrlbarController.userSelectionBehavior"><code class="docutils literal notranslate"><span class="pre">UrlbarController.userSelectionBehavior</span></code></a></li>
+                <li class="toctree-l3"><a class="reference internal" href="UrlbarController.html#UrlbarController.addQueryListener"><code class="docutils literal notranslate"><span class="pre">UrlbarController.addQueryListener()</span></code></a></li>
+                <li class="toctree-l3"><a class="reference internal" href="UrlbarController.html#UrlbarController.cancelQuery"><code class="docutils literal notranslate"><span class="pre">UrlbarController.cancelQuery()</span></code></a></li>
+                <li class="toctree-l3"><a class="reference internal" href="UrlbarController.html#UrlbarController.clearLastQueryContextCache"><code class="docutils literal notranslate"><span class="pre">UrlbarController.clearLastQueryContextCache()</span></code></a></li>
+                <li class="toctree-l3"><a class="reference internal" href="UrlbarController.html#UrlbarController.handleKeyNavigation"><code class="docutils literal notranslate"><span class="pre">UrlbarController.handleKeyNavigation()</span></code></a></li>
+                <li class="toctree-l3"><a class="reference internal" href="UrlbarController.html#UrlbarController.keyEventMovesCaret"><code class="docutils literal notranslate"><span class="pre">UrlbarController.keyEventMovesCaret()</span></code></a></li>
+                <li class="toctree-l3"><a class="reference internal" href="UrlbarController.html#UrlbarController.notify"><code class="docutils literal notranslate"><span class="pre">UrlbarController.notify()</span></code></a></li>
+                <li class="toctree-l3"><a class="reference internal" href="UrlbarController.html#UrlbarController.receiveResults"><code class="docutils literal notranslate"><span class="pre">UrlbarController.receiveResults()</span></code></a></li>
+                <li class="toctree-l3"><a class="reference internal" href="UrlbarController.html#UrlbarController.removeQueryListener"><code class="docutils literal notranslate"><span class="pre">UrlbarController.removeQueryListener()</span></code></a></li>
+                <li class="toctree-l3"><a class="reference internal" href="UrlbarController.html#UrlbarController.removeResult"><code class="docutils literal notranslate"><span class="pre">UrlbarController.removeResult()</span></code></a></li>
+                <li class="toctree-l3"><a class="reference internal" href="UrlbarController.html#UrlbarController.setLastQueryContextCache"><code class="docutils literal notranslate"><span class="pre">UrlbarController.setLastQueryContextCache()</span></code></a></li>
+                <li class="toctree-l3"><a class="reference internal" href="UrlbarController.html#UrlbarController.setView"><code class="docutils literal notranslate"><span class="pre">UrlbarController.setView()</span></code></a></li>
+                <li class="toctree-l3"><a class="reference internal" href="UrlbarController.html#UrlbarController.speculativeConnect"><code class="docutils literal notranslate"><span class="pre">UrlbarController.speculativeConnect()</span></code></a></li>
+                <li class="toctree-l3"><a class="reference internal" href="UrlbarController.html#UrlbarController.startQuery"><code class="docutils literal notranslate"><span class="pre">UrlbarController.startQuery()</span></code></a></li>
+               </ul></li>
+             </ul></li>
+            <li class="toctree-l1"><a class="reference internal" href="UrlbarInput.html">UrlbarInput Reference</a>
+             <ul>
+              <li class="toctree-l2"><a class="reference internal" href="UrlbarInput.html#UrlbarInput"><code class="docutils literal notranslate"><span class="pre">UrlbarInput</span></code></a>
+               <ul>
+                <li class="toctree-l3"><a class="reference internal" href="UrlbarInput.html#UrlbarInput.UrlbarInput"><code class="docutils literal notranslate"><span class="pre">UrlbarInput.UrlbarInput</span></code></a></li>
+                <li class="toctree-l3"><a class="reference internal" href="UrlbarInput.html#UrlbarInput._autofillFirstResult"><code class="docutils literal notranslate"><span class="pre">UrlbarInput._autofillFirstResult()</span></code></a></li>
+                <li class="toctree-l3"><a class="reference internal" href="UrlbarInput.html#UrlbarInput._autofillValue"><code class="docutils literal notranslate"><span class="pre">UrlbarInput._autofillValue()</span></code></a></li>
+                <li class="toctree-l3"><a class="reference internal" href="UrlbarInput.html#UrlbarInput._getDefaultSearchEngine"><code class="docutils literal notranslate"><span class="pre">UrlbarInput._getDefaultSearchEngine()</span></code></a></li>
+                <li class="toctree-l3"><a class="reference internal" href="UrlbarInput.html#UrlbarInput._loadURL"><code class="docutils literal notranslate"><span class="pre">UrlbarInput._loadURL()</span></code></a></li>
+                <li class="toctree-l3"><a class="reference internal" href="UrlbarInput.html#UrlbarInput._maybeAutofillPlaceholder"><code class="docutils literal notranslate"><span class="pre">UrlbarInput._maybeAutofillPlaceholder()</span></code></a></li>
+                <li class="toctree-l3"><a class="reference internal" href="UrlbarInput.html#UrlbarInput._maybeCanonizeURL"><code class="docutils literal notranslate"><span class="pre">UrlbarInput._maybeCanonizeURL()</span></code></a></li>
+                <li class="toctree-l3"><a class="reference internal" href="UrlbarInput.html#UrlbarInput._maybeSelectAll"><code class="docutils literal notranslate"><span class="pre">UrlbarInput._maybeSelectAll()</span></code></a></li>
+                <li class="toctree-l3"><a class="reference internal" href="UrlbarInput.html#UrlbarInput._notifyStartNavigation"><code class="docutils literal notranslate"><span class="pre">UrlbarInput._notifyStartNavigation()</span></code></a></li>
+                <li class="toctree-l3"><a class="reference internal" href="UrlbarInput.html#UrlbarInput._recordSearch"><code class="docutils literal notranslate"><span class="pre">UrlbarInput._recordSearch()</span></code></a></li>
+                <li class="toctree-l3"><a class="reference internal" href="UrlbarInput.html#UrlbarInput._resetSearchState"><code class="docutils literal notranslate"><span class="pre">UrlbarInput._resetSearchState()</span></code></a></li>
+                <li class="toctree-l3"><a class="reference internal" href="UrlbarInput.html#UrlbarInput._searchModeForResult"><code class="docutils literal notranslate"><span class="pre">UrlbarInput._searchModeForResult()</span></code></a></li>
+                <li class="toctree-l3"><a class="reference internal" href="UrlbarInput.html#UrlbarInput._setPlaceholder"><code class="docutils literal notranslate"><span class="pre">UrlbarInput._setPlaceholder()</span></code></a></li>
+                <li class="toctree-l3"><a class="reference internal" href="UrlbarInput.html#UrlbarInput._setValue"><code class="docutils literal notranslate"><span class="pre">UrlbarInput._setValue()</span></code></a></li>
+                <li class="toctree-l3"><a class="reference internal" href="UrlbarInput.html#UrlbarInput._trimValue"><code class="docutils literal notranslate"><span class="pre">UrlbarInput._trimValue()</span></code></a></li>
+                <li class="toctree-l3"><a class="reference internal" href="UrlbarInput.html#UrlbarInput._updatePlaceholder"><code class="docutils literal notranslate"><span class="pre">UrlbarInput._updatePlaceholder()</span></code></a></li>
+                <li class="toctree-l3"><a class="reference internal" href="UrlbarInput.html#UrlbarInput._updatePlaceholderFromDefaultEngine"><code class="docutils literal notranslate"><span class="pre">UrlbarInput._updatePlaceholderFromDefaultEngine()</span></code></a></li>
+                <li class="toctree-l3"><a class="reference internal" href="UrlbarInput.html#UrlbarInput._updateSearchModeUI"><code class="docutils literal notranslate"><span class="pre">UrlbarInput._updateSearchModeUI()</span></code></a></li>
+                <li class="toctree-l3"><a class="reference internal" href="UrlbarInput.html#UrlbarInput._whereToOpen"><code class="docutils literal notranslate"><span class="pre">UrlbarInput._whereToOpen()</span></code></a></li>
+                <li class="toctree-l3"><a class="reference internal" href="UrlbarInput.html#UrlbarInput.afterTabSwitchFocusChange"><code class="docutils literal notranslate"><span class="pre">UrlbarInput.afterTabSwitchFocusChange()</span></code></a></li>
+                <li class="toctree-l3"><a class="reference internal" href="UrlbarInput.html#UrlbarInput.confirmSearchMode"><code class="docutils literal notranslate"><span class="pre">UrlbarInput.confirmSearchMode()</span></code></a></li>
+                <li class="toctree-l3"><a class="reference internal" href="UrlbarInput.html#UrlbarInput.delayedStartupInit"><code class="docutils literal notranslate"><span class="pre">UrlbarInput.delayedStartupInit()</span></code></a></li>
+                <li class="toctree-l3"><a class="reference internal" href="UrlbarInput.html#UrlbarInput.formatValue"><code class="docutils literal notranslate"><span class="pre">UrlbarInput.formatValue()</span></code></a></li>
+                <li class="toctree-l3"><a class="reference internal" href="UrlbarInput.html#UrlbarInput.getSearchMode"><code class="docutils literal notranslate"><span class="pre">UrlbarInput.getSearchMode()</span></code></a></li>
+                <li class="toctree-l3"><a class="reference internal" href="UrlbarInput.html#UrlbarInput.getSearchSource"><code class="docutils literal notranslate"><span class="pre">UrlbarInput.getSearchSource()</span></code></a></li>
+                <li class="toctree-l3"><a class="reference internal" href="UrlbarInput.html#UrlbarInput.handleCommand"><code class="docutils literal notranslate"><span class="pre">UrlbarInput.handleCommand()</span></code></a></li>
+                <li class="toctree-l3"><a class="reference internal" href="UrlbarInput.html#UrlbarInput.handleEvent"><code class="docutils literal notranslate"><span class="pre">UrlbarInput.handleEvent()</span></code></a></li>
+                <li class="toctree-l3"><a class="reference internal" href="UrlbarInput.html#UrlbarInput.handleNavigation"><code class="docutils literal notranslate"><span class="pre">UrlbarInput.handleNavigation()</span></code></a></li>
+                <li class="toctree-l3"><a class="reference internal" href="UrlbarInput.html#UrlbarInput.handoff"><code class="docutils literal notranslate"><span class="pre">UrlbarInput.handoff()</span></code></a></li>
+                <li class="toctree-l3"><a class="reference internal" href="UrlbarInput.html#UrlbarInput.initPlaceHolder"><code class="docutils literal notranslate"><span class="pre">UrlbarInput.initPlaceHolder()</span></code></a></li>
+                <li class="toctree-l3"><a class="reference internal" href="UrlbarInput.html#UrlbarInput.makeURIReadable"><code class="docutils literal notranslate"><span class="pre">UrlbarInput.makeURIReadable()</span></code></a></li>
+                <li class="toctree-l3"><a class="reference internal" href="UrlbarInput.html#UrlbarInput.maybeConfirmSearchModeFromResult"><code class="docutils literal notranslate"><span class="pre">UrlbarInput.maybeConfirmSearchModeFromResult()</span></code></a></li>
+                <li class="toctree-l3"><a class="reference internal" href="UrlbarInput.html#UrlbarInput.onFirstResult"><code class="docutils literal notranslate"><span class="pre">UrlbarInput.onFirstResult()</span></code></a></li>
+                <li class="toctree-l3"><a class="reference internal" href="UrlbarInput.html#UrlbarInput.pickElement"><code class="docutils literal notranslate"><span class="pre">UrlbarInput.pickElement()</span></code></a></li>
+                <li class="toctree-l3"><a class="reference internal" href="UrlbarInput.html#UrlbarInput.pickResult"><code class="docutils literal notranslate"><span class="pre">UrlbarInput.pickResult()</span></code></a></li>
+                <li class="toctree-l3"><a class="reference internal" href="UrlbarInput.html#UrlbarInput.removeHiddenFocus"><code class="docutils literal notranslate"><span class="pre">UrlbarInput.removeHiddenFocus()</span></code></a></li>
+                <li class="toctree-l3"><a class="reference internal" href="UrlbarInput.html#UrlbarInput.restoreSearchModeState"><code class="docutils literal notranslate"><span class="pre">UrlbarInput.restoreSearchModeState()</span></code></a></li>
+                <li class="toctree-l3"><a class="reference internal" href="UrlbarInput.html#UrlbarInput.sanitizeTextFromClipboard"><code class="docutils literal notranslate"><span class="pre">UrlbarInput.sanitizeTextFromClipboard()</span></code></a></li>
+                <li class="toctree-l3"><a class="reference internal" href="UrlbarInput.html#UrlbarInput.search"><code class="docutils literal notranslate"><span class="pre">UrlbarInput.search()</span></code></a></li>
+                <li class="toctree-l3"><a class="reference internal" href="UrlbarInput.html#UrlbarInput.searchModeShortcut"><code class="docutils literal notranslate"><span class="pre">UrlbarInput.searchModeShortcut()</span></code></a></li>
+                <li class="toctree-l3"><a class="reference internal" href="UrlbarInput.html#UrlbarInput.setHiddenFocus"><code class="docutils literal notranslate"><span class="pre">UrlbarInput.setHiddenFocus()</span></code></a></li>
+                <li class="toctree-l3"><a class="reference internal" href="UrlbarInput.html#UrlbarInput.setPageProxyState"><code class="docutils literal notranslate"><span class="pre">UrlbarInput.setPageProxyState()</span></code></a></li>
+                <li class="toctree-l3"><a class="reference internal" href="UrlbarInput.html#UrlbarInput.setResultForCurrentValue"><code class="docutils literal notranslate"><span class="pre">UrlbarInput.setResultForCurrentValue()</span></code></a></li>
+                <li class="toctree-l3"><a class="reference internal" href="UrlbarInput.html#UrlbarInput.setSearchMode"><code class="docutils literal notranslate"><span class="pre">UrlbarInput.setSearchMode()</span></code></a></li>
+                <li class="toctree-l3"><a class="reference internal" href="UrlbarInput.html#UrlbarInput.setURI"><code class="docutils literal notranslate"><span class="pre">UrlbarInput.setURI()</span></code></a></li>
+                <li class="toctree-l3"><a class="reference internal" href="UrlbarInput.html#UrlbarInput.setUnifiedSearchButtonAvailability"><code class="docutils literal notranslate"><span class="pre">UrlbarInput.setUnifiedSearchButtonAvailability()</span></code></a></li>
+                <li class="toctree-l3"><a class="reference internal" href="UrlbarInput.html#UrlbarInput.setValueFromResult"><code class="docutils literal notranslate"><span class="pre">UrlbarInput.setValueFromResult()</span></code></a></li>
+                <li class="toctree-l3"><a class="reference internal" href="UrlbarInput.html#UrlbarInput.startQuery"><code class="docutils literal notranslate"><span class="pre">UrlbarInput.startQuery()</span></code></a></li>
+                <li class="toctree-l3"><a class="reference internal" href="UrlbarInput.html#UrlbarInput.updateTextOverflow"><code class="docutils literal notranslate"><span class="pre">UrlbarInput.updateTextOverflow()</span></code></a></li>
+               </ul></li>
+             </ul></li>
+            <li class="toctree-l1"><a class="reference internal" href="UrlbarView.html">UrlbarView Reference</a>
+             <ul>
+              <li class="toctree-l2"><a class="reference internal" href="UrlbarView.html#UrlbarView"><code class="docutils literal notranslate"><span class="pre">UrlbarView</span></code></a>
+               <ul>
+                <li class="toctree-l3"><a class="reference internal" href="UrlbarView.html#UrlbarView.UrlbarView"><code class="docutils literal notranslate"><span class="pre">UrlbarView.UrlbarView</span></code></a></li>
+                <li class="toctree-l3"><a class="reference internal" href="UrlbarView.html#UrlbarView.isOpen"><code class="docutils literal notranslate"><span class="pre">UrlbarView.isOpen</span></code></a></li>
+                <li class="toctree-l3"><a class="reference internal" href="UrlbarView.html#UrlbarView.selectedElement"><code class="docutils literal notranslate"><span class="pre">UrlbarView.selectedElement</span></code></a></li>
+                <li class="toctree-l3"><a class="reference internal" href="UrlbarView.html#UrlbarView.selectedResult"><code class="docutils literal notranslate"><span class="pre">UrlbarView.selectedResult</span></code></a></li>
+                <li class="toctree-l3"><a class="reference internal" href="UrlbarView.html#UrlbarView.visibleRowCount"><code class="docutils literal notranslate"><span class="pre">UrlbarView.visibleRowCount</span></code></a></li>
+                <li class="toctree-l3"><a class="reference internal" href="UrlbarView.html#UrlbarView.autoOpen"><code class="docutils literal notranslate"><span class="pre">UrlbarView.autoOpen()</span></code></a></li>
+                <li class="toctree-l3"><a class="reference internal" href="UrlbarView.html#UrlbarView.clearSelection"><code class="docutils literal notranslate"><span class="pre">UrlbarView.clearSelection()</span></code></a></li>
+                <li class="toctree-l3"><a class="reference internal" href="UrlbarView.html#UrlbarView.close"><code class="docutils literal notranslate"><span class="pre">UrlbarView.close()</span></code></a></li>
+                <li class="toctree-l3"><a class="reference internal" href="UrlbarView.html#UrlbarView.getFirstSelectableElement"><code class="docutils literal notranslate"><span class="pre">UrlbarView.getFirstSelectableElement()</span></code></a></li>
+                <li class="toctree-l3"><a class="reference internal" href="UrlbarView.html#UrlbarView.getLastSelectableElement"><code class="docutils literal notranslate"><span class="pre">UrlbarView.getLastSelectableElement()</span></code></a></li>
+                <li class="toctree-l3"><a class="reference internal" href="UrlbarView.html#UrlbarView.getResultAtIndex"><code class="docutils literal notranslate"><span class="pre">UrlbarView.getResultAtIndex()</span></code></a></li>
+                <li class="toctree-l3"><a class="reference internal" href="UrlbarView.html#UrlbarView.getResultFromElement"><code class="docutils literal notranslate"><span class="pre">UrlbarView.getResultFromElement()</span></code></a></li>
+                <li class="toctree-l3"><a class="reference internal" href="UrlbarView.html#UrlbarView.handleEvent"><code class="docutils literal notranslate"><span class="pre">UrlbarView.handleEvent()</span></code></a></li>
+                <li class="toctree-l3"><a class="reference internal" href="UrlbarView.html#UrlbarView.invalidateResultMenuCommands"><code class="docutils literal notranslate"><span class="pre">UrlbarView.invalidateResultMenuCommands()</span></code></a></li>
+                <li class="toctree-l3"><a class="reference internal" href="UrlbarView.html#UrlbarView.onQueryResultRemoved"><code class="docutils literal notranslate"><span class="pre">UrlbarView.onQueryResultRemoved()</span></code></a></li>
+                <li class="toctree-l3"><a class="reference internal" href="UrlbarView.html#UrlbarView.resultIsSelected"><code class="docutils literal notranslate"><span class="pre">UrlbarView.resultIsSelected()</span></code></a></li>
+                <li class="toctree-l3"><a class="reference internal" href="UrlbarView.html#UrlbarView.selectBy"><code class="docutils literal notranslate"><span class="pre">UrlbarView.selectBy()</span></code></a></li>
+                <li class="toctree-l3"><a class="reference internal" href="UrlbarView.html#UrlbarView.shouldSpaceActivateSelectedElement"><code class="docutils literal notranslate"><span class="pre">UrlbarView.shouldSpaceActivateSelectedElement()</span></code></a></li>
+                <li class="toctree-l3"><a class="reference internal" href="UrlbarView.html#UrlbarView.addDynamicViewTemplate"><code class="docutils literal notranslate"><span class="pre">UrlbarView.addDynamicViewTemplate</span></code></a></li>
+                <li class="toctree-l3"><a class="reference internal" href="UrlbarView.html#UrlbarView.removeDynamicViewTemplate"><code class="docutils literal notranslate"><span class="pre">UrlbarView.removeDynamicViewTemplate</span></code></a></li>
+               </ul></li>
+             </ul></li>
+           </ul>
+          </div>
+         </section>
+        </section>
+       </div>
+      </div>
+      <footer>
+       <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../index.html" class="btn btn-neutral float-left" title="Firefox Front-end" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a> <a href="nontechnical-overview.html" class="btn btn-neutral float-right" title="Nontechnical Overview" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+       </div>
+       <hr>
+       <div role="contentinfo">
+        <p></p>
+       </div> Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+      </footer>
+     </div>
+    </div>
+   </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ </body>
+</html>

@@ -1,0 +1,357 @@
+<!doctype html>
+<html class="writer-html5" lang="en" data-content_root="../">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Editor module structure — Firefox Source Docs  documentation</title>
+  <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50">
+  <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094">
+  <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=fd3f3429">
+  <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b">
+  <link rel="stylesheet" type="text/css" href="../_static/custom_theme.css?v=dc5ed815">
+  <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7">
+  <link rel="shortcut icon" href="../_static/firefox.ico"><!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script src="../_static/jquery.js?v=5d32c60e"></script>
+  <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+  <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+  <script src="../_static/doctools.js?v=9a2dae69"></script>
+  <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+  <script src="../_static/copybutton.js?v=30646c52"></script>
+  <script src="../_static/design-tabs.js?v=36754332"></script>
+  <script src="../_static/js/theme.js"></script>
+  <link rel="index" title="Index" href="../genindex.html">
+  <link rel="search" title="Search" href="../search.html">
+  <link rel="next" title="Editor module specific rules" href="EditorModuleSpecificRules.html">
+  <link rel="prev" title="Editor" href="index.html">
+ </head>
+ <body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+   <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <div class="wy-side-scroll">
+     <div class="wy-side-nav-search">
+      <a href="../index.html" class="icon icon-home"> Firefox Source Docs <img src="../_static/firefox-wordmark.svg" class="logo" alt="Logo"> </a><!-- -- This code is governed by the BSD license ---->
+      <div>
+       <h3>Quick search</h3>
+       <script>
+    (function () {
+      var cx = "dd12886298f75dbef";
+      var gcse = document.createElement("script");
+      gcse.async = true;
+      gcse.src = "https://cse.google.com/cse.js?cx=" + cx;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(gcse, s);
+    })();
+  </script><gcse:search></gcse:search>
+      </div>
+     </div>
+     <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+      <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../glossary/index.html">A Glossary of Common Terms</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../overview/index.html">A Quick Guide to Mozilla Applications</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../setup/index.html">Getting Set Up To Work On The Firefox Codebase</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Working On Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../contributing/index.html">Working on Firefox</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../bug-mgmt/index.html">Bug Handling</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox User Guide</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../devtools-user/index.html">Firefox DevTools User Docs</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Source Code Documentation</span></p>
+      <ul class="current">
+       <li class="toctree-l1"><a class="reference internal" href="../mots/index.html">Governance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../browser/index.html">Firefox Front-end</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../dom/index.html">DOM</a></li>
+       <li class="toctree-l1 current"><a class="reference internal" href="index.html">Editor</a>
+        <ul class="current">
+         <li class="toctree-l2 current"><a class="current reference internal" href="#">Editor module structure</a>
+          <ul>
+           <li class="toctree-l3"><a class="reference internal" href="#introduction">Introduction</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#directories">Directories</a>
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="#composer">composer</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#libeditor">libeditor</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#spellchecker">spellchecker</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#txmgr">txmgr</a></li>
+            </ul></li>
+           <li class="toctree-l3"><a class="reference internal" href="#main-classes">Main classes</a>
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="#editorbase">EditorBase</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#texteditor">TextEditor</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#htmleditor">HTMLEditor</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#editorutils">EditorUtils</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#htmleditutils">HTMLEditUtils</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#autorangearray">AutoRangeArray</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#editordompoint-editorrawdompoint-editordompointintext-editorrawdompointintext">EditorDOMPoint, EditorRawDOMPoint, EditorDOMPointInText, EditorRawDOMPointInText</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#editordomrange-editorrawdomrange-editordomrangeintexts-editorrawdomrangeintexts">EditorDOMRange, EditorRawDOMRange, EditorDOMRangeInTexts, EditorRawDOMRangeInTexts</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#autotrackdompoint-autotrackdomrange">AutoTrackDOMPoint, AutoTrackDOMRange</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#wsrunscanner">WSRunScanner</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#whitespacevisibilitykeeper">WhiteSpaceVisibilityKeeper</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#transaction">*Transaction</a></li>
+            </ul></li>
+          </ul></li>
+         <li class="toctree-l2"><a class="reference internal" href="EditorModuleSpecificRules.html">Editor module specific rules</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="IMEHandlingGuide.html">IME handling guide</a></li>
+        </ul></li>
+       <li class="toctree-l1"><a class="reference internal" href="../layout/index.html">Style system (CSS) &amp; Layout</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../gfx/index.html">Graphics</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../ipc/index.html">Processes, Threads and IPC</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../devtools/index.html">Firefox DevTools Contributor Docs</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../toolkit/index.html">Toolkit</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../js/index.html">SpiderMonkey</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../jsloader/index.html">JS Loader</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mobile/android/geckoview/index.html">GeckoView</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mobile/android/fenix/index.html">Fenix</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mobile/android/focus-android/index.html">Focus for Android</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../dom/bindings/webidl/index.html">WebIDL</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../modules/libpref/index.html">libpref</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../networking/index.html">Networking</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../remote/index.html">Remote Protocols</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../services/index.html">Services</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../permissions/index.html">Permissions</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../uriloader/index.html">File Handling</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../widget/cocoa/index.html">Firefox on macOS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../widget/windows/index.html">Firefox on Windows</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../toolkit/components/ml/index.html">Firefox AI Runtime</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../accessible/index.html">Accessibility</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../media/index.html">Media Playback</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../code-quality/index.html">Code quality</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../writing-rust-code/index.html">Writing Rust Code</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../rust-components/index.html">Rust Components</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/profiler/index.html">Gecko Profiler</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../performance/index.html">Performance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../storage/index.html">Database bindings (SQLite, KV, …)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../xpcom/index.html">XPCOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../nspr/index.html">NSPR</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../security/nss/index.html">Network Security Services (NSS)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../content-security/index.html">Web Security Checks in Gecko</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">The Firefox Build System</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../mach/index.html">Mach</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/try/index.html">Pushing to Try</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../build/buildsystem/index.html">Build System</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../taskcluster/index.html">Firefox CI and Taskgraph</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/moztreedocs/index.html">Managing Documentation</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mozbuild/vendor/index.html">Vendoring Third Party Components</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Testing &amp; Test Infrastructure</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/automated-testing/index.html">Automated Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/treeherder-try/index.html">Understanding Treeherder Results</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/sheriffed-intermittents/index.html">Sheriffed intermittent failures</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/tests-for-new-config/index.html">Turning on Firefox tests for a new configuration</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/intermittent/index.html">Avoiding intermittent tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/testing-policy/index.html">Testing Policy</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/ci-configs/index.html">Configuration Changes</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/browser-chrome/index.html">Browser chrome mochitests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/chrome-tests/index.html">Chrome Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/marionette/index.html">Marionette</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/geckodriver/index.html">geckodriver</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/test-verification/index.html">Test Verification</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/webrender/index.html">WebRender Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/mochitest-plain/index.html">Mochitest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/xpcshell/index.html">XPCShell tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/tps/index.html">TPS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../web-platform/index.html">web-platform-tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../gtest/index.html">GTest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/fuzzing/index.html">Fuzzing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/sanitizer/index.html">Sanitizer</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/perfdocs/index.html">Performance Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/code-coverage/index.html">Code coverage</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing-rust-code/index.html">Testing &amp; Debugging Rust Code</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Releases &amp; Updates</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../update-infrastructure/index.html">Mozilla Update Infrastructure</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../update-infrastructure/index.html#watershed-updates">Watershed Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../update-infrastructure/index.html#desupport-updates">Desupport Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/update-verify/index.html">Update Verify</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Localization &amp; Internationalization</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../intl/index.html">Internationalization</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../l10n/index.html">Localization</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox and Python</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../mozbase/index.html">mozbase</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../python/index.html">Using third-party Python packages</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Metrics Collected in Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../metrics/index.html">Metrics</a></li>
+      </ul>
+     </div>
+    </div>
+   </nav>
+   <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+    <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+     <i data-toggle="wy-nav-top" class="fa fa-bars"></i> <a href="../index.html">Firefox Source Docs</a>
+    </nav>
+    <div class="wy-nav-content">
+     <div class="rst-content">
+      <!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+      <div role="navigation" aria-label="Page navigation">
+       <ul class="wy-breadcrumbs">
+        <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+        <li class="breadcrumb-item"><a href="index.html">Editor</a></li>
+        <li class="breadcrumb-item active">Editor module structure</li>
+        <li class="wy-breadcrumbs-aside"><a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Developer+Infrastructure&amp;component=Firefox+Source+Docs%3A+Content&amp;short_desc=Documentation+issue+on+editor/EditorModuleStructure&amp;comment=URL+=+https://firefox-source-docs.mozilla.org/editor/EditorModuleStructure.html&amp;bug_file_loc=https://firefox-source-docs.mozilla.org/editor/EditorModuleStructure.html" rel="nofollow">Report an issue</a> / <a href="../_sources/editor/EditorModuleStructure.rst.txt" rel="nofollow"> View page source</a></li>
+       </ul>
+       <hr>
+      </div>
+      <div role="main" class="document" itemscope itemtype="http://schema.org/Article">
+       <div itemprop="articleBody">
+        <section id="editor-module-structure">
+         <h1>Editor module structure<a class="headerlink" href="#editor-module-structure" title="Link to this heading">?</a></h1>
+         <p>This document explains the structure of the editor module and overview of classes.</p>
+         <section id="introduction">
+          <h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">?</a></h2>
+          <p>This module implements the builtin editors of editable elements or documents, and this does <strong>not</strong> implement the interface with DOM API and visual feedback of the editing UI. In other words, this module implements DOM tree editors.</p>
+         </section>
+         <section id="directories">
+          <h2>Directories<a class="headerlink" href="#directories" title="Link to this heading">?</a></h2>
+          <section id="composer">
+           <h3>composer<a class="headerlink" href="#composer" title="Link to this heading">?</a></h3>
+           <p>Previously, this directory contained “Composer” UI related code. However, currently, this directory contains <code class="docutils literal notranslate"><span class="pre">nsEditingSession</span></code> and <code class="docutils literal notranslate"><span class="pre">ComposerCommandsUpdater</span></code>.</p>
+          </section>
+          <section id="libeditor">
+           <h3>libeditor<a class="headerlink" href="#libeditor" title="Link to this heading">?</a></h3>
+           <p>This is the main directory which contains “core” implementation of editors.</p>
+          </section>
+          <section id="spellchecker">
+           <h3>spellchecker<a class="headerlink" href="#spellchecker" title="Link to this heading">?</a></h3>
+           <p>Despite of the directory name, implementation of the spellchecker is <strong>not</strong> here. This directory contains only a bridge between editor classes and the spellchecker and serialized text of editable content for spellchecking.</p>
+          </section>
+          <section id="txmgr">
+           <h3>txmgr<a class="headerlink" href="#txmgr" title="Link to this heading">?</a></h3>
+           <p>This directory contains transaction items and transaction classes. They were designed for generic use cases, e.g., managing undo/redo of bookmarks/history of browser, etc, but they are used only by the editor.</p>
+          </section>
+         </section>
+         <section id="main-classes">
+          <h2>Main classes<a class="headerlink" href="#main-classes" title="Link to this heading">?</a></h2>
+          <section id="editorbase">
+           <h3>EditorBase<a class="headerlink" href="#editorbase" title="Link to this heading">?</a></h3>
+           <p><code class="docutils literal notranslate"><span class="pre">EditorBase</span></code> class is an abstract class of editors. This inherits <code class="docutils literal notranslate"><span class="pre">nsIEditor</span></code> XPCOM interface, implement common features which work with instance of classes, and exposed by <code class="docutils literal notranslate"><span class="pre">mozilla/EditorBase.h</span></code>.</p>
+          </section>
+          <section id="texteditor">
+           <h3>TextEditor<a class="headerlink" href="#texteditor" title="Link to this heading">?</a></h3>
+           <p><code class="docutils literal notranslate"><span class="pre">TextEditor</span></code> class is the implementation of plaintext editor which works with <code class="docutils literal notranslate"><span class="pre">&lt;input&gt;</span></code> and <code class="docutils literal notranslate"><span class="pre">&lt;textarea&gt;</span></code>. Its exposed root is the host HTML elements, however, the editable root is an anonymous <code class="docutils literal notranslate"><span class="pre">&lt;div&gt;</span></code> created in a native anonymous subtree under the exposed root elements. This creates a <code class="docutils literal notranslate"><span class="pre">Text</span></code> node as the first child of the anonymous <code class="docutils literal notranslate"><span class="pre">&lt;div&gt;</span></code> and modify its data. If the text data ends with a line-break, i.e., the last line is empty, append a <code class="docutils literal notranslate"><span class="pre">&lt;br&gt;</span></code> element for making the empty last line visible.</p>
+           <p>This also implements password editor. It works almost same as normal text editor, but each character may be masked by masked character such as “?” or “*” by the layout module for the privacy. Therefore, this manages masked/unmasked range of password and maybe making typed character automatically after a while for mobile devices.</p>
+           <p>This is exposed with <code class="docutils literal notranslate"><span class="pre">mozilla/TextEditor.h</span></code>.</p>
+           <section id="selection-in-texteditor">
+            <h4>Selection in TextEditor<a class="headerlink" href="#selection-in-texteditor" title="Link to this heading">?</a></h4>
+            <p>Independent <code class="docutils literal notranslate"><span class="pre">Selection</span></code> and <code class="docutils literal notranslate"><span class="pre">nsFrameSelection</span></code> per <code class="docutils literal notranslate"><span class="pre">&lt;input&gt;</span></code> or <code class="docutils literal notranslate"><span class="pre">&lt;textarea&gt;</span></code>.</p>
+           </section>
+           <section id="lifetime-of-texteditor">
+            <h4>Lifetime of TextEditor<a class="headerlink" href="#lifetime-of-texteditor" title="Link to this heading">?</a></h4>
+            <p>Created when an editable <code class="docutils literal notranslate"><span class="pre">&lt;textarea&gt;</span></code> is created or a text-editable <code class="docutils literal notranslate"><span class="pre">&lt;input&gt;</span></code> element gets focus. Note that the initialization may run asynchronously if it’s requested when it’s not safe to run script. Destroyed when the element becomes invisible. Note that <code class="docutils literal notranslate"><span class="pre">TextEditor</span></code> is recreated when every reframe of the host element. This means that when the size of <code class="docutils literal notranslate"><span class="pre">&lt;input&gt;</span></code> or <code class="docutils literal notranslate"><span class="pre">&lt;textarea&gt;</span></code> is changed for example, <code class="docutils literal notranslate"><span class="pre">TextEditor</span></code> is recreated and forget undo/redo transactions, but takes over the value, selection ranges and composition of IME from the previous instance.</p>
+           </section>
+          </section>
+          <section id="htmleditor">
+           <h3>HTMLEditor<a class="headerlink" href="#htmleditor" title="Link to this heading">?</a></h3>
+           <p><code class="docutils literal notranslate"><span class="pre">HTMLEditor</span></code> class is the implementation of rich text editor which works with <code class="docutils literal notranslate"><span class="pre">contenteditable</span></code>, <code class="docutils literal notranslate"><span class="pre">Document.designMode</span></code> and XUL <code class="docutils literal notranslate"><span class="pre">&lt;editor&gt;</span></code>. Its instance is created per document even if the document has multiple elements having <code class="docutils literal notranslate"><span class="pre">contenteditable</span></code> attribute. Therefore, undo/redo transactions are shared in all editable regions.</p>
+           <p>This is exposed with <code class="docutils literal notranslate"><span class="pre">mozilla/HTMLEditor.h</span></code>.</p>
+           <section id="selection-in-htmleditor">
+            <h4>Selection in HTMLEditor<a class="headerlink" href="#selection-in-htmleditor" title="Link to this heading">?</a></h4>
+            <p>The instance for the <code class="docutils literal notranslate"><span class="pre">Document</span></code> and <code class="docutils literal notranslate"><span class="pre">Window</span></code>. When an editable element gets focus, <code class="docutils literal notranslate"><span class="pre">HTMLEditor</span></code> sets the ancestor limit of <code class="docutils literal notranslate"><span class="pre">Selection</span></code> to the focused element or the <code class="docutils literal notranslate"><span class="pre">&lt;body&gt;</span></code> of the <code class="docutils literal notranslate"><span class="pre">Document</span></code>. Then, <code class="docutils literal notranslate"><span class="pre">Selection</span></code> cannot cross boundary of the limiter element.</p>
+           </section>
+           <section id="lifetime-of-htmleditor">
+            <h4>Lifetime of HTMLEditor<a class="headerlink" href="#lifetime-of-htmleditor" title="Link to this heading">?</a></h4>
+            <p>Created when first editable region is created in the <code class="docutils literal notranslate"><span class="pre">Document</span></code>. Destroyed when last editable region becomes non-editable.</p>
+            <p>Currently, even while <code class="docutils literal notranslate"><span class="pre">HTMLEditor</span></code> is handling an edit command/operation (called edit action in editor classes), each DOM mutation can be tracked with legacy DOM mutation events synchronously. Thus, after changing the DOM tree from <code class="docutils literal notranslate"><span class="pre">HTMLEditor</span></code>, any state could occur, e.g., the editor itself may have been destroyed, the DOM tree have been modified, the <code class="docutils literal notranslate"><span class="pre">Selection</span></code> have been modified, etc. This issue is tracked in <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1710784">bug 1710784</a>.</p>
+           </section>
+          </section>
+          <section id="editorutils">
+           <h3>EditorUtils<a class="headerlink" href="#editorutils" title="Link to this heading">?</a></h3>
+           <p>This class has only static utility methods which are used by <code class="docutils literal notranslate"><span class="pre">EditorBase</span></code> or <code class="docutils literal notranslate"><span class="pre">TextEditor</span></code> and may be used by <code class="docutils literal notranslate"><span class="pre">HTMLEditor</span></code> too. I.e., the utility methods which are used <strong>not</strong> only by <code class="docutils literal notranslate"><span class="pre">HTMLEditor</span></code> should be implemented in this class.</p>
+           <p>Typically, sateless methods should be implemented as <code class="docutils literal notranslate"><span class="pre">static</span></code> methods of utility classes because editor classes have too many methods and fields.</p>
+           <p>This class is not exposed.</p>
+          </section>
+          <section id="htmleditutils">
+           <h3>HTMLEditUtils<a class="headerlink" href="#htmleditutils" title="Link to this heading">?</a></h3>
+           <p>This class has only static utility methods which are used only by <code class="docutils literal notranslate"><span class="pre">HTMLEditor</span></code>.</p>
+           <p>This class is not exposed.</p>
+          </section>
+          <section id="autorangearray">
+           <h3>AutoRangeArray<a class="headerlink" href="#autorangearray" title="Link to this heading">?</a></h3>
+           <p>This class is a stack only class and intended to copy of normal selection ranges. In the new code, <cite>Selection</cite> shouldn’t be referred directly, instead, methods should take reference to this instance and modify it. Finally, root caller should apply the ranges to <cite>Selection</cite>. Then, <cite>HTMLEditor</cite> does not need to take care of unexpected <cite>Selection</cite> updates by legacy DOM mutation event listeners.</p>
+           <p>This class is not exposed.</p>
+          </section>
+          <section id="editordompoint-editorrawdompoint-editordompointintext-editorrawdompointintext">
+           <h3>EditorDOMPoint, EditorRawDOMPoint, EditorDOMPointInText, EditorRawDOMPointInText<a class="headerlink" href="#editordompoint-editorrawdompoint-editordompointintext-editorrawdompointintext" title="Link to this heading">?</a></h3>
+           <p>It represents a point in a DOM tree with one of the following:</p>
+           <ul class="simple">
+            <li>
+             <p>Container node and offset in it</p></li>
+            <li>
+             <p>Container node and child node in it</p></li>
+            <li>
+             <p>Container node and both offset and child node in it</p></li>
+           </ul>
+           <p>In most cases, instances are initialized with a container and only offset or child node. Then, when <code class="docutils literal notranslate"><span class="pre">Offset()</span></code> or <code class="docutils literal notranslate"><span class="pre">GetChild()</span></code> is called, the last one is “fixed”. After inserting new child node before the offset and/or the child node, <code class="docutils literal notranslate"><span class="pre">IsSetAndValid()</span></code> will return <code class="docutils literal notranslate"><span class="pre">false</span></code> since the child node is not the child at the offset.</p>
+           <p>If you want to keep using after modifying the DOM tree, you can make the instance forget offset or child node with <code class="docutils literal notranslate"><span class="pre">AutoEditorDOMPointChildInvalidator</span></code> and <code class="docutils literal notranslate"><span class="pre">AutoEditorDOMRangeChildrenInvalidator</span></code>. The reason why the forgetting methods are not simply exposed is, <code class="docutils literal notranslate"><span class="pre">Offset()</span></code> and <code class="docutils literal notranslate"><span class="pre">GetChild()</span></code> are available even after the DOM tree is modified to get the cached offset and child node, additionally, which method may modify the DOM tree may be not clear for developers. Therefore, creating a block only for these helper classes makes the updating point clearer.</p>
+           <p>These classes are exposed with <code class="docutils literal notranslate"><span class="pre">mozilla/EditorDOMPoint.h</span></code>.</p>
+          </section>
+          <section id="editordomrange-editorrawdomrange-editordomrangeintexts-editorrawdomrangeintexts">
+           <h3>EditorDOMRange, EditorRawDOMRange, EditorDOMRangeInTexts, EditorRawDOMRangeInTexts<a class="headerlink" href="#editordomrange-editorrawdomrange-editordomrangeintexts-editorrawdomrangeintexts" title="Link to this heading">?</a></h3>
+           <p>It represents 2 points in a DOM tree with 2 <code class="docutils literal notranslate"><span class="pre">Editor*DOMPoint(InText)</span></code>. Different from <code class="docutils literal notranslate"><span class="pre">nsRange</span></code>, the instances do not track the DOM tree changes. Therefore, the initialization is much faster than <code class="docutils literal notranslate"><span class="pre">nsRange</span></code> and can be in the stack.</p>
+           <p>These classes are exposed with <code class="docutils literal notranslate"><span class="pre">mozilla/EditorDOMPoint.h</span></code>.</p>
+          </section>
+          <section id="autotrackdompoint-autotrackdomrange">
+           <h3>AutoTrackDOMPoint, AutoTrackDOMRange<a class="headerlink" href="#autotrackdompoint-autotrackdomrange" title="Link to this heading">?</a></h3>
+           <p>These methods updates <code class="docutils literal notranslate"><span class="pre">Editor*DOMPoint(InText)</span></code> or <code class="docutils literal notranslate"><span class="pre">Editor*DOMRange(InTexts)</span></code> at destruction with applying the changes caused by the editor instance. In other words, they don’t track the DOM tree changes by the web apps like changes from legacy DOM mutation event listeners.</p>
+           <p>These classes are currently exposed with <code class="docutils literal notranslate"><span class="pre">mozilla/SelectionState.h</span></code>, but we should stop exposing them.</p>
+          </section>
+          <section id="wsrunscanner">
+           <h3>WSRunScanner<a class="headerlink" href="#wsrunscanner" title="Link to this heading">?</a></h3>
+           <p>A helper class of <code class="docutils literal notranslate"><span class="pre">HTMLEditor</span></code>. This class scans previous or (inclusive) next visible thing from a DOM point or a DOM node. This is typically useful for considering whether a <cite>&lt;br&gt;</cite> is visible or invisible due to near a block element boundary, finding nearest editable character from caret position, etc. However, the running cost is <strong>not</strong> cheap, thus if you find another way to consider it simpler, use it instead, and also this does not check the actual style of the nodes (visible vs. invisible, block vs. inline), thus you’d get unexpected result in tricky cases.</p>
+           <p>This class is not exposed.</p>
+          </section>
+          <section id="whitespacevisibilitykeeper">
+           <h3>WhiteSpaceVisibilityKeeper<a class="headerlink" href="#whitespacevisibilitykeeper" title="Link to this heading">?</a></h3>
+           <p>A helper class of <code class="docutils literal notranslate"><span class="pre">HTMLEditor</span></code> to handle collapsible white-spaces as what user expected. This class currently handles white-space normalization (e.g., when user inputs multiple collapsible white-spaces, this replaces some of them to NBSPs), but the behavior is different from the other browsers. We should re-implement this with emulating the other browsers’ behavior as far as possible, but currently it’s put off due to not affecting UX (tracked in <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1658699">bug 1658699</a>.</p>
+           <p>This class is not exposed.</p>
+          </section>
+          <section id="transaction">
+           <h3>*Transaction<a class="headerlink" href="#transaction" title="Link to this heading">?</a></h3>
+           <p><code class="docutils literal notranslate"><span class="pre">*Transaction</span></code> classes represents a small transaction of updating the DOM tree and implements “do”, “undo” and “redo” of the update.</p>
+           <p>Note that each class instance is created too many (one edit action may cause multiple transactions). Therefore, each instance must be smaller as far as possible, and if you have an idea to collapse multiple instances to one instance, you should fix it. Then, users can run Firefox with smaller memory devices especially if the transaction is used in <code class="docutils literal notranslate"><span class="pre">TextEditor</span></code>.</p>
+          </section>
+         </section>
+        </section>
+       </div>
+      </div>
+      <footer>
+       <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Editor" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a> <a href="EditorModuleSpecificRules.html" class="btn btn-neutral float-right" title="Editor module specific rules" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+       </div>
+       <hr>
+       <div role="contentinfo">
+        <p></p>
+       </div> Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+      </footer>
+     </div>
+    </div>
+   </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ </body>
+</html>

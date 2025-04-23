@@ -1,0 +1,445 @@
+<!doctype html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inter-process Communication (IPC) — Firefox Source Docs  documentation</title>
+  <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=fa44fd50">
+  <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=19f00094">
+  <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css?v=fd3f3429">
+  <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css?v=76b2166b">
+  <link rel="stylesheet" type="text/css" href="../../../../_static/custom_theme.css?v=dc5ed815">
+  <link rel="stylesheet" type="text/css" href="../../../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7">
+  <link rel="shortcut icon" href="../../../../_static/firefox.ico"><!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+  <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+  <script src="../../../../_static/documentation_options.js?v=5929fcd5"></script>
+  <script src="../../../../_static/doctools.js?v=9a2dae69"></script>
+  <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
+  <script src="../../../../_static/copybutton.js?v=30646c52"></script>
+  <script src="../../../../_static/design-tabs.js?v=36754332"></script>
+  <script src="../../../../_static/js/theme.js"></script>
+  <link rel="index" title="Index" href="../../../../genindex.html">
+  <link rel="search" title="Search" href="../../../../search.html">
+  <link rel="next" title="Runtime Metric Definition Subsystem: JOG" href="jog.html">
+  <link rel="prev" title="FOG code organization" href="code_organization.html">
+ </head>
+ <body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+   <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <div class="wy-side-scroll">
+     <div class="wy-side-nav-search">
+      <a href="../../../../index.html" class="icon icon-home"> Firefox Source Docs <img src="../../../../_static/firefox-wordmark.svg" class="logo" alt="Logo"> </a><!-- -- This code is governed by the BSD license ---->
+      <div>
+       <h3>Quick search</h3>
+       <script>
+    (function () {
+      var cx = "dd12886298f75dbef";
+      var gcse = document.createElement("script");
+      gcse.async = true;
+      gcse.src = "https://cse.google.com/cse.js?cx=" + cx;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(gcse, s);
+    })();
+  </script><gcse:search></gcse:search>
+      </div>
+     </div>
+     <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+      <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../glossary/index.html">A Glossary of Common Terms</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../overview/index.html">A Quick Guide to Mozilla Applications</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../setup/index.html">Getting Set Up To Work On The Firefox Codebase</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Working On Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../contributing/index.html">Working on Firefox</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../bug-mgmt/index.html">Bug Handling</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox User Guide</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../devtools-user/index.html">Firefox DevTools User Docs</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Source Code Documentation</span></p>
+      <ul class="current">
+       <li class="toctree-l1"><a class="reference internal" href="../../../../mots/index.html">Governance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../browser/index.html">Firefox Front-end</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../dom/index.html">DOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../editor/index.html">Editor</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../layout/index.html">Style system (CSS) &amp; Layout</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../gfx/index.html">Graphics</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../ipc/index.html">Processes, Threads and IPC</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../devtools/index.html">Firefox DevTools Contributor Docs</a></li>
+       <li class="toctree-l1 current"><a class="reference internal" href="../../../index.html">Toolkit</a>
+        <ul class="current">
+         <li class="toctree-l2"><a class="reference internal" href="../../../javascript-logging.html">JavaScript Logging</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../mozapps/extensions/addon-manager/index.html">Add-on Manager</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../backgroundtasks/index.html">Background Task Mode</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../crashes/crash-manager/index.html">Crash Manager</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../crashreporter/crashreporter/index.html">Crash Reporter</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../internal-urls.html">Internal URLs</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../search/index.html">Search Service</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../normandy/normandy/index.html">Shield Recipe Client</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../nimbus/docs/index.html">Nimbus</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../messaging-system/docs/index.html">Messaging System Schemas</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../pictureinpicture/pictureinpicture/index.html">Picture-in-Picture</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../prompts/prompts/index.html">Prompts</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../modules/subprocess/toolkit_modules/subprocess/index.html">Subprocess Module</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../telemetry/index.html">Telemetry</a></li>
+         <li class="toctree-l2 current"><a class="reference internal" href="../index.html">Firefox on Glean (FOG)</a>
+          <ul class="current">
+           <li class="toctree-l3"><a class="reference internal" href="../user/index.html">Using Firefox on Glean</a></li>
+           <li class="toctree-l3 current"><a class="reference internal" href="index.html">Developing Firefox on Glean</a>
+            <ul class="current">
+             <li class="toctree-l4"><a class="reference internal" href="builtin_pings.html">Built-in Pings</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="code_organization.html">FOG code organization</a></li>
+             <li class="toctree-l4 current"><a class="current reference internal" href="#">Inter-process Communication (IPC)</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="jog.html">Runtime Metric Definition Subsystem: JOG</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="local_glean.html">Developing with a local Glean build</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="metric_ids.html">FOG Identifiers (Metric Ids, Submetric Ids, Ping Ids, …)</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="new_metric_types.html">Adding a New Metric Type</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="preferences.html">Preferences and Defines</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="storage.html">Storage</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="style_guide.html">FOG Documentation Style Guide</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="testing.html">Testing</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="updating_parser.html">Updating glean_parser</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="updating_sdk.html">Updating the Glean SDK</a></li>
+             <li class="toctree-l4"><a class="reference external" href="https://github.com/mozilla/glean/">Glean SDK Source</a></li>
+            </ul></li>
+          </ul></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../modules/toolkit_modules/index.html">Toolkit Modules</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../content/toolkit_widgets/index.html">Toolkit Widgets</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../resistfingerprinting/resistfingerprinting/index.html">Fingerprinting Resistance</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../url-classifier/url-classifier/index.html">URL Classifier</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../extensions/webextensions/index.html">WebExtensions API Development</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../../extensions/spellcheck/index.html">Managing the built-in en-US dictionary</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../mozapps/update/docs/index.html">Application Update</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../antitracking/anti-tracking/index.html">Anti-Tracking</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../translations/index.html">Translations</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../sessionstore/index.html">Session Store</a></li>
+        </ul></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../js/index.html">SpiderMonkey</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../jsloader/index.html">JS Loader</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../mobile/android/geckoview/index.html">GeckoView</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../mobile/android/fenix/index.html">Fenix</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../mobile/android/focus-android/index.html">Focus for Android</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../dom/bindings/webidl/index.html">WebIDL</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../modules/libpref/index.html">libpref</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../networking/index.html">Networking</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../remote/index.html">Remote Protocols</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../services/index.html">Services</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../permissions/index.html">Permissions</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../uriloader/index.html">File Handling</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../widget/cocoa/index.html">Firefox on macOS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../widget/windows/index.html">Firefox on Windows</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../ml/index.html">Firefox AI Runtime</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../accessible/index.html">Accessibility</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../media/index.html">Media Playback</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../code-quality/index.html">Code quality</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../writing-rust-code/index.html">Writing Rust Code</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../rust-components/index.html">Rust Components</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../tools/profiler/index.html">Gecko Profiler</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../performance/index.html">Performance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../storage/index.html">Database bindings (SQLite, KV, …)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../xpcom/index.html">XPCOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../nspr/index.html">NSPR</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../security/nss/index.html">Network Security Services (NSS)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../content-security/index.html">Web Security Checks in Gecko</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">The Firefox Build System</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../mach/index.html">Mach</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../tools/try/index.html">Pushing to Try</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../build/buildsystem/index.html">Build System</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../taskcluster/index.html">Firefox CI and Taskgraph</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../tools/moztreedocs/index.html">Managing Documentation</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../mozbuild/vendor/index.html">Vendoring Third Party Components</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Testing &amp; Test Infrastructure</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/automated-testing/index.html">Automated Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/treeherder-try/index.html">Understanding Treeherder Results</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/sheriffed-intermittents/index.html">Sheriffed intermittent failures</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/tests-for-new-config/index.html">Turning on Firefox tests for a new configuration</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/intermittent/index.html">Avoiding intermittent tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/testing-policy/index.html">Testing Policy</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/ci-configs/index.html">Configuration Changes</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/browser-chrome/index.html">Browser chrome mochitests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/chrome-tests/index.html">Chrome Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/marionette/index.html">Marionette</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/geckodriver/index.html">geckodriver</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/test-verification/index.html">Test Verification</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/webrender/index.html">WebRender Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/mochitest-plain/index.html">Mochitest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/xpcshell/index.html">XPCShell tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/tps/index.html">TPS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../web-platform/index.html">web-platform-tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../gtest/index.html">GTest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../tools/fuzzing/index.html">Fuzzing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../tools/sanitizer/index.html">Sanitizer</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/perfdocs/index.html">Performance Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../tools/code-coverage/index.html">Code coverage</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing-rust-code/index.html">Testing &amp; Debugging Rust Code</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Releases &amp; Updates</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../update-infrastructure/index.html">Mozilla Update Infrastructure</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../update-infrastructure/index.html#watershed-updates">Watershed Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../update-infrastructure/index.html#desupport-updates">Desupport Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../tools/update-verify/index.html">Update Verify</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Localization &amp; Internationalization</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../intl/index.html">Internationalization</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../l10n/index.html">Localization</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox and Python</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../mozbase/index.html">mozbase</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../python/index.html">Using third-party Python packages</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Metrics Collected in Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../metrics/index.html">Metrics</a></li>
+      </ul>
+     </div>
+    </div>
+   </nav>
+   <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+    <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+     <i data-toggle="wy-nav-top" class="fa fa-bars"></i> <a href="../../../../index.html">Firefox Source Docs</a>
+    </nav>
+    <div class="wy-nav-content">
+     <div class="rst-content">
+      <!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+      <div role="navigation" aria-label="Page navigation">
+       <ul class="wy-breadcrumbs">
+        <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+        <li class="breadcrumb-item"><a href="../../../index.html">Toolkit</a></li>
+        <li class="breadcrumb-item"><a href="../index.html">Firefox on Glean (FOG)</a></li>
+        <li class="breadcrumb-item"><a href="index.html">Developing Firefox on Glean</a></li>
+        <li class="breadcrumb-item active">Inter-process Communication (IPC)</li>
+        <li class="wy-breadcrumbs-aside"><a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Developer+Infrastructure&amp;component=Firefox+Source+Docs%3A+Content&amp;short_desc=Documentation+issue+on+toolkit/components/glean/dev/ipc&amp;comment=URL+=+https://firefox-source-docs.mozilla.org/toolkit/components/glean/dev/ipc.html&amp;bug_file_loc=https://firefox-source-docs.mozilla.org/toolkit/components/glean/dev/ipc.html" rel="nofollow">Report an issue</a> / <a href="../../../../_sources/toolkit/components/glean/dev/ipc.md.txt" rel="nofollow"> View page source</a></li>
+       </ul>
+       <hr>
+      </div>
+      <div role="main" class="document" itemscope itemtype="http://schema.org/Article">
+       <div itemprop="articleBody">
+        <section id="inter-process-communication-ipc">
+         <h1>Inter-process Communication (IPC)<a class="headerlink" href="#inter-process-communication-ipc" title="Link to this heading">?</a></h1>
+         <p>Firefox Desktop is a multi-process desktop application. Code requiring instrumentation may be on any of its processes, so FOG provide facilities to do just that.</p>
+         <section id="design">
+          <h2>Design<a class="headerlink" href="#design" title="Link to this heading">?</a></h2>
+          <p>The IPC Design of FOG was worked out in <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1618253">bug 1618253</a>.</p>
+          <p>It centred around a few specific concepts:</p>
+          <section id="forbidding-non-commutative-operations">
+           <h3>Forbidding Non-Commutative Operations<a class="headerlink" href="#forbidding-non-commutative-operations" title="Link to this heading">?</a></h3>
+           <p>Because we cannot nicely impose a canonical ordering of metric operations across all processes, FOG forbids non-<a class="reference external" href="https://en.wikipedia.org/wiki/Commutative_property">commutative</a> metric operations in some circumstances.</p>
+           <p>For example, <code class="docutils literal notranslate"><span class="pre">Add()</span></code>-ing to a Counter metric works from multiple processes because the order doesn’t matter. However, given a String metric being <code class="docutils literal notranslate"><span class="pre">Set()</span></code> from multiple processes simultaneously, which value should it take?</p>
+           <p>This ambiguity is not a good foundation to build trust on, so we forbid setting a String metric from multiple processes.</p>
+           <section id="list-of-forbidden-operations">
+            <h4>List of Forbidden Operations<a class="headerlink" href="#list-of-forbidden-operations" title="Link to this heading">?</a></h4>
+            <ul class="simple">
+             <li>
+              <p>Boolean’s <code class="docutils literal notranslate"><span class="pre">set</span></code> (this is the metric type’s only operation)</p></li>
+             <li>
+              <p>Labeled Boolean’s <code class="docutils literal notranslate"><span class="pre">set</span></code> (this is the metric type’s only operation)</p></li>
+             <li>
+              <p>String’s <code class="docutils literal notranslate"><span class="pre">set</span></code> (this is the metric type’s only operation)</p></li>
+             <li>
+              <p>Labeled String’s <code class="docutils literal notranslate"><span class="pre">set</span></code> (this is the metric type’s only operation)</p></li>
+             <li>
+              <p>String List’s <code class="docutils literal notranslate"><span class="pre">set</span></code></p>
+              <ul>
+               <li>
+                <p><code class="docutils literal notranslate"><span class="pre">add</span></code> is permitted (order and uniqueness are not guaranteed)</p></li>
+              </ul></li>
+             <li>
+              <p>Timespan’s <code class="docutils literal notranslate"><span class="pre">start</span></code>, <code class="docutils literal notranslate"><span class="pre">stop</span></code>, and <code class="docutils literal notranslate"><span class="pre">cancel</span></code> (these are the metric type’s only operations)</p></li>
+             <li>
+              <p>UUID’s <code class="docutils literal notranslate"><span class="pre">set</span></code> and <code class="docutils literal notranslate"><span class="pre">generateAndSet</span></code> (these are the metric type’s only operations)</p></li>
+             <li>
+              <p>Datetime’s <code class="docutils literal notranslate"><span class="pre">set</span></code> (this is the metric type’s only operation)</p></li>
+             <li>
+              <p>Quantity’s <code class="docutils literal notranslate"><span class="pre">set</span></code> (this is the metric type’s only operation)</p></li>
+             <li>
+              <p>Labeled Quantity’s <code class="docutils literal notranslate"><span class="pre">set</span></code> (this is the metric type’s only operation)</p></li>
+            </ul>
+            <p>This list may grow over time as new metric types are added.</p>
+           </section>
+           <section id="the-unsafety-valve-permit-non-commutative-operations-over-ipc">
+            <h4>The Unsafety Valve: <code class="docutils literal notranslate"><span class="pre">permit_non_commutative_operations_over_ipc</span></code><a class="headerlink" href="#the-unsafety-valve-permit-non-commutative-operations-over-ipc" title="Link to this heading">?</a></h4>
+            <p>If you wish to forgo FOG’s protections and guarantees around ordering, and use non-commutative operations in child processes, you may mark your metric definition with the <code class="docutils literal notranslate"><span class="pre">permit_non_commutative_operations_over_ipc</span></code> metadata property, like so:</p>
+            <div class="highlight-yaml notranslate">
+             <div class="highlight">
+              <pre><span></span><span class="nt">unordered_category</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">unordered_boolean_metric</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">boolean</span>
+<span class="w">    </span><span class="nt">metadata</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">permit_non_commutative_operations_over_ipc</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+</pre>
+             </div>
+            </div>
+            <p>This presently only supports:</p>
+            <ul class="simple">
+             <li>
+              <p>Boolean metrics</p></li>
+             <li>
+              <p>Labeled Boolean metrics</p></li>
+            </ul>
+            <div class="admonition note">
+             <p class="admonition-title">Note</p>
+             <p>If there’s an metric type not on this list that you need to use in a non-parent process, please reach out <a class="reference external" href="https://chat.mozilla.org/#/room/#glean:mozilla.org">on the #glean channel</a> and we’ll help you out.</p>
+            </div>
+           </section>
+          </section>
+          <section id="process-agnosticism">
+           <h3>Process Agnosticism<a class="headerlink" href="#process-agnosticism" title="Link to this heading">?</a></h3>
+           <p>For metric types that can be used cross-process, FOG provides no facility for identifying which process the instrumentation is on.</p>
+           <p>What this means is that if you accumulate to a <a class="reference external" href="https://mozilla.github.io/glean/book/user/metrics/timing_distribution.html">Timing Distribution</a> in multiple processes, all the samples from all the processes will be combined in the same metric.</p>
+           <p>If you wish to distinguish samples from different process types, you will need multiple metrics and inline code to select the proper one for the given process. For example:</p>
+           <div class="highlight-C++ notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">XRE_GetProcessType</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">GeckoProcessType_Default</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">mozilla</span><span class="o">::</span><span class="n">glean</span><span class="o">::</span><span class="n">performance</span><span class="o">::</span><span class="n">cache_size</span><span class="p">.</span><span class="n">Accumulate</span><span class="p">(</span><span class="n">numBytes</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">1024</span><span class="p">);</span>
+<span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">mozilla</span><span class="o">::</span><span class="n">glean</span><span class="o">::</span><span class="n">performance</span><span class="o">::</span><span class="n">non_main_process_cache_size</span><span class="p">.</span><span class="n">Accumulate</span><span class="p">(</span><span class="n">numBytes</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">1024</span><span class="p">);</span>
+<span class="p">}</span>
+</pre>
+            </div>
+           </div>
+          </section>
+          <section id="scheduling">
+           <h3>Scheduling<a class="headerlink" href="#scheduling" title="Link to this heading">?</a></h3>
+           <p>FOG makes no guarantee about when non-main-process metric values are sent across IPC. FOG will try its best to schedule opportunistically in idle moments, and during orderly shutdowns.</p>
+           <p>There are a few cases where we provide more firm guarantees:</p>
+           <section id="tests">
+            <h4>Tests<a class="headerlink" href="#tests" title="Link to this heading">?</a></h4>
+            <p>There are test-only APIs in Rust, C++, and Javascript. These do not await a flush of child process metric values. You can use the test-only method <code class="docutils literal notranslate"><span class="pre">testFlushAllChildren</span></code> on the <code class="docutils literal notranslate"><span class="pre">FOG</span></code> XPCOM component to await child data’s arrival:</p>
+            <div class="highlight-js notranslate">
+             <div class="highlight">
+              <pre><span></span><span class="k">await</span><span class="w"> </span><span class="nx">Services</span><span class="p">.</span><span class="nx">fog</span><span class="p">.</span><span class="nx">testFlushAllChildren</span><span class="p">();</span>
+</pre>
+             </div>
+            </div>
+            <p>See <a class="reference internal" href="testing.html"><span class="std std-doc">the test documentation</span></a> for more details on testing FOG. For writing tests about instrumentation, see <a class="reference internal" href="../user/instrumentation_tests.html"><span class="doc std std-doc">the instrumentation test documentation</span></a>.</p>
+           </section>
+           <section id="pings">
+            <h4>Pings<a class="headerlink" href="#pings" title="Link to this heading">?</a></h4>
+            <p>We do not guarantee that non-main-process data has made it into a specific ping.</p>
+            <p><a class="reference external" href="https://mozilla.github.io/glean/book/user/pings/index.html">Built-in pings</a> are submitted by the Rust Glean SDK at times FOG doesn’t directly control, so there may be data not present in the parent process when a built-in ping is submitted. We don’t anticipate this causing a problem since child-process data that “misses” a given ping will be included in the next one.</p>
+            <p>At this time, <a class="reference external" href="https://mozilla.github.io/glean/book/user/pings/custom.html">Custom Pings</a> must be sent in the parent process and have no mechanism to schedule their submission for after child-process data arrives in the parent process. <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1732118">bug 1732118</a> tracks the addition of such a mechanism or guarantee.</p>
+           </section>
+           <section id="shutdown">
+            <h4>Shutdown<a class="headerlink" href="#shutdown" title="Link to this heading">?</a></h4>
+            <p>We will make a best effort during an orderly shutdown to flush all pending data in child processes. This means a disorderly shutdown (usually a crash) may result in child process data being lost.</p>
+           </section>
+           <section id="size">
+            <h4>Size<a class="headerlink" href="#size" title="Link to this heading">?</a></h4>
+            <p>We don’t measure or keep an up-to-date calculation of the size of the IPC Payload. We do, however, keep a count of the number of times the IPC Payload has been accessed. This is used as a (very) conservative estimate of the size of the IPC Payload so we do not exceed the <a class="reference external" href="https://searchfox.org/mozilla-central/search?q=kMaximumMessageSize">IPC message size limit</a>.</p>
+            <p>See <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1745660">bug 1745660</a>.</p>
+           </section>
+          </section>
+          <section id="mechanics">
+           <h3>Mechanics<a class="headerlink" href="#mechanics" title="Link to this heading">?</a></h3>
+           <p>The rough design is that the parent process can request an immediate flush of pending data, and each child process can decide to flush its pending data whenever it wishes. The former is via <code class="docutils literal notranslate"><span class="pre">FlushFOGData()</span> <span class="pre">returns</span> <span class="pre">(ByteBuf)</span></code> and the latter via <code class="docutils literal notranslate"><span class="pre">FOGData(ByteBuf)</span></code>.</p>
+           <p>Pending Data is a buffer of bytes generated by <code class="docutils literal notranslate"><span class="pre">bincode</span></code> in Rust in the Child, handed off to C++, passed over IPC, then given back to <code class="docutils literal notranslate"><span class="pre">bincode</span></code> in Rust on the Parent.</p>
+           <p>Rust is then responsible for turning the pending data into <a class="reference external" href="https://mozilla.github.io/glean/book/reference/metrics/index.html">metrics API</a> calls on the metrics in the parent process.</p>
+           <section id="supported-process-types">
+            <h4>Supported Process Types<a class="headerlink" href="#supported-process-types" title="Link to this heading">?</a></h4>
+            <p>FOG supports messaging between the following types of child process and the parent process:</p>
+            <ul class="simple">
+             <li>
+              <p>content children (via <code class="docutils literal notranslate"><span class="pre">PContent</span></code> (for now. See <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1641989">bug 1641989</a>)</p></li>
+             <li>
+              <p>gmp children (via <code class="docutils literal notranslate"><span class="pre">PGMP</span></code>)</p></li>
+             <li>
+              <p>gpu children (via <code class="docutils literal notranslate"><span class="pre">PGPU</span></code>)</p></li>
+             <li>
+              <p>rdd children (via <code class="docutils literal notranslate"><span class="pre">PRDD</span></code>)</p></li>
+             <li>
+              <p>socket children (via <code class="docutils literal notranslate"><span class="pre">PSocketProcess</span></code>)</p></li>
+             <li>
+              <p>utility children (via <code class="docutils literal notranslate"><span class="pre">PUtilityProcess</span></code>)</p></li>
+            </ul>
+            <p>See <a class="reference internal" href="../../../../dom/ipc/process_model.html"><span class="std std-doc">the process model docs</span></a> for more information about what that means.</p>
+           </section>
+          </section>
+          <section id="adding-support-for-a-new-process-type">
+           <h3>Adding Support for a new Process Type<a class="headerlink" href="#adding-support-for-a-new-process-type" title="Link to this heading">?</a></h3>
+           <p>Adding support for a new process type is a matter of extending the two messages mentioned above in “Mechanics” to another process type’s protocol (ipdl file).</p>
+           <ol class="arabic simple">
+            <li>
+             <p>Add two messages to the appropriate sections in <code class="docutils literal notranslate"><span class="pre">P&lt;ProcessType&gt;.ipdl</span></code></p>
+             <ul class="simple">
+              <li>
+               <p>(( <strong>Note:</strong> <code class="docutils literal notranslate"><span class="pre">PGPU</span></code> <em>should</em> be the only ipdl where <code class="docutils literal notranslate"><span class="pre">parent</span></code> means the non-parent/-main/-UI process, but double-check that you get this correct.))</p></li>
+              <li>
+               <p>Add <code class="docutils literal notranslate"><span class="pre">async</span> <span class="pre">FOGData(ByteBuf&amp;&amp;</span> <span class="pre">aBuf);</span></code> to the parent/main/UI process side of things (most often <code class="docutils literal notranslate"><span class="pre">parent:</span></code>).</p></li>
+              <li>
+               <p>Add <code class="docutils literal notranslate"><span class="pre">async</span> <span class="pre">FlushFOGData()</span> <span class="pre">returns</span> <span class="pre">(ByteBuf</span> <span class="pre">buf);</span></code> to the non-parent/-main/-UI side (most often <code class="docutils literal notranslate"><span class="pre">child:</span></code>).</p></li>
+             </ul></li>
+            <li>
+             <p>Implement the protocol endpoints in <code class="docutils literal notranslate"><span class="pre">P&lt;ProcessType&gt;{Child|Parent}.{h|cpp}</span></code></p>
+             <ul class="simple">
+              <li>
+               <p>The message added to the <code class="docutils literal notranslate"><span class="pre">parent:</span> </code> section goes in <code class="docutils literal notranslate"><span class="pre">P&lt;ProcessType&gt;Parent.{h|cpp}</span></code> and vice versa.</p></li>
+             </ul></li>
+            <li>
+             <p>Add to <code class="docutils literal notranslate"><span class="pre">FOGIPC.cpp</span></code>’s <code class="docutils literal notranslate"><span class="pre">FlushAllChildData</span></code> code that</p>
+             <ol class="arabic simple">
+              <li>
+               <p>Enumerates all processes of the newly-supported type (there may only be one),</p></li>
+              <li>
+               <p>Calls `SendFlushFOGData on each, and</p></li>
+              <li>
+               <p>Adds the resulting promise to the array.</p></li>
+             </ol></li>
+            <li>
+             <p>Add to <code class="docutils literal notranslate"><span class="pre">FOGIPC.cpp</span></code>’s <code class="docutils literal notranslate"><span class="pre">SendFOGData</span></code> the correct <code class="docutils literal notranslate"><span class="pre">GeckoProcessType_*</span></code> enum value, and appropriate code for getting the parent process singleton and calling <code class="docutils literal notranslate"><span class="pre">SendFOGData</span></code> on it.</p></li>
+            <li>
+             <p>Add to the fog crate’s <code class="docutils literal notranslate"><span class="pre">register_process_shutdown</span></code> function handling for at-shutdown flushing of IPC data. If this isn’t added, we will log (but not panic) on the first use of Glean APIs on an unsupported process type.</p>
+             <ul class="simple">
+              <li>
+               <p>“Handling” might be an empty block with a comment explaining where to find it (like how <code class="docutils literal notranslate"><span class="pre">PROCESS_TYPE_DEFAULT</span></code> is handled)</p></li>
+              <li>
+               <p>Or it might be custom code (like <code class="docutils literal notranslate"><span class="pre">PROCESS_TYPE_CONTENT</span></code>’s)</p></li>
+             </ul></li>
+            <li>
+             <p>Add to the documented <a class="reference internal" href="#supported-process-types">list of supported process types</a> the process type you added support for.</p></li>
+           </ol>
+          </section>
+         </section>
+        </section>
+       </div>
+      </div>
+      <footer>
+       <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="code_organization.html" class="btn btn-neutral float-left" title="FOG code organization" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a> <a href="jog.html" class="btn btn-neutral float-right" title="Runtime Metric Definition Subsystem: JOG" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+       </div>
+       <hr>
+       <div role="contentinfo">
+        <p></p>
+       </div> Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+      </footer>
+     </div>
+    </div>
+   </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ </body>
+</html>

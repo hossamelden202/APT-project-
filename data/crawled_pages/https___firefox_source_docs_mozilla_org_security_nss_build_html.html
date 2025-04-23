@@ -1,0 +1,452 @@
+<!doctype html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Building NSS — Firefox Source Docs  documentation</title>
+  <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50">
+  <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094">
+  <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=fd3f3429">
+  <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b">
+  <link rel="stylesheet" type="text/css" href="../../_static/custom_theme.css?v=dc5ed815">
+  <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7">
+  <link rel="shortcut icon" href="../../_static/firefox.ico"><!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script src="../../_static/jquery.js?v=5d32c60e"></script>
+  <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+  <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+  <script src="../../_static/doctools.js?v=9a2dae69"></script>
+  <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+  <script src="../../_static/copybutton.js?v=30646c52"></script>
+  <script src="../../_static/design-tabs.js?v=36754332"></script>
+  <script src="../../_static/js/theme.js"></script>
+  <link rel="index" title="Index" href="../../genindex.html">
+  <link rel="search" title="Search" href="../../search.html">
+  <link rel="next" title="Build artifacts" href="build_artifacts.html">
+  <link rel="prev" title="Network Security Services (NSS)" href="index.html">
+ </head>
+ <body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+   <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <div class="wy-side-scroll">
+     <div class="wy-side-nav-search">
+      <a href="../../index.html" class="icon icon-home"> Firefox Source Docs <img src="../../_static/firefox-wordmark.svg" class="logo" alt="Logo"> </a><!-- -- This code is governed by the BSD license ---->
+      <div>
+       <h3>Quick search</h3>
+       <script>
+    (function () {
+      var cx = "dd12886298f75dbef";
+      var gcse = document.createElement("script");
+      gcse.async = true;
+      gcse.src = "https://cse.google.com/cse.js?cx=" + cx;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(gcse, s);
+    })();
+  </script><gcse:search></gcse:search>
+      </div>
+     </div>
+     <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+      <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../glossary/index.html">A Glossary of Common Terms</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../overview/index.html">A Quick Guide to Mozilla Applications</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../setup/index.html">Getting Set Up To Work On The Firefox Codebase</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Working On Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Working on Firefox</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../bug-mgmt/index.html">Bug Handling</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox User Guide</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../devtools-user/index.html">Firefox DevTools User Docs</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Source Code Documentation</span></p>
+      <ul class="current">
+       <li class="toctree-l1"><a class="reference internal" href="../../mots/index.html">Governance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../browser/index.html">Firefox Front-end</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../dom/index.html">DOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../editor/index.html">Editor</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../layout/index.html">Style system (CSS) &amp; Layout</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../gfx/index.html">Graphics</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../ipc/index.html">Processes, Threads and IPC</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../devtools/index.html">Firefox DevTools Contributor Docs</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../toolkit/index.html">Toolkit</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../js/index.html">SpiderMonkey</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../jsloader/index.html">JS Loader</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/geckoview/index.html">GeckoView</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/fenix/index.html">Fenix</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/focus-android/index.html">Focus for Android</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../dom/bindings/webidl/index.html">WebIDL</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../modules/libpref/index.html">libpref</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../networking/index.html">Networking</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../remote/index.html">Remote Protocols</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../services/index.html">Services</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../permissions/index.html">Permissions</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../uriloader/index.html">File Handling</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../widget/cocoa/index.html">Firefox on macOS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../widget/windows/index.html">Firefox on Windows</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../toolkit/components/ml/index.html">Firefox AI Runtime</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../accessible/index.html">Accessibility</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../media/index.html">Media Playback</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../code-quality/index.html">Code quality</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../writing-rust-code/index.html">Writing Rust Code</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../rust-components/index.html">Rust Components</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/profiler/index.html">Gecko Profiler</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../performance/index.html">Performance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../storage/index.html">Database bindings (SQLite, KV, …)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../xpcom/index.html">XPCOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../nspr/index.html">NSPR</a></li>
+       <li class="toctree-l1 current"><a class="reference internal" href="index.html">Network Security Services (NSS)</a>
+        <ul class="current">
+         <li class="toctree-l2 current"><a class="current reference internal" href="#">Building NSS</a>
+          <ul>
+           <li class="toctree-l3"><a class="reference internal" href="#introduction">Introduction</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#source-code">Source code</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#build-with-gyp-and-ninja">Build with gyp and ninja</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#build-with-make">Build with make</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#unit-testing">Unit testing</a>
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="#unit-test-configuration">Unit test configuration</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#test-results">Test results</a></li>
+            </ul></li>
+          </ul></li>
+         <li class="toctree-l2"><a class="reference internal" href="build_artifacts.html">Build artifacts</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="releases/index.html">Releases</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="community.html">Community</a></li>
+        </ul></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../content-security/index.html">Web Security Checks in Gecko</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">The Firefox Build System</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mach/index.html">Mach</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/try/index.html">Pushing to Try</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../build/buildsystem/index.html">Build System</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../taskcluster/index.html">Firefox CI and Taskgraph</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/moztreedocs/index.html">Managing Documentation</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mozbuild/vendor/index.html">Vendoring Third Party Components</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Testing &amp; Test Infrastructure</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/automated-testing/index.html">Automated Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/treeherder-try/index.html">Understanding Treeherder Results</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/sheriffed-intermittents/index.html">Sheriffed intermittent failures</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/tests-for-new-config/index.html">Turning on Firefox tests for a new configuration</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/intermittent/index.html">Avoiding intermittent tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/testing-policy/index.html">Testing Policy</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/ci-configs/index.html">Configuration Changes</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/browser-chrome/index.html">Browser chrome mochitests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/chrome-tests/index.html">Chrome Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/marionette/index.html">Marionette</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/geckodriver/index.html">geckodriver</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/test-verification/index.html">Test Verification</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/webrender/index.html">WebRender Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/mochitest-plain/index.html">Mochitest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/xpcshell/index.html">XPCShell tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/tps/index.html">TPS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../web-platform/index.html">web-platform-tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../gtest/index.html">GTest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/fuzzing/index.html">Fuzzing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/sanitizer/index.html">Sanitizer</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/perfdocs/index.html">Performance Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/code-coverage/index.html">Code coverage</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing-rust-code/index.html">Testing &amp; Debugging Rust Code</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Releases &amp; Updates</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html">Mozilla Update Infrastructure</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html#watershed-updates">Watershed Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html#desupport-updates">Desupport Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/update-verify/index.html">Update Verify</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Localization &amp; Internationalization</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../intl/index.html">Internationalization</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../l10n/index.html">Localization</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox and Python</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mozbase/index.html">mozbase</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../python/index.html">Using third-party Python packages</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Metrics Collected in Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../metrics/index.html">Metrics</a></li>
+      </ul>
+     </div>
+    </div>
+   </nav>
+   <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+    <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+     <i data-toggle="wy-nav-top" class="fa fa-bars"></i> <a href="../../index.html">Firefox Source Docs</a>
+    </nav>
+    <div class="wy-nav-content">
+     <div class="rst-content">
+      <!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+      <div role="navigation" aria-label="Page navigation">
+       <ul class="wy-breadcrumbs">
+        <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+        <li class="breadcrumb-item"><a href="index.html">Network Security Services (NSS)</a></li>
+        <li class="breadcrumb-item active">Building NSS</li>
+        <li class="wy-breadcrumbs-aside"><a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Developer+Infrastructure&amp;component=Firefox+Source+Docs%3A+Content&amp;short_desc=Documentation+issue+on+security/nss/build&amp;comment=URL+=+https://firefox-source-docs.mozilla.org/security/nss/build.html&amp;bug_file_loc=https://firefox-source-docs.mozilla.org/security/nss/build.html" rel="nofollow">Report an issue</a> / <a href="../../_sources/security/nss/build.rst.txt" rel="nofollow"> View page source</a></li>
+       </ul>
+       <hr>
+      </div>
+      <div role="main" class="document" itemscope itemtype="http://schema.org/Article">
+       <div itemprop="articleBody">
+        <section id="building-nss">
+         <span id="mozilla-projects-nss-building"></span>
+         <h1>Building NSS<a class="headerlink" href="#building-nss" title="Link to this heading">?</a></h1>
+         <section id="introduction">
+          <h2><a class="reference external" href="#introduction">Introduction</a><a class="headerlink" href="#introduction" title="Link to this heading">?</a></h2>
+          <div class="docutils container">
+           <p>This page has detailed information on how to build NSS. Because NSS is a cross-platform library that builds on many different platforms and has many options, it may be complex to build._ Two build systems are maintained concurrently: a <code class="docutils literal notranslate"><span class="pre">Make</span></code> based and a <code class="docutils literal notranslate"><span class="pre">gyp</span></code> based system.</p>
+          </div>
+         </section>
+         <section id="prerequisites">
+          <span id="build-environment"></span>
+          <h2><a class="reference external" href="#build_environment">Prerequisites</a><a class="headerlink" href="#prerequisites" title="Link to this heading">?</a></h2>
+          <div class="docutils container">
+           <p>NSS needs a C and C++ compiler. It has minimal dependencies, including only standard C and C++ libraries, plus <a class="reference external" href="https://www.zlib.net/">zlib</a>. For building, you also need <a class="reference external" href="https://www.gnu.org/software/make/">make</a>. Ideally, also install <a class="reference external" href="https://github.com/nodejs/gyp-next">gyp-next</a> and <a class="reference external" href="https://ninja-build.org/">ninja</a> and put them on your path. This is recommended, as the build is faster and more reliable. Please, note that we <code class="docutils literal notranslate"><span class="pre">gyp</span></code> is currently unmaintained and that our support for <code class="docutils literal notranslate"><span class="pre">gyp-next</span></code> is experimental and might be unstable.</p>
+           <p>To install prerequisites on different platforms, one can run the following commands:</p>
+           <p><strong>On Linux:</strong></p>
+           <div class="highlight-default notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="n">sudo</span> <span class="n">apt</span> <span class="n">install</span> <span class="n">mercurial</span> <span class="n">git</span> <span class="n">ninja</span><span class="o">-</span><span class="n">build</span> <span class="n">python3</span><span class="o">-</span><span class="n">pip</span>
+<span class="n">python3</span> <span class="o">-</span><span class="n">m</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">gyp</span><span class="o">-</span><span class="nb">next</span>
+</pre>
+            </div>
+           </div>
+           <p><strong>On MacOS:</strong></p>
+           <div class="highlight-default notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="n">brew</span> <span class="n">install</span> <span class="n">mercurial</span> <span class="n">git</span> <span class="n">ninja</span> <span class="n">python3</span><span class="o">-</span><span class="n">pip</span>
+<span class="n">python3</span> <span class="o">-</span><span class="n">m</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">gyp</span><span class="o">-</span><span class="nb">next</span>
+</pre>
+            </div>
+           </div>
+           <p>It is also necessary to make sure that a <cite>python</cite> (not just <cite>python3</cite>) executable is in the path. The Homebrew Python installation has the necessary symlink but may require explicit adding to the PATH variable, for example like this:</p>
+           <div class="highlight-default notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="n">export</span> <span class="n">PATH</span><span class="o">=</span><span class="s2">"/opt/homebrew/opt/python/libexec/bin:$PATH"</span>
+</pre>
+            </div>
+           </div>
+           <p><strong>On Windows:</strong></p>
+           <div class="highlight-default notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="o">&lt;</span><span class="n">TODO</span><span class="o">&gt;</span>
+</pre>
+            </div>
+           </div>
+          </div>
+          <div class="admonition note">
+           <p class="admonition-title">Note</p>
+           <p>To retrieve the source code from the project repositories, users will need to download a release or pull the source code with their favourite Version Control System (git or Mercurial). Installing a VCS is not necessary to build an NSS release when downloaded as a compressed archive.</p>
+           <p>By default Mozilla uses a Mercurial repository for NSS. If you whish to contribute to NSS and use <code class="docutils literal notranslate"><span class="pre">git</span></code> instead of Mercurial, we encourage you to install <a class="reference external" href="https://github.com/glandium/git-cinnabar">git-cinnabar</a>.</p>
+          </div>
+         </section>
+         <section id="source-code">
+          <span id="get-the-source"></span>
+          <h2><a class="reference external" href="#get_the_source">Source code</a><a class="headerlink" href="#source-code" title="Link to this heading">?</a></h2>
+          <div class="docutils container">
+           <p>NSS and NSPR use Mercurial for source control like other Mozilla projects. To check out the latest sources for NSS and NSPR–which may not be part of a stable release–use the following commands:</p>
+           <div class="highlight-default notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="n">hg</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">hg</span><span class="o">.</span><span class="n">mozilla</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">projects</span><span class="o">/</span><span class="n">nspr</span>
+<span class="n">hg</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">hg</span><span class="o">.</span><span class="n">mozilla</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">projects</span><span class="o">/</span><span class="n">nss</span>
+</pre>
+            </div>
+           </div>
+           <p><strong>To get the source of a specific release, see:</strong> ref:<cite>mozilla_projects_nss_releases</cite> <strong>.</strong></p>
+           <p>To download the source using <code class="docutils literal notranslate"><span class="pre">git-cinnabar</span></code> instead:</p>
+           <div class="highlight-default notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">hg</span><span class="p">::</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">hg</span><span class="o">.</span><span class="n">mozilla</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">projects</span><span class="o">/</span><span class="n">nspr</span>
+<span class="n">git</span> <span class="n">clone</span> <span class="n">hg</span><span class="p">::</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">hg</span><span class="o">.</span><span class="n">mozilla</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">projects</span><span class="o">/</span><span class="n">nss</span>
+</pre>
+            </div>
+           </div>
+          </div>
+         </section>
+         <section id="build-with-gyp-and-ninja">
+          <h2><a class="reference external" href="#build">Build with gyp and ninja</a><a class="headerlink" href="#build-with-gyp-and-ninja" title="Link to this heading">?</a></h2>
+          <div class="docutils container">
+           <p>Build NSS and NSPR using our build script from the <code class="docutils literal notranslate"><span class="pre">nss</span></code> directory:</p>
+           <div class="highlight-default notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="n">cd</span> <span class="n">nss</span>
+<span class="o">./</span><span class="n">build</span><span class="o">.</span><span class="n">sh</span>
+</pre>
+            </div>
+           </div>
+           <p>This builds both NSPR and NSS in a parent directory called <code class="docutils literal notranslate"><span class="pre">dist</span></code>.</p>
+           <p>Build options are available for this script: <code class="docutils literal notranslate"><span class="pre">-o</span></code> will build in <strong>Release</strong> mode instead of the <strong>Debug</strong> mode and <code class="docutils literal notranslate"><span class="pre">-c</span></code> will <strong>clean</strong> the <code class="docutils literal notranslate"><span class="pre">dist</span></code> directory before the build.</p>
+           <p>Other build options can be displayed by running <code class="docutils literal notranslate"><span class="pre">./build.sh</span> <span class="pre">--help</span></code></p>
+          </div>
+         </section>
+         <section id="build-with-make">
+          <span id="id1"></span>
+          <h2><a class="reference external" href="#build_with_make">Build with make</a><a class="headerlink" href="#build-with-make" title="Link to this heading">?</a></h2>
+          <div class="docutils container">
+           <p>Alternatively, there is a <code class="docutils literal notranslate"><span class="pre">make</span></code> target, which produces a similar result. This supports some alternative options, but can be a lot slower.</p>
+           <div class="highlight-default notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="n">USE_64</span><span class="o">=</span><span class="mi">1</span> <span class="n">make</span> <span class="o">-</span><span class="n">j</span>
+</pre>
+            </div>
+           </div>
+           <p>The make-based build system for NSS uses a variety of variables to control the build. Below are some of the variables, along with possible values they may be set to.</p>
+          </div>
+          <table class="docutils align-default">
+           <colgroup>
+            <col style="width: 16.7%">
+            <col style="width: 83.3%">
+           </colgroup>
+           <thead>
+            <tr class="row-odd">
+             <th class="head">
+              <p>BUILD_OPT</p></th>
+             <th class="head"></th>
+            </tr>
+           </thead>
+           <tbody>
+            <tr class="row-even">
+             <td>
+              <p>0</p></td>
+             <td>
+              <p>Build a debug (non-optimized) version of NSS. <strong>This is the default.</strong></p></td>
+            </tr>
+            <tr class="row-odd">
+             <td>
+              <p>1</p></td>
+             <td>
+              <p>Build an optimized (non-debug) version of NSS.</p></td>
+            </tr>
+           </tbody>
+          </table>
+          <table class="docutils align-default">
+           <colgroup>
+            <col style="width: 16.7%">
+            <col style="width: 83.3%">
+           </colgroup>
+           <thead>
+            <tr class="row-odd">
+             <th class="head">
+              <p>USE_64</p></th>
+             <th class="head"></th>
+            </tr>
+           </thead>
+           <tbody>
+            <tr class="row-even">
+             <td>
+              <p>0</p></td>
+             <td>
+              <p>Build for a 32-bit environment/ABI. <strong>This is the default.</strong></p></td>
+            </tr>
+            <tr class="row-odd">
+             <td>
+              <p>1</p></td>
+             <td>
+              <p>Build for a 64-bit environment/ABI. <em>This is recommended.</em></p></td>
+            </tr>
+           </tbody>
+          </table>
+          <table class="docutils align-default">
+           <colgroup>
+            <col style="width: 16.7%">
+            <col style="width: 83.3%">
+           </colgroup>
+           <thead>
+            <tr class="row-odd">
+             <th class="head">
+              <p>USE_ASAN</p></th>
+             <th class="head"></th>
+            </tr>
+           </thead>
+           <tbody>
+            <tr class="row-even">
+             <td>
+              <p>0</p></td>
+             <td>
+              <p>Do not create an <a class="reference external" href="http://clang.llvm.org/docs/AddressSanitizer.html">AddressSanitizer</a> build. <strong>This is the default.</strong></p></td>
+            </tr>
+            <tr class="row-odd">
+             <td>
+              <p>1</p></td>
+             <td>
+              <p>Create an AddressSanitizer build.</p></td>
+            </tr>
+           </tbody>
+          </table>
+         </section>
+         <section id="unit-testing">
+          <span id="id2"></span>
+          <h2><a class="reference external" href="#unit_testing">Unit testing</a><a class="headerlink" href="#unit-testing" title="Link to this heading">?</a></h2>
+          <div class="docutils container">
+           <p>NSS contains extensive unit tests. Scripts to run these are found in the <code class="docutils literal notranslate"><span class="pre">tests</span></code> directory. Run the standard suite by:</p>
+           <div class="highlight-default notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="n">HOST</span><span class="o">=</span><span class="n">localhost</span> <span class="n">DOMSUF</span><span class="o">=</span><span class="n">localdomain</span> <span class="n">USE_64</span><span class="o">=</span><span class="mi">1</span> <span class="o">./</span><span class="n">tests</span><span class="o">/</span><span class="nb">all</span><span class="o">.</span><span class="n">sh</span>
+</pre>
+            </div>
+           </div>
+          </div>
+          <section id="unit-test-configuration">
+           <span id="id3"></span>
+           <h3><a class="reference external" href="#unit_test_configuration">Unit test configuration</a><a class="headerlink" href="#unit-test-configuration" title="Link to this heading">?</a></h3>
+           <div class="docutils container">
+            <p>NSS tests are configured using environment variables. The scripts will attempt to infer values for <code class="docutils literal notranslate"><span class="pre">HOST</span></code> and <code class="docutils literal notranslate"><span class="pre">DOMSUF</span></code>, but can fail. Replace <code class="docutils literal notranslate"><span class="pre">localhost</span></code> and <code class="docutils literal notranslate"><span class="pre">localdomain</span></code> with the hostname and domain suffix for your host. You need to be able to connect to <code class="docutils literal notranslate"><span class="pre">$HOST.$DOMSUF</span></code>.</p>
+            <p>If you don’t have a domain suffix you can add an entry to <code class="docutils literal notranslate"><span class="pre">/etc/hosts</span></code> (on Windows,<code class="docutils literal notranslate"><span class="pre">c:\Windows\System32\drivers\etc\hosts</span></code>) as follows:</p>
+            <div class="highlight-default notranslate">
+             <div class="highlight">
+              <pre><span></span><span class="mf">127.0.0.1</span> <span class="n">localhost</span><span class="o">.</span><span class="n">localdomain</span>
+</pre>
+             </div>
+            </div>
+            <p>Validate this opening a command shell and typing: <code class="docutils literal notranslate"><span class="pre">ping</span> <span class="pre">localhost.localdomain</span></code>.</p>
+            <p>Remove the <code class="docutils literal notranslate"><span class="pre">USE_64=1</span></code> override if using a 32-bit build.</p>
+           </div>
+          </section>
+          <section id="test-results">
+           <span id="id4"></span>
+           <h3><a class="reference external" href="#test_results">Test results</a><a class="headerlink" href="#test-results" title="Link to this heading">?</a></h3>
+           <div class="docutils container">
+            <p>Running all tests can take a considerable amount of time.</p>
+            <p>Test output is stored in <code class="docutils literal notranslate"><span class="pre">tests_results/security/$HOST.$NUMBER/</span></code>. The file <code class="docutils literal notranslate"><span class="pre">results.html</span></code> summarizes the results, <code class="docutils literal notranslate"><span class="pre">output.log</span></code> captures all the test output.</p>
+            <p>Other subdirectories of <code class="docutils literal notranslate"><span class="pre">nss/tests</span></code> contain scripts that run a subset of the full suite. Those can be run directly instead of <code class="docutils literal notranslate"><span class="pre">all.sh</span></code>, which might save some time at the cost of coverage.</p>
+           </div>
+          </section>
+         </section>
+        </section>
+       </div>
+      </div>
+      <footer>
+       <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Network Security Services (NSS)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a> <a href="build_artifacts.html" class="btn btn-neutral float-right" title="Build artifacts" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+       </div>
+       <hr>
+       <div role="contentinfo">
+        <p></p>
+       </div> Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+      </footer>
+     </div>
+    </div>
+   </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ </body>
+</html>

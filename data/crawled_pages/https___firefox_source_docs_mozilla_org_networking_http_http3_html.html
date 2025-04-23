@@ -1,0 +1,378 @@
+<!doctype html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Http3Session and Streams — Firefox Source Docs  documentation</title>
+  <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50">
+  <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094">
+  <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=fd3f3429">
+  <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b">
+  <link rel="stylesheet" type="text/css" href="../../_static/custom_theme.css?v=dc5ed815">
+  <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7">
+  <link rel="shortcut icon" href="../../_static/firefox.ico"><!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script src="../../_static/jquery.js?v=5d32c60e"></script>
+  <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+  <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+  <script src="../../_static/doctools.js?v=9a2dae69"></script>
+  <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+  <script src="../../_static/copybutton.js?v=30646c52"></script>
+  <script src="../../_static/design-tabs.js?v=36754332"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/npm/mermaid@11.2.0/dist/mermaid.esm.min.mjs"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/npm/@mermaid-js/layout-elk@0.1.4/dist/mermaid-layout-elk.esm.min.mjs"></script>
+  <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.2.0/dist/mermaid.esm.min.mjs";import elkLayouts from "https://cdn.jsdelivr.net/npm/@mermaid-js/layout-elk@0.1.4/dist/mermaid-layout-elk.esm.min.mjs";mermaid.registerLayoutLoaders(elkLayouts);mermaid.initialize({startOnLoad:false});</script>
+  <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+  <script type="module">
+import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.2.0/dist/mermaid.esm.min.mjs";
+window.addEventListener("load", () => mermaid.run());
+</script>
+  <script src="../../_static/js/theme.js"></script>
+  <link rel="index" title="Index" href="../../genindex.html">
+  <link rel="search" title="Search" href="../../search.html">
+  <link rel="next" title="Firefox Network Scheduling and Prioritization" href="prioritization.html">
+  <link rel="prev" title="HTTP Cache" href="../cache2/doc.html">
+ </head>
+ <body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+   <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <div class="wy-side-scroll">
+     <div class="wy-side-nav-search">
+      <a href="../../index.html" class="icon icon-home"> Firefox Source Docs <img src="../../_static/firefox-wordmark.svg" class="logo" alt="Logo"> </a><!-- -- This code is governed by the BSD license ---->
+      <div>
+       <h3>Quick search</h3>
+       <script>
+    (function () {
+      var cx = "dd12886298f75dbef";
+      var gcse = document.createElement("script");
+      gcse.async = true;
+      gcse.src = "https://cse.google.com/cse.js?cx=" + cx;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(gcse, s);
+    })();
+  </script><gcse:search></gcse:search>
+      </div>
+     </div>
+     <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+      <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../glossary/index.html">A Glossary of Common Terms</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../overview/index.html">A Quick Guide to Mozilla Applications</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../setup/index.html">Getting Set Up To Work On The Firefox Codebase</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Working On Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Working on Firefox</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../bug-mgmt/index.html">Bug Handling</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox User Guide</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../devtools-user/index.html">Firefox DevTools User Docs</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Source Code Documentation</span></p>
+      <ul class="current">
+       <li class="toctree-l1"><a class="reference internal" href="../../mots/index.html">Governance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../browser/index.html">Firefox Front-end</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../dom/index.html">DOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../editor/index.html">Editor</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../layout/index.html">Style system (CSS) &amp; Layout</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../gfx/index.html">Graphics</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../ipc/index.html">Processes, Threads and IPC</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../devtools/index.html">Firefox DevTools Contributor Docs</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../toolkit/index.html">Toolkit</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../js/index.html">SpiderMonkey</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../jsloader/index.html">JS Loader</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/geckoview/index.html">GeckoView</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/fenix/index.html">Fenix</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/focus-android/index.html">Focus for Android</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../dom/bindings/webidl/index.html">WebIDL</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../modules/libpref/index.html">libpref</a></li>
+       <li class="toctree-l1 current"><a class="reference internal" href="../index.html">Networking</a>
+        <ul class="current">
+         <li class="toctree-l2"><a class="reference internal" href="../index.html#how-tos">How-to’s</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../index.html#tutorials">Tutorials</a></li>
+         <li class="toctree-l2 current"><a class="reference internal" href="../index.html#deep-dives">Deep Dives</a>
+          <ul class="current">
+           <li class="toctree-l3 current"><a class="reference internal" href="../index.html#necko-design">Necko Design</a>
+            <ul class="current">
+             <li class="toctree-l4"><a class="reference internal" href="../sec-necko-components.html">Security and Networking Components</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="../cache2/doc.html">HTTP Cache</a></li>
+             <li class="toctree-l4 current"><a class="current reference internal" href="#">Http3Session and Streams</a></li>
+             <li class="toctree-l4"><a class="reference external" href="https://docs.google.com/presentation/d/1BRCK4WMYg-dUy07PB5H4jFVTpc4YnkQX8f5Y3KXqCs8">Necko Bird’s-eye View</a></li>
+             <li class="toctree-l4"><a class="reference external" href="https://docs.google.com/presentation/d/1iuYNLJfz24MN9SS5ljjhG07452-kZKtXmOeGjcc1-lU/">Gecko HTTP Walkthrough</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="prioritization.html">Firefox Network Scheduling and Prioritization</a></li>
+            </ul></li>
+           <li class="toctree-l3"><a class="reference internal" href="../index.html#necko-features">Necko Features</a></li>
+          </ul></li>
+         <li class="toctree-l2"><a class="reference internal" href="../index.html#references">References</a></li>
+        </ul></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../remote/index.html">Remote Protocols</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../services/index.html">Services</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../permissions/index.html">Permissions</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../uriloader/index.html">File Handling</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../widget/cocoa/index.html">Firefox on macOS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../widget/windows/index.html">Firefox on Windows</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../toolkit/components/ml/index.html">Firefox AI Runtime</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../accessible/index.html">Accessibility</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../media/index.html">Media Playback</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../code-quality/index.html">Code quality</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../writing-rust-code/index.html">Writing Rust Code</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../rust-components/index.html">Rust Components</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/profiler/index.html">Gecko Profiler</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../performance/index.html">Performance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../storage/index.html">Database bindings (SQLite, KV, …)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../xpcom/index.html">XPCOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../nspr/index.html">NSPR</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../security/nss/index.html">Network Security Services (NSS)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../content-security/index.html">Web Security Checks in Gecko</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">The Firefox Build System</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mach/index.html">Mach</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/try/index.html">Pushing to Try</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../build/buildsystem/index.html">Build System</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../taskcluster/index.html">Firefox CI and Taskgraph</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/moztreedocs/index.html">Managing Documentation</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mozbuild/vendor/index.html">Vendoring Third Party Components</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Testing &amp; Test Infrastructure</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/automated-testing/index.html">Automated Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/treeherder-try/index.html">Understanding Treeherder Results</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/sheriffed-intermittents/index.html">Sheriffed intermittent failures</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/tests-for-new-config/index.html">Turning on Firefox tests for a new configuration</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/intermittent/index.html">Avoiding intermittent tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/testing-policy/index.html">Testing Policy</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/ci-configs/index.html">Configuration Changes</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/browser-chrome/index.html">Browser chrome mochitests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/chrome-tests/index.html">Chrome Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/marionette/index.html">Marionette</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/geckodriver/index.html">geckodriver</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/test-verification/index.html">Test Verification</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/webrender/index.html">WebRender Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/mochitest-plain/index.html">Mochitest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/xpcshell/index.html">XPCShell tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/tps/index.html">TPS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../web-platform/index.html">web-platform-tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../gtest/index.html">GTest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/fuzzing/index.html">Fuzzing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/sanitizer/index.html">Sanitizer</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/perfdocs/index.html">Performance Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/code-coverage/index.html">Code coverage</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing-rust-code/index.html">Testing &amp; Debugging Rust Code</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Releases &amp; Updates</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html">Mozilla Update Infrastructure</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html#watershed-updates">Watershed Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html#desupport-updates">Desupport Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/update-verify/index.html">Update Verify</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Localization &amp; Internationalization</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../intl/index.html">Internationalization</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../l10n/index.html">Localization</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox and Python</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mozbase/index.html">mozbase</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../python/index.html">Using third-party Python packages</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Metrics Collected in Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../metrics/index.html">Metrics</a></li>
+      </ul>
+     </div>
+    </div>
+   </nav>
+   <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+    <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+     <i data-toggle="wy-nav-top" class="fa fa-bars"></i> <a href="../../index.html">Firefox Source Docs</a>
+    </nav>
+    <div class="wy-nav-content">
+     <div class="rst-content">
+      <!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+      <div role="navigation" aria-label="Page navigation">
+       <ul class="wy-breadcrumbs">
+        <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+        <li class="breadcrumb-item"><a href="../index.html">Networking</a></li>
+        <li class="breadcrumb-item active">Http3Session and Streams</li>
+        <li class="wy-breadcrumbs-aside"><a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Developer+Infrastructure&amp;component=Firefox+Source+Docs%3A+Content&amp;short_desc=Documentation+issue+on+networking/http/http3&amp;comment=URL+=+https://firefox-source-docs.mozilla.org/networking/http/http3.html&amp;bug_file_loc=https://firefox-source-docs.mozilla.org/networking/http/http3.html" rel="nofollow">Report an issue</a> / <a href="../../_sources/networking/http/http3.md.txt" rel="nofollow"> View page source</a></li>
+       </ul>
+       <hr>
+      </div>
+      <div role="main" class="document" itemscope itemtype="http://schema.org/Article">
+       <div itemprop="articleBody">
+        <section id="http3session-and-streams">
+         <h1>Http3Session and Streams<a class="headerlink" href="#http3session-and-streams" title="Link to this heading">?</a></h1>
+         <p>The HTTP/3 and QUIC protocol are implemented in the neqo library. Http3Session, Http3Steam, and Http3WebTransportStream are added to integrate the library into the existing necko code.</p>
+         <p>The following classes are necessary:</p>
+         <ul class="simple">
+          <li>
+           <p>HttpConnectionUDP - this is the object that is registered in nsHttpConnectionMgr and it is also used as an async listener to socket events (it implements nsIUDPSocketSyncListener)</p></li>
+          <li>
+           <p>nsUDPSocket - represent a UDP socket and implements nsASocketHandler. nsSocketTransportService manages UDP and TCP sockets and calls the corresponding nsASocketHandler when the socket encounters an error or has data to be read, etc.</p></li>
+          <li>
+           <p>NeqoHttp3Conn is a c++ object that maps to the rust object Http3Client.</p></li>
+          <li>
+           <p>Http3Session manages NeqoHttp3Conn/Http3Client and provides bridge between the rust implementation and necko legacy code, i.e. HttpConnectionUDP and nsHttpTransaction.</p></li>
+          <li>
+           <p>Http3Streams are used to map reading and writing from/into a nsHttpTransaction onto the NeqoHttp3Conn/Http3Client API (e.g. nsHttpTransaction::OnWriteSegment will call Http3Client::read_data). NeqoHttp3Conn is only accessed by Http3Sesson and NeqoHttp3Conn functions are exposed through Http3Session where needed.</p></li>
+         </ul>
+         <pre class="mermaid">        graph TD
+   A[HttpConnectionMgr] --&gt; B[HttpConnectionUDP]
+   B --&gt; C[nsUDPSocket]
+   C --&gt; B
+   D[nsSocketTransportService] --&gt; C
+   B --&gt; E[NeqoHttp3Conn]
+   B --&gt; F[Http3Stream]
+   F --&gt;|row| B
+   F --&gt; G[nsHttpTransport]
+   G --&gt; B
+   B --&gt; G
+    </pre>
+         <section id="interactions-with-sockets-and-driving-neqo">
+          <h2>Interactions with Sockets and Driving Neqo<a class="headerlink" href="#interactions-with-sockets-and-driving-neqo" title="Link to this heading">?</a></h2>
+          <p>As described in <a class="reference external" href="https://github.com/mozilla/neqo/blob/main/neqo-http3/src/lib.rs">this docs</a>, neqo does not create a socket, it produces, i.e. encodes, data that should be sent as a payload in a UDP packet and consumes data received on the UDP socket. Therefore the necko is responsible for creating a socket and reading and writing data from/into the socket. Necko uses nsUDPSocket and nsSocketTransportService for this. The UDP socket is constantly polled for reading. It is not polled for writing, we let QUIC control to not overload the network path and buffers.</p>
+          <p>When the UDP socket has an available packet, nsSocketTransportService will return from the polling function and call nsUDPSocket::OnSocketReady, which calls HttpConnectionUDP::OnPacketReceived, HttpConnectionUDP::RecvData and further Http3Session::RecvData. For writing data HttpConnectionUDP::SendData is called which calls Http3Session::SendData.</p>
+          <p>Neqo needs an external timer. The timer is managed by Http3Session. When the timer expires HttpConnectionUDP::OnQuicTimeoutExpired is executed that calls Http3Session::ProcessOutputAndEvents.</p>
+          <p>HttpConnectionUDP::RecvData, HttpConnectionUDP::SendData or HttpConnectionUDP::OnQuicTimeoutExpired must be on the stack when we interact with neqo. The reason is that they are responsible for proper clean-up in case of an error. For example, if there is a slow reader that is ready to read, it will call Http3Session::TransactionHasDataToRecv to be registered in a list and HttpConnectionUDP::ForceRecv will be called that will call the same function chain as in the case a new packet is received, i.e. HttpConnectionUDP::RecvData and further Http3Session::RecvData. The other example is when a new HTTP transaction is added to the session, the transaction needs to send data. The transaction will be registered in a list and HttpConnectionUDP::ResumeSend will be called which further calls HttpConnectionUDP::SendData.</p>
+          <p>Http3Session holds a reference to a ConnectionHandler object which is a wrapper object around HttpConnectionUDP. The destructor of ConnectionHandler calls nsHttpHandler::ReclaimConnection which is responsible for removing the connection from nsHttpConnectionMgr. HttpConnectionUDP::RecvData, HttpConnectionUDP::SendData or HttpConnectionUDP::OnQuicTimeoutExpired call HttpConnectionUDP::CloseTransaction which will cause Http3Session to remove the reference to the ConnectionHandler object. The ConnectionHandler object will be destroyed and nsHttpHandler::ReclaimConnection will be called. This behavior is historical and it is also used for HTTP/2 and older versions. In the case of the older versions, nsHttpHandler::ReclaimConnection may actually reuse a connection instead of removing it from nsHttpConnectionMgr.</p>
+          <p>Three main neqo functions responsible for driving neqo are process_input, process_output, and next_event. They are called by:</p>
+          <ul class="simple">
+           <li>
+            <p>Http3Session::ProcessInput,</p></li>
+           <li>
+            <p>Http3Session::ProcesOutput and,</p></li>
+           <li>
+            <p>Http3Session::ProcessEvents.</p></li>
+          </ul>
+          <p><strong>ProcessInput</strong> In this function we take data from the UDP socket and call NeqoHttp3Conn::ProcessInput that maps to Http3Client::process_input. The packets are read from the socket until the socket buffer is empty.</p>
+          <p><strong>ProcessEvents</strong> This function process all available neqo events. It returns earlier only in case of a fatal error. It calls NeqoHttp3Conn::GetEvent which maps to Http3Client::next_event. The events and their handling will be explained below.</p>
+          <p><strong>ProcessOutput</strong> The function is called when necko has performed some action on neqo, e.g. new HTTP transaction is added, certificate verification is done, etc., or when the timer expires. In both cases, necko wants to check if neqo has data to send or change its state. This function calls NeqoHttp3Conn::ProcessOutput that maps to Http3Client::process_output. In the Http3Session::ProcessOutput function, NeqoHttp3Conn::ProcessOutput is called repeatedly, which sents packets from neqo to the socket until neqo returns a callback timer, signals being idle, or returns a fatal error.</p>
+          <p><strong>Http3Session::RecvData</strong> performs the following steps:</p>
+          <ul class="simple">
+           <li>
+            <p>ProcessSlowConsumers - explained below.</p></li>
+           <li>
+            <p>ProcessInput - process new packets.</p></li>
+           <li>
+            <p>ProcessEvents - look if there are new events</p></li>
+           <li>
+            <p>ProcessOutput - look if we have new packets to send after packets arrive(e.g. sending ack) or due to event processing (e.g. a stream has been canceled).</p></li>
+          </ul>
+          <p><strong>Http3Session::SendData</strong> performed the following steps:</p>
+          <ul class="simple">
+           <li>
+            <p>Process (HTTP and WebTransport) streams that have data to write.</p></li>
+           <li>
+            <p>ProcessOutput - look if there are new packets to be sent after streams have supplied data to neqo.</p></li>
+          </ul>
+          <p><strong>Http3Session::ProcessOutputAndEvents</strong> performed the following steps:</p>
+          <ul class="simple">
+           <li>
+            <p>ProcessOutput - after a timeout most probably neqo will have data to retransmit or it will send a ping</p></li>
+           <li>
+            <p>ProcessEvents - look if the state of the connection has changed, i.e. the connection timed out</p></li>
+          </ul>
+         </section>
+         <section id="http-and-webtransport-streams-reading-data">
+          <h2>HTTP and WebTransport Streams Reading Data<a class="headerlink" href="#http-and-webtransport-streams-reading-data" title="Link to this heading">?</a></h2>
+          <p>The following diagram shows how data are read from an HTTP stream. The diagram for a WebTransport stream will be added later.</p>
+          <pre class="mermaid">        flowchart TD
+   A1[nsUDPSocket::OnSocketReady] --&gt; |HttpConnectionUDP::OnPacketReceived| C[HttpConnectionUDP]
+   A[HttpConnectionUDP::ResumeRecv calls] --&gt; C
+   B[HttpConnectionUDPForceIO] --&gt; |HttpConnectionUDP::RecvData| C
+   C --&gt;|1. Http3Session::RecvData| D[Http3Session]
+   D --&gt; |2. Http3Stream::WriteSegments|E[Http3Stream]
+   E --&gt; |3. nsHttpTransaction::WriteSegmentsAgain| F[nsHttpTransaction]
+   F --&gt; |4. nsPipeOutputStream::WriteSegments| G["nsPipeOutputStream"]
+   G --&gt; |5. nsHttpTransaction::WritePiipeSegnemt| F
+   F --&gt; |6. Http3Stream::OnWriteSegment| E
+   E --&gt; |"7. Return response headers or call Http3Session::ReadResponseData"|D
+   D --&gt; |8. NeqoHttp3Conn::ReadResponseDataReadResponseData| H[NeqoHHttp3Conn]
+
+    </pre>
+          <p>When there is a new packet carrying a stream data arriving on a QUIC connection nsUDPSocket::OnSocketReady will be called which will call Http3Session::RecvData. Http3Session::RecvData and ProcessInput will read the new packet from the socket and give it to neqo for processing. In the next step, ProcessEvent will be called which will have a DataReadable event and Http3Stream::WriteSegments will be called. Http3Stream::WriteSegments calls nsHttpTransaction::WriteSegmentsAgain repeatedly until all data are read from the QUIC stream or until the pipe cannot accept more data. The latter can happen when listeners of an HTTP transaction or WebTransport stream are slow and are not able to read all data available on an HTTP3/WebTransport stream fast enough.</p>
+          <p>When the pipe cannot accept more data nsHttpTransaction will call nsPipeOutputStream::AsyncWait and wait for the nsHttpTransaction::OnOutputStreamReady callback. When nsHttpTransaction::OnOutputStreamReady is called, Http3Stream/Session::TransactionHasDataToRecv is executed with the following actions:</p>
+          <ul class="simple">
+           <li>
+            <p>the corresponding stream to a list(mSlowConsumersReadyForRead) and</p></li>
+           <li>
+            <p>nsHttpConnection::ResumeRecv is called (i.e. it forces the same code path as when a socket has data to receive so that errors can be properly handled as explained previously).</p></li>
+          </ul>
+          <p>These streams will be processed in ProcessSlowConsumers which is called by Http3Session::RecvData.</p>
+         </section>
+         <section id="http-and-webtransport-streams-writing-data">
+          <h2>HTTP and WebTransport Streams Writing Data<a class="headerlink" href="#http-and-webtransport-streams-writing-data" title="Link to this heading">?</a></h2>
+          <p>The following diagram shows how data are sent from an HTTP stream. The diagram for a WebTransport stream will be added later.</p>
+          <pre class="mermaid">        flowchart TD
+   A[HttpConnectionUDP::ResumeSend calls] --&gt; C[HttpConnectionUDP]
+   B[HttpConnectionUDPForceIO] --&gt; |HttpConnectionUDP::SendData| C
+   C --&gt;|1. Http3Session::SendData| D[Http3Session]
+   D --&gt; |2. Http3Stream::ReadSegments|E[Http3Stream]
+   E --&gt; |3. nsHttpTransaction::ReadSegmentsAgain| F[nsHttpTransaction]
+   F --&gt; |4. nsPipeInputStream::ReadSegments| G["nsPipeInputStream(Request stream)"]
+   G --&gt; |5. nsHttpTransaction::ReadRequestSegment| F
+   F --&gt; |6. Http3Stream::OnReadSegment| E
+   E --&gt; |7. Http3Session::TryActivating/SendRequestBody|D
+   D --&gt; |8. NeqoHttp3Conn::Fetch/SendRequestBody| H[NeqoHHttp3Conn]
+    </pre>
+          <p>When a nsHttpTransaction has been newly added to a transaction or when nsHttpTransaction has more data to write Http3Session::StreamReadyToWrite is called (in the latter case through Http3Session::TransactionHasDataToWrite) which performs the following actions:</p>
+          <ul class="simple">
+           <li>
+            <p>add the corresponding stream to a list(mReadyForWrite) and</p></li>
+           <li>
+            <p>call HttpConnectionUDP::ResumeSend</p></li>
+          </ul>
+          <p>The Http3Session::SendData function iterates through mReadyForWrite and calls Http3Stream::ReadSegments for each stream.</p>
+         </section>
+         <section id="neqo-events">
+          <h2>Neqo Events<a class="headerlink" href="#neqo-events" title="Link to this heading">?</a></h2>
+          <p>For <strong>HeaderReady</strong> and <strong>DataReadable</strong> the Http3Stream::WriteSegments function of the corresponding stream is called. The code path shown in the flowchart above will call the nssHttpTransaction served by the stream to take headers and data.</p>
+          <p><strong>DataWritable</strong> means that a stream could not accept more data earlier and that flow control now allows sending more data. Http3Sesson will mark the stream as writable(by calling Http3Session::StreamReadyToWrite) to verify if a stream wants to write more data.</p>
+          <p><strong>Reset</strong> and <strong>StopSending</strong> events will be propagated to the stream and the stream will be closed.</p>
+          <p><strong>RequestsCreatable</strong> events are posted when a QUIC connection could not accept new streams due to the flow control in the past and the stream flow control is increased and the streams are creatable again. Http3Session::ProcessPendingProcessPending will trigger the activation of the queued streams.</p>
+          <p><strong>AuthenticationNeeded</strong> and <strong>EchFallbackAuthenticationNeeded</strong> are posted when a certificate verification is needed.</p>
+          <p><strong>ZeroRttRejected</strong> is posted when zero RTT data was rejected.</p>
+          <p><strong>ResumptionToken</strong> is posted when a new resumption token is available.</p>
+          <p><strong>ConnectionConnected</strong>, <strong>GoawayReceived</strong>, <strong>ConnectionClosing</strong> and <strong>ConnectionClosed</strong> expose change in the connection state. Difference between <strong>ConnectionClosing</strong> and <strong>ConnectionClosed</strong> that after <strong>ConnectionClosed</strong> the connection can be immediately closed and after <strong>ConnectionClosing</strong> we will keep the connection object for a short time until <strong>ConnectionClosed</strong> event is received. During this period we will retransmit the closing frame if they are lost.</p>
+          <section id="webtransport-events">
+           <h3>WebTransport Events<a class="headerlink" href="#webtransport-events" title="Link to this heading">?</a></h3>
+           <p><strong>Negotiated</strong> - WebTransport is negotiated only after the HTTP/3 settings frame has been received from the server. At that point <strong>Negotiated</strong> event is posted to inform the application.</p>
+           <p>The <strong>Session</strong> event is posted when a WebTransport session is successfully negotiated.</p>
+           <p>The <strong>SessionClosed</strong> event is posted when a connection is closed gracefully or abruptly.</p>
+           <p>The <strong>NewStream</strong> is posted when a new stream has been opened by the peer.</p>
+          </section>
+         </section>
+        </section>
+       </div>
+      </div>
+      <footer>
+       <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../cache2/doc.html" class="btn btn-neutral float-left" title="HTTP Cache" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a> <a href="prioritization.html" class="btn btn-neutral float-right" title="Firefox Network Scheduling and Prioritization" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+       </div>
+       <hr>
+       <div role="contentinfo">
+        <p></p>
+       </div> Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+      </footer>
+     </div>
+    </div>
+   </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ </body>
+</html>

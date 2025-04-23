@@ -1,0 +1,386 @@
+<!doctype html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Handling the evolution of Sync payloads — Firefox Source Docs  documentation</title>
+  <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50">
+  <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094">
+  <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=fd3f3429">
+  <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b">
+  <link rel="stylesheet" type="text/css" href="../../_static/custom_theme.css?v=dc5ed815">
+  <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7">
+  <link rel="shortcut icon" href="../../_static/firefox.ico"><!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script src="../../_static/jquery.js?v=5d32c60e"></script>
+  <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+  <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+  <script src="../../_static/doctools.js?v=9a2dae69"></script>
+  <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+  <script src="../../_static/copybutton.js?v=30646c52"></script>
+  <script src="../../_static/design-tabs.js?v=36754332"></script>
+  <script src="../../_static/js/theme.js"></script>
+  <link rel="index" title="Index" href="../../genindex.html">
+  <link rel="search" title="Search" href="../../search.html">
+  <link rel="next" title="External Links" href="external.html">
+  <link rel="prev" title="How Rust Engines are implemented" href="rust-engines.html">
+ </head>
+ <body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+   <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <div class="wy-side-scroll">
+     <div class="wy-side-nav-search">
+      <a href="../../index.html" class="icon icon-home"> Firefox Source Docs <img src="../../_static/firefox-wordmark.svg" class="logo" alt="Logo"> </a><!-- -- This code is governed by the BSD license ---->
+      <div>
+       <h3>Quick search</h3>
+       <script>
+    (function () {
+      var cx = "dd12886298f75dbef";
+      var gcse = document.createElement("script");
+      gcse.async = true;
+      gcse.src = "https://cse.google.com/cse.js?cx=" + cx;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(gcse, s);
+    })();
+  </script><gcse:search></gcse:search>
+      </div>
+     </div>
+     <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+      <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../glossary/index.html">A Glossary of Common Terms</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../overview/index.html">A Quick Guide to Mozilla Applications</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../setup/index.html">Getting Set Up To Work On The Firefox Codebase</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Working On Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Working on Firefox</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../bug-mgmt/index.html">Bug Handling</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox User Guide</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../devtools-user/index.html">Firefox DevTools User Docs</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Source Code Documentation</span></p>
+      <ul class="current">
+       <li class="toctree-l1"><a class="reference internal" href="../../mots/index.html">Governance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../browser/index.html">Firefox Front-end</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../dom/index.html">DOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../editor/index.html">Editor</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../layout/index.html">Style system (CSS) &amp; Layout</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../gfx/index.html">Graphics</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../ipc/index.html">Processes, Threads and IPC</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../devtools/index.html">Firefox DevTools Contributor Docs</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../toolkit/index.html">Toolkit</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../js/index.html">SpiderMonkey</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../jsloader/index.html">JS Loader</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/geckoview/index.html">GeckoView</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/fenix/index.html">Fenix</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/focus-android/index.html">Focus for Android</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../dom/bindings/webidl/index.html">WebIDL</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../modules/libpref/index.html">libpref</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../networking/index.html">Networking</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../remote/index.html">Remote Protocols</a></li>
+       <li class="toctree-l1 current"><a class="reference internal" href="../index.html">Services</a>
+        <ul class="current">
+         <li class="toctree-l2"><a class="reference internal" href="../settings/index.html">Remote Settings</a></li>
+         <li class="toctree-l2 current"><a class="reference internal" href="index.html">Sync</a>
+          <ul class="current">
+           <li class="toctree-l3"><a class="reference internal" href="overview.html">Introduction to Sync</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="engines.html">The Sync engines in the tree</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="rust-engines.html">How Rust Engines are implemented</a></li>
+           <li class="toctree-l3 current"><a class="current reference internal" href="#">Handling the evolution of Sync payloads</a>
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="#context-and-problem-statement">Context and Problem Statement</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#definitions">Definitions</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#decision-drivers">Decision Drivers</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#considered-options">Considered Options</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#decision-outcome">Decision Outcome</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#pros-and-cons-of-the-options">Pros and Cons of the Options</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#links">Links <!-- optional --></a></li>
+            </ul></li>
+           <li class="toctree-l3"><a class="reference internal" href="external.html">External Links</a></li>
+          </ul></li>
+        </ul></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../permissions/index.html">Permissions</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../uriloader/index.html">File Handling</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../widget/cocoa/index.html">Firefox on macOS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../widget/windows/index.html">Firefox on Windows</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../toolkit/components/ml/index.html">Firefox AI Runtime</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../accessible/index.html">Accessibility</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../media/index.html">Media Playback</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../code-quality/index.html">Code quality</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../writing-rust-code/index.html">Writing Rust Code</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../rust-components/index.html">Rust Components</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/profiler/index.html">Gecko Profiler</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../performance/index.html">Performance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../storage/index.html">Database bindings (SQLite, KV, …)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../xpcom/index.html">XPCOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../nspr/index.html">NSPR</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../security/nss/index.html">Network Security Services (NSS)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../content-security/index.html">Web Security Checks in Gecko</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">The Firefox Build System</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mach/index.html">Mach</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/try/index.html">Pushing to Try</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../build/buildsystem/index.html">Build System</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../taskcluster/index.html">Firefox CI and Taskgraph</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/moztreedocs/index.html">Managing Documentation</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mozbuild/vendor/index.html">Vendoring Third Party Components</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Testing &amp; Test Infrastructure</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/automated-testing/index.html">Automated Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/treeherder-try/index.html">Understanding Treeherder Results</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/sheriffed-intermittents/index.html">Sheriffed intermittent failures</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/tests-for-new-config/index.html">Turning on Firefox tests for a new configuration</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/intermittent/index.html">Avoiding intermittent tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/testing-policy/index.html">Testing Policy</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/ci-configs/index.html">Configuration Changes</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/browser-chrome/index.html">Browser chrome mochitests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/chrome-tests/index.html">Chrome Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/marionette/index.html">Marionette</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/geckodriver/index.html">geckodriver</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/test-verification/index.html">Test Verification</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/webrender/index.html">WebRender Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/mochitest-plain/index.html">Mochitest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/xpcshell/index.html">XPCShell tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/tps/index.html">TPS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../web-platform/index.html">web-platform-tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../gtest/index.html">GTest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/fuzzing/index.html">Fuzzing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/sanitizer/index.html">Sanitizer</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/perfdocs/index.html">Performance Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/code-coverage/index.html">Code coverage</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing-rust-code/index.html">Testing &amp; Debugging Rust Code</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Releases &amp; Updates</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html">Mozilla Update Infrastructure</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html#watershed-updates">Watershed Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html#desupport-updates">Desupport Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/update-verify/index.html">Update Verify</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Localization &amp; Internationalization</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../intl/index.html">Internationalization</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../l10n/index.html">Localization</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox and Python</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mozbase/index.html">mozbase</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../python/index.html">Using third-party Python packages</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Metrics Collected in Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../metrics/index.html">Metrics</a></li>
+      </ul>
+     </div>
+    </div>
+   </nav>
+   <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+    <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+     <i data-toggle="wy-nav-top" class="fa fa-bars"></i> <a href="../../index.html">Firefox Source Docs</a>
+    </nav>
+    <div class="wy-nav-content">
+     <div class="rst-content">
+      <!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+      <div role="navigation" aria-label="Page navigation">
+       <ul class="wy-breadcrumbs">
+        <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+        <li class="breadcrumb-item"><a href="../index.html">Services</a></li>
+        <li class="breadcrumb-item"><a href="index.html">Sync</a></li>
+        <li class="breadcrumb-item active">Handling the evolution of Sync payloads</li>
+        <li class="wy-breadcrumbs-aside"><a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Developer+Infrastructure&amp;component=Firefox+Source+Docs%3A+Content&amp;short_desc=Documentation+issue+on+services/sync/payload-evolution&amp;comment=URL+=+https://firefox-source-docs.mozilla.org/services/sync/payload-evolution.html&amp;bug_file_loc=https://firefox-source-docs.mozilla.org/services/sync/payload-evolution.html" rel="nofollow">Report an issue</a> / <a href="../../_sources/services/sync/payload-evolution.md.txt" rel="nofollow"> View page source</a></li>
+       </ul>
+       <hr>
+      </div>
+      <div role="main" class="document" itemscope itemtype="http://schema.org/Article">
+       <div itemprop="articleBody">
+        <section id="handling-the-evolution-of-sync-payloads">
+         <h1>Handling the evolution of Sync payloads<a class="headerlink" href="#handling-the-evolution-of-sync-payloads" title="Link to this heading">?</a></h1>
+         <p>(Note that this document has been written in the format of an <a class="reference external" href="https://github.com/mozilla/application-services/blob/main/docs/adr/0000-use-markdown-architectural-decision-records.md">application-services ADR</a> but the relelvant teams decided that ultimately the best home for this doc is in mozilla-central)</p>
+         <ul class="simple">
+          <li>
+           <p>Status: Accepted</p></li>
+          <li>
+           <p>Deciders: sync team, credentials management team</p></li>
+          <li>
+           <p>Date: 2023-03-15</p></li>
+         </ul>
+         <p>Technical Story:</p>
+         <ul class="simple">
+          <li>
+           <p>https://github.com/mozilla/application-services/pull/5434</p></li>
+          <li>
+           <p>https://docs.google.com/document/d/1ToLOERA5HKzEzRVZNv6Ohv_2wZaujW69pVb1Kef2jNY</p></li>
+         </ul>
+         <section id="context-and-problem-statement">
+          <h2>Context and Problem Statement<a class="headerlink" href="#context-and-problem-statement" title="Link to this heading">?</a></h2>
+          <p>Sync exists on all platforms (Desktop, Android, iOS), all channels (Nightly, Beta, Release, ESR) and is heavily used across all Firefox features. Whenever there are feature changes or requests that potentially involve schema changes, there are not a lot of good options to ensure sync doesn’t break for any specific client. Since sync data is synced from all channels, we need to make sure each client can handle the new data and that all channels can support the new schema. Issues like <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1812235">credit card failing on android and desktop release channels due to schema change on desktop Nightly</a> are examples of such cases we can run into. This document describes our decision on how we will support payload evolution over time.</p>
+          <p>Note that even though this document exists in the application-services repository, it should be considered to apply to all sync implementations, whether in this repository, in mozilla-central, or anywhere else.</p>
+         </section>
+         <section id="definitions">
+          <h2>Definitions<a class="headerlink" href="#definitions" title="Link to this heading">?</a></h2>
+          <ul class="simple">
+           <li>
+            <p>A “new” Firefox installation is a version of Firefox which has a change to a Sync payload which is not yet understood by “recent” versions. The most common example would be a Nightly version of Firefox with a new feature not yet on the release channel.</p></li>
+           <li>
+            <p>A “recent” Firefox installation is a version older than a “new” version, which does not understand or have support for new features in “new” versions, but which we still want to support without breakage and without the user perceiving data-loss. This is typically accepted to mean the current ESR version or later, but taking into account the slow update when new ESRs are released.</p></li>
+           <li>
+            <p>An “old” version is any version before what we consider “recent”.</p></li>
+          </ul>
+         </section>
+         <section id="decision-drivers">
+          <h2>Decision Drivers<a class="headerlink" href="#decision-drivers" title="Link to this heading">?</a></h2>
+          <ul class="simple">
+           <li>
+            <p>It must be possible to change what data is carried by Sync to meet future product requirements.</p></li>
+           <li>
+            <p>Both desktop and mobile platforms must be considered.</p></li>
+           <li>
+            <p>We must not break “recent” Firefox installations when a “new” Firefox installation syncs, and vice-versa.</p></li>
+           <li>
+            <p>Round-tripping data from a “new” Firefox installation through a “recent” Firefox installation must not discard any of the new data, and vice-versa.</p></li>
+           <li>
+            <p>Some degree of breakage for “old” Firefox installations when “new” or “recent” firefoxes sync might be considered acceptable if absolutely necessary.</p></li>
+           <li>
+            <p>However, breakage of “new” or “recent” Firefoxes when an “old” version syncs is <em>not</em> acceptable.</p></li>
+           <li>
+            <p>Because such evolution should be rare, we do not want to set an up-front policy about locking out “old” versions just because they might have a problem in the future. That is, we want to avoid a policy that dictates versions more than (say) 2 years old will break when syncing “just in case”</p></li>
+           <li>
+            <p>Any solution to this must be achievable in a relatively short timeframe as we know of product asks coming down the line which require this capability.</p></li>
+          </ul>
+         </section>
+         <section id="considered-options">
+          <h2>Considered Options<a class="headerlink" href="#considered-options" title="Link to this heading">?</a></h2>
+          <ul class="simple">
+           <li>
+            <p>A backwards compatible schema policy, consisting of (a) having engines “round trip” data they do not know about and (b) never changing the semantics of existing data.</p></li>
+           <li>
+            <p>A policy which prevents “recent” clients from syncing, or editing data, or other restrictions.</p></li>
+           <li>
+            <p>A formal schema-driven process.</p></li>
+           <li>
+            <p>Consider the sync payloads frozen and never change them.</p></li>
+           <li>
+            <p>Use separate collections for new data</p></li>
+          </ul>
+         </section>
+         <section id="decision-outcome">
+          <h2>Decision Outcome<a class="headerlink" href="#decision-outcome" title="Link to this heading">?</a></h2>
+          <p>Chosen option: A backwards compatible schema policy because it is very flexible and the only option meeting the decision drivers.</p>
+         </section>
+         <section id="pros-and-cons-of-the-options">
+          <h2>Pros and Cons of the Options<a class="headerlink" href="#pros-and-cons-of-the-options" title="Link to this heading">?</a></h2>
+          <section id="a-backwards-compatible-schema-policy">
+           <h3>A backwards compatible schema policy<a class="headerlink" href="#a-backwards-compatible-schema-policy" title="Link to this heading">?</a></h3>
+           <p>A summary of this option is a policy by which:</p>
+           <ul class="simple">
+            <li>
+             <p>Every sync engine must arrange to persist any fields from the payload which it does not understand. The next time that engine needs to upload that record to the storage server, it must arrange to add all such “unknown” fields back into the payload.</p></li>
+            <li>
+             <p>Different engines must identify different locations where this might happen. For example, the <code class="docutils literal notranslate"><span class="pre">passwords</span></code> engine would identify the “root” of the payload, <code class="docutils literal notranslate"><span class="pre">addresses</span></code> and <code class="docutils literal notranslate"><span class="pre">creditcards</span></code> would identify the <code class="docutils literal notranslate"><span class="pre">entry</span></code> sub-object in the payload, while the history engine would probably identify <em>both</em> the root of the payload and the <code class="docutils literal notranslate"><span class="pre">visits</span></code> array.</p></li>
+            <li>
+             <p>Fields can not change type, nor be removed for a significant amount of time. This might mean that “new” clients must support both new fields <em>and</em> fields which are considered deprecated by these “new” clients because they are still used by “recent” versions.</p></li>
+           </ul>
+           <p>The pros and cons:</p>
+           <ul class="simple">
+            <li>
+             <p>Good, because it meets the requirements.</p></li>
+            <li>
+             <p>Good, because the initial set of work identified is relatively simple to implement (that work specifically is to support the round-tripping of “unknown” fields, in the hope that by the time actual schema changes are proposed, this round-trip capability will then be on all “recent” versions)</p></li>
+            <li>
+             <p>Bad, because the inability to deprecate or change existing fields means that some evolution tasks become complicated. For example, consider a hypothetical change where we wanted to change from “street/city/state” fields into a free-form “address” field. New Firefox versions would need to populate <em>both</em> new and old fields when writing to the server, and handle the fact that only the old versions might be updated when it sees an incoming record written by a “recent” or “old” versions of Firefox. However, this should be rare.</p></li>
+            <li>
+             <p>Bad, because it’s not possible to prove a proposed change meets the requirements - the policy is informal and requires good judgement as changes are proposed.</p></li>
+           </ul>
+          </section>
+          <section id="a-policy-which-prevents-recent-clients-from-syncing-or-editing-data">
+           <h3>A policy which prevents “recent” clients from syncing, or editing data<a class="headerlink" href="#a-policy-which-prevents-recent-clients-from-syncing-or-editing-data" title="Link to this heading">?</a></h3>
+           <p>Proposals which fit into this category might have been implemented by (say) adding a version number to the schema, and if clients did not fully understand the schema it would either prevent syncing the record, or sync it but not allow editing it, or similar.</p>
+           <p>This was rejected because:</p>
+           <ul class="simple">
+            <li>
+             <p>The user would certainly perceive data-loss if we ignored the incoming data entirely.</p></li>
+            <li>
+             <p>If we still wanted older versions to “partially” see the record (eg, but disallow editing) we’d still need most of the chosen option anyway - specifically, we could still never deprecate fields etc.</p></li>
+            <li>
+             <p>The UI/UX of trying to explain to the user why they can’t edit a record was deemed impossible to do in a satisfactory way.</p></li>
+            <li>
+             <p>This would effectively penalize users who chose to use Nightly Firefoxes in any way. Simply allowing a Nightly to sync would effectively break Release/Mobile Firefox versions.</p></li>
+           </ul>
+          </section>
+          <section id="a-formal-schema-driven-process">
+           <h3>A formal schema-driven process.<a class="headerlink" href="#a-formal-schema-driven-process" title="Link to this heading">?</a></h3>
+           <p>Ideally we could formally describe schemas, but we can’t come up with anything here which works with the constraints of supporting older clients - we simply can’t update older released Firefoxes so they know how to work with the new schemas. We also couldn’t come up with a solution where a schema is downloaded dynamically which also allowed the <em>semantics</em> (as opposed to simply validity) of new fields to be described.</p>
+          </section>
+          <section id="consider-the-sync-payloads-frozen-and-never-change-them">
+           <h3>Consider the sync payloads frozen and never change them.<a class="headerlink" href="#consider-the-sync-payloads-frozen-and-never-change-them" title="Link to this heading">?</a></h3>
+           <p>A process where payloads are frozen was rejected because:</p>
+           <ul class="simple">
+            <li>
+             <p>The most naive approach here would not meet the needs of Firefox in the future.</p></li>
+            <li>
+             <p>A complicated system where we started creating new payload and new collections (ie, freezing “old” schemas but then creating “new” schemas only understood by newer clients) could not be conceived in a way that still met the requirements, particularly around data-loss for older clients. For example, adding a credit-card on a Nightly version but having it be completely unavailable on a release firefox isn’t acceptable.</p></li>
+           </ul>
+          </section>
+          <section id="use-separate-collections-for-new-data">
+           <h3>Use separate collections for new data<a class="headerlink" href="#use-separate-collections-for-new-data" title="Link to this heading">?</a></h3>
+           <p>We could store the new data in a separate collection. For example define a bookmarks2 collection where each record has the same guid as one in bookmarks alongside any new fields. Newer clients use both collections to sync.</p>
+           <p>The pros and cons:</p>
+           <ul class="simple">
+            <li>
+             <p>Good, because it allows newer clients to sync new data without affecting recent or older clients</p></li>
+            <li>
+             <p>Bad, because sync writes would lose atomicity without server changes. We can currently write to a single collection in an atomic way, but don’t have a way to write to multiple collections.</p></li>
+            <li>
+             <p>Bad because this number of collections grows each time we want to add fields.</p></li>
+            <li>
+             <p>Bad because it potentially leaks extra information to an attacker that gets access to the encrypted server records. For example if we added a new collection for a single field, then the attacker could guess if that field was set or not based on the size of the encrypted record.</p></li>
+            <li>
+             <p>Bad because it’s difficult to handle nested data with this approach, for example adding a field to a history record visit.</p></li>
+            <li>
+             <p>Bad because it has the same issue with dependent data as the chosen solution.</p></li>
+           </ul>
+          </section>
+         </section>
+         <section id="links">
+          <h2>Links <!-- optional --><a class="headerlink" href="#links" title="Link to this heading">?</a></h2>
+          <ul class="simple">
+           <li>
+            <p>This document was originally <a class="reference external" href="https://docs.google.com/document/d/1ToLOERA5HKzEzRVZNv6Ohv_2wZaujW69pVb1Kef2jNY">brain-stormed in this google docs document</a>, which may be of interest for historical context, but should not be considered part of this ADR.</p></li>
+          </ul>
+         </section>
+        </section>
+       </div>
+      </div>
+      <footer>
+       <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="rust-engines.html" class="btn btn-neutral float-left" title="How Rust Engines are implemented" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a> <a href="external.html" class="btn btn-neutral float-right" title="External Links" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+       </div>
+       <hr>
+       <div role="contentinfo">
+        <p></p>
+       </div> Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+      </footer>
+     </div>
+    </div>
+   </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ </body>
+</html>

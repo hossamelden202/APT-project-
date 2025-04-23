@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en" data-content_root="./">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lando User Guide — Mozilla Conduit 0 documentation</title>
+  <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50">
+  <link rel="stylesheet" type="text/css" href="_static/classic.css?v=def86cc0">
+  <script src="_static/documentation_options.js?v=8dde47fa"></script>
+  <script src="_static/doctools.js?v=9a2dae69"></script>
+  <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+  <link rel="index" title="Index" href="genindex.html">
+  <link rel="search" title="Search" href="search.html">
+  <link rel="next" title="Phabricator Workflow Walk-through" href="walkthrough.html">
+  <link rel="prev" title="Mozilla Phabricator User Guide" href="phabricator-user.html"><!-- RTD Extra Head -->
+  <script type="application/json" id="READTHEDOCS_DATA">{"ad_free": false, "api_host": "https://readthedocs.org", "builder": "sphinx", "canonical_url": null, "docroot": "/", "features": {"docsearch_disabled": false}, "global_analytics_code": "UA-17997319-1", "language": "en", "page": "lando-user", "programming_language": "words", "project": "moz-conduit", "proxied_api_host": "/_", "source_suffix": ".rst", "subprojects": {}, "theme": "default", "user_analytics_code": "", "version": "latest"}</script><!--
+Using this variable directly instead of using `JSON.parse` is deprecated.
+The READTHEDOCS_DATA global variable will be removed in the future.
+-->
+  <script type="text/javascript">
+READTHEDOCS_DATA = JSON.parse(document.getElementById('READTHEDOCS_DATA').innerHTML);
+</script><!-- end RTD <extrahead> -->
+  <script async type="text/javascript" src="/_/static/javascript/readthedocs-addons.js"></script>
+  <meta name="readthedocs-project-slug" content="moz-conduit">
+  <meta name="readthedocs-version-slug" content="latest">
+  <meta name="readthedocs-resolver-filename" content="/lando-user.html">
+  <meta name="readthedocs-http-status" content="200">
+ </head>
+ <body>
+  <div class="related" role="navigation" aria-label="Related">
+   <h3>Navigation</h3>
+   <ul>
+    <li class="right" style="margin-right: 10px"><a href="genindex.html" title="General Index" accesskey="I">index</a></li>
+    <li class="right"><a href="walkthrough.html" title="Phabricator Workflow Walk-through" accesskey="N">next</a> |</li>
+    <li class="right"><a href="phabricator-user.html" title="Mozilla Phabricator User Guide" accesskey="P">previous</a> |</li>
+    <li class="nav-item nav-item-0"><a href="index.html">Mozilla Conduit 0 documentation</a> »</li>
+    <li class="nav-item nav-item-this"><a href="">Lando User Guide</a></li>
+   </ul>
+  </div>
+  <div class="document">
+   <div class="documentwrapper">
+    <div class="bodywrapper">
+     <div class="body" role="main">
+      <section id="lando-user-guide">
+       <h1>Lando User Guide<a class="headerlink" href="#lando-user-guide" title="Link to this heading">¶</a></h1>
+       <section id="about-lando">
+        <h2>About Lando<a class="headerlink" href="#about-lando" title="Link to this heading">¶</a></h2>
+        <p>Lando is Mozilla’s new automatic code-landing service. It is loosely integrated with our <a class="reference external" href="https://phabricator.services.mozilla.com">Phabricator instance</a>. Its purpose is to easily commit Phabricator revisions to their destination repository.</p>
+       </section>
+       <section id="viewing-a-revision">
+        <h2>Viewing a Revision<a class="headerlink" href="#viewing-a-revision" title="Link to this heading">¶</a></h2>
+        <p>All revisions in Phabricator have a “View Stack in Lando” link. This link will let you land the current revision and all dependent ancestor revisions (see <a class="reference internal" href="#landing-a-stack-of-revisions">Landing a Stack of Revisions</a> for more details). If the revision has been accepted (approved), the link will be active; otherwise, it will be greyed out. A link looks like the following:</p><img alt="Screenshot of a Phabricator Revision ready to land with Lando" class="align-center" src="_images/view-in-lando.png">
+        <p>Clicking this link will take you to the Lando page for that revision:</p><img alt="Screenshot of a revision in Lando that is ready to land" class="align-center" src="_images/lando-land-it.png">
+        <p>You can also go directly to a revision’s Lando page by specifying the revision ID in the Lando URL: <code class="docutils literal notranslate"><span class="pre">https://lando.services.mozilla.com/D&lt;rev</span> <span class="pre">number&gt;/</span></code>.</p>
+        <p>A relevant set of metadata about the revision is presented, including the revision ID, the author, the status of reviews, and the commit message. There is also a timeline of previous landing attempts, if any.</p>
+       </section>
+       <section id="viewing-a-confidential-revision">
+        <h2>Viewing a Confidential Revision<a class="headerlink" href="#viewing-a-confidential-revision" title="Link to this heading">¶</a></h2>
+        <p>Lando can view and land secure Phabricator revisions that you have access to.</p>
+        <p>If you try to view a secure revision on Lando without proper setup, you will see an error page telling you that the revision could not be found, or it is locked down. To view it, you’ll need to provide Lando with a Phabricator API token for your account.</p>
+        <p>First, generate a Phabricator API token. Go to Settings -&gt; Conduit API Tokens -&gt; Generate Token. Keep this token secret and use it only for Lando. You cannot reuse a “cli-” token; please generate a new API token (these start with “api-“).</p><img alt="Screenshot of generating a new Phabricator API token" class="align-center" src="_images/phabricator-api-token-setup.png">
+        <p>Next go to Lando and click the settings icon next to your name, near the logout button. Once clicked, a settings modal will be displayed and you can enter the Phabricator API token you generated here.</p><img alt="Screenshot of setting the Phabricator API token on lando" class="align-center" src="_images/lando-phab-token-setting.png">
+        <p>Click save and then reload the secure revision page on Lando again.</p>
+        <p>To delete an API token, check the “Delete” checkbox on the settings modal and click save. Or you can simply log out.</p>
+       </section>
+       <section id="landing-a-revision">
+        <h2>Landing a Revision<a class="headerlink" href="#landing-a-revision" title="Link to this heading">¶</a></h2>
+        <p>You must be logged in to initiate a landing. Logins are handled by Auth0 and follow the same flow as many other Mozilla systems.</p>
+        <p>In addition to logging in, the following conditions must be true:</p>
+        <ul class="simple">
+         <li>
+          <p>The revision must be associated with a repository in Phabricator.</p></li>
+         <li>
+          <p>A destination repository must be configured in Lando. Ask in the #lando channel on irc.mozilla.org for help if you get this error.</p></li>
+         <li>
+          <p>You must have the required SCM permissions to land to the destination repo (e.g. <code class="docutils literal notranslate"><span class="pre">scm_level_3</span></code> for <code class="docutils literal notranslate"><span class="pre">mozilla-central</span></code>). See the <a class="reference external" href="https://wiki.mozilla.org/Phabricator/FAQ#Lando">FAQ</a> for help with this error.</p></li>
+         <li>
+          <p>Your permissions for the repo must be active (i.e. not expired).</p></li>
+         <li>
+          <p>A landing for this revision must not already be in progress.</p></li>
+         <li>
+          <p>You are not attempting to land an old diff of a revision that was updated.</p></li>
+        </ul>
+        <p>When you preview the landing, if any of the above are not true, you will be shown an appropriate error message at the bottom of the page, and the “Land” button will be disabled.</p><img alt="Screenshot of a Lando error" class="align-center" src="_images/lando-revision-not-associated-error.png">
+        <p>If there are no landing blockers, you can click the “Preview Landing” button to see a preview before landing. Here you can verify the final commit message as well as acknowledge any warnings.</p><img alt="Screenshot of Lando confirmation page" class="align-center" src="_images/lando-confirmation-page.png">
+        <p>Warnings are things which Lando suspects could be a problem but will allow you to determine if they really are, e.g., the revision has already been landed previously, or the revision has not been accepted by a blocking reviewer. You can acknowledge these warnings by checking the checkboxes next to them if you believe the landing should proceed regardless.</p>
+        <p>Once “Land” is clicked, a request will be queued. Generally, this will execute quickly, but if there are a lot of pending landings, or if the trees are closed, it may take longer. The landing request will stay in the queue until it is executed.</p>
+        <p>Once the landing is executed, the timeline will be updated with the results:</p><img alt="Screenshot of the Lando timeline of a successful landing" class="align-center" src="_images/lando-successful-landing.png">
+        <div class="admonition note">
+         <p class="admonition-title">Note</p>
+         <p>Lando pages do not currently automatically refresh; you will have to reload them manually to see updates. There are a couple bugs open to fix this, such as <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1460364">bug 1460364</a>.</p>
+        </div>
+        <p>If the landing failed, an error message will be displayed. This error may represent a problem with the revision, e.g. a merge conflict. In this case, the revision will have to be updated and resubmitted. If it appears to be an error with Lando itself (or related services), please let us know in #lando on IRC or <a class="reference external" href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Conduit&amp;component=Lando">file a bug</a>.</p>
+       </section>
+       <section id="landing-a-stack-of-revisions">
+        <h2>Landing a Stack of Revisions<a class="headerlink" href="#landing-a-stack-of-revisions" title="Link to this heading">¶</a></h2>
+        <p>Lando can also land a stack of revisions at once.</p>
+        <p>Ensure that the dependency chain is properly set in Phabricator:</p><img alt="Screenshot of Phabricator stack dependency chain" class="align-center" src="_images/phab-dependency-chain.png">
+        <p>Load the child-most commit of the stack you want to land. For example, in this case we would load D799 to only land D799, or load D800 to land D799 and D800, or load D801 to land all 3 revisions. Once loaded in Phabricator, click the “View Stack in Lando” link in the sidebar.</p><img alt="Screenshot of a stack of 3 revisions on lando" class="align-center" src="_images/lando-3-revision-stack.png">
+        <p>The resulting page will show you information for each revision in the stack. The timeline can show partial landings of a subset of the stack, as demonstrated in the screenshot above (D799 was landed, but D800 and D801 have not yet been landed). The same principles for landing a single revision apply for landing a stack; you will get a warning or confirmation when previewing the landing and a success or failure result after landing.</p>
+        <div class="admonition note">
+         <p class="admonition-title">Note</p>
+         <p>If there are any confidential revisions in the stack that you want to view, you must have permission to view all of them. Make sure to set a Phabricator API token on Lando if this is the case.</p>
+        </div>
+       </section>
+       <section id="frequently-asked-questions">
+        <h2>Frequently Asked Questions<a class="headerlink" href="#frequently-asked-questions" title="Link to this heading">¶</a></h2>
+        <p>See the FAQ <a class="reference external" href="https://wiki.mozilla.org/Phabricator/FAQ#Lando">on the wiki</a> for answers to common questions and issues. The FAQ is on a wiki to make it easier to maintain; please feel free to update it if you come across other frequently asked questions!</p>
+       </section>
+      </section>
+      <div class="clearer"></div>
+     </div>
+    </div>
+   </div>
+   <div class="sphinxsidebar" role="navigation" aria-label="Main">
+    <div class="sphinxsidebarwrapper">
+     <div>
+      <h3><a href="index.html">Table of Contents</a></h3>
+      <ul>
+       <li><a class="reference internal" href="#">Lando User Guide</a>
+        <ul>
+         <li><a class="reference internal" href="#about-lando">About Lando</a></li>
+         <li><a class="reference internal" href="#viewing-a-revision">Viewing a Revision</a></li>
+         <li><a class="reference internal" href="#viewing-a-confidential-revision">Viewing a Confidential Revision</a></li>
+         <li><a class="reference internal" href="#landing-a-revision">Landing a Revision</a></li>
+         <li><a class="reference internal" href="#landing-a-stack-of-revisions">Landing a Stack of Revisions</a></li>
+         <li><a class="reference internal" href="#frequently-asked-questions">Frequently Asked Questions</a></li>
+        </ul></li>
+      </ul>
+     </div>
+     <div>
+      <h4>Previous topic</h4>
+      <p class="topless"><a href="phabricator-user.html" title="previous chapter">Mozilla Phabricator User Guide</a></p>
+     </div>
+     <div>
+      <h4>Next topic</h4>
+      <p class="topless"><a href="walkthrough.html" title="next chapter">Phabricator Workflow Walk-through</a></p>
+     </div>
+     <div role="note" aria-label="source link">
+      <h3>This Page</h3>
+      <ul class="this-page-menu">
+       <li><a href="_sources/lando-user.rst.txt" rel="nofollow">Show Source</a></li>
+      </ul>
+     </div><search id="searchbox" style="display: none" role="search">
+      <h3 id="searchlabel">Quick search</h3>
+      <div class="searchformwrapper">
+       <form class="search" action="search.html" method="get">
+        <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"> <input type="submit" value="Go">
+       </form>
+      </div>
+     </search>
+     <script>document.getElementById('searchbox').style.display = "block"</script>
+    </div>
+   </div>
+   <div class="clearer"></div>
+  </div>
+  <div class="related" role="navigation" aria-label="Related">
+   <h3>Navigation</h3>
+   <ul>
+    <li class="right" style="margin-right: 10px"><a href="genindex.html" title="General Index">index</a></li>
+    <li class="right"><a href="walkthrough.html" title="Phabricator Workflow Walk-through">next</a> |</li>
+    <li class="right"><a href="phabricator-user.html" title="Mozilla Phabricator User Guide">previous</a> |</li>
+    <li class="nav-item nav-item-0"><a href="index.html">Mozilla Conduit 0 documentation</a> »</li>
+    <li class="nav-item nav-item-this"><a href="">Lando User Guide</a></li>
+   </ul>
+  </div>
+  <div class="footer" role="contentinfo">
+   © Copyright 2017, Mozilla. Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.4.5.
+  </div>
+ </body>
+</html>

@@ -1,0 +1,368 @@
+<!doctype html>
+<html class="writer-html5" lang="en">
+ <head>
+  <meta charset="utf-8">
+  <meta name="readthedocs-addons-api-version" content="1">
+  <meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chain of Trust — Scriptworker 60.8.0</title>
+  <link rel="stylesheet" type="text/css" href="_static/pygments.css">
+  <link rel="stylesheet" type="text/css" href="_static/css/theme.css">
+  <script src="_static/jquery.js"></script>
+  <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+  <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+  <script src="_static/doctools.js"></script>
+  <script src="_static/sphinx_highlight.js"></script>
+  <script src="_static/js/theme.js"></script>
+  <script src="_static/js/versions.js"></script>
+  <link rel="index" title="Index" href="genindex.html">
+  <link rel="search" title="Search" href="search.html">
+  <link rel="next" title="Scriptworker Readme" href="README.html">
+  <link rel="prev" title="Adding new scriptworker instances of an existing type" href="new_instance.html">
+  <script async type="text/javascript" src="/_/static/javascript/readthedocs-addons.js"></script>
+  <meta name="readthedocs-project-slug" content="scriptworker">
+  <meta name="readthedocs-version-slug" content="latest">
+  <meta name="readthedocs-resolver-filename" content="/chain_of_trust.html">
+  <meta name="readthedocs-http-status" content="200">
+ </head>
+ <body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+   <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <div class="wy-side-scroll">
+     <div class="wy-side-nav-search">
+      <a href="index.html" class="icon icon-home"> Scriptworker </a>
+      <div class="switch-menus">
+       <div class="version-switch"></div>
+       <div class="language-switch"></div>
+      </div>
+      <div role="search">
+       <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+        <input type="text" name="q" placeholder="Search docs" aria-label="Search docs"> <input type="hidden" name="check_keywords" value="yes"> <input type="hidden" name="area" value="default">
+       </form>
+      </div>
+     </div>
+     <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+      <p class="caption" role="heading"><span class="caption-text">Table of Contents</span></p>
+      <ul class="current">
+       <li class="toctree-l1"><a class="reference internal" href="flow_of_control.html">Flow of Control</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="maintenance.html">Maintenance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="releases.html">Scriptworker Releases</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="new_instance_types.html">Adding new scriptworker instance types</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="new_instance.html">Adding new scriptworker instances of an existing type</a></li>
+       <li class="toctree-l1 current"><a class="current reference internal" href="#">Chain of Trust</a>
+        <ul>
+         <li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a>
+          <ul>
+           <li class="toctree-l3"><a class="reference internal" href="#high-level-view">High level view</a>
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="#chain-of-trust-versions">Chain of Trust Versions</a></li>
+            </ul></li>
+          </ul></li>
+         <li class="toctree-l2"><a class="reference internal" href="#chain-of-trust-key-management">Chain of Trust Key Management</a>
+          <ul>
+           <li class="toctree-l3"><a class="reference internal" href="#verifying-new-ed25519-keys">verifying new ed25519 keys</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#rotating-the-firefoxci-cot-keys">Rotating the FirefoxCI CoT keys</a></li>
+          </ul></li>
+         <li class="toctree-l2"><a class="reference internal" href="#chain-of-trust-artifact-generation">Chain of Trust Artifact Generation</a>
+          <ul>
+           <li class="toctree-l3"><a class="reference internal" href="#embedded-ed25519-keys">Embedded ed25519 keys</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#chain-of-trust-artifacts">Chain of Trust artifacts</a></li>
+          </ul></li>
+         <li class="toctree-l2"><a class="reference internal" href="#chain-of-trust-verification">Chain of Trust Verification</a>
+          <ul>
+           <li class="toctree-l3"><a class="reference internal" href="#decision-task">Decision Task</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#ed25519-key-management">Ed25519 key management</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#building-the-chain">Building the chain</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#verifying-the-chain">Verifying the chain</a></li>
+          </ul></li>
+         <li class="toctree-l2"><a class="reference internal" href="#chain-of-trust-testing-debugging">Chain of Trust Testing / debugging</a>
+          <ul>
+           <li class="toctree-l3"><a class="reference internal" href="#create-the-virtualenv">Create the virtualenv</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#set-up-the-test-env">Set up the test env</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#find-a-task-to-test">Find a task to test</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#run-the-test">Run the test</a></li>
+          </ul></li>
+        </ul></li>
+       <li class="toctree-l1"><a class="reference internal" href="README.html">Scriptworker Readme</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="scriptworker.html">scriptworker package</a></li>
+      </ul>
+     </div>
+    </div>
+   </nav>
+   <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+    <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+     <i data-toggle="wy-nav-top" class="fa fa-bars"></i> <a href="index.html">Scriptworker</a>
+    </nav>
+    <div class="wy-nav-content">
+     <div class="rst-content">
+      <div role="navigation" aria-label="Page navigation">
+       <ul class="wy-breadcrumbs">
+        <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+        <li class="breadcrumb-item active">Chain of Trust</li>
+        <li class="wy-breadcrumbs-aside"><a href="_sources/chain_of_trust.rst.txt" rel="nofollow"> View page source</a></li>
+       </ul>
+       <hr>
+      </div>
+      <div role="main" class="document" itemscope itemtype="http://schema.org/Article">
+       <div itemprop="articleBody">
+        <section id="chain-of-trust">
+         <h1>Chain of Trust<a class="headerlink" href="#chain-of-trust" title="Permalink to this heading">?</a></h1>
+         <section id="overview">
+          <h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading">?</a></h2>
+          <p>Taskcluster is versatile and self-serve, and enables developers to make automation changes without being blocked on other teams. In the case of developer testing and debugging, this is very powerful and enabling. In the case of release automation, the ability to schedule arbitrary tasks with arbitrary configs can present a security concern.</p>
+          <p>The chain of trust is a second factor that isn’t automatically compromised if scopes are compromised. This chain allows us to trace a task’s request back to the tree.</p>
+          <section id="high-level-view">
+           <h3>High level view<a class="headerlink" href="#high-level-view" title="Permalink to this heading">?</a></h3>
+           <p><a class="reference external" href="https://firefox-ci-tc.services.mozilla.com/docs/reference/platform/auth/scopes">Scopes</a> are how Taskcluster controls access to certain features. These are granted to <a class="reference external" href="https://firefox-ci-tc.services.mozilla.com/docs/reference/platform/auth/roles">roles</a>, which are granted to users or LDAP groups.</p>
+           <p>Scopes and their associated Taskcluster credentials are not leak-proof. Also, by their nature, more people will have restricted scopes than you want, given any security-sensitive scope. Without the chain of trust, someone with release-signing scopes would be able to schedule any arbitrary task to sign any arbitrary binary with the release keys, for example.</p>
+           <p>The chain of trust is a second factor. The embedded ed25519 keys on the workers are either the <a class="reference external" href="http://searchsecurity.techtarget.com/definition/possession-factor">something you have</a> or the <a class="reference external" href="http://searchsecurity.techtarget.com/definition/inherence-factor">something you are</a>, depending on how you view the taskcluster workers.</p>
+           <p>Each chain-of-trust-enabled taskcluster worker generates and signs chain of trust artifacts, which can be used to verify each task and its artifacts, and trace a given request back to the tree.</p>
+           <p>The scriptworker nodes are the verification points. Scriptworkers run the release sensitive tasks, like signing and publishing releases. They verify their task definitions, as well as all upstream tasks that generate inputs into their task. Any broken link in the chain results in a task exception.</p>
+           <p>In conjunction with other best practices, like <a class="reference external" href="https://en.wikipedia.org/wiki/Separation_of_duties">separation of roles</a>, we can reduce attack vectors and make penetration attempts more visible, with task exceptions on release branches.</p>
+           <section id="chain-of-trust-versions">
+            <h4>Chain of Trust Versions<a class="headerlink" href="#chain-of-trust-versions" title="Permalink to this heading">?</a></h4>
+            <ol class="arabic simple">
+             <li>
+              <p>Initial Chain of Trust implementation with GPG signatures: Initial <a class="reference external" href="https://github.com/mozilla-releng/scriptworker/blob/master/HISTORY.rst#100b1---2016-11-14">1.0.0b1 on 2016-11-14</a></p></li>
+             <li>
+              <p>CoT v2: rebuild task definitions via json-e. <a class="reference external" href="https://github.com/mozilla-releng/scriptworker/blob/master/HISTORY.rst#700---2018-01-18">7.0.0 on 2018-01-18</a></p></li>
+             <li>
+              <p>Generic action hook support. <a class="reference external" href="https://github.com/mozilla-releng/scriptworker/blob/master/HISTORY.rst#1200---2018-05-29">12.0.0 on 2018-05-29</a></p></li>
+             <li>
+              <p>Release promotion action hook support. <a class="reference external" href="https://github.com/mozilla-releng/scriptworker/blob/master/HISTORY.rst#1710---2018-12-28">17.1.0 on 2018-12-28</a></p></li>
+             <li>
+              <p>ed25519 support; deprecate GPG support. <a class="reference external" href="https://github.com/mozilla-releng/scriptworker/blob/master/HISTORY.rst#2200---2019-03-07">22.0.0 on 2019-03-07</a></p></li>
+             <li>
+              <p>drop support for gpg <a class="reference external" href="https://github.com/mozilla-releng/scriptworker/blob/master/HISTORY.rst#2300---2019-03-27">23.0.0 on 2019-03-27</a></p></li>
+             <li>
+              <p>drop support for non-hook actions <a class="reference external" href="https://github.com/mozilla-releng/scriptworker/blob/master/HISTORY.rst#4100---2021-09-02">41.0.0 on 2021-09-02</a></p></li>
+            </ol>
+           </section>
+          </section>
+         </section>
+         <section id="chain-of-trust-key-management">
+          <span id="cot-key-management"></span>
+          <h2>Chain of Trust Key Management<a class="headerlink" href="#chain-of-trust-key-management" title="Permalink to this heading">?</a></h2>
+          <p>Ed25519 key management is a critical part of the chain of trust. There are valid ed25519 keys per worker implementation (docker-worker, generic-worker, and scriptworker).</p>
+          <p>Base64-encoded seeds that can be converted to valid level 3 ed25519 pubkeys are recorded in <code class="docutils literal notranslate"><span class="pre">scriptworker.constants</span></code>, in <code class="docutils literal notranslate"><span class="pre">DEFAULT_CONFIG['ed25519_public_keys']</span></code>. These are tuples to allow for key rotation.</p>
+          <p>At some point we may add per-cot-project sets of pubkeys. We may also move the source of truth of these pubkeys to a separate location, to enable cot signature verification elsewhere, outside of scriptworker.</p>
+          <section id="verifying-new-ed25519-keys">
+           <h3>verifying new ed25519 keys<a class="headerlink" href="#verifying-new-ed25519-keys" title="Permalink to this heading">?</a></h3>
+           <p>The <code class="docutils literal notranslate"><span class="pre">verify_cot</span></code> commandline tool supports a <code class="docutils literal notranslate"><span class="pre">--verify-sigs</span></code> option. This will turn on signature verification, and will break if the cot artifacts are not signed by valid level 3 ed25519 keys.</p>
+           <p>There is also a <code class="docutils literal notranslate"><span class="pre">verify_ed25519_signature</span></code> commandline tool. This takes a file path and a signature path, and verifies if the file was validly signed by a known valid level 3 key. It also takes an optional <code class="docutils literal notranslate"><span class="pre">--pubkey</span> <span class="pre">PUBKEY</span></code> argument, which allows you to verify if the file was signed by that pubkey.</p>
+          </section>
+          <section id="rotating-the-firefoxci-cot-keys">
+           <h3>Rotating the FirefoxCI CoT keys<a class="headerlink" href="#rotating-the-firefoxci-cot-keys" title="Permalink to this heading">?</a></h3>
+           <p>See <a class="reference external" href="https://mana.mozilla.org/wiki/pages/viewpage.action?spaceKey=RelEng&amp;title=Chain+of+Trust+key+rotation">this mana page</a>.</p>
+          </section>
+         </section>
+         <section id="chain-of-trust-artifact-generation">
+          <h2>Chain of Trust Artifact Generation<a class="headerlink" href="#chain-of-trust-artifact-generation" title="Permalink to this heading">?</a></h2>
+          <p>Each chain-of-trust-enabled taskcluster worker generates and uploads a chain of trust artifact after each task. This artifact contains details about the task, worker, and artifacts, and is signed by the embedded ed25519 key.</p>
+          <section id="embedded-ed25519-keys">
+           <h3>Embedded ed25519 keys<a class="headerlink" href="#embedded-ed25519-keys" title="Permalink to this heading">?</a></h3>
+           <p>Each supported taskcluster <code class="docutils literal notranslate"><span class="pre">workerType</span></code> has an embedded ed25519 keypair. These are the second factor.</p>
+           <p><code class="docutils literal notranslate"><span class="pre">docker-worker</span></code> has the ed25519 privkey embedded in the AMI, inaccessible to tasks run inside the docker container.</p>
+           <p><code class="docutils literal notranslate"><span class="pre">generic-worker</span></code> can embed the ed25519 privkey into the AMI for EC2 instances, or into the system directories for hardware. This are permissioned so the task user doesn’t have access to it.</p>
+           <p>Chain-of-Trust-enabled <code class="docutils literal notranslate"><span class="pre">scriptworker</span></code> workers have a valid ed25519 keypair.</p>
+           <p>The pubkeys for trusted workerTypes are recorded in <code class="docutils literal notranslate"><span class="pre">scriptworker.constants.ed25519_public_keys</span></code>.</p>
+          </section>
+          <section id="chain-of-trust-artifacts">
+           <h3>Chain of Trust artifacts<a class="headerlink" href="#chain-of-trust-artifacts" title="Permalink to this heading">?</a></h3>
+           <p>After the task finishes, the worker creates a chain of trust json blob, ed25519 signs it, then uploads it as <code class="docutils literal notranslate"><span class="pre">public/chain-of-trust.json</span></code> and its detached signature, <code class="docutils literal notranslate"><span class="pre">public/chain-of-trust.json.sig</span></code>. It looks like</p>
+           <div class="highlight-python notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="p">{</span>
+  <span class="s2">"artifacts"</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">"path/to/artifact"</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s2">"sha256"</span><span class="p">:</span> <span class="s2">"abcd1234"</span>
+    <span class="p">},</span>
+    <span class="o">...</span>
+  <span class="p">},</span>
+  <span class="s2">"chainOfTrustVersion"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+  <span class="s2">"environment"</span><span class="p">:</span> <span class="p">{</span>
+    <span class="c1"># worker-impl specific stuff, like ec2 instance id, ip</span>
+  <span class="p">},</span>
+  <span class="s2">"runId"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+  <span class="s2">"task"</span><span class="p">:</span> <span class="p">{</span>
+    <span class="c1"># task defn</span>
+  <span class="p">},</span>
+  <span class="s2">"taskId"</span><span class="p">:</span> <span class="s2">"..."</span><span class="p">,</span>
+  <span class="s2">"workerGroup"</span><span class="p">:</span> <span class="s2">"..."</span><span class="p">,</span>
+  <span class="s2">"workerId"</span><span class="p">:</span> <span class="s2">"..."</span>
+<span class="p">}</span>
+</pre>
+            </div>
+           </div>
+           <ul class="simple">
+            <li>
+             <p>The v1 chain-of-trust json artifact schema is viewable <a class="reference external" href="https://github.com/mozilla-releng/scriptworker/blob/master/scriptworker/data/cot_v1_schema.json">here</a>.</p></li>
+            <li>
+             <p>This is a real <a class="reference download internal" download="" href="_downloads/699f2e384ed75079711781f9fb2d89f7/chain-of-trust.json"><code class="xref download docutils literal notranslate"><span class="pre">example</span> <span class="pre">artifact</span></code></a>.</p></li>
+           </ul>
+          </section>
+         </section>
+         <section id="chain-of-trust-verification">
+          <h2>Chain of Trust Verification<a class="headerlink" href="#chain-of-trust-verification" title="Permalink to this heading">?</a></h2>
+          <p>Currently, only chain-of-trust-enabled scriptworker instances verify the chain of trust. These are tasks like signing, publishing, and submitting updates to the update server. If the chain of trust is not valid, scriptworker kills the task before it performs any further actions.</p>
+          <p>The below is how this happens.</p>
+          <section id="decision-task">
+           <span id="id1"></span>
+           <h3>Decision Task<a class="headerlink" href="#decision-task" title="Permalink to this heading">?</a></h3>
+           <p>The decision task is a special task that generates a taskgraph, then submits it to the Taskcluster queue. This graph contains task definitions and dependencies. The decision task uploads its generated graph json as an artifact, which can be inspected during chain of trust verification.</p>
+           <p>We rebuild the decision task’s task definition via <a class="reference external" href="https://github.com/taskcluster/json-e">json-e</a>, and verify that it matches the runtime task definition.</p>
+          </section>
+          <section id="ed25519-key-management">
+           <h3>Ed25519 key management<a class="headerlink" href="#ed25519-key-management" title="Permalink to this heading">?</a></h3>
+           <p>The chain of trust artifacts are signed. We need to keep track of the ed25519 public keys to verify them.</p>
+           <p>We keep the level 3 gecko pubkeys in <code class="docutils literal notranslate"><span class="pre">scriptworker.constants.ed25519_public_keys</span></code>, as base64-encoded ascii strings. Once decoded, these are the seeds for the ed25519 public keys. These are tuples of valid keys, to allow for key rotation.</p>
+          </section>
+          <section id="building-the-chain">
+           <h3>Building the chain<a class="headerlink" href="#building-the-chain" title="Permalink to this heading">?</a></h3>
+           <p>First, scriptworker inspects the [signing/balrog/pushapk/beetmover/etc] task that it claimed from the Taskcluster queue. It adds itself and its <a class="reference internal" href="cot_verify.html#decision-task"><span class="std std-ref">Decision Task</span></a> to the chain.</p>
+           <p>Any task that generates artifacts for the scriptworker then needs to be inspected. For scriptworker tasks, we have <code class="docutils literal notranslate"><span class="pre">task.payload.upstreamArtifacts</span></code>, which looks like</p>
+           <div class="highlight-python notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="p">[{</span>
+  <span class="s2">"taskId"</span><span class="p">:</span> <span class="s2">"upstream-task-id"</span><span class="p">,</span>
+  <span class="s2">"taskType"</span><span class="p">:</span> <span class="s2">"build"</span><span class="p">,</span>  <span class="c1"># for cot verification purposes</span>
+  <span class="c1"># paths can be specific artifacts, or globbed patterns</span>
+  <span class="s2">"paths"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"path/to/artifact1"</span><span class="p">,</span> <span class="s2">"path/to/artifact2"</span><span class="p">,</span> <span class="s2">"path/to/globbed/artifacts/*"</span><span class="p">,</span> <span class="s2">"path/to/partially/globbed/artifacts/*.zip"</span><span class="p">],</span>
+  <span class="s2">"formats"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"gpg"</span><span class="p">,</span> <span class="s2">"jar"</span><span class="p">]</span>  <span class="c1"># This is signing-specific for now; we could make formats optional, or use it for other task-specific info</span>
+<span class="p">},</span> <span class="p">{</span>
+  <span class="o">...</span>
+<span class="p">}]</span>
+</pre>
+            </div>
+           </div>
+           <p>We add each upstream <code class="docutils literal notranslate"><span class="pre">taskId</span></code> to the chain, with corresponding <code class="docutils literal notranslate"><span class="pre">taskType</span></code> (we use this to know how to verify the task).</p>
+           <p>For each task added to the chain, we inspect the task definition, and add other upstream tasks:</p>
+           <ul class="simple">
+            <li>
+             <p>if the decision task doesn’t match, add it to the chain.</p></li>
+            <li>
+             <p>docker-worker tasks have <code class="docutils literal notranslate"><span class="pre">task.extra.chainOfTrust.inputs</span></code>, which is a dictionary like <code class="docutils literal notranslate"><span class="pre">{"docker-image":</span> <span class="pre">"docker-image-taskid"}</span></code>. Add the docker image <code class="docutils literal notranslate"><span class="pre">taskId</span></code> to the chain (this will likely have a different decision <code class="docutils literal notranslate"><span class="pre">taskId</span></code>, so add that to the chain).</p></li>
+           </ul>
+          </section>
+          <section id="verifying-the-chain">
+           <h3>Verifying the chain<a class="headerlink" href="#verifying-the-chain" title="Permalink to this heading">?</a></h3>
+           <p>Scriptworker:</p>
+           <ul class="simple">
+            <li>
+             <p>downloads the chain of trust artifacts for each upstream task in the chain, and verifies their signatures. This requires detecting which worker implementation each task is run on, to know which ed25519 public key to use. At some point in the future, we may switch to an OpenSSL CA.</p></li>
+            <li>
+             <p>downloads each of the <code class="docutils literal notranslate"><span class="pre">upstreamArtifacts</span></code> and verify their shas against the corresponding task’s chain of trust’s artifact shas. the downloaded files live in <code class="docutils literal notranslate"><span class="pre">cot/TASKID/PATH</span></code> , so the script doesn’t have to re-download and re-verify.</p></li>
+            <li>
+             <p>downloads each decision task’s <code class="docutils literal notranslate"><span class="pre">task-graph.json</span></code>. For every <em>other</em> task in the chain, we make sure that their task definition matches a task in their decision task’s task graph.</p></li>
+            <li>
+             <p>rebuilds decision and action task definitions using <a class="reference external" href="https://github.com/taskcluster/json-e">json-e</a>, and verifies the rebuilt task definition matches the runtime definition.</p></li>
+            <li>
+             <p>verifies each docker-worker task is either part of the <code class="docutils literal notranslate"><span class="pre">prebuild_docker_image_task_types</span></code>, or that it downloads its image from a previous docker-image task.</p></li>
+            <li>
+             <p>verifies each docker-worker task’s docker image sha.</p></li>
+            <li>
+             <p>makes sure the <code class="docutils literal notranslate"><span class="pre">interactive</span></code> flag isn’t on any docker-worker task.</p></li>
+            <li>
+             <p>determines which repo we’re building off of.</p></li>
+            <li>
+             <p>matches its task’s scopes against the tree; restricted scopes require specific branches.</p></li>
+           </ul>
+           <p>Once all verification passes, it launches the task script. If chain of trust verification fails, it exits before launching the task script.</p>
+          </section>
+         </section>
+         <section id="chain-of-trust-testing-debugging">
+          <h2>Chain of Trust Testing / debugging<a class="headerlink" href="#chain-of-trust-testing-debugging" title="Permalink to this heading">?</a></h2>
+          <p>The <code class="docutils literal notranslate"><span class="pre">verify_cot</span></code> entry point allows you to test chain of trust verification without running a scriptworker instance locally.</p>
+          <section id="create-the-virtualenv">
+           <h3>Create the virtualenv<a class="headerlink" href="#create-the-virtualenv" title="Permalink to this heading">?</a></h3>
+           <ul class="simple">
+            <li>
+             <p>Install git, <code class="docutils literal notranslate"><span class="pre">python&gt;=3.6</span></code>, and python3 virtualenv.</p></li>
+            <li>
+             <p>Clone scriptworker and create virtualenv:</p></li>
+           </ul>
+           <div class="highlight-bash notranslate">
+            <div class="highlight">
+             <pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/mozilla-releng/scriptworker
+<span class="nb">cd</span><span class="w"> </span>scriptworker
+virtualenv3<span class="w"> </span>venv
+.<span class="w"> </span>venv/bin/activate
+python<span class="w"> </span>setup.py<span class="w"> </span>develop
+</pre>
+            </div>
+           </div>
+          </section>
+          <section id="set-up-the-test-env">
+           <h3>Set up the test env<a class="headerlink" href="#set-up-the-test-env" title="Permalink to this heading">?</a></h3>
+           <ul class="simple">
+            <li>
+             <p>Create a ~/.scriptworker or ./secrets.json with test client creds.</p></li>
+            <li>
+             <p>Create the client at <a class="reference external" href="https://firefox-ci-tc.services.mozilla.com/auth/clients">the client manager</a>. Mine has the <code class="docutils literal notranslate"><span class="pre">assume:project:taskcluster:worker-test-scopes</span></code> scope, but I don’t think that’s required.</p></li>
+            <li>
+             <p>The ~/.scriptworker or ./secrets.json file will look like this (fill in your clientId and accessToken):</p></li>
+           </ul>
+           <div class="highlight-python notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="p">{</span>
+  <span class="s2">"credentials"</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">"clientId"</span><span class="p">:</span> <span class="s2">"mozilla-ldap/asasaki@mozilla.com/signing-test"</span><span class="p">,</span>
+    <span class="s2">"accessToken"</span><span class="p">:</span> <span class="s2">"********"</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre>
+            </div>
+           </div>
+          </section>
+          <section id="find-a-task-to-test">
+           <h3>Find a task to test<a class="headerlink" href="#find-a-task-to-test" title="Permalink to this heading">?</a></h3>
+           <ul class="simple">
+            <li>
+             <p>Find a cot-enabled task on <a class="reference external" href="https://treeherder.mozilla.org">treeherder</a> to test.</p></li>
+            <li>
+             <p>Click it, click ‘inspect task’ in the lower left corner.</p></li>
+            <li>
+             <p>The taskId will be in a field near the top of the page.</p></li>
+           </ul>
+          </section>
+          <section id="run-the-test">
+           <h3>Run the test<a class="headerlink" href="#run-the-test" title="Permalink to this heading">?</a></h3>
+           <ul class="simple">
+            <li>
+             <p>Now you should be able to test chain of trust verification!</p></li>
+           </ul>
+           <div class="highlight-bash notranslate">
+            <div class="highlight">
+             <pre><span></span>verify_cot<span class="w"> </span>--task-type<span class="w"> </span>TASKTYPE<span class="w"> </span>TASKID<span class="w">  </span><span class="c1"># e.g., verify_cot --task-type signing cbYd3U6dRRCKPUbKsEj1Iw</span>
+</pre>
+            </div>
+           </div>
+           <ul class="simple">
+            <li>
+             <p>To test with signature verification, use the <code class="docutils literal notranslate"><span class="pre">--verify-sigs</span></code> option. This only works for level 3 trusted workers, since we don’t keep track of the other pubkeys..</p></li>
+           </ul>
+          </section>
+         </section>
+        </section>
+       </div>
+      </div>
+      <footer>
+       <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="new_instance.html" class="btn btn-neutral float-left" title="Adding new scriptworker instances of an existing type" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a> <a href="README.html" class="btn btn-neutral float-right" title="Scriptworker Readme" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+       </div>
+       <hr>
+       <div role="contentinfo">
+        <p><span class="lastupdated">Last updated on 2025-04-17. </span></p>
+       </div> Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+      </footer>
+     </div>
+    </div>
+   </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ </body>
+</html>

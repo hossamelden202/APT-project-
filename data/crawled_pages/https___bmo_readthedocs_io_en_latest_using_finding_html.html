@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/">
+  <title>2.5. Finding Bugs — BMO  documentation</title>
+  <link rel="stylesheet" type="text/css" href="../_static/pygments.css">
+  <link rel="stylesheet" type="text/css" href="../_static/bugzilla.css">
+  <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+  <script src="../_static/jquery.js"></script>
+  <script src="../_static/underscore.js"></script>
+  <script src="../_static/doctools.js"></script>
+  <link rel="shortcut icon" href="../_static/favicon.ico">
+  <link rel="search" title="Search" href="../search.html">
+  <link rel="next" title="2.6. Reports and Charts" href="reports-and-charts.html">
+  <link rel="prev" title="2.4. Editing a Bug" href="editing.html">
+  <script async type="text/javascript" src="/_/static/javascript/readthedocs-addons.js"></script>
+  <meta name="readthedocs-project-slug" content="bmo">
+  <meta name="readthedocs-version-slug" content="latest">
+  <meta name="readthedocs-resolver-filename" content="/using/finding.html">
+  <meta name="readthedocs-http-status" content="200">
+ </head>
+ <body>
+  <div class="related" role="navigation" aria-label="related navigation">
+   <h3>Navigation</h3>
+   <ul>
+    <li class="right" style="margin-right: 10px"><a href="reports-and-charts.html" title="2.6. Reports and Charts" accesskey="N">next</a></li>
+    <li class="right"><a href="editing.html" title="2.4. Editing a Bug" accesskey="P">previous</a> |</li>
+    <li class="nav-item nav-item-0"><a href="../index.html">BMO documentation</a> »</li>
+    <li class="nav-item nav-item-1"><a href="index.html" accesskey="U"><span class="section-number">2. </span>User Guide</a> »</li>
+    <li class="nav-item nav-item-this"><a href=""><span class="section-number">2.5. </span>Finding Bugs</a></li>
+   </ul>
+  </div>
+  <div class="document">
+   <div class="documentwrapper">
+    <div class="bodywrapper">
+     <div class="body" role="main">
+      <section id="finding-bugs">
+       <span id="finding"></span>
+       <h1><span class="section-number">2.5. </span>Finding Bugs<a class="headerlink" href="#finding-bugs" title="Permalink to this headline">¶</a></h1>
+       <p>Bugzilla has a number of different search options.</p>
+       <div class="admonition note">
+        <p class="admonition-title">Note</p>
+        <p>Bugzilla queries are case-insensitive and accent-insensitive when used with either MySQL or Oracle databases. When using Bugzilla with PostgreSQL, however, some queries are case sensitive. This is due to the way PostgreSQL handles case and accent sensitivity.</p>
+       </div>
+       <section id="quicksearch">
+        <span id="id1"></span>
+        <h2><span class="section-number">2.5.1. </span>Quicksearch<a class="headerlink" href="#quicksearch" title="Permalink to this headline">¶</a></h2>
+        <p>Quicksearch is a single-text-box query tool. You’ll find it in Bugzilla’s header or footer.</p>
+        <p>Quicksearch uses metacharacters to indicate what is to be searched. For example, typing</p>
+        <blockquote>
+         <div>
+          <p><code class="docutils literal notranslate"><span class="pre">foo|bar</span></code></p>
+         </div>
+        </blockquote>
+        <p>into Quicksearch would search for “foo” or “bar” in the summary and status whiteboard of a bug; adding</p>
+        <blockquote>
+         <div>
+          <p><code class="docutils literal notranslate"><span class="pre">:BazProduct</span></code></p>
+         </div>
+        </blockquote>
+        <p>would search only in that product.</p>
+        <p>You can also use it to go directly to a bug by entering its number or its alias.</p>
+       </section>
+       <section id="simple-search">
+        <h2><span class="section-number">2.5.2. </span>Simple Search<a class="headerlink" href="#simple-search" title="Permalink to this headline">¶</a></h2>
+        <p>Simple Search is good for finding one particular bug. It works like internet search engines - just enter some keywords and off you go.</p>
+       </section>
+       <section id="advanced-search">
+        <h2><span class="section-number">2.5.3. </span>Advanced Search<a class="headerlink" href="#advanced-search" title="Permalink to this headline">¶</a></h2>
+        <p>The Advanced Search page is used to produce a list of all bugs fitting exact criteria. You can play with it on <a class="reference external" href="https://bugzilla-dev.allizom.org/query.cgi?format=advanced">Mozilla’s Bugzilla (BMO) test server</a>.</p>
+        <p>Advanced Search has controls for selecting different possible values for all of the fields in a bug, as described above. For some fields, multiple values can be selected. In those cases, Bugzilla returns bugs where the content of the field matches any one of the selected values. If none is selected, then the field can take any value.</p>
+        <p>After a search is run, you can save it as a Saved Search, which will appear in the page footer. If you are in the group defined by the “querysharegroup” parameter, you may share your queries with other users; see <a class="reference internal" href="preferences.html#saved-searches"><span class="std std-ref">Saved Searches</span></a> for more details.</p>
+       </section>
+       <section id="custom-search">
+        <span id="id2"></span>
+        <h2><span class="section-number">2.5.4. </span>Custom Search<a class="headerlink" href="#custom-search" title="Permalink to this headline">¶</a></h2>
+        <p>Highly advanced querying is done using the <span class="guilabel">Custom Search</span> feature of the <span class="guilabel">Advanced Search</span> page.</p>
+        <p>The search criteria here further restrict the set of results returned by a query, over and above those defined in the fields at the top of the page. It is thereby possible to search for bugs based on elaborate combinations of criteria.</p>
+        <p>The simplest custom searches have only one term. These searches permit the selected <em>field</em> to be compared using a selectable <em>operator</em> to a specified <em>value</em>. Much of this could be reproduced using the standard fields. However, you can then combine terms using “Match All” (AND) or “Match Any” (OR), using groups for combining and priority, in order to construct searches of almost arbitrary complexity.</p>
+        <p>There are three fields in each row (known as a “term”) of a custom search:</p>
+        <ul class="simple">
+         <li>
+          <p><em>Field:</em> the name of the field being searched</p></li>
+         <li>
+          <p><em>Operator:</em> the comparison operator</p></li>
+         <li>
+          <p><em>Value:</em> the value to which the field is being compared</p></li>
+        </ul>
+        <p>The list of available <em>fields</em> contains all the fields defined for a bug, including any custom fields, and then also some pseudo-fields like <span class="guilabel">Assignee Real Name</span>, <span class="guilabel">Days Since Bug Changed</span>, <span class="guilabel">Time Since Assignee Touched</span> and other things it may be useful to search on.</p>
+        <p>There are a wide range of <em>operators</em> available, not all of which may make sense for a particular field. There are various string-matching operations (including regular expressions), numerical comparisons (which also work for dates), and also the ability to search for change information—when a field changed, what it changed from or to, and who did it. There are special operators for <span class="guilabel">is empty</span> and <span class="guilabel">is not empty</span>, because Bugzilla can’t tell the difference between a value field left blank on purpose and one left blank by accident.</p>
+        <p>You can have an arbitrary number of rows and groups, and rearrange them by dragging and dropping the handle on each item. You can even duplicate an item by holding the Alt key while dragging it. The radio buttons above them define how they relate — <span class="guilabel">Match All</span>, <span class="guilabel">Match All (Same Field)</span> or <span class="guilabel">Match Any</span>. The difference between the first and second can be illustrated with a comment search. If you have a search:</p>
+        <div class="highlight-default notranslate">
+         <div class="highlight">
+          <pre><span></span><span class="n">Comment</span>   <span class="n">contains</span> <span class="n">the</span> <span class="n">string</span>   <span class="s2">"Fred"</span>
+<span class="n">Comment</span>   <span class="n">contains</span> <span class="n">the</span> <span class="n">string</span>   <span class="s2">"Barney"</span>
+</pre>
+         </div>
+        </div>
+        <p>then under the first regime (match separately) the search would return bugs where “Fred” appeared in one comment and “Barney” in the same or any other comment, whereas under the second (match against the same field), both strings would need to occur in exactly the same comment.</p>
+        <section id="negation">
+         <span id="advanced-features"></span>
+         <h3><span class="section-number">2.5.4.1. </span>Negation<a class="headerlink" href="#negation" title="Permalink to this headline">¶</a></h3>
+         <p>At first glance, negation seems redundant. Rather than searching for:</p>
+         <div class="highlight-default notranslate">
+          <div class="highlight">
+           <pre><span></span><span class="n">NOT</span> <span class="p">(</span> <span class="n">summary</span>   <span class="n">contains</span> <span class="n">the</span> <span class="n">string</span>   <span class="s2">"foo"</span> <span class="p">)</span>
+</pre>
+          </div>
+         </div>
+         <p>one could search for:</p>
+         <div class="highlight-default notranslate">
+          <div class="highlight">
+           <pre><span></span><span class="n">summary</span>   <span class="n">does</span> <span class="ow">not</span> <span class="n">contain</span> <span class="n">the</span> <span class="n">string</span>   <span class="s2">"foo"</span>
+</pre>
+          </div>
+         </div>
+         <p>However, the search:</p>
+         <div class="highlight-default notranslate">
+          <div class="highlight">
+           <pre><span></span><span class="n">CC</span>   <span class="n">does</span> <span class="ow">not</span> <span class="n">contain</span> <span class="n">the</span> <span class="n">string</span>   <span class="s2">"@mozilla.org"</span>
+</pre>
+          </div>
+         </div>
+         <p>would find every bug where anyone on the CC list did not contain “@mozilla.org” while:</p>
+         <div class="highlight-default notranslate">
+          <div class="highlight">
+           <pre><span></span><span class="n">NOT</span> <span class="p">(</span> <span class="n">CC</span>   <span class="n">contains</span> <span class="n">the</span> <span class="n">string</span>   <span class="s2">"@mozilla.org"</span> <span class="p">)</span>
+</pre>
+          </div>
+         </div>
+         <p>would find every bug where there was nobody on the CC list who did contain the string. Similarly, the use of negation also permits complex expressions to be built using terms OR’d together and then negated. Negation permits queries such as:</p>
+         <div class="highlight-default notranslate">
+          <div class="highlight">
+           <pre><span></span><span class="n">NOT</span> <span class="p">(</span> <span class="p">(</span> <span class="n">product</span>   <span class="n">equals</span>   <span class="s2">"Update"</span> <span class="p">)</span>
+      <span class="n">OR</span>
+      <span class="p">(</span> <span class="n">component</span>   <span class="n">equals</span>   <span class="s2">"Documentation"</span> <span class="p">)</span>
+    <span class="p">)</span>
+</pre>
+          </div>
+         </div>
+         <p>to find bugs that are neither in the <span class="guilabel">Update</span> product or in the <span class="guilabel">Documentation</span> component or:</p>
+         <div class="highlight-default notranslate">
+          <div class="highlight">
+           <pre><span></span><span class="n">NOT</span> <span class="p">(</span> <span class="p">(</span> <span class="n">commenter</span>   <span class="n">equals</span>   <span class="s2">"</span><span class="si">%a</span><span class="s2">ssignee%"</span> <span class="p">)</span>
+      <span class="n">OR</span>
+      <span class="p">(</span><span class="n">component</span>   <span class="n">equals</span>   <span class="s2">"Documentation"</span> <span class="p">)</span>
+    <span class="p">)</span>
+</pre>
+          </div>
+         </div>
+         <p>to find non-documentation bugs on which the assignee has never commented.</p>
+        </section>
+        <section id="pronoun-substitution">
+         <span id="pronouns"></span>
+         <h3><span class="section-number">2.5.4.2. </span>Pronoun Substitution<a class="headerlink" href="#pronoun-substitution" title="Permalink to this headline">¶</a></h3>
+         <p>Sometimes, a query needs to compare a user-related field (such as <span class="guilabel">Reporter</span>) with a role-specific user (such as the user running the query or the user to whom each bug is assigned). For example, you may want to find all bugs that are assigned to the person who reported them.</p>
+         <p>When the <span class="guilabel">Custom Search</span> operator is either <span class="guilabel">equals</span> or <span class="guilabel">notequals</span>, the value can be <code class="docutils literal notranslate"><span class="pre">%reporter%</span></code>, <code class="docutils literal notranslate"><span class="pre">%triageowner%</span></code>, <code class="docutils literal notranslate"><span class="pre">%assignee%</span></code>, <code class="docutils literal notranslate"><span class="pre">%qacontact%</span></code>, <code class="docutils literal notranslate"><span class="pre">%user%</span></code> or <code class="docutils literal notranslate"><span class="pre">%self%</span></code>. These are known as “pronouns”. The <code class="docutils literal notranslate"><span class="pre">%user%</span></code> pronoun and its alias <code class="docutils literal notranslate"><span class="pre">%self%</span></code> refer to the user who is executing the query (that’s you) or, in the case of whining reports, the user who will be the recipient of the report. The <code class="docutils literal notranslate"><span class="pre">%reporter%</span></code>, <code class="docutils literal notranslate"><span class="pre">%triageowner%</span></code>, <code class="docutils literal notranslate"><span class="pre">%assignee%</span></code> and <code class="docutils literal notranslate"><span class="pre">%qacontact%</span></code> pronouns refer to the corresponding fields in the bug.</p>
+         <p>This feature also lets you search by a user’s group memberships. If the operator is either <span class="guilabel">equals</span>, <span class="guilabel">notequals</span> or <span class="guilabel">anyexact</span>, you can search for whether a user belongs (or not) to the specified group. The group name must be entered using “%group.foo%” syntax, where “foo” is the group name. So if you are looking for bugs reported by any user being in the “editbugs” group, then you can use:</p>
+         <div class="highlight-default notranslate">
+          <div class="highlight">
+           <pre><span></span><span class="n">reporter</span>   <span class="n">equals</span>   <span class="s2">"</span><span class="si">%g</span><span class="s2">roup.editbugs%"</span>
+</pre>
+          </div>
+         </div>
+        </section>
+        <section id="searching-for-bugs-restricted-to-groups">
+         <span id="group-restrictions"></span>
+         <h3><span class="section-number">2.5.4.3. </span>Searching for Bugs Restricted to Groups<a class="headerlink" href="#searching-for-bugs-restricted-to-groups" title="Permalink to this headline">¶</a></h3>
+         <p>When administrators set up products, they can establish one or more groups that bugs in the product can be associated with. If a bug is associated with a group then only users who are members of the group can see it.</p>
+         <p>This restriction is mostly used for security-related bugs, or internal tickets.</p>
+         <p>In order to search for bugs restricted to a group, you must be a member of the group.</p>
+         <p>Visit <a class="reference external" href="https://bugzilla.mozilla.org/userprefs.cgi?tab=permissions">the Permissions page</a> to find the groups you belong to, then search using the clause</p>
+         <blockquote>
+          <div>
+           <p>Group is equal to “%group.groupname%”</p>
+          </div>
+         </blockquote>
+         <p>to list the bugs restricted to <cite>groupname</cite>.</p>
+        </section>
+        <section id="searching-on-relative-dates">
+         <span id="relative-dates"></span>
+         <h3><span class="section-number">2.5.4.4. </span>Searching on Relative Dates<a class="headerlink" href="#searching-on-relative-dates" title="Permalink to this headline">¶</a></h3>
+         <p>In order to conduct searches over a window of time, you can use <em>relative dates</em> in query values.</p>
+         <p>The relative date values are of the form <cite>nnV</cite> where <cite>nn</cite> is a positive or negative integer and <cite>V</cite> is one of:</p>
+         <ul class="simple">
+          <li>
+           <p><cite>h</cite> – for hours</p></li>
+          <li>
+           <p><cite>d</cite> – for days</p></li>
+          <li>
+           <p><cite>w</cite> – for weeks</p></li>
+          <li>
+           <p><cite>m</cite> – for months</p></li>
+          <li>
+           <p><cite>y</cite> – for years</p></li>
+         </ul>
+         <p>A value of <cite>1d</cite> means 24 hours in the future from the time of the search.</p>
+         <p>A value of <cite>-1d</cite> means 24 hours in the past from the time of the search.</p>
+         <p>These relative values can be used when the <span class="guilabel">Custom Search</span> operator is one of:</p>
+         <ul class="simple">
+          <li>
+           <p><span class="guilabel">is less than</span></p></li>
+          <li>
+           <p><span class="guilabel">is less than or equal to</span></p></li>
+          <li>
+           <p><span class="guilabel">is greater than</span></p></li>
+          <li>
+           <p><span class="guilabel">is greater than or equal to</span></p></li>
+         </ul>
+         <p>and the field compared is a Datetime type.</p>
+         <p>To find bugs opened in the last 24 hours, you could search on:</p>
+         <blockquote>
+          <div>
+           <p>Opened is less than “-1d”</p>
+          </div>
+         </blockquote>
+         <p>To find bugs opened during the current day (UTC),</p>
+         <blockquote>
+          <div>
+           <p>Opened is less than “-0ds”</p>
+          </div>
+         </blockquote>
+         <p>Appending <cite>s</cite> to a relative date means <em>start of</em>.</p>
+         <p>You may also use relative dates for when a field changed. In the <span class="guilabel">Custom Search</span> operator that would be</p>
+         <ul class="simple">
+          <li>
+           <p><span class="guilabel">changed after</span></p></li>
+          <li>
+           <p><span class="guilabel">changed before</span></p></li>
+         </ul>
+         <p>To find bugs whose <span class="guilabel">priority</span> changed in the last seven days, search on:</p>
+         <blockquote>
+          <div>
+           <p>Priority changed after “-1w”</p>
+          </div>
+         </blockquote>
+         <p>You can also search for a change to a particular value over a relative date using the <span class="guilabel">Search by Change History</span> operator.</p>
+         <p>To find the bugs <cite>RESOLVED</cite> as <cite>WONTFIX</cite> in the current year to date, you would search on</p>
+         <blockquote>
+          <div>
+           <p>Resolution changed to “WONTFIX” between “-0ys” and “NOW”</p>
+          </div>
+         </blockquote>
+        </section>
+       </section>
+       <section id="bug-lists">
+        <span id="list"></span>
+        <h2><span class="section-number">2.5.5. </span>Bug Lists<a class="headerlink" href="#bug-lists" title="Permalink to this headline">¶</a></h2>
+        <p>The result of a search is a list of matching bugs.</p>
+        <p>The format of the list is configurable. For example, it can be sorted by clicking the column headings. Other useful features can be accessed using the links at the bottom of the list:</p>
+        <dl class="simple">
+         <dt>
+          Long Format:
+         </dt>
+         <dd>
+          <p>this gives you a large page with a non-editable summary of the fields of each bug.</p>
+         </dd>
+         <dt>
+          XML (icon):
+         </dt>
+         <dd>
+          <p>get the buglist in an XML format.</p>
+         </dd>
+         <dt>
+          CSV (icon):
+         </dt>
+         <dd>
+          <p>get the buglist as comma-separated values, for import into e.g. a spreadsheet.</p>
+         </dd>
+         <dt>
+          Feed (icon):
+         </dt>
+         <dd>
+          <p>get the buglist as an Atom feed. Copy this link into your favorite feed reader. If you are using Firefox, you can also save the list as a live bookmark by clicking the live bookmark icon in the status bar. To limit the number of bugs in the feed, add a limit=n parameter to the URL.</p>
+         </dd>
+         <dt>
+          iCalendar (icon):
+         </dt>
+         <dd>
+          <p>Get the buglist as an iCalendar file. Each bug is represented as a to-do item in the imported calendar.</p>
+         </dd>
+         <dt>
+          Change Columns:
+         </dt>
+         <dd>
+          <p>change the bug attributes which appear in the list.</p>
+         </dd>
+         <dt>
+          Change Several Bugs At Once:
+         </dt>
+         <dd>
+          <p>If your account is sufficiently empowered, and more than one bug appears in the bug list, this link is displayed and lets you easily make the same change to all the bugs in the list - for example, changing their assignee.</p>
+         </dd>
+         <dt>
+          Send Mail to Bug Assignees:
+         </dt>
+         <dd>
+          <p>If more than one bug appears in the bug list and there are at least two distinct bug assignees, this link is displayed which lets you easily send an e-mail to the assignees of all bugs on the list.</p>
+         </dd>
+         <dt>
+          Edit Search:
+         </dt>
+         <dd>
+          <p>If you didn’t get exactly the results you were looking for, you can return to the Query page through this link and make small revisions to the query you just made so you get more accurate results.</p>
+         </dd>
+         <dt>
+          Remember Search As:
+         </dt>
+         <dd>
+          <p>You can give a search a name and remember it; the name will appear as an auto-completion in the search field in the header of Bugzilla pages giving you quick access to run it again later.</p>
+         </dd>
+        </dl>
+        <hr class="docutils">
+        <p>This documentation undoubtedly has bugs; if you find some, please file them <a class="reference external" href="https://bugzilla.mozilla.org/enter_bug.cgi?product=bugzilla.mozilla.org&amp;component=Documentation">here</a>.</p>
+       </section>
+      </section>
+      <div class="clearer"></div>
+     </div>
+    </div>
+   </div>
+   <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+    <div class="sphinxsidebarwrapper">
+     <h3><a href="../index.html">Table of Contents</a></h3>
+     <ul>
+      <li><a class="reference internal" href="#">2.5. Finding Bugs</a>
+       <ul>
+        <li><a class="reference internal" href="#quicksearch">2.5.1. Quicksearch</a></li>
+        <li><a class="reference internal" href="#simple-search">2.5.2. Simple Search</a></li>
+        <li><a class="reference internal" href="#advanced-search">2.5.3. Advanced Search</a></li>
+        <li><a class="reference internal" href="#custom-search">2.5.4. Custom Search</a>
+         <ul>
+          <li><a class="reference internal" href="#negation">2.5.4.1. Negation</a></li>
+          <li><a class="reference internal" href="#pronoun-substitution">2.5.4.2. Pronoun Substitution</a></li>
+          <li><a class="reference internal" href="#searching-for-bugs-restricted-to-groups">2.5.4.3. Searching for Bugs Restricted to Groups</a></li>
+          <li><a class="reference internal" href="#searching-on-relative-dates">2.5.4.4. Searching on Relative Dates</a></li>
+         </ul></li>
+        <li><a class="reference internal" href="#bug-lists">2.5.5. Bug Lists</a></li>
+       </ul></li>
+     </ul>
+     <h4>Previous topic</h4>
+     <p class="topless"><a href="editing.html" title="previous chapter"><span class="section-number">2.4. </span>Editing a Bug</a></p>
+     <h4>Next topic</h4>
+     <p class="topless"><a href="reports-and-charts.html" title="next chapter"><span class="section-number">2.6. </span>Reports and Charts</a></p>
+     <div id="searchbox" style="display: none" role="search">
+      <h3 id="searchlabel">Quick search</h3>
+      <div class="searchformwrapper">
+       <form class="search" action="../search.html" method="get">
+        <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"> <input type="submit" value="Go">
+       </form>
+      </div>
+     </div>
+     <script>$('#searchbox').show(0);</script>
+    </div>
+   </div>
+   <div class="clearer"></div>
+  </div>
+  <div class="related" role="navigation" aria-label="related navigation">
+   <h3>Navigation</h3>
+   <ul>
+    <li class="right" style="margin-right: 10px"><a href="reports-and-charts.html" title="2.6. Reports and Charts">next</a></li>
+    <li class="right"><a href="editing.html" title="2.4. Editing a Bug">previous</a> |</li>
+    <li class="nav-item nav-item-0"><a href="../index.html">BMO documentation</a> »</li>
+    <li class="nav-item nav-item-1"><a href="index.html"><span class="section-number">2. </span>User Guide</a> »</li>
+    <li class="nav-item nav-item-this"><a href=""><span class="section-number">2.5. </span>Finding Bugs</a></li>
+   </ul>
+  </div>
+  <div class="footer" role="contentinfo">
+   Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.3.2.
+  </div>
+ </body>
+</html>

@@ -1,0 +1,441 @@
+<!doctype html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Server side overview — Firefox Source Docs  documentation</title>
+  <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50">
+  <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094">
+  <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=fd3f3429">
+  <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b">
+  <link rel="stylesheet" type="text/css" href="../../_static/custom_theme.css?v=dc5ed815">
+  <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7">
+  <link rel="shortcut icon" href="../../_static/firefox.ico"><!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script src="../../_static/jquery.js?v=5d32c60e"></script>
+  <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+  <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+  <script src="../../_static/doctools.js?v=9a2dae69"></script>
+  <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+  <script src="../../_static/copybutton.js?v=30646c52"></script>
+  <script src="../../_static/design-tabs.js?v=36754332"></script>
+  <script src="../../_static/js/theme.js"></script>
+  <link rel="index" title="Index" href="../../genindex.html">
+  <link rel="search" title="Search" href="../../search.html">
+  <link rel="next" title="Client API" href="client-api.html">
+  <link rel="prev" title="Remote Debugging Protocol" href="protocol.html">
+ </head>
+ <body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+   <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <div class="wy-side-scroll">
+     <div class="wy-side-nav-search">
+      <a href="../../index.html" class="icon icon-home"> Firefox Source Docs <img src="../../_static/firefox-wordmark.svg" class="logo" alt="Logo"> </a><!-- -- This code is governed by the BSD license ---->
+      <div>
+       <h3>Quick search</h3>
+       <script>
+    (function () {
+      var cx = "dd12886298f75dbef";
+      var gcse = document.createElement("script");
+      gcse.async = true;
+      gcse.src = "https://cse.google.com/cse.js?cx=" + cx;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(gcse, s);
+    })();
+  </script><gcse:search></gcse:search>
+      </div>
+     </div>
+     <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+      <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../glossary/index.html">A Glossary of Common Terms</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../overview/index.html">A Quick Guide to Mozilla Applications</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../setup/index.html">Getting Set Up To Work On The Firefox Codebase</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Working On Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Working on Firefox</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../bug-mgmt/index.html">Bug Handling</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox User Guide</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../devtools-user/index.html">Firefox DevTools User Docs</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Source Code Documentation</span></p>
+      <ul class="current">
+       <li class="toctree-l1"><a class="reference internal" href="../../mots/index.html">Governance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../browser/index.html">Firefox Front-end</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../dom/index.html">DOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../editor/index.html">Editor</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../layout/index.html">Style system (CSS) &amp; Layout</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../gfx/index.html">Graphics</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../ipc/index.html">Processes, Threads and IPC</a></li>
+       <li class="toctree-l1 current"><a class="reference internal" href="../index.html">Firefox DevTools Contributor Docs</a>
+        <ul class="current">
+         <li class="toctree-l2"><a class="reference internal" href="../index.html#getting-started">Getting Started</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../index.html#contributing">Contributing</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../index.html#recurring-tasks">Recurring tasks</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../index.html#automated-tests">Automated tests</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../index.html#files-and-directories">Files and directories</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../index.html#tool-architectures">Tool Architectures</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../index.html#frontend">Frontend</a></li>
+         <li class="toctree-l2 current"><a class="reference internal" href="../index.html#backend">Backend</a>
+          <ul class="current">
+           <li class="toctree-l3"><a class="reference internal" href="protocol.html">Remote Debugging Protocol</a></li>
+           <li class="toctree-l3 current"><a class="current reference internal" href="#">Backend Overview</a>
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="#connecting-to-backend">Connecting to backend</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#picking-a-particular-context-to-debug">Picking a particular context to debug</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#the-watcher-actor">The Watcher Actor</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#how-the-watcher-actor-handles-processes-threads-and-instantiates-the-targets-actors">How the Watcher Actor handles processes/threads and instantiates the targets actors?</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#session-data">Session Data</a></li>
+            </ul></li>
+           <li class="toctree-l3"><a class="reference internal" href="client-api.html">Client API</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="debugger-api.html">Debugger API</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="backward-compatibility.html">Backward Compatibility</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="actor-hierarchy.html">Actors Organization</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="protocol.js.html">Writing Actors With protocol.js</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="actor-registration.html">Registering A New Actor</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="actor-best-practices.html">Actor Best Practices</a></li>
+          </ul></li>
+         <li class="toctree-l2"><a class="reference internal" href="../index.html#preferences">Preferences</a></li>
+        </ul></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../toolkit/index.html">Toolkit</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../js/index.html">SpiderMonkey</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../jsloader/index.html">JS Loader</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/geckoview/index.html">GeckoView</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/fenix/index.html">Fenix</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/focus-android/index.html">Focus for Android</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../dom/bindings/webidl/index.html">WebIDL</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../modules/libpref/index.html">libpref</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../networking/index.html">Networking</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../remote/index.html">Remote Protocols</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../services/index.html">Services</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../permissions/index.html">Permissions</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../uriloader/index.html">File Handling</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../widget/cocoa/index.html">Firefox on macOS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../widget/windows/index.html">Firefox on Windows</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../toolkit/components/ml/index.html">Firefox AI Runtime</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../accessible/index.html">Accessibility</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../media/index.html">Media Playback</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../code-quality/index.html">Code quality</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../writing-rust-code/index.html">Writing Rust Code</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../rust-components/index.html">Rust Components</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/profiler/index.html">Gecko Profiler</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../performance/index.html">Performance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../storage/index.html">Database bindings (SQLite, KV, …)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../xpcom/index.html">XPCOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../nspr/index.html">NSPR</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../security/nss/index.html">Network Security Services (NSS)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../content-security/index.html">Web Security Checks in Gecko</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">The Firefox Build System</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mach/index.html">Mach</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/try/index.html">Pushing to Try</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../build/buildsystem/index.html">Build System</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../taskcluster/index.html">Firefox CI and Taskgraph</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/moztreedocs/index.html">Managing Documentation</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mozbuild/vendor/index.html">Vendoring Third Party Components</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Testing &amp; Test Infrastructure</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/automated-testing/index.html">Automated Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/treeherder-try/index.html">Understanding Treeherder Results</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/sheriffed-intermittents/index.html">Sheriffed intermittent failures</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/tests-for-new-config/index.html">Turning on Firefox tests for a new configuration</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/intermittent/index.html">Avoiding intermittent tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/testing-policy/index.html">Testing Policy</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/ci-configs/index.html">Configuration Changes</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/browser-chrome/index.html">Browser chrome mochitests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/chrome-tests/index.html">Chrome Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/marionette/index.html">Marionette</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/geckodriver/index.html">geckodriver</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/test-verification/index.html">Test Verification</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/webrender/index.html">WebRender Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/mochitest-plain/index.html">Mochitest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/xpcshell/index.html">XPCShell tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/tps/index.html">TPS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../web-platform/index.html">web-platform-tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../gtest/index.html">GTest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/fuzzing/index.html">Fuzzing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/sanitizer/index.html">Sanitizer</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/perfdocs/index.html">Performance Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/code-coverage/index.html">Code coverage</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing-rust-code/index.html">Testing &amp; Debugging Rust Code</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Releases &amp; Updates</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html">Mozilla Update Infrastructure</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html#watershed-updates">Watershed Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html#desupport-updates">Desupport Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/update-verify/index.html">Update Verify</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Localization &amp; Internationalization</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../intl/index.html">Internationalization</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../l10n/index.html">Localization</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox and Python</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mozbase/index.html">mozbase</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../python/index.html">Using third-party Python packages</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Metrics Collected in Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../metrics/index.html">Metrics</a></li>
+      </ul>
+     </div>
+    </div>
+   </nav>
+   <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+    <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+     <i data-toggle="wy-nav-top" class="fa fa-bars"></i> <a href="../../index.html">Firefox Source Docs</a>
+    </nav>
+    <div class="wy-nav-content">
+     <div class="rst-content">
+      <!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+      <div role="navigation" aria-label="Page navigation">
+       <ul class="wy-breadcrumbs">
+        <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+        <li class="breadcrumb-item"><a href="../index.html">Firefox DevTools Contributor Docs</a></li>
+        <li class="breadcrumb-item active">Server side overview</li>
+        <li class="wy-breadcrumbs-aside"><a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Developer+Infrastructure&amp;component=Firefox+Source+Docs%3A+Content&amp;short_desc=Documentation+issue+on+devtools/backend/watcher-architecture&amp;comment=URL+=+https://firefox-source-docs.mozilla.org/devtools/backend/watcher-architecture.html&amp;bug_file_loc=https://firefox-source-docs.mozilla.org/devtools/backend/watcher-architecture.html" rel="nofollow">Report an issue</a> / <a href="../../_sources/devtools/backend/watcher-architecture.md.txt" rel="nofollow"> View page source</a></li>
+       </ul>
+       <hr>
+      </div>
+      <div role="main" class="document" itemscope itemtype="http://schema.org/Article">
+       <div itemprop="articleBody">
+        <section id="server-side-overview">
+         <h1>Server side overview<a class="headerlink" href="#server-side-overview" title="Link to this heading">?</a></h1>
+         <section id="connecting-to-backend">
+          <h2>Connecting to backend<a class="headerlink" href="#connecting-to-backend" title="Link to this heading">?</a></h2>
+          <p>The DevTools backend exposes a RDP server that the client can query. See Client API &lt;client-api.md&gt;</p>
+         </section>
+         <section id="picking-a-particular-context-to-debug">
+          <h2>Picking a particular context to debug<a class="headerlink" href="#picking-a-particular-context-to-debug" title="Link to this heading">?</a></h2>
+          <p>The client will typically query the Root Actor for one particular Descriptor Actor which will designate what piece of the browser to debug. See &lt;actor-hierarchy.md&gt;.</p>
+          <p>The typical scenario is for the client to query a <a class="reference external" href="https://searchfox.org/mozilla-central/source/devtools/server/actors/descriptors/tab.js">TabDescriptorActor</a> in order to debug one particular tab.</p>
+         </section>
+         <section id="the-watcher-actor">
+          <h2>The Watcher Actor<a class="headerlink" href="#the-watcher-actor" title="Link to this heading">?</a></h2>
+          <p>Then, once you set a particular context to debug, you are retrieving one <a class="reference external" href="https://searchfox.org/mozilla-central/source/devtools/server/actors/watcher.js">WatcherActor</a> instance. This actor is a pillar of DevTools backend as it will coordinate the observation of everything.</p>
+          <section id="debuggable-contexts-devtools-targets">
+           <h3>Debuggable contexts / DevTools Targets<a class="headerlink" href="#debuggable-contexts-devtools-targets" title="Link to this heading">?</a></h3>
+           <p>First you will use <code class="docutils literal notranslate"><span class="pre">WatcherActor.watchTarget(String</span> <span class="pre">targetType)</span></code> method to define the child debugging contexts you are interested in. This method will only resolve after having been notified of all the existing debuggable contexts. Then a <code class="docutils literal notranslate"><span class="pre">target-available-form</span></code> RDP event is emitted on the WatcherActor for each new debuggable context being created later. As well as a <code class="docutils literal notranslate"><span class="pre">target-destroyed-form</span></code> when any debuggable context gets destroyed.</p>
+           <p>The debugging contexts are called Targets in DevTools jargon and can be:</p>
+           <ul>
+            <li>
+             <p>“frame”</p>
+             <p>Any document instance running anywhere in the browser. Each very specific document instance will be notified to the client via a dedicated <a class="reference external" href="https://searchfox.org/mozilla-central/source/devtools/server/actors/targets/window-global.js">WindowGlobalTargetActor</a> instance. This means that if you reload the page, you will have as many target actors as you reload. Also, if there is &lt;iframe&gt;s, you will get one frame targets for each iframe.</p></li>
+            <li>
+             <p>“worker”, “service_worker”, “shared_worker”</p>
+             <p>Any worker instance running anywhere in the browser. Each worker instance will ne notified to the client via a dedicated <a class="reference external" href="https://searchfox.org/mozilla-central/source/devtools/server/actors/targets/worker.js">WorkerTargetActor</a> instance.</p></li>
+            <li>
+             <p>“process”</p>
+             <p>Any process running in the browser. This is only used for debugging Firefox and not when debugging web pages. Each process will be notified to the client via a dedicated <a class="reference external" href="https://searchfox.org/mozilla-central/source/devtools/server/actors/targets/content-process.js">ProcessTargetActor</a>. You will be notified of as many process targets as there are content processes running.</p></li>
+           </ul>
+           <p>The target type strings are defined in <a class="reference external" href="https://searchfox.org/mozilla-central/source/devtools/server/actors/targets/index.js">devtools/server/actors/targets/index.js</a>.</p>
+           <p>Target Actors are exposing many other important actors, like Inspector, WebConsole, Thread Actors. See &lt;actor-hierarchy.md&gt;.</p>
+          </section>
+          <section id="resources">
+           <h3>Resources<a class="headerlink" href="#resources" title="Link to this heading">?</a></h3>
+           <p>Once you started watching for some target types, you can use <code class="docutils literal notranslate"><span class="pre">WatcherActor.watchResources(Array&lt;String&gt;</span> <span class="pre">resourceTypes)</span></code> method to be notified about resources for each active Target/Debuggable context. This method will only resolve after having been notified of all the existing resources. Resources aren’t returned by the watchResources method. Instead they are notified to the client via <code class="docutils literal notranslate"><span class="pre">resources-available-array</span></code> RDP events emitted, either on the Watcher Actor or one of the many Target Actors. Some resources may also support:</p>
+           <ul class="simple">
+            <li>
+             <p>a <code class="docutils literal notranslate"><span class="pre">resources-updated-array</span></code> RDP event, when any resource gets updated (like stylesheets or network events),</p></li>
+            <li>
+             <p>a <code class="docutils literal notranslate"><span class="pre">resources-destroyed-array</span></code> RDP event, when any resource gets destroyed (like stylesheets).</p></li>
+           </ul>
+           <p>The resources can be:</p>
+           <ul>
+            <li>
+             <p>“console-message”</p>
+             <p>Any <code class="docutils literal notranslate"><span class="pre">console.log()</span></code>, <code class="docutils literal notranslate"><span class="pre">console.error()</span></code>, … method call, in any of the debuggable context, will be notified to the client via such “console-message” resource.</p></li>
+            <li>
+             <p>“source”</p>
+             <p>Any JavaScript or Wasm source in any of the debuggable context will be notified to the client via such “source” resource.</p></li>
+            <li>
+             <p>“stylesheet”</p>
+             <p>Any StyleSheet, defined by any “frame” debuggable context will be notified to the client via such “stylesheet” resource.</p></li>
+            <li>
+             <p>Many other things.</p>
+             <p>You can find the list of all resources in <a class="reference external" href="https://searchfox.org/mozilla-central/source/devtools/server/actors/resources">devtools/server/resources/</a> folder.</p></li>
+           </ul>
+           <p>The resource type strings are defined in <a class="reference external" href="https://searchfox.org/mozilla-central/source/devtools/server/actors/resources/index.js">devtools/server/actors/resources/index.js</a>.</p>
+           <p>A resource will be a JSON object with attributes specific to each resource type. Each resource has a dedicated <code class="docutils literal notranslate"><span class="pre">ResourceWatcher</span></code> class in <a class="reference external" href="https://searchfox.org/mozilla-central/source/devtools/server/actors/resources/">devtools/server/actors/resources/</a> folder.</p>
+           <p>Depending on the resource type, they may be observed either in:</p>
+           <ul class="simple">
+            <li>
+             <p>parent process (regardless of where targets run)</p></li>
+            <li>
+             <p>main thread of the target’s process</p></li>
+            <li>
+             <p>worker thread (if we have a worker target)</p></li>
+           </ul>
+           <p>This behavior is also defined in <a class="reference external" href="https://searchfox.org/mozilla-central/source/devtools/server/actors/resources/index.js">devtools/server/actors/resources/index.js</a> via:</p>
+           <ul>
+            <li>
+             <p><code class="docutils literal notranslate"><span class="pre">ParentProcessResources</span></code></p>
+             <p>The ResourceWatcher will be instantiated in the parent process.</p></li>
+            <li>
+             <p><code class="docutils literal notranslate"><span class="pre">FrameTargetResources</span></code></p>
+             <p>The ResourceWatcher will be instantiated for “frame” targets, in the main thread of where the frame runs.</p></li>
+            <li>
+             <p><code class="docutils literal notranslate"><span class="pre">ProcessTargetResources</span></code></p>
+             <p>The ResourceWatcher will be instantiated for “process” targets, in the main thread of it.</p></li>
+            <li>
+             <p><code class="docutils literal notranslate"><span class="pre">WorkerTargetResources</span></code></p>
+             <p>The ResourceWatcher will be instantiated for “worker” targets, in the worker thread.</p></li>
+           </ul>
+           <p>Each resource should then implement the following interface:</p>
+           <div class="highlight-default notranslate">
+            <div class="highlight">
+             <pre><span></span>class MyResourceWatcher {
+  /**
+   * Start watching for my resource for a given context.
+   *
+   * This class will be instantiated only once when registered in `ParentProcessResources` and running in the parent process.
+   * Also, the first argument `watcherOrTargetActor` will be a reference to the WatcherActor instance.
+   * In all the other cases, this class will be instantiated once per active Target instance.
+   * In any other case, it will be a reference to a TargetActor.
+   *
+   * Then, the onAvailable, onUpdated and onDestroyed should be called according to their names
+   * for each resource.
+   *
+   * /!\ This method should only resolve **after** having notified via onAvailable about all the existing resource instances.
+   */
+  async watch(watcherOrTargetActor, { onAvailable, onUpdated, onDestroyed }) {
+
+    // Each method except a list of updates
+
+    // onAvailable expects a list of JSON object being Resources Object being passed as-is to the client
+    // There must be a `resourceType` attribute.
+    const {
+      TYPES: { MY_RESOURCE },
+    } = require("devtools/server/actors/resources/index");
+    onAvailable([
+      {
+        resourceType: MY_RESOURCE,
+
+        resourceId: 123, // Mandatory when using onUpdated and/or onDestroyed, otherwise optional
+
+        myResourceSpecificData: 42,
+
+        some: { nested : { object : "foo" } },
+      },
+    ]);
+
+    // onUpdated expects a list of updates against many resource objects previously notified via onAvailable
+    onUpdated([
+      {
+        resourceType: MY_RESOURCE,
+        resourceId, // Same id passed to onAvailable
+
+        // This field allows to update top attributes of your resource object
+        resourceUpdates: {
+          myResourceSpecificData: 43,
+        },
+
+        // This advanced field allows to update any nested object attribute
+        nestedResourceUpdates: [
+          {
+            path: ["some", "nested", "object"],
+            value: "bar",
+          },
+        ],
+      },
+    ]);
+
+    // onDestroyed expects a list of resource to be notified as destroyed to the client
+    onDestroyed([
+      {
+        resourceType: MY_RESOURCE,
+        resourceId, // Same id passed to onAvailable
+      }
+    ]);
+  }
+
+  /**
+   * Stop observing these resources. Unregister any listener to prevent any leak.
+   */
+  destroy() {
+
+  }
+</pre>
+            </div>
+           </div>
+          </section>
+         </section>
+         <section id="how-the-watcher-actor-handles-processes-threads-and-instantiates-the-targets-actors">
+          <h2>How the Watcher Actor handles processes/threads and instantiates the targets actors?<a class="headerlink" href="#how-the-watcher-actor-handles-processes-threads-and-instantiates-the-targets-actors" title="Link to this heading">?</a></h2>
+          <p>The Watcher Actor is running in the parent process and needs to reach all content processes and threads in order to interact with all the debuggable contexts. In order to reach all the content processes, the Watcher Actor uses the JS Process Actor API. See &lt;dom/docs/ipc/jsactors.rst&gt;. It registers one JS Process Actor called “DevToolsProcess”. For each <code class="docutils literal notranslate"><span class="pre">watchTargets</span></code> and <code class="docutils literal notranslate"><span class="pre">watchResources</span></code> method call, a new query will be sent through the JS Process Actor to all the processes. The JS Process Actor API consists of two distinct modules:</p>
+          <ul>
+           <li>
+            <p>One running in the parent process. <a class="reference external" href="https://searchfox.org/mozilla-central/source/devtools/server/connectors/js-process-actor/DevToolsProcessParent.sys.mjs">DevToolsProcessParent.sys.mjs</a></p>
+            <p>This module is simple. It will mostly forward the queries to the content process when the watcher actor calls some of its methods. It will also receive messages from the content process, and uses the <a class="reference external" href="https://searchfox.org/mozilla-central/source/devtools/server/actors/watcher/ParentProcessWatcherRegistry.sys.mjs">ParentProcessWatcherRegistry</a> in order to retrieve the related Watcher Actor instance and notify it about the incoming message.</p></li>
+           <li>
+            <p>One running in the content process. <a class="reference external" href="https://searchfox.org/mozilla-central/source/devtools/server/connectors/js-process-actor/DevToolsProcessChild.sys.mjs">DevToolsProcessChild.sys.mjs</a></p>
+            <p>This module contains some more logic. When receiving requests to watch for new targets and resources types, this will delegate these requests to many Target Watcher classes. These classes are specific to each target type:</p>
+            <ul class="simple">
+             <li>
+              <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/devtools/server/connectors/js-process-actor/target-watchers/window-global.sys.mjs">WindowGlobal</a>,</p></li>
+             <li>
+              <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/devtools/server/connectors/js-process-actor/target-watchers/process.sys.mjs">Process</a>,</p></li>
+             <li>
+              <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/devtools/server/connectors/js-process-actor/target-watchers/worker.sys.mjs">Worker</a>,</p></li>
+             <li>
+              <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/devtools/server/connectors/js-process-actor/target-watchers/service-worker.sys.mjs">ServiceWorker</a>,</p></li>
+            </ul>
+            <p>These classes will:</p>
+            <ul class="simple">
+             <li>
+              <p>Instantiate a new Target Actor each time a new matching debuggable contexts gets created.</p></li>
+             <li>
+              <p>Destroy the related Target Actor when the contexts gets destroyed.</p></li>
+             <li>
+              <p>Dispatch SessionData updates to the target actor. (this includes the watched resources, which are a SessionData attribute)</p></li>
+             <li>
+              <p>For workers, this class will also reach the distinct worker thread in order to do all these 3 first bullet points, but from the worker thread.</p></li>
+            </ul>
+            <p>Similarly to the parent process codebase, the <a class="reference external" href="https://searchfox.org/mozilla-central/source/devtools/server/connectors/js-process-actor/ContentProcessWatcherRegistry.sys.mjs">ContentProcessWatcherRegistry</a> maintains an list of objects which represents each active watcher actor. This helps store state in the content process which will be specific to each watcher.</p></li>
+          </ul>
+         </section>
+         <section id="session-data">
+          <h2>Session Data<a class="headerlink" href="#session-data" title="Link to this heading">?</a></h2>
+          <p>Each Watcher Actor maintains a dedicated Session Data object. This is a JSON-serializable object that is meant to be shared across all processes and threads. This is easily accessible from any server side code. Modifications are only been done from the parent process, but its state is synced across processes and threads.</p>
+          <p>The list of supported attributes is maintained in <a class="reference external" href="https://searchfox.org/mozilla-central/rev/7bbc54b70e348a11f9cd12071ada2cb47c8a14e3/devtools/server/actors/watcher/SessionDataHelpers.sys.mjs">SessionDataHelpers.sys.mjs</a>’s <code class="docutils literal notranslate"><span class="pre">SUPPORTED_DATA</span></code> variable. Values stored in the session data object are arrays of objects. But these arrays are meant to behave like Sets. Primitive values (strings, numbers,…) can only exists once per array. For objects, <code class="docutils literal notranslate"><span class="pre">DATA_KEY_FUNCTION</span></code> variable in SessionDataHelper module will provide a unique key identifying each element of the arrays.</p>
+          <p>The Session Data object is maintained in the parent process by <a class="reference external" href="https://searchfox.org/mozilla-central/source/devtools/server/actors/watcher/ParentProcessWatcherRegistry.sys.mjs">ParentProcessWatcherRegistry</a>. This module will store each Watcher Actor’s Session Data object. Then, the Watcher Actor will use the JS Process Actor in order to communicate updates made to the Session Data Object to all the content processes. The Worker Target Watchers are also going to relay the updates to all worker threads.</p>
+          <p>The Session Data objects of all the watcher actors are also going to be stored in <a class="reference external" href="https://searchfox.org/mozilla-central/rev/b73676a106c1655030bb876fd5e0a6825aee6044/dom/chrome-webidl/MessageManager.webidl#452">GlobalProcessScript.sharedData</a>. This is meant to provide the Session Data to the <a class="reference external" href="https://searchfox.org/mozilla-central/source/devtools/server/connectors/js-process-actor/DevToolsProcessChild.sys.mjs">DevToolsProcessChild.sys.mjs</a> when a new content process starts. We need to have access to the Session Data the earliest during the startup sequence in order to setup breakpoints. We can’t wait for a JS Process Actor query and need immediate access to it. On Process startup, we will read the Session Data from <code class="docutils literal notranslate"><span class="pre">sharedData</span></code> and then maintain the copy via JS Process Actor queries.</p>
+         </section>
+        </section>
+       </div>
+      </div>
+      <footer>
+       <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="protocol.html" class="btn btn-neutral float-left" title="Remote Debugging Protocol" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a> <a href="client-api.html" class="btn btn-neutral float-right" title="Client API" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+       </div>
+       <hr>
+       <div role="contentinfo">
+        <p></p>
+       </div> Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+      </footer>
+     </div>
+    </div>
+   </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ </body>
+</html>

@@ -1,0 +1,428 @@
+<!doctype html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Firefox Network Scheduling and Prioritization — Firefox Source Docs  documentation</title>
+  <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50">
+  <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094">
+  <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=fd3f3429">
+  <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b">
+  <link rel="stylesheet" type="text/css" href="../../_static/custom_theme.css?v=dc5ed815">
+  <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7">
+  <link rel="shortcut icon" href="../../_static/firefox.ico"><!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script src="../../_static/jquery.js?v=5d32c60e"></script>
+  <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+  <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+  <script src="../../_static/doctools.js?v=9a2dae69"></script>
+  <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+  <script src="../../_static/copybutton.js?v=30646c52"></script>
+  <script src="../../_static/design-tabs.js?v=36754332"></script>
+  <script src="../../_static/js/theme.js"></script>
+  <link rel="index" title="Index" href="../../genindex.html">
+  <link rel="search" title="Search" href="../../search.html">
+  <link rel="next" title="The Lifecycle of a HTTP Request" href="lifecycle.html">
+  <link rel="prev" title="Http3Session and Streams" href="http3.html">
+ </head>
+ <body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+   <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <div class="wy-side-scroll">
+     <div class="wy-side-nav-search">
+      <a href="../../index.html" class="icon icon-home"> Firefox Source Docs <img src="../../_static/firefox-wordmark.svg" class="logo" alt="Logo"> </a><!-- -- This code is governed by the BSD license ---->
+      <div>
+       <h3>Quick search</h3>
+       <script>
+    (function () {
+      var cx = "dd12886298f75dbef";
+      var gcse = document.createElement("script");
+      gcse.async = true;
+      gcse.src = "https://cse.google.com/cse.js?cx=" + cx;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(gcse, s);
+    })();
+  </script><gcse:search></gcse:search>
+      </div>
+     </div>
+     <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+      <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../glossary/index.html">A Glossary of Common Terms</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../overview/index.html">A Quick Guide to Mozilla Applications</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../setup/index.html">Getting Set Up To Work On The Firefox Codebase</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Working On Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Working on Firefox</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../bug-mgmt/index.html">Bug Handling</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox User Guide</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../devtools-user/index.html">Firefox DevTools User Docs</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Source Code Documentation</span></p>
+      <ul class="current">
+       <li class="toctree-l1"><a class="reference internal" href="../../mots/index.html">Governance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../browser/index.html">Firefox Front-end</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../dom/index.html">DOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../editor/index.html">Editor</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../layout/index.html">Style system (CSS) &amp; Layout</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../gfx/index.html">Graphics</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../ipc/index.html">Processes, Threads and IPC</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../devtools/index.html">Firefox DevTools Contributor Docs</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../toolkit/index.html">Toolkit</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../js/index.html">SpiderMonkey</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../jsloader/index.html">JS Loader</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/geckoview/index.html">GeckoView</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/fenix/index.html">Fenix</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/focus-android/index.html">Focus for Android</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../dom/bindings/webidl/index.html">WebIDL</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../modules/libpref/index.html">libpref</a></li>
+       <li class="toctree-l1 current"><a class="reference internal" href="../index.html">Networking</a>
+        <ul class="current">
+         <li class="toctree-l2"><a class="reference internal" href="../index.html#how-tos">How-to’s</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../index.html#tutorials">Tutorials</a></li>
+         <li class="toctree-l2 current"><a class="reference internal" href="../index.html#deep-dives">Deep Dives</a>
+          <ul class="current">
+           <li class="toctree-l3 current"><a class="reference internal" href="../index.html#necko-design">Necko Design</a>
+            <ul class="current">
+             <li class="toctree-l4"><a class="reference internal" href="../sec-necko-components.html">Security and Networking Components</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="../cache2/doc.html">HTTP Cache</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="http3.html">Http3Session and Streams</a></li>
+             <li class="toctree-l4"><a class="reference external" href="https://docs.google.com/presentation/d/1BRCK4WMYg-dUy07PB5H4jFVTpc4YnkQX8f5Y3KXqCs8">Necko Bird’s-eye View</a></li>
+             <li class="toctree-l4"><a class="reference external" href="https://docs.google.com/presentation/d/1iuYNLJfz24MN9SS5ljjhG07452-kZKtXmOeGjcc1-lU/">Gecko HTTP Walkthrough</a></li>
+             <li class="toctree-l4 current"><a class="current reference internal" href="#">Firefox Network Scheduling and Prioritization</a></li>
+            </ul></li>
+           <li class="toctree-l3"><a class="reference internal" href="../index.html#necko-features">Necko Features</a></li>
+          </ul></li>
+         <li class="toctree-l2"><a class="reference internal" href="../index.html#references">References</a></li>
+        </ul></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../remote/index.html">Remote Protocols</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../services/index.html">Services</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../permissions/index.html">Permissions</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../uriloader/index.html">File Handling</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../widget/cocoa/index.html">Firefox on macOS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../widget/windows/index.html">Firefox on Windows</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../toolkit/components/ml/index.html">Firefox AI Runtime</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../accessible/index.html">Accessibility</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../media/index.html">Media Playback</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../code-quality/index.html">Code quality</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../writing-rust-code/index.html">Writing Rust Code</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../rust-components/index.html">Rust Components</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/profiler/index.html">Gecko Profiler</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../performance/index.html">Performance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../storage/index.html">Database bindings (SQLite, KV, …)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../xpcom/index.html">XPCOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../nspr/index.html">NSPR</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../security/nss/index.html">Network Security Services (NSS)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../content-security/index.html">Web Security Checks in Gecko</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">The Firefox Build System</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mach/index.html">Mach</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/try/index.html">Pushing to Try</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../build/buildsystem/index.html">Build System</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../taskcluster/index.html">Firefox CI and Taskgraph</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/moztreedocs/index.html">Managing Documentation</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mozbuild/vendor/index.html">Vendoring Third Party Components</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Testing &amp; Test Infrastructure</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/automated-testing/index.html">Automated Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/treeherder-try/index.html">Understanding Treeherder Results</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/sheriffed-intermittents/index.html">Sheriffed intermittent failures</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/tests-for-new-config/index.html">Turning on Firefox tests for a new configuration</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/intermittent/index.html">Avoiding intermittent tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/testing-policy/index.html">Testing Policy</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/ci-configs/index.html">Configuration Changes</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/browser-chrome/index.html">Browser chrome mochitests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/chrome-tests/index.html">Chrome Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/marionette/index.html">Marionette</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/geckodriver/index.html">geckodriver</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/test-verification/index.html">Test Verification</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/webrender/index.html">WebRender Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/mochitest-plain/index.html">Mochitest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/xpcshell/index.html">XPCShell tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/tps/index.html">TPS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../web-platform/index.html">web-platform-tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../gtest/index.html">GTest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/fuzzing/index.html">Fuzzing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/sanitizer/index.html">Sanitizer</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/perfdocs/index.html">Performance Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/code-coverage/index.html">Code coverage</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing-rust-code/index.html">Testing &amp; Debugging Rust Code</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Releases &amp; Updates</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html">Mozilla Update Infrastructure</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html#watershed-updates">Watershed Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html#desupport-updates">Desupport Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/update-verify/index.html">Update Verify</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Localization &amp; Internationalization</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../intl/index.html">Internationalization</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../l10n/index.html">Localization</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox and Python</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mozbase/index.html">mozbase</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../python/index.html">Using third-party Python packages</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Metrics Collected in Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../metrics/index.html">Metrics</a></li>
+      </ul>
+     </div>
+    </div>
+   </nav>
+   <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+    <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+     <i data-toggle="wy-nav-top" class="fa fa-bars"></i> <a href="../../index.html">Firefox Source Docs</a>
+    </nav>
+    <div class="wy-nav-content">
+     <div class="rst-content">
+      <!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+      <div role="navigation" aria-label="Page navigation">
+       <ul class="wy-breadcrumbs">
+        <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+        <li class="breadcrumb-item"><a href="../index.html">Networking</a></li>
+        <li class="breadcrumb-item active">Firefox Network Scheduling and Prioritization</li>
+        <li class="wy-breadcrumbs-aside"><a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Developer+Infrastructure&amp;component=Firefox+Source+Docs%3A+Content&amp;short_desc=Documentation+issue+on+networking/http/prioritization&amp;comment=URL+=+https://firefox-source-docs.mozilla.org/networking/http/prioritization.html&amp;bug_file_loc=https://firefox-source-docs.mozilla.org/networking/http/prioritization.html" rel="nofollow">Report an issue</a> / <a href="../../_sources/networking/http/prioritization.md.txt" rel="nofollow"> View page source</a></li>
+       </ul>
+       <hr>
+      </div>
+      <div role="main" class="document" itemscope itemtype="http://schema.org/Article">
+       <div itemprop="articleBody">
+        <section id="firefox-network-scheduling-and-prioritization">
+         <h1>Firefox Network Scheduling and Prioritization<a class="headerlink" href="#firefox-network-scheduling-and-prioritization" title="Link to this heading">?</a></h1>
+         <p><em>Please note that this document is a first draft and is subject to further refinement and updates.</em> <em>Refers to Fx 132+</em></p>
+         <section id="scheduling">
+          <h2>Scheduling<a class="headerlink" href="#scheduling" title="Link to this heading">?</a></h2>
+          <p>Firefox employs several techniques to orchestrate network request scheduling:</p>
+          <section id="dom-preload-scanner-speculative-loader">
+           <h3>DOM Preload Scanner (Speculative Loader)<a class="headerlink" href="#dom-preload-scanner-speculative-loader" title="Link to this heading">?</a></h3>
+           <ul class="simple">
+            <li>
+             <p>Runs on a background thread, scanning HTML for resource URLs to preload.</p></li>
+            <li>
+             <p>Adds discovered resources to a speculative load queue.</p></li>
+            <li>
+             <p>See <a class="reference external" href="https://web.archive.org/web/20201021003137/https://developer.mozilla.org/en-US/docs/Mozilla/Gecko/HTML_parser_threading">MDN Documentation on HTML Parser Threading (archived)</a>.</p></li>
+           </ul>
+          </section>
+          <section id="dom-parser-non-speculative">
+           <h3>DOM Parser (Non-Speculative)<a class="headerlink" href="#dom-parser-non-speculative" title="Link to this heading">?</a></h3>
+           <ul class="simple">
+            <li>
+             <p>Makes requests for elements as the DOM tree is constructed.</p></li>
+           </ul>
+          </section>
+          <section id="class-of-service">
+           <h3>Class of Service<a class="headerlink" href="#class-of-service" title="Link to this heading">?</a></h3>
+           <ul class="simple">
+            <li>
+             <p>Categorizes requests based on context or request target. See <a class="reference external" href="https://searchfox.org/mozilla-central/rev/f549a50b1e39b1e6bea19912d92545c4c0a06b7b/netwerk/base/nsIClassOfService.idl#7-15">nsIClassOfService.idl</a></p></li>
+            <li>
+             <p>Categories (e.g. <a class="reference external" href="https://searchfox.org/mozilla-central/rev/f549a50b1e39b1e6bea19912d92545c4c0a06b7b/netwerk/base/nsIClassOfService.idl#69-102">Leader, Normal, Follower, Speculative, etc</a>) can affect both network and cache behaviours</p></li>
+            <li>
+             <p>May defer scheduling of certain requests (e.g., trackers classified as <code class="docutils literal notranslate"><span class="pre">ClassOfService::Tail</span></code>).</p></li>
+            <li>
+             <p>Also defines <a class="reference external" href="https://searchfox.org/mozilla-central/rev/f2c181a7ab3bfea4d2266521e6eac713630479b3/netwerk/protocol/http/nsHttpHandler.cpp#794-818">base urgency for a request</a></p></li>
+           </ul>
+          </section>
+         </section>
+         <section id="priority">
+          <h2>Priority<a class="headerlink" href="#priority" title="Link to this heading">?</a></h2>
+          <p>As HTTP/1.1 does not feature a prioritization system (sequential requests), Firefox uses <code class="docutils literal notranslate"><span class="pre">supportsPriority</span></code> and <code class="docutils literal notranslate"><span class="pre">classOfService</span></code> to order requests. With HTTP/2 and HTTP/3 utilizing a single, multiplexed connection to each host, request priority becomes crucial due to bandwidth limitations. Priority is expressed using the <strong>Extensible Prioritization Scheme</strong>, which includes:</p>
+          <ul class="simple">
+           <li>
+            <p><strong>Urgency</strong>: Ranges from <code class="docutils literal notranslate"><span class="pre">0</span></code> (highest priority) to <code class="docutils literal notranslate"><span class="pre">7</span></code> (lowest priority). Resources with a lower numerical urgency are delivered before those with higher urgencies. For example, all resources with urgency <code class="docutils literal notranslate"><span class="pre">2</span></code> are transferred before those with urgency <code class="docutils literal notranslate"><span class="pre">3</span></code> begin.</p></li>
+           <li>
+            <p><strong>Incremental</strong>: A boolean indicating whether bandwidth should be split between this resource and others of the same urgency. The incremental flag determines if resources of the same urgency are sent sequentially (<code class="docutils literal notranslate"><span class="pre">i</span></code> not present) or incrementally (<code class="docutils literal notranslate"><span class="pre">i</span></code>).</p></li>
+          </ul>
+          <p>These priorities are calculated based on the following factors:</p>
+          <ul class="simple">
+           <li>
+            <p>Resource type and its placement within the document or viewport.</p></li>
+           <li>
+            <p>Assigned <a class="reference external" href="https://searchfox.org/mozilla-central/rev/f2c181a7ab3bfea4d2266521e6eac713630479b3/netwerk/protocol/http/nsHttpHandler.cpp#794-818">Class of Service</a></p></li>
+           <li>
+            <p>Use of the <a class="reference external" href="https://searchfox.org/mozilla-central/rev/f549a50b1e39b1e6bea19912d92545c4c0a06b7b/xpcom/threads/nsISupportsPriority.idl#8-16">SupportsPriority</a> interface.</p></li>
+           <li>
+            <p>Application of PriorityHints (e.g., <code class="docutils literal notranslate"><span class="pre">fetchpriority="high"</span></code>) <a class="reference external" href="https://searchfox.org/mozilla-central/rev/1e8cec3727d6e09f4af41bb3d202b7a4c326ed84/modules/libpref/init/StaticPrefList.yaml#12615-12863">adjustments</a> which is implemented via <code class="docutils literal notranslate"><span class="pre">SupportsPriority</span></code></p></li>
+           <li>
+            <p>Backgrounded tabs will have their priorities lowered.</p></li>
+          </ul>
+         </section>
+         <section id="resource-scheduling-and-priority-table">
+          <h2>Resource Scheduling and Priority Table<a class="headerlink" href="#resource-scheduling-and-priority-table" title="Link to this heading">?</a></h2>
+          <table border="1" class="docutils">
+           <thead>
+            <tr>
+             <th><strong>Resource Type</strong></th>
+             <th><strong>Class of Service</strong></th>
+             <th><strong>supportsPriority</strong></th>
+             <th><strong>Urgency</strong></th>
+             <th><strong>Incremental</strong></th>
+             <th><strong>Notes</strong></th>
+            </tr>
+           </thead>
+           <tbody>
+            <tr>
+             <td><strong>HTML, Root Document</strong></td>
+             <td><code>UrgentStart (64)</code></td>
+             <td><code>PRIORITY_HIGHEST, -20</code></td>
+             <td><code>0</code></td>
+             <td><code>true</code></td>
+             <td></td>
+            </tr>
+            <tr>
+             <td><strong>CSS (<code>&lt;head&gt;</code>, Render-Blocking)</strong></td>
+             <td><code>Leader (1)</code></td>
+             <td><code>PRIORITY_NORMAL, 0</code><br><code>fetchpriority=high: PRIORITY_HIGH, -20</code><br><code>fetchpriority=low: PRIORITY_LOW, 0</code></td>
+             <td><code>2</code> <br><code>fetchpriority=high: 0</code><br><code>fetchpriority=low: 2</code></td>
+             <td><code>false</code></td>
+             <td></td>
+            </tr>
+            <tr>
+             <td><strong>CSS (rel=preload)</strong></td>
+             <td><code>Leader (1)</code></td>
+             <td><code>PRIORITY_HIGHEST, -20</code><br><code>fetchpriority=high: PRIORITY_HIGH, -20</code><br><code>fetchpriority=low: PRIORITY_LOW, -10</code></td>
+             <td><code>0</code> <br><code>fetchpriority=high: 0</code><br><code>fetchpriority=low: 1</code></td>
+             <td><code>false</code></td>
+             <td></td>
+            </tr>
+            <tr>
+             <td><strong>CSS (Body)</strong></td>
+             <td><code>Leader (1)</code></td>
+             <td><code>PRIORITY_NORMAL, 0</code> <br><code>fetchpriority=high: PRIORITY_HIGH, -20</code><br><code>fetchpriority=low: PRIORITY_NORMAL, 0</code></td>
+             <td><code>2</code> <br><code>fetchpriority=high: 0</code><br><code>fetchpriority=low: 2</code></td>
+             <td><code>false</code></td>
+             <td></td>
+            </tr>
+            <tr>
+             <td><strong>JavaScript (Blocking)</strong></td>
+             <td><code>Leader (1)</code></td>
+             <td><code>PRIORITY_NORMAL, 0</code> <br><code>fetchpriority=high: PRIORITY_HIGH, -10</code><br><code>fetchpriority=low: PRIORITY_LOW, 10</code></td>
+             <td><code>2</code> <br><code>fetchpriority=high: 1</code><br><code>fetchpriority=low: 3</code></td>
+             <td><code>false</code></td>
+             <td></td>
+            </tr>
+            <tr>
+             <td><strong>JavaScript (rel=preload)</strong></td>
+             <td><code>Unblocked (16)</code></td>
+             <td><code>PRIORITY_HIGHEST, -20</code> <br><code>fetchpriority=high: PRIORITY_HIGH, -20</code><br><code>fetchpriority=low: PRIORITY_LOW, 10</code></td>
+             <td><code>1</code> <br><code>fetchpriority=high: 1</code><br><code>fetchpriority=low: 4</code></td>
+             <td><code>false</code></td>
+             <td></td>
+            </tr>
+            <tr>
+             <td><strong>JavaScript (Async)</strong></td>
+             <td><code>TailAllowed (512), Unblocked (16)</code></td>
+             <td><code>PRIORITY_NORMAL, 0</code> <br><code>fetchpriority=high: PRIORITY_HIGH, -10</code><br><code>fetchpriority=low: PRIORITY_LOW, 10</code></td>
+             <td><code>3</code><br><code>fetchpriority=high: 2</code><br><code>fetchpriority=low: 4</code></td>
+             <td><code>false</code></td>
+             <td></td>
+            </tr>
+            <tr>
+             <td><strong>JavaScript (Defer)</strong></td>
+             <td><code>Unblocked (16)</code></td>
+             <td><code>PRIORITY_NORMAL, 0</code> <br><code>fetchpriority=high: PRIORITY_HIGH, -10</code><br><code>fetchpriority=low: PRIORITY_LOW, 10</code></td>
+             <td><code>3</code><br><code>fetchpriority=high: 2</code><br><code>fetchpriority=low: 4</code></td>
+             <td><code>false</code></td>
+             <td></td>
+            </tr>
+            <tr>
+             <td><strong>Font @font-face</strong></td>
+             <td><code>TailForbidden (1024)</code></td>
+             <td><code>PRIORITY_HIGH, -10</code></td>
+             <td><code>3</code></td>
+             <td><code>false</code></td>
+             <td>Urgency affected by <code>TailForbidden</code> CoS. fetchpriority applied via rel="preload"</td>
+            </tr>
+            <tr>
+             <td><strong>Font (rel=preload)</strong></td>
+             <td><code>TailForbidden (1024), Unblocked (16)</code></td>
+             <td><code>PRIORITY_HIGH, -10</code><br><code>fetchpriority=high: PRIORITY_HIGH, -10</code><br><code>fetchpriority=low: PRIORITY_LOW, 10</code></td>
+             <td><code>2</code><br><code>fetchpriority=high: 2</code><br><code>fetchpriority=low: 4</code></td>
+             <td><code>false</code></td>
+             <td></td>
+            </tr>
+            <tr>
+             <td><strong>Image</strong></td>
+             <td><code>(0)</code></td>
+             <td><code>PRIORITY_LOW, 10</code><br><code>fetchpriority=high: PRIORITY_HIGH, -10</code><br><code>fetchpriority=low: PRIORITY_LOWEST, 20</code></td>
+             <td><code>5</code><br><code>fetchpriority=high: 3</code><br><code>fetchpriority=low: 6</code></td>
+             <td><code>true</code></td>
+             <td></td>
+            </tr>
+            <tr>
+             <td><strong>Image (rel=preload)</strong></td>
+             <td><code>(0)</code></td>
+             <td><code>PRIORITY_LOW, 10</code><br><code>fetchpriority=high: PRIORITY_HIGH, -10</code><br><code>fetchpriority=low: PRIORITY_LOWEST, 20</code></td>
+             <td><code>4</code><br><code>fetchpriority=high: 3</code><br><code>fetchpriority=low: 5</code></td>
+             <td><code>true</code></td>
+             <td></td>
+            </tr>
+            <tr>
+             <td><strong>Image (About to Be Rendered)</strong></td>
+             <td><code>(0)</code></td>
+             <td><code>PRIORITY_HIGH, -10</code></td>
+             <td><code>3</code></td>
+             <td><code>true</code></td>
+             <td>See: <a href="https://searchfox.org/mozilla-central/rev/a13db27562f9237db97e2ea5b01dc879d5b55b74/modules/libpref/init/StaticPrefList.yaml#7429-7431">image_layout_network_priority</a> and <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1915817">bug 1915817</a></td>
+            </tr>
+            <tr>
+             <td><strong>Fetch</strong></td>
+             <td><code>(0)</code></td>
+             <td><code>PRIORITY_NORMAL, 0</code><br><code>fetchpriority=high: PRIORITY_HIGH, -10</code><br><code>fetchpriority=low: PRIORITY_LOW, 10</code></td>
+             <td><code>4</code><br><code>fetchpriority=high: 3</code><br><code>fetchpriority=low: 5</code></td>
+             <td><code>false</code></td>
+             <td></td>
+            </tr>
+            <tr>
+             <td><strong>Tracker (Script)</strong></td>
+             <td><code>Tail (256), Unblocked (16)</code></td>
+             <td><code>PRIORITY_NORMAL, 0</code></td>
+             <td><code>3</code></td>
+             <td><code>false</code></td>
+             <td>Request is tailed, i.e., deferred by a constant multiplied by the number of pending requests.</td>
+            </tr>
+           </tbody>
+          </table>
+          <hr class="docutils">
+          <hr class="docutils">
+         </section>
+        </section>
+       </div>
+      </div>
+      <footer>
+       <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="http3.html" class="btn btn-neutral float-left" title="Http3Session and Streams" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a> <a href="lifecycle.html" class="btn btn-neutral float-right" title="The Lifecycle of a HTTP Request" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+       </div>
+       <hr>
+       <div role="contentinfo">
+        <p></p>
+       </div> Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+      </footer>
+     </div>
+    </div>
+   </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ </body>
+</html>

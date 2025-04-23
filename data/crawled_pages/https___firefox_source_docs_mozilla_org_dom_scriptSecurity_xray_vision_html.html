@@ -1,0 +1,547 @@
+<!doctype html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Xray Vision — Firefox Source Docs  documentation</title>
+  <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50">
+  <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094">
+  <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=fd3f3429">
+  <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b">
+  <link rel="stylesheet" type="text/css" href="../../_static/custom_theme.css?v=dc5ed815">
+  <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7">
+  <link rel="shortcut icon" href="../../_static/firefox.ico"><!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script src="../../_static/jquery.js?v=5d32c60e"></script>
+  <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+  <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+  <script src="../../_static/doctools.js?v=9a2dae69"></script>
+  <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+  <script src="../../_static/copybutton.js?v=30646c52"></script>
+  <script src="../../_static/design-tabs.js?v=36754332"></script>
+  <script src="../../_static/js/theme.js"></script>
+  <link rel="index" title="Index" href="../../genindex.html">
+  <link rel="search" title="Search" href="../../search.html">
+  <link rel="next" title="DOM Workers &amp; Storage" href="../workersAndStorage/index.html">
+  <link rel="prev" title="Script Security" href="index.html">
+ </head>
+ <body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+   <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <div class="wy-side-scroll">
+     <div class="wy-side-nav-search">
+      <a href="../../index.html" class="icon icon-home"> Firefox Source Docs <img src="../../_static/firefox-wordmark.svg" class="logo" alt="Logo"> </a><!-- -- This code is governed by the BSD license ---->
+      <div>
+       <h3>Quick search</h3>
+       <script>
+    (function () {
+      var cx = "dd12886298f75dbef";
+      var gcse = document.createElement("script");
+      gcse.async = true;
+      gcse.src = "https://cse.google.com/cse.js?cx=" + cx;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(gcse, s);
+    })();
+  </script><gcse:search></gcse:search>
+      </div>
+     </div>
+     <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+      <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../glossary/index.html">A Glossary of Common Terms</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../overview/index.html">A Quick Guide to Mozilla Applications</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../setup/index.html">Getting Set Up To Work On The Firefox Codebase</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Working On Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Working on Firefox</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../bug-mgmt/index.html">Bug Handling</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox User Guide</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../devtools-user/index.html">Firefox DevTools User Docs</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Source Code Documentation</span></p>
+      <ul class="current">
+       <li class="toctree-l1"><a class="reference internal" href="../../mots/index.html">Governance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../browser/index.html">Firefox Front-end</a></li>
+       <li class="toctree-l1 current"><a class="reference internal" href="../index.html">DOM</a>
+        <ul class="current">
+         <li class="toctree-l2"><a class="reference internal" href="../ipc/index.html">DOM IPC</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../navigation/index.html">DOM Navigation</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../push/index.html">Push</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="index.html">Script Security</a></li>
+         <li class="toctree-l2 current"><a class="current reference internal" href="#">Xray Vision</a>
+          <ul>
+           <li class="toctree-l3"><a class="reference internal" href="#how-you-get-xray-vision">How you get Xray vision</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#waiving-xray-vision">Waiving Xray vision</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#xrays-for-dom-objects">Xrays for DOM objects</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#xrays-for-javascript-objects">Xrays for JavaScript objects</a>
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="#xray-semantics-for-object-and-array">Xray semantics for Object and Array</a></li>
+            </ul></li>
+          </ul></li>
+         <li class="toctree-l2"><a class="reference internal" href="../workersAndStorage/index.html">DOM Workers &amp; Storage</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../webIdlBindings/index.html">Web IDL bindings</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../ioutils_migration.html">IOUtils Migration Guide</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../fedcm.html">Federated Credential Management</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../streams.html">Implementing specifications using WHATWG Streams API</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../use-counters.html">Use Counters</a></li>
+        </ul></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../editor/index.html">Editor</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../layout/index.html">Style system (CSS) &amp; Layout</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../gfx/index.html">Graphics</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../ipc/index.html">Processes, Threads and IPC</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../devtools/index.html">Firefox DevTools Contributor Docs</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../toolkit/index.html">Toolkit</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../js/index.html">SpiderMonkey</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../jsloader/index.html">JS Loader</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/geckoview/index.html">GeckoView</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/fenix/index.html">Fenix</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/focus-android/index.html">Focus for Android</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../bindings/webidl/index.html">WebIDL</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../modules/libpref/index.html">libpref</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../networking/index.html">Networking</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../remote/index.html">Remote Protocols</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../services/index.html">Services</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../permissions/index.html">Permissions</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../uriloader/index.html">File Handling</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../widget/cocoa/index.html">Firefox on macOS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../widget/windows/index.html">Firefox on Windows</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../toolkit/components/ml/index.html">Firefox AI Runtime</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../accessible/index.html">Accessibility</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../media/index.html">Media Playback</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../code-quality/index.html">Code quality</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../writing-rust-code/index.html">Writing Rust Code</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../rust-components/index.html">Rust Components</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/profiler/index.html">Gecko Profiler</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../performance/index.html">Performance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../storage/index.html">Database bindings (SQLite, KV, …)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../xpcom/index.html">XPCOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../nspr/index.html">NSPR</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../security/nss/index.html">Network Security Services (NSS)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../content-security/index.html">Web Security Checks in Gecko</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">The Firefox Build System</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mach/index.html">Mach</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/try/index.html">Pushing to Try</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../build/buildsystem/index.html">Build System</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../taskcluster/index.html">Firefox CI and Taskgraph</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/moztreedocs/index.html">Managing Documentation</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mozbuild/vendor/index.html">Vendoring Third Party Components</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Testing &amp; Test Infrastructure</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/automated-testing/index.html">Automated Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/treeherder-try/index.html">Understanding Treeherder Results</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/sheriffed-intermittents/index.html">Sheriffed intermittent failures</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/tests-for-new-config/index.html">Turning on Firefox tests for a new configuration</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/intermittent/index.html">Avoiding intermittent tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/testing-policy/index.html">Testing Policy</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/ci-configs/index.html">Configuration Changes</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/browser-chrome/index.html">Browser chrome mochitests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/chrome-tests/index.html">Chrome Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/marionette/index.html">Marionette</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/geckodriver/index.html">geckodriver</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/test-verification/index.html">Test Verification</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/webrender/index.html">WebRender Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/mochitest-plain/index.html">Mochitest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/xpcshell/index.html">XPCShell tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/tps/index.html">TPS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../web-platform/index.html">web-platform-tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../gtest/index.html">GTest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/fuzzing/index.html">Fuzzing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/sanitizer/index.html">Sanitizer</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/perfdocs/index.html">Performance Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/code-coverage/index.html">Code coverage</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing-rust-code/index.html">Testing &amp; Debugging Rust Code</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Releases &amp; Updates</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html">Mozilla Update Infrastructure</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html#watershed-updates">Watershed Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html#desupport-updates">Desupport Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/update-verify/index.html">Update Verify</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Localization &amp; Internationalization</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../intl/index.html">Internationalization</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../l10n/index.html">Localization</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox and Python</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mozbase/index.html">mozbase</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../python/index.html">Using third-party Python packages</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Metrics Collected in Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../metrics/index.html">Metrics</a></li>
+      </ul>
+     </div>
+    </div>
+   </nav>
+   <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+    <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+     <i data-toggle="wy-nav-top" class="fa fa-bars"></i> <a href="../../index.html">Firefox Source Docs</a>
+    </nav>
+    <div class="wy-nav-content">
+     <div class="rst-content">
+      <!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+      <div role="navigation" aria-label="Page navigation">
+       <ul class="wy-breadcrumbs">
+        <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+        <li class="breadcrumb-item"><a href="../index.html">DOM</a></li>
+        <li class="breadcrumb-item active">Xray Vision</li>
+        <li class="wy-breadcrumbs-aside"><a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Developer+Infrastructure&amp;component=Firefox+Source+Docs%3A+Content&amp;short_desc=Documentation+issue+on+dom/scriptSecurity/xray_vision&amp;comment=URL+=+https://firefox-source-docs.mozilla.org/dom/scriptSecurity/xray_vision.html&amp;bug_file_loc=https://firefox-source-docs.mozilla.org/dom/scriptSecurity/xray_vision.html" rel="nofollow">Report an issue</a> / <a href="../../_sources/dom/scriptSecurity/xray_vision.rst.txt" rel="nofollow"> View page source</a></li>
+       </ul>
+       <hr>
+      </div>
+      <div role="main" class="document" itemscope itemtype="http://schema.org/Article">
+       <div itemprop="articleBody">
+        <section id="xray-vision">
+         <h1>Xray Vision<a class="headerlink" href="#xray-vision" title="Link to this heading">?</a></h1>
+         <div class="summary docutils container">
+          <p>Xray vision helps JavaScript running in a privileged security context safely access objects created by less privileged code, by showing the caller only the native version of the objects.</p>
+         </div>
+         <p>Gecko runs JavaScript from a variety of different sources and at a variety of different privilege levels.</p>
+         <ul class="simple">
+          <li>
+           <p>The JavaScript code that along with the C++ core, implements the browser itself is called <em>chrome code</em> and runs using system privileges. If chrome-privileged code is compromised, the attacker can take over the user’s computer.</p></li>
+          <li>
+           <p>JavaScript loaded from normal web pages is called <em>content code</em>. Because this code is being loaded from arbitrary web pages, it is regarded as untrusted and potentially hostile, both to other websites and to the user.</p></li>
+          <li>
+           <p>As well as these two levels of privilege, chrome code can create sandboxes. The security principal defined for the sandbox determines its privilege level. If an Expanded Principal is used, the sandbox is granted certain privileges over content code and is protected from direct access by content code.</p></li>
+         </ul>
+         <div class="line-block">
+          <div class="line">
+           The security machinery in Gecko ensures that there’s asymmetric access between code at different privilege levels: so for example, content code can’t access objects created by chrome code, but chrome code can access objects created by content.
+          </div>
+          <div class="line">
+           However, even the ability to access content objects can be a security risk for chrome code. JavaScript’s a highly malleable language. Scripts running in web pages can add extra properties to DOM objects (also known as expando properties) and even redefine standard DOM objects to do something unexpected. If chrome code relies on such modified objects, it can be tricked into doing things it shouldn’t.
+          </div>
+          <div class="line">
+           For example: <code class="docutils literal notranslate"><span class="pre">window.confirm()</span></code> is a DOM API that’s supposed to ask the user to confirm an action, and return a boolean depending on whether they clicked “OK” or “Cancel”. A web page could redefine it to return <code class="docutils literal notranslate"><span class="pre">true</span></code>:
+          </div>
+         </div>
+         <div class="highlight-JavaScript notranslate">
+          <div class="highlight">
+           <pre><span></span><span class="nb">window</span><span class="p">.</span><span class="nx">confirm</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kd">function</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="kc">true</span><span class="p">;</span>
+<span class="p">}</span>
+</pre>
+          </div>
+         </div>
+         <p>Any privileged code calling this function and expecting its result to represent user confirmation would be deceived. This would be very naive, of course, but there are more subtle ways in which accessing content objects from chrome can cause security problems.</p>
+         <div class="line-block">
+          <div class="line">
+           This is the problem that Xray vision is designed to solve. When a script accesses an object using Xray vision it sees only the native version of the object. Any expandos are invisible, and if any properties of the object have been redefined, it sees the original implementation, not the redefined version.
+          </div>
+          <div class="line">
+           So in the example above, chrome code calling the content’s <code class="docutils literal notranslate"><span class="pre">window.confirm()</span></code> would get the original version of <code class="docutils literal notranslate"><span class="pre">confirm()</span></code>, not the redefined version.
+          </div>
+         </div>
+         <div class="admonition note">
+          <p class="admonition-title">Note</p>
+          <p>It’s worth emphasizing that even if content tricks chrome into running some unexpected code, that code does not run with chrome privileges. So this is not a straightforward privilege escalation attack, although it might lead to one if the chrome code is sufficiently confused.</p>
+         </div>
+         <section id="how-you-get-xray-vision">
+          <span id="id1"></span>
+          <h2>How you get Xray vision<a class="headerlink" href="#how-you-get-xray-vision" title="Link to this heading">?</a></h2>
+          <p>Privileged code automatically gets Xray vision whenever it accesses objects belonging to less-privileged code. So when chrome code accesses content objects, it sees them with Xray vision:</p>
+          <div class="highlight-JavaScript notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="c1">// chrome code</span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">transfer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">gBrowser</span><span class="p">.</span><span class="nx">contentWindow</span><span class="p">.</span><span class="nx">confirm</span><span class="p">(</span><span class="s2">"Transfer all my money?"</span><span class="p">);</span>
+<span class="c1">// calls the native implementation</span>
+</pre>
+           </div>
+          </div>
+          <div class="admonition note">
+           <p class="admonition-title">Note</p>
+           <p>Note that using window.confirm() would be a terrible way to implement a security policy, and is only shown here to illustrate how Xray vision works.</p>
+          </div>
+         </section>
+         <section id="waiving-xray-vision">
+          <span id="id2"></span>
+          <h2>Waiving Xray vision<a class="headerlink" href="#waiving-xray-vision" title="Link to this heading">?</a></h2>
+          <div class="line-block">
+           <div class="line">
+            Xray vision is a kind of security heuristic, designed to make most common operations on untrusted objects simple and safe. However, there are some operations for which they are too restrictive: for example, if you need to see expandos on DOM objects. In cases like this you can waive Xray protection, but then you can no longer rely on any properties or functions being, or doing, what you expect. Any of them, even setters and getters, could have been redefined by untrusted code.
+           </div>
+           <div class="line">
+            To waive Xray vision for an object you can use Components.utils.waiveXrays(object), or use the object’s <code class="docutils literal notranslate"><span class="pre">wrappedJSObject</span></code> property:
+           </div>
+          </div>
+          <div class="highlight-JavaScript notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="c1">// chrome code</span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">waivedWindow</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">Components</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">waiveXrays</span><span class="p">(</span><span class="nx">gBrowser</span><span class="p">.</span><span class="nx">contentWindow</span><span class="p">);</span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">transfer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">waivedWindow</span><span class="p">.</span><span class="nx">confirm</span><span class="p">(</span><span class="s2">"Transfer all my money?"</span><span class="p">);</span>
+<span class="c1">// calls the redefined implementation</span>
+</pre>
+           </div>
+          </div>
+          <div class="highlight-JavaScript notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="c1">// chrome code</span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">waivedWindow</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">gBrowser</span><span class="p">.</span><span class="nx">contentWindow</span><span class="p">.</span><span class="nx">wrappedJSObject</span><span class="p">;</span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">transfer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">waivedWindow</span><span class="p">.</span><span class="nx">confirm</span><span class="p">(</span><span class="s2">"Transfer all my money?"</span><span class="p">);</span>
+<span class="c1">// calls the redefined implementation</span>
+</pre>
+           </div>
+          </div>
+          <p>Waivers are transitive: so if you waive Xray vision for an object, then you automatically waive it for all the object’s properties. For example, <code class="docutils literal notranslate"><span class="pre">window.wrappedJSObject.document</span></code> gets you the waived version of <code class="docutils literal notranslate"><span class="pre">document</span></code>.</p>
+          <p>To undo the waiver again, call Components.utils.unwaiveXrays(waivedObject):</p>
+          <div class="highlight-JavaScript notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="kd">var</span><span class="w"> </span><span class="nx">unwaived</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">Components</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">unwaiveXrays</span><span class="p">(</span><span class="nx">waivedWindow</span><span class="p">);</span>
+<span class="nx">unwaived</span><span class="p">.</span><span class="nx">confirm</span><span class="p">(</span><span class="s2">"Transfer all my money?"</span><span class="p">);</span>
+<span class="c1">// calls the native implementation</span>
+</pre>
+           </div>
+          </div>
+         </section>
+         <section id="xrays-for-dom-objects">
+          <span id="id3"></span>
+          <h2>Xrays for DOM objects<a class="headerlink" href="#xrays-for-dom-objects" title="Link to this heading">?</a></h2>
+          <p>The primary use of Xray vision is for DOM objects: that is, the objects that represent parts of the web page.</p>
+          <p>In Gecko, DOM objects have a dual representation: the canonical representation is in C++, and this is reflected into JavaScript for the benefit of JavaScript code. Any modifications to these objects, such as adding expandos or redefining standard properties, stays in the JavaScript reflection and does not affect the C++ representation.</p>
+          <p>The dual representation enables an elegant implementation of Xrays: the Xray just directly accesses the C++ representation of the original object, and doesn’t go to the content’s JavaScript reflection at all. Instead of filtering out modifications made by content, the Xray short-circuits the content completely.</p>
+          <p>This also makes the semantics of Xrays for DOM objects clear: they are the same as the DOM specification, since that is defined using the <a class="reference external" href="http://www.w3.org/TR/WebIDL/">WebIDL</a>, and the WebIDL also defines the C++ representation.</p>
+         </section>
+         <section id="xrays-for-javascript-objects">
+          <span id="id4"></span>
+          <h2>Xrays for JavaScript objects<a class="headerlink" href="#xrays-for-javascript-objects" title="Link to this heading">?</a></h2>
+          <p>Until recently, built-in JavaScript objects that are not part of the DOM, such as <code class="docutils literal notranslate"><span class="pre">Date</span></code>, <code class="docutils literal notranslate"><span class="pre">Error</span></code>, and <code class="docutils literal notranslate"><span class="pre">Object</span></code>, did not get Xray vision when accessed by more-privileged code.</p>
+          <p>Most of the time this is not a problem: the main concern Xrays solve is with untrusted web content manipulating objects, and web content is usually working with DOM objects. For example, if content code creates a new <code class="docutils literal notranslate"><span class="pre">Date</span></code> object, it will usually be created as a property of a DOM object, and then it will be filtered out by the DOM Xray:</p>
+          <div class="highlight-JavaScript notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="c1">// content code</span>
+
+<span class="c1">// redefine Date.getFullYear()</span>
+<span class="nb">Date</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getFullYear</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kd">function</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="k">return</span><span class="w"> </span><span class="mf">1000</span><span class="p">};</span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">date</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nb">Date</span><span class="p">();</span>
+</pre>
+           </div>
+          </div>
+          <div class="highlight-JavaScript notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="c1">// chrome code</span>
+
+<span class="c1">// contentWindow is an Xray, and date is an expando on contentWindow</span>
+<span class="c1">// so date is filtered out</span>
+<span class="nx">gBrowser</span><span class="p">.</span><span class="nx">contentWindow</span><span class="p">.</span><span class="nx">date</span><span class="p">.</span><span class="nx">getFullYear</span><span class="p">()</span>
+<span class="c1">// -&gt; TypeError: gBrowser.contentWindow.date is undefined</span>
+</pre>
+           </div>
+          </div>
+          <p>The chrome code will only even see <code class="docutils literal notranslate"><span class="pre">date</span></code> if it waives Xrays, and then, because waiving is transitive, it should expect to be vulnerable to redefinition:</p>
+          <div class="highlight-JavaScript notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="c1">// chrome code</span>
+
+<span class="nx">Components</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">waiveXrays</span><span class="p">(</span><span class="nx">gBrowser</span><span class="p">.</span><span class="nx">contentWindow</span><span class="p">).</span><span class="nx">date</span><span class="p">.</span><span class="nx">getFullYear</span><span class="p">();</span>
+<span class="c1">// -&gt; 1000</span>
+</pre>
+           </div>
+          </div>
+          <p>However, there are some situations in which privileged code will access JavaScript objects that are not themselves DOM objects and are not properties of DOM objects. For example:</p>
+          <ul class="simple">
+           <li>
+            <p>the <code class="docutils literal notranslate"><span class="pre">detail</span></code> property of a CustomEvent fired by content could be a JavaScript Object or Date as well as a string or a primitive</p></li>
+           <li>
+            <p>the return value of <code class="docutils literal notranslate"><span class="pre">evalInSandbox()</span></code> and any properties attached to the <code class="docutils literal notranslate"><span class="pre">Sandbox</span></code> object may be pure JavaScript objects</p></li>
+          </ul>
+          <p>Also, the WebIDL specifications are starting to use JavaScript types such as <code class="docutils literal notranslate"><span class="pre">Date</span></code> and <code class="docutils literal notranslate"><span class="pre">Promise</span></code>: since WebIDL definition is the basis of DOM Xrays, not having Xrays for these JavaScript types starts to seem arbitrary.</p>
+          <p>So, in Gecko 31 and 32 we’ve added Xray support for most JavaScript built-in objects.</p>
+          <p>Like DOM objects, most JavaScript built-in objects have an underlying C++ state that is separate from their JavaScript representation, so the Xray implementation can go straight to the C++ state and guarantee that the object will behave as its specification defines:</p>
+          <div class="highlight-JavaScript notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="c1">// chrome code</span>
+
+<span class="kd">var</span><span class="w"> </span><span class="nx">sandboxScript</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Date.prototype.getFullYear = function() {return 1000};'</span><span class="w"> </span><span class="o">+</span>
+<span class="w">                    </span><span class="s1">'var date = new Date(); '</span><span class="p">;</span>
+
+<span class="kd">var</span><span class="w"> </span><span class="nx">sandbox</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">Components</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">Sandbox</span><span class="p">(</span><span class="s2">"https://example.org/"</span><span class="p">);</span>
+<span class="nx">Components</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">evalInSandbox</span><span class="p">(</span><span class="nx">sandboxScript</span><span class="p">,</span><span class="w"> </span><span class="nx">sandbox</span><span class="p">);</span>
+
+<span class="c1">// Date objects are Xrayed</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">sandbox</span><span class="p">.</span><span class="nx">date</span><span class="p">.</span><span class="nx">getFullYear</span><span class="p">());</span>
+<span class="c1">// -&gt; 2014</span>
+
+<span class="c1">// But you can waive Xray vision</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">Components</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">waiveXrays</span><span class="p">(</span><span class="nx">sandbox</span><span class="p">.</span><span class="nx">date</span><span class="p">).</span><span class="nx">getFullYear</span><span class="p">());</span>
+<span class="c1">// -&gt; 1000</span>
+</pre>
+           </div>
+          </div>
+          <div class="admonition note">
+           <p class="admonition-title">Note</p>
+           <p>To test out examples like this, you can use the Scratchpad in browser context for the code snippet, and the Browser Console to see the expected output.</p>
+           <p>Because code running in Scratchpad’s browser context has chrome privileges, any time you use it to run code, you need to understand exactly what the code is doing. That includes the code samples in this article.</p>
+          </div>
+          <section id="xray-semantics-for-object-and-array">
+           <span id="id5"></span>
+           <h3>Xray semantics for Object and Array<a class="headerlink" href="#xray-semantics-for-object-and-array" title="Link to this heading">?</a></h3>
+           <p>The exceptions are <code class="docutils literal notranslate"><span class="pre">Object</span></code> and <code class="docutils literal notranslate"><span class="pre">Array</span></code>: their interesting state is in JavaScript, not C++. This means that the semantics of their Xrays have to be independently defined: they can’t simply be defined as “the C++ representation”.</p>
+           <p>The aim of Xray vision is to make most common operations simple and safe, avoiding the need to access the underlying object except in more involved cases. So the semantics defined for <code class="docutils literal notranslate"><span class="pre">Object</span></code> and <code class="docutils literal notranslate"><span class="pre">Array</span></code> Xrays aim to make it easy for privileged code to treat untrusted objects like simple dictionaries.</p>
+           <p>Any value properties of the object are visible in the Xray. If the object has properties which are themselves objects, and these objects are same-origin with the content, then their value properties are visible as well.</p>
+           <p>There are two main sorts of restrictions:</p>
+           <ul class="simple">
+            <li>
+             <p>First, the chrome code might expect to rely on the prototype’s integrity, so the object’s prototype is protected:</p>
+             <ul>
+              <li>
+               <p>the Xray has the standard <code class="docutils literal notranslate"><span class="pre">Object</span></code> or <code class="docutils literal notranslate"><span class="pre">Array</span></code> prototype, without any modifications that content may have done to that prototype. The Xray always inherits from this standard prototype, even if the underlying instance has a different prototype.</p></li>
+              <li>
+               <p>if a script has created a property on an object instance that shadows a property on the prototype, the shadowing property is not visible in the Xray</p></li>
+             </ul></li>
+            <li>
+             <p>Second, we want to prevent the chrome code from running content code, so functions and accessor properties of the object are not visible in the Xray.</p></li>
+           </ul>
+           <p>These rules are demonstrated in the script below, which evaluates a script in a sandbox, then examines the object attached to the sandbox.</p>
+           <div class="admonition note">
+            <p class="admonition-title">Note</p>
+            <p>To test out examples like this, you can use the Scratchpad in browser context for the code snippet, and the Browser Console to see the expected output.</p>
+            <p>Because code running in Scratchpad’s browser context has chrome privileges, any time you use it to run code, you need to understand exactly what the code is doing. That includes the code samples in this article.</p>
+           </div>
+           <div class="highlight-JavaScript notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="cm">/*</span>
+<span class="cm">The sandbox script:</span>
+<span class="cm">* redefines Object.prototype.toSource()</span>
+<span class="cm">* creates a Person() constructor that:</span>
+<span class="cm">  * defines a value property "firstName" using assignment</span>
+<span class="cm">  * defines a value property which shadows "constructor"</span>
+<span class="cm">  * defines a value property "address" which is a simple object</span>
+<span class="cm">  * defines a function fullName()</span>
+<span class="cm">* using defineProperty, defines a value property on Person "lastName"</span>
+<span class="cm">* using defineProperty, defines an accessor property on Person "middleName",</span>
+<span class="cm">which has some unexpected accessor behavior</span>
+<span class="cm">*/</span>
+
+<span class="kd">var</span><span class="w"> </span><span class="nx">sandboxScript</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Object.prototype.toSource = function() {'</span><span class="o">+</span>
+<span class="w">                    </span><span class="s1">'  return "not what you expected?";'</span><span class="w"> </span><span class="o">+</span>
+<span class="w">                    </span><span class="s1">'};'</span><span class="w"> </span><span class="o">+</span>
+<span class="w">                    </span><span class="s1">'function Person() {'</span><span class="w"> </span><span class="o">+</span>
+<span class="w">                    </span><span class="s1">'  this.constructor = "not a constructor";'</span><span class="w"> </span><span class="o">+</span>
+<span class="w">                    </span><span class="s1">'  this.firstName = "Joe";'</span><span class="w"> </span><span class="o">+</span>
+<span class="w">                    </span><span class="s1">'  this.address = {"street" : "Main Street"};'</span><span class="w"> </span><span class="o">+</span>
+<span class="w">                    </span><span class="s1">'  this.fullName = function() {'</span><span class="w"> </span><span class="o">+</span>
+<span class="w">                    </span><span class="s1">'    return this.firstName + " " + this.lastName;'</span><span class="o">+</span>
+<span class="w">                    </span><span class="s1">'  };'</span><span class="w"> </span><span class="o">+</span>
+<span class="w">                    </span><span class="s1">'};'</span><span class="w"> </span><span class="o">+</span>
+<span class="w">                    </span><span class="s1">'var me = new Person();'</span><span class="w"> </span><span class="o">+</span>
+<span class="w">                    </span><span class="s1">'Object.defineProperty(me, "lastName", {'</span><span class="w"> </span><span class="o">+</span>
+<span class="w">                    </span><span class="s1">'  enumerable: true,'</span><span class="w"> </span><span class="o">+</span>
+<span class="w">                    </span><span class="s1">'  configurable: true,'</span><span class="w"> </span><span class="o">+</span>
+<span class="w">                    </span><span class="s1">'  writable: true,'</span><span class="w"> </span><span class="o">+</span>
+<span class="w">                    </span><span class="s1">'  value: "Smith"'</span><span class="w"> </span><span class="o">+</span>
+<span class="w">                    </span><span class="s1">'});'</span><span class="w"> </span><span class="o">+</span>
+<span class="w">                    </span><span class="s1">'Object.defineProperty(me, "middleName", {'</span><span class="w"> </span><span class="o">+</span>
+<span class="w">                    </span><span class="s1">'  enumerable: true,'</span><span class="w"> </span><span class="o">+</span>
+<span class="w">                    </span><span class="s1">'  configurable: true,'</span><span class="w"> </span><span class="o">+</span>
+<span class="w">                    </span><span class="s1">'  get: function() { return "wait, is this really a getter?"; }'</span><span class="w"> </span><span class="o">+</span>
+<span class="w">                    </span><span class="s1">'});'</span><span class="p">;</span>
+
+<span class="kd">var</span><span class="w"> </span><span class="nx">sandbox</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">Components</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">Sandbox</span><span class="p">(</span><span class="s2">"https://example.org/"</span><span class="p">);</span>
+<span class="nx">Components</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">evalInSandbox</span><span class="p">(</span><span class="nx">sandboxScript</span><span class="p">,</span><span class="w"> </span><span class="nx">sandbox</span><span class="p">);</span>
+
+<span class="c1">// 1) trying to access properties in the prototype that have been redefined</span>
+<span class="c1">// (non-own properties) will show the original 'native' version</span>
+<span class="c1">// note that functions are not included in the output</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"1) Property redefined in the prototype:"</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">sandbox</span><span class="p">.</span><span class="nx">me</span><span class="p">.</span><span class="nx">toSource</span><span class="p">());</span>
+<span class="c1">// -&gt; "({firstName:"Joe", address:{street:"Main Street"}, lastName:"Smith"})"</span>
+
+<span class="c1">// 2) trying to access properties on the object that shadow properties</span>
+<span class="c1">// on the prototype will show the original 'native' version</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"2) Property that shadows the prototype:"</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">sandbox</span><span class="p">.</span><span class="nx">me</span><span class="p">.</span><span class="kr">constructor</span><span class="p">);</span>
+<span class="c1">// -&gt; function()</span>
+
+<span class="c1">// 3) value properties defined by assignment to this are visible:</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"3) Value property defined by assignment to this:"</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">sandbox</span><span class="p">.</span><span class="nx">me</span><span class="p">.</span><span class="nx">firstName</span><span class="p">);</span>
+<span class="c1">// -&gt; "Joe"</span>
+
+<span class="c1">// 4) value properties defined using defineProperty are visible:</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"4) Value property defined by defineProperty"</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">sandbox</span><span class="p">.</span><span class="nx">me</span><span class="p">.</span><span class="nx">lastName</span><span class="p">);</span>
+<span class="c1">// -&gt; "Smith"</span>
+
+<span class="c1">// 5) accessor properties are not visible</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"5) Accessor property"</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">sandbox</span><span class="p">.</span><span class="nx">me</span><span class="p">.</span><span class="nx">middleName</span><span class="p">);</span>
+<span class="c1">// -&gt; undefined</span>
+
+<span class="c1">// 6) accessing a value property of a value-property object is fine</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"6) Value property of a value-property object"</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">sandbox</span><span class="p">.</span><span class="nx">me</span><span class="p">.</span><span class="nx">address</span><span class="p">.</span><span class="nx">street</span><span class="p">);</span>
+<span class="c1">// -&gt; "Main Street"</span>
+
+<span class="c1">// 7) functions defined on the sandbox-defined object are not visible in the Xray</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"7) Call a function defined on the object"</span><span class="p">);</span>
+<span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">sandbox</span><span class="p">.</span><span class="nx">me</span><span class="p">.</span><span class="nx">fullName</span><span class="p">());</span>
+<span class="p">}</span>
+<span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="nx">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">e</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="c1">// -&gt; TypeError: sandbox.me.fullName is not a function</span>
+
+<span class="c1">// now with waived Xrays</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"Now with waived Xrays"</span><span class="p">);</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"1) Property redefined in the prototype:"</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">Components</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">waiveXrays</span><span class="p">(</span><span class="nx">sandbox</span><span class="p">.</span><span class="nx">me</span><span class="p">).</span><span class="nx">toSource</span><span class="p">());</span>
+<span class="c1">// -&gt; "not what you expected?"</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"2) Property that shadows the prototype:"</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">Components</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">waiveXrays</span><span class="p">(</span><span class="nx">sandbox</span><span class="p">.</span><span class="nx">me</span><span class="p">).</span><span class="kr">constructor</span><span class="p">);</span>
+<span class="c1">// -&gt; "not a constructor"</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"3) Accessor property"</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">Components</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">waiveXrays</span><span class="p">(</span><span class="nx">sandbox</span><span class="p">.</span><span class="nx">me</span><span class="p">).</span><span class="nx">middleName</span><span class="p">);</span>
+<span class="c1">// -&gt; "wait, is this really a getter?"</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"4) Call a function defined on the object"</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">Components</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">waiveXrays</span><span class="p">(</span><span class="nx">sandbox</span><span class="p">.</span><span class="nx">me</span><span class="p">).</span><span class="nx">fullName</span><span class="p">());</span>
+<span class="c1">// -&gt; "Joe Smith"</span>
+</pre>
+            </div>
+           </div>
+          </section>
+         </section>
+        </section>
+       </div>
+      </div>
+      <footer>
+       <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Script Security" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a> <a href="../workersAndStorage/index.html" class="btn btn-neutral float-right" title="DOM Workers &amp; Storage" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+       </div>
+       <hr>
+       <div role="contentinfo">
+        <p></p>
+       </div> Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+      </footer>
+     </div>
+    </div>
+   </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ </body>
+</html>

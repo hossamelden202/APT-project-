@@ -1,0 +1,298 @@
+<!doctype html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The JavaScript input interpreter — Firefox Source Docs  documentation</title>
+  <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50">
+  <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094">
+  <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=fd3f3429">
+  <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b">
+  <link rel="stylesheet" type="text/css" href="../../../_static/custom_theme.css?v=dc5ed815">
+  <link rel="stylesheet" type="text/css" href="../../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7">
+  <link rel="shortcut icon" href="../../../_static/firefox.ico"><!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+  <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+  <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+  <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+  <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+  <script src="../../../_static/copybutton.js?v=30646c52"></script>
+  <script src="../../../_static/design-tabs.js?v=36754332"></script>
+  <script src="../../../_static/js/theme.js"></script>
+  <link rel="index" title="Index" href="../../../genindex.html">
+  <link rel="search" title="Search" href="../../../search.html">
+ </head>
+ <body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+   <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <div class="wy-side-scroll">
+     <div class="wy-side-nav-search">
+      <a href="../../../index.html" class="icon icon-home"> Firefox Source Docs <img src="../../../_static/firefox-wordmark.svg" class="logo" alt="Logo"> </a><!-- -- This code is governed by the BSD license ---->
+      <div>
+       <h3>Quick search</h3>
+       <script>
+    (function () {
+      var cx = "dd12886298f75dbef";
+      var gcse = document.createElement("script");
+      gcse.async = true;
+      gcse.src = "https://cse.google.com/cse.js?cx=" + cx;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(gcse, s);
+    })();
+  </script><gcse:search></gcse:search>
+      </div>
+     </div>
+     <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+      <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../glossary/index.html">A Glossary of Common Terms</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../overview/index.html">A Quick Guide to Mozilla Applications</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../setup/index.html">Getting Set Up To Work On The Firefox Codebase</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Working On Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../contributing/index.html">Working on Firefox</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../bug-mgmt/index.html">Bug Handling</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox User Guide</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../index.html">Firefox DevTools User Docs</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Source Code Documentation</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../mots/index.html">Governance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../browser/index.html">Firefox Front-end</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../dom/index.html">DOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../editor/index.html">Editor</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../layout/index.html">Style system (CSS) &amp; Layout</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../gfx/index.html">Graphics</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../ipc/index.html">Processes, Threads and IPC</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../devtools/index.html">Firefox DevTools Contributor Docs</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../toolkit/index.html">Toolkit</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../js/index.html">SpiderMonkey</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../jsloader/index.html">JS Loader</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../mobile/android/geckoview/index.html">GeckoView</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../mobile/android/fenix/index.html">Fenix</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../mobile/android/focus-android/index.html">Focus for Android</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../dom/bindings/webidl/index.html">WebIDL</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../modules/libpref/index.html">libpref</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../networking/index.html">Networking</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../remote/index.html">Remote Protocols</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../services/index.html">Services</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../permissions/index.html">Permissions</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../uriloader/index.html">File Handling</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../widget/cocoa/index.html">Firefox on macOS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../widget/windows/index.html">Firefox on Windows</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../toolkit/components/ml/index.html">Firefox AI Runtime</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../accessible/index.html">Accessibility</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../media/index.html">Media Playback</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../code-quality/index.html">Code quality</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../writing-rust-code/index.html">Writing Rust Code</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../rust-components/index.html">Rust Components</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../tools/profiler/index.html">Gecko Profiler</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../performance/index.html">Performance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../storage/index.html">Database bindings (SQLite, KV, …)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../xpcom/index.html">XPCOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../nspr/index.html">NSPR</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../security/nss/index.html">Network Security Services (NSS)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../content-security/index.html">Web Security Checks in Gecko</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">The Firefox Build System</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../mach/index.html">Mach</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../tools/try/index.html">Pushing to Try</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../build/buildsystem/index.html">Build System</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../taskcluster/index.html">Firefox CI and Taskgraph</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../tools/moztreedocs/index.html">Managing Documentation</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../mozbuild/vendor/index.html">Vendoring Third Party Components</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Testing &amp; Test Infrastructure</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/automated-testing/index.html">Automated Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/treeherder-try/index.html">Understanding Treeherder Results</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/sheriffed-intermittents/index.html">Sheriffed intermittent failures</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/tests-for-new-config/index.html">Turning on Firefox tests for a new configuration</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/intermittent/index.html">Avoiding intermittent tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/testing-policy/index.html">Testing Policy</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/ci-configs/index.html">Configuration Changes</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/browser-chrome/index.html">Browser chrome mochitests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/chrome-tests/index.html">Chrome Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/marionette/index.html">Marionette</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/geckodriver/index.html">geckodriver</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/test-verification/index.html">Test Verification</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/webrender/index.html">WebRender Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/mochitest-plain/index.html">Mochitest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/xpcshell/index.html">XPCShell tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/tps/index.html">TPS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../web-platform/index.html">web-platform-tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../gtest/index.html">GTest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../tools/fuzzing/index.html">Fuzzing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../tools/sanitizer/index.html">Sanitizer</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/perfdocs/index.html">Performance Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../tools/code-coverage/index.html">Code coverage</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing-rust-code/index.html">Testing &amp; Debugging Rust Code</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Releases &amp; Updates</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../update-infrastructure/index.html">Mozilla Update Infrastructure</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../update-infrastructure/index.html#watershed-updates">Watershed Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../update-infrastructure/index.html#desupport-updates">Desupport Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../tools/update-verify/index.html">Update Verify</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Localization &amp; Internationalization</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../intl/index.html">Internationalization</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../l10n/index.html">Localization</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox and Python</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../mozbase/index.html">mozbase</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../python/index.html">Using third-party Python packages</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Metrics Collected in Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../metrics/index.html">Metrics</a></li>
+      </ul>
+     </div>
+    </div>
+   </nav>
+   <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+    <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+     <i data-toggle="wy-nav-top" class="fa fa-bars"></i> <a href="../../../index.html">Firefox Source Docs</a>
+    </nav>
+    <div class="wy-nav-content">
+     <div class="rst-content">
+      <!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+      <div role="navigation" aria-label="Page navigation">
+       <ul class="wy-breadcrumbs">
+        <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+        <li class="breadcrumb-item active">The JavaScript input interpreter</li>
+        <li class="wy-breadcrumbs-aside"><a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Developer+Infrastructure&amp;component=Firefox+Source+Docs%3A+Content&amp;short_desc=Documentation+issue+on+devtools-user/web_console/the_command_line_interpreter/index&amp;comment=URL+=+https://firefox-source-docs.mozilla.org/devtools-user/web_console/the_command_line_interpreter/index.html&amp;bug_file_loc=https://firefox-source-docs.mozilla.org/devtools-user/web_console/the_command_line_interpreter/index.html" rel="nofollow">Report an issue</a> / <a href="../../../_sources/devtools-user/web_console/the_command_line_interpreter/index.rst.txt" rel="nofollow"> View page source</a></li>
+       </ul>
+       <hr>
+      </div>
+      <div role="main" class="document" itemscope itemtype="http://schema.org/Article">
+       <div itemprop="articleBody">
+        <section id="the-javascript-input-interpreter">
+         <h1>The JavaScript input interpreter<a class="headerlink" href="#the-javascript-input-interpreter" title="Link to this heading">?</a></h1>
+         <p>You can interpret JavaScript expressions in real time using the interpreter provided by the Web Console. It has two modes: single-line entry and multi-line entry.</p>
+         <section id="single-line-mode">
+          <h2>Single-line mode<a class="headerlink" href="#single-line-mode" title="Link to this heading">?</a></h2>
+          <p>For single-line entry, you can type JavaScript expressions in the field at the bottom of the console log, at the <strong>&gt;&gt;</strong> prompt.</p><img alt="The Web Console, showing single-line mode" class="center" src="../../../_images/web_console_single.png">
+          <p>To enter expressions in single-line mode, type at the prompt and press <kbd class="kbd docutils literal notranslate">Enter</kbd>. To enter multi-line expressions, press <kbd class="kbd docutils literal notranslate">Shift</kbd> + <kbd class="kbd docutils literal notranslate">Enter</kbd> after typing each line, then <kbd class="kbd docutils literal notranslate">Enter</kbd> to run all the entered lines.</p>
+          <p>The expression you type is echoed under the input prompt, followed by the result.</p>
+          <p>If your input does not appear to be complete when you press <kbd class="kbd docutils literal notranslate">Enter</kbd>, then the Console treats this as <kbd class="kbd docutils literal notranslate">Shift</kbd> + <kbd class="kbd docutils literal notranslate">Enter</kbd> , enabling you to finish your input.</p>
+          <p>For example, if you type:</p>
+          <div class="highlight-JavaScript notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="kd">function</span><span class="w"> </span><span class="nx">foo</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</pre>
+           </div>
+          </div>
+          <p>and then <kbd class="kbd docutils literal notranslate">Enter</kbd>, the Console does not immediately execute the input, but behaves as if you had pressed <kbd class="kbd docutils literal notranslate">Shift</kbd> + <kbd class="kbd docutils literal notranslate">Enter</kbd> , so you can finish entering the function definition.</p>
+         </section>
+         <section id="multi-line-mode">
+          <span id="command-line-interpreter-multi-line-mode"></span>
+          <h2>Multi-line mode<a class="headerlink" href="#multi-line-mode" title="Link to this heading">?</a></h2>
+          <p>For multi-line entry, click the “split panel” icon at the right hand side of the single-line entry field, or press <kbd class="kbd docutils literal notranslate">Ctrl</kbd> + <kbd class="kbd docutils literal notranslate">B</kbd> (Windows/Linux) or <kbd class="kbd docutils literal notranslate">Cmd</kbd> + <kbd class="kbd docutils literal notranslate">B</kbd> (macOS). The multi-line editing pane opens on the left side the of Web Console.</p><img alt="Web Console in multi-line mode" class="center" src="../../../_images/web_console_multi.png">
+          <p>You can enter multiple lines of JavaScript by default in this mode, pressing <kbd class="kbd docutils literal notranslate">Enter</kbd> after each one. To execute the snippet that is currently in the editing pane, click the <strong>Run</strong> button or press <kbd class="kbd docutils literal notranslate">Ctrl</kbd> + <kbd class="kbd docutils literal notranslate">Enter</kbd> (or <kbd class="kbd docutils literal notranslate">Cmd</kbd> + <kbd class="kbd docutils literal notranslate">Return</kbd> on MacOS). The snippet is echoed under the input prompt (in the right-side pane), followed by the result.</p>
+          <p>Starting in Firefox 76, if the code snippet is more than five lines long, only the first five lines are echoed in the console, preceded by a disclosure triangle (or “twistie”), and followed by an ellipsis (…). Click anywhere in the area containing the echoed code to show the whole snippet; click again in that area to collapse it.</p>
+          <p>You can open files when in multi-line mode, and save the current contents of the editing pane to a file.</p>
+          <ul class="simple">
+           <li>
+            <p>To open a file, press <kbd class="kbd docutils literal notranslate">Ctrl</kbd> + <kbd class="kbd docutils literal notranslate">O</kbd> (<kbd class="kbd docutils literal notranslate">Cmd</kbd> + <kbd class="kbd docutils literal notranslate">O</kbd> on MacOS). A file dialog box opens so you can select the file to open.</p></li>
+           <li>
+            <p>To save the contents of the editing pane, press <kbd class="kbd docutils literal notranslate">Ctrl</kbd> + <kbd class="kbd docutils literal notranslate">S</kbd> (<kbd class="kbd docutils literal notranslate">Cmd</kbd> + <kbd class="kbd docutils literal notranslate">S</kbd> on MacOS). A file dialog box opens so you can specify the location to save to.</p></li>
+          </ul>
+          <p>To switch back to single-line mode, click the <strong>X</strong> icon at the top of the multi-line editing pane, or press <kbd class="kbd docutils literal notranslate">Ctrl</kbd> + <kbd class="kbd docutils literal notranslate">B</kbd> (Windows/Linux) or <kbd class="kbd docutils literal notranslate">Cmd</kbd> + <kbd class="kbd docutils literal notranslate">B</kbd> (MacOS).</p>
+         </section>
+         <section id="accessing-variables">
+          <h2>Accessing variables<a class="headerlink" href="#accessing-variables" title="Link to this heading">?</a></h2>
+          <p>You can access variables defined in the page, both built-in variables like <code class="docutils literal notranslate"><span class="pre">window</span></code> and variables added by JavaScript libraries like <em>jQuery</em>:</p><img alt="../../../_images/commandline-accessbuiltin.png" class="center" src="../../../_images/commandline-accessbuiltin.png"> <img alt="../../../_images/commandline-accesspageadded.png" class="center" src="../../../_images/commandline-accesspageadded.png">
+         </section>
+         <section id="autocomplete">
+          <span id="command-line-interpreter-autocomplete"></span>
+          <h2>Autocomplete<a class="headerlink" href="#autocomplete" title="Link to this heading">?</a></h2>
+          <p>The editor has autocomplete: enter the first few letters and a popup appears with possible completions:</p><img alt="../../../_images/console_autocomplete_cropped.png" class="center" src="../../../_images/console_autocomplete_cropped.png">
+          <p>Press <kbd class="kbd docutils literal notranslate">Enter</kbd>, <kbd class="kbd docutils literal notranslate">Tab</kbd>, or the right arrow key to accept the suggestion, use the up/down arrows to move to a different suggestion, or just keep typing if you don’t like any of the suggestions.</p>
+          <p>Console autocomplete suggestions are case-insensitive.</p>
+          <p>The console suggests completions from the scope of the currently executing stack frame. This means that if you’ve hit a breakpoint in a function you get autocomplete for objects local to the function.</p>
+          <p>You get autocomplete suggestions for array elements, as well:</p><img alt="../../../_images/arraylist_autocomplete.png" class="border" src="../../../_images/arraylist_autocomplete.png">
+          <p>You can enable or disable autocompletion via the Settings (“gear”) menu in the Web Console toolbar. The menuitem <strong>Enable Autocompletion</strong> has a checkmark next to it when the feature is enabled, which is missing when it is disabled. Select the menuitem to change the state.</p>
+         </section>
+         <section id="instant-evaluation">
+          <h2>Instant evaluation<a class="headerlink" href="#instant-evaluation" title="Link to this heading">?</a></h2>
+          <div class="admonition note">
+           <p class="admonition-title">Note</p>
+           <p>This feature is available in Firefox Nightly, in versions labeled 74 and later.</p>
+          </div>
+          <p>When the “instant evaluation” feature is enabled, the interpreter displays results of expressions as you’re typing them in single-line mode. Note that the result might be an error message. Expressions that have side effects are not evaluated.</p>
+          <p>You can enable or disable instant evaluation via the Settings (“gear”) menu in the Web Console toolbar. The menuitem <strong>Instant Evaluation</strong> has a checkmark next to it when the feature is enabled, which is missing when it is disabled. Select the menuitem to change the state.</p>
+         </section>
+         <section id="execution-context">
+          <h2>Execution context<a class="headerlink" href="#execution-context" title="Link to this heading">?</a></h2>
+          <p>Code that you have executed becomes part of the execution context, regardless of what editing mode you were in when you executed it. For example, if you type a function definition in the multi-line editor, and click <strong>Run</strong>, you can switch to single-line mode and still use your function.</p>
+         </section>
+         <section id="syntax-highlighting">
+          <h2>Syntax highlighting<a class="headerlink" href="#syntax-highlighting" title="Link to this heading">?</a></h2><img alt="Console output showing syntax highlighting" class="border" src="../../../_images/console_syntaxhighlighting.png">
+          <p>The text you enter has syntax highlighting as soon as you have typed enough for the highlighter to parse it and infer the meanings of the “words”.</p>
+          <p>The output is highlighted as well where appropriate.</p>
+          <div class="admonition note">
+           <p class="admonition-title">Note</p>
+           <p>Syntax highlighting is not visible in your browser if Accessibility features have been enabled.</p>
+          </div>
+         </section>
+         <section id="execution-history">
+          <span id="command-line-interpreter-execution-history"></span>
+          <h2>Execution history<a class="headerlink" href="#execution-history" title="Link to this heading">?</a></h2>
+          <p>The interpreter remembers expressions you’ve typed. To move back and forward through your history:</p>
+          <ul class="simple">
+           <li>
+            <p>In single-line mode, use the up and down arrows.</p></li>
+           <li>
+            <p>In multi-line mode, use the <strong>?</strong> and <strong>?</strong> icons in the editing panel’s toolbar.</p></li>
+          </ul>
+          <p>The expression history is persisted across sessions. To clear the history, use the <code class="docutils literal notranslate"><span class="pre">clearHistory()</span></code> <a class="reference internal" href="#command-line-interpreter-helper-commands"><span class="std std-ref">helper function</span></a>.</p>
+          <p>You can initiate a reverse search through the expression history, much like you can in bash on Linux and Mac or PowerShell on Windows. On Windows and Linux press <kbd class="kbd docutils literal notranslate">F9</kbd>. On Mac press <kbd class="kbd docutils literal notranslate">Ctrl</kbd> + <kbd class="kbd docutils literal notranslate">R</kbd> (<strong>note:</strong> not <kbd class="kbd docutils literal notranslate">Cmd</kbd> + <kbd class="kbd docutils literal notranslate">R</kbd>!) to initiate the reverse search.</p><img alt="../../../_images/reverse_search.png" class="border" src="../../../_images/reverse_search.png">
+          <p>Enter the text you want to search for in the input box at the bottom of the Console. Start typing part of the expression you are looking for and the first match is displayed in the console. Repeatedly typing <kbd class="kbd docutils literal notranslate">F9</kbd> on Windows and Linux ( <kbd class="kbd docutils literal notranslate">Ctrl</kbd> + <kbd class="kbd docutils literal notranslate">R</kbd> on Mac) cycles backwards through the matches.</p><img alt="../../../_images/reverse_search_example.png" class="border" src="../../../_images/reverse_search_example.png">
+          <p>Once you have initiated the reverse search, you can use <kbd class="kbd docutils literal notranslate">Shift</kbd> + <kbd class="kbd docutils literal notranslate">F9</kbd> on Windows or Linux ( <kbd class="kbd docutils literal notranslate">Ctrl</kbd> + <kbd class="kbd docutils literal notranslate">S</kbd> on Mac) to search forward in the list of matches. You can also use the <strong>?</strong> and <strong>?</strong> icons in the expression search bar.</p>
+          <p>When you find the expression you want, press <kbd class="kbd docutils literal notranslate">Enter</kbd> (<kbd class="kbd docutils literal notranslate">Return</kbd>) to execute the statement.</p>
+         </section>
+         <section id="working-with-iframes">
+          <h2>Working with iframes<a class="headerlink" href="#working-with-iframes" title="Link to this heading">?</a></h2>
+          <p><a class="reference internal" href="../../working_with_iframes/index.html"><span class="doc">Working with iframes</span></a> explains how to direct all debugging tools to target a particular iframe, including the command line interpreter.</p>
+         </section>
+         <section id="helper-commands">
+          <span id="command-line-interpreter-helper-commands"></span>
+          <h2>Helper commands<a class="headerlink" href="#helper-commands" title="Link to this heading">?</a></h2>
+          <p>The JavaScript command line provided by the Web Console offers a few built-in helper functions that make certain tasks easier. For more information see <a class="reference internal" href="../helpers/index.html"><span class="doc">Web Console Helpers</span></a>.</p>
+         </section>
+        </section>
+       </div>
+      </div>
+      <footer>
+       <hr>
+       <div role="contentinfo">
+        <p></p>
+       </div> Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+      </footer>
+     </div>
+    </div>
+   </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ </body>
+</html>

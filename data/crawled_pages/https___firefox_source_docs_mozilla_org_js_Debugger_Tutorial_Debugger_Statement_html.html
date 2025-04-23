@@ -1,0 +1,293 @@
+<!doctype html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tutorial: Evaluate an Expression When a debugger; Statement Is Executed — Firefox Source Docs  documentation</title>
+  <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50">
+  <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094">
+  <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=fd3f3429">
+  <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b">
+  <link rel="stylesheet" type="text/css" href="../../_static/custom_theme.css?v=dc5ed815">
+  <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7">
+  <link rel="shortcut icon" href="../../_static/firefox.ico"><!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script src="../../_static/jquery.js?v=5d32c60e"></script>
+  <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+  <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+  <script src="../../_static/doctools.js?v=9a2dae69"></script>
+  <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+  <script src="../../_static/copybutton.js?v=30646c52"></script>
+  <script src="../../_static/design-tabs.js?v=36754332"></script>
+  <script src="../../_static/js/theme.js"></script>
+  <link rel="index" title="Index" href="../../genindex.html">
+  <link rel="search" title="Search" href="../../search.html">
+  <link rel="next" title="SavedFrame" href="../SavedFrame/index.html">
+  <link rel="prev" title="Tutorial: Set a breakpoint using Debugger" href="Tutorial-Breakpoint.html">
+ </head>
+ <body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+   <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <div class="wy-side-scroll">
+     <div class="wy-side-nav-search">
+      <a href="../../index.html" class="icon icon-home"> Firefox Source Docs <img src="../../_static/firefox-wordmark.svg" class="logo" alt="Logo"> </a><!-- -- This code is governed by the BSD license ---->
+      <div>
+       <h3>Quick search</h3>
+       <script>
+    (function () {
+      var cx = "dd12886298f75dbef";
+      var gcse = document.createElement("script");
+      gcse.async = true;
+      gcse.src = "https://cse.google.com/cse.js?cx=" + cx;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(gcse, s);
+    })();
+  </script><gcse:search></gcse:search>
+      </div>
+     </div>
+     <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+      <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../glossary/index.html">A Glossary of Common Terms</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../overview/index.html">A Quick Guide to Mozilla Applications</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../setup/index.html">Getting Set Up To Work On The Firefox Codebase</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Working On Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Working on Firefox</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../bug-mgmt/index.html">Bug Handling</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox User Guide</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../devtools-user/index.html">Firefox DevTools User Docs</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Source Code Documentation</span></p>
+      <ul class="current">
+       <li class="toctree-l1"><a class="reference internal" href="../../mots/index.html">Governance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../browser/index.html">Firefox Front-end</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../dom/index.html">DOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../editor/index.html">Editor</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../layout/index.html">Style system (CSS) &amp; Layout</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../gfx/index.html">Graphics</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../ipc/index.html">Processes, Threads and IPC</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../devtools/index.html">Firefox DevTools Contributor Docs</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../toolkit/index.html">Toolkit</a></li>
+       <li class="toctree-l1 current"><a class="reference internal" href="../index.html">SpiderMonkey</a>
+        <ul class="current">
+         <li class="toctree-l2"><a class="reference internal" href="../build.html">Building and testing SpiderMonkey</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../test.html">Running Automated JavaScript Tests</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../hacking_tips.html">Hacking Tips</a></li>
+         <li class="toctree-l2 current"><a class="reference internal" href="index.html">Debugger API</a>
+          <ul class="current">
+           <li class="toctree-l3"><a class="reference internal" href="Debugger-API.html">The <code class="docutils literal notranslate"><span class="pre">Debugger</span></code> Interface</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="Debugger.html">The Debugger Object</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="Debugger.Object.html">Debugger.Object</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="Debugger.Script.html">Debugger.Script</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="Debugger.Source.html">Debugger.Source</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="Debugger.Environment.html">Debugger.Environment</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="Debugger.Frame.html">Debugger.Frame</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="Debugger.Memory.html">Debugger.Memory</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="Conventions.html">General Conventions</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="Tutorial-Alloc-Log-Tree.html">Tutorial: Show Allocations Per Call Path</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="Tutorial-Breakpoint.html">Tutorial: Set a breakpoint using <code class="docutils literal notranslate"><span class="pre">Debugger</span></code></a></li>
+           <li class="toctree-l3 current"><a class="current reference internal" href="#">Tutorial: Evaluate an Expression When a debugger; Statement Is Executed</a></li>
+          </ul></li>
+         <li class="toctree-l2"><a class="reference internal" href="../SavedFrame/index.html">SavedFrame</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../feature_checklist.html">JavaScript Language Feature Checklist</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../bytecode_checklist.html">So You Want to Add a Bytecode Op</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../use_counter.html">Adding Use Counter Telemetry to the JS Engine</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../index.html#components-of-spidermonkey">Components of SpiderMonkey</a></li>
+        </ul></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../jsloader/index.html">JS Loader</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/geckoview/index.html">GeckoView</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/fenix/index.html">Fenix</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/focus-android/index.html">Focus for Android</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../dom/bindings/webidl/index.html">WebIDL</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../modules/libpref/index.html">libpref</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../networking/index.html">Networking</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../remote/index.html">Remote Protocols</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../services/index.html">Services</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../permissions/index.html">Permissions</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../uriloader/index.html">File Handling</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../widget/cocoa/index.html">Firefox on macOS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../widget/windows/index.html">Firefox on Windows</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../toolkit/components/ml/index.html">Firefox AI Runtime</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../accessible/index.html">Accessibility</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../media/index.html">Media Playback</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../code-quality/index.html">Code quality</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../writing-rust-code/index.html">Writing Rust Code</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../rust-components/index.html">Rust Components</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/profiler/index.html">Gecko Profiler</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../performance/index.html">Performance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../storage/index.html">Database bindings (SQLite, KV, …)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../xpcom/index.html">XPCOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../nspr/index.html">NSPR</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../security/nss/index.html">Network Security Services (NSS)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../content-security/index.html">Web Security Checks in Gecko</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">The Firefox Build System</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mach/index.html">Mach</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/try/index.html">Pushing to Try</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../build/buildsystem/index.html">Build System</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../taskcluster/index.html">Firefox CI and Taskgraph</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/moztreedocs/index.html">Managing Documentation</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mozbuild/vendor/index.html">Vendoring Third Party Components</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Testing &amp; Test Infrastructure</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/automated-testing/index.html">Automated Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/treeherder-try/index.html">Understanding Treeherder Results</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/sheriffed-intermittents/index.html">Sheriffed intermittent failures</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/tests-for-new-config/index.html">Turning on Firefox tests for a new configuration</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/intermittent/index.html">Avoiding intermittent tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/testing-policy/index.html">Testing Policy</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/ci-configs/index.html">Configuration Changes</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/browser-chrome/index.html">Browser chrome mochitests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/chrome-tests/index.html">Chrome Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/marionette/index.html">Marionette</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/geckodriver/index.html">geckodriver</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/test-verification/index.html">Test Verification</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/webrender/index.html">WebRender Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/mochitest-plain/index.html">Mochitest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/xpcshell/index.html">XPCShell tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/tps/index.html">TPS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../web-platform/index.html">web-platform-tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../gtest/index.html">GTest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/fuzzing/index.html">Fuzzing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/sanitizer/index.html">Sanitizer</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/perfdocs/index.html">Performance Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/code-coverage/index.html">Code coverage</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing-rust-code/index.html">Testing &amp; Debugging Rust Code</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Releases &amp; Updates</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html">Mozilla Update Infrastructure</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html#watershed-updates">Watershed Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html#desupport-updates">Desupport Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/update-verify/index.html">Update Verify</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Localization &amp; Internationalization</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../intl/index.html">Internationalization</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../l10n/index.html">Localization</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox and Python</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mozbase/index.html">mozbase</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../python/index.html">Using third-party Python packages</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Metrics Collected in Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../metrics/index.html">Metrics</a></li>
+      </ul>
+     </div>
+    </div>
+   </nav>
+   <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+    <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+     <i data-toggle="wy-nav-top" class="fa fa-bars"></i> <a href="../../index.html">Firefox Source Docs</a>
+    </nav>
+    <div class="wy-nav-content">
+     <div class="rst-content">
+      <!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+      <div role="navigation" aria-label="Page navigation">
+       <ul class="wy-breadcrumbs">
+        <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+        <li class="breadcrumb-item"><a href="../index.html">SpiderMonkey</a></li>
+        <li class="breadcrumb-item"><a href="index.html">Debugger API</a></li>
+        <li class="breadcrumb-item active">Tutorial: Evaluate an Expression When a debugger; Statement Is Executed</li>
+        <li class="wy-breadcrumbs-aside"><a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Developer+Infrastructure&amp;component=Firefox+Source+Docs%3A+Content&amp;short_desc=Documentation+issue+on+js/Debugger/Tutorial-Debugger-Statement&amp;comment=URL+=+https://firefox-source-docs.mozilla.org/js/Debugger/Tutorial-Debugger-Statement.html&amp;bug_file_loc=https://firefox-source-docs.mozilla.org/js/Debugger/Tutorial-Debugger-Statement.html" rel="nofollow">Report an issue</a> / <a href="../../_sources/js/Debugger/Tutorial-Debugger-Statement.md.txt" rel="nofollow"> View page source</a></li>
+       </ul>
+       <hr>
+      </div>
+      <div role="main" class="document" itemscope itemtype="http://schema.org/Article">
+       <div itemprop="articleBody">
+        <section id="tutorial-evaluate-an-expression-when-a-debugger-statement-is-executed">
+         <h1>Tutorial: Evaluate an Expression When a debugger; Statement Is Executed<a class="headerlink" href="#tutorial-evaluate-an-expression-when-a-debugger-statement-is-executed" title="Link to this heading">?</a></h1>
+         <p><strong>NOTE: This tutorial no longer works in current versions of Firefox.</strong> Instead, please try the updated and expanded <a class="reference internal" href="Tutorial-Breakpoint.html"><span class="std std-doc">breakpoint tutorial</span></a>.</p>
+         <p>This page shows how you can try out the <a class="reference internal" href="Debugger-API.html"><span class="std std-doc"><code class="docutils literal notranslate"><span class="pre">Debugger</span></code> API</span></a> yourself using Firefox’s Scratchpad. We use the API to evaluate an expression in the web page whenever it executes a JavaScript <code class="docutils literal notranslate"><span class="pre">debugger;</span></code> statement.</p>
+         <ol class="arabic">
+          <li>
+           <p>Visit the URL <code class="docutils literal notranslate"><span class="pre">about:config</span></code>, and set the <code class="docutils literal notranslate"><span class="pre">devtools.chrome.enabled</span></code> preference to <code class="docutils literal notranslate"><span class="pre">true</span></code>:</p>
+           <p><img alt="Setting the 'devtools.chrome.enabled' preference" src="../../_images/enable-chrome-devtools1.png"></p></li>
+          <li>
+           <p>Save the following HTML text to a file, and visit the file in your browser:</p>
+           <div class="highlight-html notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="p">&lt;</span><span class="nt">div</span> <span class="na">onclick</span><span class="o">=</span><span class="s">"var x = 'snoo'; debugger;"</span><span class="p">&gt;</span>Click me!<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</pre>
+            </div>
+           </div></li>
+          <li>
+           <p>Open a developer Scratchpad (Menu button &gt; Developer &gt; Scratchpad), and select “Browser” from the “Environment” menu. (This menu will not be present unless you have changed the preference as explained above.)</p>
+           <p><img alt="Selecting the 'browser' context in the Scratchpad" src="../../_images/scratchpad-browser-environment1.png"></p></li>
+          <li>
+           <p>Enter the following code in the Scratchpad:</p>
+           <div class="highlight-js notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="c1">// This simply defines 'Debugger' in this Scratchpad;</span>
+<span class="c1">// it doesn't actually start debugging anything.</span>
+<span class="kd">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">addDebuggerToGlobal</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ChromeUtils</span><span class="p">.</span><span class="nx">importESModule</span><span class="p">(</span>
+<span class="w">  </span><span class="s2">"resource://gre/modules/jsdebugger.sys.mjs"</span>
+<span class="p">);</span>
+<span class="nx">addDebuggerToGlobal</span><span class="p">(</span><span class="nb">window</span><span class="p">);</span>
+
+<span class="c1">// Create a 'Debugger' instance.</span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">dbg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">Debugger</span><span class="p">;</span>
+
+<span class="c1">// Get the current tab's content window, and make it a debuggee.</span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">w</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">gBrowser</span><span class="p">.</span><span class="nx">selectedBrowser</span><span class="p">.</span><span class="nx">contentWindow</span><span class="p">.</span><span class="nx">wrappedJSObject</span><span class="p">;</span>
+<span class="nx">dbg</span><span class="p">.</span><span class="nx">addDebuggee</span><span class="p">(</span><span class="nx">w</span><span class="p">);</span>
+
+<span class="c1">// When the debuggee executes a 'debugger' statement, evaluate</span>
+<span class="c1">// the expression 'x' in that stack frame, and show its value.</span>
+<span class="nx">dbg</span><span class="p">.</span><span class="nx">onDebuggerStatement</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="p">(</span><span class="nx">frame</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">alert</span><span class="p">(</span><span class="s1">'hit debugger statement; x = '</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">frame</span><span class="p">.</span><span class="nb">eval</span><span class="p">(</span><span class="s1">'x'</span><span class="p">).</span><span class="k">return</span><span class="p">);</span>
+<span class="p">}</span>
+</pre>
+            </div>
+           </div></li>
+          <li>
+           <p>In the Scratchpad, ensure that no text is selected, and press the “Run” button.</p></li>
+          <li>
+           <p>Now, click on the text that says “Click me!” in the web page. This runs the <code class="docutils literal notranslate"><span class="pre">div</span></code> element’s <code class="docutils literal notranslate"><span class="pre">onclick</span></code> handler. When control reaches the <code class="docutils literal notranslate"><span class="pre">debugger;</span></code> statement, <code class="docutils literal notranslate"><span class="pre">Debugger</span></code> calls your callback function, passing a <code class="docutils literal notranslate"><span class="pre">Debugger.Frame</span></code> instance. Your callback function evaluates the expression <code class="docutils literal notranslate"><span class="pre">x</span></code> in the given stack frame, and displays the alert:</p>
+           <p><img alt="The Debugger callback displaying an alert" src="../../_images/debugger-alert.png"></p></li>
+          <li>
+           <p>Press “Run” in the Scratchpad again. Now, clicking on the “Click me!” text causes <em>two</em> alerts to show—one for each <code class="docutils literal notranslate"><span class="pre">Debugger</span></code> instance.</p>
+           <p>Multiple <code class="docutils literal notranslate"><span class="pre">Debugger</span></code> instances can observe the same debuggee. Re-running the code in the Scratchpad created a fresh <code class="docutils literal notranslate"><span class="pre">Debugger</span></code> instance, added the same web page as its debuggee, and then registered a fresh <code class="docutils literal notranslate"><span class="pre">debugger;</span></code> statement handler with the new instance. When you clicked on the <code class="docutils literal notranslate"><span class="pre">div</span></code> element, both of them ran. This shows how any number of <code class="docutils literal notranslate"><span class="pre">Debugger</span></code>-based tools can observe a single web page simultaneously—although, since the order in which their handlers run is not specified, such tools should probably only observe, and not influence, the debuggee’s behavior.</p></li>
+          <li>
+           <p>Close the web page and the Scratchpad.</p>
+           <p>Since both the Scratchpad’s global object and the debuggee window are now gone, the <code class="docutils literal notranslate"><span class="pre">Debugger</span></code> instances will be garbage collected, since they can no longer have any visible effect on Firefox’s behavior. The <code class="docutils literal notranslate"><span class="pre">Debugger</span></code> API tries to interact with garbage collection as transparently as possible; for example, if both a <code class="docutils literal notranslate"><span class="pre">Debugger.Object</span></code> instance and its referent are not reachable, they will both be collected, even while the <code class="docutils literal notranslate"><span class="pre">Debugger</span></code> instance to which the shadow belonged continues to exist.</p></li>
+         </ol>
+        </section>
+       </div>
+      </div>
+      <footer>
+       <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Tutorial-Breakpoint.html" class="btn btn-neutral float-left" title="Tutorial: Set a breakpoint using Debugger" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a> <a href="../SavedFrame/index.html" class="btn btn-neutral float-right" title="SavedFrame" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+       </div>
+       <hr>
+       <div role="contentinfo">
+        <p></p>
+       </div> Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+      </footer>
+     </div>
+    </div>
+   </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ </body>
+</html>

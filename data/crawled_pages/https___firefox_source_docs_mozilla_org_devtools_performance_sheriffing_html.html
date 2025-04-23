@@ -1,0 +1,339 @@
+<!doctype html>
+<html class="writer-html5" lang="en" data-content_root="../">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DevTools performance sheriffing — Firefox Source Docs  documentation</title>
+  <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50">
+  <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094">
+  <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=fd3f3429">
+  <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b">
+  <link rel="stylesheet" type="text/css" href="../_static/custom_theme.css?v=dc5ed815">
+  <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7">
+  <link rel="shortcut icon" href="../_static/firefox.ico"><!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script src="../_static/jquery.js?v=5d32c60e"></script>
+  <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+  <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+  <script src="../_static/doctools.js?v=9a2dae69"></script>
+  <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+  <script src="../_static/copybutton.js?v=30646c52"></script>
+  <script src="../_static/design-tabs.js?v=36754332"></script>
+  <script src="../_static/js/theme.js"></script>
+  <link rel="index" title="Index" href="../genindex.html">
+  <link rel="search" title="Search" href="../search.html">
+  <link rel="next" title="Automated tests" href="tests/README.html">
+  <link rel="prev" title="Recurring DevTools tasks" href="release.html">
+ </head>
+ <body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+   <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <div class="wy-side-scroll">
+     <div class="wy-side-nav-search">
+      <a href="../index.html" class="icon icon-home"> Firefox Source Docs <img src="../_static/firefox-wordmark.svg" class="logo" alt="Logo"> </a><!-- -- This code is governed by the BSD license ---->
+      <div>
+       <h3>Quick search</h3>
+       <script>
+    (function () {
+      var cx = "dd12886298f75dbef";
+      var gcse = document.createElement("script");
+      gcse.async = true;
+      gcse.src = "https://cse.google.com/cse.js?cx=" + cx;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(gcse, s);
+    })();
+  </script><gcse:search></gcse:search>
+      </div>
+     </div>
+     <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+      <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../glossary/index.html">A Glossary of Common Terms</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../overview/index.html">A Quick Guide to Mozilla Applications</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../setup/index.html">Getting Set Up To Work On The Firefox Codebase</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Working On Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../contributing/index.html">Working on Firefox</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../bug-mgmt/index.html">Bug Handling</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox User Guide</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../devtools-user/index.html">Firefox DevTools User Docs</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Source Code Documentation</span></p>
+      <ul class="current">
+       <li class="toctree-l1"><a class="reference internal" href="../mots/index.html">Governance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../browser/index.html">Firefox Front-end</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../dom/index.html">DOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../editor/index.html">Editor</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../layout/index.html">Style system (CSS) &amp; Layout</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../gfx/index.html">Graphics</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../ipc/index.html">Processes, Threads and IPC</a></li>
+       <li class="toctree-l1 current"><a class="reference internal" href="index.html">Firefox DevTools Contributor Docs</a>
+        <ul class="current">
+         <li class="toctree-l2"><a class="reference internal" href="index.html#getting-started">Getting Started</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="index.html#contributing">Contributing</a></li>
+         <li class="toctree-l2 current"><a class="reference internal" href="index.html#recurring-tasks">Recurring tasks</a>
+          <ul class="current">
+           <li class="toctree-l3"><a class="reference internal" href="release.html">Release tasks</a></li>
+           <li class="toctree-l3 current"><a class="current reference internal" href="#">Performance sheriffing</a>
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="#perfherder-alerts">PerfHerder alerts</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#devtools-performance-dashboard">DevTools performance dashboard</a></li>
+            </ul></li>
+          </ul></li>
+         <li class="toctree-l2"><a class="reference internal" href="index.html#automated-tests">Automated tests</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="index.html#files-and-directories">Files and directories</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="index.html#tool-architectures">Tool Architectures</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="index.html#frontend">Frontend</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="index.html#backend">Backend</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="index.html#preferences">Preferences</a></li>
+        </ul></li>
+       <li class="toctree-l1"><a class="reference internal" href="../toolkit/index.html">Toolkit</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../js/index.html">SpiderMonkey</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../jsloader/index.html">JS Loader</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mobile/android/geckoview/index.html">GeckoView</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mobile/android/fenix/index.html">Fenix</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mobile/android/focus-android/index.html">Focus for Android</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../dom/bindings/webidl/index.html">WebIDL</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../modules/libpref/index.html">libpref</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../networking/index.html">Networking</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../remote/index.html">Remote Protocols</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../services/index.html">Services</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../permissions/index.html">Permissions</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../uriloader/index.html">File Handling</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../widget/cocoa/index.html">Firefox on macOS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../widget/windows/index.html">Firefox on Windows</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../toolkit/components/ml/index.html">Firefox AI Runtime</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../accessible/index.html">Accessibility</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../media/index.html">Media Playback</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../code-quality/index.html">Code quality</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../writing-rust-code/index.html">Writing Rust Code</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../rust-components/index.html">Rust Components</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/profiler/index.html">Gecko Profiler</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../performance/index.html">Performance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../storage/index.html">Database bindings (SQLite, KV, …)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../xpcom/index.html">XPCOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../nspr/index.html">NSPR</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../security/nss/index.html">Network Security Services (NSS)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../content-security/index.html">Web Security Checks in Gecko</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">The Firefox Build System</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../mach/index.html">Mach</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/try/index.html">Pushing to Try</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../build/buildsystem/index.html">Build System</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../taskcluster/index.html">Firefox CI and Taskgraph</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/moztreedocs/index.html">Managing Documentation</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mozbuild/vendor/index.html">Vendoring Third Party Components</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Testing &amp; Test Infrastructure</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/automated-testing/index.html">Automated Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/treeherder-try/index.html">Understanding Treeherder Results</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/sheriffed-intermittents/index.html">Sheriffed intermittent failures</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/tests-for-new-config/index.html">Turning on Firefox tests for a new configuration</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/intermittent/index.html">Avoiding intermittent tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/testing-policy/index.html">Testing Policy</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/ci-configs/index.html">Configuration Changes</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/browser-chrome/index.html">Browser chrome mochitests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/chrome-tests/index.html">Chrome Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/marionette/index.html">Marionette</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/geckodriver/index.html">geckodriver</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/test-verification/index.html">Test Verification</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/webrender/index.html">WebRender Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/mochitest-plain/index.html">Mochitest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/xpcshell/index.html">XPCShell tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/tps/index.html">TPS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../web-platform/index.html">web-platform-tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../gtest/index.html">GTest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/fuzzing/index.html">Fuzzing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/sanitizer/index.html">Sanitizer</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/perfdocs/index.html">Performance Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/code-coverage/index.html">Code coverage</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing-rust-code/index.html">Testing &amp; Debugging Rust Code</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Releases &amp; Updates</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../update-infrastructure/index.html">Mozilla Update Infrastructure</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../update-infrastructure/index.html#watershed-updates">Watershed Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../update-infrastructure/index.html#desupport-updates">Desupport Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/update-verify/index.html">Update Verify</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Localization &amp; Internationalization</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../intl/index.html">Internationalization</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../l10n/index.html">Localization</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox and Python</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../mozbase/index.html">mozbase</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../python/index.html">Using third-party Python packages</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Metrics Collected in Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../metrics/index.html">Metrics</a></li>
+      </ul>
+     </div>
+    </div>
+   </nav>
+   <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+    <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+     <i data-toggle="wy-nav-top" class="fa fa-bars"></i> <a href="../index.html">Firefox Source Docs</a>
+    </nav>
+    <div class="wy-nav-content">
+     <div class="rst-content">
+      <!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+      <div role="navigation" aria-label="Page navigation">
+       <ul class="wy-breadcrumbs">
+        <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+        <li class="breadcrumb-item"><a href="index.html">Firefox DevTools Contributor Docs</a></li>
+        <li class="breadcrumb-item active">DevTools performance sheriffing</li>
+        <li class="wy-breadcrumbs-aside"><a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Developer+Infrastructure&amp;component=Firefox+Source+Docs%3A+Content&amp;short_desc=Documentation+issue+on+devtools/performance-sheriffing&amp;comment=URL+=+https://firefox-source-docs.mozilla.org/devtools/performance-sheriffing.html&amp;bug_file_loc=https://firefox-source-docs.mozilla.org/devtools/performance-sheriffing.html" rel="nofollow">Report an issue</a> / <a href="../_sources/devtools/performance-sheriffing.md.txt" rel="nofollow"> View page source</a></li>
+       </ul>
+       <hr>
+      </div>
+      <div role="main" class="document" itemscope itemtype="http://schema.org/Article">
+       <div itemprop="articleBody">
+        <section id="devtools-performance-sheriffing">
+         <h1>DevTools performance sheriffing<a class="headerlink" href="#devtools-performance-sheriffing" title="Link to this heading">?</a></h1>
+         <p>On a weekly basis, we should review:</p>
+         <ul class="simple">
+          <li>
+           <p><a class="reference external" href="https://treeherder.mozilla.org/perfherder/alerts?status=0&amp;amp;framework=12&amp;amp;hideDwnToInv=1&amp;amp;page=1">DevTools performance alerts from PerfHerder</a></p></li>
+          <li>
+           <p><a class="reference external" href="https://firefox-dev.tools/performance-dashboard/">DevTools performance dashboard</a></p></li>
+         </ul>
+         <section id="perfherder-alerts">
+          <h2>PerfHerder alerts<a class="headerlink" href="#perfherder-alerts" title="Link to this heading">?</a></h2>
+          <section id="setup">
+           <h3>Setup<a class="headerlink" href="#setup" title="Link to this heading">?</a></h3>
+           <p>First of all keep in mind this DevTools documentation only highlights specifics of the DevTools workflow. DevTools team is triaging its own performance alerts and follows a slightly simplified workflow, but in general the whole Performance Sheriffing documentation also applies here.</p>
+           <p>Please take a look at the <a class="reference external" href="https://wiki.mozilla.org/TestEngineering/Performance/Sheriffing">Performance Sheriffing documentation</a> and the <a class="reference external" href="https://wiki.mozilla.org/TestEngineering/Performance/Sheriffing/Workflow">workflow documentation</a>. You should also join the Performance Sheriffing room at <a class="reference external" href="https://chat.mozilla.org/#/room/#perfsheriffs:mozilla.org">https://chat.mozilla.org/#/room/#perfsheriffs:mozilla.org</a></p>
+           <p>The DevTools documentation will not explain how to use PerfHerder or TreeHerder, but we will try to link to the relevant documentation when possible.</p>
+           <p>In order to sheriff DevTools alerts, your Treeherder user needs to belong to the performance sheriffing group, otherwise you will be unable to update the alerts. Take a look at the <a class="reference external" href="https://www.google.com/url?q=https://wiki.mozilla.org/TestEngineering/Performance/Onboarding%23Sheriffing&amp;amp;sa=D&amp;amp;source=docs&amp;amp;ust=1634550314641000&amp;amp;usg=AOvVaw2aHrCFQ-wyyc-wrJgkfK4q">documentation to request access</a> and you can refer to a <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1723906">previous Bug</a> as an example.</p>
+          </section>
+          <section id="devtools-alerts">
+           <h3>DevTools alerts<a class="headerlink" href="#devtools-alerts" title="Link to this heading">?</a></h3>
+           <p><img alt="DevTools alert example" src="../_images/devtools-alert-example.png"></p>
+           <p>Performance tests are a special kind of test which output a set of metrics (timings, memory) which are collected over time by Perfherder. When a significant variance is detected for one of those metrics, an alert will be automatically created by the system</p>
+           <p>The list of DevTools performance tests is documented on the <a class="reference internal" href="tests/performance-tests-overview.html"><span class="std std-doc">DevTools Performance Tests overview</span></a>. From this list, most of the alerts will be either related to DAMP or to Memory Leak tests.</p>
+          </section>
+          <section id="weekly-sheriffing">
+           <h3>Weekly sheriffing<a class="headerlink" href="#weekly-sheriffing" title="Link to this heading">?</a></h3>
+           <p>The untriaged DevTools alerts are listed at <a class="reference external" href="https://treeherder.mozilla.org/perfherder/alerts?status=0&amp;amp;framework=12&amp;amp;hideDwnToInv=1&amp;amp;page=1">https://treeherder.mozilla.org/perfherder/alerts?status=0&amp;framework=12&amp;hideDwnToInv=1&amp;page=1</a>. The goal of the weekly sheriffing task will be to triage all those alerts.</p>
+           <p>Triaging an alert doesn’t mean solving the performance issue but simply acknowledging the alert and either:</p>
+           <ul class="simple">
+            <li>
+             <p>filing a bug</p></li>
+            <li>
+             <p>or marking as won’t fix</p></li>
+            <li>
+             <p>or mark as improvement</p></li>
+           </ul>
+           <p>As follow up, the most significant and actionable alerts should be presented to the team and you should decide next steps. It is perfectly ok to say that a performance regression is not worth investigating or fixing and close the bug as a consequence.</p>
+          </section>
+          <section id="workflow-suggestion">
+           <h3>Workflow suggestion<a class="headerlink" href="#workflow-suggestion" title="Link to this heading">?</a></h3>
+           <p>There is no right or wrong way to sheriff alerts, and a lot of this will depend on your own judgement and knowledge of the recent changes in the codebase. Nevertheless, below are some steps which can help to breakdown the task.</p>
+           <section id="ignore-minor-or-invalid-changes">
+            <h4>Ignore minor or invalid changes<a class="headerlink" href="#ignore-minor-or-invalid-changes" title="Link to this heading">?</a></h4>
+            <p><img alt="DevTools alert invalid" src="../_images/devtools-alert-invalid.png"></p>
+            <p>DevTools tests can be impacted by many platform changes, which will sometimes update the baseline of a subtest of a few percents. If a change is minor (for instance less than 5%) and the pushlog does not contain any DevTools change, you may Acknowledge the test regressions and mark the alert as “Won’t Fix”.</p>
+            <p>We also usually avoid paying too much attention to the “close” tests, which measure the time needed to close the toolbox after using a panel (eg “complicated.styleeditor.close.DAMP”). Those tests are usually noisy and not an area where we put much effort. Unless there was a huge regression, as long as those tests run in a few dozen ms you may skip those.</p>
+           </section>
+           <section id="regroup-alerts">
+            <h4>Regroup alerts<a class="headerlink" href="#regroup-alerts" title="Link to this heading">?</a></h4>
+            <p><img alt="DevTools alert regroup" src="../_images/devtools-alert-regroup.png"></p>
+            <p>I suggest to then try to regroup alerts which are likely to be caused by the same change. You can identify those by several criteria:</p>
+            <ul class="simple">
+             <li>
+              <p>the datetime of the alerts should be close (for instance same day, just a few hours apart)</p></li>
+             <li>
+              <p>the area of the alerts should be similar (for instance only debugger tests are impacted, only memory tests are impacted)</p></li>
+             <li>
+              <p>the different alerts are about different platforms</p></li>
+            </ul>
+            <p>What happens very often, given how noisy the DevTools DAMP tests are, is that an alert will be generated for a different build on Linux and on Windows for instance. Based on your overall knowledge of what landed last week, you can take a look at the pushlog for similar alerts and see if you spot any DevTools change present for all similar alerts</p>
+            <p>Once you identified 2 alerts to regroup, use the Reassign feature to merge the alerts.</p>
+           </section>
+           <section id="investigate-an-alert">
+            <h4>Investigate an alert<a class="headerlink" href="#investigate-an-alert" title="Link to this heading">?</a></h4>
+            <p><img alt="DevTools alert investigate" src="../_images/devtools-alert-investigate.png"></p>
+            <p>If an alert is valid and should be investigated, you should acknowledge the alert and file a bug, using the “File Bug” feature.</p>
+            <p>After the Bug was created, link the bug to the alert on Perfherder using the “Link to Bug” feature. Then we can also perform some early investigation.</p>
+            <ol class="arabic simple">
+             <li>
+              <p>You can look at the pushlog of the alert to see if any patch that landed seems directly related.</p></li>
+             <li>
+              <p>Review which platforms regressed to see if the regression impacted all platforms (windows, linux, macos). Usually a regression from a DevTools change will impact all platforms, so an alert only touching macos might indicate that the regression is rather coming from a platform change.</p></li>
+             <li>
+              <p>Make sense of which tests have regressed. In case several platforms have reported the same issue, it can be hard to parse the list visually. Use the “filter” input to only see tests for one platform, for instance “linux1804-64-qr”. You should then be able to tell which area of our tests have regressed.</p></li>
+            </ol>
+            <p>Summarize this information in the Bug filed for the alert, and add it to the weekly DevTools Tools Check-in agenda. You might also add some information in the notes of the alert.</p>
+            <p>Unless you already identified the regressing changeset, you should also start backfills starting from the job of the alert. Click on the job link from Perfherder, which should lead you to a DAMP job from autoland. Start a backfill using a Custom Action for the 10 previous autoland jobs, retriggered 5 times.</p>
+           </section>
+           <section id="note-about-improvements">
+            <h4>Note about improvements<a class="headerlink" href="#note-about-improvements" title="Link to this heading">?</a></h4>
+            <p><img alt="DevTools alert improvement" src="../_images/devtools-alert-improvement.png"></p>
+            <p>If an alert only contains improvements, you should still check if the improvement is expected, especially if it is an important change. Otherwise it could indicate that the test is no longer testing what it should test and it should be investigated. Unless an improvement was expected, we should follow the exact same workflow as for any alert.</p>
+           </section>
+           <section id="alert-notes-and-alert-owner">
+            <h4>Alert notes and alert owner<a class="headerlink" href="#alert-notes-and-alert-owner" title="Link to this heading">?</a></h4>
+            <p><img alt="DevTools alert notes and owner" src="../_images/devtools-alert-notes-owner.png"></p>
+            <p>This applies to all alerts you are triaging. Try to add a Note for alerts which are not associated with a Bug. The Note can just be a quick explanation saying why an alert is being ignored, or where a given improvement might come from. And assign yourself to the alert using the “Take” button.</p>
+           </section>
+          </section>
+          <section id="perfherder-tips">
+           <h3>Perfherder tips<a class="headerlink" href="#perfherder-tips" title="Link to this heading">?</a></h3>
+           <p>Again please refer to the <a class="reference external" href="https://wiki.mozilla.org/TestEngineering/Performance/Sheriffing/Workflow">main documentation for Perfherder</a>. But there are some UX issues you might run into with the DevTools workflow and worth pointing out.</p>
+           <section id="unable-to-change-the-state-of-an-alert">
+            <h4>Unable to change the state of an alert<a class="headerlink" href="#unable-to-change-the-state-of-an-alert" title="Link to this heading">?</a></h4>
+            <p>Each alert lists several tests which might have improved or regressed. Both the alert and tests have a state, for instance “untriaged”, “invalid”, … The state for the alert seems partly derived from the state of the individual tests. And sometimes it can be difficult to either update the state of the tests or the state of the alert correctly.</p>
+            <p>A common issue occurs after regrouping alerts. At that point the tests which were moved to another alert get the “reassigned” state. Imagine you want to move all the tests from this alert to “acknowledged”. If you select all tests using the checkbox on the left of the alert title, you will not see the button to “Acknowledge” the tests. This is because you can’t move tests from the “reassigned” state to the “acknowledged” state. Instead here, you have to select only the “untriaged” tests. You can easily do that by selecting “untriaged” in the dropdown next to the checkbox. Once you only have untriaged tests selected, you should be able to change their state as expected. And an alert with only “reassigned” and “acknowledged” tests will be considered as acknowledged.</p>
+            <p>From time to time, alerts also don’t seem to offer the expected action in the top right dropdown. In that case it’s probably best to raise this problem on <a class="reference external" href="https://chat.mozilla.org/#/room/#perfsheriffs:mozilla.org">https://chat.mozilla.org/#/room/#perfsheriffs:mozilla.org</a> , but you might also try resetting the tests in the alert to see if you manage to unblock the state.</p>
+           </section>
+           <section id="already-triaged-alert-coming-back">
+            <h4>Already triaged alert coming back<a class="headerlink" href="#already-triaged-alert-coming-back" title="Link to this heading">?</a></h4>
+            <p>Sometimes an alert which was already triaged will be assigned a new test change (regression or improvement). This new test will most likely have a status of “untriaged”, which will move back the alert in the untriaged category. If an alert seems familiar, pay attention to the date and check the status of individual tests, there might just be a few new tests added, which need to be assigned the same state as the others.</p>
+           </section>
+          </section>
+         </section>
+         <section id="devtools-performance-dashboard">
+          <h2>DevTools performance dashboard<a class="headerlink" href="#devtools-performance-dashboard" title="Link to this heading">?</a></h2>
+          <p>We used to rely mostly on the DevTools performance dashboard for monitoring, but alerts are now the main way we detect regressions or improvements. But the DevTools dashboard still offer a nice way to visualize DevTools performance over time, in a centralized place.</p>
+          <p>The DevTools dashboard relies on the same perfherder data as the alerts, so we should not expect to gather too much new information from this tool. The data used comes from tests running on mozilla-central, on windows platforms for DAMP and on linux for metrics or memory tests. Whereas the alerts use mostly data from autoland and check all platforms. Weekly review of this information should be done very quickly.</p>
+          <p>The homepage <a class="reference external" href="https://firefox-dev.tools/performance-dashboard/">https://firefox-dev.tools/performance-dashboard/</a> offers links to individual pages presenting charts grouped by panel or by test domain (eg DAMP, metrics test, …). I suggest to quickly open each link in a different tab and then scroll through to see if any significant regression pops up.</p>
+         </section>
+        </section>
+       </div>
+      </div>
+      <footer>
+       <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="release.html" class="btn btn-neutral float-left" title="Recurring DevTools tasks" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a> <a href="tests/README.html" class="btn btn-neutral float-right" title="Automated tests" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+       </div>
+       <hr>
+       <div role="contentinfo">
+        <p></p>
+       </div> Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+      </footer>
+     </div>
+    </div>
+   </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ </body>
+</html>

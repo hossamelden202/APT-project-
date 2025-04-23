@@ -1,0 +1,285 @@
+<!doctype html>
+<html class="writer-html5" lang="en" data-content_root="../">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Browser Startup — Firefox Source Docs  documentation</title>
+  <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50">
+  <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094">
+  <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=fd3f3429">
+  <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b">
+  <link rel="stylesheet" type="text/css" href="../_static/custom_theme.css?v=dc5ed815">
+  <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7">
+  <link rel="shortcut icon" href="../_static/firefox.ico"><!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script src="../_static/jquery.js?v=5d32c60e"></script>
+  <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+  <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+  <script src="../_static/doctools.js?v=9a2dae69"></script>
+  <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+  <script src="../_static/copybutton.js?v=30646c52"></script>
+  <script src="../_static/design-tabs.js?v=36754332"></script>
+  <script src="../_static/js/theme.js"></script>
+  <link rel="index" title="Index" href="../genindex.html">
+  <link rel="search" title="Search" href="../search.html">
+  <link rel="next" title="Category manager indirection (callModulesFromCategory)" href="CategoryManagerIndirection.html">
+  <link rel="prev" title="Command Line Parameters" href="CommandLineParameters.html">
+ </head>
+ <body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+   <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <div class="wy-side-scroll">
+     <div class="wy-side-nav-search">
+      <a href="../index.html" class="icon icon-home"> Firefox Source Docs <img src="../_static/firefox-wordmark.svg" class="logo" alt="Logo"> </a><!-- -- This code is governed by the BSD license ---->
+      <div>
+       <h3>Quick search</h3>
+       <script>
+    (function () {
+      var cx = "dd12886298f75dbef";
+      var gcse = document.createElement("script");
+      gcse.async = true;
+      gcse.src = "https://cse.google.com/cse.js?cx=" + cx;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(gcse, s);
+    })();
+  </script><gcse:search></gcse:search>
+      </div>
+     </div>
+     <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+      <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../glossary/index.html">A Glossary of Common Terms</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../overview/index.html">A Quick Guide to Mozilla Applications</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../setup/index.html">Getting Set Up To Work On The Firefox Codebase</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Working On Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../contributing/index.html">Working on Firefox</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../bug-mgmt/index.html">Bug Handling</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox User Guide</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../devtools-user/index.html">Firefox DevTools User Docs</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Source Code Documentation</span></p>
+      <ul class="current">
+       <li class="toctree-l1"><a class="reference internal" href="../mots/index.html">Governance</a></li>
+       <li class="toctree-l1 current"><a class="reference internal" href="index.html">Firefox Front-end</a>
+        <ul class="current">
+         <li class="toctree-l2"><a class="reference internal" href="urlbar/index.html">Address Bar</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="BrowserUsageTelemetry.html">Browser Usage Telemetry</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="FrontendCodeReviewBestPractices.html">Frontend Code Review Best Practices</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="CommandLineParameters.html">Command Line Parameters</a></li>
+         <li class="toctree-l2 current"><a class="current reference internal" href="#">Browser Startup</a>
+          <ul>
+           <li class="toctree-l3"><a class="reference internal" href="#invoking-your-code-on-browser-startup">Invoking your code on browser startup</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#how-do-first-run-first-startup-experiments-work">How do first run/first startup experiments work?</a></li>
+          </ul></li>
+         <li class="toctree-l2"><a class="reference internal" href="CategoryManagerIndirection.html">Category manager indirection (callModulesFromCategory)</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="components/customizableui/docs/index.html">CustomizableUI Component</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="components/enterprisepolicies/docs/index.html">Enterprise Policies</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="extensions/formautofill/docs/index.html">Form Autofill</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="extensions/newtab/docs/index.html">Firefox Home (New Tab)</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="components/aboutwelcome/docs/index.html">Firefox Welcome Experience (about:welcome)</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="installer/windows/installer/index.html">Installer</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="components/attribution/docs/index.html">Installation Attribution</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../toolkit/mozapps/defaultagent/default-browser-agent/index.html">Default Browser Agent</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="components/migration/docs/index.html">Migration</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="components/pagedata/docs/index.html">PageDataService</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="places/index.html">Places</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="components/asrouter/docs/index.html">Messaging System</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="search/index.html">Search</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="base/tabbrowser/index.html">tabbrowser</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="touchbar/index.html">Touch Bar</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="components/uitour/docs/index.html">UITour</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="branding/docs/index.html">Firefox Branding</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="components/storybook/docs/README.storybook.stories.html">Storybook for Firefox</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="components/storybook/docs/README.reusable-widgets.stories.html">Reusable UI widgets</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="components/storybook/docs/README.other-widgets.stories.html">Other types of UI Widgets</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="components/storybook/docs/README.lit-guide.stories.html">Lit</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="components/storybook/docs/README.xul-and-html.stories.html">XUL and HTML</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../toolkit/themes/shared/design-system/docs/README.design-tokens.stories.html">Design tokens</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../toolkit/themes/shared/design-system/docs/README.json-design-tokens.stories.html">JSON design tokens</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="components/backup/docs/index.html">Backup Component</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="components/sidebar/docs/index.html">Sidebar</a></li>
+        </ul></li>
+       <li class="toctree-l1"><a class="reference internal" href="../dom/index.html">DOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../editor/index.html">Editor</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../layout/index.html">Style system (CSS) &amp; Layout</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../gfx/index.html">Graphics</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../ipc/index.html">Processes, Threads and IPC</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../devtools/index.html">Firefox DevTools Contributor Docs</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../toolkit/index.html">Toolkit</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../js/index.html">SpiderMonkey</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../jsloader/index.html">JS Loader</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mobile/android/geckoview/index.html">GeckoView</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mobile/android/fenix/index.html">Fenix</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mobile/android/focus-android/index.html">Focus for Android</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../dom/bindings/webidl/index.html">WebIDL</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../modules/libpref/index.html">libpref</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../networking/index.html">Networking</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../remote/index.html">Remote Protocols</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../services/index.html">Services</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../permissions/index.html">Permissions</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../uriloader/index.html">File Handling</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../widget/cocoa/index.html">Firefox on macOS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../widget/windows/index.html">Firefox on Windows</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../toolkit/components/ml/index.html">Firefox AI Runtime</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../accessible/index.html">Accessibility</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../media/index.html">Media Playback</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../code-quality/index.html">Code quality</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../writing-rust-code/index.html">Writing Rust Code</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../rust-components/index.html">Rust Components</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/profiler/index.html">Gecko Profiler</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../performance/index.html">Performance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../storage/index.html">Database bindings (SQLite, KV, …)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../xpcom/index.html">XPCOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../nspr/index.html">NSPR</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../security/nss/index.html">Network Security Services (NSS)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../content-security/index.html">Web Security Checks in Gecko</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">The Firefox Build System</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../mach/index.html">Mach</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/try/index.html">Pushing to Try</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../build/buildsystem/index.html">Build System</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../taskcluster/index.html">Firefox CI and Taskgraph</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/moztreedocs/index.html">Managing Documentation</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mozbuild/vendor/index.html">Vendoring Third Party Components</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Testing &amp; Test Infrastructure</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/automated-testing/index.html">Automated Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/treeherder-try/index.html">Understanding Treeherder Results</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/sheriffed-intermittents/index.html">Sheriffed intermittent failures</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/tests-for-new-config/index.html">Turning on Firefox tests for a new configuration</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/intermittent/index.html">Avoiding intermittent tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/testing-policy/index.html">Testing Policy</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/ci-configs/index.html">Configuration Changes</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/browser-chrome/index.html">Browser chrome mochitests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/chrome-tests/index.html">Chrome Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/marionette/index.html">Marionette</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/geckodriver/index.html">geckodriver</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/test-verification/index.html">Test Verification</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/webrender/index.html">WebRender Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/mochitest-plain/index.html">Mochitest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/xpcshell/index.html">XPCShell tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/tps/index.html">TPS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../web-platform/index.html">web-platform-tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../gtest/index.html">GTest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/fuzzing/index.html">Fuzzing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/sanitizer/index.html">Sanitizer</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/perfdocs/index.html">Performance Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/code-coverage/index.html">Code coverage</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing-rust-code/index.html">Testing &amp; Debugging Rust Code</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Releases &amp; Updates</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../update-infrastructure/index.html">Mozilla Update Infrastructure</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../update-infrastructure/index.html#watershed-updates">Watershed Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../update-infrastructure/index.html#desupport-updates">Desupport Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/update-verify/index.html">Update Verify</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Localization &amp; Internationalization</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../intl/index.html">Internationalization</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../l10n/index.html">Localization</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox and Python</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../mozbase/index.html">mozbase</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../python/index.html">Using third-party Python packages</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Metrics Collected in Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../metrics/index.html">Metrics</a></li>
+      </ul>
+     </div>
+    </div>
+   </nav>
+   <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+    <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+     <i data-toggle="wy-nav-top" class="fa fa-bars"></i> <a href="../index.html">Firefox Source Docs</a>
+    </nav>
+    <div class="wy-nav-content">
+     <div class="rst-content">
+      <!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+      <div role="navigation" aria-label="Page navigation">
+       <ul class="wy-breadcrumbs">
+        <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+        <li class="breadcrumb-item"><a href="index.html">Firefox Front-end</a></li>
+        <li class="breadcrumb-item active">Browser Startup</li>
+        <li class="wy-breadcrumbs-aside"><a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Developer+Infrastructure&amp;component=Firefox+Source+Docs%3A+Content&amp;short_desc=Documentation+issue+on+browser/BrowserStartup&amp;comment=URL+=+https://firefox-source-docs.mozilla.org/browser/BrowserStartup.html&amp;bug_file_loc=https://firefox-source-docs.mozilla.org/browser/BrowserStartup.html" rel="nofollow">Report an issue</a> / <a href="../_sources/browser/BrowserStartup.md.txt" rel="nofollow"> View page source</a></li>
+       </ul>
+       <hr>
+      </div>
+      <div role="main" class="document" itemscope itemtype="http://schema.org/Article">
+       <div itemprop="articleBody">
+        <section id="browser-startup">
+         <h1>Browser Startup<a class="headerlink" href="#browser-startup" title="Link to this heading">?</a></h1>
+         <section id="invoking-your-code-on-browser-startup">
+          <h2>Invoking your code on browser startup<a class="headerlink" href="#invoking-your-code-on-browser-startup" title="Link to this heading">?</a></h2>
+          <p>The first rule of running code during startup is: don’t.</p>
+          <p>We take performance very seriously and ideally your component/feature should initialize only when needed.</p>
+          <p>If you have established that you really must run code during startup, available entrypoints are:</p>
+          <ul class="simple">
+           <li>
+            <p>registering a <code class="docutils literal notranslate"><span class="pre">browser-idle-startup</span></code> category entry for your JS module (or even a “best effort” user idle task, see <code class="docutils literal notranslate"><span class="pre">BrowserGlue.sys.mjs</span></code>)</p></li>
+           <li>
+            <p>registering a <code class="docutils literal notranslate"><span class="pre">browser-window-delayed-startup</span></code> category entry for your JS module. <strong>Note that this is invoked for each browser window.</strong></p></li>
+           <li>
+            <p>registering a <code class="docutils literal notranslate"><span class="pre">browser-before-ui-startup</span></code> category entry if you really really need to. This will run code before the first browser window appears on the screen and make Firefox seem slow, so please don’t do it unless absolutely necessary.</p></li>
+          </ul>
+          <p>See <a class="reference internal" href="CategoryManagerIndirection.html"><span class="std std-doc">the category manager indirection docs</span></a> for more details on this.</p>
+          <p>Other useful points in startup are:</p>
+          <ul class="simple">
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">BrowserGlue</span></code>’s <code class="docutils literal notranslate"><span class="pre">_onFirstWindowLoaded</span></code> (which should be converted to use a category manager call instead), which fires after the first browser window’s <code class="docutils literal notranslate"><span class="pre">browser-window-delayed-startup</span></code> call (see above).</p></li>
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">BrowserGlue</span></code>’s <code class="docutils literal notranslate"><span class="pre">_scheduleBestEffortUserIdleTasks</span></code> as mentioned above. Note that in this case, your code <strong>may not run at all</strong> if the browser is shut down quickly.</p></li>
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">BrowserGlue</span></code>’s <code class="docutils literal notranslate"><span class="pre">_onWindowsRestored</span></code>, and/or the observer service’s <code class="docutils literal notranslate"><span class="pre">sessionstore-windows-restored</span></code> topic, and/or a category manager call that should replace the <code class="docutils literal notranslate"><span class="pre">BrowserGlue</span></code> list of direct calls. This fires after session restore has completed restoring all windows (but before all pages that may have been restored have necessarily loaded). Note that this is guaranteed to fire even if automatic session restore is not enabled.</p></li>
+          </ul>
+         </section>
+         <section id="how-do-first-run-first-startup-experiments-work">
+          <h2>How do first run/first startup experiments work?<a class="headerlink" href="#how-do-first-run-first-startup-experiments-work" title="Link to this heading">?</a></h2>
+          <p>Why does synchronously reading Nimbus feature values work for customizing display features like <code class="docutils literal notranslate"><span class="pre">about:welcome</span></code> onboarding and the default browser prompt? The key invariant is that the display decisions wait for <code class="docutils literal notranslate"><span class="pre">sessionstore-windows-restored</span></code> to show customizable UI, and therefore we just need Nimbus available to read at that point. This is arranged either via the <code class="docutils literal notranslate"><span class="pre">--first-startup</span></code> flag; or, for subsequent startups, the relevant Nimbus features being marked <code class="docutils literal notranslate"><span class="pre">isEarlyStartup:</span> <span class="pre">true</span></code>. When <code class="docutils literal notranslate"><span class="pre">isEarlyStartup:</span> <span class="pre">true</span></code>, Nimbus caches all its feature variables as Gecko preferences, ready to be read during early startup. (See <a class="reference external" href="https://experimenter.info/faq/early-startup/what-do-it-do">the early startup docs</a>.)</p>
+          <p>Customizable display features like <code class="docutils literal notranslate"><span class="pre">about:welcome</span></code> or the default browser prompt are used in <a class="reference external" href="https://searchfox.org/mozilla-central/rev/a965e3c683ecc035dee1de72bd33a8d91b1203ed/browser/components/BrowserGlue.sys.mjs#4685"><code class="docutils literal notranslate"><span class="pre">_maybeShowDefaultBrowserPrompt()</span></code></a>, which is invoked as part of a startup idle task. Startup idle tasks are <a class="reference external" href="https://searchfox.org/mozilla-central/rev/a965e3c683ecc035dee1de72bd33a8d91b1203ed/browser/components/BrowserGlue.sys.mjs#2423">scheduled in response to <code class="docutils literal notranslate"><span class="pre">sessionstore-windows-restored</span></code></a>.</p>
+          <p>Now, why is <code class="docutils literal notranslate"><span class="pre">sessionstore-windows-restored</span></code> late enough for a first startup experiment? The answer is subtle.</p>
+          <p>During Firefox launch, <a class="reference external" href="https://searchfox.org/mozilla-central/rev/a965e3c683ecc035dee1de72bd33a8d91b1203ed/toolkit/xre/nsAppRunner.cpp#5764-5765"><code class="docutils literal notranslate"><span class="pre">final-ui-startup</span></code> is notified</a>, and in response <code class="docutils literal notranslate"><span class="pre">SessionStore</span></code> is initialized. Additionally, Nimbus/Normandy initialization is <a class="reference external" href="https://searchfox.org/mozilla-central/rev/a965e3c683ecc035dee1de72bd33a8d91b1203ed/browser/components/BrowserGlue.sys.mjs#1487">started but not awaited</a>.</p>
+          <p>Then the <a class="reference external" href="https://searchfox.org/mozilla-central/rev/a965e3c683ecc035dee1de72bd33a8d91b1203ed/toolkit/xre/nsAppRunner.cpp#5775-5778">command line is handled</a>. When <code class="docutils literal notranslate"><span class="pre">--first-startup</span></code> is passed, we <a class="reference external" href="https://searchfox.org/mozilla-central/rev/a965e3c683ecc035dee1de72bd33a8d91b1203ed/browser/components/BrowserContentHandler.sys.mjs#677">spin the event loop to allow Nimbus/Normandy time to complete its initialization and first fetch</a> before continuing to process the command line. See <a class="reference external" href="https://firefox-source-docs.mozilla.org/toolkit/modules/toolkit_modules/FirstStartup.html">the <code class="docutils literal notranslate"><span class="pre">FirstStartup</span></code> module</a>. (Important caveat: <code class="docutils literal notranslate"><span class="pre">--first-startup</span></code> is only used on Windows; see <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1872934">Bug 1872934</a>, for example.)</p>
+          <p>This races with <code class="docutils literal notranslate"><span class="pre">SessionStore</span></code>, which itself waits for the first browser window to be shown – in particular, the <code class="docutils literal notranslate"><span class="pre">sessionstore-windows-restored</span></code> notification waits for the <a class="reference external" href="https://searchfox.org/mozilla-central/rev/a965e3c683ecc035dee1de72bd33a8d91b1203ed/browser/components/sessionstore/SessionStore.sys.mjs#2147-2159">first browser window’s <code class="docutils literal notranslate"><span class="pre">browser-delayed-startup-finished</span></code> notification</a>.</p>
+          <p>This first <code class="docutils literal notranslate"><span class="pre">browser-delayed-startup-finished</span></code> notification <strong>is not guaranteed</strong> to be after <code class="docutils literal notranslate"><span class="pre">--first-startup</span></code> has spun the event loop! But, when launched with only <code class="docutils literal notranslate"><span class="pre">--first-startup</span></code> and flags considered very early in <code class="docutils literal notranslate"><span class="pre">nsAppRunner.cpp</span></code> – as <a class="reference external" href="https://searchfox.org/mozilla-central/rev/a965e3c683ecc035dee1de72bd33a8d91b1203ed/browser/installer/windows/nsis/stub.nsi#1424-1456">the stub installer does</a> – then the first window <strong>is guaranteed</strong> to be after the event loop has been spun, and therefore <code class="docutils literal notranslate"><span class="pre">sessionstore-windows-restored</span></code> is after as well. (As a counter-example: try <code class="docutils literal notranslate"><span class="pre">firefox.exe</span> <span class="pre">--browser</span> <span class="pre">--first-startup</span></code> and witness the <a class="reference external" href="https://searchfox.org/mozilla-central/rev/a965e3c683ecc035dee1de72bd33a8d91b1203ed/browser/components/BrowserContentHandler.sys.mjs#505-508"><code class="docutils literal notranslate"><span class="pre">--browser</span></code> flag</a> creating a window before spinning the event loop, inadvertently racing against <code class="docutils literal notranslate"><span class="pre">sessionstore-windows-restored</span></code>.) Making this deterministic is tracked by <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1944431">Bug 1944431</a>.</p>
+          <p>Together, this means that first-startup experiments will be loaded in time to impact display features such as <code class="docutils literal notranslate"><span class="pre">about:welcome</span></code> and the default browser prompt, and we should not have a “split brain” scenario in which the Nimbus feature is intermittently unavailable to the relevant display features.</p>
+         </section>
+        </section>
+       </div>
+      </div>
+      <footer>
+       <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="CommandLineParameters.html" class="btn btn-neutral float-left" title="Command Line Parameters" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a> <a href="CategoryManagerIndirection.html" class="btn btn-neutral float-right" title="Category manager indirection (callModulesFromCategory)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+       </div>
+       <hr>
+       <div role="contentinfo">
+        <p></p>
+       </div> Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+      </footer>
+     </div>
+    </div>
+   </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ </body>
+</html>

@@ -1,0 +1,452 @@
+<!doctype html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Avoiding intermittent tests — Firefox Source Docs  documentation</title>
+  <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50">
+  <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094">
+  <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=fd3f3429">
+  <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b">
+  <link rel="stylesheet" type="text/css" href="../../_static/custom_theme.css?v=dc5ed815">
+  <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7">
+  <link rel="shortcut icon" href="../../_static/firefox.ico"><!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script src="../../_static/jquery.js?v=5d32c60e"></script>
+  <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+  <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+  <script src="../../_static/doctools.js?v=9a2dae69"></script>
+  <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+  <script src="../../_static/copybutton.js?v=30646c52"></script>
+  <script src="../../_static/design-tabs.js?v=36754332"></script>
+  <script src="../../_static/js/theme.js"></script>
+  <link rel="index" title="Index" href="../../genindex.html">
+  <link rel="search" title="Search" href="../../search.html">
+  <link rel="next" title="Testing Policy" href="../testing-policy/index.html">
+  <link rel="prev" title="Turning on Firefox tests for a new configuration" href="../tests-for-new-config/index.html">
+ </head>
+ <body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+   <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <div class="wy-side-scroll">
+     <div class="wy-side-nav-search">
+      <a href="../../index.html" class="icon icon-home"> Firefox Source Docs <img src="../../_static/firefox-wordmark.svg" class="logo" alt="Logo"> </a><!-- -- This code is governed by the BSD license ---->
+      <div>
+       <h3>Quick search</h3>
+       <script>
+    (function () {
+      var cx = "dd12886298f75dbef";
+      var gcse = document.createElement("script");
+      gcse.async = true;
+      gcse.src = "https://cse.google.com/cse.js?cx=" + cx;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(gcse, s);
+    })();
+  </script><gcse:search></gcse:search>
+      </div>
+     </div>
+     <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+      <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../glossary/index.html">A Glossary of Common Terms</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../overview/index.html">A Quick Guide to Mozilla Applications</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../setup/index.html">Getting Set Up To Work On The Firefox Codebase</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Working On Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Working on Firefox</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../bug-mgmt/index.html">Bug Handling</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox User Guide</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../devtools-user/index.html">Firefox DevTools User Docs</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Source Code Documentation</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mots/index.html">Governance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../browser/index.html">Firefox Front-end</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../dom/index.html">DOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../editor/index.html">Editor</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../layout/index.html">Style system (CSS) &amp; Layout</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../gfx/index.html">Graphics</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../ipc/index.html">Processes, Threads and IPC</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../devtools/index.html">Firefox DevTools Contributor Docs</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../toolkit/index.html">Toolkit</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../js/index.html">SpiderMonkey</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../jsloader/index.html">JS Loader</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/geckoview/index.html">GeckoView</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/fenix/index.html">Fenix</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/focus-android/index.html">Focus for Android</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../dom/bindings/webidl/index.html">WebIDL</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../modules/libpref/index.html">libpref</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../networking/index.html">Networking</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../remote/index.html">Remote Protocols</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../services/index.html">Services</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../permissions/index.html">Permissions</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../uriloader/index.html">File Handling</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../widget/cocoa/index.html">Firefox on macOS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../widget/windows/index.html">Firefox on Windows</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../toolkit/components/ml/index.html">Firefox AI Runtime</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../accessible/index.html">Accessibility</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../media/index.html">Media Playback</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../code-quality/index.html">Code quality</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../writing-rust-code/index.html">Writing Rust Code</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../rust-components/index.html">Rust Components</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/profiler/index.html">Gecko Profiler</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../performance/index.html">Performance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../storage/index.html">Database bindings (SQLite, KV, …)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../xpcom/index.html">XPCOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../nspr/index.html">NSPR</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../security/nss/index.html">Network Security Services (NSS)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../content-security/index.html">Web Security Checks in Gecko</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">The Firefox Build System</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mach/index.html">Mach</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/try/index.html">Pushing to Try</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../build/buildsystem/index.html">Build System</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../taskcluster/index.html">Firefox CI and Taskgraph</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/moztreedocs/index.html">Managing Documentation</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mozbuild/vendor/index.html">Vendoring Third Party Components</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Testing &amp; Test Infrastructure</span></p>
+      <ul class="current">
+       <li class="toctree-l1"><a class="reference internal" href="../automated-testing/index.html">Automated Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../treeherder-try/index.html">Understanding Treeherder Results</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../sheriffed-intermittents/index.html">Sheriffed intermittent failures</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tests-for-new-config/index.html">Turning on Firefox tests for a new configuration</a></li>
+       <li class="toctree-l1 current"><a class="current reference internal" href="#">Avoiding intermittent tests</a>
+        <ul>
+         <li class="toctree-l2"><a class="reference internal" href="#accessing-dom-elements-too-soon">Accessing DOM elements too soon</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="#using-script-functions-before-they-re-defined">Using script functions before they’re defined</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="#relying-on-the-order-of-asynchronous-operations">Relying on the order of asynchronous operations</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="#using-magical-timeouts-to-cause-delays">Using magical timeouts to cause delays</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="#using-objects-without-accounting-for-the-possibility-of-their-death">Using objects without accounting for the possibility of their death</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="#tests-which-require-focus">Tests which require focus</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="#tests-which-take-too-long">Tests which take too long</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="#tests-that-do-not-clean-up-properly">Tests that do not clean up properly</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="#not-waiting-on-the-specific-event-that-you-need">Not waiting on the specific event that you need</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="#tests-that-rely-on-external-sites">Tests that rely on external sites</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="#tests-that-rely-on-math-random-to-create-unique-values">Tests that rely on Math.random() to create unique values</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="#tests-that-depend-on-the-current-time">Tests that depend on the current time</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="#tests-that-depend-on-time-differences-or-comparison">Tests that depend on time differences or comparison</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="#tests-that-destroy-the-original-tab">Tests that destroy the original tab</a></li>
+        </ul></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing-policy/index.html">Testing Policy</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../ci-configs/index.html">Configuration Changes</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../browser-chrome/index.html">Browser chrome mochitests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../chrome-tests/index.html">Chrome Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../marionette/index.html">Marionette</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../geckodriver/index.html">geckodriver</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../test-verification/index.html">Test Verification</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../webrender/index.html">WebRender Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mochitest-plain/index.html">Mochitest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../xpcshell/index.html">XPCShell tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tps/index.html">TPS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../web-platform/index.html">web-platform-tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../gtest/index.html">GTest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/fuzzing/index.html">Fuzzing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/sanitizer/index.html">Sanitizer</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../perfdocs/index.html">Performance Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/code-coverage/index.html">Code coverage</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing-rust-code/index.html">Testing &amp; Debugging Rust Code</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Releases &amp; Updates</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html">Mozilla Update Infrastructure</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html#watershed-updates">Watershed Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html#desupport-updates">Desupport Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/update-verify/index.html">Update Verify</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Localization &amp; Internationalization</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../intl/index.html">Internationalization</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../l10n/index.html">Localization</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox and Python</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mozbase/index.html">mozbase</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../python/index.html">Using third-party Python packages</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Metrics Collected in Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../metrics/index.html">Metrics</a></li>
+      </ul>
+     </div>
+    </div>
+   </nav>
+   <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+    <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+     <i data-toggle="wy-nav-top" class="fa fa-bars"></i> <a href="../../index.html">Firefox Source Docs</a>
+    </nav>
+    <div class="wy-nav-content">
+     <div class="rst-content">
+      <!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+      <div role="navigation" aria-label="Page navigation">
+       <ul class="wy-breadcrumbs">
+        <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+        <li class="breadcrumb-item active">Avoiding intermittent tests</li>
+        <li class="wy-breadcrumbs-aside"><a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Developer+Infrastructure&amp;component=Firefox+Source+Docs%3A+Content&amp;short_desc=Documentation+issue+on+testing/intermittent/index&amp;comment=URL+=+https://firefox-source-docs.mozilla.org/testing/intermittent/index.html&amp;bug_file_loc=https://firefox-source-docs.mozilla.org/testing/intermittent/index.html" rel="nofollow">Report an issue</a> / <a href="../../_sources/testing/intermittent/index.rst.txt" rel="nofollow"> View page source</a></li>
+       </ul>
+       <hr>
+      </div>
+      <div role="main" class="document" itemscope itemtype="http://schema.org/Article">
+       <div itemprop="articleBody">
+        <section id="avoiding-intermittent-tests">
+         <h1>Avoiding intermittent tests<a class="headerlink" href="#avoiding-intermittent-tests" title="Link to this heading">?</a></h1>
+         <p>Intermittent oranges are test failures which happen intermittently, in a seemingly random way. Many of such failures could be avoided by good test writing principles. This page tries to explain some of those principles for use by people who contribute tests, and also those who review them for inclusion into mozilla-central.</p>
+         <p>They are also called flaky tests in other projects.</p>
+         <p>A list of patterns which have been known to cause intermittent failures comes next, with a description of why each one causes test failures, and how to avoid it.</p>
+         <p>After writing a successful test case, make sure to run it locally, preferably in a debug build. Maybe tests depend on the state of another test or some future test or browser operation to clean up what is left over. This is a common problem in browser-chrome, here are things to try:</p>
+         <ul class="simple">
+          <li>
+           <p>debug mode, run test standalone <cite>./mach &lt;test&gt; &lt;path&gt;/&lt;to&gt;/&lt;test&gt;/test.html|js</cite></p></li>
+          <li>
+           <p>debug mode, run test standalone directory <cite>./mach &lt;test&gt; &lt;path&gt;/&lt;to&gt;/&lt;test&gt;</cite></p></li>
+          <li>
+           <p>debug mode, run test standalone larger directory <cite>./mach &lt;test&gt; &lt;path&gt;/&lt;to&gt;</cite></p></li>
+         </ul>
+         <section id="accessing-dom-elements-too-soon">
+          <h2>Accessing DOM elements too soon<a class="headerlink" href="#accessing-dom-elements-too-soon" title="Link to this heading">?</a></h2>
+          <p><code class="docutils literal notranslate"><span class="pre">data:</span></code> URLs load asynchronously. You should wait for the load event of an <a class="reference external" href="https://developer.mozilla.org/docs/Web/HTML/Element/iframe">&lt;iframe&gt;</a> that is loading a <code class="docutils literal notranslate"><span class="pre">data:</span></code> URL before trying to access the DOM of the subdocument.</p>
+          <p>For example, the following code pattern is bad:</p>
+          <div class="highlight-html notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">id</span><span class="o">=</span><span class="s">"x"</span> <span class="na">src</span><span class="o">=</span><span class="s">"data:text/html,&lt;div id='y'&gt;"</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="w">      </span><span class="kd">var</span><span class="w"> </span><span class="nx">elem</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">"x"</span><span class="p">).</span>
+<span class="w">                          </span><span class="nx">contentDocument</span><span class="p">.</span>
+<span class="w">                          </span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">"y"</span><span class="p">);</span><span class="w"> </span><span class="c1">// might fail</span>
+<span class="w">      </span><span class="c1">// ...</span>
+<span class="w">    </span><span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+  <span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+</pre>
+           </div>
+          </div>
+          <p>Instead, write the code like this:</p>
+          <div class="highlight-html notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="w">        </span><span class="kd">function</span><span class="w"> </span><span class="nx">onLoad</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">          </span><span class="kd">var</span><span class="w"> </span><span class="nx">elem</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">contentDocument</span><span class="p">.</span>
+<span class="w">                          </span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">"y"</span><span class="p">);</span>
+<span class="w">          </span><span class="c1">// ...</span>
+<span class="w">        </span><span class="p">};</span>
+<span class="w">    </span><span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+   <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">src</span><span class="o">=</span><span class="s">"data:text/html,&lt;div id='y'&gt;"</span>
+           <span class="na">onload</span><span class="o">=</span><span class="s">"onLoad()"</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
+  <span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+</pre>
+           </div>
+          </div>
+         </section>
+         <section id="using-script-functions-before-they-re-defined">
+          <h2>Using script functions before they’re defined<a class="headerlink" href="#using-script-functions-before-they-re-defined" title="Link to this heading">?</a></h2>
+          <p>This may be relevant to event handlers, more than anything else. Let’s say that you have an <cite>&lt;iframe&gt;</cite> and you want to do something after it’s been loaded, so you might write code like this:</p>
+          <div class="highlight-html notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">src</span><span class="o">=</span><span class="s">"..."</span> <span class="na">onload</span><span class="o">=</span><span class="s">"onLoad()"</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="w">  </span><span class="kd">function</span><span class="w"> </span><span class="nx">onLoad</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="c1">// oops, too late!</span>
+<span class="w">    </span><span class="c1">// ...</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+</pre>
+           </div>
+          </div>
+          <p>This is bad, because the <cite>&lt;iframe&gt;</cite>’s load may be completed before the script gets parsed, and therefore before the <code class="docutils literal notranslate"><span class="pre">onLoad</span></code> function comes into existence. This will cause you to miss the <cite>&lt;iframe&gt;</cite> load, which may cause your test to time out, for example. The best way to fix this is to move the function definition before where it’s used in the DOM, like this:</p>
+          <div class="highlight-html notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="w">  </span><span class="kd">function</span><span class="w"> </span><span class="nx">onLoad</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// ...</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">src</span><span class="o">=</span><span class="s">"..."</span> <span class="na">onload</span><span class="o">=</span><span class="s">"onLoad()"</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
+</pre>
+           </div>
+          </div>
+         </section>
+         <section id="relying-on-the-order-of-asynchronous-operations">
+          <h2>Relying on the order of asynchronous operations<a class="headerlink" href="#relying-on-the-order-of-asynchronous-operations" title="Link to this heading">?</a></h2>
+          <p>In general, when you have two asynchronous operations, you cannot assume any order between them. For example, let’s say you have two <cite>&lt;iframe&gt;</cite>’s like this:</p>
+          <div class="highlight-html notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="w">  </span><span class="kd">var</span><span class="w"> </span><span class="nx">f1Doc</span><span class="p">;</span>
+<span class="w">  </span><span class="kd">function</span><span class="w"> </span><span class="nx">f1Loaded</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">f1Doc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">"f1"</span><span class="p">).</span><span class="nx">contentDocument</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="kd">function</span><span class="w"> </span><span class="nx">f2Loaded</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="nx">elem</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">f1Doc</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">"foo"</span><span class="p">);</span><span class="w"> </span><span class="c1">// oops, f1Doc might not be set yet!</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">id</span><span class="o">=</span><span class="s">"f1"</span> <span class="na">src</span><span class="o">=</span><span class="s">"..."</span> <span class="na">onload</span><span class="o">=</span><span class="s">"f1Loaded()"</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">id</span><span class="o">=</span><span class="s">"f2"</span> <span class="na">src</span><span class="o">=</span><span class="s">"..."</span> <span class="na">onload</span><span class="o">=</span><span class="s">"f2Loaded()"</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
+</pre>
+           </div>
+          </div>
+          <p>This code is implicitly assuming that <code class="docutils literal notranslate"><span class="pre">f1</span></code> will be loaded before <code class="docutils literal notranslate"><span class="pre">f2</span></code>, but this assumption is incorrect. A simple fix is to just detect when all of the asynchronous operations have been finished, and then do what you need to do, like this:</p>
+          <div class="highlight-html notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="w">  </span><span class="kd">var</span><span class="w"> </span><span class="nx">f1Doc</span><span class="p">,</span><span class="w"> </span><span class="nx">loadCounter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0</span><span class="p">;</span>
+<span class="w">  </span><span class="kd">function</span><span class="w"> </span><span class="nx">process</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="nx">elem</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">f1Doc</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">"foo"</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="kd">function</span><span class="w"> </span><span class="nx">f1Loaded</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">f1Doc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">"f1"</span><span class="p">).</span><span class="nx">contentDocument</span><span class="p">;</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">++</span><span class="nx">loadCounter</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mf">2</span><span class="p">)</span><span class="w"> </span><span class="nx">process</span><span class="p">();</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="kd">function</span><span class="w"> </span><span class="nx">f2Loaded</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">++</span><span class="nx">loadCounter</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mf">2</span><span class="p">)</span><span class="w"> </span><span class="nx">process</span><span class="p">();</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">id</span><span class="o">=</span><span class="s">"f1"</span> <span class="na">src</span><span class="o">=</span><span class="s">"..."</span> <span class="na">onload</span><span class="o">=</span><span class="s">"f1Loaded()"</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">id</span><span class="o">=</span><span class="s">"f2"</span> <span class="na">src</span><span class="o">=</span><span class="s">"..."</span> <span class="na">onload</span><span class="o">=</span><span class="s">"f2Loaded()"</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
+</pre>
+           </div>
+          </div>
+         </section>
+         <section id="using-magical-timeouts-to-cause-delays">
+          <h2>Using magical timeouts to cause delays<a class="headerlink" href="#using-magical-timeouts-to-cause-delays" title="Link to this heading">?</a></h2>
+          <p>Sometimes when there is an asynchronous operation going on, it may be tempting to use a timeout to wait a while, hoping that the operation has been finished by then and that it’s then safe to continue. Such code uses patterns like this:</p>
+          <div class="highlight-js notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="nx">setTimeout</span><span class="p">(</span><span class="nx">handler</span><span class="p">,</span><span class="w"> </span><span class="mf">500</span><span class="p">);</span>
+</pre>
+           </div>
+          </div>
+          <p>This should raise an alarm in your head. As soon as you see such code, you should ask yourself: “Why 500, and not 100? Why not 1000? Why not 328, for that matter?” You can never answer this question, so you should always avoid code like this!</p>
+          <p>What’s wrong with this code is that you’re assuming that 500ms is enough for whatever operation you’re waiting for. This may stop being true depending on the platform, whether it’s a debug or optimized build of Firefox running this code, machine load, whether the test is run on a VM, etc. And it will start failing, sooner or later.</p>
+          <p>Instead of code like this, you should wait for the operation to be completed explicitly. Most of the time this can be done by listening for an event. Some of the time there is no good event to listen for, in which case you can add one to the code responsible for the completion of the task at hand.</p>
+          <p>Ideally magical timeouts are never necessary, but there are a couple cases, in particular when writing web-platform-tests, where you might need them. In such cases consider documenting why a timer was used so it can be removed if in the future it turns out to be no longer needed.</p>
+         </section>
+         <section id="using-objects-without-accounting-for-the-possibility-of-their-death">
+          <h2>Using objects without accounting for the possibility of their death<a class="headerlink" href="#using-objects-without-accounting-for-the-possibility-of-their-death" title="Link to this heading">?</a></h2>
+          <p>This is a very common pattern in our test suite, which was recently discovered to be responsible for many intermittent failures:</p>
+          <div class="highlight-js notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="kd">function</span><span class="w"> </span><span class="nx">runLater</span><span class="p">(</span><span class="nx">func</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">var</span><span class="w"> </span><span class="nx">timer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">Cc</span><span class="p">[</span><span class="s2">"@mozilla.org/timer;1"</span><span class="p">].</span><span class="nx">createInstance</span><span class="p">(</span><span class="nx">Ci</span><span class="p">.</span><span class="nx">nsITimer</span><span class="p">);</span>
+<span class="w">  </span><span class="nx">timer</span><span class="p">.</span><span class="nx">initWithCallback</span><span class="p">(</span><span class="nx">func</span><span class="p">,</span><span class="w"> </span><span class="mf">0</span><span class="p">,</span><span class="w"> </span><span class="nx">Ci</span><span class="p">.</span><span class="nx">nsITimer</span><span class="p">.</span><span class="nx">TYPE_ONE_SHOT</span><span class="p">);</span>
+<span class="p">}</span>
+</pre>
+           </div>
+          </div>
+          <p>The problem with this code is that it assumes that the <code class="docutils literal notranslate"><span class="pre">timer</span></code> object will live long enough for the timer to fire. That may not be the case if a garbage collection is performed before the timer needs to fire. If that happens, the <code class="docutils literal notranslate"><span class="pre">timer</span></code> object will get garbage collected and will go away before the timer has had a chance to fire. A simple way to fix this is to make the <code class="docutils literal notranslate"><span class="pre">timer</span></code> object global, so that an outstanding reference to the object would still exist by the time that the garbage collection code attempts to collect it.</p>
+          <div class="highlight-js notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="kd">var</span><span class="w"> </span><span class="nx">timer</span><span class="p">;</span>
+<span class="kd">function</span><span class="w"> </span><span class="nx">runLater</span><span class="p">(</span><span class="nx">func</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">timer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">Cc</span><span class="p">[</span><span class="s2">"@mozilla.org/timer;1"</span><span class="p">].</span><span class="nx">createInstance</span><span class="p">(</span><span class="nx">Ci</span><span class="p">.</span><span class="nx">nsITimer</span><span class="p">);</span>
+<span class="w">  </span><span class="nx">timer</span><span class="p">.</span><span class="nx">initWithCallback</span><span class="p">(</span><span class="nx">func</span><span class="p">,</span><span class="w"> </span><span class="mf">0</span><span class="p">,</span><span class="w"> </span><span class="nx">Ci</span><span class="p">.</span><span class="nx">nsITimer</span><span class="p">.</span><span class="nx">TYPE_ONE_SHOT</span><span class="p">);</span>
+<span class="p">}</span>
+</pre>
+           </div>
+          </div>
+          <p>A similar problem may happen with <code class="docutils literal notranslate"><span class="pre">nsIWebProgressListener</span></code> objects passed to the <code class="docutils literal notranslate"><span class="pre">nsIWebProgress.addProgressListener()</span></code> method, because the web progress object stores a weak reference to the <code class="docutils literal notranslate"><span class="pre">nsIWebProgressListener</span></code> object, which does not prevent it from being garbage collected.</p>
+         </section>
+         <section id="tests-which-require-focus">
+          <h2>Tests which require focus<a class="headerlink" href="#tests-which-require-focus" title="Link to this heading">?</a></h2>
+          <p>Some tests require the application window to be focused in order to function properly.</p>
+          <p>For example if you’re writing a crashtest or reftest which tests an element which is focused, you need to specify it in the manifest file, like this:</p>
+          <div class="highlight-default notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="n">needs</span><span class="o">-</span><span class="n">focus</span> <span class="n">load</span> <span class="n">my</span><span class="o">-</span><span class="n">crashtest</span><span class="o">.</span><span class="n">html</span>
+<span class="n">needs</span><span class="o">-</span><span class="n">focus</span> <span class="o">==</span> <span class="n">my</span><span class="o">-</span><span class="n">reftest</span><span class="o">.</span><span class="n">html</span> <span class="n">my</span><span class="o">-</span><span class="n">reftest</span><span class="o">-</span><span class="n">ref</span><span class="o">.</span><span class="n">html</span>
+</pre>
+           </div>
+          </div>
+          <p>Also, if you’re writing a mochitest which synthesizes keyboard events using <code class="docutils literal notranslate"><span class="pre">synthesizeKey()</span></code>, the window needs to be focused, otherwise the test would fail intermittently on Linux. You can ensure that by using <code class="docutils literal notranslate"><span class="pre">SimpleTest.waitForFocus()</span></code> and start what your test does from inside the callback for that function, as below:</p>
+          <div class="highlight-js notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="nx">SimpleTest</span><span class="p">.</span><span class="nx">waitForFocus</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">synthesizeKey</span><span class="p">(</span><span class="s2">"x"</span><span class="p">,</span><span class="w"> </span><span class="p">{});</span>
+<span class="w">  </span><span class="c1">// ...</span>
+<span class="p">});</span>
+</pre>
+           </div>
+          </div>
+          <p>Tests which require mouse interaction, open context menus, etc. may also require focus. Note that waitForFocus implicitly waits for a load event as well, so it’s safe to call it for a window which has not finished loading yet.</p>
+         </section>
+         <section id="tests-which-take-too-long">
+          <h2>Tests which take too long<a class="headerlink" href="#tests-which-take-too-long" title="Link to this heading">?</a></h2>
+          <p>Sometimes what happens in a single unit test is just too much. This will cause the test to time out in random places during its execution if the running machine is under a heavy load, which is a sign that the test needs to have more time to execute. This could potentially happen only in debug builds, as they are slower in general. There are two ways to solve this problem. One of them is to split the test into multiple smaller tests (which might have other advantages as well, including better readability in the test), or to ask the test runner framework to give the test more time to finish correctly. The latter can be done using the <code class="docutils literal notranslate"><span class="pre">requestLongerTimeout</span></code> function.</p>
+         </section>
+         <section id="tests-that-do-not-clean-up-properly">
+          <h2>Tests that do not clean up properly<a class="headerlink" href="#tests-that-do-not-clean-up-properly" title="Link to this heading">?</a></h2>
+          <p>Sometimes, tests register event handlers for various events, but they don’t clean up after themselves correctly. Alternatively, sometimes tests do things which have persistent effects in the browser running the test suite. Examples include opening a new window, adding a bookmark, changing the value of a preference, etc.</p>
+          <p>In these situations, sometimes the problem is caught as soon as the test is checked into the tree. But it’s also possible for the thing which was not cleaned up properly to have an intermittent effect on future (and perhaps seemingly unrelated) tests. These types of intermittent failures may be extremely hard to debug, and not obvious at first because most people only look at the test in which the failure happens instead of previous tests. How the failure would look varies on a case by case basis, but one example is <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=612625">bug 612625</a>.</p>
+         </section>
+         <section id="not-waiting-on-the-specific-event-that-you-need">
+          <h2>Not waiting on the specific event that you need<a class="headerlink" href="#not-waiting-on-the-specific-event-that-you-need" title="Link to this heading">?</a></h2>
+          <p>Sometimes, instead of waiting for event A, tests wait on event B, implicitly hoping that B occurring means that A has occurred too. <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=626168">Bug 626168</a> was an example of this. The test really needed to wait for a paint in the middle of its execution, but instead it would wait for an event loop hit, hoping that by the time that we hit the event loop, a paint has also occurred. While these types of assumptions may hold true when developing the test, they’re not guaranteed to be true every time that the test is run. When writing a test, if you have to wait for an event, you need to take note of why you’re waiting for the event, and what exactly you’re waiting on, and then make sure that you’re really waiting on the correct event.</p>
+         </section>
+         <section id="tests-that-rely-on-external-sites">
+          <h2>Tests that rely on external sites<a class="headerlink" href="#tests-that-rely-on-external-sites" title="Link to this heading">?</a></h2>
+          <p>Even if the external site is not actually down, variable performance of the external site, and external networks can add enough variation to test duration that it can easily cause a test to fail intermittently.</p>
+          <p>External sites should NOT be used for testing.</p>
+         </section>
+         <section id="tests-that-rely-on-math-random-to-create-unique-values">
+          <h2>Tests that rely on Math.random() to create unique values<a class="headerlink" href="#tests-that-rely-on-math-random-to-create-unique-values" title="Link to this heading">?</a></h2>
+          <p>Sometimes you need unique values in your test. Using <code class="docutils literal notranslate"><span class="pre">Math.random()</span></code> to get unique values works most of the time, but this function actually doesn’t guarantee that its return values are unique, so your test might get repeated values from this function, which means that it may fail intermittently. You can use the following pattern instead of calling <code class="docutils literal notranslate"><span class="pre">Math.random()</span></code> if you need values that have to be unique for your test:</p>
+          <div class="highlight-js notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="kd">var</span><span class="w"> </span><span class="nx">gUniqueCounter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0</span><span class="p">;</span>
+<span class="kd">function</span><span class="w"> </span><span class="nx">generateUniqueValues</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s2">"-"</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="o">++</span><span class="nx">gUniqueCounter</span><span class="p">);</span>
+<span class="p">}</span>
+</pre>
+           </div>
+          </div>
+         </section>
+         <section id="tests-that-depend-on-the-current-time">
+          <h2>Tests that depend on the current time<a class="headerlink" href="#tests-that-depend-on-the-current-time" title="Link to this heading">?</a></h2>
+          <p>When writing a test which depends on the current time, extra attention should be paid to different types of behavior depending on when a test runs. For example, how does your test handle the case where the daylight saving (DST) settings change while it’s running? If you’re testing for a time concept relative to now (like today, yesterday, tomorrow, etc) does your test handle the case where these concepts change their meaning at the middle of the test (for example, what if your test starts at 23:59:36 on a given day and finishes at 00:01:13)?</p>
+         </section>
+         <section id="tests-that-depend-on-time-differences-or-comparison">
+          <h2>Tests that depend on time differences or comparison<a class="headerlink" href="#tests-that-depend-on-time-differences-or-comparison" title="Link to this heading">?</a></h2>
+          <p>When doing time differences the operating system timers resolution should be taken into account. For example consecutive calls to <a class="reference external" href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Date">Date()</a> don’t guarantee to get different values. Also when crossing XPCOM different time implementations can give surprising results. For example when comparing a timestamp got through <a class="reference internal" href="../../nspr/reference/pr_now.html#pr-now"><span class="std std-ref">PR_Now</span></a> with one got though a JavaScript date, the last call could result in the past of the first call! These differences are more pronounced on Windows, where the skew can be up to 16ms. Globally, the timers’ resolutions are guesses that are not guaranteed (also due to bogus resolutions on virtual machines), so it’s better to use larger brackets when the comparison is really needed.</p>
+         </section>
+         <section id="tests-that-destroy-the-original-tab">
+          <h2>Tests that destroy the original tab<a class="headerlink" href="#tests-that-destroy-the-original-tab" title="Link to this heading">?</a></h2>
+          <p>Tests that remove the original tab from the browser chrome test window can cause intermittent oranges or can, and of themselves, be intermittent oranges. Obviously, both of these outcomes are undesirable. You should neither write tests that do this, or r+ tests that do this. As a general rule, if you call <code class="docutils literal notranslate"><span class="pre">addTab</span></code> or other tab-opening methods in your test cleanup code, you’re probably doing something you shouldn’t be.</p>
+         </section>
+        </section>
+       </div>
+      </div>
+      <footer>
+       <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../tests-for-new-config/index.html" class="btn btn-neutral float-left" title="Turning on Firefox tests for a new configuration" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a> <a href="../testing-policy/index.html" class="btn btn-neutral float-right" title="Testing Policy" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+       </div>
+       <hr>
+       <div role="contentinfo">
+        <p></p>
+       </div> Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+      </footer>
+     </div>
+    </div>
+   </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ </body>
+</html>

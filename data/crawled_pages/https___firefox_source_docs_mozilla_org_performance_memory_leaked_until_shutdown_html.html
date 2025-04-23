@@ -1,0 +1,340 @@
+<!doctype html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Debugging a “leaked until shutdown” problem using cycle collector logs — Firefox Source Docs  documentation</title>
+  <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50">
+  <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094">
+  <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=fd3f3429">
+  <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b">
+  <link rel="stylesheet" type="text/css" href="../../_static/custom_theme.css?v=dc5ed815">
+  <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7">
+  <link rel="shortcut icon" href="../../_static/firefox.ico"><!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script src="../../_static/jquery.js?v=5d32c60e"></script>
+  <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+  <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+  <script src="../../_static/doctools.js?v=9a2dae69"></script>
+  <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+  <script src="../../_static/copybutton.js?v=30646c52"></script>
+  <script src="../../_static/design-tabs.js?v=36754332"></script>
+  <script src="../../_static/js/theme.js"></script>
+  <link rel="index" title="Index" href="../../genindex.html">
+  <link rel="search" title="Search" href="../../search.html">
+ </head>
+ <body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+   <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <div class="wy-side-scroll">
+     <div class="wy-side-nav-search">
+      <a href="../../index.html" class="icon icon-home"> Firefox Source Docs <img src="../../_static/firefox-wordmark.svg" class="logo" alt="Logo"> </a><!-- -- This code is governed by the BSD license ---->
+      <div>
+       <h3>Quick search</h3>
+       <script>
+    (function () {
+      var cx = "dd12886298f75dbef";
+      var gcse = document.createElement("script");
+      gcse.async = true;
+      gcse.src = "https://cse.google.com/cse.js?cx=" + cx;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(gcse, s);
+    })();
+  </script><gcse:search></gcse:search>
+      </div>
+     </div>
+     <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+      <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../glossary/index.html">A Glossary of Common Terms</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../overview/index.html">A Quick Guide to Mozilla Applications</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../setup/index.html">Getting Set Up To Work On The Firefox Codebase</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Working On Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Working on Firefox</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../bug-mgmt/index.html">Bug Handling</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox User Guide</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../devtools-user/index.html">Firefox DevTools User Docs</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Source Code Documentation</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mots/index.html">Governance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../browser/index.html">Firefox Front-end</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../dom/index.html">DOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../editor/index.html">Editor</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../layout/index.html">Style system (CSS) &amp; Layout</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../gfx/index.html">Graphics</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../ipc/index.html">Processes, Threads and IPC</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../devtools/index.html">Firefox DevTools Contributor Docs</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../toolkit/index.html">Toolkit</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../js/index.html">SpiderMonkey</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../jsloader/index.html">JS Loader</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/geckoview/index.html">GeckoView</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/fenix/index.html">Fenix</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/focus-android/index.html">Focus for Android</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../dom/bindings/webidl/index.html">WebIDL</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../modules/libpref/index.html">libpref</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../networking/index.html">Networking</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../remote/index.html">Remote Protocols</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../services/index.html">Services</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../permissions/index.html">Permissions</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../uriloader/index.html">File Handling</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../widget/cocoa/index.html">Firefox on macOS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../widget/windows/index.html">Firefox on Windows</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../toolkit/components/ml/index.html">Firefox AI Runtime</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../accessible/index.html">Accessibility</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../media/index.html">Media Playback</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../code-quality/index.html">Code quality</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../writing-rust-code/index.html">Writing Rust Code</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../rust-components/index.html">Rust Components</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/profiler/index.html">Gecko Profiler</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../index.html">Performance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../storage/index.html">Database bindings (SQLite, KV, …)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../xpcom/index.html">XPCOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../nspr/index.html">NSPR</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../security/nss/index.html">Network Security Services (NSS)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../content-security/index.html">Web Security Checks in Gecko</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">The Firefox Build System</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mach/index.html">Mach</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/try/index.html">Pushing to Try</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../build/buildsystem/index.html">Build System</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../taskcluster/index.html">Firefox CI and Taskgraph</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/moztreedocs/index.html">Managing Documentation</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mozbuild/vendor/index.html">Vendoring Third Party Components</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Testing &amp; Test Infrastructure</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/automated-testing/index.html">Automated Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/treeherder-try/index.html">Understanding Treeherder Results</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/sheriffed-intermittents/index.html">Sheriffed intermittent failures</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/tests-for-new-config/index.html">Turning on Firefox tests for a new configuration</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/intermittent/index.html">Avoiding intermittent tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/testing-policy/index.html">Testing Policy</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/ci-configs/index.html">Configuration Changes</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/browser-chrome/index.html">Browser chrome mochitests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/chrome-tests/index.html">Chrome Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/marionette/index.html">Marionette</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/geckodriver/index.html">geckodriver</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/test-verification/index.html">Test Verification</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/webrender/index.html">WebRender Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/mochitest-plain/index.html">Mochitest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/xpcshell/index.html">XPCShell tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/tps/index.html">TPS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../web-platform/index.html">web-platform-tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../gtest/index.html">GTest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/fuzzing/index.html">Fuzzing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/sanitizer/index.html">Sanitizer</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/perfdocs/index.html">Performance Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/code-coverage/index.html">Code coverage</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing-rust-code/index.html">Testing &amp; Debugging Rust Code</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Releases &amp; Updates</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html">Mozilla Update Infrastructure</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html#watershed-updates">Watershed Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html#desupport-updates">Desupport Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/update-verify/index.html">Update Verify</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Localization &amp; Internationalization</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../intl/index.html">Internationalization</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../l10n/index.html">Localization</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox and Python</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mozbase/index.html">mozbase</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../python/index.html">Using third-party Python packages</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Metrics Collected in Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../metrics/index.html">Metrics</a></li>
+      </ul>
+     </div>
+    </div>
+   </nav>
+   <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+    <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+     <i data-toggle="wy-nav-top" class="fa fa-bars"></i> <a href="../../index.html">Firefox Source Docs</a>
+    </nav>
+    <div class="wy-nav-content">
+     <div class="rst-content">
+      <!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+      <div role="navigation" aria-label="Page navigation">
+       <ul class="wy-breadcrumbs">
+        <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+        <li class="breadcrumb-item active">Debugging a “leaked until shutdown” problem using cycle collector logs</li>
+        <li class="wy-breadcrumbs-aside"><a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Developer+Infrastructure&amp;component=Firefox+Source+Docs%3A+Content&amp;short_desc=Documentation+issue+on+performance/memory/leaked_until_shutdown&amp;comment=URL+=+https://firefox-source-docs.mozilla.org/performance/memory/leaked_until_shutdown.html&amp;bug_file_loc=https://firefox-source-docs.mozilla.org/performance/memory/leaked_until_shutdown.html" rel="nofollow">Report an issue</a> / <a href="../../_sources/performance/memory/leaked_until_shutdown.md.txt" rel="nofollow"> View page source</a></li>
+       </ul>
+       <hr>
+      </div>
+      <div role="main" class="document" itemscope itemtype="http://schema.org/Article">
+       <div itemprop="articleBody">
+        <section id="debugging-a-leaked-until-shutdown-problem-using-cycle-collector-logs">
+         <h1>Debugging a “leaked until shutdown” problem using cycle collector logs<a class="headerlink" href="#debugging-a-leaked-until-shutdown-problem-using-cycle-collector-logs" title="Link to this heading">?</a></h1>
+         <p>Here’s an example of how to use cycle collector logs to understand what might be causing a “leaked until shutdown” problem.</p>
+         <section id="introduction">
+          <h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">?</a></h2>
+          <p>First off, what do I mean? There are a number of different leak checkers in Firefox. The one we are talking about has errors that look like this:</p>
+          <div class="highlight-none notranslate">
+           <div class="highlight">
+            <pre><span></span>TEST_END: FAIL, expected PASS - leaked 1 window(s) until shutdown [url = chrome://browser/content/browser.xhtml]
+</pre>
+           </div>
+          </div>
+          <p>Different things besides “window” can appear here, like docshell. The important part is the “until shutdown”. What this means is that a window was created during a specific test, but it was not destroyed immediately after we finished the test. However, it was destroyed by the time we shut down the entire browser. This generally means that chrome JS stored a reference to the window in a global variable somewhere, and forgot to clear it before the test went away. In the worst case, this can mean that chrome JS is leaking every web page we open. This kind of leak wouldn’t be detected by our other leak checkers because they run at shutdown, and all chrome JS is cleared away before we shut down.</p>
+         </section>
+         <section id="initial-investigation">
+          <h2>Initial investigation<a class="headerlink" href="#initial-investigation" title="Link to this heading">?</a></h2>
+          <p>Now that you hopefully understand a bit more what this leak means, we can talk about how an investigation should proceed. First, you want to get more information about which test created the leaked window, so you can figure out how to reproduce the leak without running a bunch of tests.</p>
+          <p>The information appears one line before the line I showed above, like this:</p>
+          <div class="highlight-none notranslate">
+           <div class="highlight">
+            <pre><span></span>INFO TEST-INFO | browser/components/sessionstore/test/browser_tab_groups_empty.js | windows(s) leaked: [pid = 6245] [serial = 12], [pid = 6245] [serial = 13]
+TEST_END: FAIL, expected PASS - leaked 1 window(s) until shutdown [url = chrome://browser/content/browser.xhtml]
+</pre>
+           </div>
+          </div>
+          <p>This means the window was created while running the test <code class="docutils literal notranslate"><span class="pre">browser_tab_groups_empty.js</span></code>. The two windows are uniquely identified by the strings <code class="docutils literal notranslate"><span class="pre">[pid</span> <span class="pre">=</span> <span class="pre">6245]</span> <span class="pre">[serial</span> <span class="pre">=</span> <span class="pre">12]</span></code> and <code class="docutils literal notranslate"><span class="pre">[pid</span> <span class="pre">=</span> <span class="pre">6245]</span> <span class="pre">[serial</span> <span class="pre">=</span> <span class="pre">13]</span></code>. You can search in the test log to see the exact moments these windows were created or destroyed, which can be useful.</p>
+          <p>For instance, this is the place where the first window was created:</p>
+          <div class="highlight-none notranslate">
+           <div class="highlight">
+            <pre><span></span>GECKO(6245) [Parent 6245: Main Thread]: I/DocShellAndDOMWindowLeak ++DOMWINDOW == 12 (198390000) [pid = 6245] [serial = 12] [outer = 0]
+</pre>
+           </div>
+          </div>
+          <p>The place where the window was destroyed will look similar, except that it will have <code class="docutils literal notranslate"><span class="pre">--DOMWINDOW</span></code> instead of <code class="docutils literal notranslate"><span class="pre">++DOMWINDOW</span></code>.</p>
+          <p>Before we get into the complexity of analyzing cycle collector logs, this is a good moment to sit back for a few minutes and look over your patch and see if you can figure out where you might have created a strong reference to a window without clearing it when the window is closed. With a small patch, it can be easier to figure it out by reasoning rather than using cycle collector logs.</p>
+         </section>
+         <section id="getting-a-cycle-collector-log">
+          <h2>Getting a cycle collector log<a class="headerlink" href="#getting-a-cycle-collector-log" title="Link to this heading">?</a></h2>
+          <p>If that doesn’t work, we can take a look at creating and analyzing cycle collector logs.</p>
+          <p>The first thing you want to do is figure out whether the leak is in a parent process or a child process, so that we can create less useless logs. In the example above, the logging for the <code class="docutils literal notranslate"><span class="pre">++DOMWINDOW</span></code> says <code class="docutils literal notranslate"><span class="pre">[Parent</span> <span class="pre">6245:</span> <span class="pre">Main</span> <span class="pre">Thread]</span></code> so we can tell it is in the parent process. It could also look like <code class="docutils literal notranslate"><span class="pre">[Child</span> <span class="pre">6246:</span> <span class="pre">Main</span> <span class="pre">Thread]</span></code>, which would mean that it is in a child process.</p>
+          <p>The second thing you want to do is make sure you can reproduce the leak when it is run alone. Sometimes there are weird interactions between tests so we want to check that’s not the case here. While a debug build is not needed to get cycle collector logs, if the error you are trying to fix is only showing up in a debug build, you’ll need to use one, too.</p>
+          <p>For our example test, you’d run something like this to confirm the error:</p>
+          <div class="highlight-none notranslate">
+           <div class="highlight">
+            <pre><span></span>./mach test --headless browser_tab_groups_empty.js
+</pre>
+           </div>
+          </div>
+          <p>With that confirmed, we need to re-run the test with a lot of environment variables set, in order to capture some logs. It’ll look something like this:</p>
+          <div class="highlight-none notranslate">
+           <div class="highlight">
+            <pre><span></span>MOZ_DISABLE_CONTENT_SANDBOX=t MOZ_CC_LOG_DIRECTORY=~/logs/emptylog/ MOZ_CC_LOG_ALL=1 MOZ_CC_LOG_PROCESS=main MOZ_CC_LOG_THREAD=main ./mach test --headless browser_tab_groups_empty.js
+</pre>
+           </div>
+          </div>
+          <p>Breaking this down:</p>
+          <ol class="arabic simple">
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">MOZ_DISABLE_CONTENT_SANDBOX=t</span></code> disables the sandbox so that the content process can save logs to the disk. This isn’t needed if you are only logging the parent process.</p></li>
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">MOZ_CC_LOG_DIRECTORY=~/logs/emptylog/</span></code> sets the directory we are saving the logs to. Adjust it as appropriate. The directory must already exist.</p></li>
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">MOZ_CC_LOG_ALL=1</span></code> logs every cycle collection while the browser is running. We have to do this because we can’t tell in advance which CC will capture the state when the window is leaking. This means we will have many logs.</p></li>
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">MOZ_CC_LOG_PROCESS=main</span></code> only records logs for the main process. This is what you need if you previously determined that the leak was in the parent process. If instead you determined that the leak was in a child process, the right side will be <code class="docutils literal notranslate"><span class="pre">content</span></code> instead of <code class="docutils literal notranslate"><span class="pre">main</span></code>. The purpose of this is to reduce the number of logs you have to sift through, and also to avoid hiding the leak by changing timing (logging can be slow).</p></li>
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">MOZ_CC_LOG_THREAD=main</span></code> only records logs for the main thread, ignoring CCs on worker threads. All of the things that this leak checker cares about are main thread only, so it’ll always be like this. As with the previous one, the goal here is to reduce the number of logs we produce.</p></li>
+          </ol>
+          <p>There are lots of different ways to run the cycle collector, including on try, but we won’t go into them here.</p>
+          <p>Now run the test to get the logs. In addition to the cycle collector logs, you’ll want to keep around a copy of the normal test log.</p>
+         </section>
+         <section id="analyzing-the-log">
+          <h2>Analyzing the log<a class="headerlink" href="#analyzing-the-log" title="Link to this heading">?</a></h2>
+          <p>In the test log for the run where we captured cycle collector logs, we’re going to look up the same information we had in the initial leak log. First, we want information about which windows leaked:</p>
+          <div class="highlight-none notranslate">
+           <div class="highlight">
+            <pre><span></span>INFO TEST-INFO | browser/components/sessionstore/test/browser_tab_groups_empty.js | windows(s) leaked: [pid = 90804] [serial = 12], [pid = 90804] [serial = 13]
+</pre>
+           </div>
+          </div>
+          <p>This tells us that the PID of the process that had leaked windows was 90804.</p>
+          <p>Now look up the information for those leaked windows in the test log:</p>
+          <div class="highlight-none notranslate">
+           <div class="highlight">
+            <pre><span></span>GECKO(90804) [Parent 90804: Main Thread]: I/DocShellAndDOMWindowLeak --DOMWINDOW == 11 (135153800) [pid = 90804] [serial = 12] [outer = 0] [url = chrome://browser/content/browser.xhtml]
+GECKO(90804) [Parent 90804: Main Thread]: I/DocShellAndDOMWindowLeak --DOMWINDOW == 10 (14b22fc00) [pid = 90804] [serial = 13] [outer = 0] [url = about:blank]
+</pre>
+           </div>
+          </div>
+          <p>This tells us that 0x135153800 and 0x14b22fc00 are the addresses of the windows in question. For now, let’s focus on the window <code class="docutils literal notranslate"><span class="pre">0x135153800</span></code>. One is an inner and one is an outer, so if we fix one leak we’ll probably fix them both.</p>
+          <p>Now we go to the directory where the CC logs were saved, and see which logs have the windows we’re interested in, using the information about the PID and addresses we just gathered:</p>
+          <div class="highlight-default notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="o">~/</span><span class="n">logs</span><span class="o">/</span><span class="n">emptylog</span> <span class="o">%</span> <span class="n">grep</span> <span class="n">nsGlobalWindow</span> <span class="n">cc</span><span class="o">-</span><span class="n">edges</span><span class="mf">.90804</span><span class="o">*</span> <span class="o">|</span> <span class="n">grep</span> <span class="mi">135153800</span>
+<span class="n">cc</span><span class="o">-</span><span class="n">edges</span><span class="mf">.90804</span><span class="o">-</span><span class="mf">1.</span><span class="n">log</span><span class="p">:</span><span class="mh">0x135153800</span> <span class="p">[</span><span class="n">rc</span><span class="o">=</span><span class="mi">2</span><span class="p">]</span> <span class="n">nsGlobalWindowOuter</span> <span class="c1"># 30 outer</span>
+<span class="n">cc</span><span class="o">-</span><span class="n">edges</span><span class="mf">.90804</span><span class="o">-</span><span class="mf">2.</span><span class="n">log</span><span class="p">:</span><span class="mh">0x135153800</span> <span class="p">[</span><span class="n">rc</span><span class="o">=</span><span class="mi">2</span><span class="p">]</span> <span class="n">nsGlobalWindowOuter</span> <span class="c1"># 30 outer</span>
+<span class="n">cc</span><span class="o">-</span><span class="n">edges</span><span class="mf">.90804</span><span class="o">-</span><span class="mf">3.</span><span class="n">log</span><span class="p">:</span><span class="mh">0x135153800</span> <span class="p">[</span><span class="n">rc</span><span class="o">=</span><span class="mi">2</span><span class="p">]</span> <span class="n">nsGlobalWindowOuter</span> <span class="c1"># 30 outer</span>
+<span class="n">cc</span><span class="o">-</span><span class="n">edges</span><span class="mf">.90804</span><span class="o">-</span><span class="mf">4.</span><span class="n">log</span><span class="p">:</span><span class="mh">0x135153800</span> <span class="p">[</span><span class="n">rc</span><span class="o">=</span><span class="mi">2</span><span class="p">]</span> <span class="n">nsGlobalWindowOuter</span> <span class="c1"># 30 outer</span>
+<span class="n">cc</span><span class="o">-</span><span class="n">edges</span><span class="mf">.90804</span><span class="o">-</span><span class="mf">5.</span><span class="n">log</span><span class="p">:</span><span class="mh">0x135153800</span> <span class="p">[</span><span class="n">rc</span><span class="o">=</span><span class="mi">2</span><span class="p">]</span> <span class="n">nsGlobalWindowOuter</span> <span class="c1"># 30 outer</span>
+<span class="n">cc</span><span class="o">-</span><span class="n">edges</span><span class="mf">.90804</span><span class="o">-</span><span class="mf">6.</span><span class="n">log</span><span class="p">:</span><span class="mh">0x135153800</span> <span class="p">[</span><span class="n">rc</span><span class="o">=</span><span class="mi">2</span><span class="p">]</span> <span class="n">nsGlobalWindowOuter</span> <span class="c1"># 30 outer</span>
+<span class="n">cc</span><span class="o">-</span><span class="n">edges</span><span class="mf">.90804</span><span class="o">-</span><span class="mf">7.</span><span class="n">log</span><span class="p">:</span><span class="mh">0x135153800</span> <span class="p">[</span><span class="n">rc</span><span class="o">=</span><span class="mi">2</span><span class="p">]</span> <span class="n">nsGlobalWindowOuter</span> <span class="c1"># 30 outer</span>
+</pre>
+           </div>
+          </div>
+          <p>The number in the file name indicates the order these logs were created in. <code class="docutils literal notranslate"><span class="pre">cc-edges.90804-7.log</span></code> is the final log that the windows appeared in, so that is probably the log for the CC where it was freed. We can confirm this by looking for the special <code class="docutils literal notranslate"><span class="pre">[garbage]</span></code> indicator in the log:</p>
+          <div class="highlight-none notranslate">
+           <div class="highlight">
+            <pre><span></span>~/logs/emptylog % grep 0x135153800 cc-edges.90804* | grep garbage
+cc-edges.90804-7.log:0x135153800 [garbage]
+</pre>
+           </div>
+          </div>
+          <p>Because the window was cleaned up in log 7, we want to investigate log 6, because the window was still alive, but probably should have already been cleaned up. (The leak checking framework runs a bunch of CCs before the point where the window should be cleaned up.) To do this, we need the <code class="docutils literal notranslate"><span class="pre">find_roots</span></code> script <a class="reference external" href="https://github.com/amccreight/heapgraph/">from here</a>. You give this script the name of the log and the address of the object:</p>
+          <div class="highlight-default notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="o">~/</span><span class="n">logs</span><span class="o">/</span><span class="n">emptylog</span> <span class="o">%</span> <span class="o">~/</span><span class="n">tools</span><span class="o">/</span><span class="n">heapgraph</span><span class="o">/</span><span class="n">find_roots</span><span class="o">.</span><span class="n">py</span> <span class="n">cc</span><span class="o">-</span><span class="n">edges</span><span class="mf">.90804</span><span class="o">-</span><span class="mf">6.</span><span class="n">log</span> <span class="mh">0x14b22fc00</span>
+<span class="n">Parsing</span> <span class="n">cc</span><span class="o">-</span><span class="n">edges</span><span class="mf">.90804</span><span class="o">-</span><span class="mf">6.</span><span class="n">log</span><span class="o">.</span> <span class="n">Done</span> <span class="n">loading</span> <span class="n">graph</span><span class="o">.</span>
+
+<span class="mh">0x135df8640</span> <span class="p">[</span><span class="n">LoadedScript</span><span class="p">]</span>
+    <span class="o">--</span><span class="p">[</span><span class="n">mModuleRecord</span><span class="p">]</span><span class="o">--&gt;</span> <span class="mh">0x2cf45673da80</span> <span class="p">[</span><span class="n">JS</span> <span class="n">Object</span> <span class="p">(</span><span class="n">Module</span><span class="p">)]</span>
+    <span class="o">--</span><span class="p">[</span><span class="o">**</span><span class="n">UNKNOWN</span> <span class="n">SLOT</span> <span class="mi">1</span><span class="o">**</span><span class="p">]</span><span class="o">--&gt;</span> <span class="mh">0x2cf45673dad8</span> <span class="p">[</span><span class="n">JS</span> <span class="n">Object</span> <span class="p">(</span><span class="n">ModuleEnvironmentObject</span><span class="p">)]</span>
+    <span class="o">--</span><span class="p">[</span><span class="n">SessionStoreTestUtils</span><span class="p">]</span><span class="o">--&gt;</span> <span class="mh">0x39112798e660</span> <span class="p">[</span><span class="n">JS</span> <span class="n">Object</span> <span class="p">(</span><span class="n">Object</span><span class="p">)]</span>
+    <span class="o">--</span><span class="p">[</span><span class="n">windowGlobal</span><span class="p">]</span><span class="o">--&gt;</span> <span class="mh">0x2cf45676e660</span> <span class="p">[</span><span class="n">JS</span> <span class="n">Object</span> <span class="p">(</span><span class="n">Proxy</span><span class="p">)]</span>
+    <span class="o">--</span><span class="p">[</span><span class="n">baseshape_global</span><span class="p">,</span> <span class="n">proxy</span> <span class="n">target</span><span class="p">]</span><span class="o">--&gt;</span> <span class="mh">0x112cd36e8c90</span> <span class="p">[</span><span class="n">JS</span> <span class="n">Object</span> <span class="p">(</span><span class="n">Window</span><span class="p">)]</span>
+    <span class="o">--</span><span class="p">[</span><span class="n">UnwrapDOMObject</span><span class="p">(</span><span class="n">obj</span><span class="p">)]</span><span class="o">--&gt;</span> <span class="mh">0x14b22fc00</span> <span class="p">[</span><span class="n">nsGlobalWindowInner</span> <span class="c1"># 31 inner chrome://browser/content/browser.xhtml]</span>
+
+    <span class="n">Root</span> <span class="mh">0x135df8640</span> <span class="ow">is</span> <span class="n">a</span> <span class="n">ref</span> <span class="n">counted</span> <span class="nb">object</span> <span class="k">with</span> <span class="mi">1</span> <span class="n">unknown</span> <span class="n">edge</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="o">.</span>
+    <span class="n">known</span> <span class="n">edges</span><span class="p">:</span>
+        <span class="mh">0x2cf45676e5f0</span> <span class="p">[</span><span class="n">JS</span> <span class="n">Object</span> <span class="p">(</span><span class="n">ScriptSource</span><span class="p">)]</span>  <span class="o">--</span><span class="p">[]</span><span class="o">--&gt;</span> <span class="mh">0x135df8640</span>
+</pre>
+           </div>
+          </div>
+          <p>What this ASCII art means is that there is a path from a <code class="docutils literal notranslate"><span class="pre">LoadedScript</span></code> object to the window.</p>
+          <p><code class="docutils literal notranslate"><span class="pre">--[mModuleRecord]--&gt;</span></code> is an edge in this path, with the label <code class="docutils literal notranslate"><span class="pre">mModuleRecord</span></code>.</p>
+          <p>In this specific case, the fact that the <code class="docutils literal notranslate"><span class="pre">SessionStoreTestUtils</span></code> object still holds a reference to the window after the test closed seemed suspicious, and the person investigating the leak changed the test to avoid the use of <code class="docutils literal notranslate"><span class="pre">SessionStoreTestUtils</span></code>.</p>
+         </section>
+        </section>
+       </div>
+      </div>
+      <footer>
+       <hr>
+       <div role="contentinfo">
+        <p></p>
+       </div> Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+      </footer>
+     </div>
+    </div>
+   </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ </body>
+</html>

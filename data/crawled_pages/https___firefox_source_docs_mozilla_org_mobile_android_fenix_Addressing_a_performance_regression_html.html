@@ -1,0 +1,346 @@
+<!doctype html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Addressing a performance regression — Firefox Source Docs  documentation</title>
+  <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50">
+  <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094">
+  <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=fd3f3429">
+  <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b">
+  <link rel="stylesheet" type="text/css" href="../../../_static/custom_theme.css?v=dc5ed815">
+  <link rel="stylesheet" type="text/css" href="../../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7">
+  <link rel="shortcut icon" href="../../../_static/firefox.ico"><!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+  <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+  <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+  <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+  <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+  <script src="../../../_static/copybutton.js?v=30646c52"></script>
+  <script src="../../../_static/design-tabs.js?v=36754332"></script>
+  <script src="../../../_static/js/theme.js"></script>
+  <link rel="index" title="Index" href="../../../genindex.html">
+  <link rel="search" title="Search" href="../../../search.html">
+  <link rel="next" title="Architecture Decisions" href="Architecture-Decisions.html">
+  <link rel="prev" title="Acronym Dictionary" href="Acronym-dictionary.html">
+ </head>
+ <body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+   <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <div class="wy-side-scroll">
+     <div class="wy-side-nav-search">
+      <a href="../../../index.html" class="icon icon-home"> Firefox Source Docs <img src="../../../_static/firefox-wordmark.svg" class="logo" alt="Logo"> </a><!-- -- This code is governed by the BSD license ---->
+      <div>
+       <h3>Quick search</h3>
+       <script>
+    (function () {
+      var cx = "dd12886298f75dbef";
+      var gcse = document.createElement("script");
+      gcse.async = true;
+      gcse.src = "https://cse.google.com/cse.js?cx=" + cx;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(gcse, s);
+    })();
+  </script><gcse:search></gcse:search>
+      </div>
+     </div>
+     <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+      <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../glossary/index.html">A Glossary of Common Terms</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../overview/index.html">A Quick Guide to Mozilla Applications</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../setup/index.html">Getting Set Up To Work On The Firefox Codebase</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Working On Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../contributing/index.html">Working on Firefox</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../bug-mgmt/index.html">Bug Handling</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox User Guide</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../devtools-user/index.html">Firefox DevTools User Docs</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Source Code Documentation</span></p>
+      <ul class="current">
+       <li class="toctree-l1"><a class="reference internal" href="../../../mots/index.html">Governance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../browser/index.html">Firefox Front-end</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../dom/index.html">DOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../editor/index.html">Editor</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../layout/index.html">Style system (CSS) &amp; Layout</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../gfx/index.html">Graphics</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../ipc/index.html">Processes, Threads and IPC</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../devtools/index.html">Firefox DevTools Contributor Docs</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../toolkit/index.html">Toolkit</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../js/index.html">SpiderMonkey</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../jsloader/index.html">JS Loader</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../geckoview/index.html">GeckoView</a></li>
+       <li class="toctree-l1 current"><a class="reference internal" href="index.html">Fenix</a>
+        <ul class="current">
+         <li class="toctree-l2"><a class="reference internal" href="Acronym-dictionary.html">Acronym Dictionary</a></li>
+         <li class="toctree-l2 current"><a class="current reference internal" href="#">Addressing a performance regression</a>
+          <ul>
+           <li class="toctree-l3"><a class="reference internal" href="#what-to-do-after-a-performance-regression-is-reported">What to do after a performance regression is reported.</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#install-the-required-dependencies">Install the required dependencies.</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#finding-the-regressing-commit">Finding the regressing commit.</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#using-backfill-py">Using backfill.py</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#extra-tips">Extra tips:</a>
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="#identifying-the-source-of-the-regression">Identifying the source of the regression.</a></li>
+            </ul></li>
+          </ul></li>
+         <li class="toctree-l2"><a class="reference internal" href="Architecture-Decisions.html">Architecture Decisions</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="architecture-overview.html">Architecture Overview</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Crash-Monitoring.html">Crash Monitoring</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Creating-a-release-branch.html">Creating a release branch</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Data-Practices.html">Data practises</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Development-Test-Plan.html">Development Test Plan</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Fennec-Migration.html">Fennec Legacy: Migration</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Firebase-Cloud-Messaging-for-WebPush.html">Firebase Cloud Messaging for WebPush</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Firefox-for-Android-Team-Processes.html">Firefox for Android Team Processes</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Home.html">Home</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Implementing-Telemetry.html">Implementing Telemetry</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Implementing-a-Nimbus-Experiment.html">Implementing a Nimbus Experiment</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="List-of-fenix-threads.html">List of Fenix Threads</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Logging-Crash-Information.html">Logging Crash Information</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Metric-Feature-Tags.html">Metric Feature Tags</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Secret-settings-debug-menu-instructions.html">Debug settings menu instructions</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Telemetry-implementation%2C-reviews%2C-renewals.html">Telemetry - Implementation, Reviews, Renewals</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Telemetry-implementation%2C-reviews%2C-renewals.html#creating-glean-annotations">Creating Glean Annotations</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Telemetry-implementation%2C-reviews%2C-renewals.html#data-review">Data review</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Telemetry-implementation%2C-reviews%2C-renewals.html#renewing-existing-telemetry">Renewing existing telemetry</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Test-telemetry-pings.html">Test Telemetry Pings</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Working-with-Strings.html">Working with Strings</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="adjust.html">Adjust</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="certificates.html">Certificates</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="crash-reporting.html">Crash Reporting</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="experiments.html">Experiments</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="manual-testing.html">Manual Testing</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="metrics.html">Metrics Definitions</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="release-checklist.html">Release Checklist</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="substituting-local-gv.html">Substituting Local GeckoView</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="syncIntegrationTests.html">Sync Integration Tests</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="telemetry.html">Telemetry</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="UI-Tests.html">UI Tests</a></li>
+        </ul></li>
+       <li class="toctree-l1"><a class="reference internal" href="../focus-android/index.html">Focus for Android</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../dom/bindings/webidl/index.html">WebIDL</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../modules/libpref/index.html">libpref</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../networking/index.html">Networking</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../remote/index.html">Remote Protocols</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../services/index.html">Services</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../permissions/index.html">Permissions</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../uriloader/index.html">File Handling</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../widget/cocoa/index.html">Firefox on macOS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../widget/windows/index.html">Firefox on Windows</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../toolkit/components/ml/index.html">Firefox AI Runtime</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../accessible/index.html">Accessibility</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../media/index.html">Media Playback</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../code-quality/index.html">Code quality</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../writing-rust-code/index.html">Writing Rust Code</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../rust-components/index.html">Rust Components</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../tools/profiler/index.html">Gecko Profiler</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../performance/index.html">Performance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../storage/index.html">Database bindings (SQLite, KV, …)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../xpcom/index.html">XPCOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../nspr/index.html">NSPR</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../security/nss/index.html">Network Security Services (NSS)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../content-security/index.html">Web Security Checks in Gecko</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">The Firefox Build System</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../mach/index.html">Mach</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../tools/try/index.html">Pushing to Try</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../build/buildsystem/index.html">Build System</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../taskcluster/index.html">Firefox CI and Taskgraph</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../tools/moztreedocs/index.html">Managing Documentation</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../mozbuild/vendor/index.html">Vendoring Third Party Components</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Testing &amp; Test Infrastructure</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/automated-testing/index.html">Automated Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/treeherder-try/index.html">Understanding Treeherder Results</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/sheriffed-intermittents/index.html">Sheriffed intermittent failures</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/tests-for-new-config/index.html">Turning on Firefox tests for a new configuration</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/intermittent/index.html">Avoiding intermittent tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/testing-policy/index.html">Testing Policy</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/ci-configs/index.html">Configuration Changes</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/browser-chrome/index.html">Browser chrome mochitests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/chrome-tests/index.html">Chrome Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/marionette/index.html">Marionette</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/geckodriver/index.html">geckodriver</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/test-verification/index.html">Test Verification</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/webrender/index.html">WebRender Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/mochitest-plain/index.html">Mochitest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/xpcshell/index.html">XPCShell tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/tps/index.html">TPS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../web-platform/index.html">web-platform-tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../gtest/index.html">GTest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../tools/fuzzing/index.html">Fuzzing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../tools/sanitizer/index.html">Sanitizer</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/perfdocs/index.html">Performance Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../tools/code-coverage/index.html">Code coverage</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing-rust-code/index.html">Testing &amp; Debugging Rust Code</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Releases &amp; Updates</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../update-infrastructure/index.html">Mozilla Update Infrastructure</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../update-infrastructure/index.html#watershed-updates">Watershed Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../update-infrastructure/index.html#desupport-updates">Desupport Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../tools/update-verify/index.html">Update Verify</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Localization &amp; Internationalization</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../intl/index.html">Internationalization</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../l10n/index.html">Localization</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox and Python</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../mozbase/index.html">mozbase</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../python/index.html">Using third-party Python packages</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Metrics Collected in Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../metrics/index.html">Metrics</a></li>
+      </ul>
+     </div>
+    </div>
+   </nav>
+   <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+    <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+     <i data-toggle="wy-nav-top" class="fa fa-bars"></i> <a href="../../../index.html">Firefox Source Docs</a>
+    </nav>
+    <div class="wy-nav-content">
+     <div class="rst-content">
+      <!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+      <div role="navigation" aria-label="Page navigation">
+       <ul class="wy-breadcrumbs">
+        <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+        <li class="breadcrumb-item"><a href="index.html">Fenix</a></li>
+        <li class="breadcrumb-item active">Addressing a performance regression</li>
+        <li class="wy-breadcrumbs-aside"><a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Developer+Infrastructure&amp;component=Firefox+Source+Docs%3A+Content&amp;short_desc=Documentation+issue+on+mobile/android/fenix/Addressing-a-performance-regression&amp;comment=URL+=+https://firefox-source-docs.mozilla.org/mobile/android/fenix/Addressing-a-performance-regression.html&amp;bug_file_loc=https://firefox-source-docs.mozilla.org/mobile/android/fenix/Addressing-a-performance-regression.html" rel="nofollow">Report an issue</a> / <a href="../../../_sources/mobile/android/fenix/Addressing-a-performance-regression.md.txt" rel="nofollow"> View page source</a></li>
+       </ul>
+       <hr>
+      </div>
+      <div role="main" class="document" itemscope itemtype="http://schema.org/Article">
+       <div itemprop="articleBody">
+        <section id="addressing-a-performance-regression">
+         <h1>Addressing a performance regression<a class="headerlink" href="#addressing-a-performance-regression" title="Link to this heading">?</a></h1>
+         <p>To keep Fenix in a good shape, the performance team weekly runs multiple performance tests to identify regressions. The results are kept and maintained <a class="reference external" href="https://earthangel-b40313e5.influxcloud.net/d/s3AT6t7nk/fenix-startup-nightly-via-backfill-py?orgId=1">here</a>.</p>
+         <p>The main tests are:</p>
+         <ul class="simple">
+          <li>
+           <p>MAIN first frame: Simulates a COLD MAIN (app icon launch) launch to report FullyDrawn, e.g when the user sees the app fully drawn after launching it.</p></li>
+          <li>
+           <p>COLD VIEW Nav start: An app link launch to load a page. It measures until “navigation starts” which is an internal Gecko event that indicates we’re starting to load a page.</p></li>
+         </ul>
+         <section id="what-to-do-after-a-performance-regression-is-reported">
+          <h2>What to do after a performance regression is reported.<a class="headerlink" href="#what-to-do-after-a-performance-regression-is-reported" title="Link to this heading">?</a></h2>
+          <p>Weekly after, the performance team runs the tests, if there is any regression, they will open a ticket, providing the dates between when was the last non-regressing and regressing version (an <a class="reference external" href="https://github.com/mozilla-mobile/fenix/issues/25253">example</a> ticket). <strong>These dates are important</strong> for us to discover which commit introduced the regression. As we would like to identify which commit is the offending one, we need to bitset the commit range from non-regressing to regressing version. Fortunately for us, the performance team has a tool that can help us with that it’s called <a class="reference external" href="https://github.com/mozilla-mobile/perf-tools/blob/main/backfill.py">backfil</a>.</p>
+          <p>The tool can take a commit range start/end, build all the APKs, run the performance tests and provide the same data that it’s plotted <a class="reference external" href="https://earthangel-b40313e5.influxcloud.net/d/s3AT6t7nk/fenix-startup-nightly-via-backfill-py?orgId=1">here</a>. With it we can identify the offending commit.</p>
+         </section>
+         <section id="install-the-required-dependencies">
+          <h2>Install the required dependencies.<a class="headerlink" href="#install-the-required-dependencies" title="Link to this heading">?</a></h2>
+          <ul class="simple">
+           <li>
+            <p>Pull the <a class="reference external" href="https://github.com/mozilla-mobile/perf-tools">perf-tools</a> repository, and on it follow the <a class="reference external" href="https://github.com/mozilla-mobile/perf-tools#configuration">configuration instructions</a>.</p></li>
+           <li>
+            <p>Make you can run <code class="docutils literal notranslate"><span class="pre">adb</span></code> on the terminal, as the performance tools we use it through the scripts.</p></li>
+          </ul>
+         </section>
+         <section id="finding-the-regressing-commit">
+          <h2>Finding the regressing commit.<a class="headerlink" href="#finding-the-regressing-commit" title="Link to this heading">?</a></h2>
+          <p>Now that you have all the dependencies installed, we will need to find the commit hash, where there the regression was reported and when the regression was not present, as <a class="reference external" href="https://github.com/mozilla-mobile/perf-tools/blob/main/backfill.py">backfill</a>, need them as parameters.</p>
+          <p>On the reported <a class="reference external" href="https://github.com/mozilla-mobile/fenix/issues/25253">ticket</a>, the performance team gave us the date when the regression was introduced (5/10), and when it wasn’t present (5/9).</p>
+          <p><img alt="image" src="https://user-images.githubusercontent.com/773158/174879320-ace21f51-2892-4b1c-8c25-a10ee8d0174e.png"></p>
+          <p>We can find each commit hash date by downloading the APKs, from Task Cluster and going to the about page.</p>
+          <p>For example:</p>
+          <p><strong>For 05/10</strong>. <a class="reference external" href="https://firefox-ci-tc.services.mozilla.com/tasks/index/mobile.v2.fenix.nightly.2022.06.06.latest/armeabi-v7a">https://firefox-ci-tc.services.mozilla.com/tasks/index/mobile.v2.fenix.nightly.2022.05.10.latest/armeabi-v7a</a></p><img width="503" alt="image" src="https://user-images.githubusercontent.com/773158/174894842-3341aff6-185f-4402-9c30-3cd5c56dcd3d.png">
+          <p>From it, we can find <a class="reference external" href="https://github.com/mozilla-mobile/fenix/commit/2f7f5988fccad2cf2043eed4b6849b32a4c76048">2f7f5988f</a> when the regression was spotted.</p>
+          <p><strong>For 05/09</strong>. <a class="reference external" href="https://firefox-ci-tc.services.mozilla.com/tasks/index/mobile.v2.fenix.nightly.2022.06.06.latest/armeabi-v7a">https://firefox-ci-tc.services.mozilla.com/tasks/index/mobile.v2.fenix.nightly.2022.05.10.latest/armeabi-v7a</a></p><img width="499" alt="image" src="https://user-images.githubusercontent.com/773158/174894896-a3a66219-ba0e-4174-b4fa-842e049e8d6d.png">
+          <p>When the regression was not present <a class="reference external" href="https://github.com/mozilla-mobile/fenix/commit/98455c01eeba7c63775f18817cd079f5d08b4513">98455c01e</a></p>
+          <p>Using the commits we can construct this range: https://github.com/mozilla-mobile/fenix/compare/98455c01eeba7c63775f18817cd079f5d08b4513…2f7f5988fccad2cf2043eed4b6849b32a4c76048 <img width="856" alt="commit range" src="https://user-images.githubusercontent.com/773158/175076734-9c585df2-7c5d-4b17-9135-9447643fb5d0.png"></p>
+          <p>With it we can see each commit that could introduced the regression.</p>
+         </section>
+         <section id="using-backfill-py">
+          <h2>Using backfill.py<a class="headerlink" href="#using-backfill-py" title="Link to this heading">?</a></h2>
+          <p>With the info that we found above, execute <code class="docutils literal notranslate"><span class="pre">backfill.py</span></code></p>
+          <div class="highlight-default notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="n">perf</span><span class="o">-</span><span class="n">tools</span><span class="o">-</span><span class="n">main</span> <span class="o">%</span> <span class="n">python3</span> <span class="n">backfill</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">tests</span> <span class="n">cold_main_first_frame</span> <span class="o">--</span><span class="n">startcommit</span> <span class="mi">98455</span><span class="n">c01eeba7c63775f18817cd079f5d08b4513</span> <span class="o">--</span><span class="n">endcommit</span> <span class="mi">2</span><span class="n">f7f5988fccad2cf2043eed4b6849b32a4c76048</span> <span class="o">--</span><span class="n">git_remote_name</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">mozilla</span><span class="o">-</span><span class="n">mobile</span><span class="o">/</span><span class="n">fenix</span><span class="o">.</span><span class="n">git</span> <span class="o">--</span><span class="n">repository_to_test_path</span> <span class="o">../</span><span class="n">fenix</span> <span class="n">fenix</span> <span class="n">nightly</span> <span class="n">armeabi</span><span class="o">-</span><span class="n">v7a</span> <span class="n">commitsRange</span>
+</pre>
+           </div>
+          </div>
+          <p>Where:</p>
+          <ul class="simple">
+           <li>
+            <p><strong>cold_main_first_frame</strong>: it’s the test we would like to run, we could also pass <code class="docutils literal notranslate"><span class="pre">cold_view_nav_start</span></code> depending on the regression type.</p></li>
+           <li>
+            <p><strong>–startcommit</strong>: it’s the commit before the regression.</p></li>
+           <li>
+            <p><strong>–endcommit</strong> it’s the commit where the regression appears.</p></li>
+           <li>
+            <p><strong>–repository_to_test_path</strong> is the path where your local Fenix repository is.</p></li>
+          </ul>
+          <p><strong>Note</strong>: Make sure your repository includes all the tokens (Sentry, Nimbus, … etc) that we include in our release builds, as not adding them could affect the test results, as we want the APKs to be the same <a class="reference external" href="https://wiki.mozilla.org/Performance/Fenix#How_to_measure_what_users_experience">experience as normal users will have</a>. Part of this is making sure you have <a class="reference external" href="https://github.com/mozilla-mobile/fenix#automatically-sign-release-builds">autosignReleaseWithDebugKey in your local.properties</a>.</p>
+          <p>? Be patient, as we will have to build an APK for each possible commit in the range and for this range there <a class="reference external" href="https://github.com/mozilla-mobile/fenix/compare/98455c01eeba7c63775f18817cd079f5d08b4513...2f7f5988fccad2cf2043eed4b6849b32a4c76048">are 19 commits</a> then we will build 19 APKs, and run the performance test for each one.</p>
+          <p>As the script progress, we will start to see some activity on the <code class="docutils literal notranslate"><span class="pre">perf-tools</span></code> <strong>directory</strong>, as each APKs will go there with the format <code class="docutils literal notranslate"><span class="pre">apk_commit_&lt;HASH&gt;.apk</span></code></p>
+          <p><img alt="image" src="https://user-images.githubusercontent.com/773158/174896260-7273afae-02de-49bf-be78-da0e08aa05ff.png"></p>
+          <p>After all the APKs are built, the script will continue with the testing phase, it will run the tests per each commit/APKs, and create a directory named <code class="docutils literal notranslate"><span class="pre">backfill_output</span></code> where it will create two <strong>.txt files per commit</strong> <code class="docutils literal notranslate"><span class="pre">apk_commit_&lt;HASH&gt;-cold_main_first_frame-analysis.txt</span></code> and <code class="docutils literal notranslate"><span class="pre">apk_commit_&lt;HASH&gt;-cold_main_first_frame-durations.txt</span></code></p>
+          <p><img alt="image" src="https://user-images.githubusercontent.com/773158/174896536-6b798764-b81d-4e3a-bab0-1a1a31a57664.png"></p>
+          <p>These files are the output of the script:</p>
+          <ul class="simple">
+           <li>
+            <p><strong>Cold_main_first_frame-analysis.txt</strong>: Will contain key information about the test results like max,mean,median, and min.</p></li>
+           <li>
+            <p><strong>Cold_main_first_frame-durations.txt</strong>: Will contain the raw information of each repetition of the test.</p></li>
+          </ul>
+          <p>With these files, we can identify which commit, introduced the regression by checking file by file which results are closer to the ones reported one the regression ticket.</p>
+          <p>After we found the regressing commit, we just have to update the ticket, posting our finding and tagging the person that introduced to research how to optimize the patch. Normally if the regression is significant we will ask to undo the commit until the patch is optimized.</p>
+         </section>
+         <section id="extra-tips">
+          <h2>Extra tips:<a class="headerlink" href="#extra-tips" title="Link to this heading">?</a></h2>
+          <ul class="simple">
+           <li>
+            <p>In case you would like to run the same test that are run via <code class="docutils literal notranslate"><span class="pre">backfil</span></code> for an specific APK, you can find more information <a class="reference external" href="https://wiki.mozilla.org/Performance/Fenix/Performance_reviews#Measuring_cold_start_up_duration">here</a>.</p></li>
+           <li>
+            <p>If you would like to graph the results you can use <code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">analyze_durations.py</span> <span class="pre">--graph</span> <span class="pre">results.txt</span></code>. *Just keep in mind, the results provide from the Performance team are from running the tests on a Moto G 5. Running on a more powerful device could cause the results to diverge.</p></li>
+           <li>
+            <p>In case, you need to start recording a profile in startup https://profiler.firefox.com/docs/#/./guide-startup-shutdown?id=firefox-for-android.</p></li>
+          </ul>
+          <section id="identifying-the-source-of-the-regression">
+           <h3>Identifying the source of the regression.<a class="headerlink" href="#identifying-the-source-of-the-regression" title="Link to this heading">?</a></h3>
+           <p>Our main task, when looking for a performance regression is just to identify the faulty commit, but if we would like to figure out what is the exact cause, we will need to take <a class="reference external" href="https://wiki.mozilla.org/Performance/Fenix/Performance_reviews#Profile">profile</a> from regressing version, and the version before to try to identify what could be causing the issue, checking the code path of the regressing commit could give us some hints to where to look.</p>
+          </section>
+         </section>
+        </section>
+       </div>
+      </div>
+      <footer>
+       <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Acronym-dictionary.html" class="btn btn-neutral float-left" title="Acronym Dictionary" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a> <a href="Architecture-Decisions.html" class="btn btn-neutral float-right" title="Architecture Decisions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+       </div>
+       <hr>
+       <div role="contentinfo">
+        <p></p>
+       </div> Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+      </footer>
+     </div>
+    </div>
+   </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ </body>
+</html>

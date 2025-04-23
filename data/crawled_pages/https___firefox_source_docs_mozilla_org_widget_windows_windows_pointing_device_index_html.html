@@ -1,0 +1,910 @@
+<!doctype html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Windows Pointing Device Support in Firefox — Firefox Source Docs  documentation</title>
+  <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50">
+  <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094">
+  <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=fd3f3429">
+  <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b">
+  <link rel="stylesheet" type="text/css" href="../../../_static/custom_theme.css?v=dc5ed815">
+  <link rel="stylesheet" type="text/css" href="../../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7">
+  <link rel="shortcut icon" href="../../../_static/firefox.ico"><!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+  <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+  <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+  <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+  <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+  <script src="../../../_static/copybutton.js?v=30646c52"></script>
+  <script src="../../../_static/design-tabs.js?v=36754332"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/npm/mermaid@11.2.0/dist/mermaid.esm.min.mjs"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/npm/@mermaid-js/layout-elk@0.1.4/dist/mermaid-layout-elk.esm.min.mjs"></script>
+  <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.2.0/dist/mermaid.esm.min.mjs";import elkLayouts from "https://cdn.jsdelivr.net/npm/@mermaid-js/layout-elk@0.1.4/dist/mermaid-layout-elk.esm.min.mjs";mermaid.registerLayoutLoaders(elkLayouts);mermaid.initialize({startOnLoad:false});</script>
+  <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+  <script type="module">
+import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.2.0/dist/mermaid.esm.min.mjs";
+window.addEventListener("load", () => mermaid.run());
+</script>
+  <script src="../../../_static/js/theme.js"></script>
+  <link rel="index" title="Index" href="../../../genindex.html">
+  <link rel="search" title="Search" href="../../../search.html">
+  <link rel="next" title="Windows Limited Access Features" href="../LimitedAccessFeature.html">
+  <link rel="prev" title="Windows DLL Blocklisting" href="../blocklist.html">
+ </head>
+ <body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+   <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <div class="wy-side-scroll">
+     <div class="wy-side-nav-search">
+      <a href="../../../index.html" class="icon icon-home"> Firefox Source Docs <img src="../../../_static/firefox-wordmark.svg" class="logo" alt="Logo"> </a><!-- -- This code is governed by the BSD license ---->
+      <div>
+       <h3>Quick search</h3>
+       <script>
+    (function () {
+      var cx = "dd12886298f75dbef";
+      var gcse = document.createElement("script");
+      gcse.async = true;
+      gcse.src = "https://cse.google.com/cse.js?cx=" + cx;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(gcse, s);
+    })();
+  </script><gcse:search></gcse:search>
+      </div>
+     </div>
+     <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+      <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../glossary/index.html">A Glossary of Common Terms</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../overview/index.html">A Quick Guide to Mozilla Applications</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../setup/index.html">Getting Set Up To Work On The Firefox Codebase</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Working On Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../contributing/index.html">Working on Firefox</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../bug-mgmt/index.html">Bug Handling</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox User Guide</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../devtools-user/index.html">Firefox DevTools User Docs</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Source Code Documentation</span></p>
+      <ul class="current">
+       <li class="toctree-l1"><a class="reference internal" href="../../../mots/index.html">Governance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../browser/index.html">Firefox Front-end</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../dom/index.html">DOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../editor/index.html">Editor</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../layout/index.html">Style system (CSS) &amp; Layout</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../gfx/index.html">Graphics</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../ipc/index.html">Processes, Threads and IPC</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../devtools/index.html">Firefox DevTools Contributor Docs</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../toolkit/index.html">Toolkit</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../js/index.html">SpiderMonkey</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../jsloader/index.html">JS Loader</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../mobile/android/geckoview/index.html">GeckoView</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../mobile/android/fenix/index.html">Fenix</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../mobile/android/focus-android/index.html">Focus for Android</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../dom/bindings/webidl/index.html">WebIDL</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../modules/libpref/index.html">libpref</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../networking/index.html">Networking</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../remote/index.html">Remote Protocols</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../services/index.html">Services</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../permissions/index.html">Permissions</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../uriloader/index.html">File Handling</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../cocoa/index.html">Firefox on macOS</a></li>
+       <li class="toctree-l1 current"><a class="reference internal" href="../index.html">Firefox on Windows</a>
+        <ul class="current">
+         <li class="toctree-l2"><a class="reference internal" href="../blocklist.html">Windows DLL Blocklisting</a></li>
+         <li class="toctree-l2 current"><a class="current reference internal" href="#">Windows Pointing Device Support in Firefox</a>
+          <ul>
+           <li class="toctree-l3"><a class="reference internal" href="#introduction">Introduction</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#motivation">Motivation</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#technical-background">Technical Background</a>
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="#a-quick-primer-on-pointing-devices">A Quick Primer on Pointing Devices</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#gestures">Gestures</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#history-of-web-standards-and-windows-apis">History of Web Standards and Windows APIs</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#css-interaction-media-queries">CSS “interaction” Media Queries</a></li>
+            </ul></li>
+           <li class="toctree-l3"><a class="reference internal" href="#state-of-the-browser">State of the Browser</a>
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="#pan-and-zoom-inertia-overscroll-and-elastic-bounce">Pan and Zoom, Inertia, Overscroll, and Elastic Bounce</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#pointer-media-queries">Pointer Media Queries</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#web-events">Web Events</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#operating-system-interfaces">Operating System Interfaces</a></li>
+            </ul></li>
+           <li class="toctree-l3"><a class="reference internal" href="#discussion">Discussion</a>
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="#css-pointer-media-queries">CSS “pointer” Media Queries</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#id1">Pan-and-Zoom, Inertia, Overscroll, and Elastic Bounce</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#id2">Web Events</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#id3">Operating System Interfaces</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#high-frequency-input">High-Frequency Input</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#directmanipulation-and-pens">DirectManipulation and Pens</a></li>
+            </ul></li>
+          </ul></li>
+         <li class="toctree-l2"><a class="reference internal" href="../LimitedAccessFeature.html">Windows Limited Access Features</a></li>
+        </ul></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../toolkit/components/ml/index.html">Firefox AI Runtime</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../accessible/index.html">Accessibility</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../media/index.html">Media Playback</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../code-quality/index.html">Code quality</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../writing-rust-code/index.html">Writing Rust Code</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../rust-components/index.html">Rust Components</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../tools/profiler/index.html">Gecko Profiler</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../performance/index.html">Performance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../storage/index.html">Database bindings (SQLite, KV, …)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../xpcom/index.html">XPCOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../nspr/index.html">NSPR</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../security/nss/index.html">Network Security Services (NSS)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../content-security/index.html">Web Security Checks in Gecko</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">The Firefox Build System</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../mach/index.html">Mach</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../tools/try/index.html">Pushing to Try</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../build/buildsystem/index.html">Build System</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../taskcluster/index.html">Firefox CI and Taskgraph</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../tools/moztreedocs/index.html">Managing Documentation</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../mozbuild/vendor/index.html">Vendoring Third Party Components</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Testing &amp; Test Infrastructure</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/automated-testing/index.html">Automated Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/treeherder-try/index.html">Understanding Treeherder Results</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/sheriffed-intermittents/index.html">Sheriffed intermittent failures</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/tests-for-new-config/index.html">Turning on Firefox tests for a new configuration</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/intermittent/index.html">Avoiding intermittent tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/testing-policy/index.html">Testing Policy</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/ci-configs/index.html">Configuration Changes</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/browser-chrome/index.html">Browser chrome mochitests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/chrome-tests/index.html">Chrome Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/marionette/index.html">Marionette</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/geckodriver/index.html">geckodriver</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/test-verification/index.html">Test Verification</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/webrender/index.html">WebRender Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/mochitest-plain/index.html">Mochitest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/xpcshell/index.html">XPCShell tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/tps/index.html">TPS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../web-platform/index.html">web-platform-tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../gtest/index.html">GTest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../tools/fuzzing/index.html">Fuzzing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../tools/sanitizer/index.html">Sanitizer</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/perfdocs/index.html">Performance Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../tools/code-coverage/index.html">Code coverage</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing-rust-code/index.html">Testing &amp; Debugging Rust Code</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Releases &amp; Updates</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../update-infrastructure/index.html">Mozilla Update Infrastructure</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../update-infrastructure/index.html#watershed-updates">Watershed Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../update-infrastructure/index.html#desupport-updates">Desupport Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../tools/update-verify/index.html">Update Verify</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Localization &amp; Internationalization</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../intl/index.html">Internationalization</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../l10n/index.html">Localization</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox and Python</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../mozbase/index.html">mozbase</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../python/index.html">Using third-party Python packages</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Metrics Collected in Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../metrics/index.html">Metrics</a></li>
+      </ul>
+     </div>
+    </div>
+   </nav>
+   <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+    <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+     <i data-toggle="wy-nav-top" class="fa fa-bars"></i> <a href="../../../index.html">Firefox Source Docs</a>
+    </nav>
+    <div class="wy-nav-content">
+     <div class="rst-content">
+      <!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+      <div role="navigation" aria-label="Page navigation">
+       <ul class="wy-breadcrumbs">
+        <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+        <li class="breadcrumb-item"><a href="../index.html">Firefox on Windows</a></li>
+        <li class="breadcrumb-item active">Windows Pointing Device Support in Firefox</li>
+        <li class="wy-breadcrumbs-aside"><a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Developer+Infrastructure&amp;component=Firefox+Source+Docs%3A+Content&amp;short_desc=Documentation+issue+on+widget/windows/windows-pointing-device/index&amp;comment=URL+=+https://firefox-source-docs.mozilla.org/widget/windows/windows-pointing-device/index.html&amp;bug_file_loc=https://firefox-source-docs.mozilla.org/widget/windows/windows-pointing-device/index.html" rel="nofollow">Report an issue</a> / <a href="../../../_sources/widget/windows/windows-pointing-device/index.rst.txt" rel="nofollow"> View page source</a></li>
+       </ul>
+       <hr>
+      </div>
+      <div role="main" class="document" itemscope itemtype="http://schema.org/Article">
+       <div itemprop="articleBody">
+        <section id="windows-pointing-device-support-in-firefox">
+         <h1><a class="toc-backref" href="#id4" role="doc-backlink">Windows Pointing Device Support in Firefox</a><a class="headerlink" href="#windows-pointing-device-support-in-firefox" title="Link to this heading">?</a></h1>
+         <nav class="contents" id="table-of-contents">
+          <p class="topic-title">Table of Contents</p>
+          <ul class="simple">
+           <li>
+            <p><a class="reference internal" href="#windows-pointing-device-support-in-firefox" id="id4">Windows Pointing Device Support in Firefox</a></p>
+            <ul>
+             <li>
+              <p><a class="reference internal" href="#introduction" id="id5">Introduction</a></p></li>
+             <li>
+              <p><a class="reference internal" href="#motivation" id="id6">Motivation</a></p></li>
+             <li>
+              <p><a class="reference internal" href="#technical-background" id="id7">Technical Background</a></p>
+              <ul>
+               <li>
+                <p><a class="reference internal" href="#a-quick-primer-on-pointing-devices" id="id8">A Quick Primer on Pointing Devices</a></p>
+                <ul>
+                 <li>
+                  <p><a class="reference internal" href="#common-pointing-devices" id="id9">Common Pointing Devices</a></p></li>
+                 <li>
+                  <p><a class="reference internal" href="#the-buxton-three-state-model" id="id10">The Buxton Three-State Model</a></p></li>
+                </ul></li>
+               <li>
+                <p><a class="reference internal" href="#gestures" id="id11">Gestures</a></p></li>
+               <li>
+                <p><a class="reference internal" href="#history-of-web-standards-and-windows-apis" id="id12">History of Web Standards and Windows APIs</a></p></li>
+               <li>
+                <p><a class="reference internal" href="#css-interaction-media-queries" id="id13">CSS “interaction” Media Queries</a></p>
+                <ul>
+                 <li>
+                  <p><a class="reference internal" href="#selection-of-the-primary-pointing-device" id="id14">Selection of the Primary Pointing Device</a></p></li>
+                </ul></li>
+              </ul></li>
+             <li>
+              <p><a class="reference internal" href="#state-of-the-browser" id="id15">State of the Browser</a></p>
+              <ul>
+               <li>
+                <p><a class="reference internal" href="#pan-and-zoom-inertia-overscroll-and-elastic-bounce" id="id16">Pan and Zoom, Inertia, Overscroll, and Elastic Bounce</a></p></li>
+               <li>
+                <p><a class="reference internal" href="#pointer-media-queries" id="id17">Pointer Media Queries</a></p></li>
+               <li>
+                <p><a class="reference internal" href="#web-events" id="id18">Web Events</a></p></li>
+               <li>
+                <p><a class="reference internal" href="#operating-system-interfaces" id="id19">Operating System Interfaces</a></p></li>
+              </ul></li>
+             <li>
+              <p><a class="reference internal" href="#discussion" id="id20">Discussion</a></p>
+              <ul>
+               <li>
+                <p><a class="reference internal" href="#css-pointer-media-queries" id="id21">CSS “pointer” Media Queries</a></p></li>
+               <li>
+                <p><a class="reference internal" href="#id1" id="id22">Pan-and-Zoom, Inertia, Overscroll, and Elastic Bounce</a></p></li>
+               <li>
+                <p><a class="reference internal" href="#id2" id="id23">Web Events</a></p></li>
+               <li>
+                <p><a class="reference internal" href="#id3" id="id24">Operating System Interfaces</a></p></li>
+               <li>
+                <p><a class="reference internal" href="#high-frequency-input" id="id25">High-Frequency Input</a></p></li>
+               <li>
+                <p><a class="reference internal" href="#directmanipulation-and-pens" id="id26">DirectManipulation and Pens</a></p></li>
+              </ul></li>
+            </ul></li>
+          </ul>
+         </nav>
+         <section id="introduction">
+          <h2><a class="toc-backref" href="#id5" role="doc-backlink">Introduction</a><a class="headerlink" href="#introduction" title="Link to this heading">?</a></h2>
+          <p>This document is intended to provide the reader with a quick primer and/or refresher on pointing devices and the various operating system APIs, user experience guidelines, and Web standards that contribute to the way Firefox handles input devices on Microsoft Windows.</p>
+          <p>The documentation for these things is scattered across the web and has varying levels of detail and completeness; some of it is missing or ambiguous and was only determined experimentally or by reading about other people’s experiences through forum posts. An explicit goal of this document is to gather this information into a cohesive picture.</p>
+          <p>We will then discuss the ways in which Firefox currently (as of early 2023) produces incorrect or suboptimal behavior when implementing those standards and guidelines.</p>
+          <p>Finally, we will raise some thoughts and questions to spark discussion on how we might improve the situation and handle corner cases. Some of these issues are intrinsically “opinion based” or “policy based”, so clear direction on these is desirable before engineering effort is invested into reimplementation.</p>
+         </section>
+         <section id="motivation">
+          <h2><a class="toc-backref" href="#id6" role="doc-backlink">Motivation</a><a class="headerlink" href="#motivation" title="Link to this heading">?</a></h2>
+          <p>A quick look at the <a class="reference external" href="https://bugzilla.mozilla.orgbuglist.cgi?query_format=advanced&amp;status_whiteboard=%5Bwin%3Atouch%5D&amp;list_id=16586149&amp;status_whiteboard_type=allwordssubstr">pile of defects</a> on <em>bugzilla.mozilla.org</em> marked with <em>[win:touch]</em> will show anyone that Firefox’s input stack for pointer devices has issues, but the bugs recorded there don’t begin to capture the full range of unreported glitches and difficult-to-reproduce hiccups that users run into while using touchscreen hardware and pen digitizers on Firefox, nor does it capture the ways that Firefox misbehaves according to various W3C standards that are (luckily) either rarely used or worked around in web apps (and thus go undetected or unreported).</p>
+          <p>These bugs primarily manifest in a few ways that will each be discussed in their own section:</p>
+          <ol class="arabic simple">
+           <li>
+            <p>Firefox failing to return the proper values for the <code class="docutils literal notranslate"><span class="pre">pointer</span></code>, <code class="docutils literal notranslate"><span class="pre">any-pointer</span></code>, <code class="docutils literal notranslate"><span class="pre">hover</span></code>, and <code class="docutils literal notranslate"><span class="pre">any-hover</span></code> CSS Media Queries</p></li>
+           <li>
+            <p>Firefox failing to fire the correct pointer-related DOM events at the correct time (or at all)</p></li>
+           <li>
+            <p>Firefox’s inconsistent handling of touch-related gestures like scrolling, where certain machines (like the Surface Pro) fail to meet the expected behavior of scrolling inertia and overscroll. This leads to a weird touch experience where the page comes to a choppy, dead-stop when using single-finger scrolling</p></li>
+          </ol>
+          <p>It’s worth noting that Firefox is not alone in having these types of issues, and that handling input devices is a notoriously difficult task for many applications; even a substantial amount of Microsoft’s own software has trouble navigating this minefield on their own Microsoft Surface devices. Defects are instigated by a combination of the <em>intrinsic complexity</em> of the problem domain and the <em>accidential complexity</em> introduced by device vendors and Windows itself.</p>
+          <p>The <em>intrinsic complexity</em> comes from the simple fact that human-machine interaction is difficult. A person must attempt to convey complex and abstract goals through a series of simple movements involving a few pieces of physical hardware. The devices can send signals that are unclear or even contradictory, and the software must decide how to handle this.</p>
+          <p>As a trivial example, every software engineer that’s ever written page scrolling logic has to answer the question, “What should my program do if the user hits ‘Page Up’ and ‘Page Down’ at the same time?”. While it may seem obvious that the answer is “Do nothing.”, naively-written keyboard input logic might assume the two are mutually-exclusive and only process whichever key is handled first in program order.</p>
+          <p>Occasionally, a new device will be invented that doesn’t obviously map to existing abstractions and input pipelines. There will be a period of time where applications will want to support the new device, but it won’t be well understood by either the application developers nor the device vendor themselves what ideal integration would look like. The new Apple Vision VR headset is such a device; traditional VR headsets have used controllers to point at things, but Apple insists that the entire thing should be done using only hand tracking and eye tracking. Developers of VR video games and other apps (like Firefox) will inevitably make many mistakes on the road to supporting this new headset.</p>
+          <p>A major source of defect-causing <em>accidental complexity</em> is the lack of clear expectations and documentation from Microsoft for apps (like Firefox) that are not using their Universal Windows Platform (UWP). The Microsoft Developer Network (MSDN) mentions concepts like inertia, overscroll, elastic bounce, single-finger panning, etc., but the solution is presented in the context of UWP, and the solution for non-UWP apps is either unclear or undocumented.</p>
+          <p>Adding to this complexity is the fact that Windows itself has gone through several iterations of input APIs for different classes of devices, and these APIs interact with each other in ways that are surprising or unintuitive. Again, the advice given on MSDN pertains to UWP apps, and the documentation about the newer “pointer” based window messages is a mix of incomplete and inaccurate.</p>
+          <p>Finally, individual input devices have bugs in their driver software that would disrupt even applications that are using the Windows input APIs perfectly. Handling all of these deviations is impossible and would result in fragile, unmaintainable code, but Firefox inevitably has to work around common ones to avoid alienating large portions of the userbase.</p>
+         </section>
+         <section id="technical-background">
+          <h2><a class="toc-backref" href="#id7" role="doc-backlink">Technical Background</a><a class="headerlink" href="#technical-background" title="Link to this heading">?</a></h2>
+          <section id="a-quick-primer-on-pointing-devices">
+           <h3><a class="toc-backref" href="#id8" role="doc-backlink">A Quick Primer on Pointing Devices</a><a class="headerlink" href="#a-quick-primer-on-pointing-devices" title="Link to this heading">?</a></h3>
+           <p>Traditionally, web browsers were designed to accommodate computer mice and devices that behave in a similar way, like trackballs and touchpads on laptops. Generally, it was assumed that there would be one such device attached to the computer, and it would be used to control a hovering “cursor” whose movements would be changed by relative movement of the physical input device.</p>
+           <p>However, modern computers can be controlled using a variety of different pointing devices, all with different characteristics. Many allow multiple concurrent targets to be pointed at and have multiple sensors, buttons, and other actuators.</p>
+           <p>For example, the screen of the Microsoft Surface Pro has dual capabilities of being a touch sensor and a digitizer for a tablet pen. When being used as a workstation, it’s not uncommon for a user to also connect the “keyboard + touchpad” cover and a mouse (via USB or Bluetooth) to provide the more productivity-oriented “keyboard and mouse” setup. In that configuration, there are 4 pointer devices connected to the machine simultaneously: a touch screen, a pen digitizer, a touchpad, and a mouse.</p>
+           <p>The next section will give a quick overview of common pointing devices. Many will be familiar to the reader, but they are still mentioned to establish common terminology and to avoid making assumptions about familiarity with every input device.</p>
+           <section id="common-pointing-devices">
+            <h4><a class="toc-backref" href="#id9" role="doc-backlink">Common Pointing Devices</a><a class="headerlink" href="#common-pointing-devices" title="Link to this heading">?</a></h4>
+            <p>Here are some descriptions of a few pointing device types that demonstrate the diversity of hardware:</p>
+            <p><strong>Touchscreen</strong></p>
+            <blockquote>
+             <div>
+              <p>A touchscreen is a computer display that is able to sense the location of (possibly-multiple) fingers (or stylus) making contact with its surface. Software can then respond to the touches by changing the displayed objects quickly, giving the user a sense of actually physically manipulating them on screen with their hands.</p><a class="reference internal image-reference" href="../../../_images/touchscreen.jpg"><img alt="../../../_images/touchscreen.jpg" src="../../../_images/touchscreen.jpg" style="width: 25%;"></a>
+             </div>
+            </blockquote>
+            <p><strong>Digitizing Tablet + Pen Stylus</strong></p>
+            <blockquote>
+             <div>
+              <p>These advanced pointing devices tend to exist in two forms: as an external sensing “pad” that can be plugged into a computer and sits on a desk or in someone’s lap, or as a sensor built right into a computer display. Both use a “stylus”, which is a pen-shaped electronic device that is detectable by the surface. Common features include the ability to distinguish proximity to the surface (“hovering”) versus actual contact, pressure sensitivity, angle/tilt detection, multiple “ends” such as a tip and an eraser, and one-or-more buttons/switch actuators.</p><a class="reference internal image-reference" href="../../../_images/wacom_tablet.png"><img alt="../../../_images/wacom_tablet.png" src="../../../_images/wacom_tablet.png" style="width: 25%;"></a>
+             </div>
+            </blockquote>
+            <p><strong>Joystick/Pointer Stick</strong></p>
+            <blockquote>
+             <div>
+              <p>Pointer sticks are most often seen in laptop computers made by IBM/Lenovo, where they exist as a little red nub located between the G, H, and B keys on a standard QWERTY keyboard. They function similarly to the analog sticks on a game controller – The user displaces the stick from its center position, and that is interpreted as a relative direction to move the on-screen cursor. A greater displacement from center is interpreted as increased velocity of movement.</p><a class="reference internal image-reference" href="../../../_images/trackpoint.jpg"><img alt="../../../_images/trackpoint.jpg" src="../../../_images/trackpoint.jpg" style="width: 25%;"></a>
+             </div>
+            </blockquote>
+            <p><strong>Touchpad</strong></p>
+            <blockquote>
+             <div>
+              <p>A touchpad is a rectangular surface (often found on laptop computers) that detects touch and motion of a finger and moves an on-screen cursor relative to the motion. Modern touchpads often support multiple touches simultaneously, and therefore offer functionality that is quite similar to a touchscreen, albeit with different movement semantics because of their physical separation from the screen (discussed below).</p><a class="reference internal image-reference" href="../../../_images/touchpad.jpg"><img alt="../../../_images/touchpad.jpg" src="../../../_images/touchpad.jpg" style="width: 25%;"></a>
+             </div>
+            </blockquote>
+            <p><strong>VR Controllers</strong></p>
+            <blockquote>
+             <div>
+              <p>VR controllers (and other similar devices like the Wiimote from the Nintendo Wii) allow users to point at objects in a three-dimensional virtual world by moving a real-world controller and “projecting” the controller’s position into the virtual space. They often also include sensors to detect the yaw, pitch, and roll of the sensors. There are often other inputs in the controller device, like analog sticks and buttons.</p><a class="reference internal image-reference" href="../../../_images/vrcontroller.jpg"><img alt="../../../_images/vrcontroller.jpg" src="../../../_images/vrcontroller.jpg" style="width: 25%;"></a>
+             </div>
+            </blockquote>
+            <p><strong>Hand Tracking</strong></p>
+            <blockquote>
+             <div>
+              <p>Devices like the Apple Vision (introduced during the time this document was being written) and (to a lesser extent) the Meta Quest have the ability to track the wearer’s hand and directly interpret gestures and movements as input. As the human hand can assume a staggering number of orientations and configurations, a finite list of specific shapes and movements must be identified and labelled to allow for clear software-user interaction.</p><a class="reference internal image-reference" href="../../../_images/apple_vision_user.jpg"><img alt="../../../_images/apple_vision_user.jpg" src="../../../_images/apple_vision_user.jpg" style="width: 25%;"></a> <a class="reference internal image-reference" href="../../../_images/apple_vision.jpg"><img alt="../../../_images/apple_vision.jpg" src="../../../_images/apple_vision.jpg" style="width: 25%;"></a>
+             </div>
+            </blockquote>
+            <p><strong>Mouse</strong></p>
+            <blockquote>
+             <div>
+              <p>A pointing device that needs no introduction. Moving a physical clam-shaped device across a surface translates to relative movement of a cursor on screen.</p><a class="reference internal image-reference" href="../../../_images/mouse.jpg"><img alt="../../../_images/mouse.jpg" src="../../../_images/mouse.jpg" style="width: 25%;"></a>
+             </div>
+            </blockquote>
+           </section>
+           <section id="the-buxton-three-state-model">
+            <h4><a class="toc-backref" href="#id10" role="doc-backlink">The Buxton Three-State Model</a><a class="headerlink" href="#the-buxton-three-state-model" title="Link to this heading">?</a></h4>
+            <p>Bill Buxton, an early pioneer in the field of human-computer interaction, came up with a three-state model for pointing devices; a device can be “Out of Range”, “Tracking”, or “Dragging”. Not all devices support all three states, and some devices have multiple actuators that can have the three-state model individually applied.</p>
+            <pre class="mermaid">        stateDiagram-v2
+    direction LR
+    state "State 0" as s0
+    state "State 1" as s1
+    state "State 2" as s2
+    s0 --&gt; s0 : Out Of Range
+    s1 --&gt; s1 : Tracking
+    s2 --&gt; s2 : Dragging
+    s0 --&gt; s1 : Stylus On
+    s1 --&gt; s0 : Stylus Lift
+    s1 --&gt; s2 : Tip Switch Close
+    s2 --&gt; s1 : Tip Switch Open
+    </pre>
+            <p>For demonstration, here is the model applied to a few devices:</p>
+            <p><strong>Computer Mouse</strong></p>
+            <blockquote>
+             <div>
+              <p>A mouse is never in the “Out of Range” state. Even though it can technically be lifted off its surface, the mouse does not report this as a separate condition; instead, it behaves as-if it is stationary until it can once again sense the surface moving underneath.</p>
+              <p>The remaining two states apply to each button individually; when a button is not being pressed, the mouse is considered in the “tracking” state with respect to that button. When a button is held down, the mouse is “dragging” with respect to that button. A “click” is simply considered a zero-length drag under this model.</p>
+              <p>In the case of a two-button mouse, this means that the mouse can be in a total of 4 different states: tracking, left button dragging, right button dragging, and two-button dragging. In practice, very little software actually does anything meaningful with two-button dragging.</p>
+             </div>
+            </blockquote>
+            <p><strong>Touch Screen</strong></p>
+            <blockquote>
+             <div>
+              <p>Applying the model to a touch screen, one can observe that current hardware has no way to sense that a finger that is “hovering, but not quite making contact with the screen”. This means that the “Tracking” state can be ruled out, leaving only the “Out of Range” and “Dragging” states. Since many touch screens can support multiple fingers touching the screen concurrently, and each finger can be in one of two states, there are potentially 2^N different “states” that a touchscreen can be in. Windows assigns meaning to many two, three, and four-finger gestures.</p>
+             </div>
+            </blockquote>
+            <p><strong>Tablet Digitizer</strong></p>
+            <blockquote>
+             <div>
+              <p>A tablet digitizer supports all three states: when the stylus is far away from the surface, it is considered “out of range”; when it is located slightly above the surface, it is “tracking”; and when it is making contact with the surface, it is “dragging”.</p>
+             </div>
+            </blockquote>
+            <p>The W3C standards for pointing devices are based on this three-state model, but applied to each individual web element instead of the entire system. This makes things like “Out-of-Range” possible for the mouse, since it can be out of range of a web element.</p>
+            <p>The W3C uses the terms “over” and “out” to convey the transition between “out-of-range” and “tracking” (which the W3C calls “hover”), and the terms “down” and “up” convey the transition between “tracking” and “dragging”.</p>
+            <p>The standard also address some of the known shortcomings of the model to improve portability and consistency; these improvements will be discussed more below.</p>
+            <p>The Windows Pointer API is <em>supposedly</em> based around this model, but unfortunately real-world testing shows that the model is not followed very consistently with respect to the actual signals sent to the application.</p>
+           </section>
+          </section>
+          <section id="gestures">
+           <h3><a class="toc-backref" href="#id11" role="doc-backlink">Gestures</a><a class="headerlink" href="#gestures" title="Link to this heading">?</a></h3>
+           <p>In contrast to the sort-of “anything goes” UI designs of the past, modern operating systems like Windows, Mac OS X, iOS, Android, and even modern Linux DEs have an “opinionated” idea of how user interaction should behave across all apps on the platform (the so-called “look and feel” of the operating system).</p>
+           <p>Users expect gestures like swipes, pinches, and taps to act the same way across all apps for a given operating system, and they expect things like on-screen keyboards or handwriting recognition to pop up in certain contexts. Failing to meet those expectations makes an app look less polished, and (especially as far as accessibility is concerned) it frustrates the user and makes it more difficult for them to interact with the app.</p>
+           <p>Microsoft defines guidelines for various behaviours that Windows applications should ideally adhere to in the <a class="reference external" href="https://learn.microsoft.com/en-us/windows/apps/design/input/">Input and Interactions</a> section on MSDN. Some of these are summarized quickly below:</p>
+           <p><strong>Drag and Drop</strong></p>
+           <blockquote>
+            <div>
+             <p>Drag and drop allows a user to transfer data from one application to another. The gesture begins when a pointer device moves into the “Dragging” state over top of a UI element, usually as a result of holding down a mouse button or pressing a finger on a touchscreen. The user moves the pointer over top of the receiver of the data, and then ends the gesture by releasing the mouse button or lifting their finger off the touchscreen. Window interprets this transition out of the “Dragging” state as permission to initiate the data transfer.</p>
+             <p>Firefox has supported Drag and Drop for a very long time, so it will not be discussed further.</p>
+            </div>
+           </blockquote>
+           <p><strong>Pan and Zoom</strong></p>
+           <blockquote>
+            <div>
+             <p>When using touchscreens (and multi-touch touchpads), users expect to be able to cause the viewport to “pan” left/right/up/down by pressing two fingers on the screen (creating two pointers in “Dragging” state) and moving their fingers in the direction of movement. When they are done, they can release both fingers (changing both pointers to “Out of Bounds”).</p>
+             <p>A zoom can be signalled by moving the two fingers apart or together in a “pinch” or “reverse pinch” gesture.</p>
+            </div>
+           </blockquote>
+           <p><strong>Single Pointer Panning</strong></p>
+           <blockquote>
+            <div>
+             <p>Applications that are based on a UI model of the user interacting with a “page” often allow a single pointer “Dragging” over the viewport to cause the viewport to pan, similarly to the two-finger panning discussed in the previous section.</p>
+             <p>Note that this gesture is not as universal as two-finger panning is – as a counterexample, graphics programs tend to treat one-finger dragging as object manipulation and two-finger dragging as viewport panning.</p>
+            </div>
+           </blockquote>
+           <p><strong>Inertia</strong></p>
+           <blockquote>
+            <div>
+             <p>When a user is done panning, they may lift their finger/pen off the screen while the viewport is still in motion. Users expect that the page will continue to move for a little while, as-if the user had “tossed” the page when they let go. Effectively, the page behaves as though it has “momentum” that needs to be gradually lost before the page comes to a full stop.</p>
+             <p>Modern operating systems provide this behavior via their various native widget toolkits, and the curve that objects follow as they slow to a stop are different across OSes. In that way, they can be considered part of the unique “look and feel” of the OS. Users expect the scrolling of pages in their web browser to behave this way, and so when Firefox fails to provide this behavior it can be jarring.</p>
+            </div>
+           </blockquote>
+           <p><strong>Overscroll and Elastic Bounce</strong></p>
+           <blockquote>
+            <div>
+             <p>When a user is panning the page and reaches the outer edges, Microsoft recommends that the app should begin an “elastic bounce” animation, where the page will allow the user to scroll past the end (“overscroll”), show empty space underneath the page, and then sort of “snap back” like a rubber band that’s been stretched and then released. You can see a demonstration in <a class="reference external" href="https://www.windowslatest.com/2020/05/21/microsoft-is-adding-elastic-scrolling-to-chrome-on-windows-10/">this article</a>, which discusses Microsoft adding it to Chromium.</p>
+            </div>
+           </blockquote>
+          </section>
+          <section id="history-of-web-standards-and-windows-apis">
+           <h3><a class="toc-backref" href="#id12" role="doc-backlink">History of Web Standards and Windows APIs</a><a class="headerlink" href="#history-of-web-standards-and-windows-apis" title="Link to this heading">?</a></h3>
+           <p>The World-Wide Web Consortium (W3C) and the Web Hypertext Application Technology Working Group (WHATWG) manage the standards that detail the interface between a user agent (like Firefox) and applications designed to run on the Web Platform. The user agent, in turn, must rely on the operating system (Windows, in this case) to provide the necessary APIs to implement the standards required by the Web Platform.</p>
+           <p>As a result of that relationship, a Web Standard is unlikely to be created until all widely-used operating systems provide the required APIs. That allows us to build a linear timeline with a predictable pattern: a new type of device becomes popular, the APIs to support it are introduced into operating systems, and eventually a cross-platform standard is introduced into the Web Platform.</p>
+           <p>The following sections detail the history of input devices supported by Windows and the Web Platform:</p>
+           <p><strong>1985 - Computer Mouse Support (Windows 1.0)</strong></p>
+           <blockquote>
+            <div>
+             <p>The first version of Windows (1985) supported a computer mouse. Support for other input devices is not well-documented, but probably non-existant.</p>
+            </div>
+           </blockquote>
+           <p><strong>1991 - Third-Party De-facto Pen Support (Wintab)</strong></p>
+           <blockquote>
+            <div>
+             <p>In the late 80s and early 90s, any tablet pen hardware vendor that wanted to support Windows would need to write a device driver and design a proprietary user-mode API to expose the device to user applications. In turn, application developers would have to write and maintain code to support the APIs of every relevant device vendor.</p>
+             <p>In 1991, a company named LCS/Telegraphics released an API for Windows called “Wintab”, which was designed in collaboration with hardware and software vendors to define a general API that could be targetted by device drivers and applications.</p>
+             <p>It would take Microsoft more than a decade to include first-party support for tablet pens in Windows, which allowed Wintab to become the de-facto standard for pen support on Windows. The Wintab API continues to be supported by virtually all artist tablets to this day. Notable companies include Wacom, Huion, XP-Pen, etc.</p>
+            </div>
+           </blockquote>
+           <p><strong>1992 - Early Windows Pen Support (Windows for Pen Computing)</strong></p>
+           <blockquote>
+            <div>
+             <p>The earliest Windows operating system to support non-mouse pointing devices was Windows 3.1 with the “Windows for Pen Computing” add-on (1992). (<a class="reference external" href="https://socket3.wordpress.com/2019/07/31/windows-for-pen-computing-1-0/">For the curious</a>, and I’m certain <a class="reference external" href="https://www.amazon.com/Microsoft-Windows-Pen-Computing-Programmers/dp/1556154690">this book</a> is a must-read!). Pen support was mostly implemented by translating actions into the existing <code class="docutils literal notranslate"><span class="pre">WM_MOUSExxx</span></code> messages, but also “upgraded” any application’s <code class="docutils literal notranslate"><span class="pre">EDIT</span></code> controls into <code class="docutils literal notranslate"><span class="pre">HEDIT</span></code> controls, which looked the same but were capable of being handwritten into using a pen. This was not very user-friendly, as the controls stayed the same size and the UI was not adapted to the input method. This add-on never achieved much popularity.</p>
+             <p>It is not documented whether Netscape Navigator (the ancestor of Mozilla Firefox) supported this add-on or not, but there is no trace of it in modern Firefox code.</p>
+            </div>
+           </blockquote>
+           <p><strong>1995 - Introduction of JavaScript and Mouse Events (De-facto Web Standard)</strong></p>
+           <blockquote>
+            <div>
+             <p>The introduction of JavaScript in 1995 by Netscape Communications added a programmable, event-driven scripting environment to the Web Platform. Browser vendors quickly added the ability for scripts to listen for and react to mouse events. These are the well-known events like <code class="docutils literal notranslate"><span class="pre">mouseover</span></code>, <code class="docutils literal notranslate"><span class="pre">mouseenter</span></code>, <code class="docutils literal notranslate"><span class="pre">mousedown</span></code>, etc. that are ubiquitous on the web, and are known by basically anyone who has ever written front-end JavaScript.</p>
+             <p>This ubiquity created a de-facto standard for mouse input, which would eventually be formally standardized by the W3C in the HTML Living Standard in 2001.</p>
+             <p>The Mouse Event APIs assume that the computer has one single pointing device which is always present, has a single cursor capable of “hovering” over an element, and has between one and three buttons.</p>
+             <p>When support for other pointing devices like touchscreen and pen first became available in operating systems, it was exposed to the web by interpreting user actions into equivalent mouse events. Unfortunately, this is unable to handle multiple concurrent pointers (like one would get from multitouch screens) or report the kind of rich information a pen digitizer can provide, like tilt angle, pressure, etc. This eventually lead the W3C to develop the new “Touch Events” standard to expose touch functionality, and eventually the “Pointer Events” to expose more of the rich information provided by pens.</p>
+            </div>
+           </blockquote>
+           <p><strong>2005 - Mainstream Pen Support (Windows XP Tablet PC Edition)</strong></p>
+           <blockquote>
+            <div>
+             <p>It was the release of Windows XP Tablet PC Edition (2005) that allowed Windows applications to directly support tablet pens by using the new COM “<a class="reference external" href="https://learn.microsoft.com/en-us/windows/win32/tablet/tablet-pc-development-guide">Windows Tablet PC</a>” APIs, most of which are provided through the main <a class="reference external" href="https://learn.microsoft.com/en-us/windows/win32/tablet/inkcollector-class">InkCollector</a> class. The <code class="docutils literal notranslate"><span class="pre">InkCollector</span></code> functionality would eventually be “mainlined” into Windows XP Professional Service Pack 2, and continues to exist in modern Windows releases.</p>
+             <p>The Tablet PC APIs consist of a large group of COM objects that work together to facilitate enumerating attached pens, detecting pen movement and pen strokes, and analyzing them to provide:</p>
+             <ol class="arabic">
+              <li>
+               <p><strong>Cursor Movement</strong>: translates the movements of the pen into the standard mouse events that applications expect from mouse cursor movement, namely <code class="docutils literal notranslate"><span class="pre">WM_NCHITTEST</span></code>, <code class="docutils literal notranslate"><span class="pre">WM_SETCURSOR</span></code> and <code class="docutils literal notranslate"><span class="pre">WM_MOUSEMOVE</span></code>.</p></li>
+              <li>
+               <p><strong>Gesture Recognition</strong>: detects common user actions, like “tap”, “double-tap”, “press-and-hold”, and “drag”. The <cite>InkCollector</cite> delivers these events via COM <a class="reference external" href="https://learn.microsoft.com/en-us/windows/win32/tablet/inkcollector-systemgesture">SystemGesture</a> events using the <a class="reference external" href="https://learn.microsoft.com/en-us/windows/win32/api/msinkaut/ne-msinkaut-inksystemgesture">InkSystemGesture</a> enumeration. It will also translate them into common Win32 messages; for example, a “drag” gesture would be translated into a <code class="docutils literal notranslate"><span class="pre">WM_LBUTTONDOWN</span></code> message, several <code class="docutils literal notranslate"><span class="pre">WM_MOUSEMOVE</span></code> messages, and finally a <code class="docutils literal notranslate"><span class="pre">WM_LBUTTONUP</span></code> message.</p>
+               <p>An application that is using <code class="docutils literal notranslate"><span class="pre">InkCollector</span></code> will receive both types of messages: traditional mouse input through the Win32 message queue, and “Tablet PC API” events through COM callbacks. It is up to the application to determine which events matter to it in a given context, as the two types of events are not guaranteed by Microsoft to correspond in any predictable way.</p></li>
+              <li>
+               <p><strong>Shape and Text Recognition</strong>: allows the app to recognize letters, numbers, punctuation, and other <a class="reference external" href="https://learn.microsoft.com/en-us/windows/win32/api/msinkaut/ne-msinkaut-inkapplicationgesture">common shapes</a> the user might make using their pen. Supported shapes include circles, squares, arrows, and motions like “scratch out” to correct a misspelled word. Custom recognizers exist that allow recognition of other symbols, like music notes or mathematical notation.</p></li>
+              <li>
+               <p><strong>Flick Recognition</strong>: allows the user to invoke actions via quick, linear motions that are recognized by Windows and sent to the app as <code class="docutils literal notranslate"><span class="pre">WM_TABLET_FLICK</span></code> messages. The app can choose to handle the window message or pass it on to the default window procedure, which will translate it to scrolling messages or mouse messages.</p>
+               <p>For example, a quick upward ‘flick’ corresponds to “Page up”, and a quick sideways flick in a web browser would be “back”. Flicks were never widely used by Windows apps, and they may have been removed in more recent versions of Windows, as the existing Control Panel menus for configuring them seem to no longer exist as of Windows 10 22H2.</p></li>
+             </ol>
+             <p>Firefox does not appear to have ever used these APIs to allow tablet pen input, with the exception of <a class="reference external" href="https://searchfox.org/mozilla-central/rev/e6cb503ac22402421186e7488d4250cc1c5fecab/widget/windows/InkCollector.cpp">one piece of code</a> to detect when the pen leaves the Firefox window to solve <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1016232">Bug 1016232</a>.</p>
+            </div>
+           </blockquote>
+           <p><strong>2009 - Touch Support: WM_GESTURE (Windows 7)</strong></p>
+           <blockquote>
+            <div>
+             <p>While attempts were made with the release of Windows Vista (2007) to support touchscreens through the existing tablet APIs, it was ultimately the release of Windows 7 (2009) that brought first-class support for Touchscreen devices to Windows with new Win32 APIs and two main window messages: <code class="docutils literal notranslate"><span class="pre">WM_TOUCH</span></code> and <code class="docutils literal notranslate"><span class="pre">WM_GESTURE</span></code>.</p>
+             <p>These two messages are mutually-exclusive, and all applications are initially set to receive only <code class="docutils literal notranslate"><span class="pre">WM_GESTURE</span></code> messages. Under this configuration, Windows will attempt to recognize specific movements on a touch digitizer and post “gesture” messages to the application’s message queue. These gestures are similar to (but, somewhat-confusingly, not identical to) the gestures provided by the “Windows Tablet PC” APIs mentioned above. The main gesture messages are: zoom, pan, rotate, two-finger-tap, and press-and-tap (one finger presses, another finger quickly taps the screen).</p>
+             <p>In contrast to the behavior of the <code class="docutils literal notranslate"><span class="pre">InkCollector</span></code> APIs, which will send both gesture events and translated mouse messages, the <code class="docutils literal notranslate"><span class="pre">WM_GESTURE</span></code> message is truly “upstream” of the translated mouse messages; the translated mouse messages will only be generated if the application forwards the <code class="docutils literal notranslate"><span class="pre">WM_GESTURE</span></code> message to the default window procedure. This makes programming against this API simpler than the <code class="docutils literal notranslate"><span class="pre">InkCollector</span></code> API, as there is no need to state-fully “remember” that an action has already been serviced by one codepath and needs to be ignored by the other.</p>
+             <p>Firefox current supports the <code class="docutils literal notranslate"><span class="pre">WM_GESTURE</span></code> message when Asynchronous Pan and Zoom (APZ) is not enabled (although we do not handle inertia in this case, so the page comes to a dead-stop immediately when the user stops scrolling).</p>
+            </div>
+           </blockquote>
+           <p><strong>2009 - Touch Support: WM_TOUCH (Windows 7)</strong></p>
+           <blockquote>
+            <div>
+             <p>Also introduced in Windows 7, an application that needs full control over touchscreen events can use <a class="reference external" href="https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-registertouchwindow">RegisterTouchWindow</a> to change any of its windows to receive <code class="docutils literal notranslate"><span class="pre">WM_TOUCH</span></code> messages instead of the more high-level <code class="docutils literal notranslate"><span class="pre">WM_GESTURE</span></code> messages. These messages explicitly notify the application about every finger that contacts or breaks contact with the digitizer (as well as each finger’s movement over time). This provides absolute control over touch interpretation, but also means that the burden of handling touch behavior falls completely on the application.</p>
+             <p>To help ease this burden, Microsoft provides two COM APIs to interpret touch messages, <code class="docutils literal notranslate"><span class="pre">IManipulationProcessor</span></code> and <code class="docutils literal notranslate"><span class="pre">IInertiaProcessor</span></code>.</p>
+             <p><code class="docutils literal notranslate"><span class="pre">IManipulationProcessor</span></code> can be considered a superset of the functionality available through normal gestures. The application feeds <code class="docutils literal notranslate"><span class="pre">WM_TOUCH</span></code> data into it (along with other state, such as pivot points and timestamps), and it allows for manipulations like: two-finger rotation around a pivot, single-finger rotation around a pivot, simultaneous rotation and translation (for example, ‘dragging’ a single corner of a square). <a class="reference external" href="https://learn.microsoft.com/en-us/windows/win32/wintouch/advanced-manipulations-overview">These MSDN diagrams</a> give a good overview of the kinds of advanced manipulations an app might support.</p>
+             <p><code class="docutils literal notranslate"><span class="pre">IInertiaProcessor</span></code> works with <code class="docutils literal notranslate"><span class="pre">IManipulationProcessor</span></code> to add inertia to objects in a standard way across the operating system. It is likely that later APIs that provide this (like DirectManipulation) are using these COM objects under the hood to accomplish their inertia handling.</p>
+             <p>Firefox currently handles the <code class="docutils literal notranslate"><span class="pre">WM_TOUCH</span></code> event when Asynchronous Pan and Zoom (APZ) is enabled, but we do not use either the <code class="docutils literal notranslate"><span class="pre">IInertiaProcessor</span></code> nor the <code class="docutils literal notranslate"><span class="pre">IManipulationProcessor</span></code>.</p>
+            </div>
+           </blockquote>
+           <p><strong>2012 - Unified Pointer API (Windows 8)</strong></p>
+           <blockquote>
+            <div>
+             <p>Windows 8 (2012) was Microsoft’s initial attempt to make a touch-first, mobile-first operating system that (ideally) would make it easy for app developers to treat touch, pen, and mouse as first-class input devices.</p>
+             <p>By this point, the Windows Tablet APIs would allow tablet pens to draw text and shapes like squares, triangles, and music notes, and those shapes would be recognizable by the Windows Ink subsystem.</p>
+             <p>At the same time, Windows Touch allowed touchscreens to have advanced manipulation, like rotate + translate, or simultaneous pan and zoom, and it allowed objects manipulated by touch to have momentum and angular velocity.</p>
+             <p>The shortcomings of having separate input stacks for these various devices starts to be become apparent after a while: Why shouldn’t a touchscreen be able to recognize a circle or a triangle? Why shouldn’t a pen be able to have complex rotation and zoom functionality? How do we handle these newer laptop touchpads that are starting to handle multi-touch gestures like a touchscreen, but still cause relative cursor movement like a mouse? Why does my program have to have 3 separate codepaths for different pointing devices that are all very similar?</p>
+             <p>The Windows Pointer Device Input Stack introduces new APIs and window messages that generalize the various types of pointing devices under a single API while still falling back to the legacy touch and tablet input stacks in the event that the API is unused. (Note that the touch and tablet stacks themselves fall back to the traditional mouse input stack when they are unused.)</p>
+             <p>Microsoft based their pointer APIs off the Buxton Three-State Model (discussed earlier), where changes between “Out-of-Range” and “Tracking” are signalled by <code class="docutils literal notranslate"><span class="pre">WM_POINTERENTER</span></code> AND <code class="docutils literal notranslate"><span class="pre">WM_POINTERLEAVE</span></code> messages, and changes between “Tracking” and “Dragging” are signalled by <code class="docutils literal notranslate"><span class="pre">WM_POINTERDOWN</span></code> and <code class="docutils literal notranslate"><span class="pre">WM_POINTERUP</span></code>. Movement is indicated via <code class="docutils literal notranslate"><span class="pre">WM_POINTERUPDATE</span></code> messages.</p>
+             <p>If these messages are unhandled (the message is forwarded to <code class="docutils literal notranslate"><span class="pre">DefWindowProc</span></code>), the Win32 subsystem will translate them into touch or gesture messages. If unhandled, those will be further translated into mouse and system messages.</p>
+             <p>While the Pointer API is not without some unfortunate pitfalls (which will be discussed later), it still provides several advantages over the previously available APIs: it can allow a mostly-unified codepath for handling pointing devices, it circumvents many of the often-complex interactions between the previous APIs, and it provides the ability to simulate pointing devices to help facilitate end-to-end automated testing.</p>
+             <p>Firefox currently uses the Pointer APIs to handle tablet stylus input only, while other input methods still use the historical mouse and touch input APIs above.</p>
+            </div>
+           </blockquote>
+           <p><strong>2013 - DirectManipulation (Windows 8.1)</strong></p>
+           <blockquote>
+            <div>
+             <p>DirectManipulation is a DirectX based API that was added during the release of Windows 8.1 (2013). This API allows an app to create a series of “viewports” inside a window and have scrollable content within each of these viewports. The manipulation engine will then take care of automatically reading Pointer API messages from the window’s event queue and generating pan and zoom events to be consumed by the app.</p>
+             <p>In the case that the app is also using DirectComposition to draw its window, DirectManipulation can pipe the events directly into it, causing the app to essentially get asynchronous pan and zoom with proper handling of inertia and overscroll with very little coding.</p>
+             <p>DirectManipulation is only used in Firefox to handle data coming from Precision Touchpads, as Microsoft provides no other convenient API for obtaining data from such devices. Firefox creates fake content inside of a fake viewport to capture the incoming events from the touchpad and translates them into the standard Asynchronous Pan and Zoom (APZ) events that the rest of the input pipeline uses.</p>
+            </div>
+           </blockquote>
+           <p><strong>2013 - Touch Events (Web Standard)</strong></p>
+           <blockquote>
+            <div>
+             <p>“<a class="reference external" href="https://www.w3.org/TR/touch-events/">Touch Events</a>” became a W3C recommendation in October, 2013.</p>
+             <p>At this point, Microsoft’s first operating system to include touch support (Windows 7) was the most popular desktop operating system, and the ubiquity of smart phones brought a huge uptick in users with touchscreen inputs. All major browsers included some API that allowed reading touch input, prompting the W3C to formalize a new standard to ensure interoperability.</p>
+             <p>With the Touch Events API, multiple touch interactions may be reported simultaneously, each with their own separate identifier for tracking and their own coordinates within the screen, viewport, and client area. A touch is reported by: a <code class="docutils literal notranslate"><span class="pre">touchstart</span></code> event with a unique ID for each contact, zero-or-more <code class="docutils literal notranslate"><span class="pre">touchmove</span></code> events with that ID, and finally a <code class="docutils literal notranslate"><span class="pre">touchend</span></code> event to signal the end of that specific contact.</p>
+             <p>The API also has some amount of support for pen styluses, but it lacks important features necessary to truly support them: hovering, pressure, tilt, or multiple cursors like an erasure. Ultimately, its functionality has been superceded by the newer “Pointer Events” API, discussed below.</p>
+            </div>
+           </blockquote>
+           <p><strong>2016 - Precision Touchpads (Windows 10)</strong></p>
+           <blockquote>
+            <div>
+             <p>Early touchpads emulated a computer mouse by directly using the same IBM PS/2 interface that most computer mice used and translating relative movement of the user’s finger into equivalent movements of a mouse on a surface.</p>
+             <p>As touchpad technology advanced and more powerful interface standards like USB begun to take over the consumer market, touchpad vendors started adding extra features to their hardware, like tap-to-click, tap-and-drag, and tap-and-hold (to simulate a right click). These behaviors were implemented by touchpad vendors either in hardware drivers and/or user mode “hooks” that injected equivalent Win32 messages into the appropriate target.</p>
+             <p>As expected, each touchpad vendor’s driver had its own subtly-different behavior from others, its own bugs, and its own negative interactions with other software.</p>
+             <p>During the later years of Windows 8, Microsoft and touchpad company Synaptics co-developed the “Precision Touchpad” standard, which defines an interface for touchpad hardware to report its physical measurements, precision, and sensor configuration to Windows and allows it to deliver raw touch data. Windows then interprets the data and generates gestures and window messages in a standard way, removing the burden of implementing these behaviors from the touchpad vendor and providing the OS with rich information about the user’s movements.</p>
+             <p>It wasn’t until the 2016 release of Windows 10 14946 that Microsoft would support all the standard gestures through the new standard. Although adoption by vendors has been a bit slow, the fact that <a class="reference external" href="https://pocketnow.com/all-windows-11-pcs-will-be-required-to-have-a-precision-touchpad-and-webcam/">it is a requirement for Windows 11</a> means that vendor support for this standard is imminent.</p>
+             <p>Unfortunately, there’s a piece of bad news: Microsoft did not implement the above “Unified Pointer API” for use with touchpads, as the developers of Blender discovered when <a class="reference external" href="https://archive.blender.org/developer/D7660">they moved to the Pointer API</a>. Instead, Microsoft expects developers to either use DirectManipulation to automatically get pan/zoom enabled for their app, or the RawInput API to directly read touchpad data.</p>
+            </div>
+           </blockquote>
+           <p><strong>2019 - Pointer Events (Web Standard)</strong></p>
+           <blockquote>
+            <div>
+             <p>“<a class="reference external" href="https://www.w3.org/TR/pointerevents/">Pointer Events</a>” became a level 2 W3C recommendation in April, 2019. They considered <a class="reference external" href="https://www.w3.org/Submission/2012/SUBM-pointer-events-20120907/">the work done by Microsoft</a> as part of the design of their own Pointer API, and in many ways the W3C standard resembles an improved, better specified, more consistent, and easier-to-use version of the APIs provided by the Win32 subsystem.</p>
+             <p>The Pointer Events API generalizes devices like touchscreens, mice, tablet pens, VR controllers, etc. into a “thing that points”. A pointer has (optional) properties: a width and height (big for a finger, 1px for a mouse), an amount of pressure, a tilt angle relative to the surface, some buttons, etc. This helps applications maximize code reuse for handling pointer input by having a common codebase written against these generalized traits. If needed, the application may also have smaller, specialized sections of code for each concrete pointer type.</p>
+             <p>Certain types of pointers (like pens and touchscreens) have a behavior where they are always “captured” by the first object that they interact with. For example, if a user puts their finger on an empty part of a web page and starts to scroll, their finger is now “captured” by the web page itself. “Captured” means that even if their finger moves over an element in the web page, that element will not receive events from the finger – the page itself will until the entire interaction stops.</p>
+             <p>The events themselves very closely follow the Buxton Three-State Model (discussed earlier), where <code class="docutils literal notranslate"><span class="pre">pointerover/pointerout</span></code> messages indicate transitions from “Out of Range” to “Tracking” and visa-versa, and <code class="docutils literal notranslate"><span class="pre">pointerdown/pointerup</span></code> messages transition between “Tracking” and “Dragging”. <code class="docutils literal notranslate"><span class="pre">pointermove</span></code> updates the position of the pointer, and a special <code class="docutils literal notranslate"><span class="pre">pointercancel</span></code> message is sent to inform the page that the browser is “cancelling” a <code class="docutils literal notranslate"><span class="pre">pointerdown</span></code> event because it has decided to consume it for a gesture or because the operating system cancelled the pointer for its own reasons.</p>
+            </div>
+           </blockquote>
+          </section>
+          <section id="css-interaction-media-queries">
+           <h3><a class="toc-backref" href="#id13" role="doc-backlink">CSS “interaction” Media Queries</a><a class="headerlink" href="#css-interaction-media-queries" title="Link to this heading">?</a></h3>
+           <p>(Note that this section is <strong>not</strong> about the <a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/CSS/pointer-events">pointer-events</a> CSS property, which defines the circumstances where an element can be the target of pointer events.)</p>
+           <p>The W3C defines the interaction-related media queries in the <a class="reference external" href="https://www.w3.org/TR/mediaqueries-4/#mf-interaction">Media Queries Level 4 - Interaction Media Features</a> document.</p>
+           <p>To summarize, the main interaction-related CSS Media Queries that Firefox must support are <code class="docutils literal notranslate"><span class="pre">pointer</span></code>, <code class="docutils literal notranslate"><span class="pre">any-pointer</span></code>, <code class="docutils literal notranslate"><span class="pre">hover</span></code> and <code class="docutils literal notranslate"><span class="pre">any-hover</span></code>.</p>
+           <p><code class="docutils literal notranslate"><span class="pre">pointer</span></code></p>
+           <blockquote>
+            <div>
+             <p>Allows the webpage to query the existence of a pointing device on the machine, and (if available) the assumed “pointing accuracy” of the “primary” pointing device. The device considered “primary” on a machine with multiple input devices is a policy decision that must be made by the web browser; Windows simply provides the APIs to query information about attached devices.</p>
+             <p>The browser is expected to return one of three strings to this media query:</p>
+             <p><code class="docutils literal notranslate"><span class="pre">none</span></code></p>
+             <blockquote>
+              <div>
+               <p>There is no pointing device attached to the computer.</p>
+              </div>
+             </blockquote>
+             <p><code class="docutils literal notranslate"><span class="pre">coarse</span></code></p>
+             <blockquote>
+              <div>
+               <p>The primary pointing device is capable of approximately pointing at a relatively large target (like a finger on a touchscreen).</p>
+              </div>
+             </blockquote>
+             <p><code class="docutils literal notranslate"><span class="pre">fine</span></code></p>
+             <blockquote>
+              <div>
+               <p>The primary pointing device is capable of near-pixel-level accuracy (like a computer mouse or a tablet pen).</p>
+              </div>
+             </blockquote>
+            </div>
+           </blockquote>
+           <p><code class="docutils literal notranslate"><span class="pre">any-pointer</span></code></p>
+           <blockquote>
+            <div>
+             <p>Similar to <code class="docutils literal notranslate"><span class="pre">pointer</span></code>, but represents the union of capabilities of all pointers attached to the system, such that the meanings become:</p>
+             <p><code class="docutils literal notranslate"><span class="pre">none</span></code></p>
+             <blockquote>
+              <div>
+               <p>There is no pointing device attached to the computer.</p>
+              </div>
+             </blockquote>
+             <p><code class="docutils literal notranslate"><span class="pre">coarse</span></code></p>
+             <blockquote>
+              <div>
+               <p>There is at-least one “coarse” pointer attached.</p>
+              </div>
+             </blockquote>
+             <p><code class="docutils literal notranslate"><span class="pre">fine</span></code></p>
+             <blockquote>
+              <div>
+               <p>There is at-least one “fine” pointer attached.</p>
+              </div>
+             </blockquote>
+            </div>
+           </blockquote>
+           <p><code class="docutils literal notranslate"><span class="pre">hover</span></code></p>
+           <blockquote>
+            <div>
+             <p>Allows the webpage to query whether the primary pointer is capable of “hovering” over top of elements on the page. Computer mice, touchpad cursors, and higher-end pen tablets all support this, whereas current touchscreens are “touch” or “no touch”, and they cannot detect a finger hovering over the screen.</p>
+             <p><code class="docutils literal notranslate"><span class="pre">hover</span></code></p>
+             <blockquote>
+              <div>
+               <p>The primary pointer is capable of reporting hovering.</p>
+              </div>
+             </blockquote>
+             <p><code class="docutils literal notranslate"><span class="pre">none</span></code></p>
+             <blockquote>
+              <div>
+               <p>The primary pointer is not capable of reporting hovering.</p>
+              </div>
+             </blockquote>
+            </div>
+           </blockquote>
+           <p><code class="docutils literal notranslate"><span class="pre">any-hover</span></code></p>
+           <blockquote>
+            <div>
+             <p>Indicates whether any pointer attached to the system has the <code class="docutils literal notranslate"><span class="pre">hover</span></code> capability.</p>
+            </div>
+           </blockquote>
+           <section id="selection-of-the-primary-pointing-device">
+            <h4><a class="toc-backref" href="#id14" role="doc-backlink">Selection of the Primary Pointing Device</a><a class="headerlink" href="#selection-of-the-primary-pointing-device" title="Link to this heading">?</a></h4>
+            <p>To illustrate the complexity of this topic, consider the Microsoft Surface Pro.</p>
+            <p>The Surface Pro has an advanced screen that is capable of receiving touch input, but it can also behave like a pen digitizer and receive input from a stylus with advanced pen capabilities, like hover sensing, pressure sensitivity, multiple buttons, and even multiple “tips” (a pen and eraser end).</p>
+            <p>In this case, what should Firefox consider the primary pointing device?</p>
+            <p>Perhaps the user intends to use their Surface Pro like a touchscreen tablet, at which point Firefox should report <code class="docutils literal notranslate"><span class="pre">pointer:</span> <span class="pre">coarse</span></code> and <code class="docutils literal notranslate"><span class="pre">hover:</span> <span class="pre">none</span></code> capabilities.</p>
+            <p>But what if, instead, the user wants to sketch art or take notes using a pen on their Surface Pro? In this case, Firefox should be reporting <code class="docutils literal notranslate"><span class="pre">pointer:</span> <span class="pre">fine</span></code> and <code class="docutils literal notranslate"><span class="pre">hover:</span> <span class="pre">hover</span></code>.</p>
+            <p>Imagine that the user then attaches the “keyboard + touchpad” cover attachment to their Surface Pro; naturally, we will consider that the user’s intent is for the touchpad to become the primary pointing device, and so it is fairly clear that we should return <code class="docutils literal notranslate"><span class="pre">pointer:</span> <span class="pre">fine</span></code> and <code class="docutils literal notranslate"><span class="pre">hover:</span> <span class="pre">hover</span></code> in this state.</p>
+            <p>However, what if the user tucks the keyboard/touchpad attachment behind the tablet and begins exclusively operating the device with their finger?</p>
+            <p>This example shows that complex, multi-input machines can resist classification and blur the lines between labels like “touch device”, “laptop”, “drawing tablet”, etc. It also illustrates that identifying the “primary” pointing device using only machine configuration may yield unintuitive and suboptimal results.</p>
+            <p>While we can almost-certainly improve our hardware detection heuristics to better answer this question (and we should, at the very least), perhaps it makes more sense for Firefox to incorporate user intentions into the decision. Intentions could be communicated directly by the user through some sort of setting or indirectly through the user’s actions.</p>
+            <p>For example, if the user intends to draw on the screen with a pen, perhaps Firefox provides something like a “drawing mode” that the user can toggle to change the primary pointing device to the pen. Or perhaps it’s better for Firefox to interpret the mere fact of receiving pen input as evidence of the user’s intent and switch the reported primary pointing device automatically.</p>
+            <p>If we wanted to switch automatically, there are predictable traps and pitfalls we need to think about: we need to ensure that we don’t create frustrating user experiences where web pages may “pop” beneath the user suddenly, and we should likely incorporate some kind of “settling time” so we don’t oscillate between devices.</p>
+            <p>It’s worth noting that Chromium doesn’t seem to incorporate anything like what’s being suggested here, so if this is well-designed it may be an opportunity for Firefox to try something novel.</p>
+           </section>
+          </section>
+         </section>
+         <section id="state-of-the-browser">
+          <h2><a class="toc-backref" href="#id15" role="doc-backlink">State of the Browser</a><a class="headerlink" href="#state-of-the-browser" title="Link to this heading">?</a></h2>
+          <section id="pan-and-zoom-inertia-overscroll-and-elastic-bounce">
+           <h3><a class="toc-backref" href="#id16" role="doc-backlink">Pan and Zoom, Inertia, Overscroll, and Elastic Bounce</a><a class="headerlink" href="#pan-and-zoom-inertia-overscroll-and-elastic-bounce" title="Link to this heading">?</a></h3>
+           <p>As can be seen in the videos below, Firefox’s support for inertia, overscroll, and elastic bounce works well on all platforms when a stylus pen is used as the input device, and it also works just fine with the touchscreen on the Dell XPS 15. However, it completely fails when the touchscreen is used on the Microsoft Surface Pro. While more investigation is needed to completely understand these issues, the fact that the correctly-behaving digitizing pens use the Pointer API and the misbehaving input devices do not may be related.</p>
+           <ul class="simple">
+            <li>
+             <p><a class="reference external" href="https://drive.google.com/file/d/1Z1QRSf2RluNhJwkKCzPb6-14vRtkqK8s/view?usp=sharing">Video 1</a> showcasing overscroll and bounce not working on Surface Pro with touch, but other devices/inputs are working</p></li>
+            <li>
+             <p><a class="reference external" href="https://drive.google.com/file/d/1bOgpVGBeZtwelvPJzYdA6uFRpubGtu4W/view?usp=sharing">Video 2</a> showing that everything works just fine with an external Wacom digitizer</p></li>
+           </ul>
+          </section>
+          <section id="pointer-media-queries">
+           <h3><a class="toc-backref" href="#id17" role="doc-backlink">Pointer Media Queries</a><a class="headerlink" href="#pointer-media-queries" title="Link to this heading">?</a></h3>
+           <p><strong>“any-pointer” Queries</strong></p>
+           <p>Unlike the <code class="docutils literal notranslate"><span class="pre">pointer</span></code> media queries, which rely on the browser to make a policy decision about what should be considered the “primary” pointer in a given system configuration, the <code class="docutils literal notranslate"><span class="pre">any-pointer</span></code> queries are much more objective and binary: the computer either has a type of device attached to it, or it doesn’t.</p>
+           <p><strong>any-pointer: coarse</strong></p>
+           <p>Firefox reports that there are “coarse” pointing devices present if either of these two points is true:</p>
+           <ol class="arabic simple">
+            <li>
+             <p><code class="docutils literal notranslate"><span class="pre">GetSystemMetrics(SM_DIGITIZER)</span></code> reports that a device that supports touch or pen is present.</p></li>
+            <li>
+             <p>Based on heuristics, Firefox concludes that it is running on a computer it considers a “tablet”.</p></li>
+           </ol>
+           <p>Point #1 is incorrect, as a pen is not a “coarse” pointing device. Note that this is a recent regression in <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1811303">Bug 1811303</a> that was uplifted to Firefox 112, so this actually regressed as this document was being written! This is responsible for the incorrect “Windows 10 Desktop + Wacom USB Tablet” issue in the table.</p>
+           <p>Point #2 is a clear case of the <a class="reference external" href="https://en.wikipedia.org/wiki/XY_problem">XY Problem</a>, where Firefox is trying to determine if a coarse pointing device is present by determining whether it is running on a tablet, when instead it should be directly testing for coarse pointing devices (since, of course, those can exist on machines that wouldn’t normally be considered a “tablet”). This is responsible for the incorrect “Windows 10 Dell XPS 15 (Touch Disabled) + Wacom USB Tablet” issue in the table below.</p>
+           <p><strong>any-pointer: fine</strong></p>
+           <p>Firefox reports that there are “fine” pointing devices present if and only if it detects a mouse. This is clearly already wrong. Firefox determines that the computer has a mouse using the following algorithm:</p>
+           <ol class="arabic simple">
+            <li>
+             <p>If <code class="docutils literal notranslate"><span class="pre">GetSystemMetrics(SM_MOUSEPRESENT)</span></code> returns false, report no mouse.</p></li>
+            <li>
+             <p>If Firefox does not consider the current computer to be a tablet, report a mouse if there is at-least one “mouse” device driver running on the computer.</p></li>
+            <li>
+             <p>If Firefox considers the current computer to be a tablet or a touch system, only report a mouse if there are at-least two “mouse” device drivers running. This exists because some tablet pens and touch digitizers report themselves as computer mice.</p></li>
+           </ol>
+           <p>This algorithm also suffers from the XY problem – Firefox is trying to determine whether a fine pointing device exists by determining if there is a computer mouse present, when instead it should be directly testing for fine pointing devices, since mice are not the only fine pointing devices.</p>
+           <p>Because of this proxy question, this algorithm is completely dependent on any attached fine pointing device (like a pen tablet) to report itself as a mouse. Point #3 makes the problem even worse, because if a computer that resembles a tablet fails to report its digitizers as mice, the algorithm will completely ignore an actual computer mouse attached to the system because it expects two of them to be reported!</p>
+           <p>Unfortunately, the Surface Pro has both a pen digitizer and a touch digitizer, and it reports neither as a mouse. As a result, this algorithm completely falls apart on the Surface Pro, failing to report any “fine” pointing device even when a computer mouse is plugged in, a pen is plugged in, or even when the tablet is docked because its touchpad is only one mouse and it expects at least two.</p>
+           <p>This is also responsible for failing to report the trackpad on the Dell XPS 15 as “fine”, because the Dell XPS 15 has a touchscreen and therefore looks like a “tablet”, but doesn’t report 2 mouse drivers.</p>
+           <p><strong>any-pointer: hover</strong></p>
+           <p>Firefox reports that any device that is a “fine” pointer also supports “hover”, which does generally hold true, but isn’t necessarily true for lower-end pens that only support tapping. It would be better for Firefox to directly query the operating system instead of just assuming.</p>
+           <p><strong>“pointer” media query</strong></p>
+           <p>As discussed previously at length, this media query relies on a “primary” designation made by the browser. Below is the current algorithm used to determine this:</p>
+           <ol class="arabic simple">
+            <li>
+             <p>If the computer is considered a “tablet” (see below), report primary pointer as “coarse” (this is clearly already the wrong behavior).</p></li>
+            <li>
+             <p>Otherwise, if the computer has a mouse plugged in, report “fine”.</p></li>
+            <li>
+             <p>Otherwise, if the computer has a touchscreen or pen digitizer, report “coarse” (this is wrong in the case of the digitizer).</p></li>
+            <li>
+             <p>Otherwise, report “fine” (this is wrong; should report “None”).</p></li>
+           </ol>
+           <p>Firefox uses the following algorithm to determine if the computer is a “tablet” for point #1 above:</p>
+           <ol class="arabic simple">
+            <li>
+             <p>It is not a tablet if it’s not at-least running Windows 8.</p></li>
+            <li>
+             <p>If Windows “Tablet Mode” is enabled, it is a tablet no matter what.</p></li>
+            <li>
+             <p>If no touch-capable digitizers are attached, it is not a tablet.</p></li>
+            <li>
+             <p>If the system doesn’t support auto-rotation, perhaps because it has no rotation sensor, or perhaps because it’s docked and operating in “laptop mode” where rotation won’t happen, it’s not a tablet.</p></li>
+            <li>
+             <p>If the vendor that made the computer reports to Windows that it supports “convertible slate mode” and it is currently operating in “slate mode”, it’s a tablet.</p></li>
+            <li>
+             <p>Otherwise, it’s not a tablet.</p></li>
+           </ol>
+           <p><strong>Table with comparison to Chromium</strong></p>
+           <p>The following table shows how Firefox and Chromium respond to various pointer queries. The “any-pointer” and “any-hover” columns are not subjective and therefore are always either green or red to indicate “pass” or “fail”, but the “pointer” and “hover” may also be yellow to indicate that it’s “open to interpretation” because of the aforementioned difficulty in determining the “primary pointer”.</p><a class="reference internal image-reference" href="../../../_images/touch_media_queries.png"><img alt="../../../_images/touch_media_queries.png" src="../../../_images/touch_media_queries.png" style="width: 100%;"></a>
+           <p><strong>Related Bugs</strong></p>
+           <ul class="simple">
+            <li>
+             <p><a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1813979">Bug 1813979</a> - For Surface Pro media query “any-pointer: fine” is true only when both the Type Cover and mouse are connected</p></li>
+            <li>
+             <p><a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1747942">Bug 1747942</a> - Incorrect CSS media query matches for pointer, any-pointer, hover and any-hover on Surface Laptop</p></li>
+            <li>
+             <p><a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1528441">Bug 1528441</a> - @media (hover) and (any-hover) does not work on Firefox 64/65 where certain dual inputs are present</p></li>
+            <li>
+             <p><a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1697294">Bug 1697294</a> - Content processes unable to detect Windows 10 Tablet Mode</p></li>
+            <li>
+             <p><a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1806259">Bug 1806259</a> - CSS media queries wrongly detect a Win10 desktop computer with a mouse and a touchscreen, as a device with no mouse (hover: none) and a touchscreen (pointer: coarse)</p></li>
+           </ul>
+          </section>
+          <section id="web-events">
+           <h3><a class="toc-backref" href="#id18" role="doc-backlink">Web Events</a><a class="headerlink" href="#web-events" title="Link to this heading">?</a></h3>
+           <p>The pen stylus worked well on all tested systems – The correct pointer events were fired in the correct order, and mouse events were properly simulated in case the default behavior was allowed.</p>
+           <p>The touchscreen input was less reliable. On the Dell XPS 15, the “Pointer Events” were flawless, but the “Touch Events” were missing an important step: the <code class="docutils literal notranslate"><span class="pre">touchstart</span></code> and <code class="docutils literal notranslate"><span class="pre">touchmove</span></code> messages were sent just fine, but Firefox never sends the <code class="docutils literal notranslate"><span class="pre">touchend</span></code> message! (Hopefully that isn’t too difficult to fix!)</p>
+           <p>Unfortunately, everything really falls apart on the Surface Pro using the touchscreen – neither the “Pointer Events” nor the “Touch Events” fire at all! Instead, the touch is completely absorbed by pan and zoom gestures, and nothing is sent to the web page. The website’s request for <code class="docutils literal notranslate"><span class="pre">touch-action:</span> <span class="pre">none</span></code> is ignored, and the web page is never given any opportunity to call <code class="docutils literal notranslate"><span class="pre">Event.preventDefault()</span></code> to cancel the pan/zoom behavior.</p>
+          </section>
+          <section id="operating-system-interfaces">
+           <h3><a class="toc-backref" href="#id19" role="doc-backlink">Operating System Interfaces</a><a class="headerlink" href="#operating-system-interfaces" title="Link to this heading">?</a></h3>
+           <p>As was discussed above, Windows has multiple input APIs that were each introduced in newer version of Windows to handle devices that were not well-served by existing APIs.</p>
+           <p>Backward compatibility with applications designed against older APIs is realized when applications call the default event handler (<code class="docutils literal notranslate"><span class="pre">DefWindowProc</span></code>) upon receiving an event type that they don’t recognize (which is what apps have always been instructed to do if they receive events they don’t recognize). The unrecognized newer events will be translated by the default event handler into older events and sent back to the application. A very old application may have this process repeat through several generations of APIs until it finally sees events that it recognizes.</p>
+           <p>Firefox currently uses a mix of the older and newer APIs, which complicates the input handling logic and may be responsible for some of the difficult-to-explain bugs that we see reported by users.</p>
+           <p>Here is an explanation of the codepaths Firefox uses to handle pointer input:</p>
+           <ol class="arabic">
+            <li>
+             <p>Firefox handles the <code class="docutils literal notranslate"><span class="pre">WM_POINTER[LEAVE|DOWN|UP|UPDATE]</span></code> messages if the input device is a tablet pen and an Asynchronous Pan and Zoom (APZ) compositor is available. Note that this already may not be ideal, as Microsoft warns (<a class="reference external" href="https://learn.microsoft.com/en-us/windows/win32/inputmsg/wm-pointercapturechanged">here</a>) that handling some pointer messages and passing other pointer messages to <code class="docutils literal notranslate"><span class="pre">DefWindowProc</span></code> has unspecified behavior (meaning that Win32 may do something unexpected or nonsensical).</p>
+             <p>If the above criteria aren’t met, Firefox will call <code class="docutils literal notranslate"><span class="pre">DefWindowProc</span></code>, which will re-post the pointer messages as either touch messages or mouse messages.</p></li>
+            <li>
+             <p>If DirectManipulation is being used for APZ, it will output the <code class="docutils literal notranslate"><span class="pre">WM_POINTERCAPTURECHANGED</span></code> if it detects a pan or zoom gesture it can handle. It will then handle the rest of the gesture itself.</p>
+             <p>DirectManipulation is used for all top-level and popup windows as long as it isn’t disabled via the <code class="docutils literal notranslate"><span class="pre">apz.allow_zooming</span></code>, <code class="docutils literal notranslate"><span class="pre">apz.windows.use_direct_manipulation</span></code>, or <code class="docutils literal notranslate"><span class="pre">apz.windows.force_disable_direct_manipulation</span></code> prefs.</p></li>
+            <li>
+             <p>If the pointing device is touch, the next action depends on whether an Asynchronous Pan and Zoom (APZ) compositor is available. If it is, the window will have been registered using <code class="docutils literal notranslate"><span class="pre">RegisterTouchWindow</span></code>, and Firefox will receive <code class="docutils literal notranslate"><span class="pre">WM_TOUCH</span></code> messages, which will be sent to the “Touch Event” API and handled directly by the APZ compositor.</p>
+             <p>If there is no APZ compositor, it will instead be received as a <code class="docutils literal notranslate"><span class="pre">WM_GESTURE</span></code> message or a mouse message, depending on the movement. Note that these will be more basic gestures, like tap-and-hold.</p></li>
+            <li>
+             <p>If none of the above apply, the message will be converted into standard <code class="docutils literal notranslate"><span class="pre">WM_MOUSExxx</span></code> messages via a call to <code class="docutils literal notranslate"><span class="pre">DefWindowProc</span></code>.</p></li>
+           </ol>
+          </section>
+         </section>
+         <section id="discussion">
+          <h2><a class="toc-backref" href="#id20" role="doc-backlink">Discussion</a><a class="headerlink" href="#discussion" title="Link to this heading">?</a></h2>
+          <p>Here is where some of the outstanding thoughts or questions can be listed. This can be updated as more questions come about and (hopefully) as answers to questions become apparent.</p>
+          <section id="css-pointer-media-queries">
+           <h3><a class="toc-backref" href="#id21" role="doc-backlink">CSS “pointer” Media Queries</a><a class="headerlink" href="#css-pointer-media-queries" title="Link to this heading">?</a></h3>
+           <ul class="simple">
+            <li>
+             <p>The logic for the <code class="docutils literal notranslate"><span class="pre">any-pointer</span></code> and <code class="docutils literal notranslate"><span class="pre">any-hover</span></code> queries are objectively incorrect and should be rewritten altogether. That is not as big of a job as it sounds, as the code is fairly straightforward and self-contained. (Note: Improvements have already been made in <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1813979">Bug 1813979</a>)</p></li>
+            <li>
+             <p>There are a few behaviors for <code class="docutils literal notranslate"><span class="pre">pointer</span></code> and <code class="docutils literal notranslate"><span class="pre">hover</span></code> that are objectively wrong (such as reporting a <code class="docutils literal notranslate"><span class="pre">coarse</span></code> pointer when the Surface Pro is docked with a touchpad). Those should be fixable with a code change similar to the previous bullet.</p></li>
+            <li>
+             <p>Do we want to continue to use only machine configuration to decide what the “primary” pointer is, or do we also want to incorporate user intent into the algorithm? Or, alternatively:</p>
+             <ol class="arabic simple">
+              <li>
+               <p>Do we create a way for the user to override? For example, a “Drawing Mode” button if a tablet digitizer is sensed.</p></li>
+              <li>
+               <p>Do we attempt to change automatically in response to user action?</p>
+               <ul>
+                <li>
+                 <p>An example was used above of a docked Surface Pro computer, where the user may use the keyboard and touchpad for a while, then perhaps tuck that behind and use the device as a touchscreen, and then perhaps draw on it with a tablet stylus.</p></li>
+                <li>
+                 <p>We would need to be careful to avoid careless “popping” or “oscillating” if we react too quickly to changing input types.</p></li>
+               </ul></li>
+             </ol></li>
+            <li>
+             <p>On a separate-but-related note, the <a class="reference external" href="https://www.w3.org/TR/mediaqueries-5/#descdef-media-pointer">W3C suggested</a> that it might be beneficial to allow users to at-least disable all reporting of <code class="docutils literal notranslate"><span class="pre">fine</span></code> pointing devices for users who may have a disability that prevents them from being able to click small objects, even with a fine pointing device.</p></li>
+           </ul>
+          </section>
+          <section id="id1">
+           <h3><a class="toc-backref" href="#id22" role="doc-backlink">Pan-and-Zoom, Inertia, Overscroll, and Elastic Bounce</a><a class="headerlink" href="#id1" title="Link to this heading">?</a></h3>
+           <ul>
+            <li>
+             <p>Inertia, overscroll, and elastic bounce are just plain broken on the Surface Pro. That should definitely be investigated.</p></li>
+            <li>
+             <p>We can see from the video below that Microsoft Edge has quite a bit more overscroll and a more elastic bounce than Firefox does, and it also allows elastic bounce in directions that the page itself doesn’t scroll.</p>
+             <p>Edge’s way seems more similar to the user experience I’d expect from using Firefox on an iPhone or Android device. Perhaps we should consider following suit?</p>
+             <p>(<a class="reference external" href="https://drive.google.com/file/d/14XVLT6CNn2RaXcHHCRIrQmRwoMYjj6fu/view?usp=sharing">Link to video</a>)</p></li>
+           </ul>
+          </section>
+          <section id="id2">
+           <h3><a class="toc-backref" href="#id23" role="doc-backlink">Web Events</a><a class="headerlink" href="#id2" title="Link to this heading">?</a></h3>
+           <ul class="simple">
+            <li>
+             <p>It’s worth investigating why the <code class="docutils literal notranslate"><span class="pre">touchend</span></code> message never seems to be sent by Firefox on any tested devices.</p></li>
+            <li>
+             <p>It’s very disappointing that neither the Pointer Events API nor the Touch Events API works at all on Firefox on the Surface Pro. That should be investigated very soon!</p></li>
+           </ul>
+          </section>
+          <section id="id3">
+           <h3><a class="toc-backref" href="#id24" role="doc-backlink">Operating System Interfaces</a><a class="headerlink" href="#id3" title="Link to this heading">?</a></h3>
+           <ul class="simple">
+            <li>
+             <p>With the upcoming sun-setting of Windows 7 support, Firefox has an opportunity to revisit the implementation of our input handling and try to simplify our codepaths and eliminate some of the workarounds that exist to handle some of these complex interactions, as well as fix entire classes of bugs - both reported and unreported - that currently exist as a result.</p></li>
+            <li>
+             <p>Does it make sense to combine the touchscreen and pen handling together and use the <code class="docutils literal notranslate"><span class="pre">WM_POINTERXXX</span></code> messages for both?</p>
+             <ul>
+              <li>
+               <p>This would eliminate the need to handle the <code class="docutils literal notranslate"><span class="pre">WM_TOUCH</span></code> and <code class="docutils literal notranslate"><span class="pre">WM_GESTURE</span></code> messages at all.</p></li>
+              <li>
+               <p>Note that there is precedent for this, as <a class="reference external" href="https://gitlab.gnome.org/GNOME/gtk/-/merge_requests/1563">GTK</a> has already done so. It appears that <a class="reference external" href="https://archive.blender.org/developer/D7660">Blender</a> has plans to move toward this as well.</p></li>
+              <li>
+               <p>Tablet pens seemed to do very well in most of the testing, and they are also the part of the code that mainly exercises the <code class="docutils literal notranslate"><span class="pre">WM_POINTERXXX</span></code> codepaths. That may imply increased reliability in that codepath?</p></li>
+              <li>
+               <p>The Pointer APIs also have good device simulation for integration testing.</p></li>
+              <li>
+               <p>Would we also want to roll mouse handling into it using the <cite>EnableMouseInPointer &lt;https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-enablemouseinpointer&gt;</cite> __ call? That would allow us to also get rid of handling <code class="docutils literal notranslate"><span class="pre">WM_MOUSE[MOVE/WHEEL/HWHEEL]</span></code> and <code class="docutils literal notranslate"><span class="pre">WM_[LRM]BUTTON[UP|DOWN]</span></code> messages. Truly one codepath (with a few minor branches) to rule them all!</p></li>
+              <li>
+               <p>Nick Rishel sent <a class="reference external" href="http://the-witness.net/news/2012/10/wm_touch-is-totally-bananas/">this link</a> that details the troubles that the developers of The Witness (a video game) ran into when using the <code class="docutils literal notranslate"><span class="pre">WM_TOUCH</span></code> API. It argues that the API is poorly-designed, and advises that if Windows 7 support is not needed, the API should be avoided.</p></li>
+             </ul></li>
+            <li>
+             <p>Should we exclusively use DirectManipulation for Pan/Zoom?</p>
+             <ul>
+              <li>
+               <p>Multitouch touchpads bypass all of the <code class="docutils literal notranslate"><span class="pre">WM_POINTER</span></code> machinery for anything gesture-related and directly send their messages to DirectManipulation. We then “capture” all the DirectManipulation events and pump them into our events pipeline, as explained above.</p></li>
+              <li>
+               <p>DirectManipulation also handles “overscroll + elastic bounce” in a way that aligns with Windows look-and-feel.</p></li>
+              <li>
+               <p>Perhaps it makes sense to just use DirectManipulation for all APZ handling and eliminate any attempt at handling this through other codepaths.</p></li>
+             </ul></li>
+           </ul>
+          </section>
+          <section id="high-frequency-input">
+           <h3><a class="toc-backref" href="#id25" role="doc-backlink">High-Frequency Input</a><a class="headerlink" href="#high-frequency-input" title="Link to this heading">?</a></h3>
+           <p>“High-Frequency Input” refers to the ability for an app to be able to still perceive input events despite them happening at a rate faster than the app itself actually handles them.</p>
+           <p>Consider a mouse that moves through several points: “A-&gt;B-&gt;C-&gt;D-&gt;E”. If the application processes input when the mouse is at “A” and doesn’t poll again until the mouse is at point “E”, the default behavior of all modern operating systems is to “coalesce” these events and simply report “A-&gt;E”. This is fine for the majority of use cases, but certain workloads (such as digital handwriting and video games) can benefit from knowing the complete path that was taken to get from the start point to the end point.</p>
+           <p>Generally, solutions to this involve the operating system keeping a history of pointer movements that can be retrieved through an API. For example, Android provides the <a class="reference external" href="https://developer.android.com/reference/android/view/MotionEvent.html">MotionEvent</a> API that batches historal movements.</p>
+           <p>Unfortunately, the APIs to do this in Windows are terribly broken. As <a class="reference external" href="https://blog.getpaint.net/2019/11/14/paint-net-4-2-6-alpha-build-7258/">this blog</a> makes clear, <a class="reference external" href="https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getmousemovepointsex">GetMouseMovePointsEx</a> has so many issues that they had to remove its usage from their program because of the burden. That same blog entry also details that the newer Pointer API has the <a class="reference external" href="https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getpointerinfohistory">GetPointerInfoHistory</a> that is <em>supposed</em> to support tracking pointer history, but it only ever tracks a single entry!</p>
+           <p>Perhaps luckily, there is currently no web standard for high-frequency input, although it <a class="reference external" href="https://lists.w3.org/Archives/Public/public-pointer-events/2014AprJun/0057.html">has been asked about in the past</a>.</p>
+           <p>If such a standard was ever created, it would likely be very difficult for Firefox on Windows to support it.</p>
+          </section>
+          <section id="directmanipulation-and-pens">
+           <h3><a class="toc-backref" href="#id26" role="doc-backlink">DirectManipulation and Pens</a><a class="headerlink" href="#directmanipulation-and-pens" title="Link to this heading">?</a></h3>
+           <ul class="simple">
+            <li>
+             <p>This is a todo item, but it needs to be investigated whether or not DirectManipulation can directly scoop up pen input, or whether it has to be handled by the application (and forwarded to DM if desired).</p></li>
+           </ul>
+          </section>
+         </section>
+        </section>
+       </div>
+      </div>
+      <footer>
+       <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../blocklist.html" class="btn btn-neutral float-left" title="Windows DLL Blocklisting" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a> <a href="../LimitedAccessFeature.html" class="btn btn-neutral float-right" title="Windows Limited Access Features" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+       </div>
+       <hr>
+       <div role="contentinfo">
+        <p></p>
+       </div> Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+      </footer>
+     </div>
+    </div>
+   </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ </body>
+</html>

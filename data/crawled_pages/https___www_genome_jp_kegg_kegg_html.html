@@ -1,0 +1,401 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>KEGG: Kyoto Encyclopedia of Genes and Genomes</title>
+  <meta name="Keywords" content="KEGG, Kyoto Encyclopedia of Genes and Genomes, Pathway database, Brite database, Ligand database, Kanehisa Laboratories">
+  <meta name="Description" content="KEGG (Kyoto Encyclopedia of Genes and Genomes) is a bioinformatics resource for linking genomes to life and the environment">
+  <link rel="stylesheet" href="/css/kegg25.css">
+  <script src="/js/jquery-3.5.1.min.js"></script>
+  <script src="/kegg/js/launcher.js"></script>
+  <script>
+<!--
+function init() {
+    document.form1.text.focus();
+    document.form1.text.onkeydown = check_keys;
+    document.show.onsubmit = function(){submit_chk(document.show);};
+}
+
+function check_keys( ev ) {
+    var c = get_code( ev );
+    var p = document.form1.text.value;
+
+    p = p.replace( /^\s+/, "" );
+    p = p.replace( /\s+$/, "" );
+
+    if (c == 13 && p == "") { document.form1.text.blur(); }
+    return true;
+}
+
+function get_code( _event ) {
+    if( !_event ) _event = window.event;
+    if (_event.which) { code = _event.which; }
+    else { code = _event.keyCode; }
+    return code;
+}
+
+function submit_chk(form){
+    var ent = form.org.value;
+    ent = ent.replace( /\s+/, " " );
+    ent = ent.replace( /\s+$/, "" );
+    ent = ent.replace( /^\s+/, "" );
+    if(ent == ""){
+        return false;
+    }
+    if(ent.match(/\W/)) {
+        form.orgs.value = ent;
+        form.org.value = "";
+    } else {
+        form.org.value = ent;
+    }
+    form.action ='/kegg-bin/show_organism';
+    form.submit();
+    return true;
+}
+//-->
+</script>
+  <style>
+.menu3 {
+  background: url(/Fig/kegg_bg3.png);
+}
+dl {
+  margin: 2px 0 2px 20px;
+}
+dt {
+  width: 140px;
+  margin: 2px 0;
+  float: left;
+  clear: left;
+}
+dd {
+  margin: 2px 0;
+  float: left;
+}
+div.bor1 ul {
+  margin: 0;
+  padding: 0;
+}
+div.bor1 li {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+</style>
+ </head>
+ <body onload="init();">
+  <div id="topnav" ontouchstart="">
+   <div class="navlist">
+    <a href="/kegg/">KEGG</a>
+   </div>
+   <div class="dropdown">
+    Databases 
+    <div class="dropdown-content">
+     <ul>
+      <li><a href="/kegg/pathway.html">Pathway</a></li>
+      <li><a href="/kegg/brite.html">Brite</a></li>
+      <li><a href="/kegg/ko.html">KO</a></li>
+      <li><a href="/kegg/genes.html">Genes</a></li>
+      <li><a href="/kegg/compound/">Chemical</a></li>
+      <li><a href="/kegg/disease/">Disease</a></li>
+      <li><a href="/kegg/drug/">Drug</a></li>
+      <li><a href="/kegg/medicus.html">Medicus</a></li>
+     </ul>
+    </div>
+   </div>
+   <div class="dropdown">
+    Tools 
+    <div class="dropdown-content">
+     <ul>
+      <li><a href="/kegg/mapper/">Mapper</a></li>
+      <li><a href="/kegg/webapp/">Web Apps</a></li>
+      <li><a href="/kegg/syntax/">Syntax</a></li>
+      <li><a href="/kegg/annotation/">Annotation</a></li>
+     </ul>
+    </div>
+   </div>
+   <div class="dropdown">
+    Auto annotation 
+    <div class="dropdown-content">
+     <ul>
+      <li><a href="https://www.kegg.jp/blastkoala/">BlastKOALA</a></li>
+      <li><a href="https://www.kegg.jp/ghostkoala/">GhostKOALA</a></li>
+     </ul>
+    </div>
+   </div>
+   <div class="navlist">
+    <a href="https://www.kanehisa.jp/">Kanehisa Lab</a>
+   </div>
+  </div>
+  <div id="header2">
+   <div class="topsearch">
+    <form name="form1" method="get" enctype="multipart/form-data" action="javascript:LaunchRetriever(document.form1);">
+     <select name="mode"> <option value="kegg" selected>KEGG</option> <option value="dbget">DBGET</option> <option value="medicus">MEDICUS</option> </select> <input type="search" size="40" name="text"> <input type="button" value="Search" onclick="LaunchRetriever(document.form1);"> &nbsp;&nbsp; <a href="javascript:void(window.open('/kegg/document/help_kegg_search.html','KEGG_Help','toolbar=no,location=no,directories=no,width=720,height=640,resizable=yes,scrollbars=yes'))">Help</a>
+    </form>
+   </div>
+   <div class="langbar">
+    <a href="/kegg/kegg_ja.html">» Japanese</a>
+   </div>
+  </div>
+  <div id="sidenav">
+   <div class="logo2">
+    <a href="/kegg/"><img src="/Fig/kegg128.gif" alt="KEGG icon"></a>
+   </div>
+   <div class="menu3">
+    <ul>
+     <li class="home"><b>KEGG Home</b></li>
+     <li>&nbsp;&nbsp; <a href="/kegg/docs/relnote.html">Release notes</a></li>
+     <li>&nbsp;&nbsp; <a href="https://www.kegg.jp/kegg/docs/statistics.html">Current statistics</a></li>
+    </ul>
+    <ul>
+     <li><a href="/kegg/kegg1.html"><b>KEGG Database</b></a></li>
+     <li>&nbsp;&nbsp; <a href="/kegg/kegg1a.html">KEGG overview</a></li>
+     <li>&nbsp;&nbsp; <a href="/kegg/kegg1b.html">KEGG mapping</a></li>
+     <li>&nbsp;&nbsp; <a href="/kegg/kegg1c.html">Color codes</a></li>
+    </ul>
+    <ul>
+     <li><a href="/kegg/kegg3.html"><b>KEGG Objects</b></a></li>
+     <li>&nbsp;&nbsp; <a href="/kegg/docs/weblinks.html">KEGG Weblinks</a></li>
+     <li>&nbsp;&nbsp; <a href="/kegg/docs/dbentry.html">Entry format</a></li>
+    </ul>
+    <ul>
+     <li><a href="/kegg/kegg4.html"><b>KEGG Software</b></a></li>
+     <li>&nbsp;&nbsp; <a href="/kegg/api.html">KEGG API</a></li>
+     <li>&nbsp;&nbsp; <a href="https://www.kegg.jp/kegg/xml/">KGML</a></li>
+    </ul>
+    <ul>
+     <li><a href="https://www.kegg.jp/kegg/download/">KEGG FTP</a></li>
+     <li>&nbsp;&nbsp; <a href="https://www.pathway.jp/en/academic.html">Subscription</a></li>
+     <li>&nbsp;&nbsp; <a href="/kegg/docs/plea.html">Background info</a></li>
+    </ul>
+    <ul>
+     <li><a href="https://www.genome.jp/">GenomeNet</a></li>
+    </ul>
+    <ul>
+     <li><a href="https://www.genome.jp/dbget/">DBGET/LinkDB</a></li>
+    </ul>
+    <ul>
+     <li><a href="https://www.kegg.jp/feedback/">Feedback</a></li>
+     <li><a href="https://www.kegg.jp/feedback/copyright.html">Copyright request</a></li>
+    </ul>
+    <ul>
+     <li><a href="https://www.kanehisa.jp/">Kanehisa Labs</a></li>
+    </ul>
+   </div>
+  </div>
+  <div id="content2">
+   <!-- start -->
+   <hr class="frame1">
+   <div class="main">
+    <h3 class="txt1">KEGG: Kyoto Encyclopedia of Genes and Genomes</h3>
+    <div class="bor1" style="width:530px;">
+     KEGG is a database resource for understanding high-level functions and utilities of the biological system, such as the cell, the organism and the ecosystem, from molecular-level information, especially large-scale molecular datasets generated by genome sequencing and other high-throughput experimental technologies.
+     <br>
+      See <a href="/kegg/docs/relnote.html">Release notes</a> <span class="small">(April 1, 2025)</span> for new and updated features.
+     <br><!--
+<div style="margin-top:6px;">
+<span style="color:red;">Announcement:</span> <a href="/kegg/docs/announce.html">Updated procedure to generate organism-specific pathways</a>
+</div>
+-->
+     <div style="margin-top:6px;">
+      <b class="txt1">New article:</b> <a href="https://doi.org/10.1093/nar/gkae909">KEGG: biological systems database as a model of the real world</a>
+     </div>
+    </div>
+    <br><b><img src="/Fig/egg.gif" alt="egg"> KEGG Database</b>
+    <dl>
+     <dt>
+      <a href="/kegg/kegg2.html"><b>KEGG2</b></a>
+     </dt>
+     <dd>
+      KEGG Table of Contents &nbsp; [<a href="/kegg/docs/updnote.html">Update notes</a> | <a href="/kegg/docs/upd_all.html">Release history</a>]
+     </dd>
+    </dl>
+    <div class="clear"></div>
+    <div style="width:420px; float:left;">
+     <dl>
+      <dt>
+       <a href="/kegg/pathway.html"><b>KEGG PATHWAY</b></a>
+      </dt>
+      <dd>
+       KEGG pathway maps
+      </dd>
+      <dt>
+       <a href="/kegg/brite.html"><b>KEGG BRITE</b></a>
+      </dt>
+      <dd>
+       BRITE hierarchies and tables
+      </dd>
+      <dt>
+       <a href="/kegg/module.html"><b>KEGG MODULE</b></a>
+      </dt>
+      <dd>
+       KEGG modules
+      </dd>
+      <dt>
+       <a href="/kegg/ko.html"><b>KEGG&nbsp;ORTHOLOGY</b></a>
+      </dt>
+      <dd>
+       KO functional orthologs
+      </dd>
+      <dt>
+       <a href="/kegg/genes.html"><b>KEGG GENES</b></a>
+      </dt>
+      <dd>
+       Genes and proteins &nbsp; [<a href="/kegg/annotation/ann_stat.html">Statistics</a>]
+      </dd>
+      <dt>
+       <a href="/kegg/genome/"><b>KEGG GENOME</b></a>
+      </dt>
+      <dd>
+       Genomes &nbsp; [<a href="/kegg/syntax/taxonomy.html">Taxonomy</a> | <a href="/kegg/syntax/synteny.html">Synteny</a>]
+      </dd>
+      <li><a href="/kegg/annotation/">Annotation</a></li>
+      <dt>
+       <a href="/kegg/genome/virus.html"><b>KEGG Virus</b></a>
+      </dt>
+      <dd>
+       Virus-organism relationships
+      </dd>
+      <dt>
+       <a href="/kegg/tables/br08606.html"><b>KEGG Organisms</b></a>
+      </dt>
+      <dd style="margin:0;">
+       <form name="show" method="get" action="javascript:submit_chk(this.form);">
+        Enter org code(s) <input type="text" name="org" size="7" value=""> <input type="hidden" name="orgs" value=""> <input type="button" value="Go" onclick="submit_chk(this.form);">
+       </form>
+      </dd>
+      <dt>
+       <a href="/kegg/compound/"><b>KEGG COMPOUND</b></a>
+      </dt>
+      <dd>
+       Small molecules
+      </dd>
+      <dt>
+       <a href="/kegg/glycan/"><b>KEGG GLYCAN</b></a>
+      </dt>
+      <dd>
+       Glycans
+      </dd>
+      <dt>
+       <a href="/kegg/reaction/"><b>KEGG REACTION</b></a>
+      </dt>
+      <dd>
+       Biochemical reactions &nbsp; [<a href="/kegg/reaction/rmodule.html">RModule</a>]
+      </dd>
+      <dt>
+       <a href="/kegg/annotation/enzyme.html"><b>KEGG ENZYME</b></a>
+      </dt>
+      <dd>
+       Enzyme nomenclature
+      </dd>
+      <dt>
+       <a href="/kegg/network.html"><b>KEGG NETWORK</b></a>
+      </dt>
+      <dd>
+       Disease-related network variations
+      </dd>
+      <dt>
+       <a href="/kegg/disease/"><b>KEGG DISEASE</b></a>
+      </dt>
+      <dd>
+       Human diseases
+      </dd>
+      <dt>
+       <a href="/kegg/drug/"><b>KEGG DRUG</b></a>
+      </dt>
+      <dd>
+       Drugs &nbsp; [<a href="/kegg/drug/br08328.html">New drug approvals</a>]
+      </dd>
+     </dl>
+     <div class="clear"></div>
+    </div>
+    <div style="float:left;">
+     <div class="bor1">
+      <ul>
+       <li><a href="/brite/br08901">Pathway</a></li>
+       <li><a href="/brite/br08902">Brite</a></li>
+       <li><a href="/brite/br08904">Brite table</a></li>
+       <li><a href="/brite/ko00002a">Module</a></li>
+       <li><a href="/brite/br08907">Network</a></li>
+       <li><a href="/brite/ko00001">KO (Function)</a></li>
+       <li><a href="/brite/br08611">Organism</a></li>
+       <li><a href="/brite/br08621">Virus</a></li>
+       <li><a href="/brite/br08001">Compound</a></li>
+       <li><a href="/brite/br08403">Disease (ICD)</a></li>
+       <li><a href="/brite/br08303">Drug (ATC)</a></li>
+       <li><a href="/brite/br08310">Drug (Target)</a></li>
+       <li><a href="/brite/br08307">Antimicrobials</a></li>
+      </ul>
+     </div>
+    </div>
+    <div style="clear:left;"></div>
+    <dl>
+     <dt>
+      <a href="/kegg/medicus.html"><b>KEGG MEDICUS</b></a>
+     </dt>
+     <dd>
+      Health information resource &nbsp; [<a href="https://www.kegg.jp/medicus-bin/search_medicus">Drug labels search</a>]
+     </dd>
+    </dl>
+    <div class="clear"></div><b><img src="/Fig/egg.gif" alt="egg"> Analysis Tools</b>
+    <dl>
+     <dt>
+      <a href="/kegg/mapper/"><b>KEGG Mapper</b></a>
+     </dt>
+     <dd>
+      PATHWAY/BRITE/MODULE mapping tools
+     </dd>
+     <dt>
+      <a href="/kegg/webapp/"><b>KEGG Web Apps</b></a>
+     </dt>
+     <dd>
+      Pathway viewer with coloring features, etc.
+     </dd>
+     <dt>
+      <a href="/kegg/syntax/"><b>KEGG Syntax</b></a>
+     </dt>
+     <li><a href="/kegg/annotation/">Annotation</a></li>
+     <dd>
+      Conserved gene, gene set and gene order analysis
+     </dd>
+     <dt>
+      <a href="/kegg/annotation/"><b>KEGG Annotation</b></a>
+     </dt>
+     <dd>
+      KO assignment and validation
+     </dd>
+     <dt>
+      <a href="https://www.kegg.jp/blastkoala/"><b>BlastKOALA</b></a>
+     </dt>
+     <dd>
+      BLAST-based KO annotation and KEGG mapping
+     </dd>
+     <dt>
+      <a href="https://www.kegg.jp/ghostkoala/"><b>GhostKOALA</b></a>
+     </dt>
+     <dd>
+      GHOSTX-based KO annotation and KEGG mapping
+     </dd>
+     <dt>
+      <a href="https://www.genome.jp/tools/blast/"><b>BLAST</b></a>/<a href="https://www.genome.jp/tools/fasta/"><b>FASTA</b></a>
+     </dt>
+     <dd>
+      Sequence similarity search
+     </dd>
+     <dt>
+      <a href="https://www.genome.jp/tools/simcomp/"><b>SIMCOMP</b></a>
+     </dt>
+     <dd>
+      Chemical structure similarity search
+     </dd>
+    </dl>
+    <div class="clear"></div>
+    <br>
+   </div>
+   <hr class="frame1"><!-- end -->
+  </div>
+  <div id="footer2">
+   <a href="https://www.kegg.jp/kegg/legal.html">Copyright</a> 1995-2025 <a href="https://www.kanehisa.jp/">Kanehisa Laboratories</a>
+  </div>
+ </body>
+</html>

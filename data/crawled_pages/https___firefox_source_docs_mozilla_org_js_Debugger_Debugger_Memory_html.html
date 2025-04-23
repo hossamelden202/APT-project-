@@ -1,0 +1,686 @@
+<!doctype html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Debugger.Memory — Firefox Source Docs  documentation</title>
+  <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50">
+  <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094">
+  <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=fd3f3429">
+  <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b">
+  <link rel="stylesheet" type="text/css" href="../../_static/custom_theme.css?v=dc5ed815">
+  <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7">
+  <link rel="shortcut icon" href="../../_static/firefox.ico"><!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script src="../../_static/jquery.js?v=5d32c60e"></script>
+  <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+  <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+  <script src="../../_static/doctools.js?v=9a2dae69"></script>
+  <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+  <script src="../../_static/copybutton.js?v=30646c52"></script>
+  <script src="../../_static/design-tabs.js?v=36754332"></script>
+  <script src="../../_static/js/theme.js"></script>
+  <link rel="index" title="Index" href="../../genindex.html">
+  <link rel="search" title="Search" href="../../search.html">
+  <link rel="next" title="General Conventions" href="Conventions.html">
+  <link rel="prev" title="Debugger.Frame" href="Debugger.Frame.html">
+ </head>
+ <body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+   <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <div class="wy-side-scroll">
+     <div class="wy-side-nav-search">
+      <a href="../../index.html" class="icon icon-home"> Firefox Source Docs <img src="../../_static/firefox-wordmark.svg" class="logo" alt="Logo"> </a><!-- -- This code is governed by the BSD license ---->
+      <div>
+       <h3>Quick search</h3>
+       <script>
+    (function () {
+      var cx = "dd12886298f75dbef";
+      var gcse = document.createElement("script");
+      gcse.async = true;
+      gcse.src = "https://cse.google.com/cse.js?cx=" + cx;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(gcse, s);
+    })();
+  </script><gcse:search></gcse:search>
+      </div>
+     </div>
+     <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+      <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../glossary/index.html">A Glossary of Common Terms</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../overview/index.html">A Quick Guide to Mozilla Applications</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../setup/index.html">Getting Set Up To Work On The Firefox Codebase</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Working On Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Working on Firefox</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../bug-mgmt/index.html">Bug Handling</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox User Guide</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../devtools-user/index.html">Firefox DevTools User Docs</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Source Code Documentation</span></p>
+      <ul class="current">
+       <li class="toctree-l1"><a class="reference internal" href="../../mots/index.html">Governance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../browser/index.html">Firefox Front-end</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../dom/index.html">DOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../editor/index.html">Editor</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../layout/index.html">Style system (CSS) &amp; Layout</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../gfx/index.html">Graphics</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../ipc/index.html">Processes, Threads and IPC</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../devtools/index.html">Firefox DevTools Contributor Docs</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../toolkit/index.html">Toolkit</a></li>
+       <li class="toctree-l1 current"><a class="reference internal" href="../index.html">SpiderMonkey</a>
+        <ul class="current">
+         <li class="toctree-l2"><a class="reference internal" href="../build.html">Building and testing SpiderMonkey</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../test.html">Running Automated JavaScript Tests</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../hacking_tips.html">Hacking Tips</a></li>
+         <li class="toctree-l2 current"><a class="reference internal" href="index.html">Debugger API</a>
+          <ul class="current">
+           <li class="toctree-l3"><a class="reference internal" href="Debugger-API.html">The <code class="docutils literal notranslate"><span class="pre">Debugger</span></code> Interface</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="Debugger.html">The Debugger Object</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="Debugger.Object.html">Debugger.Object</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="Debugger.Script.html">Debugger.Script</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="Debugger.Source.html">Debugger.Source</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="Debugger.Environment.html">Debugger.Environment</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="Debugger.Frame.html">Debugger.Frame</a></li>
+           <li class="toctree-l3 current"><a class="current reference internal" href="#">Debugger.Memory</a>
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="#allocation-site-tracking">Allocation Site Tracking</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#allocation-logging">Allocation Logging</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#censuses">Censuses</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#accessor-properties-of-the-debugger-memory-prototype-object">Accessor Properties of the <code class="docutils literal notranslate"><span class="pre">Debugger.Memory.prototype</span></code> Object</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#trackingallocationsites"><code class="docutils literal notranslate"><span class="pre">trackingAllocationSites</span></code></a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#allocationsamplingprobability"><code class="docutils literal notranslate"><span class="pre">allocationSamplingProbability</span></code></a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#maxallocationsloglength"><code class="docutils literal notranslate"><span class="pre">maxAllocationsLogLength</span></code></a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#allocationslogoverflowed"><code class="docutils literal notranslate"><span class="pre">allocationsLogOverflowed</span></code></a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#debugger-memory-handler-functions">Debugger.Memory Handler Functions</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#ongarbagecollection-statistics"><code class="docutils literal notranslate"><span class="pre">onGarbageCollection(statistics)</span></code></a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#collections"><code class="docutils literal notranslate"><span class="pre">collections</span></code></a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#reason"><code class="docutils literal notranslate"><span class="pre">reason</span></code></a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#nonincrementalreason"><code class="docutils literal notranslate"><span class="pre">nonincrementalReason</span></code></a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#gccyclenumber"><code class="docutils literal notranslate"><span class="pre">gcCycleNumber</span></code></a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#function-properties-of-the-debugger-memory-prototype-object">Function Properties of the <code class="docutils literal notranslate"><span class="pre">Debugger.Memory.prototype</span></code> Object</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#drainallocationslog"><code class="docutils literal notranslate"><span class="pre">drainAllocationsLog()</span></code></a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#takecensus-options"><code class="docutils literal notranslate"><span class="pre">takeCensus(options)</span></code></a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#memory-use-analysis-exposes-implementation-details">Memory Use Analysis Exposes Implementation Details</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#objects">Objects</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#strings">Strings</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#scripts">Scripts</a></li>
+            </ul></li>
+           <li class="toctree-l3"><a class="reference internal" href="Conventions.html">General Conventions</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="Tutorial-Alloc-Log-Tree.html">Tutorial: Show Allocations Per Call Path</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="Tutorial-Breakpoint.html">Tutorial: Set a breakpoint using <code class="docutils literal notranslate"><span class="pre">Debugger</span></code></a></li>
+           <li class="toctree-l3"><a class="reference internal" href="Tutorial-Debugger-Statement.html">Tutorial: Evaluate an Expression When a debugger; Statement Is Executed</a></li>
+          </ul></li>
+         <li class="toctree-l2"><a class="reference internal" href="../SavedFrame/index.html">SavedFrame</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../feature_checklist.html">JavaScript Language Feature Checklist</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../bytecode_checklist.html">So You Want to Add a Bytecode Op</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../use_counter.html">Adding Use Counter Telemetry to the JS Engine</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../index.html#components-of-spidermonkey">Components of SpiderMonkey</a></li>
+        </ul></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../jsloader/index.html">JS Loader</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/geckoview/index.html">GeckoView</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/fenix/index.html">Fenix</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/focus-android/index.html">Focus for Android</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../dom/bindings/webidl/index.html">WebIDL</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../modules/libpref/index.html">libpref</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../networking/index.html">Networking</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../remote/index.html">Remote Protocols</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../services/index.html">Services</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../permissions/index.html">Permissions</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../uriloader/index.html">File Handling</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../widget/cocoa/index.html">Firefox on macOS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../widget/windows/index.html">Firefox on Windows</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../toolkit/components/ml/index.html">Firefox AI Runtime</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../accessible/index.html">Accessibility</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../media/index.html">Media Playback</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../code-quality/index.html">Code quality</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../writing-rust-code/index.html">Writing Rust Code</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../rust-components/index.html">Rust Components</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/profiler/index.html">Gecko Profiler</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../performance/index.html">Performance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../storage/index.html">Database bindings (SQLite, KV, …)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../xpcom/index.html">XPCOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../nspr/index.html">NSPR</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../security/nss/index.html">Network Security Services (NSS)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../content-security/index.html">Web Security Checks in Gecko</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">The Firefox Build System</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mach/index.html">Mach</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/try/index.html">Pushing to Try</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../build/buildsystem/index.html">Build System</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../taskcluster/index.html">Firefox CI and Taskgraph</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/moztreedocs/index.html">Managing Documentation</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mozbuild/vendor/index.html">Vendoring Third Party Components</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Testing &amp; Test Infrastructure</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/automated-testing/index.html">Automated Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/treeherder-try/index.html">Understanding Treeherder Results</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/sheriffed-intermittents/index.html">Sheriffed intermittent failures</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/tests-for-new-config/index.html">Turning on Firefox tests for a new configuration</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/intermittent/index.html">Avoiding intermittent tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/testing-policy/index.html">Testing Policy</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/ci-configs/index.html">Configuration Changes</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/browser-chrome/index.html">Browser chrome mochitests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/chrome-tests/index.html">Chrome Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/marionette/index.html">Marionette</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/geckodriver/index.html">geckodriver</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/test-verification/index.html">Test Verification</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/webrender/index.html">WebRender Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/mochitest-plain/index.html">Mochitest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/xpcshell/index.html">XPCShell tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/tps/index.html">TPS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../web-platform/index.html">web-platform-tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../gtest/index.html">GTest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/fuzzing/index.html">Fuzzing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/sanitizer/index.html">Sanitizer</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/perfdocs/index.html">Performance Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/code-coverage/index.html">Code coverage</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing-rust-code/index.html">Testing &amp; Debugging Rust Code</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Releases &amp; Updates</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html">Mozilla Update Infrastructure</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html#watershed-updates">Watershed Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html#desupport-updates">Desupport Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/update-verify/index.html">Update Verify</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Localization &amp; Internationalization</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../intl/index.html">Internationalization</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../l10n/index.html">Localization</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox and Python</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mozbase/index.html">mozbase</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../python/index.html">Using third-party Python packages</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Metrics Collected in Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../metrics/index.html">Metrics</a></li>
+      </ul>
+     </div>
+    </div>
+   </nav>
+   <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+    <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+     <i data-toggle="wy-nav-top" class="fa fa-bars"></i> <a href="../../index.html">Firefox Source Docs</a>
+    </nav>
+    <div class="wy-nav-content">
+     <div class="rst-content">
+      <!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+      <div role="navigation" aria-label="Page navigation">
+       <ul class="wy-breadcrumbs">
+        <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+        <li class="breadcrumb-item"><a href="../index.html">SpiderMonkey</a></li>
+        <li class="breadcrumb-item"><a href="index.html">Debugger API</a></li>
+        <li class="breadcrumb-item active">Debugger.Memory</li>
+        <li class="wy-breadcrumbs-aside"><a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Developer+Infrastructure&amp;component=Firefox+Source+Docs%3A+Content&amp;short_desc=Documentation+issue+on+js/Debugger/Debugger.Memory&amp;comment=URL+=+https://firefox-source-docs.mozilla.org/js/Debugger/Debugger.Memory.html&amp;bug_file_loc=https://firefox-source-docs.mozilla.org/js/Debugger/Debugger.Memory.html" rel="nofollow">Report an issue</a> / <a href="../../_sources/js/Debugger/Debugger.Memory.md.txt" rel="nofollow"> View page source</a></li>
+       </ul>
+       <hr>
+      </div>
+      <div role="main" class="document" itemscope itemtype="http://schema.org/Article">
+       <div itemprop="articleBody">
+        <section id="debugger-memory">
+         <h1>Debugger.Memory<a class="headerlink" href="#debugger-memory" title="Link to this heading">?</a></h1>
+         <p>The <a class="reference internal" href="Debugger-API.html"><span class="std std-doc"><code class="docutils literal notranslate"><span class="pre">Debugger</span> <span class="pre">API</span></code></span></a> can help tools observe the debuggee’s memory use in various ways:</p>
+         <ul class="simple">
+          <li>
+           <p>It can mark each new object with the JavaScript call stack at which it was allocated.</p></li>
+          <li>
+           <p>It can log all object allocations, yielding a stream of JavaScript call stacks at which allocations have occurred.</p></li>
+          <li>
+           <p>It can compute a <em>census</em> of items belonging to the debuggee, categorizing items in various ways, and yielding item counts.</p></li>
+         </ul>
+         <p>If <i>dbg</i> is a <a class="reference internal" href="Debugger.html"><span class="std std-doc"><code class="docutils literal notranslate"><span class="pre">Debugger</span></code></span></a> instance, then the methods and accessor properties of <code class="docutils literal notranslate"><span class="pre">dbg.memory</span></code> control how <i>dbg</i> observes its debuggees’ memory use. The <code class="docutils literal notranslate"><span class="pre">dbg.memory</span></code> object is an instance of <code class="docutils literal notranslate"><span class="pre">Debugger.Memory</span></code>; its inherited accessors and methods are described below.</p>
+         <section id="allocation-site-tracking">
+          <h2>Allocation Site Tracking<a class="headerlink" href="#allocation-site-tracking" title="Link to this heading">?</a></h2>
+          <p>The JavaScript engine marks each new object with the call stack at which it was allocated, if:</p>
+          <ul class="simple">
+           <li>
+            <p>the object is allocated in the scope of a global object that is a debuggee of some <a class="reference internal" href="Debugger.html"><span class="std std-doc"><code class="docutils literal notranslate"><span class="pre">Debugger</span></code></span></a> instance <i>dbg</i>; and</p></li>
+           <li>
+            <p><code><i>dbg</i>.memory.<a class="reference internal" href="#trackingallocationsites">trackingAllocationSites</a></code> is set to <code class="docutils literal notranslate"><span class="pre">true</span></code>.</p></li>
+           <li>
+            <p>A <a class="reference external" href="https://en.wikipedia.org/wiki/Bernoulli_trial">Bernoulli trial</a> succeeds, with probability equal to the maximum of <a class="reference internal" href="#allocsamplingprobability"><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">d.memory.allocationSamplingProbability</span></code></span></a> of all <code class="docutils literal notranslate"><span class="pre">Debugger</span></code> instances <code class="docutils literal notranslate"><span class="pre">d</span></code> that are observing the global that this object is allocated within the scope of.</p></li>
+          </ul>
+          <p>Given a <a class="reference internal" href="Debugger.Object.html"><span class="std std-doc"><code class="docutils literal notranslate"><span class="pre">Debugger.Object</span></code></span></a> instance <i>dobj</i> referring to some object, <code><i>dobj</i>.<a class="reference internal" href="Debugger.Object.html#allocationsite"><span class="std std-ref">allocationSite</span></a></code> returns a <a class="reference internal" href="../SavedFrame/index.html"><span class="doc std std-doc">saved call stack</span></a> indicating where <i>dobj</i>’s referent was allocated.</p>
+         </section>
+         <section id="allocation-logging">
+          <h2>Allocation Logging<a class="headerlink" href="#allocation-logging" title="Link to this heading">?</a></h2>
+          <p>If <i>dbg</i> is a <a class="reference internal" href="Debugger.html"><span class="std std-doc"><code class="docutils literal notranslate"><span class="pre">Debugger</span></code></span></a> instance, and <code><i>dbg</i>.memory.<a class="reference internal" href="#trackingallocationsites">trackingAllocationSites</a></code> is set to <code class="docutils literal notranslate"><span class="pre">true</span></code>, then the JavaScript engine logs each object allocated by <i>dbg</i>’s debuggee code. You can retrieve the current log by calling <code><i>dbg</i>.memory.<a class="reference internal" href="#drainAllocationsLog"><span class="xref myst">drainAllocationsLog</span></a></code>. You can control the limit on the log’s size by setting <code><i>dbg</i>.memory.<a class="reference internal" href="#maxAllocationsLogLength"><span class="xref myst">maxAllocationsLogLength</span></a></code>.</p>
+         </section>
+         <section id="censuses">
+          <h2>Censuses<a class="headerlink" href="#censuses" title="Link to this heading">?</a></h2>
+          <p>A <em>census</em> is a complete traversal of the graph of all reachable memory items belonging to a particular <code class="docutils literal notranslate"><span class="pre">Debugger</span></code>’s debuggees. It produces a count of those items, broken down by various criteria. If <i>dbg</i> is a <a class="reference internal" href="Debugger.html"><span class="std std-doc"><code class="docutils literal notranslate"><span class="pre">Debugger</span></code></span></a> instance, you can call <code><i>dbg</i>.memory.<a class="reference internal" href="#takecensus-options"><span class="xref myst">takeCensus</span></a></code> to conduct a census of its debuggees’ possessions.</p>
+         </section>
+         <section id="accessor-properties-of-the-debugger-memory-prototype-object">
+          <h2>Accessor Properties of the <code class="docutils literal notranslate"><span class="pre">Debugger.Memory.prototype</span></code> Object<a class="headerlink" href="#accessor-properties-of-the-debugger-memory-prototype-object" title="Link to this heading">?</a></h2>
+          <p>If <i>dbg</i> is a <a class="reference internal" href="Debugger.html"><span class="std std-doc"><code class="docutils literal notranslate"><span class="pre">Debugger</span></code></span></a> instance, then <code class="docutils literal notranslate"><span class="pre">&lt;i&gt;dbg&lt;/i&gt;.memory</span></code> is a <code class="docutils literal notranslate"><span class="pre">Debugger.Memory</span></code> instance, which inherits the following accessor properties from its prototype:</p>
+         </section>
+         <section id="trackingallocationsites">
+          <h2><code class="docutils literal notranslate"><span class="pre">trackingAllocationSites</span></code><a class="headerlink" href="#trackingallocationsites" title="Link to this heading">?</a></h2>
+          <p>A boolean value indicating whether this <code class="docutils literal notranslate"><span class="pre">Debugger.Memory</span></code> instance is capturing the JavaScript execution stack when each Object is allocated. This accessor property has both a getter and setter: assigning to it enables or disables the allocation site tracking. Reading the accessor produces <code class="docutils literal notranslate"><span class="pre">true</span></code> if the Debugger is capturing stacks for Object allocations, and <code class="docutils literal notranslate"><span class="pre">false</span></code> otherwise. Allocation site tracking is initially disabled in a new Debugger.</p>
+          <p>Assignment is fallible: if the Debugger cannot track allocation sites, it throws an <code class="docutils literal notranslate"><span class="pre">Error</span></code> instance.</p>
+          <p>You can retrieve the allocation site for a given object with the <a class="reference internal" href="Debugger.Object.html#allocationsite"><span class="std std-ref"><code class="docutils literal notranslate"><span class="pre">Debugger.Object.prototype.allocationSite</span></code></span></a> accessor property.</p>
+         </section>
+         <section id="allocationsamplingprobability">
+          <h2><code class="docutils literal notranslate"><span class="pre">allocationSamplingProbability</span></code><a class="headerlink" href="#allocationsamplingprobability" title="Link to this heading">?</a></h2>
+          <p>A number between 0 and 1 that indicates the probability with which each new allocation should be entered into the allocations log. 0 is equivalent to “never”, 1 is “always”, and .05 would be “one out of twenty”.</p>
+          <p>The default is 1, or logging every allocation.</p>
+          <p>Note that in the presence of multiple <code>Debugger</code> instances observing the same allocations within a global’s scope, the maximum <code>allocationSamplingProbability</code> of all the <code>Debugger</code>s is used.</p>
+         </section>
+         <section id="maxallocationsloglength">
+          <h2><code class="docutils literal notranslate"><span class="pre">maxAllocationsLogLength</span></code><a class="headerlink" href="#maxallocationsloglength" title="Link to this heading">?</a></h2>
+          <p>The maximum number of allocation sites to accumulate in the allocations log at a time. This accessor can be both fetched and stored to. Its default value is <code class="docutils literal notranslate"><span class="pre">5000</span></code>.</p>
+         </section>
+         <section id="allocationslogoverflowed">
+          <h2><code class="docutils literal notranslate"><span class="pre">allocationsLogOverflowed</span></code><a class="headerlink" href="#allocationslogoverflowed" title="Link to this heading">?</a></h2>
+          <p>Returns <code class="docutils literal notranslate"><span class="pre">true</span></code> if there have been more than [<code class="docutils literal notranslate"><span class="pre">maxAllocationsLogLength</span></code>][#max-alloc-log] allocations since the last time [<code class="docutils literal notranslate"><span class="pre">drainAllocationsLog</span></code>][#drain-alloc-log] was called and some data has been lost. Returns <code class="docutils literal notranslate"><span class="pre">false</span></code> otherwise.</p>
+         </section>
+         <section id="debugger-memory-handler-functions">
+          <h2>Debugger.Memory Handler Functions<a class="headerlink" href="#debugger-memory-handler-functions" title="Link to this heading">?</a></h2>
+          <p>Similar to <a class="reference internal" href="Debugger-API.html"><span class="std std-doc"><code class="docutils literal notranslate"><span class="pre">Debugger</span></code>’s handler functions</span></a>, <code class="docutils literal notranslate"><span class="pre">Debugger.Memory</span></code> inherits accessor properties that store handler functions for SpiderMonkey to call when given events occur in debuggee code.</p>
+          <p>Unlike <code class="docutils literal notranslate"><span class="pre">Debugger</span></code>’s hooks, <code class="docutils literal notranslate"><span class="pre">Debugger.Memory</span></code>’s handlers’ return values are not significant, and are ignored. The handler functions receive the <code class="docutils literal notranslate"><span class="pre">Debugger.Memory</span></code>’s owning <code class="docutils literal notranslate"><span class="pre">Debugger</span></code> instance as their <code class="docutils literal notranslate"><span class="pre">this</span></code> value. The owning <code class="docutils literal notranslate"><span class="pre">Debugger</span></code>’s <code class="docutils literal notranslate"><span class="pre">uncaughtExceptionHandler</span></code> is still fired for errors thrown in <code class="docutils literal notranslate"><span class="pre">Debugger.Memory</span></code> hooks.</p>
+          <p>On a new <code class="docutils literal notranslate"><span class="pre">Debugger.Memory</span></code> instance, each of these properties is initially <code class="docutils literal notranslate"><span class="pre">undefined</span></code>. Any value assigned to a debugging handler must be either a function or <code class="docutils literal notranslate"><span class="pre">undefined</span></code>; otherwise a <code class="docutils literal notranslate"><span class="pre">TypeError</span></code> is thrown.</p>
+          <p>Handler functions run in the same thread in which the event occurred. They run in the compartment to which they belong, not in a debuggee compartment.</p>
+         </section>
+         <section id="ongarbagecollection-statistics">
+          <h2><code class="docutils literal notranslate"><span class="pre">onGarbageCollection(statistics)</span></code><a class="headerlink" href="#ongarbagecollection-statistics" title="Link to this heading">?</a></h2>
+          <p>A garbage collection cycle spanning one or more debuggees has just been completed.</p>
+          <p>The <em>statistics</em> parameter is an object containing information about the GC cycle. It has the following properties:</p>
+         </section>
+         <section id="collections">
+          <h2><code class="docutils literal notranslate"><span class="pre">collections</span></code><a class="headerlink" href="#collections" title="Link to this heading">?</a></h2>
+          <p>The <code class="docutils literal notranslate"><span class="pre">collections</span></code> property’s value is an array. Because SpiderMonkey’s collector is incremental, a full collection cycle may consist of multiple discrete collection slices with the JS mutator running interleaved. For each collection slice that occurred, there is an entry in the <code class="docutils literal notranslate"><span class="pre">collections</span></code> array with the following form:</p>
+          <div class="highlight-default notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="p">{</span>
+  <span class="s2">"startTimestamp"</span><span class="p">:</span> <span class="n">timestamp</span><span class="p">,</span>
+  <span class="s2">"endTimestamp"</span><span class="p">:</span> <span class="n">timestamp</span><span class="p">,</span>
+<span class="p">}</span>
+</pre>
+           </div>
+          </div>
+          <p>Here the <code class="docutils literal notranslate"><span class="pre">timestamp</span></code> values are <a class="reference internal" href="Conventions.html#timestamps"><span class="std std-ref">timestamps</span></a> of the GC slice’s start and end events.</p>
+         </section>
+         <section id="reason">
+          <h2><code class="docutils literal notranslate"><span class="pre">reason</span></code><a class="headerlink" href="#reason" title="Link to this heading">?</a></h2>
+          <p>A very short string describing the reason why the collection was triggered. Known values include the following:</p>
+          <ul class="simple">
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">"API"</span></code></p></li>
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">"EAGER_ALLOC_TRIGGER"</span></code></p></li>
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">"DESTROY_RUNTIME"</span></code></p></li>
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">"LAST_DITCH"</span></code></p></li>
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">"TOO_MUCH_MALLOC"</span></code></p></li>
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">"ALLOC_TRIGGER"</span></code></p></li>
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">"DEBUG_GC"</span></code></p></li>
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">"COMPARTMENT_REVIVED"</span></code></p></li>
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">"RESET"</span></code></p></li>
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">"OUT_OF_NURSERY"</span></code></p></li>
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">"EVICT_NURSERY"</span></code></p></li>
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">"FULL_STORE_BUFFER"</span></code></p></li>
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">"SHARED_MEMORY_LIMIT"</span></code></p></li>
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">"PERIODIC_FULL_GC"</span></code></p></li>
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">"INCREMENTAL_TOO_SLOW"</span></code></p></li>
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">"DOM_WINDOW_UTILS"</span></code></p></li>
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">"COMPONENT_UTILS"</span></code></p></li>
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">"MEM_PRESSURE"</span></code></p></li>
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">"CC_FINISHED"</span></code></p></li>
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">"CC_FORCED"</span></code></p></li>
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">"LOAD_END"</span></code></p></li>
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">"PAGE_HIDE"</span></code></p></li>
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">"NSJSCONTEXT_DESTROY"</span></code></p></li>
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">"SET_NEW_DOCUMENT"</span></code></p></li>
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">"SET_DOC_SHELL"</span></code></p></li>
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">"DOM_UTILS"</span></code></p></li>
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">"DOM_IPC"</span></code></p></li>
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">"DOM_WORKER"</span></code></p></li>
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">"INTER_SLICE_GC"</span></code></p></li>
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">"REFRESH_FRAME"</span></code></p></li>
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">"FULL_GC_TIMER"</span></code></p></li>
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">"SHUTDOWN_CC"</span></code></p></li>
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">"USER_INACTIVE"</span></code></p></li>
+          </ul>
+         </section>
+         <section id="nonincrementalreason">
+          <h2><code class="docutils literal notranslate"><span class="pre">nonincrementalReason</span></code><a class="headerlink" href="#nonincrementalreason" title="Link to this heading">?</a></h2>
+          <p>If SpiderMonkey’s collector determined it could not incrementally collect garbage, and had to do a full GC all at once, this is a short string describing the reason it determined the full GC was necessary. Otherwise, <code class="docutils literal notranslate"><span class="pre">null</span></code> is returned. Known values include the following:</p>
+          <ul class="simple">
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">"GC</span> <span class="pre">mode"</span></code></p></li>
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">"malloc</span> <span class="pre">bytes</span> <span class="pre">trigger"</span></code></p></li>
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">"allocation</span> <span class="pre">trigger"</span></code></p></li>
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">"requested"</span></code></p></li>
+          </ul>
+         </section>
+         <section id="gccyclenumber">
+          <h2><code class="docutils literal notranslate"><span class="pre">gcCycleNumber</span></code><a class="headerlink" href="#gccyclenumber" title="Link to this heading">?</a></h2>
+          <p>The GC cycle’s “number”. Does not correspond to the number of GC cycles that have run, but is guaranteed to be monotonically increasing.</p>
+         </section>
+         <section id="function-properties-of-the-debugger-memory-prototype-object">
+          <h2>Function Properties of the <code class="docutils literal notranslate"><span class="pre">Debugger.Memory.prototype</span></code> Object<a class="headerlink" href="#function-properties-of-the-debugger-memory-prototype-object" title="Link to this heading">?</a></h2>
+         </section>
+         <section id="drainallocationslog">
+          <h2><code class="docutils literal notranslate"><span class="pre">drainAllocationsLog()</span></code><a class="headerlink" href="#drainallocationslog" title="Link to this heading">?</a></h2>
+          <p>When <code class="docutils literal notranslate"><span class="pre">trackingAllocationSites</span></code> is <code class="docutils literal notranslate"><span class="pre">true</span></code>, this method returns an array of recent <code class="docutils literal notranslate"><span class="pre">Object</span></code> allocations within the set of debuggees. <em>Recent</em> is defined as the <code class="docutils literal notranslate"><span class="pre">maxAllocationsLogLength</span></code> most recent <code class="docutils literal notranslate"><span class="pre">Object</span></code> allocations since the last call to <code class="docutils literal notranslate"><span class="pre">drainAllocationsLog</span></code>. Therefore, calling this method effectively clears the log.</p>
+          <p>Objects in the array are of the form:</p>
+          <div class="highlight-default notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="p">{</span>
+  <span class="s2">"timestamp"</span><span class="p">:</span> <span class="n">timestamp</span><span class="p">,</span>
+  <span class="s2">"frame"</span><span class="p">:</span> <span class="n">allocationSite</span><span class="p">,</span>
+  <span class="s2">"class"</span><span class="p">:</span> <span class="n">className</span><span class="p">,</span>
+  <span class="s2">"size"</span><span class="p">:</span> <span class="n">byteSize</span><span class="p">,</span>
+  <span class="s2">"inNursery"</span><span class="p">:</span> <span class="n">inNursery</span><span class="p">,</span>
+<span class="p">}</span>
+</pre>
+           </div>
+          </div>
+          <p>Where</p>
+          <ul class="simple">
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">timestamp</span></code> is the <a class="reference internal" href="Conventions.html#timestamps"><span class="std std-ref">timestamp</span></a> of the allocation event.</p></li>
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">allocationSite</span></code> is an allocation site (as a <a class="reference internal" href="../SavedFrame/index.html"><span class="doc std std-doc">captured stack</span></a>). Note that this property can be null if the object was allocated with no JavaScript frames on the stack.</p></li>
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">className</span></code> is the string name of the allocated object’s internal <code class="docutils literal notranslate"><span class="pre">[[Class]]</span></code> property, for example “Array”, “Date”, “RegExp”, or (most commonly) “Object”.</p></li>
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">byteSize</span></code> is the size of the object in bytes.</p></li>
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">inNursery</span></code> is true if the allocation happened inside the nursery. False if the allocation skipped the nursery and started in the tenured heap.</p></li>
+          </ul>
+          <p>When <code class="docutils literal notranslate"><span class="pre">trackingAllocationSites</span></code> is <code class="docutils literal notranslate"><span class="pre">false</span></code>, <code class="docutils literal notranslate"><span class="pre">drainAllocationsLog()</span></code> throws an <code class="docutils literal notranslate"><span class="pre">Error</span></code>.</p>
+         </section>
+         <section id="takecensus-options">
+          <h2><code class="docutils literal notranslate"><span class="pre">takeCensus(options)</span></code><a class="headerlink" href="#takecensus-options" title="Link to this heading">?</a></h2>
+          <p>Carry out a census of the debuggee compartments’ contents. A <em>census</em> is a complete traversal of the graph of all reachable memory items belonging to a particular <code class="docutils literal notranslate"><span class="pre">Debugger</span></code>’s debuggees. The census produces a count of those items, broken down by various criteria.</p>
+          <p>The <i>options</i> argument is an object whose properties specify how the census should be carried out.</p>
+          <p>If <i>options</i> has a <code class="docutils literal notranslate"><span class="pre">breakdown</span></code> property, that determines how the census categorizes the items it finds, and what data it collects about them. For example, if <code class="docutils literal notranslate"><span class="pre">dbg</span></code> is a <code class="docutils literal notranslate"><span class="pre">Debugger</span></code> instance, the following performs a simple count of debuggee items:</p>
+          <div class="highlight-none notranslate">
+           <div class="highlight">
+            <pre><span></span>dbg.memory.takeCensus({ breakdown: { by: 'count' } })
+</pre>
+           </div>
+          </div>
+          <p>That might produce a result like:</p>
+          <div class="highlight-none notranslate">
+           <div class="highlight">
+            <pre><span></span>{ "count": 1616, "bytes": 93240 }
+</pre>
+           </div>
+          </div>
+          <p>Here is a breakdown that groups JavaScript objects by their class name, non-string, non-script items by their C++ type name, and DOM nodes with their node name:</p>
+          <div class="highlight-none notranslate">
+           <div class="highlight">
+            <pre><span></span>{
+  by: "coarseType",
+  objects: { by: "objectClass" },
+  other:   { by: "internalType" },
+  domNode: { by: "descriptiveType" }
+}
+</pre>
+           </div>
+          </div>
+          <p>which produces a result like this:</p>
+          <div class="highlight-none notranslate">
+           <div class="highlight">
+            <pre><span></span>{
+  "objects": {
+    "Function":         { "count": 404, "bytes": 37328 },
+    "Object":           { "count": 11,  "bytes": 1264 },
+    "Debugger":         { "count": 1,   "bytes": 416 },
+    "ScriptSource":     { "count": 1,   "bytes": 64 },
+    // ... omitted for brevity...
+  },
+  "scripts":            { "count": 1,   "bytes": 0 },
+  "strings":            { "count": 701, "bytes": 49080 },
+  "other": {
+    "js::Shape":        { "count": 450, "bytes": 0 },
+    "js::BaseShape":    { "count": 21,  "bytes": 0 },
+    "js::ObjectGroup":  { "count": 17,  "bytes": 0 }
+  },
+  "domNode": {
+    "#text":            { "count": 1,   "bytes": 12 }
+  }
+}
+</pre>
+           </div>
+          </div>
+          <p>In general, a <code class="docutils literal notranslate"><span class="pre">breakdown</span></code> value has one of the following forms:</p>
+          <ul>
+           <li>
+            <p><code>{ by: “count”, count:<i>count</i>, bytes:<i>bytes</i> }</code></p>
+            <p>The trivial categorization: none whatsoever. Simply tally up the items visited. If <i>count</i> is true, count the number of items visited; if <i>bytes</i> is true, total the number of bytes the items use directly. Both <i>count</i> and <i>bytes</i> are optional; if omitted, they default to <code class="docutils literal notranslate"><span class="pre">true</span></code>. In the result of the census, this breakdown produces a value of the form:</p>
+            <div class="highlight-none notranslate">
+             <div class="highlight">
+              <pre><span></span>{ "count": n, "bytes": b }
+</pre>
+             </div>
+            </div>
+            <p>where the <code class="docutils literal notranslate"><span class="pre">count</span></code> and <code class="docutils literal notranslate"><span class="pre">bytes</span></code> properties are present as directed by the <i>count</i> and <i>bytes</i> properties on the breakdown.</p>
+            <p>Note that the census can produce byte sizes only for the most common types. When the census cannot find the byte size for a given type, it returns zero.</p></li>
+           <li>
+            <p><code>{ by: “bucket” }</code></p>
+            <p>Do not do any filtering or categorizing. Instead, accumulate a bucket of each node’s ID for every node that matches. The resulting report is an array of the IDs.</p>
+            <p>For example, to find the ID of all nodes whose internal object <code class="docutils literal notranslate"><span class="pre">[[class]]</span></code> property is named “RegExp”, you could use the following code:</p>
+            <div class="highlight-none notranslate">
+             <div class="highlight">
+              <pre><span></span>const report = dbg.memory.takeCensus({
+  breakdown: {
+    by: "objectClass",
+    then: { by: "bucket" }
+  }
+});
+doStuffWithRegExpIDs(report.RegExp);
+</pre>
+             </div>
+            </div></li>
+           <li>
+            <p><code>{ by: “allocationStack”, then:<i>breakdown</i>, noStack:<i>noStackBreakdown</i> }</code></p>
+            <p>Group items by the full JavaScript stack trace at which they were allocated.</p>
+            <p>Further categorize all the items allocated at each distinct stack using <i>breakdown</i>.</p>
+            <p>In the result of the census, this breakdown produces a JavaScript <code class="docutils literal notranslate"><span class="pre">Map</span></code> value whose keys are <code class="docutils literal notranslate"><span class="pre">SavedFrame</span></code> values, and whose values are whatever sort of result <i>breakdown</i> produces. Objects allocated on an empty JavaScript stack appear under the key <code class="docutils literal notranslate"><span class="pre">null</span></code>.</p>
+            <p>SpiderMonkey only tracks allocation sites for items if requested via the <a class="reference internal" href="#trackingallocationsites"><code class="docutils literal notranslate"><span class="pre">trackingAllocationSites</span></code></a> flag; even then, it does not record allocation sites for every kind of item that appears in the heap. Items that lack allocation site information are counted using <i>noStackBreakdown</i>. These appear in the result <code class="docutils literal notranslate"><span class="pre">Map</span></code> under the key string <code class="docutils literal notranslate"><span class="pre">"noStack"</span></code>.</p></li>
+           <li>
+            <p><code>{ by: “objectClass”, then:<i>breakdown</i>, other:<i>otherBreakdown</i> }</code></p>
+            <p>Group JavaScript objects by their ECMAScript <code class="docutils literal notranslate"><span class="pre">[[Class]]</span></code> internal property values.</p>
+            <p>Further categorize JavaScript objects in each class using <i>breakdown</i>. Further categorize items that are not JavaScript objects using <i>otherBreakdown</i>.</p>
+            <p>In the result of the census, this breakdown produces a JavaScript object with no prototype whose own property names are strings naming classes, and whose values are whatever sort of result <i>breakdown</i> produces. The results for non-object items appear as the value of the property named <code class="docutils literal notranslate"><span class="pre">"other"</span></code>.</p></li>
+           <li>
+            <p><code>{ by: “coarseType”, objects:<i>objects</i>, scripts:<i>scripts</i>, strings:<i>strings</i>, domNode:<i>domNode</i>, other:<i>other</i> }</code></p>
+            <p>Group items by their coarse type.</p>
+            <p>Use the breakdown value <i>objects</i> for items that are JavaScript objects.</p>
+            <p>Use the breakdown value <i>scripts</i> for items that are representations of JavaScript code. This includes bytecode, compiled machine code, and saved source code.</p>
+            <p>Use the breakdown value <i>strings</i> for JavaScript strings.</p>
+            <p>Use the breakdown value <i>domNode</i> for DOM nodes.</p>
+            <p>Use the breakdown value <i>other</i> for items that don’t fit into any of the above categories.</p>
+            <p>In the result of the census, this breakdown produces a JavaScript object of the form:</p>
+            <div class="highlight-default notranslate">
+             <div class="highlight">
+              <pre><span></span><span class="p">{</span>
+  <span class="s2">"objects"</span><span class="p">:</span> <span class="n">result</span><span class="p">,</span>
+  <span class="s2">"scripts"</span><span class="p">:</span> <span class="n">result</span><span class="p">,</span>
+  <span class="s2">"strings"</span><span class="p">:</span> <span class="n">result</span><span class="p">,</span>
+  <span class="s2">"domNode:"</span> <span class="n">result</span><span class="p">,</span>
+  <span class="s2">"other"</span><span class="p">:</span> <span class="n">result</span><span class="p">,</span>
+<span class="p">}</span>
+</pre>
+             </div>
+            </div>
+            <p>where each <i>result</i> is a value of whatever sort the corresponding breakdown value produces. All breakdown values are optional, and default to <code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">type:</span> <span class="pre">"count"</span> <span class="pre">}</span></code>.</p></li>
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">by:</span> <span class="pre">"filename",</span> <span class="pre">then:breakdown,</span> <span class="pre">noFilename:noFilenameBreakdown</span> <span class="pre">}</span></code></p>
+            <p>For scripts only, group by the filename of the script.</p>
+            <p>Further categorize all of the scripts from each distinct filename using breakdown.</p>
+            <p>Scripts that lack a filename are counted using noFilenameBreakdown. These appear in the result <code class="docutils literal notranslate"><span class="pre">Map</span></code> under the key string <code class="docutils literal notranslate"><span class="pre">"noFilename"</span></code>.</p></li>
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">by:</span> <span class="pre">"internalType",</span> <span class="pre">then:</span> <span class="pre">breakdown</span> <span class="pre">}</span></code></p>
+            <p>Group items by the names given their types internally by SpiderMonkey. These names are not meaningful to web developers, but this type of breakdown does serve as a catch-all that can be useful to Firefox tool developers.</p>
+            <p>For example, a census of a pristine debuggee global broken down by internal type name typically looks like this:</p>
+            <div class="highlight-none notranslate">
+             <div class="highlight">
+              <pre><span></span>{
+  "JSString":        { "count": 701, "bytes": 49080 },
+  "js::Shape":       { "count": 450, "bytes": 0 },
+  "JSObject":        { "count": 426, "bytes": 44160 },
+  "js::BaseShape":   { "count": 21,  "bytes": 0 },
+  "js::ObjectGroup": { "count": 17,  "bytes": 0 },
+  "JSScript":        { "count": 1,   "bytes": 0 }
+}
+</pre>
+             </div>
+            </div>
+            <p>In the result of the census, this breakdown produces a JavaScript object with no prototype whose own property names are strings naming types, and whose values are whatever sort of result <i>breakdown</i> produces.</p></li>
+           <li>
+            <p><code>[ <i>breakdown</i>, … ]</code></p>
+            <p>Group each item using all the given breakdown values. In the result of the census, this breakdown produces an array of values of the sort produced by each listed breakdown.</p></li>
+          </ul>
+          <p>To simplify breakdown values, all <code class="docutils literal notranslate"><span class="pre">then</span></code> and <code class="docutils literal notranslate"><span class="pre">other</span></code> properties are optional. If omitted, they are treated as if they were <code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">type:</span> <span class="pre">"count"</span> <span class="pre">}</span></code>.</p>
+          <p>Breakdown groupings cannot be nested within themselves. This would not be useful, and forbidding this prevents infinite recursion.</p>
+          <p>If the <code class="docutils literal notranslate"><span class="pre">options</span></code> argument has no <code class="docutils literal notranslate"><span class="pre">breakdown</span></code> property, <code class="docutils literal notranslate"><span class="pre">takeCensus</span></code> defaults to the following:</p>
+          <div class="highlight-js notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nx">by</span><span class="o">:</span><span class="w"> </span><span class="s2">"coarseType"</span><span class="p">,</span>
+<span class="w">  </span><span class="nx">objects</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">by</span><span class="o">:</span><span class="w"> </span><span class="s2">"objectClass"</span><span class="w"> </span><span class="p">},</span>
+<span class="w">  </span><span class="nx">domNode</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">by</span><span class="o">:</span><span class="w"> </span><span class="s2">"descriptiveType"</span><span class="w"> </span><span class="p">},</span>
+<span class="w">  </span><span class="nx">other</span><span class="o">:</span><span class="w">   </span><span class="p">{</span><span class="w"> </span><span class="nx">by</span><span class="o">:</span><span class="w"> </span><span class="s2">"internalType"</span><span class="w"> </span><span class="p">}</span>
+<span class="p">}</span>
+</pre>
+           </div>
+          </div>
+          <p>which produces results of the form:</p>
+          <div class="highlight-default notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="p">{</span>
+  <span class="n">objects</span><span class="p">:</span> <span class="p">{</span> <span class="n">class</span><span class="p">:</span> <span class="n">count</span><span class="p">,</span> <span class="o">...</span> <span class="p">},</span>
+  <span class="n">scripts</span><span class="p">:</span> <span class="n">count</span><span class="p">,</span>
+  <span class="n">strings</span><span class="p">:</span> <span class="n">count</span><span class="p">,</span>
+  <span class="n">domNode</span><span class="p">:</span> <span class="p">{</span> <span class="n">node</span> <span class="n">name</span><span class="p">:</span><span class="n">count</span><span class="p">,</span> <span class="o">...</span> <span class="p">},</span>
+  <span class="n">other</span><span class="p">:</span>   <span class="p">{</span> <span class="nb">type</span> <span class="n">name</span><span class="p">:</span><span class="n">count</span><span class="p">,</span> <span class="o">...</span> <span class="p">}</span>
+<span class="p">}</span>
+</pre>
+           </div>
+          </div>
+          <p>where each <code class="docutils literal notranslate"><span class="pre">count</span></code> has the form:</p>
+          <div class="highlight-js notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="p">{</span><span class="w"> </span><span class="s2">"count"</span><span class="o">:</span><span class="w"> </span><span class="nx">count</span><span class="p">,</span><span class="w"> </span><span class="nx">bytes</span><span class="o">:</span><span class="w"> </span><span class="nx">bytes</span><span class="w"> </span><span class="p">}</span>
+</pre>
+           </div>
+          </div>
+          <p>Because performing a census requires traversing the entire graph of objects in debuggee compartments, it is an expensive operation. On developer hardware in 2014, traversing a memory graph containing roughly 130,000 nodes and 410,000 edges took roughly 100ms. The traversal itself temporarily allocates one hash table entry per node (roughly two address-sized words) in addition to the per-category counts, whose size depends on the number of categories.</p>
+         </section>
+         <section id="memory-use-analysis-exposes-implementation-details">
+          <h2>Memory Use Analysis Exposes Implementation Details<a class="headerlink" href="#memory-use-analysis-exposes-implementation-details" title="Link to this heading">?</a></h2>
+          <p>Memory analysis may yield surprising results, because browser implementation details that are transparent to content JavaScript often have visible effects on memory consumption. Web developers need to know their pages’ actual memory consumption on real browsers, so it is correct for the tool to expose these behaviors, as long as it is done in a way that helps developers make decisions about their own code.</p>
+          <p>This section covers some areas where Firefox’s actual behavior deviates from what one might expect from the specified behavior of the web platform.</p>
+         </section>
+         <section id="objects">
+          <h2>Objects<a class="headerlink" href="#objects" title="Link to this heading">?</a></h2>
+          <p>SpiderMonkey objects usually use less memory than the naïve “table of properties with attributes” model would suggest. For example, it is typical for many objects to have identical sets of properties, with only the properties’ values varying from one object to the next. To take advantage of this regularity, SpiderMonkey objects with identical sets of properties may share their property metadata; only property values are stored directly in the object.</p>
+          <p>Array objects may also be optimized, if the set of live indices is dense.</p>
+         </section>
+         <section id="strings">
+          <h2>Strings<a class="headerlink" href="#strings" title="Link to this heading">?</a></h2>
+          <p>SpiderMonkey has three representations of strings:</p>
+          <ul class="simple">
+           <li>
+            <p>Normal: the string’s text is counted in its size.</p></li>
+           <li>
+            <p>Substring: the string is a substring of some other string, and points to that string for its storage. This representation may result in a small string retaining a very large string. However, the memory consumed by the string itself is a small constant independent of its size, since it is simply a reference to the larger string, a start position, and a length.</p></li>
+           <li>
+            <p>Concatenations: When asked to concatenate two strings, SpiderMonkey may elect to delay copying the strings’ data, and represent the result simply as a pointer to the two original strings. Again, such a string retains other strings, but the memory consumed by the string itself is a small constant independent of its size, since it is simply a pair of pointers.</p></li>
+          </ul>
+          <p>SpiderMonkey converts strings from the more complex representations to the simpler ones when it pleases. Such conversions usually increase memory consumption.</p>
+          <p>SpiderMonkey shares some strings amongst all web pages and browser JS. These shared strings, called <em>atoms</em>, are not included in censuses’ string counts.</p>
+         </section>
+         <section id="scripts">
+          <h2>Scripts<a class="headerlink" href="#scripts" title="Link to this heading">?</a></h2>
+          <p>SpiderMonkey has a complex, hybrid representation of JavaScript code. There are four representations kept in memory:</p>
+          <ul class="simple">
+           <li>
+            <p><em>Source code</em>. SpiderMonkey retains a copy of most JavaScript source code.</p></li>
+           <li>
+            <p><em>Compressed source code</em>. SpiderMonkey compresses JavaScript source code, and de-compresses it on demand. Heuristics determine how long to retain the uncompressed code.</p></li>
+           <li>
+            <p><em>Bytecode</em>. This is SpiderMonkey’s parsed representation of JavaScript. Bytecode can be interpreted directly, or used as input to a just-in-time compiler. Source is parsed into bytecode on demand; functions that are never called are never parsed.</p></li>
+           <li>
+            <p><em>Machine code</em>. SpiderMonkey includes several just-in-time compilers, each of which translates JavaScript source or bytecode to machine code. Heuristics determine which code to compile, and which compiler to use. Machine code may be dropped in response to memory pressure, and regenerated as needed.</p></li>
+          </ul>
+          <p>Furthermore, SpiderMonkey’s just-in-time compilers generate inline caches for type specialization. This information is dropped periodically to reduce memory usage.</p>
+          <p>In a census, all the various forms of JavaScript code are placed in the <code class="docutils literal notranslate"><span class="pre">"scripts"</span></code> category.</p>
+         </section>
+        </section>
+       </div>
+      </div>
+      <footer>
+       <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Debugger.Frame.html" class="btn btn-neutral float-left" title="Debugger.Frame" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a> <a href="Conventions.html" class="btn btn-neutral float-right" title="General Conventions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+       </div>
+       <hr>
+       <div role="contentinfo">
+        <p></p>
+       </div> Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+      </footer>
+     </div>
+    </div>
+   </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ </body>
+</html>

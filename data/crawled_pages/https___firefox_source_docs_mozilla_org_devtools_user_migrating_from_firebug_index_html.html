@@ -1,0 +1,431 @@
+<!doctype html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Migrating from Firebug — Firefox Source Docs  documentation</title>
+  <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50">
+  <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094">
+  <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=fd3f3429">
+  <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b">
+  <link rel="stylesheet" type="text/css" href="../../_static/custom_theme.css?v=dc5ed815">
+  <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7">
+  <link rel="shortcut icon" href="../../_static/firefox.ico"><!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script src="../../_static/jquery.js?v=5d32c60e"></script>
+  <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+  <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+  <script src="../../_static/doctools.js?v=9a2dae69"></script>
+  <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+  <script src="../../_static/copybutton.js?v=30646c52"></script>
+  <script src="../../_static/design-tabs.js?v=36754332"></script>
+  <script src="../../_static/js/theme.js"></script>
+  <link rel="index" title="Index" href="../../genindex.html">
+  <link rel="search" title="Search" href="../../search.html">
+ </head>
+ <body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+   <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <div class="wy-side-scroll">
+     <div class="wy-side-nav-search">
+      <a href="../../index.html" class="icon icon-home"> Firefox Source Docs <img src="../../_static/firefox-wordmark.svg" class="logo" alt="Logo"> </a><!-- -- This code is governed by the BSD license ---->
+      <div>
+       <h3>Quick search</h3>
+       <script>
+    (function () {
+      var cx = "dd12886298f75dbef";
+      var gcse = document.createElement("script");
+      gcse.async = true;
+      gcse.src = "https://cse.google.com/cse.js?cx=" + cx;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(gcse, s);
+    })();
+  </script><gcse:search></gcse:search>
+      </div>
+     </div>
+     <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+      <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../glossary/index.html">A Glossary of Common Terms</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../overview/index.html">A Quick Guide to Mozilla Applications</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../setup/index.html">Getting Set Up To Work On The Firefox Codebase</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Working On Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Working on Firefox</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../bug-mgmt/index.html">Bug Handling</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox User Guide</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../index.html">Firefox DevTools User Docs</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Source Code Documentation</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mots/index.html">Governance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../browser/index.html">Firefox Front-end</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../dom/index.html">DOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../editor/index.html">Editor</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../layout/index.html">Style system (CSS) &amp; Layout</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../gfx/index.html">Graphics</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../ipc/index.html">Processes, Threads and IPC</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../devtools/index.html">Firefox DevTools Contributor Docs</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../toolkit/index.html">Toolkit</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../js/index.html">SpiderMonkey</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../jsloader/index.html">JS Loader</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/geckoview/index.html">GeckoView</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/fenix/index.html">Fenix</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/focus-android/index.html">Focus for Android</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../dom/bindings/webidl/index.html">WebIDL</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../modules/libpref/index.html">libpref</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../networking/index.html">Networking</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../remote/index.html">Remote Protocols</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../services/index.html">Services</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../permissions/index.html">Permissions</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../uriloader/index.html">File Handling</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../widget/cocoa/index.html">Firefox on macOS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../widget/windows/index.html">Firefox on Windows</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../toolkit/components/ml/index.html">Firefox AI Runtime</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../accessible/index.html">Accessibility</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../media/index.html">Media Playback</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../code-quality/index.html">Code quality</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../writing-rust-code/index.html">Writing Rust Code</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../rust-components/index.html">Rust Components</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/profiler/index.html">Gecko Profiler</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../performance/index.html">Performance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../storage/index.html">Database bindings (SQLite, KV, …)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../xpcom/index.html">XPCOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../nspr/index.html">NSPR</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../security/nss/index.html">Network Security Services (NSS)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../content-security/index.html">Web Security Checks in Gecko</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">The Firefox Build System</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mach/index.html">Mach</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/try/index.html">Pushing to Try</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../build/buildsystem/index.html">Build System</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../taskcluster/index.html">Firefox CI and Taskgraph</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/moztreedocs/index.html">Managing Documentation</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mozbuild/vendor/index.html">Vendoring Third Party Components</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Testing &amp; Test Infrastructure</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/automated-testing/index.html">Automated Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/treeherder-try/index.html">Understanding Treeherder Results</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/sheriffed-intermittents/index.html">Sheriffed intermittent failures</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/tests-for-new-config/index.html">Turning on Firefox tests for a new configuration</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/intermittent/index.html">Avoiding intermittent tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/testing-policy/index.html">Testing Policy</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/ci-configs/index.html">Configuration Changes</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/browser-chrome/index.html">Browser chrome mochitests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/chrome-tests/index.html">Chrome Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/marionette/index.html">Marionette</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/geckodriver/index.html">geckodriver</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/test-verification/index.html">Test Verification</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/webrender/index.html">WebRender Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/mochitest-plain/index.html">Mochitest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/xpcshell/index.html">XPCShell tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/tps/index.html">TPS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../web-platform/index.html">web-platform-tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../gtest/index.html">GTest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/fuzzing/index.html">Fuzzing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/sanitizer/index.html">Sanitizer</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/perfdocs/index.html">Performance Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/code-coverage/index.html">Code coverage</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing-rust-code/index.html">Testing &amp; Debugging Rust Code</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Releases &amp; Updates</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html">Mozilla Update Infrastructure</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html#watershed-updates">Watershed Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html#desupport-updates">Desupport Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/update-verify/index.html">Update Verify</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Localization &amp; Internationalization</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../intl/index.html">Internationalization</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../l10n/index.html">Localization</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox and Python</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mozbase/index.html">mozbase</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../python/index.html">Using third-party Python packages</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Metrics Collected in Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../metrics/index.html">Metrics</a></li>
+      </ul>
+     </div>
+    </div>
+   </nav>
+   <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+    <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+     <i data-toggle="wy-nav-top" class="fa fa-bars"></i> <a href="../../index.html">Firefox Source Docs</a>
+    </nav>
+    <div class="wy-nav-content">
+     <div class="rst-content">
+      <!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+      <div role="navigation" aria-label="Page navigation">
+       <ul class="wy-breadcrumbs">
+        <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+        <li class="breadcrumb-item active">Migrating from Firebug</li>
+        <li class="wy-breadcrumbs-aside"><a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Developer+Infrastructure&amp;component=Firefox+Source+Docs%3A+Content&amp;short_desc=Documentation+issue+on+devtools-user/migrating_from_firebug/index&amp;comment=URL+=+https://firefox-source-docs.mozilla.org/devtools-user/migrating_from_firebug/index.html&amp;bug_file_loc=https://firefox-source-docs.mozilla.org/devtools-user/migrating_from_firebug/index.html" rel="nofollow">Report an issue</a> / <a href="../../_sources/devtools-user/migrating_from_firebug/index.rst.txt" rel="nofollow"> View page source</a></li>
+       </ul>
+       <hr>
+      </div>
+      <div role="main" class="document" itemscope itemtype="http://schema.org/Article">
+       <div itemprop="articleBody">
+        <section id="migrating-from-firebug">
+         <h1>Migrating from Firebug<a class="headerlink" href="#migrating-from-firebug" title="Link to this heading">?</a></h1>
+         <p>When migrating from Firebug to the Firefox Developer Tools, you may wonder where the features you loved in Firebug are available in the Developer Tools. The following list aims to help Firebug users to find their way into the Developer Tools.</p><img alt="../../_images/logo-developer-quantum1.png" class="center" src="../../_images/logo-developer-quantum1.png">
+         <p class="center">For the latest developer tools and features, try Firefox Developer Edition.</p><a href="https://www.mozilla.org/en-US/firefox/developer/" style="width: 280px; display: block; margin-left: auto; margin-right: auto; padding: 10px; text-align: center; border-radius: 4px; background-color: #81BC2E; white-space: nowrap; color: white; text-shadow: 0px 1px 0px rgba(0, 0, 0, 0.25); box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.2), 0px -1px 0px 0px rgba(0, 0, 0, 0.3) inset;">Download Firefox Developer Edition</a>
+         <section id="general">
+          <h2>General<a class="headerlink" href="#general" title="Link to this heading">?</a></h2>
+          <section id="activation">
+           <h3>Activation<a class="headerlink" href="#activation" title="Link to this heading">?</a></h3>
+           <p>Firebug’s activation is URL based respecting the <a class="reference external" href="https://en.wikipedia.org/wiki/Same_origin_policy">same origin policy</a>. That means that when you open a page on the same origin in a different tab, Firebug gets opened automatically. And when you open a page of a different origin in the same tab, it closes automatically. The DevTools’ activation on the other hand is tab based. That means, that when you open the DevTools in a tab, they stay open even when you switch between different websites. When you switch to another tab, though, they’re closed.</p>
+          </section>
+          <section id="open-the-tools">
+           <h3>Open the tools<a class="headerlink" href="#open-the-tools" title="Link to this heading">?</a></h3>
+           <p>Firebug can be opened by pressing F12. To open it to inspect an element it is possible to press <kbd class="kbd docutils literal notranslate">Ctrl</kbd> + <kbd class="kbd docutils literal notranslate">Shift</kbd> + <kbd class="kbd docutils literal notranslate">C</kbd> / <kbd class="kbd docutils literal notranslate">Cmd</kbd> + <kbd class="kbd docutils literal notranslate">Opt</kbd> + <kbd class="kbd docutils literal notranslate">C</kbd>. The DevTools share the same shortcuts, but also provide <a class="reference internal" href="../keyboard_shortcuts/index.html#keyboard-shortcuts-opening-and-closing-tools"><span class="std std-ref">shortcuts for the different panels</span></a>. E.g. the <a class="reference internal" href="../network_monitor/index.html"><span class="doc">Network Monitor</span></a> can be opened via <kbd class="kbd docutils literal notranslate">Ctrl</kbd> + <kbd class="kbd docutils literal notranslate">Shift</kbd> + <kbd class="kbd docutils literal notranslate">Q</kbd> / <kbd class="kbd docutils literal notranslate">Cmd</kbd> + <kbd class="kbd docutils literal notranslate">Opt</kbd> + <kbd class="kbd docutils literal notranslate">Q</kbd>, the <a class="reference internal" href="../web_console/index.html"><span class="doc">Web Console</span></a> via <kbd class="kbd docutils literal notranslate">Ctrl</kbd> + <kbd class="kbd docutils literal notranslate">Shift</kbd> + <kbd class="kbd docutils literal notranslate">K</kbd> / <kbd class="kbd docutils literal notranslate">Cmd</kbd> + <kbd class="kbd docutils literal notranslate">Opt</kbd> + <kbd class="kbd docutils literal notranslate">K</kbd> and the <a class="reference internal" href="../debugger/index.html"><span class="doc">Debugger</span></a> via <kbd class="kbd docutils literal notranslate">Ctrl</kbd> + <kbd class="kbd docutils literal notranslate">Shift</kbd> + <kbd class="kbd docutils literal notranslate">S</kbd> / <kbd class="kbd docutils literal notranslate">Cmd</kbd> + <kbd class="kbd docutils literal notranslate">Opt</kbd> + <kbd class="kbd docutils literal notranslate">S</kbd>.</p>
+          </section>
+         </section>
+         <section id="web-console">
+          <h2>Web Console<a class="headerlink" href="#web-console" title="Link to this heading">?</a></h2>
+          <p>The <a class="reference internal" href="../web_console/index.html"><span class="doc">Web Console</span></a> is the equivalent of Firebug’s Console panel. It shows log information associated with a web page and allows you to execute JavaScript expressions via its <a class="reference internal" href="../web_console/the_command_line_interpreter/index.html"><span class="doc">command line</span></a>. The display between both is somewhat different. This may be changed in <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1269730">bug 1269730</a>.</p>
+          <section id="filter-log-messages">
+           <h3>Filter log messages<a class="headerlink" href="#filter-log-messages" title="Link to this heading">?</a></h3>
+           <p>Firebug offers two ways to filter log messages, via the options menu and via the filter buttons within the toolbar. The Developer Tools console offers similar functionality via the <a class="reference internal" href="../web_console/console_messages/index.html#web-console-ui-tour-filtering-by-category"><span class="std std-ref">filter buttons inside its toolbar</span></a> — centralized at one place.</p>
+          </section>
+          <section id="command-line-api">
+           <h3>Command Line API<a class="headerlink" href="#command-line-api" title="Link to this heading">?</a></h3>
+           <p>The Command Line API in Firebug provides some special functions for your convenience. The Developer Tools command line has <a class="reference internal" href="../web_console/the_command_line_interpreter/index.html#command-line-interpreter-helper-commands"><span class="std std-ref">some functions in common</span></a>, but also has some other functions and misses others.</p>
+          </section>
+          <section id="console-api">
+           <h3>Console API<a class="headerlink" href="#console-api" title="Link to this heading">?</a></h3>
+           <p>To log things to the console from within the web page Firebug makes a Console API available within the page. The Developer Tools share the <a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/API/console">same API</a>, so your <code class="docutils literal notranslate"><span class="pre">console.*</span></code> statements will continue to work.</p>
+          </section>
+          <section id="persist-logs">
+           <h3>Persist logs<a class="headerlink" href="#persist-logs" title="Link to this heading">?</a></h3>
+           <p>In Firebug you can click the <em>Persist</em> button within the toolbar to keep the logged messages between page navigations and reloads. In the DevTools this option is called <a class="reference internal" href="../settings/index.html#settings-common-preferences"><span class="std std-ref">Enable persistent logs</span></a> and is available within the Toolbox Options panel.</p>
+          </section>
+          <section id="server-logs">
+           <h3>Server logs<a class="headerlink" href="#server-logs" title="Link to this heading">?</a></h3>
+           <p>Firebug extensions like FirePHP allow to log server-side messages to the Firebug console. This functionality is already <a class="reference internal" href="../web_console/console_messages/index.html#web-console-server"><span class="std std-ref">integrated into the DevTools</span></a> using the <a class="reference external" href="https://craig.is/writing/chrome-logger">ChromeLogger</a> protocol and doesn’t require any extensions to be installed.</p>
+          </section>
+          <section id="command-history">
+           <h3>Command history<a class="headerlink" href="#command-history" title="Link to this heading">?</a></h3>
+           <p>The <a class="reference internal" href="../web_console/the_command_line_interpreter/index.html#command-line-interpreter-execution-history"><span class="std std-ref">command history</span></a> available through a button in Firebug’s command line, is available by pressing <kbd class="kbd docutils literal notranslate">?</kbd>/<kbd class="kbd docutils literal notranslate">?</kbd> within the DevTools command line.</p>
+          </section>
+          <section id="inspect-object-properties">
+           <h3>Inspect object properties<a class="headerlink" href="#inspect-object-properties" title="Link to this heading">?</a></h3>
+           <p>By clicking on an object logged within the console you can inspect the object’s properties and methods within the DOM panel. In the Firefox DevTools you can also inspect the objects. The difference is that they <a class="reference internal" href="../web_console/rich_output/index.html#web-console-rich-output-examining-object-properties"><span class="std std-ref">show the properties and methods within a side panel inside the Web Console</span></a>.</p>
+          </section>
+          <section id="show-network-requests">
+           <h3>Show network requests<a class="headerlink" href="#show-network-requests" title="Link to this heading">?</a></h3>
+           <p>The Console panel in Firebug allows to log <a class="reference external" href="https://developer.mozilla.org/en-US/docs/Glossary/AJAX">AJAX</a> requests (aka <a class="reference external" href="https://developer.mozilla.org/en-US/docs/Glossary/XHR_(XMLHttpRequest)">XMLHttpRequest</a>). This option is also available within the DevTools Web Console via the <em>Net</em> &gt; <em>XHR</em>. Furthermore, the Web Console even allows to display all other network requests via <em>Net</em> &gt; <em>Log</em>.</p>
+          </section>
+          <section id="view-json-and-xml-structures">
+           <h3>View JSON and XML structures<a class="headerlink" href="#view-json-and-xml-structures" title="Link to this heading">?</a></h3>
+           <p>To view JSON and XML responses of <a class="reference external" href="https://developer.mozilla.org/en-US/docs/Glossary/AJAX">AJAX</a> requests, Firebug has special tabs when expanding the request within the Console panel. The DevTools Web Console shows those structures directly under the “Response” tab.</p>
+          </section>
+          <section id="multi-line-command-line">
+           <h3>Multi-line command line<a class="headerlink" href="#multi-line-command-line" title="Link to this heading">?</a></h3>
+           <p>Firebug’s console has a multi-line command line called Command Editor. The DevTools have a <a class="reference internal" href="../web_console/the_command_line_interpreter/index.html#command-line-interpreter-multi-line-mode"><span class="std std-ref">side panel</span></a> like the Command Editor.</p>
+          </section>
+          <section id="response-preview">
+           <h3>Response preview<a class="headerlink" href="#response-preview" title="Link to this heading">?</a></h3>
+           <p>There is a <em>Preview</em> tab when a network request logged to the console is expanded in Firebug. The Web Console displays a preview within the <em>Response</em> tab. It is currently missing the preview for HTML, XML and SVG, though, which is tracked in <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1247392">bug 1247392</a> and <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1262796">bug 1262796</a>, but when you click on the URL of the request you switch to the <a class="reference internal" href="../network_monitor/index.html"><span class="doc">Network Monitor</span></a>, which has a <em>Preview</em> tab.</p>
+          </section>
+         </section>
+         <section id="inspector">
+          <h2>Inspector<a class="headerlink" href="#inspector" title="Link to this heading">?</a></h2>
+          <p>Firebug has an HTML panel, which allows to edit HTML/XML/SVG and the CSS related to it. Within the DevTools this functionality is served by the <a class="reference internal" href="../page_inspector/index.html"><span class="doc">Page Inspector</span></a>.</p>
+          <section id="edit-html">
+           <h3>Edit HTML<a class="headerlink" href="#edit-html" title="Link to this heading">?</a></h3>
+           <p>Within the Page Inspector the tag attributes and the contents can be edited inline just like in Firebug. Beyond that it allows to edit the tag names inline.</p>
+           <p>You can also edit the HTML directly. In Firebug you do this by right-clicking a node and clicking Edit HTML… in the context menu. In the DevTools this option is also available via the context menu. There the option is called <a class="reference internal" href="../page_inspector/how_to/examine_and_edit_html/index.html#page-inspector-how-to-examine-and-edit-html-editing-html"><span class="std std-ref">Edit As HTML</span></a>. Only the live preview of changes is currently missing, which is tracked in <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1067318">bug 1067318</a> and <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=815464">bug 815464</a>.</p>
+          </section>
+          <section id="copy-html-and-related-information">
+           <h3>Copy HTML and related information<a class="headerlink" href="#copy-html-and-related-information" title="Link to this heading">?</a></h3>
+           <p>Firebug’s HTML panel allows to copy the inner and outer HTML of an element as well as the CSS and XPath to it via the context menu of an element. The Page Inspector provides the same functionality except copying XPaths. This is covered by <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=987877">bug 987877</a>.</p>
+          </section>
+          <section id="edit-css">
+           <h3>Edit CSS<a class="headerlink" href="#edit-css" title="Link to this heading">?</a></h3>
+           <p>Both tools allow to view and edit the CSS rules related to the element selected within the node view in a similar way. Firebug has a Style side panel for this, the DevTools have a <a class="reference internal" href="../page_inspector/how_to/examine_and_edit_css/index.html"><span class="doc">Rules side panel</span></a>.</p>
+           <p>In Firebug you add new rules by right-clicking and choosing <em>Add Rule…</em> from the context menu. The DevTools also have a context menu option for that named <a class="reference internal" href="../page_inspector/how_to/examine_and_edit_css/index.html#page-inspector-how-to-examine-and-edit-css-add-rules"><span class="std std-ref">Add New Rule and additionally have a + button</span></a> within the Rules panel’s toolbar to create new rules.</p>
+           <p>To edit element styles, i.e. the CSS properties of the <a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes#attr-style">style</a> attribute of an element, in Firebug you have to right-click into the Style side panel and choose Edit Element Style… from the context menu. The DevTools display an <a class="reference internal" href="../page_inspector/how_to/examine_and_edit_css/index.html#page-inspector-how-to-examine-and-edit-css-element-rule"><span class="std std-ref">element {} rule</span></a> for this purpose, which requires a single click into it to start editing the properties.</p>
+          </section>
+          <section id="auto-completion-of-css">
+           <h3>Auto-completion of CSS<a class="headerlink" href="#auto-completion-of-css" title="Link to this heading">?</a></h3>
+           <p>As in Firebug, the Rules view provides an auto-completion for the CSS property names and their values. A few property values are not auto-completed yet, which is tracked in <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1337918">bug 1337918</a>.</p>
+          </section>
+          <section id="copy-paste-css">
+           <h3>Copy &amp; paste CSS<a class="headerlink" href="#copy-paste-css" title="Link to this heading">?</a></h3>
+           <p>Firebug’s Style side panel as well as the DevTools’ Rules side panel provide options within their context menus to copy the CSS rule or the style declarations. The DevTools additionally provide an option to copy the selector of a rule and copy disabled property declarations as commented out. They are missing the option to copy the whole style declaration, though this can be achieved by selecting them within the panel and copying the selection by pressing <kbd class="kbd docutils literal notranslate">Ctrl</kbd> + <kbd class="kbd docutils literal notranslate">C</kbd> or via the context menu.</p>
+           <p>The Rules side panel of the DevTools is smarter when it comes to pasting CSS into it. You can paste whole style declarations into an existing rule property declarations which are commented out are automatically disabled.</p>
+          </section>
+          <section id="toggle-pseudo-classes">
+           <h3>Toggle pseudo-classes<a class="headerlink" href="#toggle-pseudo-classes" title="Link to this heading">?</a></h3>
+           <p>Firebug lets you toggle the CSS <a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/CSS/Pseudo-classes">pseudo-classes</a> <a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/CSS/:hover">:hover</a>, <a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/CSS/:active">:active</a> and <a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/CSS/:focus">:focus</a> for an element via the options menu of the Style side panel. In the DevTools there are two ways to do the same. The first one is to toggle them via the pseudo-class panel within the Rules side panel. The second one is to right-click and element within the node view and toggle the pseudo-classes via the <a class="reference internal" href="../page_inspector/how_to/examine_and_edit_html/index.html#page-inspector-how-to-examine-and-edit-html-context-menu-reference"><span class="std std-ref">context menu</span></a>.</p>
+          </section>
+          <section id="examine-css-shorthand-properties">
+           <h3>Examine CSS shorthand properties<a class="headerlink" href="#examine-css-shorthand-properties" title="Link to this heading">?</a></h3>
+           <p>CSS <a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/CSS/Shorthand_properties">shorthand properties</a> can be split into their related longhand properties by setting the option <em>Expand Shorthand Properties</em> within the Style side panel. The DevTools’ Rules panel is a bit smarter and allows you to expand individual shorthand properties by clicking the twisty besides them.</p>
+          </section>
+          <section id="only-show-applied-styles">
+           <h3>Only show applied styles<a class="headerlink" href="#only-show-applied-styles" title="Link to this heading">?</a></h3>
+           <p>The Style side panel in Firebug has an option to display only the properties of a CSS rule that are applied to the selected element and hide all overwritten styles. There is no such feature in the <a class="reference internal" href="../page_inspector/how_to/examine_and_edit_css/index.html"><span class="doc">Rules side panel</span></a> of the DevTools, but it is requested in <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1335327">bug 1335327</a>.</p>
+          </section>
+          <section id="inspect-box-model">
+           <h3>Inspect box model<a class="headerlink" href="#inspect-box-model" title="Link to this heading">?</a></h3>
+           <p>In Firebug the <a class="reference external" href="https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/The_box_model">box model</a> can be inspected via the Layout side panel. In the DevTools the <a class="reference internal" href="../page_inspector/how_to/examine_and_edit_the_box_model/index.html"><span class="doc">box model is part of the Computed side panel</span></a>. Both tools highlight the different parts of the box model within the page when hovering them in the box model view. Also, both tools allow you to edit the different values inline via a click on them.</p>
+          </section>
+          <section id="inspect-computed-styles">
+           <h3>Inspect computed styles<a class="headerlink" href="#inspect-computed-styles" title="Link to this heading">?</a></h3>
+           <p>The computed values of CSS properties are displayed within the DevTools’ <a class="reference internal" href="../page_inspector/how_to/examine_and_edit_css/index.html#page-inspector-how-to-examine-and-edit-css-examine-computed-css"><span class="std std-ref">Computed side panel</span></a> like within Firebug’s Computed side panel. The difference is that in the DevTools the properties are always listed alphabetically and not grouped (see <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=977128">bug 977128</a>) and there is no option to hide the Mozilla specific styles, therefore there is an input field allowing to filter the properties.</p>
+          </section>
+          <section id="inspect-events">
+           <h3>Inspect events<a class="headerlink" href="#inspect-events" title="Link to this heading">?</a></h3>
+           <p>Events assigned to an element are displayed in the Events side panel in Firebug. In the DevTools they are shown when clicking the small ‘ev’ icon besides an element within the node view. Both tools allow to display wrapped event listeners (e.g. listeners wrapped in jQuery functions). To improve the UI of the DevTools, there is also a request to add an Events side panel to them like the one in Firebug (see <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1226640">bug 1226640</a>).</p>
+          </section>
+          <section id="stop-script-execution-on-dom-mutation">
+           <h3>Stop script execution on DOM mutation<a class="headerlink" href="#stop-script-execution-on-dom-mutation" title="Link to this heading">?</a></h3>
+           <p>In Firebug you can break on DOM mutations, that means that when an element is changed, the script execution is stopped at the related line within the JavaScript file, which caused the change. This feature can globally be enabled via the <em>Break On Mutate</em> button, or individually for each element and for different types of changes like attribute changes, content changes or element removal. Unfortunately, the DevTools do not have this feature yet (see <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1004678">bug 1004678</a>). To stop the script execution there, you need to set a breakpoint on the line with the modification within the <a class="reference internal" href="../debugger/index.html"><span class="doc">Debugger panel</span></a>.</p>
+          </section>
+          <section id="search-for-elements-via-css-selectors-or-xpaths">
+           <h3>Search for elements via CSS selectors or XPaths<a class="headerlink" href="#search-for-elements-via-css-selectors-or-xpaths" title="Link to this heading">?</a></h3>
+           <p>Firebug allows to search for elements within the HTML panel via CSS selectors or XPaths. Also the <a class="reference internal" href="../page_inspector/how_to/examine_and_edit_html/index.html#page-inspector-how-to-examine-and-edit-html-searching"><span class="std std-ref">DevTools’ Inspector panel allows to search for CSS selectors</span></a>. It even displays a list with matching IDs or classes. Searching by XPaths is not supported though (see <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=963933">bug 963933</a>).</p>
+          </section>
+         </section>
+         <section id="debugger">
+          <h2>Debugger<a class="headerlink" href="#debugger" title="Link to this heading">?</a></h2>
+          <p>What’s the Script panel in Firebug, is the <a class="reference internal" href="../debugger/index.html"><span class="doc">Debugger panel</span></a> in the DevTools. Both allow you to debug JavaScript code executed on a website.</p>
+          <section id="switch-between-sources">
+           <h3>Switch between sources<a class="headerlink" href="#switch-between-sources" title="Link to this heading">?</a></h3>
+           <p>Firebug has a Script Location Menu listing all JavaScript sources related to the website. Those sources can be static, i.e. files, or they can be dynamically generated (i.e. scripts executed via event handlers, <code class="docutils literal notranslate"><span class="pre">eval()</span></code>, <code class="docutils literal notranslate"><span class="pre">new</span> <span class="pre">Function()</span></code>, etc.). In the DevTools’ Debugger panel the scripts are listed at the left side within the <a class="reference internal" href="../debugger/ui_tour/index.html#debugger-ui-tour-source-list-pane"><span class="std std-ref">Sources side panel</span></a>. Dynamically generated scripts are only listed there when they are <a class="reference internal" href="../debugger/how_to/debug_eval_sources/index.html"><span class="doc">named via a //# sourceURL comment</span></a>.</p>
+          </section>
+          <section id="managing-breakpoints">
+           <h3>Managing breakpoints<a class="headerlink" href="#managing-breakpoints" title="Link to this heading">?</a></h3>
+           <p>In Firebug you can set different types of breakpoints, which are all listed within the Breakpoints side panel. In the DevTools the breakpoints are shown below each script source within the <a class="reference internal" href="../debugger/ui_tour/index.html#debugger-ui-tour-source-list-pane"><span class="std std-ref">Sources side panel</span></a>. Those panels allow you to enable and disable single or all breakpoints and to remove single breakpoints or all of them at once. They do currently only allow to set script breakpoints. XHR, DOM, Cookie and Error breakpoints are not supported yet (see <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=821610">bug 821610</a>, <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1004678">bug 1004678</a>, <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=895893">bug 895893</a> and <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1165010">bug 1165010</a>). While there are no breakpoints for single JavaScript errors, there is a setting <em>Pause on Exceptions</em> within the <a class="reference internal" href="../settings/index.html#settings-debugger"><span class="std std-ref">Debugger panel options</span></a>.</p>
+          </section>
+          <section id="step-through-code">
+           <h3>Step through code<a class="headerlink" href="#step-through-code" title="Link to this heading">?</a></h3>
+           <p>Once the script execution is stopped, you can step through the code using the Continue (<kbd class="kbd docutils literal notranslate">F8</kbd>), Step Over (<kbd class="kbd docutils literal notranslate">F10</kbd>), Step Into (<kbd class="kbd docutils literal notranslate">F11</kbd>) and Step Out (<kbd class="kbd docutils literal notranslate">Shift</kbd> + <kbd class="kbd docutils literal notranslate">F11</kbd>) options. They work the same in both tools.</p>
+          </section>
+          <section id="examine-call-stack">
+           <h3>Examine call stack<a class="headerlink" href="#examine-call-stack" title="Link to this heading">?</a></h3>
+           <p>When the script execution is paused, Firebug displays the function call stack within its Stack side panel. In there the functions are listed together with their call parameters. In the DevTools the function call stack is shown within the <a class="reference internal" href="../debugger/ui_tour/index.html#debugger-ui-tour-call-stack"><span class="std std-ref">Call Stack side panel</span></a>. To see the call parameters in the DevTools, you need to have a look at the <a class="reference internal" href="../debugger/how_to/set_watch_expressions/index.html"><span class="doc">Variables side panel</span></a>.</p>
+          </section>
+          <section id="examine-variables">
+           <h3>Examine variables<a class="headerlink" href="#examine-variables" title="Link to this heading">?</a></h3>
+           <p>The Watch side panel in Firebug displays the <a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/API/Window">window</a> object (the global scope) by default. With the script execution halted it shows the different variable scopes available within the current call stack frame. Furthermore, it allows you to add and manipulate watch expressions. The DevTools have a <a class="reference internal" href="../debugger/how_to/set_watch_expressions/index.html"><span class="doc">Variables side panel</span></a>, which works basically the same. The main difference is that it is empty when the script execution is not stopped, i.e. it doesn’t display the <code class="docutils literal notranslate"><span class="pre">window</span></code> object. Though you can inspect that object either via the <a class="reference internal" href="../dom_property_viewer/index.html"><span class="doc">DOM property viewer</span></a> or via the <a class="reference internal" href="../web_console/index.html"><span class="doc">Web Console</span></a>.</p>
+          </section>
+         </section>
+         <section id="style-editor">
+          <h2>Style Editor<a class="headerlink" href="#style-editor" title="Link to this heading">?</a></h2>
+          <p>The <a class="reference internal" href="../style_editor/index.html"><span class="doc">Style Editor</span></a> in the Firefox DevTools allows you to examine and edit the different CSS style sheets of a page like Firebug’s CSS panel does it. In addition to that it allows to create new style sheets and to import existing style sheets and apply them to the page. It also allows you to toggle individual style sheets.</p>
+          <section id="id3">
+           <h3>Switch between sources<a class="headerlink" href="#id3" title="Link to this heading">?</a></h3>
+           <p>The CSS panel of Firebug allows to switch between different CSS sources using the CSS Location Menu. The Style Editor has a <a class="reference internal" href="../style_editor/index.html#style-editor-the-style-sheet-pane"><span class="std std-ref">sidebar</span></a> for this purpose.</p>
+          </section>
+          <section id="edit-a-style-sheet">
+           <h3>Edit a style sheet<a class="headerlink" href="#edit-a-style-sheet" title="Link to this heading">?</a></h3>
+           <p>Firebug’s CSS panel offers three different ways for editing style sheets. The default one is to edit them inline like within the Style side panel. Furthermore it has a Source and a Live Edit mode, which allow to edit the selected style sheet like within a text editor. The Style Editor of the DevTools only has one way to edit style sheets, which corresponds to Firebug’s Live Edit mode.</p>
+          </section>
+          <section id="try-out-css-selectors">
+           <h3>Try out CSS selectors<a class="headerlink" href="#try-out-css-selectors" title="Link to this heading">?</a></h3>
+           <p>Firebug’s Selectors side panel provides a way to validate a CSS selector. It lists all elements matching the entered selector. The DevTools don’t have this feature yet, but it’s requested in <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1323746">bug 1323746</a>.</p>
+          </section>
+          <section id="searching-within-the-style-sheets">
+           <h3>Searching within the style sheets<a class="headerlink" href="#searching-within-the-style-sheets" title="Link to this heading">?</a></h3>
+           <p>Firebug allows to search within the style sheets via the search field. The Style Editor in the DevTools also provides a way to search within a style sheet, though there is currently no option to search within multiple sheets (see <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=889571">bug 889571</a> and also not via a regular expression (see <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1362030">bug 1362030</a>).</p>
+          </section>
+         </section>
+         <section id="performance-tool">
+          <h2>Performance Tool<a class="headerlink" href="#performance-tool" title="Link to this heading">?</a></h2>
+          <p>Firebug allows to profile JavaScript performance via the “Profile” button within the Console panel or the <code class="docutils literal notranslate"><span class="pre">console.profile()</span></code> and <code class="docutils literal notranslate"><span class="pre">console.profileEnd()</span></code> commands. The DevTools provide advanced tooling regarding performance profiling. A profile can be created via <a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/API/console/profile">console.profile()</a> and <a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/API/console/profileEnd">console.profileEnd()</a> like in Firebug or via the “Start Recording Performance” button in the <a class="reference internal" href="../performance/index.html"><span class="doc">Performance Tool</span></a>. The output of the <span class="xref std std-doc">Call Tree</span> is the one that comes nearest to the output in Firebug, but the Performance panel provides much more information than just the JavaScript performance. E.g. it also provides information about HTML parsing or layout.</p>
+          <p>This is the part where Firebug and the DevTools differ the most, because the outputs are completely different. While Firebug focuses on JavaScript performance and provides detailed information about JavaScript function calls during the profiling session, the Performance Tool in the DevTools offers a broad spectrum of information regarding a website’s performance but doesn’t go into detail regarding JavaScript function calls.</p>
+          <section id="view-javascript-call-performance">
+           <h3>View JavaScript call performance<a class="headerlink" href="#view-javascript-call-performance" title="Link to this heading">?</a></h3>
+           <p>What comes nearest to Firebug’s profiler output is the <a class="reference internal" href="../performance/index.html"><span class="doc">Call Tree view</span></a> in the Performance panel. Like in Firebug it lists the total execution time of each function call under <em>Total Time</em> as well as the number of calls under <em>Samples</em>, the time spent within the function under <em>Self Time</em> and the related percentages in reference to the total execution time.</p>
+           <div class="admonition note">
+            <p class="admonition-title">Note</p>
+            <p>The times and percentages listed in the DevTools’ Call Tree view is not equivalent to the ones shown in Firebug, because it uses different APIs sampling the execution of the JavaScript code.</p>
+           </div>
+          </section>
+          <section id="jump-to-function-declaration">
+           <h3>Jump to function declaration<a class="headerlink" href="#jump-to-function-declaration" title="Link to this heading">?</a></h3>
+           <p>Like in Firebug’s profiler output the <span class="xref std std-doc">Call Tree view</span> of the DevTools’ Performance Tool allows to jump to the line of code where the called JavaScript function is defined. In Firebug the source link to the function is located at the right side of the Console panel output while within the DevTools the link is placed on the right side within the Call Tree View.</p>
+          </section>
+         </section>
+         <section id="network-monitor">
+          <h2>Network Monitor<a class="headerlink" href="#network-monitor" title="Link to this heading">?</a></h2>
+          <p>To monitor network requests Firebug provides a Net panel. The Firefox DevTools allow to inspect the network traffic using the <a class="reference internal" href="../network_monitor/index.html"><span class="doc">Network Monitor</span></a>. Both tools provide similar information including a timeline showing the request and response times of the network requests.</p>
+          <section id="inspect-request-information">
+           <h3>Inspect request information<a class="headerlink" href="#inspect-request-information" title="Link to this heading">?</a></h3>
+           <p>Both Firebug and the Firefox DevTools’ Network Monitor allow you to inspect the information about a request by clicking on it. The only difference is that Firebug shows the information below the request while the Network Monitor displays it within a side panel.</p>
+           <p>In both tools there are different tabs containing different kinds of information for the selected request. They contain a <em>Headers</em>, <em>Params</em>, <em>Response</em> and <em>Cookies</em> panel. A preview of the response is shown within specifically named panels like <em>HTML</em>. The Network Monitor has a <em>Preview</em> panel for this purpose. It doesn’t provide information about the cached data yet (see <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=859051">bug 859051</a>), but provides a <em>Security</em> tab in addition to Firebug’s information and a <em>Timings</em> tab showing detailed information about the network timings.</p>
+          </section>
+          <section id="view-request-timings">
+           <h3>View request timings<a class="headerlink" href="#view-request-timings" title="Link to this heading">?</a></h3>
+           <p>Firebug offers detailed information about the network timings related to a request by hovering the Timeline column within its Net panel. The Network Monitor shows this information within a <a class="reference internal" href="../network_monitor/request_details/index.html#network-monitor-request-details-timings-tab"><span class="std std-ref">Timings side panel</span></a> when you select a request.</p>
+          </section>
+          <section id="view-remote-address">
+           <h3>View remote address<a class="headerlink" href="#view-remote-address" title="Link to this heading">?</a></h3>
+           <p>The remote address of a request is shown within the Remote IP column within Firebug. In the Network Monitor the address is shown at <em>Remote Address</em> in the <em>Headers</em> tab when a request is selected.</p>
+          </section>
+          <section id="search-within-requests">
+           <h3>Search within requests<a class="headerlink" href="#search-within-requests" title="Link to this heading">?</a></h3>
+           <p>The search field within Firebug allows to search within the requests. The search field in the Firefox DevTools filters the requests by the entered string.</p>
+           <p>Firebug allowed to search within the response body of the network requests by checking <em>Response Bodies</em> within its search field options. This feature is not available yet within the Network Monitor, but it’s requested in <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1334408">bug 1334408</a>. While response bodies can’t be searched yet, the Network Monitor allows to <a class="reference internal" href="../network_monitor/request_list/index.html#request-list-filtering-by-properties"><span class="std std-ref">filter by different request properties</span></a>.</p>
+          </section>
+         </section>
+         <section id="storage-inspector">
+          <h2>Storage Inspector<a class="headerlink" href="#storage-inspector" title="Link to this heading">?</a></h2>
+          <p>The Cookies panel in Firebug displays information related to the cookies created by a page and allows to manipulate the information they store. Within the DevTools this functionality is located within the <a class="reference internal" href="../storage_inspector/index.html"><span class="doc">Storage Inspector</span></a>. In contrast to Firebug the Storage Inspector not only allows to inspect cookies but also other kinds of storages like the local and session storage, the cache and <a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API">IndexedDB</a> databases.</p>
+          <section id="inspect-cookies">
+           <h3>Inspect cookies<a class="headerlink" href="#inspect-cookies" title="Link to this heading">?</a></h3>
+           <p>All cookies related to a website are listed inside the Cookies panel in Firebug. Inside the DevTools, the cookies are grouped by domain under the Cookies section within the <a class="reference internal" href="../storage_inspector/index.html"><span class="doc">Storage Inspector</span></a>. Both show pretty much the same information per cookie, i.e. the name, value, domain, path, expiration date and whether the cookie is HTTP-only.</p>
+           <p>The DevTools don’t show by default whether a cookie is secure, but this can be enabled by right-clicking the table header and checking <em>Secure</em> from the context menu. Additionally, the DevTools allow to display the creation date of a cookie as well as when it was last accessed and whether it is host-only.</p>
+          </section>
+          <section id="edit-cookies">
+           <h3>Edit cookies<a class="headerlink" href="#edit-cookies" title="Link to this heading">?</a></h3>
+           <p>To edit a cookie in Firebug you have to right-click the cookie and choose <em>Edit</em> from the context menu. Then a dialog pops up allowing you to edit the data of the cookie and save it. Inside the Storage Inspector you just have to double-click the data you want to edit. Then an inline editor allows you to edit the value.</p>
+          </section>
+          <section id="delete-cookies">
+           <h3>Delete cookies<a class="headerlink" href="#delete-cookies" title="Link to this heading">?</a></h3>
+           <p>Firebug’s Cookies panel allows you to delete all cookies of a website via the menu option <em>Cookies</em> &gt; <em>Remove Cookies</em> or by pressing <kbd class="kbd docutils literal notranslate">Ctrl</kbd> + <kbd class="kbd docutils literal notranslate">Shift</kbd> + <kbd class="kbd docutils literal notranslate">O</kbd>. It also allows you to only remove session cookies via <em>Cookies</em> &gt; <em>Remove Session Cookies</em> and to remove single cookies by right-clicking them and choosing <em>Delete</em>. The DevTools Storage Inspector allows to remove all cookies and a single one by right-clicking on a cookie and choosing <em>Delete All</em> resp. <em>Delete “&lt;cookie name&gt;”</em>. Additionally, it allows to delete all cookies from a specific domain via the context menu option <em>Delete All From “&lt;domain name&gt;”</em>. It currently does not allow to only delete session cookies (see <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1336934">bug 1336934</a>).</p>
+          </section>
+         </section>
+         <section id="feedback">
+          <h2>Feedback<a class="headerlink" href="#feedback" title="Link to this heading">?</a></h2>
+          <p>We are always happy to respond to feedback and questions. If you have any queries or points of view, feel free to share them on our <a class="reference external" href="https://discourse.mozilla.org/c/devtools">DevTools Discourse Forum</a>.</p>
+         </section>
+        </section>
+       </div>
+      </div>
+      <footer>
+       <hr>
+       <div role="contentinfo">
+        <p></p>
+       </div> Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+      </footer>
+     </div>
+    </div>
+   </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ </body>
+</html>

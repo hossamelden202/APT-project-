@@ -1,0 +1,340 @@
+<!doctype html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Static Analysis for Rooting and Heap Write Hazards — Firefox Source Docs  documentation</title>
+  <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50">
+  <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094">
+  <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=fd3f3429">
+  <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b">
+  <link rel="stylesheet" type="text/css" href="../../_static/custom_theme.css?v=dc5ed815">
+  <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7">
+  <link rel="shortcut icon" href="../../_static/firefox.ico"><!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script src="../../_static/jquery.js?v=5d32c60e"></script>
+  <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+  <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+  <script src="../../_static/doctools.js?v=9a2dae69"></script>
+  <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+  <script src="../../_static/copybutton.js?v=30646c52"></script>
+  <script src="../../_static/design-tabs.js?v=36754332"></script>
+  <script src="../../_static/js/theme.js"></script>
+  <link rel="index" title="Index" href="../../genindex.html">
+  <link rel="search" title="Search" href="../../search.html">
+  <link rel="next" title="Running the Rooting Hazard Analysis" href="running.html">
+  <link rel="prev" title="SpiderMonkey garbage collector" href="../gc.html">
+ </head>
+ <body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+   <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <div class="wy-side-scroll">
+     <div class="wy-side-nav-search">
+      <a href="../../index.html" class="icon icon-home"> Firefox Source Docs <img src="../../_static/firefox-wordmark.svg" class="logo" alt="Logo"> </a><!-- -- This code is governed by the BSD license ---->
+      <div>
+       <h3>Quick search</h3>
+       <script>
+    (function () {
+      var cx = "dd12886298f75dbef";
+      var gcse = document.createElement("script");
+      gcse.async = true;
+      gcse.src = "https://cse.google.com/cse.js?cx=" + cx;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(gcse, s);
+    })();
+  </script><gcse:search></gcse:search>
+      </div>
+     </div>
+     <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+      <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../glossary/index.html">A Glossary of Common Terms</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../overview/index.html">A Quick Guide to Mozilla Applications</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../setup/index.html">Getting Set Up To Work On The Firefox Codebase</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Working On Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Working on Firefox</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../bug-mgmt/index.html">Bug Handling</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox User Guide</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../devtools-user/index.html">Firefox DevTools User Docs</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Source Code Documentation</span></p>
+      <ul class="current">
+       <li class="toctree-l1"><a class="reference internal" href="../../mots/index.html">Governance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../browser/index.html">Firefox Front-end</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../dom/index.html">DOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../editor/index.html">Editor</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../layout/index.html">Style system (CSS) &amp; Layout</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../gfx/index.html">Graphics</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../ipc/index.html">Processes, Threads and IPC</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../devtools/index.html">Firefox DevTools Contributor Docs</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../toolkit/index.html">Toolkit</a></li>
+       <li class="toctree-l1 current"><a class="reference internal" href="../index.html">SpiderMonkey</a>
+        <ul class="current">
+         <li class="toctree-l2"><a class="reference internal" href="../build.html">Building and testing SpiderMonkey</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../test.html">Running Automated JavaScript Tests</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../hacking_tips.html">Hacking Tips</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../Debugger/index.html">Debugger API</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../SavedFrame/index.html">SavedFrame</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../feature_checklist.html">JavaScript Language Feature Checklist</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../bytecode_checklist.html">So You Want to Add a Bytecode Op</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../use_counter.html">Adding Use Counter Telemetry to the JS Engine</a></li>
+         <li class="toctree-l2 current"><a class="reference internal" href="../index.html#components-of-spidermonkey">Components of SpiderMonkey</a>
+          <ul class="current">
+           <li class="toctree-l3 current"><a class="reference internal" href="../index.html#garbage-collector">? Garbage Collector</a>
+            <ul class="current">
+             <li class="toctree-l4"><a class="reference internal" href="../gc.html">Overview</a></li>
+             <li class="toctree-l4 current"><a class="current reference internal" href="#">Rooting Hazard Analysis</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="running.html">Running the Analysis</a></li>
+            </ul></li>
+           <li class="toctree-l3"><a class="reference internal" href="../index.html#js-value-and-jsobject">? JS::Value and JSObject</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="../index.html#javascript-parser">?? JavaScript Parser</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="../index.html#javascript-interpreter">?? JavaScript Interpreter</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="../index.html#javascript-jits">? JavaScript JITs</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="../index.html#id1">? WebAssembly</a></li>
+          </ul></li>
+        </ul></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../jsloader/index.html">JS Loader</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/geckoview/index.html">GeckoView</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/fenix/index.html">Fenix</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/focus-android/index.html">Focus for Android</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../dom/bindings/webidl/index.html">WebIDL</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../modules/libpref/index.html">libpref</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../networking/index.html">Networking</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../remote/index.html">Remote Protocols</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../services/index.html">Services</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../permissions/index.html">Permissions</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../uriloader/index.html">File Handling</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../widget/cocoa/index.html">Firefox on macOS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../widget/windows/index.html">Firefox on Windows</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../toolkit/components/ml/index.html">Firefox AI Runtime</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../accessible/index.html">Accessibility</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../media/index.html">Media Playback</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../code-quality/index.html">Code quality</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../writing-rust-code/index.html">Writing Rust Code</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../rust-components/index.html">Rust Components</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/profiler/index.html">Gecko Profiler</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../performance/index.html">Performance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../storage/index.html">Database bindings (SQLite, KV, …)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../xpcom/index.html">XPCOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../nspr/index.html">NSPR</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../security/nss/index.html">Network Security Services (NSS)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../content-security/index.html">Web Security Checks in Gecko</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">The Firefox Build System</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mach/index.html">Mach</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/try/index.html">Pushing to Try</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../build/buildsystem/index.html">Build System</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../taskcluster/index.html">Firefox CI and Taskgraph</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/moztreedocs/index.html">Managing Documentation</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mozbuild/vendor/index.html">Vendoring Third Party Components</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Testing &amp; Test Infrastructure</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/automated-testing/index.html">Automated Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/treeherder-try/index.html">Understanding Treeherder Results</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/sheriffed-intermittents/index.html">Sheriffed intermittent failures</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/tests-for-new-config/index.html">Turning on Firefox tests for a new configuration</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/intermittent/index.html">Avoiding intermittent tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/testing-policy/index.html">Testing Policy</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/ci-configs/index.html">Configuration Changes</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/browser-chrome/index.html">Browser chrome mochitests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/chrome-tests/index.html">Chrome Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/marionette/index.html">Marionette</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/geckodriver/index.html">geckodriver</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/test-verification/index.html">Test Verification</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/webrender/index.html">WebRender Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/mochitest-plain/index.html">Mochitest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/xpcshell/index.html">XPCShell tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/tps/index.html">TPS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../web-platform/index.html">web-platform-tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../gtest/index.html">GTest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/fuzzing/index.html">Fuzzing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/sanitizer/index.html">Sanitizer</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/perfdocs/index.html">Performance Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/code-coverage/index.html">Code coverage</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing-rust-code/index.html">Testing &amp; Debugging Rust Code</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Releases &amp; Updates</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html">Mozilla Update Infrastructure</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html#watershed-updates">Watershed Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html#desupport-updates">Desupport Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/update-verify/index.html">Update Verify</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Localization &amp; Internationalization</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../intl/index.html">Internationalization</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../l10n/index.html">Localization</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox and Python</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mozbase/index.html">mozbase</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../python/index.html">Using third-party Python packages</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Metrics Collected in Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../metrics/index.html">Metrics</a></li>
+      </ul>
+     </div>
+    </div>
+   </nav>
+   <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+    <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+     <i data-toggle="wy-nav-top" class="fa fa-bars"></i> <a href="../../index.html">Firefox Source Docs</a>
+    </nav>
+    <div class="wy-nav-content">
+     <div class="rst-content">
+      <!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+      <div role="navigation" aria-label="Page navigation">
+       <ul class="wy-breadcrumbs">
+        <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+        <li class="breadcrumb-item"><a href="../index.html">SpiderMonkey</a></li>
+        <li class="breadcrumb-item active">Static Analysis for Rooting and Heap Write Hazards</li>
+        <li class="wy-breadcrumbs-aside"><a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Developer+Infrastructure&amp;component=Firefox+Source+Docs%3A+Content&amp;short_desc=Documentation+issue+on+js/HazardAnalysis/index&amp;comment=URL+=+https://firefox-source-docs.mozilla.org/js/HazardAnalysis/index.html&amp;bug_file_loc=https://firefox-source-docs.mozilla.org/js/HazardAnalysis/index.html" rel="nofollow">Report an issue</a> / <a href="../../_sources/js/HazardAnalysis/index.md.txt" rel="nofollow"> View page source</a></li>
+       </ul>
+       <hr>
+      </div>
+      <div role="main" class="document" itemscope itemtype="http://schema.org/Article">
+       <div itemprop="articleBody">
+        <section id="static-analysis-for-rooting-and-heap-write-hazards">
+         <h1>Static Analysis for Rooting and Heap Write Hazards<a class="headerlink" href="#static-analysis-for-rooting-and-heap-write-hazards" title="Link to this heading">?</a></h1>
+         <p>Treeherder can run two static analysis builds: the full browser (linux64-haz), just the JS shell (linux64-shell-haz). They show up on treeherder as <code class="docutils literal notranslate"><span class="pre">H</span></code> and <code class="docutils literal notranslate"><span class="pre">SM(H)</span></code>.</p>
+         <section id="diagnosing-a-hazard-failure">
+          <h2>Diagnosing a hazard failure<a class="headerlink" href="#diagnosing-a-hazard-failure" title="Link to this heading">?</a></h2>
+          <p>The first step is to look at what sort of hazard is being reported. There are two types that cause the job to fail: stack rooting hazards for garbage collection, and heap write thread safety hazards for stylo.</p>
+          <p>The summary output will include either the string <code class="docutils literal notranslate"><span class="pre">&lt;N&gt;</span> <span class="pre">rooting</span> <span class="pre">hazards</span> <span class="pre">detected</span></code> or <code class="docutils literal notranslate"><span class="pre">&lt;N&gt;</span> <span class="pre">heap</span> <span class="pre">write</span> <span class="pre">hazards</span> <span class="pre">detected</span> <span class="pre">out</span> <span class="pre">of</span> <span class="pre">&lt;M&gt;</span> <span class="pre">allowed</span></code>. See the appropriate section below for each.</p>
+         </section>
+         <section id="diagnosing-a-rooting-hazards-failure">
+          <h2>Diagnosing a rooting hazards failure<a class="headerlink" href="#diagnosing-a-rooting-hazards-failure" title="Link to this heading">?</a></h2>
+          <p>Click on the <code class="docutils literal notranslate"><span class="pre">H</span></code> build link, select the “Artifacts” pane on the bottom left, and download the <code class="docutils literal notranslate"><span class="pre">public/build/hazards.txt.gz</span></code> and <code class="docutils literal notranslate"><span class="pre">public/build/hazards.html.gz</span></code> files. The HTML file is most useful when running the analysis locally, since it will link to the exact parts of the code in question, but it’s easier to talk about the text file here.</p>
+          <p>Example snippet from <code class="docutils literal notranslate"><span class="pre">hazards.txt</span></code>:</p>
+          <div class="highlight-none notranslate">
+           <div class="highlight">
+            <pre><span></span>Function 'jsopcode.cpp:uint8 DecompileExpressionFromStack(JSContext*, int32, int32, class JS::Handle&lt;JS::Value&gt;, int8**)' has unrooted 'ed' of type 'ExpressionDecompiler' live across GC call 'uint8 ExpressionDecompiler::decompilePC(uint8*)' at js/src/jsopcode.cpp:1866
+    js/src/jsopcode.cpp:1866: Assume(74,75, !__temp_23*, true)
+    js/src/jsopcode.cpp:1867: Assign(75,76, return := 0)
+    js/src/jsopcode.cpp:1867: Call(76,77, ed.~ExpressionDecompiler())
+GC Function: uint8 ExpressionDecompiler::decompilePC(uint8*)
+    JSString* js::ValueToSource(JSContext*, class JS::Handle&lt;JS::Value&gt;)
+    uint8 js::Invoke(JSContext*, JS::Value*, JS::Value*, uint32, JS::Value*, class JS::MutableHandle&lt;JS::Value&gt;)
+    uint8 js::Invoke(JSContext*, JS::CallArgs, uint32)
+    JSScript* JSFunction::getOrCreateScript(JSContext*)
+    uint8 JSFunction::createScriptForLazilyInterpretedFunction(JSContext*, class JS::Handle&lt;JSFunction*&gt;)
+    uint8 JSRuntime::cloneSelfHostedFunctionScript(JSContext*, class JS::Handle&lt;js::PropertyName*&gt;, class JS::Handle&lt;JSFunction*&gt;)
+    JSScript* js::CloneScript(JSContext*, class JS::Handle&lt;JSObject*&gt;, class JS::Handle&lt;JSFunction*&gt;, const class JS::Handle&lt;JSScript*&gt;, uint32)
+    JSObject* js::CloneStaticBlockObject(JSContext*, class JS::Handle&lt;JSObject*&gt;, class JS::Handle&lt;js::StaticBlockObject*&gt;)
+    js::StaticBlockObject* js::StaticBlockObject::create(js::ExclusiveContext*)
+    js::Shape* js::EmptyShape::getInitialShape(js::ExclusiveContext*, js::Class*, js::TaggedProto, JSObject*, JSObject*, uint32, uint32)
+    js::Shape* js::EmptyShape::getInitialShape(js::ExclusiveContext*, js::Class*, js::TaggedProto, JSObject*, JSObject*, uint64, uint32)
+    js::UnownedBaseShape* js::BaseShape::getUnowned(js::ExclusiveContext*, js::StackBaseShape*)
+    js::BaseShape* js_NewGCBaseShape(js::ThreadSafeContext*) [with js::AllowGC allowGC = (js::AllowGC)1u]
+    js::BaseShape* js::gc::NewGCThing(js::ThreadSafeContext*, uint32, uint64, uint32) [with T = js::BaseShape; js::AllowGC allowGC = (js::AllowGC)1u; size_t = long unsigned int]
+    void js::gc::RunDebugGC(JSContext*)
+    void js::MinorGC(JSRuntime*, uint32)
+    GC
+</pre>
+           </div>
+          </div>
+          <p>This means that a rooting hazard was discovered at <code class="docutils literal notranslate"><span class="pre">js/src/jsopcode.cpp</span></code> line 1866, in the function <code class="docutils literal notranslate"><span class="pre">DecompileExpressionFromStack</span></code> (it is prefixed with the filename because it’s a static function.) The problem is that there is an unrooted variable <code class="docutils literal notranslate"><span class="pre">ed</span></code> that holds an <code class="docutils literal notranslate"><span class="pre">ExpressionDecompiler</span></code> live across a call to <code class="docutils literal notranslate"><span class="pre">decompilePC</span></code>. “Live” means that the variable is used after the call to <code class="docutils literal notranslate"><span class="pre">decompilePC</span></code> returns. <code class="docutils literal notranslate"><span class="pre">decompilePC</span></code> may trigger a GC according to the static call stack given starting from the line beginning with “<code class="docutils literal notranslate"><span class="pre">GC</span> <span class="pre">Function:</span></code>”.</p>
+          <p>The hazard itself has some barely comprehensible <code class="docutils literal notranslate"><span class="pre">Assume(...)</span></code> and <code class="docutils literal notranslate"><span class="pre">Call(...)</span></code> <a class="reference internal" href="CFG.html"><span class="std std-doc">gibberish</span></a> that describes the exact data flow path of the variable into the function call. That stuff is rarely useful – usually, you’ll only need to look at it if it’s complaining about a temporary and you want to know where the temporary came from. The type <code class="docutils literal notranslate"><span class="pre">ExpressionDecompiler</span></code> is believed to hold pointers to GC-controlled objects of some sort. The analysis currently does not describe the exact field it is worried about.</p>
+          <p>To unpack this a little, the analysis is saying the following can happen:</p>
+          <ul class="simple">
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">ExpressionDecompiler</span></code> contains some pointer to a GC thing. For example, it might have a field <code class="docutils literal notranslate"><span class="pre">obj</span></code> of type <code class="docutils literal notranslate"><span class="pre">JSObject*</span></code>. (There is a <code class="docutils literal notranslate"><span class="pre">gcTypes.txt</span></code> file inside <code class="docutils literal notranslate"><span class="pre">hazardIntermediates.tar.xz</span></code> that will give the detailed explanation for all types.)</p></li>
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">DecompileExpressionFromStack</span></code> is called.</p></li>
+           <li>
+            <p>A pointer is stored in that field of the <code class="docutils literal notranslate"><span class="pre">ed</span></code> variable.</p></li>
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">decompilePC</span></code> is invoked, which calls <code class="docutils literal notranslate"><span class="pre">ValueToSource</span></code>, which calls <code class="docutils literal notranslate"><span class="pre">Invoke</span></code>, which eventually calls <code class="docutils literal notranslate"><span class="pre">js::MinorGC</span></code></p></li>
+           <li>
+            <p>During the resulting garbage collection, the object pointed to by <code class="docutils literal notranslate"><span class="pre">ed.obj</span></code> is moved to a different location. All pointers stored in the JS heap are updated automatically, as are all rooted pointers. <code class="docutils literal notranslate"><span class="pre">ed.obj</span></code> is not, because the GC doesn’t know about it.</p></li>
+           <li>
+            <p>After <code class="docutils literal notranslate"><span class="pre">decompilePC</span></code> returns, something accesses <code class="docutils literal notranslate"><span class="pre">ed.obj</span></code>. This is now a stale pointer, and may refer to just about anything – the wrong object, an invalid object, or whatever. As TeX would say, <strong>badness 10000</strong>.</p></li>
+          </ul>
+         </section>
+         <section id="diagnosing-a-heap-write-hazard-failure">
+          <h2>Diagnosing a heap write hazard failure<a class="headerlink" href="#diagnosing-a-heap-write-hazard-failure" title="Link to this heading">?</a></h2>
+          <p>OBSOLETE: The heap write hazard analysis has not been updated in years and is looking for things that no longer exist, and therefore will always report zero problems.</p>
+          <p>For the thread unsafe heap write analysis, a hazard means that some Gecko_* function calls, directly or indirectly, code that writes to something on the heap, or calls an unknown function that <em>might</em> write to something on the heap. The analysis requires quite a few annotations to describe things that are actually safe. This section will be expanded as we gain more experience with the analysis, but here are some common issues:</p>
+          <ul class="simple">
+           <li>
+            <p>Adding a new Gecko_* function: often, you will need to annotate any outparams or owned (thread-local) parameters in the <code class="docutils literal notranslate"><span class="pre">treatAsSafeArgument</span></code> function in <code class="docutils literal notranslate"><span class="pre">js/src/devtools/rootAnalysis/analyzeHeapWrites.js</span></code>.</p></li>
+           <li>
+            <p>Calling some libc function: if you add a call to some random libc function (eg <code class="docutils literal notranslate"><span class="pre">sin()</span></code> or <code class="docutils literal notranslate"><span class="pre">floor()</span></code> or <code class="docutils literal notranslate"><span class="pre">ceil()</span></code>, though the latter two are already annotated), the analysis will report an “External Function”. Add it to <code class="docutils literal notranslate"><span class="pre">checkExternalFunction</span></code>, assuming it <em>doesn’t</em> have the possibility of writing to shared heap memory.</p></li>
+           <li>
+            <p>If you call some non-returning (crashing) function that the analysis doesn’t know about, you’ll need to add it to <code class="docutils literal notranslate"><span class="pre">ignoreContents</span></code>.</p></li>
+          </ul>
+          <p>On the other hand, you might have a real thread safety issue on your hands. Shared caches are common problems. Fix it.</p>
+         </section>
+         <section id="analysis-implementation">
+          <h2>Analysis implementation<a class="headerlink" href="#analysis-implementation" title="Link to this heading">?</a></h2>
+          <p>These builds do the following:</p>
+          <ul class="simple">
+           <li>
+            <p>set up a build environment and run the analysis within it, then upload the resulting files</p></li>
+           <li>
+            <p>compile an optimized JS shell to later run the analysis</p></li>
+           <li>
+            <p>compile the browser with gcc, using a slightly modified version of the sixgill (http://svn.sixgill.org) gcc plugin</p></li>
+           <li>
+            <p>produce a set of <code class="docutils literal notranslate"><span class="pre">.xdb</span></code> files describing everything encountered during the compilation</p></li>
+           <li>
+            <p>analyze the <code class="docutils literal notranslate"><span class="pre">.xdb</span></code> files with scripts in <code class="docutils literal notranslate"><span class="pre">js/src/devtools/rootAnalysis</span></code></p></li>
+          </ul>
+          <p>The format of the information stored in those files is <a class="reference internal" href="CFG.html"><span class="std std-doc">somewhat documented</span></a>.</p>
+         </section>
+         <section id="running-the-analysis">
+          <h2>Running the analysis<a class="headerlink" href="#running-the-analysis" title="Link to this heading">?</a></h2>
+          <section id="pushing-to-try">
+           <h3>Pushing to try<a class="headerlink" href="#pushing-to-try" title="Link to this heading">?</a></h3>
+           <p>The easiest way to run an analysis is to push to try with <code class="docutils literal notranslate"><span class="pre">mach</span> <span class="pre">try</span> <span class="pre">fuzzy</span> <span class="pre">-q</span> <span class="pre">"'haz"</span></code> (or, if the hazards of interest are contained entirely within <code class="docutils literal notranslate"><span class="pre">js/src</span></code>, use <code class="docutils literal notranslate"><span class="pre">mach</span> <span class="pre">try</span> <span class="pre">fuzzy</span> <span class="pre">-q</span> <span class="pre">"'shell-haz"</span></code> for a much faster result). The expected turnaround time for linux64-haz is just under 1.5 hours (~20 minutes for <code class="docutils literal notranslate"><span class="pre">hazard-linux64-shell-haz</span></code>).</p>
+           <p>The output will be uploaded and an output file <code class="docutils literal notranslate"><span class="pre">hazards.txt.xz</span></code> will be placed into the “Artifacts” info pane on treeherder.</p>
+          </section>
+          <section id="running-locally">
+           <h3>Running locally<a class="headerlink" href="#running-locally" title="Link to this heading">?</a></h3>
+           <p>The rooting <a class="reference internal" href="running.html"><span class="std std-doc">hazard analysis may be run</span></a> using mach.</p>
+          </section>
+         </section>
+         <section id="so-you-broke-the-analysis-by-adding-a-hazard-now-what">
+          <h2>So you broke the analysis by adding a hazard. Now what?<a class="headerlink" href="#so-you-broke-the-analysis-by-adding-a-hazard-now-what" title="Link to this heading">?</a></h2>
+          <p>Backout, fix the hazard, or (final resort) update the expected number of hazards in <code class="docutils literal notranslate"><span class="pre">js/src/devtools/rootAnalysis/expect.browser.json</span></code> (but don’t do that).</p>
+          <p>The most common way to fix a hazard is to change the variable to be a <code class="docutils literal notranslate"><span class="pre">Rooted</span></code> type, as described in <a class="reference external" href="https://searchfox.org/mozilla-central/source/js/public/RootingAPI.h">RootingAPI.h</a></p>
+          <p>For more complicated cases, ask on the Matrix channel (see <a class="reference external" href="https://spidermonkey.dev/">spidermonkey.dev</a> for contact info). If you don’t get a response, ping sfink or jonco for rooting hazards, bholley or sfink for heap write hazards.</p>
+         </section>
+        </section>
+       </div>
+      </div>
+      <footer>
+       <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../gc.html" class="btn btn-neutral float-left" title="SpiderMonkey garbage collector" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a> <a href="running.html" class="btn btn-neutral float-right" title="Running the Rooting Hazard Analysis" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+       </div>
+       <hr>
+       <div role="contentinfo">
+        <p></p>
+       </div> Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+      </footer>
+     </div>
+    </div>
+   </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ </body>
+</html>

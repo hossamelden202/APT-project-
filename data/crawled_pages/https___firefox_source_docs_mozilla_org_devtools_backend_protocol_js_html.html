@@ -1,0 +1,914 @@
+<!doctype html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Writing an Actor — Firefox Source Docs  documentation</title>
+  <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50">
+  <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094">
+  <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=fd3f3429">
+  <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b">
+  <link rel="stylesheet" type="text/css" href="../../_static/custom_theme.css?v=dc5ed815">
+  <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7">
+  <link rel="shortcut icon" href="../../_static/firefox.ico"><!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script src="../../_static/jquery.js?v=5d32c60e"></script>
+  <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+  <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+  <script src="../../_static/doctools.js?v=9a2dae69"></script>
+  <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+  <script src="../../_static/copybutton.js?v=30646c52"></script>
+  <script src="../../_static/design-tabs.js?v=36754332"></script>
+  <script src="../../_static/js/theme.js"></script>
+  <link rel="index" title="Index" href="../../genindex.html">
+  <link rel="search" title="Search" href="../../search.html">
+  <link rel="next" title="How to register an actor" href="actor-registration.html">
+  <link rel="prev" title="How actors are organized" href="actor-hierarchy.html">
+ </head>
+ <body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+   <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <div class="wy-side-scroll">
+     <div class="wy-side-nav-search">
+      <a href="../../index.html" class="icon icon-home"> Firefox Source Docs <img src="../../_static/firefox-wordmark.svg" class="logo" alt="Logo"> </a><!-- -- This code is governed by the BSD license ---->
+      <div>
+       <h3>Quick search</h3>
+       <script>
+    (function () {
+      var cx = "dd12886298f75dbef";
+      var gcse = document.createElement("script");
+      gcse.async = true;
+      gcse.src = "https://cse.google.com/cse.js?cx=" + cx;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(gcse, s);
+    })();
+  </script><gcse:search></gcse:search>
+      </div>
+     </div>
+     <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+      <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../glossary/index.html">A Glossary of Common Terms</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../overview/index.html">A Quick Guide to Mozilla Applications</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../setup/index.html">Getting Set Up To Work On The Firefox Codebase</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Working On Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Working on Firefox</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../bug-mgmt/index.html">Bug Handling</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox User Guide</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../devtools-user/index.html">Firefox DevTools User Docs</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Source Code Documentation</span></p>
+      <ul class="current">
+       <li class="toctree-l1"><a class="reference internal" href="../../mots/index.html">Governance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../browser/index.html">Firefox Front-end</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../dom/index.html">DOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../editor/index.html">Editor</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../layout/index.html">Style system (CSS) &amp; Layout</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../gfx/index.html">Graphics</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../ipc/index.html">Processes, Threads and IPC</a></li>
+       <li class="toctree-l1 current"><a class="reference internal" href="../index.html">Firefox DevTools Contributor Docs</a>
+        <ul class="current">
+         <li class="toctree-l2"><a class="reference internal" href="../index.html#getting-started">Getting Started</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../index.html#contributing">Contributing</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../index.html#recurring-tasks">Recurring tasks</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../index.html#automated-tests">Automated tests</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../index.html#files-and-directories">Files and directories</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../index.html#tool-architectures">Tool Architectures</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../index.html#frontend">Frontend</a></li>
+         <li class="toctree-l2 current"><a class="reference internal" href="../index.html#backend">Backend</a>
+          <ul class="current">
+           <li class="toctree-l3"><a class="reference internal" href="protocol.html">Remote Debugging Protocol</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="watcher-architecture.html">Backend Overview</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="client-api.html">Client API</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="debugger-api.html">Debugger API</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="backward-compatibility.html">Backward Compatibility</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="actor-hierarchy.html">Actors Organization</a></li>
+           <li class="toctree-l3 current"><a class="current reference internal" href="#">Writing Actors With protocol.js</a>
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="#a-simple-hello-world">A Simple Hello World</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#arguments">Arguments</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#returning-json">Returning JSON</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#types-and-marshalling">Types and Marshalling</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#nullables">Nullables</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#actors">Actors</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#lifetimes">Lifetimes</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#events">Events</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#id1">Lifetimes</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#custom-front-methods">Custom Front Methods</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#id2">Lifetimes</a></li>
+            </ul></li>
+           <li class="toctree-l3"><a class="reference internal" href="actor-registration.html">Registering A New Actor</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="actor-best-practices.html">Actor Best Practices</a></li>
+          </ul></li>
+         <li class="toctree-l2"><a class="reference internal" href="../index.html#preferences">Preferences</a></li>
+        </ul></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../toolkit/index.html">Toolkit</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../js/index.html">SpiderMonkey</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../jsloader/index.html">JS Loader</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/geckoview/index.html">GeckoView</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/fenix/index.html">Fenix</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/focus-android/index.html">Focus for Android</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../dom/bindings/webidl/index.html">WebIDL</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../modules/libpref/index.html">libpref</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../networking/index.html">Networking</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../remote/index.html">Remote Protocols</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../services/index.html">Services</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../permissions/index.html">Permissions</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../uriloader/index.html">File Handling</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../widget/cocoa/index.html">Firefox on macOS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../widget/windows/index.html">Firefox on Windows</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../toolkit/components/ml/index.html">Firefox AI Runtime</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../accessible/index.html">Accessibility</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../media/index.html">Media Playback</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../code-quality/index.html">Code quality</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../writing-rust-code/index.html">Writing Rust Code</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../rust-components/index.html">Rust Components</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/profiler/index.html">Gecko Profiler</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../performance/index.html">Performance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../storage/index.html">Database bindings (SQLite, KV, …)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../xpcom/index.html">XPCOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../nspr/index.html">NSPR</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../security/nss/index.html">Network Security Services (NSS)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../content-security/index.html">Web Security Checks in Gecko</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">The Firefox Build System</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mach/index.html">Mach</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/try/index.html">Pushing to Try</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../build/buildsystem/index.html">Build System</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../taskcluster/index.html">Firefox CI and Taskgraph</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/moztreedocs/index.html">Managing Documentation</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mozbuild/vendor/index.html">Vendoring Third Party Components</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Testing &amp; Test Infrastructure</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/automated-testing/index.html">Automated Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/treeherder-try/index.html">Understanding Treeherder Results</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/sheriffed-intermittents/index.html">Sheriffed intermittent failures</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/tests-for-new-config/index.html">Turning on Firefox tests for a new configuration</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/intermittent/index.html">Avoiding intermittent tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/testing-policy/index.html">Testing Policy</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/ci-configs/index.html">Configuration Changes</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/browser-chrome/index.html">Browser chrome mochitests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/chrome-tests/index.html">Chrome Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/marionette/index.html">Marionette</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/geckodriver/index.html">geckodriver</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/test-verification/index.html">Test Verification</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/webrender/index.html">WebRender Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/mochitest-plain/index.html">Mochitest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/xpcshell/index.html">XPCShell tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/tps/index.html">TPS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../web-platform/index.html">web-platform-tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../gtest/index.html">GTest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/fuzzing/index.html">Fuzzing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/sanitizer/index.html">Sanitizer</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/perfdocs/index.html">Performance Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/code-coverage/index.html">Code coverage</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing-rust-code/index.html">Testing &amp; Debugging Rust Code</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Releases &amp; Updates</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html">Mozilla Update Infrastructure</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html#watershed-updates">Watershed Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html#desupport-updates">Desupport Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/update-verify/index.html">Update Verify</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Localization &amp; Internationalization</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../intl/index.html">Internationalization</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../l10n/index.html">Localization</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox and Python</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mozbase/index.html">mozbase</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../python/index.html">Using third-party Python packages</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Metrics Collected in Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../metrics/index.html">Metrics</a></li>
+      </ul>
+     </div>
+    </div>
+   </nav>
+   <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+    <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+     <i data-toggle="wy-nav-top" class="fa fa-bars"></i> <a href="../../index.html">Firefox Source Docs</a>
+    </nav>
+    <div class="wy-nav-content">
+     <div class="rst-content">
+      <!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+      <div role="navigation" aria-label="Page navigation">
+       <ul class="wy-breadcrumbs">
+        <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+        <li class="breadcrumb-item"><a href="../index.html">Firefox DevTools Contributor Docs</a></li>
+        <li class="breadcrumb-item active">Writing an Actor</li>
+        <li class="wy-breadcrumbs-aside"><a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Developer+Infrastructure&amp;component=Firefox+Source+Docs%3A+Content&amp;short_desc=Documentation+issue+on+devtools/backend/protocol.js&amp;comment=URL+=+https://firefox-source-docs.mozilla.org/devtools/backend/protocol.js.html&amp;bug_file_loc=https://firefox-source-docs.mozilla.org/devtools/backend/protocol.js.html" rel="nofollow">Report an issue</a> / <a href="../../_sources/devtools/backend/protocol.js.md.txt" rel="nofollow"> View page source</a></li>
+       </ul>
+       <hr>
+      </div>
+      <div role="main" class="document" itemscope itemtype="http://schema.org/Article">
+       <div itemprop="articleBody">
+        <section id="writing-an-actor">
+         <h1>Writing an Actor<a class="headerlink" href="#writing-an-actor" title="Link to this heading">?</a></h1>
+         <section id="a-simple-hello-world">
+          <h2>A Simple Hello World<a class="headerlink" href="#a-simple-hello-world" title="Link to this heading">?</a></h2>
+          <p>Here’s a simple Hello World actor. It is a global actor (not associated with a given browser tab). It has two parts: a spec and an implementation. The spec would go somewhere like <code class="docutils literal notranslate"><span class="pre">devtools/shared/specs/hello-world.js</span></code> and would look like:</p>
+          <div class="highlight-none notranslate">
+           <div class="highlight">
+            <pre><span></span>const {Arg, RetVal, generateActorSpec} = require("devtools/shared/protocol");
+
+const helloWorldSpec = generateActorSpec({
+  typeName: "helloWorld", // I'll explain types later, I promise.
+
+  methods: {
+    sayHello: {
+      // The request packet template.  There are no arguments, so
+      // it is empty.  The framework will add the "type" and "to"
+      // request properties.
+      request: {},
+
+      // The response packet template.  The return value of the function
+      // will be plugged in where the RetVal() appears in the template.
+      response: {
+        greeting: RetVal("string") // "string" is the return value type.
+      }
+    },
+  },
+});
+
+// Expose the spec so it can be imported by the implementation.
+exports.helloWorldSpec = helloWorldSpec;
+</pre>
+           </div>
+          </div>
+          <p>The actor implementation would go somewhere like <code class="docutils literal notranslate"><span class="pre">devtools/server/actors/hello-world.js</span></code> and would look like:</p>
+          <div class="highlight-none notranslate">
+           <div class="highlight">
+            <pre><span></span>const { Actor } = require("devtools/shared/protocol");
+const {helloWorldSpec} = require("devtools/shared/specs/hello-world");
+
+class HelloActor extends Actor {
+  constructor(conn) {
+    super(conn, helloWorldSpec);
+  }
+
+  sayHello() {
+   return "hello";
+  }
+}
+
+// You also need to export the actor class in your module for discovery.
+exports.HelloActor = HelloActor;
+</pre>
+           </div>
+          </div>
+          <p>To activate your actor, register it in the <code class="docutils literal notranslate"><span class="pre">addBrowserActors</span></code> method in <code class="docutils literal notranslate"><span class="pre">server/actors/utils/actor-registry.js</span></code>. The registration code would look something like this:</p>
+          <div class="highlight-none notranslate">
+           <div class="highlight">
+            <pre><span></span>this.registerModule("devtools/server/actors/hello-world", {
+  prefix: "hello",
+  constructor: "HelloActor",
+  type: { global: true }
+});
+</pre>
+           </div>
+          </div>
+          <p>Your spec allows the actor to support a <code class="docutils literal notranslate"><span class="pre">sayHello</span></code> request. A request/reply will look like this:</p>
+          <div class="highlight-none notranslate">
+           <div class="highlight">
+            <pre><span></span>-&gt; { to: &lt;actorID&gt;, type: "sayHello" }
+&lt;- { from: &lt;actorID&gt;, greeting: "hello" }
+</pre>
+           </div>
+          </div>
+          <p>Now we can create a client side object. We call these <em>front</em> objects and they typically go in <code class="docutils literal notranslate"><span class="pre">devtools/client/fronts/</span></code>.</p>
+          <p>Here’s the front for the HelloActor:</p>
+          <div class="highlight-none notranslate">
+           <div class="highlight">
+            <pre><span></span>const HelloFront = protocol.FrontClassWithSpec(helloWorldSpec, {
+  initialize: function (client, form) {
+    protocol.Front.prototype.initialize.call(this, client, form);
+    // This call may not be required but it's a good idea. It will
+    // guarantee that your instance is managed in the pool.
+    this.manage(this);
+  }
+});
+</pre>
+           </div>
+          </div>
+          <p>Note that there is no <code class="docutils literal notranslate"><span class="pre">sayHello</span></code> method. The FrontClass will generate a method on the Front object that matches the method declaration in the Actor class.</p>
+          <p>The generated methods will return a Promise. That promise will resolve to the RetVal of the actor method.</p>
+          <p>So if we have a reference to a HelloFront object, we can issue a <code class="docutils literal notranslate"><span class="pre">sayHello</span></code> request:</p>
+          <div class="highlight-none notranslate">
+           <div class="highlight">
+            <pre><span></span>hello.sayHello().then(greeting =&gt; {
+  console.log(greeting);
+});
+</pre>
+           </div>
+          </div>
+          <p>How do you get an initial reference to the front? That’s a bit tricky, but basically there are two ways:</p>
+          <ul class="simple">
+           <li>
+            <p>Manually</p></li>
+           <li>
+            <p>Magically</p></li>
+          </ul>
+          <p>Manually - If you’re using a DevToolsClient instance, you can discover the actorID manually and create a Front for it:</p>
+          <div class="highlight-none notranslate">
+           <div class="highlight">
+            <pre><span></span>let hello = new HelloFront(this.client, { actor: &lt;hello actorID&gt; });
+</pre>
+           </div>
+          </div>
+          <p>Magically - Once you have an initial reference to a protocol.js object, it can return other protocol.js objects and fronts will automatically be created.</p>
+         </section>
+         <section id="arguments">
+          <h2>Arguments<a class="headerlink" href="#arguments" title="Link to this heading">?</a></h2>
+          <p><code class="docutils literal notranslate"><span class="pre">sayHello</span></code> has no arguments, so let’s add a method that does take arguments. Here’s an adjustment to the spec:</p>
+          <div class="highlight-none notranslate">
+           <div class="highlight">
+            <pre><span></span>methods: {
+  echo: {
+    request: { echo: Arg(0, "string") },
+    response: { echoed: RetVal("string") }
+  }
+}
+</pre>
+           </div>
+          </div>
+          <p>Here’s an adjustment to the implementation:</p>
+          <div class="highlight-none notranslate">
+           <div class="highlight">
+            <pre><span></span>echo: function (str) {
+  return str + "... " + str + "...";
+}
+</pre>
+           </div>
+          </div>
+          <p>This tells the library to place the 0th argument, which should be a string, in the <code class="docutils literal notranslate"><span class="pre">echo</span></code> property of the request packet.</p>
+          <p>This will generate a request handler whose request and response packets look like this:</p>
+          <div class="highlight-none notranslate">
+           <div class="highlight">
+            <pre><span></span>{ to: &lt;actorID&gt;, type: "echo", echo: &lt;str&gt; }
+{ from: &lt;actorID&gt;, echoed: &lt;str&gt; }
+</pre>
+           </div>
+          </div>
+          <p>The client usage should be predictable:</p>
+          <div class="highlight-none notranslate">
+           <div class="highlight">
+            <pre><span></span>hello.echo("hello").then(str =&gt; { assert(str === "hello... hello...") })
+</pre>
+           </div>
+          </div>
+          <p>The library tries hard to make using fronts feel like natural javascript (or as natural as you believe promises are, I guess). When building the response it will put the return value of the function where RetVal() is specified in the response template, and on the client side it will use the value in that position when resolving the promise.</p>
+         </section>
+         <section id="returning-json">
+          <h2>Returning JSON<a class="headerlink" href="#returning-json" title="Link to this heading">?</a></h2>
+          <p>Maybe your response is an object. Here’s an example of a spec:</p>
+          <div class="highlight-none notranslate">
+           <div class="highlight">
+            <pre><span></span>methods: {
+  addOneTwice: {
+    request: { a: Arg(0, "number"), b: Arg(1, "number") },
+    response: { ret: RetVal("json") }
+  }
+}
+</pre>
+           </div>
+          </div>
+          <p>Here’s an example implementation:</p>
+          <div class="highlight-none notranslate">
+           <div class="highlight">
+            <pre><span></span>addOneTwice: function (a, b) {
+  return { a: a + 1, b: b + 1 };
+}
+</pre>
+           </div>
+          </div>
+          <p>This will generate a response packet that looks like:</p>
+          <div class="highlight-none notranslate">
+           <div class="highlight">
+            <pre><span></span>{ from: &lt;actorID&gt;, ret: { a: &lt;number&gt;, b: &lt;number&gt; } }
+</pre>
+           </div>
+          </div>
+          <p>That’s probably unnecessary nesting (if you’re sure you won’t be returning an object with ‘from’ as a key!), so you can just replace <code class="docutils literal notranslate"><span class="pre">response</span></code> with:</p>
+          <div class="highlight-none notranslate">
+           <div class="highlight">
+            <pre><span></span>response: RetVal("json")
+</pre>
+           </div>
+          </div>
+          <p>and now your packet will look like:</p>
+          <div class="highlight-none notranslate">
+           <div class="highlight">
+            <pre><span></span>{ from: &lt;actorID&gt;, a: &lt;number&gt;, b: &lt;number&gt; }
+</pre>
+           </div>
+          </div>
+         </section>
+         <section id="types-and-marshalling">
+          <h2>Types and Marshalling<a class="headerlink" href="#types-and-marshalling" title="Link to this heading">?</a></h2>
+          <p>Things have been pretty simple up to this point - all the arguments we’ve passed in have been javascript primitives. But for some types (most importantly Actor types, which I’ll get to eventually), we can’t just copy them into a JSON packet and expect it to work, we need to marshal things ourselves.</p>
+          <p>Again, the protocol lib tries hard to provide a natural API to actors and clients, and sometime that natural API might involve object APIs. I’m going to use a wickedly contrived example, bear with me. Let’s say I have a small object that contains a number and has a few methods associated with it:</p>
+          <div class="highlight-none notranslate">
+           <div class="highlight">
+            <pre><span></span>let Incrementor = function (i) {
+  this.value = value;
+}
+Incrementor.prototype = {
+    increment: function () { this.value++ },
+    decrement: function () { this.value-- }
+};
+</pre>
+           </div>
+          </div>
+          <p>and I want to return it from a backend function:</p>
+          <div class="highlight-none notranslate">
+           <div class="highlight">
+            <pre><span></span>// spec:
+methods: {
+  getIncrementor: {
+    request: { number: Arg(0, "number") },
+    response: { value: RetVal("incrementor") } // We'll define "incrementor" below.
+  }
+}
+
+// implementation:
+getIncrementor: function (i) {
+  return new Incrementor(i)
+}
+</pre>
+           </div>
+          </div>
+          <p>I want that response to look like <code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">from:</span> <span class="pre">&lt;actorID&gt;,</span> <span class="pre">value:</span> <span class="pre">&lt;number&gt;</span> <span class="pre">}</span></code>, but the client side needs to know to return an Incrementor, not a primitive number. So let’s tell the protocol lib about Incrementors:</p>
+          <div class="highlight-none notranslate">
+           <div class="highlight">
+            <pre><span></span>protocol.types.addType("incrementor", {
+    // When writing to a protocol packet, just send the value
+    write: (v) =&gt; v.value,
+
+    // When reading from a protocol packet, wrap with an Incrementor
+    // object.
+    read: (v) =&gt; new Incrementor(v)
+});
+</pre>
+           </div>
+          </div>
+          <p>And now our client can use the API as expected:</p>
+          <div class="highlight-none notranslate">
+           <div class="highlight">
+            <pre><span></span>front.getIncrementor(5).then(incrementor =&gt; {
+    incrementor.increment();
+    assert(incrementor.value === 6);
+});
+</pre>
+           </div>
+          </div>
+          <p>You can do the same thing with arguments:</p>
+          <div class="highlight-none notranslate">
+           <div class="highlight">
+            <pre><span></span>// spec:
+methods: {
+  passIncrementor: {
+    request: { Arg(0, "incrementor") },
+  }
+}
+
+// implementation:
+passIncrementor: function (inc) {
+  w.increment();
+  assert(incrementor.value === 6);
+}
+
+front.passIncrementor(new Incrementor(5));
+</pre>
+           </div>
+          </div>
+          <p>The library provides primitiive <code class="docutils literal notranslate"><span class="pre">boolean</span></code>, <code class="docutils literal notranslate"><span class="pre">number</span></code>, <code class="docutils literal notranslate"><span class="pre">string</span></code>, and <code class="docutils literal notranslate"><span class="pre">json</span></code> types.</p>
+          <p>Moving right along, let’s say you want to pass/return an array of Incrementors. You can just prepend <code class="docutils literal notranslate"><span class="pre">array:</span></code> to the type name:</p>
+          <div class="highlight-none notranslate">
+           <div class="highlight">
+            <pre><span></span>// spec:
+methods: {
+  incrementAll: {
+    request: { incrementors: Arg(0, "array:incrementor") },
+    response: { incrementors: RetVal("array:incrementor") }
+  }
+}
+
+// implementation:
+incrementAll: function (incrementors) {
+  incrementors.forEach(incrementor =&gt; {
+    incrementor.increment();
+  }
+  return incrementors;
+}
+</pre>
+           </div>
+          </div>
+          <p>You can use an iterator in place of an array as an argument or return value, and the library will handle the conversion automatically.</p>
+          <p>Or maybe you want to return a dictionary where one item is a incrementor. To do this you need to tell the type system which members of the dictionary need custom marshallers:</p>
+          <div class="highlight-none notranslate">
+           <div class="highlight">
+            <pre><span></span>protocol.types.addDictType("contrivedObject", {
+  incrementor: "incrementor",
+  incrementorArray: "array:incrementor"
+});
+
+// spec:
+methods: {
+  reallyContrivedExample: {
+    response: RetVal("contrivedObject")
+  }
+}
+
+// implementations:
+reallyContrivedExample: function () {
+  return {
+    /* a and b are primitives and so don't need to be called out specifically in addDictType */
+    a: "hello", b: "world",
+    incrementor: new Incrementor(1),
+    incrementorArray: [new Incrementor(2), new Incrementor(3)]
+  }
+}
+
+front.reallyContrivedExample().then(obj =&gt; {
+  assert(obj.a == "hello");
+  assert(obj.b == "world");
+  assert(incrementor.i == 1);
+  assert(incrementorArray[0].i == 2);
+  assert(incrementorArray[1].i == 3);
+});
+</pre>
+           </div>
+          </div>
+         </section>
+         <section id="nullables">
+          <h2>Nullables<a class="headerlink" href="#nullables" title="Link to this heading">?</a></h2>
+          <p>If an argument, return value, or dict property can be null/undefined, you can prepend <code class="docutils literal notranslate"><span class="pre">nullable:</span></code> to the type name:</p>
+          <div class="highlight-none notranslate">
+           <div class="highlight">
+            <pre><span></span>"nullable:incrementor",  // Can be null/undefined or an incrementor
+"array:nullable:incrementor", // An array of incrementors that can have holes.
+"nullable:array:incrementor" // Either null/undefined or an array of incrementors without holes.
+</pre>
+           </div>
+          </div>
+         </section>
+         <section id="actors">
+          <h2>Actors<a class="headerlink" href="#actors" title="Link to this heading">?</a></h2>
+          <p>Probably the most common objects that need custom martialing are actors themselves. These are more interesting than the Incrementor object, but by default they’re somewhat easy to work with. Let’s add a ChildActor implementation that will be returned by the HelloActor (which is rapidly becoming the OverwhelminglyComplexActor):</p>
+          <div class="highlight-none notranslate">
+           <div class="highlight">
+            <pre><span></span>// spec:
+const childActorSpec = generateActorSpec({
+  actorType: "childActor",
+  methods: {
+    getGreeting: {
+      response: { greeting: RetVal("string") },
+    }
+  }
+});
+
+// implementation:
+class ChildActor extends Actor {
+  constructor(conn, id) {
+    super(conn, childActorSpec);
+
+    this.greeting = "hello from " + id;
+  }
+
+  getGreeting() {
+    return this.greeting;
+  }
+}
+
+exports.ChildActor = ChildActor;
+
+const ChildFront = protocol.FrontClassWithSpec(childActorSpec, {
+  initialize: function (client, form) {
+    protocol.Front.prototype.initialize.call(this, client, form);
+  },
+});
+</pre>
+           </div>
+          </div>
+          <p>The library will register a marshaller for the actor type itself, using typeName as its tag.</p>
+          <p>So we can now add the following code to HelloActor:</p>
+          <div class="highlight-none notranslate">
+           <div class="highlight">
+            <pre><span></span>// spec:
+methods: {
+  getChild: {
+    request: { id: Arg(0, "string") },
+    response: { child: RetVal("childActor") }
+  }
+}
+
+// implementation:
+getChild: function (id) {
+  return ChildActor(this.conn, id);
+}
+
+front.getChild("child1").then(childFront =&gt; {
+  return childFront.getGreeting();
+}).then(greeting =&gt; {
+  assert(id === "hello from child1");
+});
+</pre>
+           </div>
+          </div>
+          <p>The conversation will look like this:</p>
+          <div class="highlight-none notranslate">
+           <div class="highlight">
+            <pre><span></span>{ to: &lt;actorID&gt;, type: "getChild", id: "child1" }
+{ from: &lt;actorID&gt;, child: { actor: &lt;childActorID&gt; }}
+{ to: &lt;childActorID&gt;, type: "getGreeting" }
+{ from: &lt;childActorID&gt;, greeting: "hello from child1" }
+</pre>
+           </div>
+          </div>
+          <p>But the ID is the only interesting part of this made-up example. You’re never going to want a reference to a ChildActor without checking its ID. Making an extra request just to get that id is wasteful. You really want the first response to look like <code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">from:</span> <span class="pre">&lt;actorID&gt;,</span> <span class="pre">child:</span> <span class="pre">{</span> <span class="pre">actor:</span> <span class="pre">&lt;childActorID&gt;,</span> <span class="pre">greeting:</span> <span class="pre">"hello</span> <span class="pre">from</span> <span class="pre">child1"</span> <span class="pre">}</span> <span class="pre">}</span></code></p>
+          <p>You can customize the marshalling of an actor by providing a <code class="docutils literal notranslate"><span class="pre">form</span></code> method in the <code class="docutils literal notranslate"><span class="pre">ChildActor</span></code> class:</p>
+          <div class="highlight-none notranslate">
+           <div class="highlight">
+            <pre><span></span>form: function () {
+    return {
+        actor: this.actorID,
+        greeting: this.greeting
+    }
+},
+</pre>
+           </div>
+          </div>
+          <p>And you can demarshal in the <code class="docutils literal notranslate"><span class="pre">ChildFront</span></code> class by implementing a matching <code class="docutils literal notranslate"><span class="pre">form</span></code> method:</p>
+          <div class="highlight-none notranslate">
+           <div class="highlight">
+            <pre><span></span>form: function (form) {
+    this.actorID = form.actor;
+    this.greeting = form.greeting;
+}
+</pre>
+           </div>
+          </div>
+          <p>Now you can use the id immediately:</p>
+          <div class="highlight-none notranslate">
+           <div class="highlight">
+            <pre><span></span>front.getChild("child1").then(child =&gt; { assert(child.greeting === "child1) });
+</pre>
+           </div>
+          </div>
+          <p>You may come across a situation where you want to customize the output of a <code class="docutils literal notranslate"><span class="pre">form</span></code> method depending on the operation being performed. For example, imagine that ChildActor is a bit more complex, with a, b, c, and d members:</p>
+          <div class="highlight-none notranslate">
+           <div class="highlight">
+            <pre><span></span>ChildActor:
+    form: function () {
+        return {
+            actor: this.actorID,
+            greeting: this.greeting,
+            a: this.a,
+            b: this.b,
+            c: this.c,
+            d: this.d
+        }
+    }
+ChildFront:
+    form: function (form) {
+        this.actorID = form.actorID;
+        this.id = form.id;
+        this.a = form.a;
+        this.b = form.b;
+        this.c = form.c;
+        this.d = form.d;
+    }
+</pre>
+           </div>
+          </div>
+          <p>And imagine you want to change ‘c’ and return the object:</p>
+          <div class="highlight-none notranslate">
+           <div class="highlight">
+            <pre><span></span>// Oops!  If a type is going to return references to itself or any other
+// type that isn't fully registered yet, you need to predeclare the type.
+types.addActorType("childActor");
+
+...
+
+// spec:
+methods: {
+  changeC: {
+    request: { newC: Arg(0) },
+    response: { self: RetVal("childActor") }
+  }
+}
+
+// implementation:
+changeC: function (newC) {
+  c = newC;
+  return this;
+}
+
+...
+
+childFront.changeC('hello').then(ret =&gt; { assert(ret === childFront); assert(childFront.c === "hello") });
+</pre>
+           </div>
+          </div>
+          <p>Now our response will look like:</p>
+          <div class="highlight-none notranslate">
+           <div class="highlight">
+            <pre><span></span>{ from: &lt;childActorID&gt;, self: { actor: &lt;childActorID&gt;, greeting: &lt;id&gt;, a: &lt;a&gt;, b: &lt;b&gt;, c: "hello", d: &lt;d&gt; }
+</pre>
+           </div>
+          </div>
+         </section>
+         <section id="lifetimes">
+          <h2>Lifetimes<a class="headerlink" href="#lifetimes" title="Link to this heading">?</a></h2>
+          <p>No, I don’t want to talk about lifetimes quite yet.</p>
+         </section>
+         <section id="events">
+          <h2>Events<a class="headerlink" href="#events" title="Link to this heading">?</a></h2>
+          <p>Your actor has great news!</p>
+          <p>Actors are subclasses of jetpack <code class="docutils literal notranslate"><span class="pre">EventTarget</span></code>, so you can just emit events. Here’s how you’d set it up in a spec:</p>
+          <div class="highlight-none notranslate">
+           <div class="highlight">
+            <pre><span></span>events: {
+  "good-news": {
+    type: "goodNews", // event target naming and packet naming are at odds, and we want both to be natural!
+    news: Arg(0)
+  }
+}
+
+methods: {
+  giveGoodNews: {
+    request: { news: Arg(0) }
+  }
+}
+</pre>
+           </div>
+          </div>
+          <p>Here’s how the implementation would look:</p>
+          <div class="highlight-none notranslate">
+           <div class="highlight">
+            <pre><span></span>const EventEmitter = require("devtools/shared/event-emitter");
+
+// In your Actor class:
+giveGoodNews(news) {
+  EventEmitter.emit(this, "good-news", news);
+}
+</pre>
+           </div>
+          </div>
+          <p>Now you can listen to events on a front:</p>
+          <div class="highlight-none notranslate">
+           <div class="highlight">
+            <pre><span></span>front.on("good-news", news =&gt; {
+  console.log(`Got some good news: ${news}\n`);
+});
+front.giveGoodNews().then(() =&gt; { console.log("request returned.") });
+</pre>
+           </div>
+          </div>
+          <p>If you want to modify the argument that will be passed to event listeners callbacks, you can use <code class="docutils literal notranslate"><span class="pre">before(eventName,</span> <span class="pre">fn)</span></code> in the front definition. This can only be used once for a given <code class="docutils literal notranslate"><span class="pre">eventName</span></code>. The <code class="docutils literal notranslate"><span class="pre">fn</span></code> function will be called before emitting the event via the EventEmitter API on the Front, and its return value will be passed to the event listener callbacks. If <code class="docutils literal notranslate"><span class="pre">fn</span></code> is async, the event will only be emitted after <code class="docutils literal notranslate"><span class="pre">fn</span></code> call resolves.</p>
+          <div class="highlight-none notranslate">
+           <div class="highlight">
+            <pre><span></span>// In front file, most probably in the constructor:
+this.before("good-news", function(news) {
+  return news.join(" - ");
+});
+
+// In any consumer
+front.on("good-news", function(news) {
+  console.log(news);
+});
+</pre>
+           </div>
+          </div>
+          <p>So if the server sent the following array: <code class="docutils literal notranslate"><span class="pre">[1,</span> <span class="pre">2,</span> <span class="pre">3]</span></code>, the console.log in the consumer would print <code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">-</span> <span class="pre">2</span> <span class="pre">-</span> <span class="pre">3</span></code>.</p>
+          <p>On a somewhat related note, not every method needs to be request/response. Just like an actor can emit a one-way event, a method can be marked as a one-way request. Maybe we don’t care about giveGoodNews returning anything:</p>
+          <div class="highlight-none notranslate">
+           <div class="highlight">
+            <pre><span></span>// spec:
+methods: {
+  giveGoodNews: {
+    request: { news: Arg(0, "string") },
+    oneway: true
+  }
+}
+
+// implementation:
+giveGoodNews: function (news) {
+  emit(this, "good-news", news);
+}
+</pre>
+           </div>
+          </div>
+         </section>
+         <section id="id1">
+          <h2>Lifetimes<a class="headerlink" href="#id1" title="Link to this heading">?</a></h2>
+          <p>No, let’s talk about custom front methods instead.</p>
+         </section>
+         <section id="custom-front-methods">
+          <h2>Custom Front Methods<a class="headerlink" href="#custom-front-methods" title="Link to this heading">?</a></h2>
+          <p>You might have some bookkeeping to do before issuing a request. Let’s say you’re calling <code class="docutils literal notranslate"><span class="pre">echo</span></code>, but you want to count the number of times you issue that request. Just use the <code class="docutils literal notranslate"><span class="pre">custom</span></code> tag in your front implementation:</p>
+          <div class="highlight-none notranslate">
+           <div class="highlight">
+            <pre><span></span>echo: custom(function (str) {
+    this.numEchos++;
+    return this._echo(str);
+}, {
+    impl: "_echo"
+})
+</pre>
+           </div>
+          </div>
+          <p>This puts the generated implementation in <code class="docutils literal notranslate"><span class="pre">_echo</span></code> instead of <code class="docutils literal notranslate"><span class="pre">echo</span></code>, letting you implement <code class="docutils literal notranslate"><span class="pre">echo</span></code> as needed. If you leave out the <code class="docutils literal notranslate"><span class="pre">impl</span></code>, it just won’t generate the implementation at all. You’re on your own.</p>
+         </section>
+         <section id="id2">
+          <h2>Lifetimes<a class="headerlink" href="#id2" title="Link to this heading">?</a></h2>
+          <p>OK, I can’t think of any more ways to put this off. The remote debugging protocol has the concept of a <em>parent</em> for each actor. This is to make distributed memory management a bit easier. Basically, any descendents of an actor will be destroyed if the actor is destroyed.</p>
+          <p>Other than that, the basic protocol makes no guarantees about lifetime. Each interface defined in the protocol will need to discuss and document its approach to lifetime management (although there are a few common patterns).</p>
+          <p>The protocol library will maintain the child/parent relationships for you, but it needs some help deciding what the child/parent relationships are.</p>
+          <p>The default parent of an object is the first object that returns it after it is created. So to revisit our earlier HelloActor <code class="docutils literal notranslate"><span class="pre">getChild</span></code> implementation:</p>
+          <div class="highlight-none notranslate">
+           <div class="highlight">
+            <pre><span></span>// spec:
+methods: {
+  getChild: {
+    request: { id: Arg(0) },
+    response: { child: RetVal("childActor") }
+  }
+}
+
+// implementation:
+getChild: function (id) {
+  return new ChildActor(this.conn, id);
+}
+</pre>
+           </div>
+          </div>
+          <p>The ChildActor’s parent is the HelloActor, because it’s the one that created it.</p>
+          <p>You can customize this behavior in two ways. The first is by defining a <code class="docutils literal notranslate"><span class="pre">marshallPool</span></code> property in your actor. Imagine a new ChildActor method:</p>
+          <div class="highlight-none notranslate">
+           <div class="highlight">
+            <pre><span></span>// spec:
+methods: {
+  getSibling: {
+    request: { id: Arg(0) },
+    response: { child: RetVal("childActor") }
+  }
+}
+
+// implementation:
+getSibling: function (id) {
+  return new ChildActor(this.conn, id);
+}
+</pre>
+           </div>
+          </div>
+          <p>This creates a new child actor owned by the current child actor. But in this example we want all actors created by the child to be owned by the HelloActor. So we can define a <code class="docutils literal notranslate"><span class="pre">defaultParent</span></code> property that makes use of the <code class="docutils literal notranslate"><span class="pre">parent</span></code> property provided by the Actor class:</p>
+          <div class="highlight-none notranslate">
+           <div class="highlight">
+            <pre><span></span>get marshallPool() { return this.parent }
+</pre>
+           </div>
+          </div>
+          <p>The front needs to provide a matching <code class="docutils literal notranslate"><span class="pre">defaultParent</span></code> property that returns an owning front, to make sure the client and server lifetimes stay synced.</p>
+         </section>
+        </section>
+       </div>
+      </div>
+      <footer>
+       <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="actor-hierarchy.html" class="btn btn-neutral float-left" title="How actors are organized" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a> <a href="actor-registration.html" class="btn btn-neutral float-right" title="How to register an actor" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+       </div>
+       <hr>
+       <div role="contentinfo">
+        <p></p>
+       </div> Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+      </footer>
+     </div>
+    </div>
+   </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ </body>
+</html>

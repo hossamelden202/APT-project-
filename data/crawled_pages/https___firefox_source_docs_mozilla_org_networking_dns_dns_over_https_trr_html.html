@@ -1,0 +1,313 @@
+<!doctype html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DNS over HTTPS (Trusted Recursive Resolver) — Firefox Source Docs  documentation</title>
+  <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50">
+  <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094">
+  <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=fd3f3429">
+  <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b">
+  <link rel="stylesheet" type="text/css" href="../../_static/custom_theme.css?v=dc5ed815">
+  <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7">
+  <link rel="shortcut icon" href="../../_static/firefox.ico"><!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script src="../../_static/jquery.js?v=5d32c60e"></script>
+  <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+  <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+  <script src="../../_static/doctools.js?v=9a2dae69"></script>
+  <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+  <script src="../../_static/copybutton.js?v=30646c52"></script>
+  <script src="../../_static/design-tabs.js?v=36754332"></script>
+  <script src="../../_static/js/theme.js"></script>
+  <link rel="index" title="Index" href="../../genindex.html">
+  <link rel="search" title="Search" href="../../search.html">
+  <link rel="next" title="URL Parsers" href="../url_parsers.html">
+  <link rel="prev" title="The Lifecycle of a HTTP Request" href="../http/lifecycle.html">
+ </head>
+ <body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+   <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <div class="wy-side-scroll">
+     <div class="wy-side-nav-search">
+      <a href="../../index.html" class="icon icon-home"> Firefox Source Docs <img src="../../_static/firefox-wordmark.svg" class="logo" alt="Logo"> </a><!-- -- This code is governed by the BSD license ---->
+      <div>
+       <h3>Quick search</h3>
+       <script>
+    (function () {
+      var cx = "dd12886298f75dbef";
+      var gcse = document.createElement("script");
+      gcse.async = true;
+      gcse.src = "https://cse.google.com/cse.js?cx=" + cx;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(gcse, s);
+    })();
+  </script><gcse:search></gcse:search>
+      </div>
+     </div>
+     <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+      <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../glossary/index.html">A Glossary of Common Terms</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../overview/index.html">A Quick Guide to Mozilla Applications</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../setup/index.html">Getting Set Up To Work On The Firefox Codebase</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Working On Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Working on Firefox</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../bug-mgmt/index.html">Bug Handling</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox User Guide</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../devtools-user/index.html">Firefox DevTools User Docs</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Source Code Documentation</span></p>
+      <ul class="current">
+       <li class="toctree-l1"><a class="reference internal" href="../../mots/index.html">Governance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../browser/index.html">Firefox Front-end</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../dom/index.html">DOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../editor/index.html">Editor</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../layout/index.html">Style system (CSS) &amp; Layout</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../gfx/index.html">Graphics</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../ipc/index.html">Processes, Threads and IPC</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../devtools/index.html">Firefox DevTools Contributor Docs</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../toolkit/index.html">Toolkit</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../js/index.html">SpiderMonkey</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../jsloader/index.html">JS Loader</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/geckoview/index.html">GeckoView</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/fenix/index.html">Fenix</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/focus-android/index.html">Focus for Android</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../dom/bindings/webidl/index.html">WebIDL</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../modules/libpref/index.html">libpref</a></li>
+       <li class="toctree-l1 current"><a class="reference internal" href="../index.html">Networking</a>
+        <ul class="current">
+         <li class="toctree-l2"><a class="reference internal" href="../index.html#how-tos">How-to’s</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../index.html#tutorials">Tutorials</a></li>
+         <li class="toctree-l2 current"><a class="reference internal" href="../index.html#deep-dives">Deep Dives</a>
+          <ul class="current">
+           <li class="toctree-l3"><a class="reference internal" href="../index.html#necko-design">Necko Design</a></li>
+           <li class="toctree-l3 current"><a class="reference internal" href="../index.html#necko-features">Necko Features</a>
+            <ul class="current">
+             <li class="toctree-l4"><a class="reference internal" href="../http/lifecycle.html">The Lifecycle of a HTTP Request</a></li>
+             <li class="toctree-l4 current"><a class="current reference internal" href="#">DNS over HTTPS (Trusted Recursive Resolver)</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="../url_parsers.html">URL Parsers</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="../webtransport/webtransport.html">WebTransport (WIP)</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="../captive_portals.html">Captive Portal Detection</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="../early_hints.html">Early Hints</a></li>
+            </ul></li>
+          </ul></li>
+         <li class="toctree-l2"><a class="reference internal" href="../index.html#references">References</a></li>
+        </ul></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../remote/index.html">Remote Protocols</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../services/index.html">Services</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../permissions/index.html">Permissions</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../uriloader/index.html">File Handling</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../widget/cocoa/index.html">Firefox on macOS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../widget/windows/index.html">Firefox on Windows</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../toolkit/components/ml/index.html">Firefox AI Runtime</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../accessible/index.html">Accessibility</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../media/index.html">Media Playback</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../code-quality/index.html">Code quality</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../writing-rust-code/index.html">Writing Rust Code</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../rust-components/index.html">Rust Components</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/profiler/index.html">Gecko Profiler</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../performance/index.html">Performance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../storage/index.html">Database bindings (SQLite, KV, …)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../xpcom/index.html">XPCOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../nspr/index.html">NSPR</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../security/nss/index.html">Network Security Services (NSS)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../content-security/index.html">Web Security Checks in Gecko</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">The Firefox Build System</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mach/index.html">Mach</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/try/index.html">Pushing to Try</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../build/buildsystem/index.html">Build System</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../taskcluster/index.html">Firefox CI and Taskgraph</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/moztreedocs/index.html">Managing Documentation</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mozbuild/vendor/index.html">Vendoring Third Party Components</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Testing &amp; Test Infrastructure</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/automated-testing/index.html">Automated Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/treeherder-try/index.html">Understanding Treeherder Results</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/sheriffed-intermittents/index.html">Sheriffed intermittent failures</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/tests-for-new-config/index.html">Turning on Firefox tests for a new configuration</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/intermittent/index.html">Avoiding intermittent tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/testing-policy/index.html">Testing Policy</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/ci-configs/index.html">Configuration Changes</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/browser-chrome/index.html">Browser chrome mochitests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/chrome-tests/index.html">Chrome Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/marionette/index.html">Marionette</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/geckodriver/index.html">geckodriver</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/test-verification/index.html">Test Verification</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/webrender/index.html">WebRender Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/mochitest-plain/index.html">Mochitest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/xpcshell/index.html">XPCShell tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/tps/index.html">TPS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../web-platform/index.html">web-platform-tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../gtest/index.html">GTest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/fuzzing/index.html">Fuzzing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/sanitizer/index.html">Sanitizer</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/perfdocs/index.html">Performance Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/code-coverage/index.html">Code coverage</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing-rust-code/index.html">Testing &amp; Debugging Rust Code</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Releases &amp; Updates</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html">Mozilla Update Infrastructure</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html#watershed-updates">Watershed Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html#desupport-updates">Desupport Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/update-verify/index.html">Update Verify</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Localization &amp; Internationalization</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../intl/index.html">Internationalization</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../l10n/index.html">Localization</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox and Python</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mozbase/index.html">mozbase</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../python/index.html">Using third-party Python packages</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Metrics Collected in Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../metrics/index.html">Metrics</a></li>
+      </ul>
+     </div>
+    </div>
+   </nav>
+   <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+    <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+     <i data-toggle="wy-nav-top" class="fa fa-bars"></i> <a href="../../index.html">Firefox Source Docs</a>
+    </nav>
+    <div class="wy-nav-content">
+     <div class="rst-content">
+      <!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+      <div role="navigation" aria-label="Page navigation">
+       <ul class="wy-breadcrumbs">
+        <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+        <li class="breadcrumb-item"><a href="../index.html">Networking</a></li>
+        <li class="breadcrumb-item active">DNS over HTTPS (Trusted Recursive Resolver)</li>
+        <li class="wy-breadcrumbs-aside"><a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Developer+Infrastructure&amp;component=Firefox+Source+Docs%3A+Content&amp;short_desc=Documentation+issue+on+networking/dns/dns-over-https-trr&amp;comment=URL+=+https://firefox-source-docs.mozilla.org/networking/dns/dns-over-https-trr.html&amp;bug_file_loc=https://firefox-source-docs.mozilla.org/networking/dns/dns-over-https-trr.html" rel="nofollow">Report an issue</a> / <a href="../../_sources/networking/dns/dns-over-https-trr.md.txt" rel="nofollow"> View page source</a></li>
+       </ul>
+       <hr>
+      </div>
+      <div role="main" class="document" itemscope itemtype="http://schema.org/Article">
+       <div itemprop="articleBody">
+        <section id="dns-over-https-trusted-recursive-resolver">
+         <h1>DNS over HTTPS (Trusted Recursive Resolver)<a class="headerlink" href="#dns-over-https-trusted-recursive-resolver" title="Link to this heading">?</a></h1>
+         <section id="terminology">
+          <h2>Terminology<a class="headerlink" href="#terminology" title="Link to this heading">?</a></h2>
+          <p><strong>DNS-over-HTTPS (DoH)</strong> allows DNS to be resolved with enhanced privacy, secure transfers and comparable performance. The protocol is described in <a class="reference external" href="https://tools.ietf.org/html/rfc8484">RFC 8484</a> .</p>
+          <p><strong>Trusted Recursive Resolver (TRR)</strong> is the name of Firefox’s implementation of the protocol and the <a class="reference external" href="https://wiki.mozilla.org/Security/DOH-resolver-policy">policy</a> that ensures only privacy-respecting DoH providers are recommended by Firefox.</p>
+          <p>On this page we will use DoH when referring to the protocol, and TRR when referring to the implementation.</p>
+          <p><strong>Unencrypted DNS (Do53)</strong> is the regular way most programs resolve DNS names. This is usually done by the operating system by sending an unencrypted packet to the DNS server that normally listens on port 53.</p>
+         </section>
+         <section id="doh-rollout">
+          <h2>DoH Rollout<a class="headerlink" href="#doh-rollout" title="Link to this heading">?</a></h2>
+          <p><strong>DoH Rollout</strong> refers to the frontend code that decides whether TRR will be enabled automatically for users in the <a class="reference external" href="https://support.mozilla.org/kb/firefox-dns-over-https#w_about-the-us-rollout-of-dns-over-https">rollout population</a>.</p>
+          <p>The functioning of this module is described <a class="reference external" href="https://wiki.mozilla.org/Security/DNS_Over_HTTPS">here</a>.</p>
+          <p>The code lives in <a class="reference external" href="https://searchfox.org/mozilla-central/source/browser/components/doh">browser/components/doh</a>.</p>
+         </section>
+         <section id="implementation">
+          <h2>Implementation<a class="headerlink" href="#implementation" title="Link to this heading">?</a></h2>
+          <p>When enabled TRR may work in two modes, TRR-first (2) and TRR-only (3). These are controlled by the <strong>network.trr.mode</strong> or <strong>doh-rollout.mode</strong> prefs. The difference is that when a DoH request fails in TRR-first mode, we then fallback to <strong>Do53</strong>.</p>
+          <p>For TRR-first mode, we have a strict-fallback setting which can be enabled by setting network.trr.strict_native_fallback to true. With this, while we will still completely skip TRR for certain requests (like captive portal detection, bootstrapping the TRR provider, etc.) we will only fall back after a TRR failure to <strong>Do53</strong> for three possible reasons:</p>
+          <ol class="arabic simple">
+           <li>
+            <p>We detected, via Confirmation, that TRR is currently out of service on the network. This could mean the provider is down or blocked.</p></li>
+           <li>
+            <p>The address successfully resolved via TRR could not be connected to.</p></li>
+           <li>
+            <p>TRR result is NXDOMAIN.</p></li>
+          </ol>
+          <p>When a DNS resolution doesn’t use TRR we will normally preserve that data in the form of a <em>TRRSkippedReason</em>. A detailed explanation of each one is available <a class="reference internal" href="trr-skip-reasons.html"><span class="doc std std-doc">here</span></a>.</p>
+          <p>In other cases, instead of falling back, we will trigger a fresh Confirmation (which will start us on a fresh connection to the provider) and retry the lookup with TRR again. We only retry once.</p>
+          <p>DNS name resolutions are performed in <em>nsHostResolver::ResolveHost</em>. If a cached response for the request could not be found, <em>nsHostResolver::NameLookup</em> will trigger either a DoH or a Do53 request. First it checks the effective TRR mode of the request is as requests could have a different mode from the global one. If the request may use TRR, then we dispatch a request in <em>nsHostResolver::TrrLookup</em>. Since we usually resolve both IPv4 and IPv6 names, a <strong>TRRQuery</strong> object is created to perform and combine both responses.</p>
+          <p>Once done, <em>nsHostResolver::CompleteLookup</em> is called. If the DoH server returned a valid response we use it, otherwise we report a failure in TRR-only mode, or try Do53 in TRR-first mode.</p>
+          <p><strong>TRRService</strong> controls the global state and settings of the feature. Each individual request is performed by the <strong>TRR</strong> class.</p>
+          <p>Since HTTP channels in Firefox normally work on the main thread, TRR uses a special implementation called <strong>TRRServiceChannel</strong> to avoid congestion on the main thread.</p>
+         </section>
+         <section id="dynamic-blocklist">
+          <h2>Dynamic Blocklist<a class="headerlink" href="#dynamic-blocklist" title="Link to this heading">?</a></h2>
+          <p>In order to improve performance TRR service manages a dynamic blocklist for host names that can’t be resolved with DoH but work with the native resolver. Blocklisted entries will not be retried over DoH for one minute (See <em>network.trr.temp_blocklist_duration_sec</em> pref). When a domain is added to the blocklist, we also check if there is an NS record for its parent domain, in which case we add that to the blocklist. This feature is controlled by the <em>network.trr.temp_blocklist</em> pref.</p>
+         </section>
+         <section id="trr-confirmation">
+          <h2>TRR Confirmation<a class="headerlink" href="#trr-confirmation" title="Link to this heading">?</a></h2>
+          <p>TRR requests normally have a 1.5 second timeout. If for some reason we do not get a response in that time we fall back to Do53. To avoid this delay for all requests when the DoH server is not accessible, we perform a confirmation check. If the check fails, we conclude that the server is not usable and will use Do53 directly. The confirmation check is retried periodically to check if the TRR connection is functional again.</p>
+          <p>The confirmation state has one of the following values:</p>
+          <ul class="simple">
+           <li>
+            <p>CONFIRM_OFF: TRR is turned off, so the service is not active.</p></li>
+           <li>
+            <p>CONFIRM_TRING_OK: TRR in on, but we are not sure yet if the DoH server is accessible. We optimistically try to resolve via DoH and fall back to Do53 after 1.5 seconds. While in this state the TRRService will be performing NS record requests to the DoH server as a connectivity check. Depending on a successful response it will either transition to the CONFIRM_OK or CONFIRM_FAILED state.</p></li>
+           <li>
+            <p>CONFIRM_OK: TRR is on and we have confirmed that the DoH server is behaving adequately. Will use TRR for all requests (and fall back to Do53 in case of timeout, NXDOMAIN, etc).</p></li>
+           <li>
+            <p>CONFIRM_FAILED: TRR is on, but the DoH server is not accessible. Either we have no network connectivity, or the server is down. We don’t perform DoH requests in this state because they are sure to fail.</p></li>
+           <li>
+            <p>CONFIRM_TRYING_FAILED: This is equivalent to CONFIRM_FAILED, but we periodically enter this state when rechecking if the DoH server is accessible.</p></li>
+           <li>
+            <p>CONFIRM_DISABLED: We are in this state if the browser is in TRR-only mode, or if the confirmation was explicitly disabled via pref.</p></li>
+          </ul>
+          <p>The state machine for the confirmation is defined in the <em>HandleConfirmationEvent</em> method in <em>TRRService.cpp</em></p>
+          <p>If strict fallback mode is enabled, Confirmation will set a flag to refresh our connection to the provider.</p>
+         </section>
+         <section id="excluded-domains">
+          <h2>Excluded Domains<a class="headerlink" href="#excluded-domains" title="Link to this heading">?</a></h2>
+          <p>Some domains will never be resolved via TRR. This includes:</p>
+          <ul class="simple">
+           <li>
+            <p>domains listed in the <strong>network.trr.builtin-excluded-domains</strong> pref (normally domains that are equal or end in <em>localhost</em> or <em>local</em>)</p></li>
+           <li>
+            <p>domains listed in the <strong>network.trr.excluded-domains</strong> pref (chosen by the user)</p></li>
+           <li>
+            <p>domains that are subdomains of the network’s DNS suffix (for example if the network has the <strong>lan</strong> suffix, domains such as <strong>computer.lan</strong> will not use TRR)</p></li>
+           <li>
+            <p>requests made by Firefox to check for the existence of a captive-portal</p></li>
+           <li>
+            <p>requests made by Firefox to check the network’s IPv6 capabilities</p></li>
+           <li>
+            <p>domains listed in <em>/etc/hosts</em></p></li>
+          </ul>
+         </section>
+         <section id="steering">
+          <h2>Steering<a class="headerlink" href="#steering" title="Link to this heading">?</a></h2>
+          <p>A small set of TRR providers are only available on certain networks. Detection is performed in DoHHeuristics.sys.mjs followed by a call to <em>TRRService::SetDetectedURI</em>. This causes Firefox to use the network specific TRR provider until a network change occurs.</p>
+         </section>
+         <section id="user-choice">
+          <h2>User Choice<a class="headerlink" href="#user-choice" title="Link to this heading">?</a></h2>
+          <p>The TRR feature is designed to prioritize user choice before user agent decisions. That means the user may explicitly disable TRR by setting <strong>network.trr.mode</strong> to <strong>5</strong> (TRR-disabled), and that <em>doh-rollout</em> will not overwrite user settings. Changes to the TRR URL or TRR mode by the user will disable heuristics use the user configured settings.</p>
+         </section>
+        </section>
+       </div>
+      </div>
+      <footer>
+       <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../http/lifecycle.html" class="btn btn-neutral float-left" title="The Lifecycle of a HTTP Request" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a> <a href="../url_parsers.html" class="btn btn-neutral float-right" title="URL Parsers" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+       </div>
+       <hr>
+       <div role="contentinfo">
+        <p></p>
+       </div> Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+      </footer>
+     </div>
+    </div>
+   </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ </body>
+</html>

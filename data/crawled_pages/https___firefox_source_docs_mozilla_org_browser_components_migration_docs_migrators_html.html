@@ -1,0 +1,932 @@
+<!doctype html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Migrators Reference — Firefox Source Docs  documentation</title>
+  <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=fa44fd50">
+  <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=19f00094">
+  <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css?v=fd3f3429">
+  <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css?v=76b2166b">
+  <link rel="stylesheet" type="text/css" href="../../../../_static/custom_theme.css?v=dc5ed815">
+  <link rel="stylesheet" type="text/css" href="../../../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7">
+  <link rel="shortcut icon" href="../../../../_static/firefox.ico"><!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+  <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+  <script src="../../../../_static/documentation_options.js?v=5929fcd5"></script>
+  <script src="../../../../_static/doctools.js?v=9a2dae69"></script>
+  <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
+  <script src="../../../../_static/copybutton.js?v=30646c52"></script>
+  <script src="../../../../_static/design-tabs.js?v=36754332"></script>
+  <script src="../../../../_static/js/theme.js"></script>
+  <link rel="index" title="Index" href="../../../../genindex.html">
+  <link rel="search" title="Search" href="../../../../search.html">
+  <link rel="next" title="Migration Wizard Reference" href="migration-wizard.html">
+  <link rel="prev" title="MigrationUtils Reference" href="migration-utils.html">
+ </head>
+ <body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+   <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <div class="wy-side-scroll">
+     <div class="wy-side-nav-search">
+      <a href="../../../../index.html" class="icon icon-home"> Firefox Source Docs <img src="../../../../_static/firefox-wordmark.svg" class="logo" alt="Logo"> </a><!-- -- This code is governed by the BSD license ---->
+      <div>
+       <h3>Quick search</h3>
+       <script>
+    (function () {
+      var cx = "dd12886298f75dbef";
+      var gcse = document.createElement("script");
+      gcse.async = true;
+      gcse.src = "https://cse.google.com/cse.js?cx=" + cx;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(gcse, s);
+    })();
+  </script><gcse:search></gcse:search>
+      </div>
+     </div>
+     <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+      <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../glossary/index.html">A Glossary of Common Terms</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../overview/index.html">A Quick Guide to Mozilla Applications</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../setup/index.html">Getting Set Up To Work On The Firefox Codebase</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Working On Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../contributing/index.html">Working on Firefox</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../bug-mgmt/index.html">Bug Handling</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox User Guide</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../devtools-user/index.html">Firefox DevTools User Docs</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Source Code Documentation</span></p>
+      <ul class="current">
+       <li class="toctree-l1"><a class="reference internal" href="../../../../mots/index.html">Governance</a></li>
+       <li class="toctree-l1 current"><a class="reference internal" href="../../../index.html">Firefox Front-end</a>
+        <ul class="current">
+         <li class="toctree-l2"><a class="reference internal" href="../../../urlbar/index.html">Address Bar</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../BrowserUsageTelemetry.html">Browser Usage Telemetry</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../FrontendCodeReviewBestPractices.html">Frontend Code Review Best Practices</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../CommandLineParameters.html">Command Line Parameters</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../BrowserStartup.html">Browser Startup</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../CategoryManagerIndirection.html">Category manager indirection (callModulesFromCategory)</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../customizableui/docs/index.html">CustomizableUI Component</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../enterprisepolicies/docs/index.html">Enterprise Policies</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../extensions/formautofill/docs/index.html">Form Autofill</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../extensions/newtab/docs/index.html">Firefox Home (New Tab)</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../aboutwelcome/docs/index.html">Firefox Welcome Experience (about:welcome)</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../installer/windows/installer/index.html">Installer</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../attribution/docs/index.html">Installation Attribution</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../../toolkit/mozapps/defaultagent/default-browser-agent/index.html">Default Browser Agent</a></li>
+         <li class="toctree-l2 current"><a class="reference internal" href="index.html">Migration</a>
+          <ul class="current">
+           <li class="toctree-l3"><a class="reference internal" href="migration-utils.html">MigrationUtils Reference</a></li>
+           <li class="toctree-l3 current"><a class="current reference internal" href="#">Migrators Reference</a>
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="#browser-migrators">Browser migrators</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#chromeprofilemigrator-class">ChromeProfileMigrator class</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#braveprofilemigrator-class">BraveProfileMigrator class</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#canaryprofilemigrator-class">CanaryProfileMigrator class</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#chromebetamigrator-class">ChromeBetaMigrator class</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#chromedevmigrator-class">ChromeDevMigrator class</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#chromium360semigrator-class">Chromium360seMigrator class</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#chromiumedgemigrator-class">ChromiumEdgeMigrator class</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#chromiumedgebetamigrator-class">ChromiumEdgeBetaMigrator class</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#chromiumprofilemigrator-class">ChromiumProfileMigrator class</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#operaprofilemigrator-class">OperaProfileMigrator class</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#operagxprofilemigrator-class">OperaGXProfileMigrator class</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#vivaldiprofilemigrator-class">VivaldiProfileMigrator class</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#file-migrators">File migrators</a></li>
+            </ul></li>
+           <li class="toctree-l3"><a class="reference internal" href="migration-wizard.html">Migration Wizard Reference</a></li>
+          </ul></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../pagedata/docs/index.html">PageDataService</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../places/index.html">Places</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../asrouter/docs/index.html">Messaging System</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../search/index.html">Search</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../base/tabbrowser/index.html">tabbrowser</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../touchbar/index.html">Touch Bar</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../uitour/docs/index.html">UITour</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../branding/docs/index.html">Firefox Branding</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../storybook/docs/README.storybook.stories.html">Storybook for Firefox</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../storybook/docs/README.reusable-widgets.stories.html">Reusable UI widgets</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../storybook/docs/README.other-widgets.stories.html">Other types of UI Widgets</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../storybook/docs/README.lit-guide.stories.html">Lit</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../storybook/docs/README.xul-and-html.stories.html">XUL and HTML</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../../toolkit/themes/shared/design-system/docs/README.design-tokens.stories.html">Design tokens</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../../toolkit/themes/shared/design-system/docs/README.json-design-tokens.stories.html">JSON design tokens</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../backup/docs/index.html">Backup Component</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../sidebar/docs/index.html">Sidebar</a></li>
+        </ul></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../dom/index.html">DOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../editor/index.html">Editor</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../layout/index.html">Style system (CSS) &amp; Layout</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../gfx/index.html">Graphics</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../ipc/index.html">Processes, Threads and IPC</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../devtools/index.html">Firefox DevTools Contributor Docs</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../toolkit/index.html">Toolkit</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../js/index.html">SpiderMonkey</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../jsloader/index.html">JS Loader</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../mobile/android/geckoview/index.html">GeckoView</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../mobile/android/fenix/index.html">Fenix</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../mobile/android/focus-android/index.html">Focus for Android</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../dom/bindings/webidl/index.html">WebIDL</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../modules/libpref/index.html">libpref</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../networking/index.html">Networking</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../remote/index.html">Remote Protocols</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../services/index.html">Services</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../permissions/index.html">Permissions</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../uriloader/index.html">File Handling</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../widget/cocoa/index.html">Firefox on macOS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../widget/windows/index.html">Firefox on Windows</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../toolkit/components/ml/index.html">Firefox AI Runtime</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../accessible/index.html">Accessibility</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../media/index.html">Media Playback</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../code-quality/index.html">Code quality</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../writing-rust-code/index.html">Writing Rust Code</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../rust-components/index.html">Rust Components</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../tools/profiler/index.html">Gecko Profiler</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../performance/index.html">Performance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../storage/index.html">Database bindings (SQLite, KV, …)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../xpcom/index.html">XPCOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../nspr/index.html">NSPR</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../security/nss/index.html">Network Security Services (NSS)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../content-security/index.html">Web Security Checks in Gecko</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">The Firefox Build System</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../mach/index.html">Mach</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../tools/try/index.html">Pushing to Try</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../build/buildsystem/index.html">Build System</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../taskcluster/index.html">Firefox CI and Taskgraph</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../tools/moztreedocs/index.html">Managing Documentation</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../mozbuild/vendor/index.html">Vendoring Third Party Components</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Testing &amp; Test Infrastructure</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/automated-testing/index.html">Automated Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/treeherder-try/index.html">Understanding Treeherder Results</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/sheriffed-intermittents/index.html">Sheriffed intermittent failures</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/tests-for-new-config/index.html">Turning on Firefox tests for a new configuration</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/intermittent/index.html">Avoiding intermittent tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/testing-policy/index.html">Testing Policy</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/ci-configs/index.html">Configuration Changes</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/browser-chrome/index.html">Browser chrome mochitests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/chrome-tests/index.html">Chrome Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/marionette/index.html">Marionette</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/geckodriver/index.html">geckodriver</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/test-verification/index.html">Test Verification</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/webrender/index.html">WebRender Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/mochitest-plain/index.html">Mochitest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/xpcshell/index.html">XPCShell tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/tps/index.html">TPS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../web-platform/index.html">web-platform-tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../gtest/index.html">GTest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../tools/fuzzing/index.html">Fuzzing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../tools/sanitizer/index.html">Sanitizer</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/perfdocs/index.html">Performance Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../tools/code-coverage/index.html">Code coverage</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing-rust-code/index.html">Testing &amp; Debugging Rust Code</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Releases &amp; Updates</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../update-infrastructure/index.html">Mozilla Update Infrastructure</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../update-infrastructure/index.html#watershed-updates">Watershed Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../update-infrastructure/index.html#desupport-updates">Desupport Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../tools/update-verify/index.html">Update Verify</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Localization &amp; Internationalization</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../intl/index.html">Internationalization</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../l10n/index.html">Localization</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox and Python</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../mozbase/index.html">mozbase</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../python/index.html">Using third-party Python packages</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Metrics Collected in Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../metrics/index.html">Metrics</a></li>
+      </ul>
+     </div>
+    </div>
+   </nav>
+   <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+    <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+     <i data-toggle="wy-nav-top" class="fa fa-bars"></i> <a href="../../../../index.html">Firefox Source Docs</a>
+    </nav>
+    <div class="wy-nav-content">
+     <div class="rst-content">
+      <!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+      <div role="navigation" aria-label="Page navigation">
+       <ul class="wy-breadcrumbs">
+        <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+        <li class="breadcrumb-item"><a href="../../../index.html">Firefox Front-end</a></li>
+        <li class="breadcrumb-item"><a href="index.html">Migration</a></li>
+        <li class="breadcrumb-item active">Migrators Reference</li>
+        <li class="wy-breadcrumbs-aside"><a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Developer+Infrastructure&amp;component=Firefox+Source+Docs%3A+Content&amp;short_desc=Documentation+issue+on+browser/components/migration/docs/migrators&amp;comment=URL+=+https://firefox-source-docs.mozilla.org/browser/components/migration/docs/migrators.html&amp;bug_file_loc=https://firefox-source-docs.mozilla.org/browser/components/migration/docs/migrators.html" rel="nofollow">Report an issue</a> / <a href="../../../../_sources/browser/components/migration/docs/migrators.rst.txt" rel="nofollow"> View page source</a></li>
+       </ul>
+       <hr>
+      </div>
+      <div role="main" class="document" itemscope itemtype="http://schema.org/Article">
+       <div itemprop="articleBody">
+        <section id="migrators-reference">
+         <h1>Migrators Reference<a class="headerlink" href="#migrators-reference" title="Link to this heading">?</a></h1>
+         <p>There are currently two types of migrators: browser migrators, and file migrators. Browser migrators will migrate various resources from another browser. A file migrator allows the user to migrate data through an intermediary file (like passwords from a .CSV file).</p>
+         <section id="browser-migrators">
+          <h2>Browser migrators<a class="headerlink" href="#browser-migrators" title="Link to this heading">?</a></h2>
+          <section id="migratorbase-class">
+           <h3>MigratorBase class<a class="headerlink" href="#migratorbase-class" title="Link to this heading">?</a></h3>
+           <dl class="js class">
+            <dt class="sig sig-object js" id="MigratorBase">
+             <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="n"><span class="pre">MigratorBase</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MigratorBase" title="Link to this definition">?</a>
+            </dt>
+            <dd>
+             <p>Shared prototype for migrators.</p>
+             <p>To implement a migrator: 1. Import this module. 2. Create a subclass of MigratorBase for your new migrator. 3. Override the <cite>key</cite> static getter with a unique identifier for the browser</p>
+             <blockquote>
+              <div>
+               <p>that this migrator migrates from.</p>
+              </div>
+             </blockquote>
+             <ol class="arabic simple" start="4">
+              <li>
+               <p>If the migrator supports multiple profiles, override the sourceProfiles Here we default for single-profile migrator.</p></li>
+              <li>
+               <p>Implement getResources(aProfile) (see below).</p></li>
+              <li>
+               <p>For startup-only migrators, override <code class="docutils literal notranslate"><span class="pre">startupOnlyMigrator</span></code>.</p></li>
+              <li>
+               <p>Add the migrator to the MIGRATOR_MODULES structure in MigrationUtils.sys.mjs.</p></li>
+             </ol>
+             <dl class="js attribute">
+              <dt class="sig sig-object js" id="MigratorBase.enabled">
+               <span class="sig-prename descclassname"><span class="n"><span class="pre">MigratorBase</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">enabled</span></span></span><a class="headerlink" href="#MigratorBase.enabled" title="Link to this definition">?</a>
+              </dt>
+              <dd>
+               <p>Returns true if the migrator is configured to be enabled. This is controlled by the <cite>browser.migrate.&lt;BROWSER_KEY&gt;.enabled</cite> boolean preference.</p>
+              </dd>
+             </dl>
+             <dl class="js attribute">
+              <dt class="sig sig-object js" id="MigratorBase.startupOnlyMigrator">
+               <span class="sig-prename descclassname"><span class="n"><span class="pre">MigratorBase</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">startupOnlyMigrator</span></span></span><a class="headerlink" href="#MigratorBase.startupOnlyMigrator" title="Link to this definition">?</a>
+              </dt>
+              <dd>
+               <p>OVERRIDE IF AND ONLY IF the migrator is a startup-only migrator (For now, that is just the Firefox migrator, see <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=737381">bug 737381</a>). Default: false.</p>
+               <p>Startup-only migrators are different in two ways: - they may only be used during startup. - the user-profile is half baked during migration. The folder exists,</p>
+               <blockquote>
+                <div>
+                 <p>but it’s only accessible through MigrationUtils.profileStartup. The migrator can call MigrationUtils.profileStartup.doStartup at any point in order to initialize the profile.</p>
+                </div>
+               </blockquote>
+              </dd>
+             </dl>
+             <dl class="js attribute">
+              <dt class="sig sig-object js" id="MigratorBase.brandImage">
+               <span class="sig-prename descclassname"><span class="n"><span class="pre">MigratorBase</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">brandImage</span></span></span><a class="headerlink" href="#MigratorBase.brandImage" title="Link to this definition">?</a>
+              </dt>
+              <dd>
+               <p><strong>type:</strong> string</p>
+               <p>This method should get overridden to return an icon url of the browser to be imported from. By default, this will just use the default Favicon image.</p>
+              </dd>
+             </dl>
+             <dl class="js attribute">
+              <dt class="sig sig-object js" id="MigratorBase.displayNameL10nID">
+               <span class="sig-prename descclassname"><span class="n"><span class="pre">MigratorBase</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">displayNameL10nID</span></span></span><a class="headerlink" href="#MigratorBase.displayNameL10nID" title="Link to this definition">?</a>
+              </dt>
+              <dd>
+               <p><strong>type:</strong> string</p>
+               <p>This must be overridden to return a Fluent string ID mapping to the display name for this migrator. These strings should be defined in migrationWizard.ftl.</p>
+              </dd>
+             </dl>
+             <dl class="js attribute">
+              <dt class="sig sig-object js" id="MigratorBase.key">
+               <span class="sig-prename descclassname"><span class="n"><span class="pre">MigratorBase</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">key</span></span></span><a class="headerlink" href="#MigratorBase.key" title="Link to this definition">?</a>
+              </dt>
+              <dd>
+               <p><strong>type:</strong> string</p>
+               <p>This must be overridden to return a simple string identifier for the migrator, for example “firefox”, “chrome”, “opera-gx”. This key is what is used as an identifier when calling MigrationUtils.getMigrator.</p>
+              </dd>
+             </dl>
+             <dl class="js function">
+              <dt class="sig sig-object js" id="MigratorBase.canGetPermissions">
+               <span class="sig-prename descclassname"><span class="n"><span class="pre">MigratorBase</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">canGetPermissions</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MigratorBase.canGetPermissions" title="Link to this definition">?</a>
+              </dt>
+              <dd>
+               <dl class="field-list simple">
+                <dt class="field-odd">
+                 Returns<span class="colon">:</span>
+                </dt>
+                <dd class="field-odd">
+                 <p><strong>Promise.&lt;(boolean|string)&gt;</strong> –</p>
+                </dd>
+               </dl>
+              </dd>
+             </dl>
+             <dl class="js function">
+              <dt class="sig sig-object js" id="MigratorBase.getLastUsedDate">
+               <span class="sig-prename descclassname"><span class="n"><span class="pre">MigratorBase</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getLastUsedDate</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MigratorBase.getLastUsedDate" title="Link to this definition">?</a>
+              </dt>
+              <dd>
+               <p>OVERRIDE in order to provide an estimate of when the last time was that somebody used the browser. It is OK that this is somewhat fuzzy - history may not be available (or be wiped or not present due to e.g. incognito mode).</p>
+               <p>If not overridden, the promise will resolve to the Unix epoch.</p>
+               <dl class="field-list simple">
+                <dt class="field-odd">
+                 Returns<span class="colon">:</span>
+                </dt>
+                <dd class="field-odd">
+                 <p><strong>Promise.&lt;Date&gt;</strong> – A Promise that resolves to the last used date.</p>
+                </dd>
+               </dl>
+              </dd>
+             </dl>
+             <dl class="js function">
+              <dt class="sig sig-object js" id="MigratorBase.getMigrateData">
+               <span class="sig-prename descclassname"><span class="n"><span class="pre">MigratorBase</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getMigrateData</span></span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">aProfile</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#MigratorBase.getMigrateData" title="Link to this definition">?</a>
+              </dt>
+              <dd>
+               <p>This method returns a number that is the bitwise OR of all resource types that are available in aProfile. See MigrationUtils.resourceTypes for each resource type.</p>
+               <dl class="field-list simple">
+                <dt class="field-odd">
+                 Arguments<span class="colon">:</span>
+                </dt>
+                <dd class="field-odd">
+                 <ul class="simple">
+                  <li>
+                   <p><strong>aProfile</strong> (<em>object|string</em>) – The profile from which data may be imported, or an empty string in the case of a single-profile migrator.</p></li>
+                 </ul>
+                </dd>
+                <dt class="field-even">
+                 Returns<span class="colon">:</span>
+                </dt>
+                <dd class="field-even">
+                 <p><strong>number</strong> –</p>
+                </dd>
+               </dl>
+              </dd>
+             </dl>
+             <dl class="js function">
+              <dt class="sig sig-object js" id="MigratorBase.getPermissions">
+               <span class="sig-prename descclassname"><span class="n"><span class="pre">MigratorBase</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getPermissions</span></span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_win</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#MigratorBase.getPermissions" title="Link to this definition">?</a>
+              </dt>
+              <dd>
+               <p>Subclasses should implement this if special permissions need to be requested from the user or the operating system in order to perform a migration with this MigratorBase. This will be called only if hasPermissions resolves to false.</p>
+               <p>The returned Promise will resolve to true if permissions were successfully obtained, and false otherwise. Implementors should ensure that if a call to getPermissions resolves to true, that the MigratorBase will be able to get read access to all of the resources it needs to do a migration.</p>
+               <dl class="field-list simple">
+                <dt class="field-odd">
+                 Arguments<span class="colon">:</span>
+                </dt>
+                <dd class="field-odd">
+                 <ul class="simple">
+                  <li>
+                   <p><strong>_win</strong> (<em>DOMWindow</em>) – The top-level DOM window hosting the UI that is requesting the permission. This can be used to, for example, anchor a file picker window to the same window that is hosting the migration UI.</p></li>
+                 </ul>
+                </dd>
+                <dt class="field-even">
+                 Returns<span class="colon">:</span>
+                </dt>
+                <dd class="field-even">
+                 <p><strong>Promise.&lt;boolean&gt;</strong> –</p>
+                </dd>
+               </dl>
+              </dd>
+             </dl>
+             <dl class="js function">
+              <dt class="sig sig-object js" id="MigratorBase.getResources">
+               <span class="sig-prename descclassname"><span class="n"><span class="pre">MigratorBase</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getResources</span></span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_aProfile</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#MigratorBase.getResources" title="Link to this definition">?</a>
+              </dt>
+              <dd>
+               <p>MUST BE OVERRIDDEN.</p>
+               <p>Returns an array of “migration resources” objects for the given profile, or for the “default” profile, if the migrator does not support multiple profiles.</p>
+               <p>Each migration resource should provide: - a <code class="docutils literal notranslate"><span class="pre">type</span></code> getter, returning any of the migration resource types (see</p>
+               <blockquote>
+                <div>
+                 <p>MigrationUtils.resourceTypes).</p>
+                </div>
+               </blockquote>
+               <ul>
+                <li>
+                 <p>a <code class="docutils literal notranslate"><span class="pre">migrate</span></code> method, taking two arguments, aCallback(bool success, object details), for migrating the data for this resource. It may do its job synchronously or asynchronously. Either way, it must call aCallback(bool aSuccess, object details) when it’s done. In the case of an exception thrown from <code class="docutils literal notranslate"><span class="pre">migrate</span></code>, it’s taken as if aCallback(false, {}) is called. The details argument is sometimes optional, but conditional on how the migration wizard wants to display the migration state for the resource.</p>
+                 <p>Note: In the case of a simple asynchronous implementation, you may find MigrationUtils.wrapMigrateFunction handy for handling aCallback easily.</p></li>
+               </ul>
+               <p>For each migration type listed in MigrationUtils.resourceTypes, multiple migration resources may be provided. This practice is useful when the data for a certain migration type is independently stored in few locations. For example, the mac version of Safari stores its “reading list” bookmarks in a separate property list.</p>
+               <p>Note that the importation of a particular migration type is reported as successful if _any_ of its resources succeeded to import (that is, called, <code class="docutils literal notranslate"><span class="pre">aCallback(true,</span> <span class="pre">{})</span></code>). However, completion-status for a particular migration type is reported to the UI only once all of its migrators have called aCallback.</p>
+               <p>NOTE: The returned array should only include resources from which data can be imported. So, for example, before adding a resource for the BOOKMARKS migration type, you should check if you should check that the bookmarks file exists.</p>
+               <dl class="field-list simple">
+                <dt class="field-odd">
+                 Arguments<span class="colon">:</span>
+                </dt>
+                <dd class="field-odd">
+                 <ul class="simple">
+                  <li>
+                   <p><strong>_aProfile</strong> (<em>object|string</em>) – The profile from which data may be imported, or an empty string in the case of a single-profile migrator. In the case of multiple-profiles migrator, it is guaranteed that aProfile is a value returned by the sourceProfiles getter (see above).</p></li>
+                 </ul>
+                </dd>
+                <dt class="field-even">
+                 Returns<span class="colon">:</span>
+                </dt>
+                <dd class="field-even">
+                 <p><strong>Promise.&lt;Array.&lt;MigratorResource&gt;&gt;|Array.&lt;MigratorResource&gt;</strong> –</p>
+                </dd>
+               </dl>
+              </dd>
+             </dl>
+             <dl class="js function">
+              <dt class="sig sig-object js" id="MigratorBase.getSourceProfiles">
+               <span class="sig-prename descclassname"><span class="n"><span class="pre">MigratorBase</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getSourceProfiles</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MigratorBase.getSourceProfiles" title="Link to this definition">?</a>
+              </dt>
+              <dd>
+               <p>OVERRIDE IF AND ONLY IF the source supports multiple profiles.</p>
+               <p>Returns array of profile objects from which data may be imported. The object should have the following keys:</p>
+               <blockquote>
+                <div>
+                 <p>id - a unique string identifier for the profile name - a pretty name to display to the user in the UI</p>
+                </div>
+               </blockquote>
+               <p>Only profiles from which data can be imported should be listed. Otherwise the behavior of the migration wizard isn’t well-defined.</p>
+               <p>For a single-profile source (e.g. safari, ie), this returns null, and not an empty array. That is the default implementation.</p>
+               <dl class="field-list simple">
+                <dt class="field-odd">
+                 Returns<span class="colon">:</span>
+                </dt>
+                <dd class="field-odd">
+                 <p><strong>Array.&lt;object&gt;|null</strong> –</p>
+                </dd>
+               </dl>
+              </dd>
+             </dl>
+             <dl class="js function">
+              <dt class="sig sig-object js" id="MigratorBase.hasPermissions">
+               <span class="sig-prename descclassname"><span class="n"><span class="pre">MigratorBase</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">hasPermissions</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MigratorBase.hasPermissions" title="Link to this definition">?</a>
+              </dt>
+              <dd>
+               <p>Subclasses should implement this if special checks need to be made to determine if certain permissions need to be requested before data can be imported. The returned Promise resolves to true if the required permissions have been granted and a migration could proceed.</p>
+               <dl class="field-list simple">
+                <dt class="field-odd">
+                 Returns<span class="colon">:</span>
+                </dt>
+                <dd class="field-odd">
+                 <p><strong>Promise.&lt;boolean&gt;</strong> –</p>
+                </dd>
+               </dl>
+              </dd>
+             </dl>
+             <dl class="js function">
+              <dt class="sig sig-object js" id="MigratorBase.isSourceAvailable">
+               <span class="sig-prename descclassname"><span class="n"><span class="pre">MigratorBase</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">isSourceAvailable</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MigratorBase.isSourceAvailable" title="Link to this definition">?</a>
+              </dt>
+              <dd>
+               <p>Checks to see if one or more profiles exist for the browser that this migrator migrates from.</p>
+               <dl class="field-list simple">
+                <dt class="field-odd">
+                 Returns<span class="colon">:</span>
+                </dt>
+                <dd class="field-odd">
+                 <p><strong>Promise.&lt;boolean&gt;</strong> – True if one or more profiles exists that this migrator can migrate resources from.</p>
+                </dd>
+               </dl>
+              </dd>
+             </dl>
+             <dl class="js function">
+              <dt class="sig sig-object js" id="MigratorBase.migrate">
+               <span class="sig-prename descclassname"><span class="n"><span class="pre">MigratorBase</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">migrate</span></span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">aItems</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aStartup</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aProfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aProgressCallback</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#MigratorBase.migrate" title="Link to this definition">?</a>
+              </dt>
+              <dd>
+               <dl class="field-list simple">
+                <dt class="field-odd">
+                 Arguments<span class="colon">:</span>
+                </dt>
+                <dd class="field-odd">
+                 <ul class="simple">
+                  <li>
+                   <p><strong>aItems</strong> (<em>number</em>) – A bitfield with bits from MigrationUtils.resourceTypes flipped to indicate what types of resources should be migrated.</p></li>
+                  <li>
+                   <p><strong>aStartup</strong> (<em>boolean</em>) – True if this migration is occurring during startup.</p></li>
+                  <li>
+                   <p><strong>aProfile</strong> (<em>object|string</em>) – The other browser profile that is being migrated from.</p></li>
+                  <li>
+                   <p><strong>aProgressCallback</strong> (<em>function|null</em>) – An optional callback that will be fired once a resourceType has finished migrating. The callback will be passed the numeric representation of the resource type followed by a boolean indicating whether or not the resource was migrated successfully and optionally an object containing additional details.</p></li>
+                 </ul>
+                </dd>
+               </dl>
+               <div class="admonition seealso">
+                <p class="admonition-title">See also</p>
+                <ul class="simple">
+                 <li>
+                  <p><a class="reference internal" href="migration-utils.html#MigrationUtils" title="MigrationUtils"><code class="xref any js js-class docutils literal notranslate"><span class="pre">MigrationUtils</span></code></a></p></li>
+                </ul>
+               </div>
+              </dd>
+             </dl>
+            </dd>
+           </dl>
+          </section>
+          <section id="chrome-and-chrome-variant-migrators">
+           <h3>Chrome and Chrome variant migrators<a class="headerlink" href="#chrome-and-chrome-variant-migrators" title="Link to this heading">?</a></h3>
+           <p>The <code class="docutils literal notranslate"><span class="pre">ChromeProfileMigrator</span></code> is subclassed ino order to provide migration capabilities for variants of the Chrome browser.</p>
+          </section>
+         </section>
+         <section id="chromeprofilemigrator-class">
+          <h2>ChromeProfileMigrator class<a class="headerlink" href="#chromeprofilemigrator-class" title="Link to this heading">?</a></h2>
+          <dl class="js class">
+           <dt class="sig sig-object js" id="ChromeProfileMigrator">
+            <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="n"><span class="pre">ChromeProfileMigrator</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ChromeProfileMigrator" title="Link to this definition">?</a>
+           </dt>
+           <dd>
+            <p>Chrome profile migrator. This can also be used as a parent class for migrators for browsers that are variants of Chrome.</p>
+            <dl class="js function">
+             <dt class="sig sig-object js" id="ChromeProfileMigrator._getChromeUserDataPathIfExists">
+              <span class="sig-prename descclassname"><span class="n"><span class="pre">ChromeProfileMigrator</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">_getChromeUserDataPathIfExists</span></span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">noRemapping=false</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ChromeProfileMigrator._getChromeUserDataPathIfExists" title="Link to this definition">?</a>
+             </dt>
+             <dd>
+              <p>Returns a Promise that resolves to the data path containing the Local State and profile directories for this browser.</p>
+              <dl class="field-list simple">
+               <dt class="field-odd">
+                Arguments<span class="colon">:</span>
+               </dt>
+               <dd class="field-odd">
+                <ul class="simple">
+                 <li>
+                  <p><strong>noRemapping</strong> (<em>boolean</em>) – Set to true to bypass any remapping that might have occurred on platforms where the data path changes once permission has been granted.</p></li>
+                </ul>
+               </dd>
+               <dt class="field-even">
+                Returns<span class="colon">:</span>
+               </dt>
+               <dd class="field-even">
+                <p><strong>Promise.&lt;string&gt;</strong> –</p>
+               </dd>
+              </dl>
+             </dd>
+            </dl>
+           </dd>
+          </dl>
+         </section>
+         <section id="braveprofilemigrator-class">
+          <h2>BraveProfileMigrator class<a class="headerlink" href="#braveprofilemigrator-class" title="Link to this heading">?</a></h2>
+          <dl class="js class">
+           <dt class="sig sig-object js" id="BraveProfileMigrator">
+            <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="n"><span class="pre">BraveProfileMigrator</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#BraveProfileMigrator" title="Link to this definition">?</a>
+           </dt>
+           <dd>
+            <p>Brave migrator</p>
+           </dd>
+          </dl>
+         </section>
+         <section id="canaryprofilemigrator-class">
+          <h2>CanaryProfileMigrator class<a class="headerlink" href="#canaryprofilemigrator-class" title="Link to this heading">?</a></h2>
+          <dl class="js class">
+           <dt class="sig sig-object js" id="CanaryProfileMigrator">
+            <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="n"><span class="pre">CanaryProfileMigrator</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#CanaryProfileMigrator" title="Link to this definition">?</a>
+           </dt>
+           <dd>
+            <p>Chrome Canary Not available on Linux</p>
+           </dd>
+          </dl>
+         </section>
+         <section id="chromebetamigrator-class">
+          <h2>ChromeBetaMigrator class<a class="headerlink" href="#chromebetamigrator-class" title="Link to this heading">?</a></h2>
+          <dl class="js class">
+           <dt class="sig sig-object js" id="ChromeBetaMigrator">
+            <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="n"><span class="pre">ChromeBetaMigrator</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ChromeBetaMigrator" title="Link to this definition">?</a>
+           </dt>
+           <dd>
+            <p>Chrome Beta migrator</p>
+           </dd>
+          </dl>
+         </section>
+         <section id="chromedevmigrator-class">
+          <h2>ChromeDevMigrator class<a class="headerlink" href="#chromedevmigrator-class" title="Link to this heading">?</a></h2>
+          <dl class="js class">
+           <dt class="sig sig-object js" id="ChromeDevMigrator">
+            <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="n"><span class="pre">ChromeDevMigrator</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ChromeDevMigrator" title="Link to this definition">?</a>
+           </dt>
+           <dd>
+            <p>Chrome Dev - Linux only (not available in Mac and Windows)</p>
+           </dd>
+          </dl>
+         </section>
+         <section id="chromium360semigrator-class">
+          <h2>Chromium360seMigrator class<a class="headerlink" href="#chromium360semigrator-class" title="Link to this heading">?</a></h2>
+          <dl class="js class">
+           <dt class="sig sig-object js" id="Chromium360seMigrator">
+            <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="n"><span class="pre">Chromium360seMigrator</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Chromium360seMigrator" title="Link to this definition">?</a>
+           </dt>
+           <dd>
+            <p>Chromium 360 migrator</p>
+           </dd>
+          </dl>
+         </section>
+         <section id="chromiumedgemigrator-class">
+          <h2>ChromiumEdgeMigrator class<a class="headerlink" href="#chromiumedgemigrator-class" title="Link to this heading">?</a></h2>
+          <dl class="js class">
+           <dt class="sig sig-object js" id="ChromiumEdgeMigrator">
+            <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="n"><span class="pre">ChromiumEdgeMigrator</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ChromiumEdgeMigrator" title="Link to this definition">?</a>
+           </dt>
+           <dd>
+            <p>Edge (Chromium-based) migrator</p>
+           </dd>
+          </dl>
+         </section>
+         <section id="chromiumedgebetamigrator-class">
+          <h2>ChromiumEdgeBetaMigrator class<a class="headerlink" href="#chromiumedgebetamigrator-class" title="Link to this heading">?</a></h2>
+          <dl class="js class">
+           <dt class="sig sig-object js" id="ChromiumEdgeBetaMigrator">
+            <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="n"><span class="pre">ChromiumEdgeBetaMigrator</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ChromiumEdgeBetaMigrator" title="Link to this definition">?</a>
+           </dt>
+           <dd>
+            <p>Edge Beta (Chromium-based) migrator</p>
+           </dd>
+          </dl>
+         </section>
+         <section id="chromiumprofilemigrator-class">
+          <h2>ChromiumProfileMigrator class<a class="headerlink" href="#chromiumprofilemigrator-class" title="Link to this heading">?</a></h2>
+          <dl class="js class">
+           <dt class="sig sig-object js" id="ChromiumProfileMigrator">
+            <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="n"><span class="pre">ChromiumProfileMigrator</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ChromiumProfileMigrator" title="Link to this definition">?</a>
+           </dt>
+           <dd>
+            <p>Chromium migrator</p>
+           </dd>
+          </dl>
+         </section>
+         <section id="operaprofilemigrator-class">
+          <h2>OperaProfileMigrator class<a class="headerlink" href="#operaprofilemigrator-class" title="Link to this heading">?</a></h2>
+          <dl class="js class">
+           <dt class="sig sig-object js" id="OperaProfileMigrator">
+            <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="n"><span class="pre">OperaProfileMigrator</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#OperaProfileMigrator" title="Link to this definition">?</a>
+           </dt>
+           <dd>
+            <p>Opera migrator</p>
+           </dd>
+          </dl>
+         </section>
+         <section id="operagxprofilemigrator-class">
+          <h2>OperaGXProfileMigrator class<a class="headerlink" href="#operagxprofilemigrator-class" title="Link to this heading">?</a></h2>
+          <dl class="js class">
+           <dt class="sig sig-object js" id="OperaGXProfileMigrator">
+            <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="n"><span class="pre">OperaGXProfileMigrator</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#OperaGXProfileMigrator" title="Link to this definition">?</a>
+           </dt>
+           <dd>
+            <p>Opera GX migrator</p>
+           </dd>
+          </dl>
+         </section>
+         <section id="vivaldiprofilemigrator-class">
+          <h2>VivaldiProfileMigrator class<a class="headerlink" href="#vivaldiprofilemigrator-class" title="Link to this heading">?</a></h2>
+          <dl class="js class">
+           <dt class="sig sig-object js" id="VivaldiProfileMigrator">
+            <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="n"><span class="pre">VivaldiProfileMigrator</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#VivaldiProfileMigrator" title="Link to this definition">?</a>
+           </dt>
+           <dd>
+            <p>Vivaldi migrator</p>
+           </dd>
+          </dl>
+          <section id="edgeprofilemigrator-class">
+           <h3>EdgeProfileMigrator class<a class="headerlink" href="#edgeprofilemigrator-class" title="Link to this heading">?</a></h3>
+           <dl class="js class">
+            <dt class="sig sig-object js" id="EdgeProfileMigrator">
+             <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="n"><span class="pre">EdgeProfileMigrator</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#EdgeProfileMigrator" title="Link to this definition">?</a>
+            </dt>
+            <dd>
+             <p>Edge (EdgeHTML) profile migrator</p>
+             <dl class="js function">
+              <dt class="sig sig-object js" id="EdgeProfileMigrator.getSourceProfiles">
+               <span class="sig-prename descclassname"><span class="n"><span class="pre">EdgeProfileMigrator</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getSourceProfiles</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#EdgeProfileMigrator.getSourceProfiles" title="Link to this definition">?</a>
+              </dt>
+              <dd>
+               <dl class="field-list simple">
+                <dt class="field-odd">
+                 Returns<span class="colon">:</span>
+                </dt>
+                <dd class="field-odd">
+                 <p><strong>Array|null</strong> – Somewhat counterintuitively, this returns <code class="docutils literal notranslate"><span class="pre">null</span></code> to indicate “There is only 1 (default) profile”. See MigrationUtils.sys.mjs for slightly more info on how sourceProfiles is used.</p>
+                </dd>
+               </dl>
+              </dd>
+             </dl>
+            </dd>
+           </dl>
+          </section>
+          <section id="firefoxprofilemigrator-class">
+           <h3>FirefoxProfileMigrator class<a class="headerlink" href="#firefoxprofilemigrator-class" title="Link to this heading">?</a></h3>
+           <dl class="js class">
+            <dt class="sig sig-object js" id="FirefoxProfileMigrator">
+             <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="n"><span class="pre">FirefoxProfileMigrator</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#FirefoxProfileMigrator" title="Link to this definition">?</a>
+            </dt>
+            <dd>
+             <p>Firefox profile migrator. Currently, this class only does “pave over” migrations, where various parts of an old profile overwrite a new profile. This is distinct from other migrators which attempt to import old profile data into the existing profile.</p>
+             <p>This migrator is what powers the “Profile Refresh” mechanism.</p>
+            </dd>
+           </dl>
+          </section>
+          <section id="ieprofilemigrator-class">
+           <h3>IEProfileMigrator class<a class="headerlink" href="#ieprofilemigrator-class" title="Link to this heading">?</a></h3>
+           <dl class="js class">
+            <dt class="sig sig-object js" id="IEProfileMigrator">
+             <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="n"><span class="pre">IEProfileMigrator</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#IEProfileMigrator" title="Link to this definition">?</a>
+            </dt>
+            <dd>
+             <p>Internet Explorer profile migrator</p>
+            </dd>
+           </dl>
+          </section>
+         </section>
+         <section id="file-migrators">
+          <h2>File migrators<a class="headerlink" href="#file-migrators" title="Link to this heading">?</a></h2>
+          <dl class="js function">
+           <dt class="sig sig-object js" id="FilePickerConfigurationFilter">
+            <span class="sig-name descname"><span class="n"><span class="pre">FilePickerConfigurationFilter</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#FilePickerConfigurationFilter" title="Link to this definition">?</a>
+           </dt>
+           <dd>
+            <dl class="field-list simple">
+             <dt class="field-odd">
+              Arguments<span class="colon">:</span>
+             </dt>
+             <dd class="field-odd">
+              <ul class="simple">
+               <li>
+                <p><strong>title</strong> (<em>string</em>) – The title for the filter. Example: “CSV Files”</p></li>
+               <li>
+                <p><strong>extensionPattern</strong> (<em>string</em>) – A matching pattern for the filter. Example: “<a href="#id1"><span class="problematic" id="id2">*</span></a>.csv”</p></li>
+              </ul>
+             </dd>
+            </dl>
+           </dd>
+          </dl>
+          <dl class="js function">
+           <dt class="sig sig-object js" id="FilePickerConfiguration">
+            <span class="sig-name descname"><span class="n"><span class="pre">FilePickerConfiguration</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#FilePickerConfiguration" title="Link to this definition">?</a>
+           </dt>
+           <dd>
+            <dl class="field-list simple">
+             <dt class="field-odd">
+              Arguments<span class="colon">:</span>
+             </dt>
+             <dd class="field-odd">
+              <ul class="simple">
+               <li>
+                <p><strong>title</strong> (<em>string</em>) – The title that should be assigned to the native file picker window.</p></li>
+               <li>
+                <p><strong>filters</strong> (<em>Array.&lt;FilePickerConfigurationFilter&gt;</em>) – One or more extension filters that should be applied to the native file picker window to make selection easier.</p></li>
+              </ul>
+             </dd>
+            </dl>
+           </dd>
+          </dl>
+          <section id="filemigratorbase-class">
+           <h3>FileMigratorBase class<a class="headerlink" href="#filemigratorbase-class" title="Link to this heading">?</a></h3>
+           <dl class="js class">
+            <dt class="sig sig-object js" id="FileMigratorBase">
+             <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="n"><span class="pre">FileMigratorBase</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#FileMigratorBase" title="Link to this definition">?</a>
+            </dt>
+            <dd>
+             <p>Base class for a migration that involves reading a single file off of the disk that the user picks using a file picker. The file might be generated by another browser or some other application.</p>
+             <dl class="js attribute">
+              <dt class="sig sig-object js" id="FileMigratorBase.displayedResourceTypes">
+               <span class="sig-prename descclassname"><span class="n"><span class="pre">FileMigratorBase</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">displayedResourceTypes</span></span></span><a class="headerlink" href="#FileMigratorBase.displayedResourceTypes" title="Link to this definition">?</a>
+              </dt>
+              <dd>
+               <p><strong>type:</strong> Array.&lt;string&gt;</p>
+               <p>Returns a list of one or more resource types that should appear to be in progress of migrating while the file migration occurs. Notably, this does not need to match the resource types that are returned by <cite>FileMigratorBase.migrate</cite>.</p>
+              </dd>
+             </dl>
+             <dl class="js attribute">
+              <dt class="sig sig-object js" id="FileMigratorBase.enabled">
+               <span class="sig-prename descclassname"><span class="n"><span class="pre">FileMigratorBase</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">enabled</span></span></span><a class="headerlink" href="#FileMigratorBase.enabled" title="Link to this definition">?</a>
+              </dt>
+              <dd>
+               <p><strong>type:</strong> boolean</p>
+               <p>Returns true if the migrator is configured to be enabled.</p>
+              </dd>
+             </dl>
+             <dl class="js attribute">
+              <dt class="sig sig-object js" id="FileMigratorBase.progressHeaderL10nID">
+               <span class="sig-prename descclassname"><span class="n"><span class="pre">FileMigratorBase</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">progressHeaderL10nID</span></span></span><a class="headerlink" href="#FileMigratorBase.progressHeaderL10nID" title="Link to this definition">?</a>
+              </dt>
+              <dd>
+               <p><strong>type:</strong> string</p>
+               <p>This getter should be overridden to return a Fluent string ID for what the migration wizard header should be while the file migration is underway.</p>
+              </dd>
+             </dl>
+             <dl class="js attribute">
+              <dt class="sig sig-object js" id="FileMigratorBase.successHeaderL10nID">
+               <span class="sig-prename descclassname"><span class="n"><span class="pre">FileMigratorBase</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">successHeaderL10nID</span></span></span><a class="headerlink" href="#FileMigratorBase.successHeaderL10nID" title="Link to this definition">?</a>
+              </dt>
+              <dd>
+               <p><strong>type:</strong> string</p>
+               <p>This getter should be overridden to return a Fluent string ID for what the migration wizard header should be while the file migration is done.</p>
+              </dd>
+             </dl>
+             <dl class="js attribute">
+              <dt class="sig sig-object js" id="FileMigratorBase.brandImage">
+               <span class="sig-prename descclassname"><span class="n"><span class="pre">FileMigratorBase</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">brandImage</span></span></span><a class="headerlink" href="#FileMigratorBase.brandImage" title="Link to this definition">?</a>
+              </dt>
+              <dd>
+               <p><strong>type:</strong> string</p>
+               <p>This getter should get overridden to return an icon url to represent the file to be imported from. By default, this will just use the default Favicon image.</p>
+              </dd>
+             </dl>
+             <dl class="js attribute">
+              <dt class="sig sig-object js" id="FileMigratorBase.displayNameL10nID">
+               <span class="sig-prename descclassname"><span class="n"><span class="pre">FileMigratorBase</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">displayNameL10nID</span></span></span><a class="headerlink" href="#FileMigratorBase.displayNameL10nID" title="Link to this definition">?</a>
+              </dt>
+              <dd>
+               <p><strong>type:</strong> string</p>
+               <p>This must be overridden to return a Fluent string ID mapping to the display name for this migrator. These strings should be defined in migrationWizard.ftl.</p>
+              </dd>
+             </dl>
+             <dl class="js attribute">
+              <dt class="sig sig-object js" id="FileMigratorBase.key">
+               <span class="sig-prename descclassname"><span class="n"><span class="pre">FileMigratorBase</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">key</span></span></span><a class="headerlink" href="#FileMigratorBase.key" title="Link to this definition">?</a>
+              </dt>
+              <dd>
+               <p><strong>type:</strong> string</p>
+               <p>This must be overridden to return a simple string identifier for the migrator, for example “password-csv”. This key is what is used as an identifier when calling MigrationUtils.getFileMigrator.</p>
+              </dd>
+             </dl>
+             <dl class="js function">
+              <dt class="sig sig-object js" id="FileMigratorBase.getFilePickerConfig">
+               <span class="sig-prename descclassname"><span class="n"><span class="pre">FileMigratorBase</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">getFilePickerConfig</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#FileMigratorBase.getFilePickerConfig" title="Link to this definition">?</a>
+              </dt>
+              <dd>
+               <p>A subclass of FileMigratorBase will eventually open a native file picker for the user to select the file from their file system.</p>
+               <p>Subclasses need to override this method in order to configure the native file picker.</p>
+               <dl class="field-list simple">
+                <dt class="field-odd">
+                 Returns<span class="colon">:</span>
+                </dt>
+                <dd class="field-odd">
+                 <p><strong>Promise.&lt;FilePickerConfiguration&gt;</strong> –</p>
+                </dd>
+               </dl>
+              </dd>
+             </dl>
+             <dl class="js function">
+              <dt class="sig sig-object js" id="FileMigratorBase.migrate">
+               <span class="sig-prename descclassname"><span class="n"><span class="pre">FileMigratorBase</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">migrate</span></span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_filePath</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#FileMigratorBase.migrate" title="Link to this definition">?</a>
+              </dt>
+              <dd>
+               <p>Called to perform the file migration once the user makes a selection from the native file picker. This will not be called if the user chooses to cancel the native file picker.</p>
+               <dl class="field-list simple">
+                <dt class="field-odd">
+                 Arguments<span class="colon">:</span>
+                </dt>
+                <dd class="field-odd">
+                 <ul class="simple">
+                  <li>
+                   <p><strong>_filePath</strong> (<em>string</em>) – The path that the user selected from the native file picker.</p></li>
+                 </ul>
+                </dd>
+               </dl>
+              </dd>
+             </dl>
+            </dd>
+           </dl>
+          </section>
+          <section id="passwordfilemigrator-class">
+           <h3>PasswordFileMigrator class<a class="headerlink" href="#passwordfilemigrator-class" title="Link to this heading">?</a></h3>
+           <dl class="js class">
+            <dt class="sig sig-object js" id="PasswordFileMigrator">
+             <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="n"><span class="pre">PasswordFileMigrator</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#PasswordFileMigrator" title="Link to this definition">?</a>
+            </dt>
+            <dd>
+             <p>A file migrator for importing passwords from CSV or TSV files. CSV files are more common, so this is what we show as the file type for the display name, but this FileMigrator accepts both.</p>
+            </dd>
+           </dl>
+          </section>
+         </section>
+        </section>
+       </div>
+      </div>
+      <footer>
+       <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="migration-utils.html" class="btn btn-neutral float-left" title="MigrationUtils Reference" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a> <a href="migration-wizard.html" class="btn btn-neutral float-right" title="Migration Wizard Reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+       </div>
+       <hr>
+       <div role="contentinfo">
+        <p></p>
+       </div> Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+      </footer>
+     </div>
+    </div>
+   </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ </body>
+</html>

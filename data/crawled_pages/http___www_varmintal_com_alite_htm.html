@@ -1,0 +1,628 @@
+<html>
+ <head>
+  <meta http-equiv="Content-Language" content="en-us">
+  <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+  <meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+  <meta name="ProgId" content="FrontPage.Editor.Document">
+  <meta name="keywords" content="6PPC, Rifle, Pressure, Deformations, Modal, Barrel, Tuner, animated view, vibration, frequency, Finite, Element, Analysis, structures, LS-DYNA, FEA, mechanical, engineer, engineering, structural">
+  <meta name="Description" content="Finite Element Analysis of the forced deformations and complex vibrations of a Light Rifle with and without a tuner using the LS-DYNA Finite Element Code.">
+  <title>Finite Element Analysis -- Dynamic Analysis of a Light Rifle with/without
+a tuner.</title>
+ </head>
+ <body background="huntbgd.gif" text="#000000" link="#0000FF" vlink="#FF0000">
+  <div align="left">
+   <table bordercolor="#000000" cellspacing="0" bordercolordark="#000080" cellpadding="3" align="left" bgcolor="#FFFFE1" bordercolorlight="#000080" border="1">
+    <tbody>
+     <tr>
+      <td bordercolor="#000080" bordercolorlight="#000080" align="left" bgcolor="#0033CC" bordercolordark="#000080">
+       <p align="center"><b><font face="Arial" color="#FFFFFF" size="4">Page Index</font></b></p></td>
+     </tr>
+     <tr>
+      <td bordercolor="#000080" bordercolorlight="#000080" align="left" bgcolor="#E6FFFF" bordercolordark="#000080">
+       <p align="center"><font face="Arial" size="2"><a href="asubj.htm"><b>Subject Index</b></a></font></p></td>
+     </tr>
+     <tr>
+      <td align="middle" bgcolor="#FFFFD7">
+       <p align="left"><font face="Arial" size="2"><a href="aspon.htm">Sponsors</a><br><a href="ahunt.htm">Coyote Hunting</a><br><a href="coy5-20.htm">Coyote Calling Example</a><br><a href="attac.htm">Coyote Attacks</a><br><a href="avarm.htm">Varmint Hunting</a><br><a href="17hmr.htm">17 HMR Field Testing</a><br><a href="ahunt.htm#Deer_Hunting">Deer Hunting</a><br><a href="ahsto.htm">Many Hunting Stories</a><br><a href="asucc.htm">Hunt Success Stories</a><br><a href="abifu.htm">Make A Bi-Fur-Pod</a><br><a href="arelo.htm">Reloading Page</a><br><a href="ashot.htm">Shooting Page</a><br><a href="atarg.htm">Free Targets</a><br><a href="pburn.htm">Powder Burn Rate</a><br><a href="aflut.htm">Fluted Barrel Analysis</a><br><a href="a22lr.htm">22LR Rifle &amp; Tuner</a><br><a href="aeste.htm">Esten's Rifle &amp; Tuner</a><br><a href="alite.htm">Light Rifle &amp; Tuner</a><br><a href="amode.htm">Barrel Harmonic Movie</a><br><a href="atune.htm">Barrel Tuner Analysis</a><br><a href="apres.htm">6PPC Barrel Dynamics</a><br><a href="amod7.htm">243 Model 7 Action FEA</a><br><a href="abolt.htm">Rifle Action Stress</a><br><a href="abat85.htm">Bat Action Analysis</a><br><a href="a243z.htm">Rifle Chamber Finish</a><br><a href="afric.htm">Friction Test Results</a><br><a href="apoli.htm">Gun Rights &amp; Politics</a><br><a href="abart.htm">Bart our Black Lab</a><br><a href="atide.htm">Tide son of Bart</a><br><a href="aengr.htm">Engineering Page</a><br><a href="arock.htm">Rockwell Hardness FEA</a><br><a href="alath.htm">Mini Lathe Page</a><br><a href="acomp.htm">My Computers Page</a><br><a href="ahamp.htm">Ham Radio Page</a><br><a href="index.htm">Home Page</a><br><a href="apopt.htm">My Father</a><br><a href="abeth.htm">Bethel Island</a><br><a href="aback.htm">Backpacking</a><br><a href="abac3.htm">Winnemucca Lake</a><br><a href="aupda.htm">Latest Updates</a><br><a href="alink.htm">Links Page</a><br><a href="aemail.htm">Email</a></font></p></td>
+     </tr>
+    </tbody>
+   </table>
+  </div>
+  <p align="center"><img border="0" src="varm.gif" alt width="351" height="89"></p>
+  <h2 align="center"><b>FEA (Finite Element Analysis)<br>
+     Rifle Barrel Dynamic Pressure Analysis<br>
+     of a 6PPC Light Rifle With and Without a Muzzle Tuner</b></h2>
+  <div align="center">
+   <center>
+    <table border="0" cellpadding="5" cellspacing="0" bgcolor="#E6FFFF">
+     <tbody>
+      <tr>
+       <td>
+        <p align="center"><a href="#Model">Light Rifle Model</a> | <a href="#Mesh">3-D Mesh</a> | <a href="#Movie">Rifle Movie</a> | <a href="#Pressure">Pressure Curves</a> | <a href="#NoTuner">No Tuner</a> | <a href="#Tuner">Tuner</a> | <a href="#Target">Simulated Target</a> | <a href="#Ladder">Ladder Test</a> | <a href="#Length">20, 22, &amp; 24 in Barrels</a> | <a href="#Modes">Vibration Mode Shapes</a> | <a href="#Built-In">Built-In Tuner</a> | <a href="#Grandpa">Grandpa's Inch</a> | <a href="#Esten">Esten's Tuner</a> | <a href="#Lynn">Lynn's Tuner</a>&nbsp;| <a href="#BarrelLength">Barrel Length vs Accuracy</a> |</p></td>
+      </tr>
+     </tbody>
+    </table>
+   </center>
+  </div>
+  <p><b>OBJECTIVE....</b> The objective of this study was to gain some insight and understanding on what a tuner does to the motions of the rifle barrel and how a muzzle tuner might affect the accuracy of a rifle. The calculation loads simulates the gas pressure traveling up a rifle barrel behind the bullet. The deformations in the rifle and barrel are calculated and then a 100 yard projection of the barrel's muzzle is displayed. I chose the 6PPC caliber because it is the most popular caliber of the benchrest community. I have personally never participated in a benchrest match. However, I am interested in rifle accuracy and how to improve accuracy since varmint hunting also requires very accurate rifles.</p>
+  <p><b>POWERFUL TOOL....</b> This analysis was done with the <a href="http://www.lstc.com/" target="_blank">LS-DYNA Finite Element Code</a>. This software is a very powerful tool for analyzing the dynamic and static loading of structures. It was used here to calculate the rifle's response to the high pressure gas that forces the bullet out of a barrel when it is fired. For early calculations, the breach end of the barrel was fixed in space which treats the barrel as a cantilever beam. The results showed that a more complex model was required to capture the dynamics of the complete rifle. There is a vertical plane of symmetry in the model and only motions in the vertical direction are calculated. In the movies on the <a href="apres.htm">Barrel Dynamics Page</a>, the displacements are greatly amplified so that they can be viewed.</p>
+  <p><a name="Model"><img border="0" src="Light-Rifle-8oz-Tuner.png" width="722" height="186"></a></p>
+  <p><b>THE BARREL....</b> The 416 Stainless Steel 5.23 lb barrel in this model has a breach diameter of 1.25" for 4 inches and then a straight taper to a diameter of 0.9" at a distance of 21". The diameter is 0.9" from there to the end of the barrel at 22". The caliber is 6mm with no rifling modeled. The 8 ounce tuner is 2" long of 416 Stainless Steel. It has an 0.9" ID and the OD is 1.4" and extends 1" beyond the muzzle. The full rifle is in a one G gravitational field to simulate earth's gravity. The muzzle sag is calculated with the Implicit method using dynamic relaxation . Then the dynamic calculation proceeds with the pressure time data using Explicit method. The burning powder's gas pressure is applied to the chamber walls and the bolt face. The barrel's chamber is the size of the 6PPC caliber brass. But for the calculation, I did not include the brass case and merely applied the pressure to the bolt face and the chamber walls.</p>
+  <p><b>THE ACTION....</b> The action is 1.25 inches in diameter and is 7.2 inches long. The weight of the action is 2 pounds. The bolt is merged into the action's cylinder. The gas pressure acts on the bolt face. Since there is no bolt, there is also no bolt handle.</p>
+  <p><b>THE SCOPE AND RINGS....</b> The scope weighs approximately 20 oz and is aluminum with a 0.1 inch wall thickness. There is a simulated lens in both the eyepiece and the objective to stiffen the otherwise open ends. The scope rings are also aluminum and are bonded to the action and scope.</p>
+  <p><b>THE STOCK....</b> The stock has the mechanical properties of wood. The action is "glued in" to the stock and the barrel is completely free floated. The stock is supported at two places, one 2" section near the butt and another 2" section on the forearm that is 9" forward of the bolt face. The complete rifle is allowed free recoil, that is no shooter's shoulder is modeled.&nbsp;</p>
+  <p><b>THE 8 OZ TUNER....</b> The 1.4 inch diameter 8 oz tuner is 2 inches long with 0.9 inch diameter bore. One inch of the tuner is bonded to the barrel's last inch, to simulate a threaded joint, and there is one inch of overhang past the muzzle. The mechanical properties of the tuner are that of 416 Stainless Steel.</p>
+  <p align="center"><b>Light Rifle Weight Summary</b></p>
+  <div align="center">
+   <center>
+    <table border="1" cellpadding="2" cellspacing="0" bordercolor="#000080" bordercolorlight="#000080" bordercolordark="#000080" bgcolor="#CCFFFF">
+     <tbody>
+      <tr>
+       <td align="center" bgcolor="#00FFFF"><b>Item</b></td>
+       <td align="center" bgcolor="#00FFFF"><b>No Tuner<br>
+          (lb)</b></td>
+       <td align="center" bgcolor="#00FFFF"><b>8 oz Tuner<br>
+          (lb)</b></td>
+      </tr>
+      <tr>
+       <td align="center">Barrel</td>
+       <td align="center">5.234</td>
+       <td align="center">5.234</td>
+      </tr>
+      <tr>
+       <td align="center">Action</td>
+       <td align="center">1.500</td>
+       <td align="center">1.500</td>
+      </tr>
+      <tr>
+       <td align="center">Stock</td>
+       <td align="center">3.014</td>
+       <td align="center">3.014</td>
+      </tr>
+      <tr>
+       <td align="center">Scope</td>
+       <td align="center">1.246</td>
+       <td align="center">1.246</td>
+      </tr>
+      <tr>
+       <td align="center">Lens</td>
+       <td align="center">0.0156</td>
+       <td align="center">0.0156</td>
+      </tr>
+      <tr>
+       <td align="center">Mounts</td>
+       <td align="center">0.0526</td>
+       <td align="center">0.0526</td>
+      </tr>
+      <tr>
+       <td align="center">Tuner</td>
+       <td align="center">0.0</td>
+       <td align="center">0.500</td>
+      </tr>
+      <tr>
+       <td align="center" bgcolor="#00FFFF"><b>Total</b></td>
+       <td align="center" bgcolor="#00FFFF"><b>11.354</b></td>
+       <td align="center" bgcolor="#00FFFF"><b>11.854</b></td>
+      </tr>
+     </tbody>
+    </table>
+   </center>
+  </div>
+  <p><a name="Mesh"><img border="0" src="light-rifle-mesh.png" width="702" height="376"></a></p>
+  <p><b>THE 3-D MESH....</b> This view shows the mesh detail. Only half of the mesh is actually in the calculation. There is a vertical plane of symmetry (X-Z Plane) down the bore axis and the center of the stock. The mesh is reflected across this plane for the for this 3-D mesh picture. The boundary condition for the calculation forced all nodes on the symmetry plane to remain on the plane, but the nodes are allowed to move while remaining on the plane. For the 3-D model without a tuner, there are 17,196 nodes and 12,080 elements. For the model with the tuner, there are 18,055 nodes and 12,656 elements. Every microsecond of pressure vs time data, the conditions of the model were stored for post-processing to generate the curves.</p>
+  <div align="center">
+   <center>
+    <table border="0" cellpadding="5" cellspacing="0" bgcolor="#E6FFFF">
+     <tbody>
+      <tr>
+       <td><b>CONCLUSION....</b> Maybe the "consensus" was that a rifle barrel vibrated in one or more of the mode shapes when fired. Maybe that was because the mode shapes and frequencies were easy to calculate and they did seem to answer some of the questions. From these dynamic pressure calculations, it appears that the forced deformations and recoil are much more important than the natural vibration modes in determining where a barrel is pointing. Put another way, consider a guitar string being plucked. One pulls the string into a position (forced position) then releases it and the string vibrates at is natural frequency. The chamber pressure and recoil forces the rifle barrel to a new shape and once the bullet leaves the barrel, then the barrel vibrates. However, the addition of the scope to the model has shown some small high frequency vibrations superimposed on the forced deformations, which only slightly alter where the muzzle points before the bullet exits. For decreasing group size, it appears that even an "out of tune" tuner is better than no tuner at all.&nbsp; 
+        <div align="center">
+         <table border="0" cellpadding="5" cellspacing="0" bgcolor="#CCFFFF">
+          <tbody>
+           <tr>
+            <td bgcolor="#99FFCC"><b><i>Larger Groups Without a Tuner:<br></i></b><i><b>Summary:<br>
+                Higher velocity shots exit early while pointing higher at the target and drop less in reaching the target.<br>
+                Lower velocity shots exit later while&nbsp; pointing lower at the target and drop more in reaching the target.<br>
+                Bad additive combination</b></i>.</td>
+           </tr>
+           <tr>
+            <td bgcolor="#66FFFF"><b><i>Smaller Groups With a Tuner:<br>
+                Summary:<br>
+                Higher velocity shots exit early while pointing lower at the target but drop less in reaching the target.<br>
+                Lower velocity shots exit later while&nbsp; pointing higher at the target but drop more in reaching the target.<br>
+                Counteracting combination.</i></b></td>
+           </tr>
+          </tbody>
+         </table>
+        </div></td>
+      </tr>
+     </tbody>
+    </table>
+   </center>
+  </div>
+  <p align="center"><img border="0" src="coyotel.gif" width="87" height="49"></p>
+  <p align="center"><font color="#000080" size="5" face="Arial Rounded MT Bold"><a name="Movie">Light Rifle - Dynamic Response During Firing</a></font></p>
+  <p><img border="0" src="fine-rifle-no-tuner-movie.gif" width="529" height="107"><br><b>MOVIE: NO TUNER....</b> This movie clip shows the powder's gas pressure traveling up the barrel at 1/4 inch increments. The deformations have been amplified by 500X so one can see the motions more clearly. If the deformations were not amplified the movie would show no motion and only the stress color fringes. These movies were calculated with an earlier pressure curve that delivered a 3685 muzzle velocity. Also gravity was not present since the barrel's downward sag amplified by 500X would obscure viewing the barrel motions. Note that the bolt moves aft a few mils from the chamber pressure. See <a href="abolt.htm">Panda Bolt Page</a>. When the few mils is amplified by 500X, it looks like a big hole in the receiver.</p>
+  <p><img border="0" src="fine-rifle-no-tuner-movie-scale1.gif" width="416" height="96"><br><b>MOVIE: NO TUNER....</b> This movie clip is the same as above, but the deformations are not amplified and are shown full scale at 1X. The scope's objective doesn't really hit the barrel and the rifle doesn't really recoil off the bench!</p>
+  <p><img border="0" src="no-tuner-at-exit-time.png" width="95" height="78"><br><b>MUZZLE AT EXIT....</b> This picture shows the orientation of the muzzle at the time of bullet exit, approximately 0.00092 seconds. It is pointing slightly below the original bore axis and is rapidly moving downward. The deformations are amplified by 500X.</p>
+  <p align="center"><img border="0" src="coyotel.gif" width="87" height="49"></p>
+  <p align="center"><font color="#000080" size="5" face="Arial Rounded MT Bold">Light Rifle &amp; 8 oz Tuner - Dynamic Response During Firing</font></p>
+  <p><img border="0" src="fine-rifle-tuner-movie.gif" width="529" height="107"><br><b>MOVIE: 8 OZ TUNER....</b> This movie clip shows the powder's gas pressure traveling up the barrel. The deformations have been amplified by 500X so one can see the motions more clearly.</p>
+  <p><img border="0" src="tuner-at-exit-time.png" width="163" height="92"><br><b>MUZZLE &amp; TUNER AT EXIT....</b> This picture shows the orientation of the muzzle at the time of bullet exit, approximately 0.00092 seconds. It is pointing upward and the projection to the 100 yard target is still climbing. The projection stays near this position for about 0.0001 second. See the charts below. The deformations are amplified by 500X.</p>
+  <p>&nbsp;</p>
+  <p align="center"><font color="#000080" size="5" face="Arial Rounded MT Bold"><a name="NoTuner">Five Shot Groups Light Rifle With/Without A Tuner</a><br></font><img border="0" src="Light-Rifle-No-Tuner.gif" width="287" height="76"> <font face="Arial Rounded MT Bold" size="7">vs</font> <img border="0" src="Light-Rifle-8oz-Tuner.gif" width="289" height="75"></p>
+  <p align="left"><b>LIGHT RIFLE FEA MODEL....</b> The rifle weighs 11.35 lb and has a 5.23 lb barrel that is 1.25" diameter at the breach and out to 4" from the breach. There is a straight taper to 1" from the muzzle where the diameter of the barrel is 0.9". The last inch of the barrel has a constant diameter of 0.9" so an 8 ounce tuner can be installed (numerically). The 8 ounce 416 stainless steel tuner is 2" long with a bore diameter of 0.9" and an outer diameter of 1.4". The action cylinder is 1.25" in diameter with a core that serves as a bolt where the chamber pressure acts. The chamber is the dimensions of a 6PPC brass. The FEA model has a vertical plane of symmetry down the bore axis and nodes on this vertical plane are constrained to move on the plane. The five 6PPC pressure vs time curves were used to load these two models and the results of group size are shown below.</p>
+  <p><font color="#000080" size="5" face="Arial Rounded MT Bold"><a name="Pressure">Five Separate Pressure vs Time Data</a></font></p>
+  <p><img border="0" src="6ppc-input-5-shots-small.png" width="508" height="240"><br><b>6PPC PRESSURE CURVES....</b> I received permission form <a href="http://www.shootingsoftware.com/pressure.htm" target="_blank">Recreational Software, Inc</a> to use their 6PPC Pressure vs Time data. I downloaded the Free Pressure Trace software in demo mode. Included in the download is the sample five shot pressure vs time curves for a 6PPC out of a clean cold barrel shooting the 70 gr Nosler Ballistic Tips (Moly) bullets. I was able to extract the 249 points of digital data from the file for each of the five curves. I create 5 separate pressure loading curves for the Finite Element model of the full rifle.</p>
+  <p><font color="#000080" size="5" face="Arial Rounded MT Bold">Rifle with No Tuner Results:<br></font><img border="0" src="five-shots-light-rifle-22in-bbl-no-tuner-100yd.png" width="640" height="480"><br><img border="0" src="Light-Rifle-No-Tuner.gif" width="287" height="76"><br><b>MUZZLE PROJECTION NO TUNER....</b> This Muzzle Projection Curve (MPG) shows where the muzzle is pointing on a 100 yard target vs time. The colored dots show where the muzzle is pointing for each shot at bullet&nbsp; exit time. The sag due to gravity causes the muzzle to point 0.6461 inches lower than it would in zero gravity. The muzzle projection is on a rapid downward swing at the bullet exit time for each shot. The highest velocity shot exits early while the barrel is pointing high at the target. The two lowest velocity shots exit later while the barrel is pointing low. This combination leads to a larger vertical spread in the group size at 100 yards.<br></p>
+  <p>&nbsp;</p>
+  <p><font color="#000080" size="5" face="Arial Rounded MT Bold"><a name="Tuner">Rifle with 8 oz Tuner Results:</a><br></font><img border="0" src="five-shots-light-rifle-22in-bbl-8oz-tuner-100yd.png" width="640" height="480"><br><img border="0" src="Light-Rifle-8oz-Tuner.gif" width="289" height="75"><br><b>MUZZLE PROJECTION 8 OZ TUNER....</b>&nbsp; With the 8 oz Tuner the sag due to gravity causes the muzzle to point 0.8613 inches lower than in zero gravity. Using the same five pressure curves and with an 8 oz tuner, the muzzle projection is on or near an upward peak at the bullet exit time for each of the shots even though there is a large variation in the pressure curves and muzzle velocity. Unlike the case with no tuner, the highest velocity shot does not exit with the muzzle pointing to the highest position on the target. The maximum spread is only 0.0698 inches compared to 0.1645 inches for the case with no tuner.</p>
+  <p><a name="Target"><img border="0" src="five-shot-light-rifle-simulated-target.png" width="640" height="480"></a><br><b>SIMULATED 100 YARD TARGET....</b> This graph summarizes the data by showing where the barrel is pointing at the 100 yard target at the time the bullet exits the muzzle (top row). The bottom row shows where each bullet would strike the target by including the bullet drop due to the bullet's flight and the drop due to the downward velocity of the muzzle as the bullet exits. The bullet impact points are shown with small colored dots that are not to scale. The actual size of the bullet holes would have obscured where each bullet would have hit.</p>
+  <p align="center"><b>Table 1: Muzzle Projected to a 100 Yard Target<br>
+     Light 11.35 lb Rifle ---&nbsp; 5.23 lb BBL Breach 1.25" Dia Muzzle Dia 0.9" lb 22" Long</b></p>
+  <div align="center">
+   <center>
+    <table border="1" cellpadding="5" cellspacing="0" bordercolor="#000080" bordercolorlight="#000080" bordercolordark="#000080" bgcolor="#CCFFFF">
+     <tbody>
+      <tr>
+       <td bgcolor="#66FFFF" align="center"><b>Shot No.</b></td>
+       <td bgcolor="#66FFFF" align="center"><b>Muzzle Velocity<br>
+          (fps)</b></td>
+       <td bgcolor="#66FFFF" align="center"><b>Bullet Exit Time<br>
+          (seconds)</b></td>
+       <td bgcolor="#66FFFF" align="center"><b>POI No Tuner<br>
+          (inch)</b></td>
+       <td bgcolor="#66FFFF" align="center"><b>POI 8 oz Tuner<br>
+          (inch)</b></td>
+      </tr>
+      <tr>
+       <td align="center">1</td>
+       <td align="center">3407</td>
+       <td align="center">0.0009587</td>
+       <td align="center">-0.2747</td>
+       <td align="center">-0.3081</td>
+      </tr>
+      <tr>
+       <td align="center">2</td>
+       <td align="center">3304</td>
+       <td align="center">0.0009543</td>
+       <td align="center">-0.2403</td>
+       <td align="center">-0.2661</td>
+      </tr>
+      <tr>
+       <td align="center">3</td>
+       <td align="center">3685</td>
+       <td align="center">0.0009153</td>
+       <td align="center">-0.1102</td>
+       <td align="center">-0.3358</td>
+      </tr>
+      <tr>
+       <td align="center">4</td>
+       <td align="center">3423</td>
+       <td align="center">0.0009413</td>
+       <td align="center">-0.1840</td>
+       <td align="center">-0.2793</td>
+      </tr>
+      <tr>
+       <td align="center">5</td>
+       <td align="center">3481</td>
+       <td align="center">0.0009283</td>
+       <td align="center">-0.1235</td>
+       <td align="center">-0.2773</td>
+      </tr>
+      <tr>
+       <td align="center" colspan="3" bgcolor="#00FFFF"><b>Maximum Spread Muzzle Projection</b></td>
+       <td align="center"><b>0.1645</b></td>
+       <td align="center"><b>0.0689</b></td>
+      </tr>
+     </tbody>
+    </table>
+   </center>
+  </div>
+  <p align="center">&nbsp;</p>
+  <p align="center"><b>Table 2: Bullet Drop due to the Muzzle's Downward Velocity<br>
+     at the Time of Bullet Exit</b></p>
+  <div align="center">
+   <center>
+    <table border="1" cellpadding="5" cellspacing="0" bgcolor="#CCFFFF" bordercolor="#000080" bordercolorlight="#000080" bordercolordark="#000080" height="236">
+     <tbody>
+      <tr>
+       <td align="center" bgcolor="#66FFFF" height="38"><b>Shot No.</b></td>
+       <td align="center" bgcolor="#66FFFF" height="38"><b>Muzzle<br>
+          Velocity<br>
+          (fps)</b></td>
+       <td align="center" bgcolor="#66FFFF" height="38"><b>Bullet Time<br>
+          of Flight<br>
+          (sec)</b></td>
+       <td align="center" bgcolor="#66FFFF" height="38"><b>No Tuner<br>
+          Muzzle Vertical<br>
+          Velocity<br>
+          (inch/sec)</b></td>
+       <td align="center" bgcolor="#66FFFF" height="38"><b>8&nbsp; oz Tuner<br>
+          Muzzle Vertical<br>
+          Velocity<br>
+          (inch/sec)</b></td>
+       <td align="center" bgcolor="#66FFFF" height="38"><b>No Tuner<br>
+          Downward Velocity<br>
+          Bullet Drop (inch)</b></td>
+       <td align="center" bgcolor="#66FFFF" height="38"><b>8 oz Tuner<br>
+          Downward Velocity<br>
+          Bullet Drop (inch)</b></td>
+      </tr>
+      <tr>
+       <td align="center" height="19">1</td>
+       <td align="center" height="19">3407</td>
+       <td align="center" height="19">0.093</td>
+       <td align="center" height="19">-3.760</td>
+       <td align="center" height="19">-0.8096</td>
+       <td align="center" height="19">-0.350</td>
+       <td align="center" height="19">-0.075</td>
+      </tr>
+      <tr>
+       <td align="center" height="19">2</td>
+       <td align="center" height="19">3304</td>
+       <td align="center" height="19">0.096</td>
+       <td align="center" height="19">-4.005</td>
+       <td align="center" height="19">-0.9000</td>
+       <td align="center" height="19">-0.384</td>
+       <td align="center" height="19">-0.086</td>
+      </tr>
+      <tr>
+       <td align="center" height="19">3</td>
+       <td align="center" height="19">3685</td>
+       <td align="center" height="19">0.086</td>
+       <td align="center" height="19">-1.785</td>
+       <td align="center" height="19">-0.2074</td>
+       <td align="center" height="19">-0.154</td>
+       <td align="center" height="19">-0.018</td>
+      </tr>
+      <tr>
+       <td align="center" height="19">4</td>
+       <td align="center" height="19">3423</td>
+       <td align="center" height="19">0.092</td>
+       <td align="center" height="19">-3.413</td>
+       <td align="center" height="19">-0.7103</td>
+       <td align="center" height="19">-0.316</td>
+       <td align="center" height="19">-0.066</td>
+      </tr>
+      <tr>
+       <td align="center" height="19">5</td>
+       <td align="center" height="19">3481</td>
+       <td align="center" height="19">0.091</td>
+       <td align="center" height="19">-2.821</td>
+       <td align="center" height="19">-0.4853</td>
+       <td align="center" height="19">-0.257</td>
+       <td align="center" height="19">-0.044</td>
+      </tr>
+     </tbody>
+    </table>
+   </center>
+  </div>
+  <p align="center">&nbsp;</p>
+  <p align="center"><b>Table 3: Muzzle Projected to a 100 Yard Target<br>
+     Plus the Bullet Drop Calculated from the Muzzle Velocity<br>
+     and Downward Muzzle Velocity</b></p>
+  <div align="center">
+   <center>
+    <table border="1" cellpadding="5" cellspacing="0" bgcolor="#CCFFFF" bordercolor="#000080" bordercolorlight="#000080" bordercolordark="#000080" height="236">
+     <tbody>
+      <tr>
+       <td align="center" bgcolor="#66FFFF" height="38"><b>Shot No.</b></td>
+       <td align="center" bgcolor="#66FFFF" height="38"><b>Muzzle<br>
+          Velocity<br>
+          (fps)</b></td>
+       <td align="center" bgcolor="#66FFFF" height="38"><b>Bullet Flight Drop<br>
+          in 100 Yd<br>
+          (inch)</b></td>
+       <td align="center" bgcolor="#66FFFF" height="38"><b>No Tuner<br>
+          Including<br>
+          Bullet Drop<br>
+          (inch)</b></td>
+       <td align="center" bgcolor="#66FFFF" height="38"><b>8 oz&nbsp; Tuner<br>
+          Including<br>
+          Bullet Drop<br>
+          (inch)</b></td>
+      </tr>
+      <tr>
+       <td align="center" height="19">1</td>
+       <td align="center" height="19">3407</td>
+       <td align="center" height="19">-1.5724</td>
+       <td align="center" height="19">-2.1967</td>
+       <td align="center" height="19">-1.9558</td>
+      </tr>
+      <tr>
+       <td align="center" height="19">2</td>
+       <td align="center" height="19">3304</td>
+       <td align="center" height="19">-1.6702</td>
+       <td align="center" height="19">-2.2950</td>
+       <td align="center" height="19">-2.0227</td>
+      </tr>
+      <tr>
+       <td align="center" height="19">3</td>
+       <td align="center" height="19">3685</td>
+       <td align="center" height="19">-1.3397</td>
+       <td align="center" height="19">-1.6034</td>
+       <td align="center" height="19">-1.6933</td>
+      </tr>
+      <tr>
+       <td align="center" height="19">4</td>
+       <td align="center" height="19">3423</td>
+       <td align="center" height="19">-1.5569</td>
+       <td align="center" height="19">-2.0566</td>
+       <td align="center" height="19">-1.9019</td>
+      </tr>
+      <tr>
+       <td align="center" height="19">5</td>
+       <td align="center" height="19">3481</td>
+       <td align="center" height="19">-1.5044</td>
+       <td align="center" height="19">-1.8846</td>
+       <td align="center" height="19">-1.8258</td>
+      </tr>
+      <tr>
+       <td colspan="3" align="center" bgcolor="#66FFFF" height="19"><b>Maximum Spread Including Bullet Drop</b></td>
+       <td align="center" height="19" bgcolor="#66CCFF"><b>0.6915</b></td>
+       <td align="center" height="19" bgcolor="#66CCFF"><b>0.3293</b></td>
+      </tr>
+     </tbody>
+    </table>
+   </center>
+  </div>
+  <p align="left"><b>ADDING IT ALL TOGETHER....</b> Here are the results for the two Light Rifles firing the same five shot pressure curves. After including where the muzzle is pointing at the 100 yard target, the bullet drop for each shot's muzzle velocity, and finally the downward velocity of the swing of the muzzle as the bullet exits, the results show that the barrel without a tuner would shoot a <b>0.6915</b> inch vertical spread group and the same five shots with a 8 ounce tuner would shoot a <b>0.3293</b> inch vertical spread group. The 8 ounce tuner gave a 52% reduction in group size.</p>
+  <p align="center"><font color="#000080" size="5" face="Arial Rounded MT Bold"><a name="Ladder">Ladder Test with Light Rifle FEA Model</a></font></p>
+  <p align="left"><b>LADDER TEST....</b> It appears that the "Muzzle Projection Curve" (MPC) tends to explains what is going on in the Ladder or "Audette" test. Starting with a low velocity load muzzle exit would be on the right side of the MPC peak. As the muzzle velocity is increased, the exit point moves to the left and finally with higher velocity, up over the peak. When the shots show a grouping, they would exit near the left side of the peak. But, it is not that simple because the MPC peak also moves to the left with the higher pressure loads that result in higher velocity. However the peak in the MPC moves to the left at a slower rate than the bullet exit points. So it is a little like a dog chasing its tail. One thing the 300 yd Ladder Test does it that it amplifies the bullet drop more than where the muzzle is pointing. The muzzle pointing is line-of-sight and therefore linear but the bullet drop during the Time Of Flight (TOF) is not linear with distance.</p>
+  <p align="left"><img border="0" src="ladder2-test-100yd.png" width="640" height="480"><br><b>LADDER TEST CALCULATION....</b> Here are the points of impact for the Light Rifle with a 22" barrel and no tuner. The Pressure Curve T4 was used and scaled to give muzzle velocities of from 3300 to 3600 fps. For this calculation the pressure was applied to the chamber and each 1/4" of barrel length as the base of the bullet arrived. It appears that the best load for this model would be at 3450 fps where velocity variations of 75 fps had impact points separated by only 0.004".</p>
+  <p align="center"><font color="#000080" size="5" face="Arial Rounded MT Bold"><a name="Length">Barrel Lengths of 20, 22, and 24 inches</a></font></p>
+  <p align="left"><b>THREE BARREL LENGTHS....</b> Here is a barrel length comparisons of 20, 22, and 24 inch barrels with and without an 8 oz tuner. Each barrel had a 1.25" breach diameter for 4" and then a straight taper to one inch from the muzzle where the diameter was 0.9". The last inch of each barrel was 0.9" in diameter. It is interesting that the short 20 inch barrel's spread in pointing at the 100 yard target was small, but the velocity of the muzzle's vertical swing had a large variation which increased the vertical spread. The 8 oz tuner (which I should probably be calling a muzzle mass) helped, however the 20 in barrel had the poorest showing.<br>
+    I included the Light Rifle 22 in barrel data from the above calculation.<br>
+    The interesting results were for the 24 inch barrel. With the 8 oz tuner, the bullet exits were quite a bit left of the peak on the MPC. The higher velocity shots exited when the barrel was pointing quite a bit lower than the average velocity shots. This resulted in the smallest vertical spread at the 100 yd target.</p>
+  <p align="center"><b>Table: Summary of Barrel Length Results<br>
+     Virtual Group Size on 100 Yard Target</b></p>
+  <div align="center">
+   <center>
+    <table border="1" cellpadding="5" cellspacing="0" bordercolor="#000080" bordercolorlight="#000080" bordercolordark="#000080" bgcolor="#CCFFFF">
+     <tbody>
+      <tr>
+       <td bgcolor="#66FFFF" align="center"><b>Barrel<br>
+          Length<br>
+          (in)</b></td>
+       <td bgcolor="#66FFFF" align="center"><b>Group Size<br>
+          Bare Barrel<br>
+          (in)</b></td>
+       <td bgcolor="#66FFFF" align="center"><b>Group Size<br>
+          8 oz Tuner<br>
+          (in)</b></td>
+      </tr>
+      <tr>
+       <td align="center">20</td>
+       <td align="center">0.7200</td>
+       <td align="center">0.4155</td>
+      </tr>
+      <tr>
+       <td align="center">22</td>
+       <td align="center">0.6915</td>
+       <td align="center">0.3293</td>
+      </tr>
+      <tr>
+       <td align="center">24</td>
+       <td align="center">0.5734</td>
+       <td align="center">0.2115</td>
+      </tr>
+     </tbody>
+    </table>
+   </center>
+  </div>
+  <blockquote>
+   <p align="left"><b>For each calculated shot's POI, the following is calculated:<br>
+      1. Pressure curve scaled for the correct Muzzle Velocity<br>
+      2. Bullet exit time<br>
+      3. Drop during the flight to the target<br>
+      4. Muzzle vertical velocity transmitted to the bullet at exit<br>
+      5. Time of Flight (TOF)<br>
+      6. Bullet vertical displacement from 4. during the TOF<br>
+      7. Muzzle's projection to the 100 Yd Target</b></p>
+  </blockquote>
+  <p align="left">Putting it all together the Vertical Spread at the Virtual 100 Yd target was calculated and a Muzzle Projection Curve was plotted.</p>
+  <p align="left"><img border="0" src="five-shots-20in-bbl-no-tuner-100yd.png" width="640" height="480"><br><img border="0" src="five-shots-20in-bbl-8oz-tuner-100yd.png" width="640" height="480"><br><b>NO TUNER....</b> High velocity shots (green dot) exit the muzzle when it is pointing high. Low velocity shots (red and orange dots) exit when the barrel is pointing low.<br><b>8 OZ TUNER....</b> Better, but the muzzle's pointing to the 100 yd target is swinging downward and the variation in the vertical velocity leads the the larger vertical spread.</p>
+  <p align="left">&nbsp;</p>
+  <p align="left"><img border="0" src="five-shots-light-rifle-22in-bbl-no-tuner-100yd.png" width="640" height="480"><br><img border="0" src="five-shots-light-rifle-22in-bbl-8oz-tuner-100yd.png" width="640" height="480"></p>
+  <p align="left">&nbsp;</p>
+  <p align="left"><img border="0" src="five-shots-24in-bbl-no-tuner-100yd.png" width="640" height="480"><br><img border="0" src="five-shots-24in-bbl-8oz-tuner-100yd.png" width="640" height="480"><br>
+    With the 8 oz tuner, the bullet exits were quite a bit left of the peak on the MPC. The higher velocity shot (green dot) exited when the barrel was pointing quite a bit lower than the average velocity shots. This resulted in the smallest vertical spread of the three barrel lengths at the 100 yd target.<br><br><b>WHAT A TUNER DOES....</b> A Tuner appears to compensates for variations in muzzle velocity. It slow down the movement of the muzzle so that with safe loadings, one can be on the left side of the MPC at bullet exit time. It will also reduce the high frequency jitter at the muzzle because if its inertia.</p>
+  <p align="center"><img border="0" src="coyotel.gif" width="87" height="49"></p>
+  <p align="center"><font color="#000080" size="5" face="Arial Rounded MT Bold"><a name="Modes">Mode Shapes and Natural Frequencies</a></font></p>
+  <div align="center">
+   <center>
+    <table border="0" cellpadding="5" cellspacing="0">
+     <tbody>
+      <tr>
+       <td align="center"><img border="0" src="lite-mode1.gif" width="372" height="100"><br><b>Mode 1</b> @ 143.5 Hz</td>
+       <td align="center"><img border="0" src="lite-mode2.gif" width="372" height="100"><br><b>Mode 2</b> @ 340.9 Hz</td>
+      </tr>
+      <tr>
+       <td align="center"><img border="0" src="lite-mode3.gif" width="372" height="100"><br><b>Mode 3</b> @ 394.1 Hz</td>
+       <td align="center"><img border="0" src="lite-mode4.gif" width="372" height="100"><br><b>Mode 4</b> @ 424.9 Hz</td>
+      </tr>
+      <tr>
+       <td align="center"><img border="0" src="lite-mode5.gif" width="372" height="100"><br><b>Mode 5</b> @ 727.7 Hz</td>
+       <td align="center"><img border="0" src="lite-mode6.gif" width="372" height="100"><br><b>Mode 6</b> @ 1033 Hz</td>
+      </tr>
+      <tr>
+       <td align="center"><img border="0" src="lite-mode7.gif" width="372" height="100"><br><b>Mode 7</b> @ 1263 Hz</td>
+       <td align="center"><img border="0" src="lite-mode8.gif" width="372" height="100"><br><b>Mode 8</b> @ 1861 Hz</td>
+      </tr>
+     </tbody>
+    </table>
+   </center>
+  </div>
+  <p><b>FIRST 8 MODES....</b> Here are the mode shapes and natural frequencies of the 11.35 lb Light Rifle. I only show the first 8 Mode of vibration. The addition of the scope and a more realistic rifle stock added a number of lower natural frequencies and their mode shapes. The boundary conditions are Free-Free. This is as if the rifle were suspended in space with zero gravity.</p>
+  <p align="center"><img border="0" src="coyotel.gif" width="87" height="49"></p>
+  <p align="center"><font color="#000080" size="5" face="Arial Rounded MT Bold"><a name="Built-In">More Barrel Shapes &amp; Configurations</a></font></p>
+  <p><img border="0" src="light-rifle-cont1-100yd.png" width="640" height="480"><br><img border="0" src="cont1-muzzle.png" width="471" height="163"><br><b>A DIFFERENT BARREL CONTOUR....</b> Here are the details for the barrel contour:<br>
+    1.250" dia 0 to 4"<br>
+    Straight taper to 19" dia 0.8"<br>
+    0.8" dia from 19 to 20.75"<br>
+    1.0" dia from 21 to 22" muzzle.<br>
+    What I call Contour One with Heavy Muzzle.<br>
+    Barrel weighs 5.026 lb.<br>
+    This barrel contour has a machined in place muzzle tuner and puts the peak in the Muzzle Projection Curve (MPC) near the muzzle exit time without excessive pressures. If I calculated correctly, the 1" muzzle diameter at 22 inches from the bolt face is within the barrel rules.</p>
+  <p align="center"><a name="Grandpa"><img border="0" src="coyotel.gif" width="87" height="49"></a></p>
+  <p><img border="0" src="weak-middle-bb-at-100ydl.png" width="640" height="480"><br><img border="0" src="weak-middle-bbl.png" width="702" height="212"><br><b>GRANDPA'S INCH....</b> Interesting barrel contour. Here is a Weak Middle barrel. It is 1.250" out to 4" from the bolt face, a straight taper to 0.8" at 14" and finally a straight taper up to 1.0" at the 22" muzzle and weighs 4.76 lb. The vertical spread is 0.4523" at 100 yards. It's pointing for the highest and lowest velocity shot is almost identical. What makes the spread is that the lower velocity bullet drops so much more than the higher velocity bullet. It would be interesting to have a few more uniform pressure curves to use. This contour looks like it might have possibilities.</p>
+  <p align="center"><img border="0" src="coyotel.gif" width="87" height="49"></p>
+  <p align="center"><a name="Esten"><img border="0" src="esten-tuner-pic.jpg" width="459" height="305"></a><br><b><font face="Arial Rounded MT Bold" size="5">Esten's Tuner<br></font><font face="Arial Rounded MT Bold" size="3">See <a href="aeste.htm">Esten's Rifle Page</a></font></b></p>
+  <p><img border="0" src="eston-tuner-shot-4-3423fps.png" width="640" height="480"><br><img border="0" src="tune1-model-barrel.png" width="702" height="196"><br><img border="0" src="tune1-model-zoom.png" width="362" height="250"><br><b>ESTEN'S TUNER....</b> Three calculations were with the Shot 4 pressure curve. The curves show the effects of adding the tuner base and the base plus the brass weight. It looks like the Brass Weight might be more than necessary with ammo at about 3423 fps and a small standard deviation on muzzle velocity.<br><br>
+    Barrel = 5.39 lb<br>
+    Stainless Steel Muzzle Base = 6.90 oz<br>
+    Brass Weight = 6.86 oz<br><br><img border="0" src="eston-tuner-shot-4-3423fps-mvd.png" width="640" height="480"><br><b>SLOWS MUZZLE'S VERTICAL VELOCITY....</b> The muzzle's vertical velocity&nbsp; is transmitted to the bullet as it exits the barrel. A smaller value will give less vertical spread at the target for velocity variations from shot to shot. Also remember that the Muzzle Projection Curves (MPC) are NOT barrel movement, but are where the last 1/2 inch of the muzzle is pointing at the 100 yard target as time progresses. There is a combination of muzzle vertical movement, stock movement, and angle of exit that is included in the projection to the 100 yard target. I think the MPC is the best way to evaluate how the barrel responds and what the tuner does. If I only charted the muzzle movement and exit angle it would difficult to understand what it would mean at the target.</p>
+  <p align="center"><img border="0" src="coyotel.gif" width="87" height="49"></p>
+  <p align="center"><font face="Arial Rounded MT Bold" size="5"><b><a name="Lynn">Lynn's 28.5" Long Range Rifle</a></b></font></p>
+  <p><img border="0" src="lynn-full-rifle.png" width="717" height="169"><br><b>THE RIFLE....</b> The 6 BR caliber rifle weighs 16.3 pounds with the 2 oz aluminum tuner base and the 6 oz sleeve. The weights are 8 oz shaft collars that are held in position with a setscrew. Lynn is shooting a 103 gr bullet at 2970 fps which by my calculations exits the muzzle at 0.00126678 seconds.</p>
+  <p><img border="0" src="lynn-muzzle-base-sleeve-shaftcollar2.png" width="372" height="227"><br><b>CLOSE UP OF THE MUZZLE....</b> The muzzle has a aluminum tuner base (blue) with a stainless steel sleeve (gray) screwed on and bonded with epoxy. The 8 oz shaft collars (yellow) can be added to the sleeve and secured with a setscrew.</p>
+  <p><img border="0" src="lynn1to5-100yd.png" width="640" height="480"><br><b>MUZZLE PROJECTED TO 100 YD....</b> I calculated where the muzzle is pointing while the rifle is being fired. The dotted line shows when the bullet exits the muzzle. The curves show where last 0.5 inch of the muzzle is pointing vs time. Included in this projection is the vertical deflection of the muzzle and the angle of exit both projected to 100 yards.&nbsp; In zero gravity the bore axis points to zero on the target. The muzzle sag is first calculated due to gravity before the chamber pressure is applied. The graph shows where the muzzle is pointing at the target due to the sag caused by gravity.</p>
+  <p align="center"><b>Table: Effects Gravity over Zero Gravity</b></p>
+  <div align="center">
+   <center>
+    <table border="1" cellpadding="5" cellspacing="0" bordercolor="#000080" bordercolorlight="#000080" bordercolordark="#000080" bgcolor="#CCFFFF">
+     <tbody>
+      <tr>
+       <td bgcolor="#66FFFF" align="center"><b>Curve</b></td>
+       <td bgcolor="#66FFFF" align="center"><b>Muzzle Sag<br>
+          due to Gravity<br>
+          (in)</b></td>
+       <td bgcolor="#66FFFF" align="center"><b>Muzzle Points to<br>
+          100 Yd Target<br>
+          due to Gravity</b></td>
+      </tr>
+      <tr>
+       <td align="center">red</td>
+       <td align="center">-0.00880</td>
+       <td align="center">-1.348</td>
+      </tr>
+      <tr>
+       <td align="center">green</td>
+       <td align="center">-0.00917</td>
+       <td align="center">-1.421</td>
+      </tr>
+      <tr>
+       <td align="center">blue</td>
+       <td align="center">-0.01049</td>
+       <td align="center">-1.683</td>
+      </tr>
+      <tr>
+       <td align="center">black</td>
+       <td align="center">-0.01220</td>
+       <td align="center">-2.021</td>
+      </tr>
+      <tr>
+       <td align="center">turquoise</td>
+       <td align="center">-0.01397</td>
+       <td align="center">-2.377</td>
+      </tr>
+     </tbody>
+    </table>
+   </center>
+  </div>
+  <p><img border="0" src="lynn1to5-mvd.png" width="640" height="480"><br><b>MUZZLE'S VERTICAL VELOCITY....</b> The muzzle is moving vertically as the rifle is being fired due to the dynamics of recoil and the deformations due to gravity. The Muzzle of the Bare Barrel is moving downward at a 2.870 in/sec as the bullet exits. The slope of the curve is very steep at bullet exit time. Small variations in bullet velocity would cause large changes in the muzzle's downward velocity. Also the negative slope gives less downward velocity to faster bullets which exit earlier and more downward velocity to slower bullets that exit later.&nbsp; The muzzle's downward velocity is transmitted to the bullet and over the time of flight to the 100 yard target, it causes the bullet to drop 0.299 inches. With the steepness of the curve, a small variation in muzzle velocity causes a large variation in drop. The barrel with the tuner body and sleeve, but no shaft collar weights has the lowest vertical muzzle velocity. This is not to be confused with the bullet's muzzle velocity.</p>
+  <p align="center"><b>Table: Point of Impact on a 100 Yard Target</b></p>
+  <div align="center">
+   <center>
+    <table border="1" cellpadding="5" cellspacing="0" bordercolor="#000080" bordercolorlight="#000080" bordercolordark="#000080" bgcolor="#CCFFFF">
+     <tbody>
+      <tr>
+       <td bgcolor="#66FFFF" align="center"><b>Curve</b></td>
+       <td bgcolor="#66FFFF" align="center"><b>Muzzle<br>
+          Velocity<br>
+          (fps)</b></td>
+       <td bgcolor="#66FFFF" align="center"><b>Bullet<br>
+          Exit Time<br>
+          (seconds)</b></td>
+       <td bgcolor="#66FFFF" align="center"><b>Bullet Drop<br>
+          over 100 Yd<br>
+          (in)</b></td>
+       <td bgcolor="#66FFFF" align="center"><b>Pointing at<br>
+          100 Yards<br>
+          (in)</b></td>
+       <td bgcolor="#66FFFF" align="center"><b>Muzzle's<br>
+          Downward<br>
+          Velocity<br>
+          (in/sec)</b></td>
+       <td bgcolor="#66FFFF" align="center"><b>Bullet Drop<br>
+          from MDV<br>
+          During TOF<br>
+          (in)</b></td>
+       <td bgcolor="#66FFFF" align="center"><b>Bullet Hits<br>
+          Target<br>
+          (in)</b></td>
+       <td bgcolor="#66FFFF" align="center"><b>Difference<br>
+          in POI<br>
+          Bare Barrel<br>
+          as Zero<br>
+          (in)</b></td>
+      </tr>
+      <tr>
+       <td align="center">red</td>
+       <td align="center" rowspan="5">2970</td>
+       <td align="center" rowspan="5">0.00126678</td>
+       <td align="center" rowspan="5">1.933</td>
+       <td align="center">-0.4382</td>
+       <td align="center">-2.870</td>
+       <td align="center">-0.299</td>
+       <td align="center">-2.6703</td>
+       <td align="center">0.0</td>
+      </tr>
+      <tr>
+       <td align="center">green</td>
+       <td align="center">-0.4525</td>
+       <td align="center">-1.254</td>
+       <td align="center">-0.131</td>
+       <td align="center">-2.4889</td>
+       <td align="center">+0.181</td>
+      </tr>
+      <tr>
+       <td align="center">blue</td>
+       <td align="center">-0.8992</td>
+       <td align="center">-0.719</td>
+       <td align="center">-0.075</td>
+       <td align="center">-2.9071</td>
+       <td align="center">-0.237</td>
+      </tr>
+      <tr>
+       <td align="center">black</td>
+       <td align="center">-1.3468</td>
+       <td align="center">-0.970</td>
+       <td align="center">-0.101</td>
+       <td align="center">-3.3809</td>
+       <td align="center">-0.711</td>
+      </tr>
+      <tr>
+       <td align="center">turquoise</td>
+       <td align="center">-1.8219</td>
+       <td align="center">-1.430</td>
+       <td align="center">-0.149</td>
+       <td align="center">-3.9039</td>
+       <td align="center">-1.234</td>
+      </tr>
+     </tbody>
+    </table>
+   </center>
+  </div>
+  <p><b>WHAT HAPPENS AT THE 100 YD TARGET....</b> These calculations indicate that when Lynn zeros his rifle at 100 yards with the tuner base and sleeve installed and then adds one 8 oz shaft collar, his point of impact will drop by 0.474 inches. When he adds the second shaft collar, the drop will be 0.997 inches. Assuming this model is an accurate representation of the actual rifle. This is a very lengthy calculation to come up with just two numbers that might or might not be verified.</p>
+  <p align="center"><font face="Arial Rounded MT Bold" size="5"><b><a name="BarrelLength">Barrel Length vs Accuracy &amp; Muzzle Velocity</a></b></font></p>
+  <p><b>BARREL LENGTH VS ACCURACY....</b> Richard Lomax at AccurateReloading.com used a Sako S 491 rifle in 223 Remington caliber for the test. He shot 5-shot groups with 3 different powders as he proceeded to shorten the barrel on the rifle. It is difficult to see the trends in the data tables posted here at&nbsp; <a href="http://www.accuratereloading.com/223sb.html" target="_blank">http://www.accuratereloading.com/223sb.html</a>. I used Richard Lomax's data and created plot files of the data so the trends can more easily be seen. Here are the complete set of curves I used to view the data and show the trends.<br><b>NOTE: </b>I was not involved in the testing. I am merely using the Dplot software to present the data in a form that is more readily interpreted.&nbsp;</p>
+  <p><img border="0" src="barrel-length-vs-group-size.png" width="640" height="480"><br><b>ACCURACY SUMMARY.... </b>Collecting the three average group size curves on one plot shows that a barrel length of between 16 to 17.5" in length<br>
+    appears to produce the smallest groups and the best accuracy.</p>
+  <p><img border="0" src="gh-4198.png" width="640" height="480"><br><b>H-4198 Powder.</b> The next three charts show the group sizes for each of the three powders used. There is a large amount of scatter in the data, but there is a trend.</p>
+  <p><img border="0" src="gh-322.png" width="640" height="480"><br><b>H-322 Powder.</b></p>
+  <p><img border="0" src="gn-135.png" width="640" height="480"><br><b>VV N-135 Powder.</b></p>
+  <p><img border="0" src="vh-4198.png" width="640" height="480"><br><b>H-4198 Powder.</b> The next three charts show how the muzzle velocity decreases as the barrel is shortened for each of the three powders used.</p>
+  <p><img border="0" src="vh-322.png" width="640" height="480"><br><b>H-322 Powder.</b></p>
+  <p><img border="0" src="vv-135.png" width="640" height="480"><br><b>VV N-135 Powder.</b></p>
+  <p><img border="0" src="barrel-length-vs-velocity.png" width="640" height="480"><br><b>MUZZLE VELOCITY VS BARREL LENGTH....</b> Collecting the three average velocity curves on one plot shows the muzzle velocity achieved with each of the three powder types.</p>
+  <p><img border="0" src="velocity-change-per-inch.png" width="640" height="480"><br><b>MUZZLE VELOCITY CHANGE PER INCH....</b> Finally this chart is the slope of the average velocity curves and shows the velocity per inch of barrel length. Notice that for H-322 adding an inch of barrel to a 22 inch barrel would gain you about 37 fps. But adding an inch of barrel length to a 10 inch barrel would gain you about 52 fps. It sure would be nice to have the pressure curve data on some of these loading. Then one could do an FEA analysis of the barrel motion.</p>
+  <p>Good Hunting... from Varmint Al<img border="0" src="coyotel.gif" width="87" height="49"><br>
+    For the serious reader: <a href="HOW2CHEK006.pdf" target="_blank">How to Check Another Engineer's Calculation</a>.<img border="0" src="check.gif" width="26" height="16"></p>
+  <p align="center">Last Updated: <!--webbot bot="Timestamp" startspan
+s-type="EDITED" s-format="%m/%d/%Y" -->04/28/2016<!--webbot bot="Timestamp"
+i-checksum="12615" endspan --><br>
+    End of Page<img src="coyotel.gif" alt width="87" height="49"></p>
+ </body>
+</html>

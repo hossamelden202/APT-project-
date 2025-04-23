@@ -1,0 +1,493 @@
+<!doctype html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HTTP Logging — Firefox Source Docs  documentation</title>
+  <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50">
+  <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094">
+  <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=fd3f3429">
+  <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b">
+  <link rel="stylesheet" type="text/css" href="../../_static/custom_theme.css?v=dc5ed815">
+  <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7">
+  <link rel="shortcut icon" href="../../_static/firefox.ico"><!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script src="../../_static/jquery.js?v=5d32c60e"></script>
+  <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+  <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+  <script src="../../_static/doctools.js?v=9a2dae69"></script>
+  <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+  <script src="../../_static/copybutton.js?v=30646c52"></script>
+  <script src="../../_static/design-tabs.js?v=36754332"></script>
+  <script src="../../_static/js/theme.js"></script>
+  <link rel="index" title="Index" href="../../genindex.html">
+  <link rel="search" title="Search" href="../../search.html">
+  <link rel="next" title="Submitting Actionable Networking Bugs" href="../submitting_networking_bugs.html">
+  <link rel="prev" title="Networking" href="../index.html">
+ </head>
+ <body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+   <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <div class="wy-side-scroll">
+     <div class="wy-side-nav-search">
+      <a href="../../index.html" class="icon icon-home"> Firefox Source Docs <img src="../../_static/firefox-wordmark.svg" class="logo" alt="Logo"> </a><!-- -- This code is governed by the BSD license ---->
+      <div>
+       <h3>Quick search</h3>
+       <script>
+    (function () {
+      var cx = "dd12886298f75dbef";
+      var gcse = document.createElement("script");
+      gcse.async = true;
+      gcse.src = "https://cse.google.com/cse.js?cx=" + cx;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(gcse, s);
+    })();
+  </script><gcse:search></gcse:search>
+      </div>
+     </div>
+     <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+      <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../glossary/index.html">A Glossary of Common Terms</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../overview/index.html">A Quick Guide to Mozilla Applications</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../setup/index.html">Getting Set Up To Work On The Firefox Codebase</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Working On Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Working on Firefox</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../bug-mgmt/index.html">Bug Handling</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox User Guide</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../devtools-user/index.html">Firefox DevTools User Docs</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Source Code Documentation</span></p>
+      <ul class="current">
+       <li class="toctree-l1"><a class="reference internal" href="../../mots/index.html">Governance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../browser/index.html">Firefox Front-end</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../dom/index.html">DOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../editor/index.html">Editor</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../layout/index.html">Style system (CSS) &amp; Layout</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../gfx/index.html">Graphics</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../ipc/index.html">Processes, Threads and IPC</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../devtools/index.html">Firefox DevTools Contributor Docs</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../toolkit/index.html">Toolkit</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../js/index.html">SpiderMonkey</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../jsloader/index.html">JS Loader</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/geckoview/index.html">GeckoView</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/fenix/index.html">Fenix</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/focus-android/index.html">Focus for Android</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../dom/bindings/webidl/index.html">WebIDL</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../modules/libpref/index.html">libpref</a></li>
+       <li class="toctree-l1 current"><a class="reference internal" href="../index.html">Networking</a>
+        <ul class="current">
+         <li class="toctree-l2 current"><a class="reference internal" href="../index.html#how-tos">How-to’s</a>
+          <ul class="current">
+           <li class="toctree-l3 current"><a class="current reference internal" href="#">HTTP Logging</a>
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="#using-about-logging">Using about:logging</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#logging-http-activity-by-manually-setting-environment-variables">Logging HTTP activity by manually setting environment variables</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#start-logging-using-command-line-arguments">Start logging using command line arguments</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#advanced-techniques">Advanced techniques</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#see-also">See also</a></li>
+            </ul></li>
+           <li class="toctree-l3"><a class="reference internal" href="../submitting_networking_bugs.html">Submitting Actionable Networking Bugs</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="../captive_portals.html">Captive Portal Detection</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="../connectivity_checking.html">Connectivity Checking</a></li>
+          </ul></li>
+         <li class="toctree-l2"><a class="reference internal" href="../index.html#tutorials">Tutorials</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../index.html#deep-dives">Deep Dives</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../index.html#references">References</a></li>
+        </ul></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../remote/index.html">Remote Protocols</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../services/index.html">Services</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../permissions/index.html">Permissions</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../uriloader/index.html">File Handling</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../widget/cocoa/index.html">Firefox on macOS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../widget/windows/index.html">Firefox on Windows</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../toolkit/components/ml/index.html">Firefox AI Runtime</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../accessible/index.html">Accessibility</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../media/index.html">Media Playback</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../code-quality/index.html">Code quality</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../writing-rust-code/index.html">Writing Rust Code</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../rust-components/index.html">Rust Components</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/profiler/index.html">Gecko Profiler</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../performance/index.html">Performance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../storage/index.html">Database bindings (SQLite, KV, …)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../xpcom/index.html">XPCOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../nspr/index.html">NSPR</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../security/nss/index.html">Network Security Services (NSS)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../content-security/index.html">Web Security Checks in Gecko</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">The Firefox Build System</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mach/index.html">Mach</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/try/index.html">Pushing to Try</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../build/buildsystem/index.html">Build System</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../taskcluster/index.html">Firefox CI and Taskgraph</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/moztreedocs/index.html">Managing Documentation</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mozbuild/vendor/index.html">Vendoring Third Party Components</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Testing &amp; Test Infrastructure</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/automated-testing/index.html">Automated Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/treeherder-try/index.html">Understanding Treeherder Results</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/sheriffed-intermittents/index.html">Sheriffed intermittent failures</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/tests-for-new-config/index.html">Turning on Firefox tests for a new configuration</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/intermittent/index.html">Avoiding intermittent tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/testing-policy/index.html">Testing Policy</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/ci-configs/index.html">Configuration Changes</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/browser-chrome/index.html">Browser chrome mochitests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/chrome-tests/index.html">Chrome Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/marionette/index.html">Marionette</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/geckodriver/index.html">geckodriver</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/test-verification/index.html">Test Verification</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/webrender/index.html">WebRender Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/mochitest-plain/index.html">Mochitest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/xpcshell/index.html">XPCShell tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/tps/index.html">TPS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../web-platform/index.html">web-platform-tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../gtest/index.html">GTest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/fuzzing/index.html">Fuzzing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/sanitizer/index.html">Sanitizer</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/perfdocs/index.html">Performance Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/code-coverage/index.html">Code coverage</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing-rust-code/index.html">Testing &amp; Debugging Rust Code</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Releases &amp; Updates</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html">Mozilla Update Infrastructure</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html#watershed-updates">Watershed Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html#desupport-updates">Desupport Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/update-verify/index.html">Update Verify</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Localization &amp; Internationalization</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../intl/index.html">Internationalization</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../l10n/index.html">Localization</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox and Python</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mozbase/index.html">mozbase</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../python/index.html">Using third-party Python packages</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Metrics Collected in Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../metrics/index.html">Metrics</a></li>
+      </ul>
+     </div>
+    </div>
+   </nav>
+   <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+    <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+     <i data-toggle="wy-nav-top" class="fa fa-bars"></i> <a href="../../index.html">Firefox Source Docs</a>
+    </nav>
+    <div class="wy-nav-content">
+     <div class="rst-content">
+      <!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+      <div role="navigation" aria-label="Page navigation">
+       <ul class="wy-breadcrumbs">
+        <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+        <li class="breadcrumb-item"><a href="../index.html">Networking</a></li>
+        <li class="breadcrumb-item active">HTTP Logging</li>
+        <li class="wy-breadcrumbs-aside"><a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Developer+Infrastructure&amp;component=Firefox+Source+Docs%3A+Content&amp;short_desc=Documentation+issue+on+networking/http/logging&amp;comment=URL+=+https://firefox-source-docs.mozilla.org/networking/http/logging.html&amp;bug_file_loc=https://firefox-source-docs.mozilla.org/networking/http/logging.html" rel="nofollow">Report an issue</a> / <a href="../../_sources/networking/http/logging.rst.txt" rel="nofollow"> View page source</a></li>
+       </ul>
+       <hr>
+      </div>
+      <div role="main" class="document" itemscope itemtype="http://schema.org/Article">
+       <div itemprop="articleBody">
+        <section id="http-logging">
+         <h1>HTTP Logging<a class="headerlink" href="#http-logging" title="Link to this heading">?</a></h1>
+         <p>Sometimes, while debugging your Web app (or client-side code using Necko), it can be useful to log HTTP traffic. This saves a log of HTTP-related information from your browser run into a file that you can examine (or upload to Bugzilla if a developer has asked you for a log).</p>
+         <div class="admonition note">
+          <p class="admonition-title">Note</p>
+          <p><strong>Note:</strong> The <a class="reference external" href="https://developer.mozilla.org/en-US/docs/Tools/Web_Console">Web Console</a> also offers the ability to peek at HTTP transactions within Firefox. HTTP logging generally provides more detailed logging.</p>
+         </div>
+         <section id="using-about-logging">
+          <span id="using-about-networking"></span>
+          <h2>Using <a class="reference external" href="about:logging">about:logging</a><a class="headerlink" href="#using-about-logging" title="Link to this heading">?</a></h2>
+          <p>This is the best and easiest way to do HTTP logging. At any point during while your browser is running, you can turn logging on and off.</p>
+          <div class="admonition note">
+           <p class="admonition-title">Note</p>
+           <p><strong>Note:</strong> Before Firefox 108 the logging UI used to be located at <cite>about:networking#logging</cite></p>
+          </div>
+          <p>This allows you to capture only the “interesting” part of the browser’s behavior (i.e. your bug), which makes the HTTP log much smaller and easier to analyze.</p>
+          <ol class="arabic simple">
+           <li>
+            <p>Launch the browser and get it into whatever state you need to be in just before your bug occurs.</p></li>
+           <li>
+            <p>Open a new tab and type in “<a class="reference external" href="about:logging">about:logging</a>” into the URL bar.</p></li>
+           <li>
+            <p>Adjust the location of the log file if you don’t like the default</p></li>
+           <li>
+            <p>Adjust the list of modules that you want to log: this list has the exact same format as the MOZ_LOG environment variable (see below). Generally the default list is OK, unless a Mozilla developer has told you to modify it.</p>
+            <ul class="simple">
+             <li>
+              <p>For cookie issues, use presets <code class="docutils literal notranslate"><span class="pre">Cookies</span></code></p></li>
+             <li>
+              <p>For WebSocket issues, use presets <code class="docutils literal notranslate"><span class="pre">WebSockets</span></code></p></li>
+             <li>
+              <p>For HTTP/3 or QUIC issues, use presets <code class="docutils literal notranslate"><span class="pre">HTTP/3</span></code></p></li>
+             <li>
+              <p>For other networking issues, use presets <code class="docutils literal notranslate"><span class="pre">Networking</span></code></p></li>
+            </ul></li>
+           <li>
+            <p>Click on Start Logging.</p></li>
+           <li>
+            <p>Reproduce the bug (i.e. go to the web site that is broken for you and make the bug happen in the browser)</p></li>
+           <li>
+            <p>Make a note of the value of “Current Log File”.</p></li>
+           <li>
+            <p>Click on Stop Logging.</p></li>
+           <li>
+            <p>Go to the folder containing the specified log file, and gather all the log files. You will see several files that look like: log.txt-main.1806.moz_log, log.txt-child.1954.moz_log, log.txt-child.1970.moz_log, etc. This is because Firefox now uses multiple processes, and each process gets its own log file.</p></li>
+           <li>
+            <p>For many bugs, the “log.txt-main.moz_log” file is the only thing you need to upload as a file attachment to your Bugzilla bug (this is assuming you’re logging to help a mozilla developer). Other bugs may require all the logs to be uploaded–ask the developer if you’re not sure.</p></li>
+           <li>
+            <p>Pat yourself on the back–a job well done! Thanks for helping us debug Firefox.</p></li>
+          </ol>
+          <div class="admonition note">
+           <p class="admonition-title">Note</p>
+           <p><strong>Note:</strong> The log may include sensitive data such as URLs and cookies. To protect your privacy, we kindly request you to send the log file or the profiler link directly and confidentially to <a class="reference external" href="mailto:necko%40mozilla.com">necko<span>@</span>mozilla<span>.</span>com</a>.</p>
+          </div>
+         </section>
+         <section id="logging-http-activity-by-manually-setting-environment-variables">
+          <h2>Logging HTTP activity by manually setting environment variables<a class="headerlink" href="#logging-http-activity-by-manually-setting-environment-variables" title="Link to this heading">?</a></h2>
+          <p>Sometimes the <a class="reference external" href="about:logging">about:logging</a> approach won’t work, for instance if your bug occurs during startup, or you’re running on mobile, etc. In that case you can set environment variables *before* you launch Firefox. Note that this approach winds up logging the whole browser history, so files can get rather large (they compress well :)</p>
+          <p>Setting environment variables differs by operating system. Don’t let the scary-looking command line stuff frighten you off; it’s not hard at all!</p>
+          <section id="windows">
+           <h3>Windows<a class="headerlink" href="#windows" title="Link to this heading">?</a></h3>
+           <ol class="arabic">
+            <li>
+             <p>If Firefox is already running, exit out of it.</p></li>
+            <li>
+             <p>Open a command prompt by holding down the Windows key and pressing “R”.</p></li>
+            <li>
+             <p>Type CMD and press enter, a new Command Prompt window with a black background will appear.</p></li>
+            <li>
+             <div class="line-block">
+              <div class="line">
+               Copy and paste the following lines one at a time into the Command Prompt window. Press the enter key after each one.:
+              </div>
+              <div class="line">
+               <strong>For 64-bit Windows:</strong>
+              </div>
+             </div>
+             <div class="highlight-default notranslate">
+              <div class="highlight">
+               <pre><span></span><span class="nb">set</span> <span class="n">MOZ_LOG</span><span class="o">=</span><span class="n">timestamp</span><span class="p">,</span><span class="n">rotate</span><span class="p">:</span><span class="mi">200</span><span class="p">,</span><span class="n">nsHttp</span><span class="p">:</span><span class="mi">5</span><span class="p">,</span><span class="n">cache2</span><span class="p">:</span><span class="mi">5</span><span class="p">,</span><span class="n">nsSocketTransport</span><span class="p">:</span><span class="mi">5</span><span class="p">,</span><span class="n">nsHostResolver</span><span class="p">:</span><span class="mi">5</span>
+<span class="nb">set</span> <span class="n">MOZ_LOG_FILE</span><span class="o">=%</span><span class="n">TEMP</span><span class="o">%</span>\<span class="n">log</span><span class="o">.</span><span class="n">txt</span>
+<span class="s2">"c:\Program Files\Mozilla Firefox</span><span class="se">\f</span><span class="s2">irefox.exe"</span>
+</pre>
+              </div>
+             </div>
+             <p><strong>For 32-bit Windows:</strong></p>
+             <div class="highlight-default notranslate">
+              <div class="highlight">
+               <pre><span></span><span class="nb">set</span> <span class="n">MOZ_LOG</span><span class="o">=</span><span class="n">timestamp</span><span class="p">,</span><span class="n">rotate</span><span class="p">:</span><span class="mi">200</span><span class="p">,</span><span class="n">nsHttp</span><span class="p">:</span><span class="mi">5</span><span class="p">,</span><span class="n">cache2</span><span class="p">:</span><span class="mi">5</span><span class="p">,</span><span class="n">nsSocketTransport</span><span class="p">:</span><span class="mi">5</span><span class="p">,</span><span class="n">nsHostResolver</span><span class="p">:</span><span class="mi">5</span>
+<span class="nb">set</span> <span class="n">MOZ_LOG_FILE</span><span class="o">=%</span><span class="n">TEMP</span><span class="o">%</span>\<span class="n">log</span><span class="o">.</span><span class="n">txt</span>
+<span class="s2">"c:\Program Files (x86)\Mozilla Firefox</span><span class="se">\f</span><span class="s2">irefox.exe"</span>
+</pre>
+              </div>
+             </div>
+             <p>(These instructions assume that you installed Firefox to the default location, and that drive C: is your Windows startup disk. Make the appropriate adjustments if those aren’t the case.)</p></li>
+            <li>
+             <p>Reproduce whatever problem it is that you’re having.</p></li>
+            <li>
+             <p>Once you’ve reproduced the problem, exit Firefox and look for the generated log files in your temporary directory. You can type “%TEMP%” directly into the Windows Explorer location bar to get there quickly.</p></li>
+           </ol>
+          </section>
+          <section id="linux">
+           <h3>Linux<a class="headerlink" href="#linux" title="Link to this heading">?</a></h3>
+           <p>This section offers information on how to capture HTTP logs for Firefox running on Linux.</p>
+           <ol class="arabic">
+            <li>
+             <p>Quit out of Firefox if it’s running.</p></li>
+            <li>
+             <p>Open a new shell. The commands listed here assume a bash-compatible shell.</p></li>
+            <li>
+             <p>Copy and paste the following commands into the shell one at a time. Make sure to hit enter after each line.</p>
+             <div class="highlight-default notranslate">
+              <div class="highlight">
+               <pre><span></span><span class="n">export</span> <span class="n">MOZ_LOG</span><span class="o">=</span><span class="n">timestamp</span><span class="p">,</span><span class="n">rotate</span><span class="p">:</span><span class="mi">200</span><span class="p">,</span><span class="n">nsHttp</span><span class="p">:</span><span class="mi">5</span><span class="p">,</span><span class="n">cache2</span><span class="p">:</span><span class="mi">5</span><span class="p">,</span><span class="n">nsSocketTransport</span><span class="p">:</span><span class="mi">5</span><span class="p">,</span><span class="n">nsHostResolver</span><span class="p">:</span><span class="mi">5</span>
+<span class="n">export</span> <span class="n">MOZ_LOG_FILE</span><span class="o">=/</span><span class="n">tmp</span><span class="o">/</span><span class="n">log</span><span class="o">.</span><span class="n">txt</span>
+<span class="n">cd</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">firefox</span>
+<span class="o">./</span><span class="n">firefox</span>
+</pre>
+              </div>
+             </div></li>
+            <li>
+             <p>Reproduce the problem you’re debugging.</p></li>
+            <li>
+             <p>When the problem has been reproduced, exit Firefox and look for the generated log files, which you can find at <code class="docutils literal notranslate"><span class="pre">/tmp/log.txt</span></code>.</p></li>
+           </ol>
+          </section>
+          <section id="macos">
+           <h3>macOS<a class="headerlink" href="#macos" title="Link to this heading">?</a></h3>
+           <p>These instructions show how to log HTTP traffic in Firefox on macOS.</p>
+           <ol class="arabic">
+            <li>
+             <p>Quit Firefox is if it’s currently running, by using the Quit option in the File menu. Keep in mind that simply closing all windows does <strong>not</strong> quit Firefox on macOS (this is standard practice for Mac applications).</p></li>
+            <li>
+             <p>Run the Terminal application, which is located in the Utilities subfolder in your startup disk’s Applications folder.</p></li>
+            <li>
+             <p>Copy and paste the following commands into the Terminal window, hitting the return key after each line.</p>
+             <div class="highlight-default notranslate">
+              <div class="highlight">
+               <pre><span></span><span class="n">export</span> <span class="n">MOZ_LOG</span><span class="o">=</span><span class="n">timestamp</span><span class="p">,</span><span class="n">rotate</span><span class="p">:</span><span class="mi">200</span><span class="p">,</span><span class="n">nsHttp</span><span class="p">:</span><span class="mi">5</span><span class="p">,</span><span class="n">cache2</span><span class="p">:</span><span class="mi">5</span><span class="p">,</span><span class="n">nsSocketTransport</span><span class="p">:</span><span class="mi">5</span><span class="p">,</span><span class="n">nsHostResolver</span><span class="p">:</span><span class="mi">5</span>
+<span class="n">export</span> <span class="n">MOZ_LOG_FILE</span><span class="o">=~/</span><span class="n">Desktop</span><span class="o">/</span><span class="n">log</span><span class="o">.</span><span class="n">txt</span>
+<span class="n">cd</span> <span class="o">/</span><span class="n">Applications</span><span class="o">/</span><span class="n">Firefox</span><span class="o">.</span><span class="n">app</span><span class="o">/</span><span class="n">Contents</span><span class="o">/</span><span class="n">MacOS</span>
+<span class="o">./</span><span class="n">firefox</span>
+</pre>
+              </div>
+             </div>
+             <p>(The instructions assume that you’ve installed Firefox directly into your startup disk’s Applications folder. If you’ve put it elsewhere, change the path used on the third line appropriately.)</p></li>
+            <li>
+             <p>Reproduce whatever problem you’re trying to debug.</p></li>
+            <li>
+             <p>Quit Firefox and look for the generated <code class="docutils literal notranslate"><span class="pre">log.txt</span></code> log files on your desktop.</p></li>
+           </ol>
+           <div class="admonition note">
+            <p class="admonition-title">Note</p>
+            <p><strong>Note:</strong> The generated log file uses Unix-style line endings. Older editors may have problems with this, but if you’re using an even reasonably modern Mac OS X application to view the log, you won’t have any problems.</p>
+           </div>
+          </section>
+         </section>
+         <section id="start-logging-using-command-line-arguments">
+          <h2>Start logging using command line arguments<a class="headerlink" href="#start-logging-using-command-line-arguments" title="Link to this heading">?</a></h2>
+          <p>Since Firefox 61 it’s possible to start logging in a bit simpler way than setting environment variables: using command line arguments. Here is an example for the <strong>Windows</strong> platform, on other platforms we accept the same form of the arguments:</p>
+          <ol class="arabic">
+           <li>
+            <p>If Firefox is already running, exit out of it.</p></li>
+           <li>
+            <p>Open a command prompt. On <a class="reference external" href="https://commandwindows.com/runline.htm">Windows XP</a>, you can find the “Run…” command in the Start menu’s “All Programs” submenu. On <a class="reference external" href="http://www.xp-vista.com/other/where-is-run-in-windows-vista">all newer versions of Windows</a>, you can hold down the Windows key and press “R”.</p></li>
+           <li>
+            <div class="line-block">
+             <div class="line">
+              Copy and paste the following line into the “Run” command window and then press enter:
+             </div>
+             <div class="line">
+              <strong>For 32-bit Windows:</strong>
+             </div>
+            </div>
+            <div class="highlight-default notranslate">
+             <div class="highlight">
+              <pre><span></span><span class="s2">"c:\Program Files (x86)\Mozilla Firefox</span><span class="se">\f</span><span class="s2">irefox.exe"</span> <span class="o">-</span><span class="n">MOZ_LOG</span><span class="o">=</span><span class="n">timestamp</span><span class="p">,</span><span class="n">rotate</span><span class="p">:</span><span class="mi">200</span><span class="p">,</span><span class="n">nsHttp</span><span class="p">:</span><span class="mi">5</span><span class="p">,</span><span class="n">cache2</span><span class="p">:</span><span class="mi">5</span><span class="p">,</span><span class="n">nsSocketTransport</span><span class="p">:</span><span class="mi">5</span><span class="p">,</span><span class="n">nsHostResolver</span><span class="p">:</span><span class="mi">5</span> <span class="o">-</span><span class="n">MOZ_LOG_FILE</span><span class="o">=%</span><span class="n">TEMP</span><span class="o">%</span>\<span class="n">log</span><span class="o">.</span><span class="n">txt</span>
+</pre>
+             </div>
+            </div>
+            <p><strong>For 64-bit Windows:</strong></p>
+            <div class="highlight-default notranslate">
+             <div class="highlight">
+              <pre><span></span><span class="s2">"c:\Program Files\Mozilla Firefox</span><span class="se">\f</span><span class="s2">irefox.exe"</span> <span class="o">-</span><span class="n">MOZ_LOG</span><span class="o">=</span><span class="n">timestamp</span><span class="p">,</span><span class="n">rotate</span><span class="p">:</span><span class="mi">200</span><span class="p">,</span><span class="n">nsHttp</span><span class="p">:</span><span class="mi">5</span><span class="p">,</span><span class="n">cache2</span><span class="p">:</span><span class="mi">5</span><span class="p">,</span><span class="n">nsSocketTransport</span><span class="p">:</span><span class="mi">5</span><span class="p">,</span><span class="n">nsHostResolver</span><span class="p">:</span><span class="mi">5</span> <span class="o">-</span><span class="n">MOZ_LOG_FILE</span><span class="o">=%</span><span class="n">TEMP</span><span class="o">%</span>\<span class="n">log</span><span class="o">.</span><span class="n">txt</span>
+</pre>
+             </div>
+            </div>
+            <p>(These instructions assume that you installed Firefox to the default location, and that drive C: is your Windows startup disk. Make the appropriate adjustments if those aren’t the case.)</p></li>
+           <li>
+            <p>Reproduce whatever problem it is that you’re having.</p></li>
+           <li>
+            <p>Once you’ve reproduced the problem, exit Firefox and look for the generated log files in your temporary directory. You can type “%TEMP%” directly into the Windows Explorer location bar to get there quickly.</p></li>
+          </ol>
+         </section>
+         <section id="advanced-techniques">
+          <h2>Advanced techniques<a class="headerlink" href="#advanced-techniques" title="Link to this heading">?</a></h2>
+          <p>You can adjust some of the settings listed above to change what HTTP information get logged.</p>
+          <section id="limiting-the-size-of-the-logged-data">
+           <h3>Limiting the size of the logged data<a class="headerlink" href="#limiting-the-size-of-the-logged-data" title="Link to this heading">?</a></h3>
+           <p>By default there is no limit to the size of log file(s), and they capture the logging throughout the time Firefox runs, from start to finish. These files can get quite large (gigabytes)! So we have added a ‘rotate:SIZE_IN_MB’ option to MOZ_LOG (we use it in the examples above). If you are using Firefox &gt;= 51, setting this option saves only the last N megabytes of logging data, which helps keep them manageable in size. (Unknown modules are ignored, so it’s OK to use ‘rotate’ in your environment even if you’re running Firefox &lt;= 50: it will do nothing).</p>
+           <p>This is accomplished by splitting the log into up to 4 separate files (their filenames have a numbered extension, .0, .1, .2, .3) The logging back end cycles the files it writes to, while ensuring that the sum of these files’ sizes will never go over the specified limit.</p>
+           <p>Note 1: <strong>the file with the largest number is not guaranteed to be the last file written!</strong> We don’t move the files, we only cycle. Using the rotate module automatically adds timestamps to the log, so it’s always easy to recognize which file keeps the most recent data.</p>
+           <p>Note 2: <strong>rotate doesn’t support append</strong>. When you specify rotate, on every start all the files (including any previous non-rotated log file) are deleted to avoid any mixture of information. The <code class="docutils literal notranslate"><span class="pre">append</span></code> module specified is then ignored.</p>
+          </section>
+          <section id="use-sync-if-your-browser-crashes-or-hangs">
+           <h3>Use ‘sync’ if your browser crashes or hangs<a class="headerlink" href="#use-sync-if-your-browser-crashes-or-hangs" title="Link to this heading">?</a></h3>
+           <p>By default, HTTP logging buffers messages and only periodically writes them to disk (this is more efficient and also makes logging less likely to interfere with race conditions, etc). However, if you are seeing your browser crash (or hang) you should add “,sync” to the list of logging modules in your MOZ_LOG environment variable. This will cause each log message to be immediately written (and fflush()’d), which is likely to give us more information about your crash.</p>
+          </section>
+          <section id="turning-on-quic-logging">
+           <h3>Turning on QUIC logging<a class="headerlink" href="#turning-on-quic-logging" title="Link to this heading">?</a></h3>
+           <p>This can be done by setting <cite>MOZ_LOG</cite> to <cite>timestamp,rotate:200,nsHttp:5,neqo_http3::*:5,neqo_transport::*:5</cite>.</p>
+          </section>
+          <section id="logging-only-http-request-and-response-headers">
+           <h3>Logging only HTTP request and response headers<a class="headerlink" href="#logging-only-http-request-and-response-headers" title="Link to this heading">?</a></h3>
+           <p>There are two ways to do this:</p>
+           <ol class="arabic simple">
+            <li>
+             <p>Replace MOZ_LOG<code class="docutils literal notranslate"><span class="pre">=nsHttp:5</span></code> with MOZ_LOG<code class="docutils literal notranslate"><span class="pre">=nsHttp:3</span></code> in the commands above.</p></li>
+            <li>
+             <p>There’s a handy extension for Firefox called <a class="reference external" href="https://addons.mozilla.org/firefox/addon/3829">HTTP Header Live</a> that you can use to capture just the HTTP request and response headers. This is a useful tool when you want to peek at HTTP traffic.</p></li>
+           </ol>
+          </section>
+          <section id="turning-off-logging-of-socket-level-transactions">
+           <h3>Turning off logging of socket-level transactions<a class="headerlink" href="#turning-off-logging-of-socket-level-transactions" title="Link to this heading">?</a></h3>
+           <p>If you’re not interested in socket-level log information, either because it’s not relevant to your bug or because you’re debugging something that includes a lot of noise that’s hard to parse through, you can do that. Simply remove the text <code class="docutils literal notranslate"><span class="pre">nsSocketTransport:5</span></code> from the commands above.</p>
+          </section>
+          <section id="turning-off-dns-query-logging">
+           <h3>Turning off DNS query logging<a class="headerlink" href="#turning-off-dns-query-logging" title="Link to this heading">?</a></h3>
+           <p>You can turn off logging of host resolving (that is, DNS queries) by removing the text <code class="docutils literal notranslate"><span class="pre">nsHostResolver:5</span></code> from the commands above.</p>
+          </section>
+          <section id="enable-logging-for-try-server-runs">
+           <h3>Enable Logging for try server runs<a class="headerlink" href="#enable-logging-for-try-server-runs" title="Link to this heading">?</a></h3>
+           <p>You can enable logging on try by passing the <cite>env</cite> argument via <cite>mach try</cite>. For example:</p>
+           <div class="admonition note">
+            <p class="admonition-title">Note</p>
+            <p><code class="docutils literal notranslate"><span class="pre">./mach</span> <span class="pre">try</span> <span class="pre">fuzzy</span> <span class="pre">--env</span> <span class="pre">"MOZ_LOG=nsHttp:5,SSLTokensCache:5"</span></code></p>
+           </div>
+          </section>
+          <section id="how-to-enable-quic-logging">
+           <h3>How to enable QUIC logging<a class="headerlink" href="#how-to-enable-quic-logging" title="Link to this heading">?</a></h3>
+           <p>The steps to enable QUIC logging (<a class="reference external" href="https://datatracker.ietf.org/doc/draft-ietf-quic-qlog-main-schema/">QLOG</a>) are:</p>
+           <ol class="arabic simple">
+            <li>
+             <p>Go to <code class="docutils literal notranslate"><span class="pre">about:config</span></code>, search for <code class="docutils literal notranslate"><span class="pre">network.http.http3.enable_qlog</span></code> and set it to true.</p></li>
+            <li>
+             <p>Restart Firefox.</p></li>
+            <li>
+             <p>QLOG files will be saved in the <code class="docutils literal notranslate"><span class="pre">qlog_$PID</span></code> directory located within your system’s temporary directory.</p></li>
+            <li>
+             <p>To visualize the QLOG data, visit <a class="reference external" href="https://qvis.quictools.info/">https://qvis.quictools.info/</a>. You can upload the QLOG files there to see the visual representation of the flows.</p></li>
+           </ol>
+          </section>
+         </section>
+         <section id="see-also">
+          <h2>See also<a class="headerlink" href="#see-also" title="Link to this heading">?</a></h2>
+          <ul class="simple">
+           <li>
+            <p>There are similar options available to debug mailnews protocols. See <a class="reference external" href="https://www-archive.mozilla.org/quality/mailnews/mail-troubleshoot.html">this document</a> for more info about mailnews troubleshooting.</p></li>
+           <li>
+            <p>On the Windows platform, nightly Firefox builds have FTP logging built-in (don’t ask why this is only the case for Windows!). To enable FTP logging, just set <code class="docutils literal notranslate"><span class="pre">MOZ_LOG=nsFtp:5</span></code> (in older versions of Mozilla, you need to use <code class="docutils literal notranslate"><span class="pre">nsFTPProtocol</span></code> instead of <code class="docutils literal notranslate"><span class="pre">nsFtp</span></code>).</p></li>
+           <li>
+            <p>When Mozilla’s built-in logging capabilities aren’t good enough, and you need a full-fledged packet tracing tool, two free products are <a class="reference external" href="https://www.wireshark.org/">Wireshark</a> and <a class="reference external" href="https://github.com/jpr5/ngrep/">ngrep</a>. They are available for Windows and most flavors of UNIX (including Linux and Mac OS X), are rock solid, and offer enough features to help uncover any Mozilla networking problem.</p></li>
+          </ul>
+         </section>
+        </section>
+       </div>
+      </div>
+      <footer>
+       <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../index.html" class="btn btn-neutral float-left" title="Networking" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a> <a href="../submitting_networking_bugs.html" class="btn btn-neutral float-right" title="Submitting Actionable Networking Bugs" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+       </div>
+       <hr>
+       <div role="contentinfo">
+        <p></p>
+       </div> Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+      </footer>
+     </div>
+    </div>
+   </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ </body>
+</html>

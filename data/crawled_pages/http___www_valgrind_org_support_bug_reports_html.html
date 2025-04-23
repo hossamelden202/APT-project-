@@ -1,0 +1,93 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <title>Valgrind: Bug Reports</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <style type="text/css">@import url('/css/valgrind.css');</style>
+  <link rel="stylesheet" type="text/css" href="/css/valgrind.css">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="icon" href="/favicon.ico" type="image/x-icon">
+  <meta name="description" content="Official Home Page for valgrind, a suite of tools for debugging and profiling. Automatically detect memory management and threading bugs, and perform detailed profiling.  The current stable version is valgrind-3.24.0.">
+  <meta name="keywords" content="Valgrind Memcheck Cachegrind Callgrind Massif Helgrind memory-management uninitialised memory memory leaks passing uninitialised memory overlapping pointers misuses of the POSIX pthreads">
+ </head><!-- dont we all just wish IE && Netscape 4.x to /dev/null -->
+ <body topmargin="0" leftmargin="0" marginwidth="0" marginheight="0" bgcolor="#ffffff" text="#202020" link="#000099" alink="#0000ff" vlink="#000099">
+  <div class="outer-box">
+   <div class="inner-box">
+    <table width="100%" cellspacing="0" cellpadding="12" border="0">
+     <tbody>
+      <tr>
+       <td width="1%" align="center"><a href="/"><img src="/images/st-george_sm.png" width="121" height="127" alt="Valgrind Home" title="Valgrind Home" border="0"> </a></td>
+       <td width="99%" align="center" valign="middle"><span class="topnav"> <a class="crumb" href="/info/">Information</a> <a class="crumb" href="/downloads/">Source Code</a> <a class="crumb" href="/docs/">Documentation</a> <span class="crumb"><b>Contact</b></span> <a class="crumb" href="/help/">How to Help</a> <a class="crumb" href="/gallery/">Gallery</a> </span>
+        <div class="subnav">
+         | <a class="crumb" href="/support/mailing_lists.html">Mailing Lists and IRC</a> | <span class="crumb"><b>Bug Reports</b></span> | <a class="crumb" href="/support/features.html">Feature Requests</a> | <a class="crumb" href="/support/summary.html">Contact Summary</a> | <a class="crumb" href="/support/consultants.html">Commercial Support</a> |
+        </div></td>
+      </tr>
+      <tr>
+       <td colspan="2" valign="top" width="100%">
+        <div id="leaf-page">
+         <h1>Bug Reports</h1>
+         <br>
+         <h2>Before Reporting a Bug</h2>
+         <p>Before you report a bug, please consult the <a href="/docs/manual/FAQ.html">Frequently Asked Questions</a>. It contains workarounds for many of the failure conditions for which we know a workaround. This includes a large fraction of the failures people seem to encounter in practice.</p>
+         <p>After that, please search Bugzilla to see if the bug has already been reported. There are two ways to do this:</p>
+         <ul>
+          <li>Using the <a href="http://bugs.kde.org/query.cgi?format=specific">Bugzilla query</a> page; choose Valgrind as the "product", and then type something relevant in the "words" box. If you are seeing a crash or abort, searching for part of the abort message might be effective. If you are feeling adventurous you can select the "Advanced search" tab; this gives a lot more control but isn't much better for finding existing bugs.</li>
+          <li>Or you can view all open Valgrind bug reports at the <a href="http://bugs.kde.org/buglist.cgi?product=valgrind&amp;bug_status=UNCONFIRMED&amp;bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED&amp;cmdtype=doit&amp;limit=0">Bugzilla all open bugs</a> page, and use your browser's search facilities to search through them.</li>
+         </ul>
+         <p></p>Note that KDE kindly lets us use their Bugzilla, which explains the URLs of those pages and all the mentions of KDE.
+         <p></p>
+         <p>Anyone can search in Bugzilla, you don't need an account. Searching requires some effort, but helps avoid duplicates, and you may find that your problem has already been solved.</p>
+         <h2>Reporting a Bug</h2>
+         <p>If you haven't encountered your problem after those steps, please file a report using our <a href="https://bugs.kde.org/enter_bug.cgi?product=valgrind">Bugzilla report</a> page. You need a KDE Bugzilla account to report a bug; instructions for creating one are on the page. Creating an account takes some time and effort, but it's a necessary evil when using Bugzilla.</p>
+         <p>The bug report form can be intimidating. Fortunately you don't have to fill in all the fields. Leave all fields blank except the following:</p>
+         <ul>
+          <li><strong>Component:</strong> If the problem is with a specific Valgrind tool (eg. Memcheck, Cachegrind), select the tool name. If it's a Vex issue (i.e. an abort message mentions "vex"), select "vex". If it's a general problem that appears tool-independent, or you are not sure, select "general".</li>
+          <li><strong>Version:</strong> The version number is shown when Valgrind starts up, on the "Using valgrind-$VERSION, a dynamic binary instrumentation framework" line. A "GIT"-suffixed version will only appear if you are using code directly from the git repository.</li>
+          <li><strong>Severity:</strong> If Valgrind won't compile, choose "major". If you are seeing a crash, choose "crash". If your problem is minor, choose "minor" or "wishlist". Otherwise, choose "normal". Please leave the "grave" or "critical" categories to the Valgrind developers to decide.</li>
+          <li><strong>Platform:</strong> "unspecified" is usually fine; this field isn't very important unless it's a packaging-related problem.</li>
+          <li><strong>OS:</strong> This is auto-filled in, but unless you're confident it's an OS-specific problem, it's probably best to change it to "unspecified".</li>
+          <li><strong>Summary:</strong> This is the title of the bug report. Try to make it precise. E.g. if you get an assertion failure, don't say "assertion failure"; copy in the actual assertion failure message.</li>
+          <li><strong>Description:</strong> The most important field, which describes the problem. Please include the following information: 
+           <ol>
+            <li>The output of <code>uname -a</code>.</li>
+            <li>The full output you get when you run your program under Valgrind with the <code>-v</code> flag.</li>
+           </ol> Note that a bug is much more likely to be fixed if a Valgrind developer can reproduce it. So full reproduction steps are very helpful. Small test cases are even better.</li>
+         </ul>
+         <p>Here are some resources on how to write a good bug report, which can help your get your problem fixed quicker:</p>
+         <ul>
+          <li>Eric Raymond's and Rick Moen's <a href="http://www.catb.org/~esr/faqs/smart-questions.html">How To Ask Questions The Smart Way</a></li>
+          <li>mozilla.org's <a href="http://www.mozilla.org/quality/bug-writing-guidelines.html">bug writing guidelines</a></li>
+          <li>Simon Tatham's <a href="http://www.chiark.greenend.org.uk/~sgtatham/bugs.html">How to Report Bugs Effectively</a></li>
+         </ul>
+         <h2>After Reporting a Bug</h2>
+         <p>All bug reports are read by multiple Valgrind developers. Furthermore, we try to respond to most bug reports, but we have limited time so this does not always happen. We may also ask for more information.</p>
+         <p>If a bug is confirmed (e.g. we are able to reproduce it) we will usually change its status from UNCONFIRMED to NEW or ASSIGNED. Important bugs will be given a "target" by developers indicating that they are required/desired for an upcoming. Note that we don't really use the "priority" field, so it will usually be "NOR" (normal).</p>
+         <p>Once a bug is fixed in the git repository, it is changed to RESOLVED. We do not use the VERIFIED or CLOSED statuses.</p>
+         <p>Some bugs are fixed quickly, some take a long time to get fixed, some are never fixed. Please be patient if your bug is not acted upon quickly. One great thing about Bugzilla is that, at the very least, bug reports do not get lost.</p>
+         <h2>Alternatives</h2>
+         <p>If you have trouble with Bugzilla, or for some reason you don't think Bugzilla is appropriate for your report (although it probably is), contact the <a href="http://lists.sourceforge.net/lists/listinfo/valgrind-users">valgrind-users</a> mailing list. But you may just be told to file a bug in Bugzilla.</p>
+        </div></td>
+      </tr><!-- end contents -->
+      <tr>
+       <td class="gray" colspan="2" align="center">
+        <div class="hr_gray">
+         <hr>
+        </div><br><img src="/images/dragon_sm.png" width="102" height="78" alt="Bad, Bad Bug!" title="Bad, Bad Bug!" border="0" align="right">
+        <p>Copyright © 2000-2024 <a href="/info/developers.html">Valgrind™ Developers</a></p>
+        <div style="text-align:left">
+         <div>
+          Hosting kindly provided by <a href="https://sourceware.org/">sourceware.org</a>
+         </div>
+         <div>
+          <a href="http://www.anybrowser.org/campaign/"><i>Best Viewed With A(ny) Browser</i></a>
+         </div>
+         <br>
+        </div></td>
+      </tr>
+     </tbody>
+    </table>
+   </div>
+  </div>
+ </body>
+</html>

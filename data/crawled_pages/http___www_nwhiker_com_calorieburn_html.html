@@ -1,0 +1,325 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+ <head>
+  <title>Calorie Burn Calculator</title>
+ </head>
+ <body bgcolor="#a9a9a9" leftmargin="0" topmargin="0" marginheight="0">
+  <script type="text/JavaScript">
+<!--//--><h3>Your browser does not support JavaScript.</h3>
+<!--//--><p>The calorie calculator will not work with your browser</p><hr>
+<!--//start hiding script from old browsers
+
+function msg(text) {
+  //this displays a message in the status bar
+  window.defaultStatus=''; 
+  window.status=text;
+}
+
+function Num(str) {
+  //check for valid numbers
+  for (var i=0; i<str.length; i++) 
+  {var ch = str.substring(i, i + 1)
+  if (ch!="." && (ch < "0" || ch > "9"))
+  {alert("Please enter a valid number");
+	return false;}}
+ 	return true;
+}
+
+function calc(form) { 
+  //get weight in either lbs or kg
+  var weight = form.wt.value
+
+  //get pace for either miles or km
+  var pace = (form.pmin.value * 60);  
+
+  //get duration and convert duration to hours, from hours, and minutes
+  var dur = ((form.hrs.value * 1) + (form.min.value / 60));
+  
+  //get elevation gain during hike
+  var elv = form.elev.value;
+  
+  //check for necessary values
+  if(form.wt.value * 1 == 0)
+  {alert("Please enter your Weight");
+   return false;}
+  if(pace == 0)
+  {alert("Please enter your Pace");
+   return false;} 
+  if(dur == 0)
+  {alert("Please enter Duration");
+   return false;} 
+  if(elv == 0)
+  {alert("Please enter Elevation");
+   return false;}
+ 
+  //insert zeros in blank fields
+  if(form.pmin.value == "") form.pmin.value = 0;
+  if(form.hrs.value == "") form.hrs.value = 0;
+  if(form.min.value == "") form.min.value = 0;
+  if(form.elev.value == "") form.elev.value = 0;
+  
+  //eliminate decimal places in time values
+  hrs2 = form.hrs.value;
+  form.hrs.value = Math.floor(hrs2);
+  form.min.value = (form.min.value * 1) + (hrs2 - Math.floor(hrs2)) * 60;
+  min2 = form.min.value;
+  form.min.value = Math.floor(min2);
+  pmin2 = form.pmin.value;
+  form.pmin.value = Math.floor(pmin2);
+
+  //correct for minutes >= 60
+  if(form.min.value >= 60) 
+  {min1 = form.min.value / 60;
+   form.min.value = Math.round(60 * (min1 - Math.floor(min1)));
+   form.hrs.value = form.hrs.value * 1 + Math.floor(min1);} 
+    
+  //calculate calories burned!
+  dist = ((dur/(form.pmin.value/60)));
+  form.dist.value = parseInt(dist);
+  diff=(((((elv/(dist*5280)*100)*4)+(Math.sqrt((dist*dist)*6))))/2.5);
+  form.hikediff.value = Math.round(diff);
+  
+  
+  cal = ((((weight * 2462.4)+44044)/Math.pow(pace,1.0045))+(Math.sqrt((Math.pow(diff,3)))));
+  
+  form.calhr.value = parseInt(cal);
+  form.caltot.value = parseInt(cal * dur);
+
+    //extra stuff
+  if (form.min.value < 10)
+  {form.min.value = 0+form.min.value}
+} 
+ 
+function clear(form) { 
+  //clear all values
+  form.wt.value = ""; form.pmin.value = "";
+  form.min.value = "";form.hrs.value = ""; 
+  form.caltot.value = "";form.calhr.value = "";
+  form.elv.value = "";form.elev.value = "";
+}
+
+//done hiding from old browsers --></script>
+  <table align="center">
+   <tbody>
+    <tr>
+     <td valign="top">
+      <center>
+       <font face="Verdana" size="4"> <b>CALORIE BURN CALCULATOR</b></font>
+       <br>
+       <form>
+        <font face="Verdana" size="1" color="#dc143c"> <b>THIS CALCULATOR IS FOR ENTERTAINMENT PURPOSES AND<br>
+          HAS NO SCIENTIFIC SUPPORT AND DOES NOT CLAIM TO BE ACCURATE.</b> <font color="#00008b"> <br>
+          However, I have spent a considerable amount of time<br>
+          trying to make the results close to other charts on the internet. </font></font>
+        <br>
+        <br>
+        <table border="0" cellpadding="0" width="600" align="center">
+         <tbody>
+          <tr>
+           <td>
+            <table border="1" cellpadding="0" cellspacing="0" width="150" bgcolor="#f5deb3">
+             <tbody>
+              <tr>
+               <td>
+                <table align="center" border="0" cellpadding="2" width="150">
+                 <tbody>
+                  <tr>
+                   <td align="center"><font face="Verdana" size="2"><b>Weight</b></font></td>
+                  </tr>
+                  <tr>
+                   <td align="center"><font face="Verdana" size="1"><b> <input class="inputtext" onchange="(Num(this.value))" size="7" name="wt">Lbs</b></font></td>
+                  </tr>
+                 </tbody>
+                </table></td>
+              </tr>
+             </tbody>
+            </table></td>
+           <td>
+            <table border="1" cellpadding="0" cellspacing="0" width="150" bgcolor="#f5deb3">
+             <tbody>
+              <tr>
+               <td>
+                <table align="center" border="0" cellpadding="2" width="150">
+                 <tbody>
+                  <tr>
+                   <td align="center"><font face="Verdana" size="2"><b>Pace</b></font></td>
+                  </tr>
+                  <tr>
+                   <td align="center"><font face="Verdana" size="1"><b> <input class="inputtext" onchange="(Num(this.value))" size="3" name="pmin"> min/mile</b></font></td>
+                  </tr>
+                 </tbody>
+                </table></td>
+              </tr>
+             </tbody>
+            </table></td>
+           <td>
+            <table border="1" cellpadding="0" cellspacing="0" width="150" bgcolor="#f5deb3">
+             <tbody>
+              <tr>
+               <td>
+                <table align="center" border="0" cellpadding="2" width="150">
+                 <tbody>
+                  <tr>
+                   <td align="center" colspan="2"><font face="Verdana" size="2"><b>Duration</b></font></td>
+                  </tr>
+                  <tr>
+                   <td align="center"><font face="Verdana" size="1"><b> <input class="inputtext" name="hrs" onchange="(Num(this.value))" size="3"> hrs</b></font></td>
+                   <td align="center"><font face="Verdana" size="1"><b> <input class="inputtext" name="min" onchange="(Num(this.value))" size="3"> min</b></font></td>
+                  </tr>
+                 </tbody>
+                </table></td>
+              </tr>
+             </tbody>
+            </table></td>
+           <td>
+            <table border="1" cellpadding="0" cellspacing="0" width="150" bgcolor="#f5deb3">
+             <tbody>
+              <tr>
+               <td>
+                <table align="center" border="0" cellpadding="2" width="150">
+                 <tbody>
+                  <tr>
+                   <td align="center"><font face="Verdana" size="2"><b>Elevation Gain</b></font></td>
+                  </tr>
+                  <tr>
+                   <td align="center"><font face="Verdana" size="1"><b> <input class="inputtext" name="elev" onchange="(Num(this.value))" size="7"> feet</b></font></td>
+                  </tr>
+                 </tbody>
+                </table></td>
+              </tr>
+             </tbody>
+            </table></td>
+          </tr>
+         </tbody>
+        </table>
+        <table border="0" cellpadding="10" width="500" align="center">
+         <tbody>
+          <tr>
+           <td align="center"><input class="menutext" onclick="calc(this.form)" type="button" value="Calculate !"></td>
+           <td align="center"><input class="menutext" onclick="clear(this.form)" type="reset" value="Reset Form"></td>
+           <td align="center"><input type="button" value="Return" onclick="Javascript:history.back()"></td>
+          </tr>
+         </tbody>
+        </table><font face="Verdana" size="2" color="#800000"><b> One pound of fat is roughly equivalent to 3,500 calories </b></font>
+        <table align="center" border="0" cellpadding="10" cellspacing="0" width="300">
+         <tbody>
+          <tr>
+           <td>
+            <table border="1" cellpadding="0" cellspacing="0" width="150" bgcolor="#8fbc8f">
+             <tbody>
+              <tr>
+               <td>
+                <table align="center" border="0" cellpadding="2" width="150">
+                 <tbody>
+                  <tr>
+                   <td align="center"><font face="Verdana" size="1"><b>Calories / Hour</b></font></td>
+                  </tr>
+                  <tr>
+                   <td align="center"><input class="inputtext" size="9" name="calhr"></td>
+                  </tr>
+                 </tbody>
+                </table></td>
+              </tr>
+             </tbody>
+            </table></td>
+           <td>
+            <table border="1" cellpadding="0" cellspacing="0" width="150" bgcolor="#8fbc8f">
+             <tbody>
+              <tr>
+               <td>
+                <table align="center" border="0" cellpadding="2" width="150">
+                 <tbody>
+                  <tr>
+                   <td align="center"><font face="Verdana" size="1"><b>Total Calories</b></font></td>
+                  </tr>
+                  <tr>
+                   <td align="center"><input class="inputtext" size="9" name="caltot"></td>
+                  </tr>
+                 </tbody>
+                </table></td>
+              </tr>
+             </tbody>
+            </table></td>
+          </tr>
+         </tbody>
+        </table>
+        <table align="center" border="0" cellpadding="10" cellspacing="0" width="300">
+         <tbody>
+          <tr>
+           <td>
+            <table border="1" cellpadding="0" cellspacing="0" width="150" bgcolor="#f08080">
+             <tbody>
+              <tr>
+               <td>
+                <table align="center" border="0" cellpadding="2" width="150">
+                 <tbody>
+                  <tr>
+                   <td align="center"><font face="Verdana" size="1"><b>Miles Hiked</b></font></td>
+                  </tr>
+                  <tr>
+                   <td align="center"><input class="inputtext" size="9" name="dist"></td>
+                  </tr>
+                 </tbody>
+                </table></td>
+              </tr>
+             </tbody>
+            </table></td>
+           <td>
+            <table border="1" cellpadding="0" cellspacing="0" width="150" bgcolor="#f08080">
+             <tbody>
+              <tr>
+               <td>
+                <table align="center" border="0" cellpadding="2" width="150">
+                 <tbody>
+                  <tr>
+                   <td align="center"><font face="Verdana" size="1"><b>Hike Difficulty Level</b></font></td>
+                  </tr>
+                  <tr>
+                   <td align="center"><input class="inputtext" size="9" name="hikediff"></td>
+                  </tr>
+                 </tbody>
+                </table></td>
+              </tr>
+             </tbody>
+            </table></td>
+          </tr>
+         </tbody>
+        </table>
+        <table cellspacing="2" cellpadding="2" border="2">
+         <tbody>
+          <tr>
+           <td bgcolor="#c0c0c0" colspan="2"><font face="Verdana" size="2"><b> &nbsp;Score&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Difficulty Level&nbsp;&nbsp;&nbsp;</b></font></td>
+          </tr>
+          <tr>
+           <td bgcolor="#4682b4" align="center"><font face="Verdana" size="2" color="#ffff00"> 0 - 7 </font></td>
+           <td bgcolor="#4682b4" align="center"><font face="Verdana" size="2" color="#ffff00"> EASY </font></td>
+          </tr>
+          <tr>
+           <td bgcolor="#4682b4" align="center"><font face="Verdana" size="2" color="#ffff00"> 8 - 13 </font></td>
+           <td bgcolor="#4682b4" align="center"><font face="Verdana" size="2" color="#ffff00"> MODERATE </font></td>
+          </tr>
+          <tr>
+           <td bgcolor="#4682b4" align="center"><font face="Verdana" size="2" color="#ffff00"> 14 - 18 </font></td>
+           <td bgcolor="#4682b4" align="center"><font face="Verdana" size="2" color="#ffff00"> CHALLENGING </font></td>
+          </tr>
+          <tr>
+           <td bgcolor="#4682b4" align="center"><font face="Verdana" size="2" color="#ffff00"> 19 - 23 </font></td>
+           <td bgcolor="#4682b4" align="center"><font face="Verdana" size="2" color="#ffff00"> DIFFICULT </font></td>
+          </tr>
+          <tr>
+           <td bgcolor="#4682b4" align="center"><font face="Verdana" size="2" color="#ffff00"> 24 - 27 </font></td>
+           <td bgcolor="#4682b4" align="center"><font face="Verdana" size="2" color="#ffff00"> VERY DIFFICULT </font></td>
+          </tr>
+          <tr>
+           <td bgcolor="#4682b4" align="center"><font face="Verdana" size="2" color="#ffff00"> 28 + </font></td>
+           <td bgcolor="#4682b4" align="center"><font face="Verdana" size="2" color="#ffff00"> EXTREME </font></td>
+          </tr>
+         </tbody>
+        </table>
+       </form>
+      </center></td>
+    </tr>
+   </tbody>
+  </table>
+ </body>
+</html>

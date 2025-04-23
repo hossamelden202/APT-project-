@@ -1,0 +1,373 @@
+<!doctype html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How to perftest a model — Firefox Source Docs  documentation</title>
+  <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50">
+  <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094">
+  <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=fd3f3429">
+  <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b">
+  <link rel="stylesheet" type="text/css" href="../../../_static/custom_theme.css?v=dc5ed815">
+  <link rel="stylesheet" type="text/css" href="../../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7">
+  <link rel="shortcut icon" href="../../../_static/firefox.ico"><!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+  <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+  <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+  <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+  <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+  <script src="../../../_static/copybutton.js?v=30646c52"></script>
+  <script src="../../../_static/design-tabs.js?v=36754332"></script>
+  <script src="../../../_static/js/theme.js"></script>
+  <link rel="index" title="Index" href="../../../genindex.html">
+  <link rel="search" title="Search" href="../../../search.html">
+  <link rel="next" title="WebExtensions AI API" href="extensions.html">
+  <link rel="prev" title="Models management" href="models.html">
+ </head>
+ <body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+   <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <div class="wy-side-scroll">
+     <div class="wy-side-nav-search">
+      <a href="../../../index.html" class="icon icon-home"> Firefox Source Docs <img src="../../../_static/firefox-wordmark.svg" class="logo" alt="Logo"> </a><!-- -- This code is governed by the BSD license ---->
+      <div>
+       <h3>Quick search</h3>
+       <script>
+    (function () {
+      var cx = "dd12886298f75dbef";
+      var gcse = document.createElement("script");
+      gcse.async = true;
+      gcse.src = "https://cse.google.com/cse.js?cx=" + cx;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(gcse, s);
+    })();
+  </script><gcse:search></gcse:search>
+      </div>
+     </div>
+     <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+      <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../glossary/index.html">A Glossary of Common Terms</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../overview/index.html">A Quick Guide to Mozilla Applications</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../setup/index.html">Getting Set Up To Work On The Firefox Codebase</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Working On Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../contributing/index.html">Working on Firefox</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../bug-mgmt/index.html">Bug Handling</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox User Guide</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../devtools-user/index.html">Firefox DevTools User Docs</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Source Code Documentation</span></p>
+      <ul class="current">
+       <li class="toctree-l1"><a class="reference internal" href="../../../mots/index.html">Governance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../browser/index.html">Firefox Front-end</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../dom/index.html">DOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../editor/index.html">Editor</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../layout/index.html">Style system (CSS) &amp; Layout</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../gfx/index.html">Graphics</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../ipc/index.html">Processes, Threads and IPC</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../devtools/index.html">Firefox DevTools Contributor Docs</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../index.html">Toolkit</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../js/index.html">SpiderMonkey</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../jsloader/index.html">JS Loader</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../mobile/android/geckoview/index.html">GeckoView</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../mobile/android/fenix/index.html">Fenix</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../mobile/android/focus-android/index.html">Focus for Android</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../dom/bindings/webidl/index.html">WebIDL</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../modules/libpref/index.html">libpref</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../networking/index.html">Networking</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../remote/index.html">Remote Protocols</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../services/index.html">Services</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../permissions/index.html">Permissions</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../uriloader/index.html">File Handling</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../widget/cocoa/index.html">Firefox on macOS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../widget/windows/index.html">Firefox on Windows</a></li>
+       <li class="toctree-l1 current"><a class="reference internal" href="index.html">Firefox AI Runtime</a>
+        <ul class="current">
+         <li class="toctree-l2"><a class="reference internal" href="architecture.html">Architecture</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="api.html">APIs</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="notifications.html">Notifications</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="models.html">Models management</a></li>
+         <li class="toctree-l2 current"><a class="current reference internal" href="#">How to perftest a model</a>
+          <ul>
+           <li class="toctree-l3"><a class="reference internal" href="#run-locally">Run locally</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#add-in-the-ci">Add in the CI</a></li>
+          </ul></li>
+         <li class="toctree-l2"><a class="reference internal" href="extensions.html">WebExtensions AI API</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="extensions-api-example/README.html">Trial Inference API Extension Example</a></li>
+        </ul></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../accessible/index.html">Accessibility</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../media/index.html">Media Playback</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../code-quality/index.html">Code quality</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../writing-rust-code/index.html">Writing Rust Code</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../rust-components/index.html">Rust Components</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../tools/profiler/index.html">Gecko Profiler</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../performance/index.html">Performance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../storage/index.html">Database bindings (SQLite, KV, …)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../xpcom/index.html">XPCOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../nspr/index.html">NSPR</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../security/nss/index.html">Network Security Services (NSS)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../content-security/index.html">Web Security Checks in Gecko</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">The Firefox Build System</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../mach/index.html">Mach</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../tools/try/index.html">Pushing to Try</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../build/buildsystem/index.html">Build System</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../taskcluster/index.html">Firefox CI and Taskgraph</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../tools/moztreedocs/index.html">Managing Documentation</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../mozbuild/vendor/index.html">Vendoring Third Party Components</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Testing &amp; Test Infrastructure</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/automated-testing/index.html">Automated Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/treeherder-try/index.html">Understanding Treeherder Results</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/sheriffed-intermittents/index.html">Sheriffed intermittent failures</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/tests-for-new-config/index.html">Turning on Firefox tests for a new configuration</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/intermittent/index.html">Avoiding intermittent tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/testing-policy/index.html">Testing Policy</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/ci-configs/index.html">Configuration Changes</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/browser-chrome/index.html">Browser chrome mochitests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/chrome-tests/index.html">Chrome Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/marionette/index.html">Marionette</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/geckodriver/index.html">geckodriver</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/test-verification/index.html">Test Verification</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/webrender/index.html">WebRender Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/mochitest-plain/index.html">Mochitest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/xpcshell/index.html">XPCShell tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/tps/index.html">TPS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../web-platform/index.html">web-platform-tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../gtest/index.html">GTest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../tools/fuzzing/index.html">Fuzzing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../tools/sanitizer/index.html">Sanitizer</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/perfdocs/index.html">Performance Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../tools/code-coverage/index.html">Code coverage</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing-rust-code/index.html">Testing &amp; Debugging Rust Code</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Releases &amp; Updates</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../update-infrastructure/index.html">Mozilla Update Infrastructure</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../update-infrastructure/index.html#watershed-updates">Watershed Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../update-infrastructure/index.html#desupport-updates">Desupport Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../tools/update-verify/index.html">Update Verify</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Localization &amp; Internationalization</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../intl/index.html">Internationalization</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../l10n/index.html">Localization</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox and Python</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../mozbase/index.html">mozbase</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../python/index.html">Using third-party Python packages</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Metrics Collected in Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../metrics/index.html">Metrics</a></li>
+      </ul>
+     </div>
+    </div>
+   </nav>
+   <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+    <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+     <i data-toggle="wy-nav-top" class="fa fa-bars"></i> <a href="../../../index.html">Firefox Source Docs</a>
+    </nav>
+    <div class="wy-nav-content">
+     <div class="rst-content">
+      <!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+      <div role="navigation" aria-label="Page navigation">
+       <ul class="wy-breadcrumbs">
+        <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+        <li class="breadcrumb-item"><a href="index.html">Firefox AI Runtime</a></li>
+        <li class="breadcrumb-item active">How to perftest a model</li>
+        <li class="wy-breadcrumbs-aside"><a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Developer+Infrastructure&amp;component=Firefox+Source+Docs%3A+Content&amp;short_desc=Documentation+issue+on+toolkit/components/ml/perf&amp;comment=URL+=+https://firefox-source-docs.mozilla.org/toolkit/components/ml/perf.html&amp;bug_file_loc=https://firefox-source-docs.mozilla.org/toolkit/components/ml/perf.html" rel="nofollow">Report an issue</a> / <a href="../../../_sources/toolkit/components/ml/perf.rst.txt" rel="nofollow"> View page source</a></li>
+       </ul>
+       <hr>
+      </div>
+      <div role="main" class="document" itemscope itemtype="http://schema.org/Article">
+       <div itemprop="articleBody">
+        <section id="how-to-perftest-a-model">
+         <h1>How to perftest a model<a class="headerlink" href="#how-to-perftest-a-model" title="Link to this heading">?</a></h1>
+         <p>For each model running inside Firefox, we want to determine its performance in terms of speed and memory usage and track it over time.</p>
+         <p>To do so, we use the <a class="reference external" href="https://wiki.mozilla.org/Perfherder">Perfherder</a> infrastructure to gather the performance metrics.</p>
+         <p>Adding a new performance test is done in two steps: 1. making it work locally 2. add it in perfherder</p>
+         <section id="run-locally">
+          <h2>Run locally<a class="headerlink" href="#run-locally" title="Link to this heading">?</a></h2>
+          <p>To test the performance of a model, you can add in the <cite>tests/browser</cite> a new file with the following structure and adapt it to your needs:</p>
+          <div class="highlight-javascript notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="s2">"use strict"</span><span class="p">;</span>
+
+<span class="c1">// unfortunately we have to write a full static structure here</span>
+<span class="c1">// see https://bugzilla.mozilla.org/show_bug.cgi?id=1930955</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">perfMetadata</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">owner</span><span class="o">:</span><span class="w"> </span><span class="s2">"GenAI Team"</span><span class="p">,</span>
+<span class="w">  </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s2">"ML Test Model"</span><span class="p">,</span>
+<span class="w">  </span><span class="nx">description</span><span class="o">:</span><span class="w"> </span><span class="s2">"Template test for latency for ml models"</span><span class="p">,</span>
+<span class="w">  </span><span class="nx">options</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">default</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nx">perfherder</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">      </span><span class="nx">perfherder_metrics</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s2">"pipeline-ready-latency"</span><span class="p">,</span><span class="w"> </span><span class="nx">unit</span><span class="o">:</span><span class="w"> </span><span class="s2">"ms"</span><span class="p">,</span><span class="w"> </span><span class="nx">shouldAlert</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="w"> </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s2">"initialization-latency"</span><span class="p">,</span><span class="w"> </span><span class="nx">unit</span><span class="o">:</span><span class="w"> </span><span class="s2">"ms"</span><span class="p">,</span><span class="w"> </span><span class="nx">shouldAlert</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="w"> </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s2">"model-run-latency"</span><span class="p">,</span><span class="w"> </span><span class="nx">unit</span><span class="o">:</span><span class="w"> </span><span class="s2">"ms"</span><span class="p">,</span><span class="w"> </span><span class="nx">shouldAlert</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="w"> </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s2">"pipeline-ready-memory"</span><span class="p">,</span><span class="w"> </span><span class="nx">unit</span><span class="o">:</span><span class="w"> </span><span class="s2">"MB"</span><span class="p">,</span><span class="w"> </span><span class="nx">shouldAlert</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="w"> </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s2">"initialization-memory"</span><span class="p">,</span><span class="w"> </span><span class="nx">unit</span><span class="o">:</span><span class="w"> </span><span class="s2">"MB"</span><span class="p">,</span><span class="w"> </span><span class="nx">shouldAlert</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="w"> </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s2">"model-run-memory"</span><span class="p">,</span><span class="w"> </span><span class="nx">unit</span><span class="o">:</span><span class="w"> </span><span class="s2">"MB"</span><span class="p">,</span><span class="w"> </span><span class="nx">shouldAlert</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="w"> </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s2">"total-memory-usage"</span><span class="p">,</span><span class="w"> </span><span class="nx">unit</span><span class="o">:</span><span class="w"> </span><span class="s2">"MB"</span><span class="p">,</span><span class="w"> </span><span class="nx">shouldAlert</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="w"> </span><span class="p">},</span>
+<span class="w">      </span><span class="p">],</span>
+<span class="w">      </span><span class="nx">verbose</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">      </span><span class="nx">manifest</span><span class="o">:</span><span class="w"> </span><span class="s2">"perftest.toml"</span><span class="p">,</span>
+<span class="w">      </span><span class="nx">manifest_flavor</span><span class="o">:</span><span class="w"> </span><span class="s2">"browser-chrome"</span><span class="p">,</span>
+<span class="w">      </span><span class="nx">try_platform</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"linux"</span><span class="p">,</span><span class="w"> </span><span class="s2">"mac"</span><span class="p">,</span><span class="w"> </span><span class="s2">"win"</span><span class="p">],</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="p">};</span>
+
+<span class="nx">requestLongerTimeout</span><span class="p">(</span><span class="mf">120</span><span class="p">);</span>
+
+<span class="nx">add_task</span><span class="p">(</span><span class="k">async</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">test_ml_generic_pipeline</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">options</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">taskName</span><span class="o">:</span><span class="w"> </span><span class="s2">"feature-extraction"</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">modelId</span><span class="o">:</span><span class="w"> </span><span class="s2">"Xenova/all-MiniLM-L6-v2"</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">modelHubUrlTemplate</span><span class="o">:</span><span class="w"> </span><span class="s2">"{model}/{revision}"</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">modelRevision</span><span class="o">:</span><span class="w"> </span><span class="s2">"main"</span><span class="p">,</span>
+<span class="w">  </span><span class="p">};</span>
+
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">args</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">"The quick brown fox jumps over the lazy dog."</span><span class="p">];</span>
+<span class="w">  </span><span class="k">await</span><span class="w"> </span><span class="nx">perfTest</span><span class="p">(</span><span class="s2">"example"</span><span class="p">,</span><span class="w"> </span><span class="nx">options</span><span class="p">,</span><span class="w"> </span><span class="nx">args</span><span class="p">);</span>
+<span class="p">});</span>
+</pre>
+           </div>
+          </div>
+          <p>Then add the file in <cite>perftest.toml</cite> and rebuild with <cite>./mach build</cite>.</p>
+          <p>The test downloads models it uses from the local disk, so you need to prepare them.</p>
+          <p>We provide a script to automate this.</p>
+          <div class="highlight-bash notranslate">
+           <div class="highlight">
+            <pre><span></span>$<span class="w"> </span>mach<span class="w"> </span>python<span class="w"> </span>toolkit/components/ml/tests/tools/create_local_hub.py<span class="w"> </span>--list-models
+Available<span class="w"> </span>git-based<span class="w"> </span>models<span class="w"> </span>from<span class="w"> </span>the<span class="w"> </span>YAML:
+
+-<span class="w"> </span>xenova-all-minilm-l6-v2<span class="w"> </span>-&gt;<span class="w"> </span>path-prefix:<span class="w"> </span>onnx-models/Xenova/all-MiniLM-L6-v2/main/
+-<span class="w"> </span>mozilla-ner<span class="w"> </span>-&gt;<span class="w"> </span>path-prefix:<span class="w"> </span>onnx-models/Mozilla/distilbert-uncased-NER-LoRA/main/
+-<span class="w"> </span>mozilla-intent<span class="w"> </span>-&gt;<span class="w"> </span>path-prefix:<span class="w"> </span>onnx-models/Mozilla/mobilebert-uncased-finetuned-LoRA-intent-classifier/main/
+-<span class="w"> </span>mozilla-autofill<span class="w"> </span>-&gt;<span class="w"> </span>path-prefix:<span class="w"> </span>onnx-models/Mozilla/tinybert-uncased-autofill/main/
+-<span class="w"> </span>distilbart-cnn-12-6<span class="w"> </span>-&gt;<span class="w"> </span>path-prefix:<span class="w"> </span>onnx-models/Mozilla/distilbart-cnn-12-6/main/
+-<span class="w"> </span>qwen2.5-0.5-instruct<span class="w"> </span>-&gt;<span class="w"> </span>path-prefix:<span class="w"> </span>onnx-models/Mozilla/Qwen2.5-0.5B-Instruct/main/
+-<span class="w"> </span>mozilla-smart-tab-topic<span class="w"> </span>-&gt;<span class="w"> </span>path-prefix:<span class="w"> </span>onnx-models/Mozilla/smart-tab-topic/main/
+-<span class="w"> </span>mozilla-smart-tab-emb<span class="w"> </span>-&gt;<span class="w"> </span>path-prefix:<span class="w"> </span>onnx-models/Mozilla/smart-tab-embedding/main/
+
+<span class="o">(</span>Use<span class="w"> </span><span class="sb">`</span>--model<span class="w"> </span>&lt;key&gt;<span class="sb">`</span><span class="w"> </span>to<span class="w"> </span>clone<span class="w"> </span>one<span class="w"> </span>of<span class="w"> </span>these<span class="w"> </span>repositories.<span class="o">)</span>
+</pre>
+           </div>
+          </div>
+          <p>You can then use <cite>–model</cite> to download locally models, by specifying the local <cite>MOZ_ML_LOCAL_DIR</cite> directory, via the env var or command line argument :</p>
+          <div class="highlight-bash notranslate">
+           <div class="highlight">
+            <pre><span></span>$<span class="w"> </span>mach<span class="w"> </span>python<span class="w"> </span>toolkit/components/ml/tests/tools/create_local_hub.py<span class="w"> </span>--model<span class="w"> </span>mozilla-smart-tab-emb<span class="w"> </span>--fetches-dir<span class="w"> </span>~/ml-fetches
+Found<span class="w"> </span>existing<span class="w"> </span>file<span class="w"> </span>/Users/tarekziade/Dev/fetches/ort-wasm-simd-threaded.jsep.wasm,<span class="w"> </span>verifying<span class="w"> </span>checksum...
+Existing<span class="w"> </span>file<span class="s1">'s checksum matches. Skipping download.</span>
+<span class="s1">Updated Git hooks.</span>
+<span class="s1">Git LFS initialized.</span>
+<span class="s1">Cloning https://huggingface.co/Mozilla/smart-tab-embedding into '</span>/Users/tarekziade/Dev/fetches/onnx-models/Mozilla/smart-tab-embedding/main...
+Cloning<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="s1">'/Users/tarekziade/Dev/fetches/onnx-models/Mozilla/smart-tab-embedding/main'</span>...
+Checked<span class="w"> </span>out<span class="w"> </span>revision<span class="w"> </span><span class="s1">'2278e76f67ada584cfd3149fd2661dad03674e4d'</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="s1">'/Users/tarekziade/Dev/fetches/onnx-models/Mozilla/smart-tab-embedding/main'</span>.
+</pre>
+           </div>
+          </div>
+          <p>Once done, you should then be able to run it locally with :</p>
+          <div class="highlight-bash notranslate">
+           <div class="highlight">
+            <pre><span></span>$<span class="w"> </span><span class="nv">MOZ_ML_LOCAL_DIR</span><span class="o">=</span>~/ml-fetches<span class="w"> </span>./mach<span class="w"> </span>perftest<span class="w"> </span>toolkit/components/ml/tests/browser/browser_ml_engine_perf.js<span class="w"> </span>--mochitest-extra-args<span class="o">=</span>headless
+</pre>
+           </div>
+          </div>
+          <p>Notice that <cite>MOZ_ML_LOCAL_DIR</cite> is an absolute path to the <cite>root</cite> directory.</p>
+         </section>
+         <section id="add-in-the-ci">
+          <h2>Add in the CI<a class="headerlink" href="#add-in-the-ci" title="Link to this heading">?</a></h2>
+          <p>To add the test in the CI you need to add an entry in</p>
+          <ul class="simple">
+           <li>
+            <p><cite>taskcluster/kinds/perftest/linux.yml</cite></p></li>
+           <li>
+            <p><cite>taskcluster/kinds/perftest/windows11.yml</cite></p></li>
+           <li>
+            <p><cite>taskcluster/kinds/perftest/macos.yml</cite></p></li>
+          </ul>
+          <p>With a unique name that starts with <cite>ml-perf</cite></p>
+          <p>Example for Linux:</p>
+          <div class="highlight-yaml notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="nt">ml-perf</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">fetches</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">fetch</span><span class="p">:</span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ort.wasm</span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ort.jsep.wasm</span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ort-training.wasm</span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">xenova-all-minilm-l6-v2</span>
+<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Run ML Models Perf Tests</span>
+<span class="w">    </span><span class="nt">treeherder</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">symbol</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">perftest(linux-ml-perf)</span>
+<span class="w">        </span><span class="nt">tier</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="w">    </span><span class="nt">attributes</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">batch</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="w">        </span><span class="nt">cron</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="w">    </span><span class="nt">run-on-projects</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">autoland</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">mozilla-central</span><span class="p p-Indicator">]</span>
+<span class="w">    </span><span class="nt">run</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">&gt;-</span>
+<span class="w">            </span><span class="no">mkdir -p $MOZ_FETCHES_DIR/../artifacts &amp;&amp;</span>
+<span class="w">            </span><span class="no">cd $MOZ_FETCHES_DIR &amp;&amp;</span>
+<span class="w">            </span><span class="no">python3 python/mozperftest/mozperftest/runner.py</span>
+<span class="w">            </span><span class="no">--mochitest-binary ${MOZ_FETCHES_DIR}/firefox/firefox-bin</span>
+<span class="w">            </span><span class="no">--flavor mochitest</span>
+<span class="w">            </span><span class="no">--output $MOZ_FETCHES_DIR/../artifacts</span>
+<span class="w">            </span><span class="no">toolkit/components/ml/tests/browser/browser_ml_engine_perf.js</span>
+</pre>
+           </div>
+          </div>
+          <p>You also need to add the models your test uses (like the ones you’ve downloaded locally) by adding entries in <cite>taskcluster/kinds/fetch/onnxruntime-web-fetch.yaml</cite> and adapting the <cite>fetches</cite> section.</p>
+          <p>Once this is done, try it out with:</p>
+          <div class="highlight-bash notranslate">
+           <div class="highlight">
+            <pre><span></span>$<span class="w"> </span>./mach<span class="w"> </span>try<span class="w"> </span>perf<span class="w"> </span>--single-run<span class="w"> </span>--full<span class="w"> </span>--artifact
+</pre>
+           </div>
+          </div>
+          <p>You should then see the results in treeherder.</p>
+         </section>
+        </section>
+       </div>
+      </div>
+      <footer>
+       <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="models.html" class="btn btn-neutral float-left" title="Models management" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a> <a href="extensions.html" class="btn btn-neutral float-right" title="WebExtensions AI API" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+       </div>
+       <hr>
+       <div role="contentinfo">
+        <p></p>
+       </div> Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+      </footer>
+     </div>
+    </div>
+   </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ </body>
+</html>

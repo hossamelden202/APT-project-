@@ -1,0 +1,544 @@
+<!doctype html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Writing Instrumentation Tests — Firefox Source Docs  documentation</title>
+  <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=fa44fd50">
+  <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=19f00094">
+  <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css?v=fd3f3429">
+  <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css?v=76b2166b">
+  <link rel="stylesheet" type="text/css" href="../../../../_static/custom_theme.css?v=dc5ed815">
+  <link rel="stylesheet" type="text/css" href="../../../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7">
+  <link rel="shortcut icon" href="../../../../_static/firefox.ico"><!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+  <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+  <script src="../../../../_static/documentation_options.js?v=5929fcd5"></script>
+  <script src="../../../../_static/doctools.js?v=9a2dae69"></script>
+  <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
+  <script src="../../../../_static/copybutton.js?v=30646c52"></script>
+  <script src="../../../../_static/design-tabs.js?v=36754332"></script>
+  <script src="../../../../_static/js/theme.js"></script>
+  <link rel="index" title="Index" href="../../../../genindex.html">
+  <link rel="search" title="Search" href="../../../../search.html">
+  <link rel="next" title="Migrating Firefox Telemetry to Glean" href="migration.html">
+  <link rel="prev" title="Using Firefox on Glean to Record Legacy Telemetry Scalars" href="glean_for_legacy_scalars.html">
+ </head>
+ <body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+   <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <div class="wy-side-scroll">
+     <div class="wy-side-nav-search">
+      <a href="../../../../index.html" class="icon icon-home"> Firefox Source Docs <img src="../../../../_static/firefox-wordmark.svg" class="logo" alt="Logo"> </a><!-- -- This code is governed by the BSD license ---->
+      <div>
+       <h3>Quick search</h3>
+       <script>
+    (function () {
+      var cx = "dd12886298f75dbef";
+      var gcse = document.createElement("script");
+      gcse.async = true;
+      gcse.src = "https://cse.google.com/cse.js?cx=" + cx;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(gcse, s);
+    })();
+  </script><gcse:search></gcse:search>
+      </div>
+     </div>
+     <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+      <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../glossary/index.html">A Glossary of Common Terms</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../overview/index.html">A Quick Guide to Mozilla Applications</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../setup/index.html">Getting Set Up To Work On The Firefox Codebase</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Working On Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../contributing/index.html">Working on Firefox</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../bug-mgmt/index.html">Bug Handling</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox User Guide</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../devtools-user/index.html">Firefox DevTools User Docs</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Source Code Documentation</span></p>
+      <ul class="current">
+       <li class="toctree-l1"><a class="reference internal" href="../../../../mots/index.html">Governance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../browser/index.html">Firefox Front-end</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../dom/index.html">DOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../editor/index.html">Editor</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../layout/index.html">Style system (CSS) &amp; Layout</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../gfx/index.html">Graphics</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../ipc/index.html">Processes, Threads and IPC</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../devtools/index.html">Firefox DevTools Contributor Docs</a></li>
+       <li class="toctree-l1 current"><a class="reference internal" href="../../../index.html">Toolkit</a>
+        <ul class="current">
+         <li class="toctree-l2"><a class="reference internal" href="../../../javascript-logging.html">JavaScript Logging</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../mozapps/extensions/addon-manager/index.html">Add-on Manager</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../backgroundtasks/index.html">Background Task Mode</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../crashes/crash-manager/index.html">Crash Manager</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../crashreporter/crashreporter/index.html">Crash Reporter</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../internal-urls.html">Internal URLs</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../search/index.html">Search Service</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../normandy/normandy/index.html">Shield Recipe Client</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../nimbus/docs/index.html">Nimbus</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../messaging-system/docs/index.html">Messaging System Schemas</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../pictureinpicture/pictureinpicture/index.html">Picture-in-Picture</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../prompts/prompts/index.html">Prompts</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../modules/subprocess/toolkit_modules/subprocess/index.html">Subprocess Module</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../telemetry/index.html">Telemetry</a></li>
+         <li class="toctree-l2 current"><a class="reference internal" href="../index.html">Firefox on Glean (FOG)</a>
+          <ul class="current">
+           <li class="toctree-l3 current"><a class="reference internal" href="index.html">Using Firefox on Glean</a>
+            <ul class="current">
+             <li class="toctree-l4"><a class="reference internal" href="getting_started.html">Getting Started with Firefox on Glean (FOG)</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="new_definitions_file.html">New Metrics and Pings</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="gifft.html">Glean Interface For Firefox Telemetry (GIFFT)</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="glean_for_legacy_events.html">Using Firefox on Glean to Record Legacy Telemetry Events</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="glean_for_legacy_scalars.html">Using Firefox on Glean to Record Legacy Telemetry Scalars</a></li>
+             <li class="toctree-l4 current"><a class="current reference internal" href="#">Writing Instrumentation Tests</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="migration.html">Migrating Firefox Telemetry to Glean</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="ohttp.html">Using Oblivious HTTP in Firefox on Glean</a></li>
+             <li class="toctree-l4"><a class="reference external" href="https://mozilla.github.io/glean/book/index.html">Glean SDK Documentation</a></li>
+            </ul></li>
+           <li class="toctree-l3"><a class="reference internal" href="../dev/index.html">Developing Firefox on Glean</a></li>
+          </ul></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../modules/toolkit_modules/index.html">Toolkit Modules</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../content/toolkit_widgets/index.html">Toolkit Widgets</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../resistfingerprinting/resistfingerprinting/index.html">Fingerprinting Resistance</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../url-classifier/url-classifier/index.html">URL Classifier</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../extensions/webextensions/index.html">WebExtensions API Development</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../../extensions/spellcheck/index.html">Managing the built-in en-US dictionary</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../mozapps/update/docs/index.html">Application Update</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../antitracking/anti-tracking/index.html">Anti-Tracking</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../translations/index.html">Translations</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../sessionstore/index.html">Session Store</a></li>
+        </ul></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../js/index.html">SpiderMonkey</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../jsloader/index.html">JS Loader</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../mobile/android/geckoview/index.html">GeckoView</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../mobile/android/fenix/index.html">Fenix</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../mobile/android/focus-android/index.html">Focus for Android</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../dom/bindings/webidl/index.html">WebIDL</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../modules/libpref/index.html">libpref</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../networking/index.html">Networking</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../remote/index.html">Remote Protocols</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../services/index.html">Services</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../permissions/index.html">Permissions</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../uriloader/index.html">File Handling</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../widget/cocoa/index.html">Firefox on macOS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../widget/windows/index.html">Firefox on Windows</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../ml/index.html">Firefox AI Runtime</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../accessible/index.html">Accessibility</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../media/index.html">Media Playback</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../code-quality/index.html">Code quality</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../writing-rust-code/index.html">Writing Rust Code</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../rust-components/index.html">Rust Components</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../tools/profiler/index.html">Gecko Profiler</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../performance/index.html">Performance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../storage/index.html">Database bindings (SQLite, KV, …)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../xpcom/index.html">XPCOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../nspr/index.html">NSPR</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../security/nss/index.html">Network Security Services (NSS)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../content-security/index.html">Web Security Checks in Gecko</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">The Firefox Build System</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../mach/index.html">Mach</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../tools/try/index.html">Pushing to Try</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../build/buildsystem/index.html">Build System</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../taskcluster/index.html">Firefox CI and Taskgraph</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../tools/moztreedocs/index.html">Managing Documentation</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../mozbuild/vendor/index.html">Vendoring Third Party Components</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Testing &amp; Test Infrastructure</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/automated-testing/index.html">Automated Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/treeherder-try/index.html">Understanding Treeherder Results</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/sheriffed-intermittents/index.html">Sheriffed intermittent failures</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/tests-for-new-config/index.html">Turning on Firefox tests for a new configuration</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/intermittent/index.html">Avoiding intermittent tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/testing-policy/index.html">Testing Policy</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/ci-configs/index.html">Configuration Changes</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/browser-chrome/index.html">Browser chrome mochitests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/chrome-tests/index.html">Chrome Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/marionette/index.html">Marionette</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/geckodriver/index.html">geckodriver</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/test-verification/index.html">Test Verification</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/webrender/index.html">WebRender Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/mochitest-plain/index.html">Mochitest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/xpcshell/index.html">XPCShell tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/tps/index.html">TPS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../web-platform/index.html">web-platform-tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../gtest/index.html">GTest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../tools/fuzzing/index.html">Fuzzing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../tools/sanitizer/index.html">Sanitizer</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/perfdocs/index.html">Performance Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../tools/code-coverage/index.html">Code coverage</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing-rust-code/index.html">Testing &amp; Debugging Rust Code</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Releases &amp; Updates</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../update-infrastructure/index.html">Mozilla Update Infrastructure</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../update-infrastructure/index.html#watershed-updates">Watershed Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../update-infrastructure/index.html#desupport-updates">Desupport Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../tools/update-verify/index.html">Update Verify</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Localization &amp; Internationalization</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../intl/index.html">Internationalization</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../l10n/index.html">Localization</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox and Python</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../mozbase/index.html">mozbase</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../python/index.html">Using third-party Python packages</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Metrics Collected in Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../metrics/index.html">Metrics</a></li>
+      </ul>
+     </div>
+    </div>
+   </nav>
+   <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+    <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+     <i data-toggle="wy-nav-top" class="fa fa-bars"></i> <a href="../../../../index.html">Firefox Source Docs</a>
+    </nav>
+    <div class="wy-nav-content">
+     <div class="rst-content">
+      <!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+      <div role="navigation" aria-label="Page navigation">
+       <ul class="wy-breadcrumbs">
+        <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+        <li class="breadcrumb-item"><a href="../../../index.html">Toolkit</a></li>
+        <li class="breadcrumb-item"><a href="../index.html">Firefox on Glean (FOG)</a></li>
+        <li class="breadcrumb-item"><a href="index.html">Using Firefox on Glean</a></li>
+        <li class="breadcrumb-item active">Writing Instrumentation Tests</li>
+        <li class="wy-breadcrumbs-aside"><a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Developer+Infrastructure&amp;component=Firefox+Source+Docs%3A+Content&amp;short_desc=Documentation+issue+on+toolkit/components/glean/user/instrumentation_tests&amp;comment=URL+=+https://firefox-source-docs.mozilla.org/toolkit/components/glean/user/instrumentation_tests.html&amp;bug_file_loc=https://firefox-source-docs.mozilla.org/toolkit/components/glean/user/instrumentation_tests.html" rel="nofollow">Report an issue</a> / <a href="../../../../_sources/toolkit/components/glean/user/instrumentation_tests.md.txt" rel="nofollow"> View page source</a></li>
+       </ul>
+       <hr>
+      </div>
+      <div role="main" class="document" itemscope itemtype="http://schema.org/Article">
+       <div itemprop="articleBody">
+        <section id="writing-instrumentation-tests">
+         <h1>Writing Instrumentation Tests<a class="headerlink" href="#writing-instrumentation-tests" title="Link to this heading">?</a></h1>
+         <div class="admonition-old-glean-proverb admonition">
+          <p class="admonition-title">Old Glean Proverb</p>
+          <p>If it’s important enough to be instrumented, it’s important enough to be tested.</p>
+         </div>
+         <p>All metrics and pings in the Glean SDK have <a class="reference external" href="https://mozilla.github.io/glean/book/reference/metrics/index.html">well-documented APIs for testing</a>. You’ll want to familiarize yourself with <code class="docutils literal notranslate"><span class="pre">TestGetValue()</span></code> (here’s <a class="reference external" href="https://searchfox.org/mozilla-central/rev/66e59131c1c76fe486424dc37f0a8a399ca874d4/toolkit/mozapps/update/tests/unit_background_update/test_backgroundupdate_glean.js#28">an example JS (xpcshell) test of some metrics</a>) for metrics and <a class="reference external" href="https://mozilla.github.io/glean/book/reference/pings/index.html#testbeforenextsubmit"><code class="docutils literal notranslate"><span class="pre">TestBeforeNextSubmit()</span></code></a> (here’s <a class="reference external" href="https://searchfox.org/mozilla-central/rev/66e59131c1c76fe486424dc37f0a8a399ca874d4/toolkit/components/glean/tests/gtest/TestFog.cpp#232">an example C++ (gtest) test of a custom ping</a>) for pings.</p>
+         <p>All test APIs are available in all three of FOG’s supported languages: Rust, C++, and JavaScript.</p>
+         <p>But how do you get into a position where you can even call these test APIs? How do they fit in with Firefox Desktop’s testing frameworks?</p>
+         <section id="manual-testing-and-debugging">
+          <h2>Manual Testing and Debugging<a class="headerlink" href="#manual-testing-and-debugging" title="Link to this heading">?</a></h2>
+          <p>The Glean SDK has <a class="reference external" href="https://mozilla.github.io/glean/book/reference/debug/index.html">debugging capabilities</a> for manually verifying that instrumentation makes it to Mozilla’s Data Pipeline. Firefox Desktop supports these via environment variables <em>and</em> via the interface on <code class="docutils literal notranslate"><span class="pre">about:glean</span></code>.</p>
+          <p>This is all well and good for getting a good sense check that things are going well <em>now</em>, but in order to check that everything stays good through the future, you’re going to want to write some automated tests.</p>
+         </section>
+         <section id="general-things-to-bear-in-mind">
+          <h2>General Things To Bear In Mind<a class="headerlink" href="#general-things-to-bear-in-mind" title="Link to this heading">?</a></h2>
+          <ul class="simple">
+           <li>
+            <p>You may see values from previous tests persist across tests because the profile directory was shared between test cases.</p>
+            <ul>
+             <li>
+              <p>You can reset Glean before your test by calling <code class="docutils literal notranslate"><span class="pre">Services.fog.testResetFOG()</span></code> (in JS).</p>
+              <ul>
+               <li>
+                <p>If your instrumentation isn’t on the parent process, you should call <code class="docutils literal notranslate"><span class="pre">await</span> <span class="pre">Services.fog.testFlushAllChildren()</span></code> before <code class="docutils literal notranslate"><span class="pre">testResetFOG</span></code>. That will ensure all pending data makes it to the parent process to be cleared.</p></li>
+              </ul></li>
+             <li>
+              <p>You shouldn’t have to do this in C++ or Rust since there you should use the <code class="docutils literal notranslate"><span class="pre">FOGFixture</span></code> test fixture.</p></li>
+            </ul></li>
+           <li>
+            <p>If your metric is based on timing (<code class="docutils literal notranslate"><span class="pre">timespan</span></code>, <code class="docutils literal notranslate"><span class="pre">timing_distribution</span></code>), do not expect to be able to assert the correct timing value. Glean does a lot of timing for you deep in the SDK, so unless you mock the system’s monotonic clock, do not expect the values to be predictable.</p>
+            <ul>
+             <li>
+              <p>Instead, check that a value is <code class="docutils literal notranslate"><span class="pre">&gt;</span> <span class="pre">0</span></code> or that the number of samples is expected.</p></li>
+             <li>
+              <p>You might be able to assert that the value is at least as much as a known, timed value, but beware of rounding.</p></li>
+             <li>
+              <p>If your metric is a <code class="docutils literal notranslate"><span class="pre">timing_distribution</span></code> mirroring to a Telemetry probe via <a class="reference internal" href="gifft.html"><span class="std std-doc">GIFFT</span></a>, there may be <a class="reference internal" href="gifft.html#timing-distribution-mirrors-samples-and-sums-might-be-different"><span class="std std-ref">small observed differences between systems</span></a> that can cause equality assertions to fail.</p></li>
+            </ul></li>
+           <li>
+            <p>Errors in instrumentation APIs do not panic, throw, or crash. But Glean remembers that the errors happened.</p>
+            <ul>
+             <li>
+              <p>Test APIs, on the other hand, are permitted (some may say “encouraged”) to panic, throw, or crash on bad behaviour.</p></li>
+             <li>
+              <p>If you call a test API and it panics, throws, or crashes, that means your instrumentation did something wrong. Check your test logs for details about what went awry.</p></li>
+            </ul></li>
+          </ul>
+          <section id="tests-and-artifact-builds">
+           <h3>Tests and Artifact Builds<a class="headerlink" href="#tests-and-artifact-builds" title="Link to this heading">?</a></h3>
+           <p>Artifact build support is provided by <a class="reference internal" href="../dev/jog.html"><span class="doc std std-doc">the JOG subsystem</span></a>. It is able to register the latest versions of all metrics and pings at runtime. However, the compiled code is still running against the version of those metrics and pings that was current at the time the artifacts were compiled.</p>
+           <p>This isn’t a problem unless:</p>
+           <ul class="simple">
+            <li>
+             <p>You are changing a metric or ping that is used in instrumentation in the compiled code, or</p></li>
+            <li>
+             <p>You are using <code class="docutils literal notranslate"><span class="pre">testBeforeNextSubmit</span></code> in JavaScript for a ping submitted in the compiled code.</p></li>
+           </ul>
+           <p>When in doubt, simply test your new test in artifact mode (by e.g. passing <code class="docutils literal notranslate"><span class="pre">--enable-artifact-builds</span></code> to <code class="docutils literal notranslate"><span class="pre">mach</span> <span class="pre">try</span></code>) before submitting it. If it doesn’t pass in artifact mode because of one of these two cases, you may need to skip your test whenever FOG’s artifact build support is enabled:</p>
+           <ul class="simple">
+            <li>
+             <p>xpcshell:</p></li>
+           </ul>
+           <div class="highlight-js notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="nx">add_task</span><span class="p">(</span>
+<span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="nx">skip_if</span><span class="o">:</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">Services</span><span class="p">.</span><span class="nx">prefs</span><span class="p">.</span><span class="nx">getBoolPref</span><span class="p">(</span><span class="s2">"telemetry.fog.artifact_build"</span><span class="p">,</span><span class="w"> </span><span class="kc">false</span><span class="p">)</span><span class="w"> </span><span class="p">},</span>
+<span class="w">  </span><span class="kd">function</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// ... your test ...</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">);</span>
+</pre>
+            </div>
+           </div>
+           <ul class="simple">
+            <li>
+             <p>mochitest:</p></li>
+           </ul>
+           <div class="highlight-js notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="nx">add_task</span><span class="p">(</span><span class="kd">function</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">Services</span><span class="p">.</span><span class="nx">prefs</span><span class="p">.</span><span class="nx">getBoolPref</span><span class="p">(</span><span class="s2">"telemetry.fog.artifact_build"</span><span class="p">,</span><span class="w"> </span><span class="kc">false</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">Assert</span><span class="p">.</span><span class="nx">ok</span><span class="p">(</span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="s2">"Test skipped in artifact mode."</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="c1">// ... your test ...</span>
+<span class="p">});</span>
+</pre>
+            </div>
+           </div>
+          </section>
+         </section>
+         <section id="the-usual-test-format">
+          <h2>The Usual Test Format<a class="headerlink" href="#the-usual-test-format" title="Link to this heading">?</a></h2>
+          <p>Instrumentation tests tend to follow the same three-part format:</p>
+          <ol class="arabic simple">
+           <li>
+            <p>Assert no value in the metric</p></li>
+           <li>
+            <p>Express behaviour</p></li>
+           <li>
+            <p>Assert correct value in the metric</p></li>
+          </ol>
+          <p>Your choice of test suite will depend on how the instrumented behaviour can be expressed.</p>
+         </section>
+         <section id="xpcshell-tests">
+          <h2><code class="docutils literal notranslate"><span class="pre">xpcshell</span></code> Tests<a class="headerlink" href="#xpcshell-tests" title="Link to this heading">?</a></h2>
+          <p>If the instrumented behaviour is on the main or content process and can be called from privileged JS, <code class="docutils literal notranslate"><span class="pre">xpcshell</span></code> is an excellent choice.</p>
+          <p><code class="docutils literal notranslate"><span class="pre">xpcshell</span></code> is so minimal an environment, however, that (pending <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1756055">bug 1756055</a>) you’ll need to manually tell it you need two things:</p>
+          <ol class="arabic simple">
+           <li>
+            <p>A profile directory</p></li>
+           <li>
+            <p>An initialized FOG</p></li>
+          </ol>
+          <div class="highlight-js notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="cm">/* Any copyright is dedicated to the Public Domain.</span>
+<span class="cm">   http://creativecommons.org/publicdomain/zero/1.0/ */</span>
+
+<span class="s2">"use strict"</span><span class="p">;</span>
+
+<span class="nx">add_setup</span><span class="p">(</span><span class="kd">function</span><span class="w"> </span><span class="nx">test_setup</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="c1">// FOG needs a profile directory to put its data in.</span>
+<span class="w">  </span><span class="nx">do_get_profile</span><span class="p">();</span>
+
+<span class="w">  </span><span class="c1">// FOG needs to be initialized in order for data to flow.</span>
+<span class="w">  </span><span class="nx">Services</span><span class="p">.</span><span class="nx">fog</span><span class="p">.</span><span class="nx">initializeFOG</span><span class="p">();</span>
+<span class="p">});</span>
+</pre>
+           </div>
+          </div>
+          <p>From there, just follow The Usual Test Format:</p>
+          <div class="highlight-js notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="nx">add_task</span><span class="p">(</span><span class="kd">function</span><span class="w"> </span><span class="nx">test_instrumentation</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="c1">// 1) Assert no value</span>
+<span class="w">  </span><span class="nx">Assert</span><span class="p">.</span><span class="nx">equal</span><span class="p">(</span><span class="kc">undefined</span><span class="p">,</span><span class="w"> </span><span class="nx">Glean</span><span class="p">.</span><span class="nx">myMetricCategory</span><span class="p">.</span><span class="nx">myMetricName</span><span class="p">.</span><span class="nx">testGetValue</span><span class="p">());</span>
+
+<span class="w">  </span><span class="c1">// 2) Express behaviour</span>
+<span class="w">  </span><span class="c1">// ...&lt;left as an exercise to the reader&gt;...</span>
+
+<span class="w">  </span><span class="c1">// 3) Assert correct value</span>
+<span class="w">  </span><span class="nx">Assert</span><span class="p">.</span><span class="nx">equal</span><span class="p">(</span><span class="nx">kValue</span><span class="p">,</span><span class="w"> </span><span class="nx">Glean</span><span class="p">.</span><span class="nx">myMetricCategory</span><span class="p">.</span><span class="nx">myMetricName</span><span class="p">.</span><span class="nx">testGetValue</span><span class="p">());</span>
+<span class="p">});</span>
+</pre>
+           </div>
+          </div>
+          <p>If your new instrumentation includes a new custom ping, there are two small additions to The Usual Test Format:</p>
+          <ul class="simple">
+           <li>
+            <p>1.1) Call <code class="docutils literal notranslate"><span class="pre">testBeforeNextSubmit</span></code> <em>before</em> your ping is submitted. The callback you register in <code class="docutils literal notranslate"><span class="pre">testBeforeNextSubmit</span></code> is called synchronously with the call to the ping’s <code class="docutils literal notranslate"><span class="pre">submit()</span></code>.</p></li>
+           <li>
+            <p>3.1) Check that the ping actually was submitted. If all your Asserts are inside <code class="docutils literal notranslate"><span class="pre">testBeforeNextSubmit</span></code>’s closure, another way this test could pass is by not running any of them.</p></li>
+          </ul>
+          <div class="highlight-js notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="nx">add_task</span><span class="p">(</span><span class="kd">function</span><span class="w"> </span><span class="nx">test_custom_ping</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="c1">// 1) Assert no value</span>
+<span class="w">  </span><span class="nx">Assert</span><span class="p">.</span><span class="nx">equal</span><span class="p">(</span><span class="kc">undefined</span><span class="p">,</span><span class="w"> </span><span class="nx">Glean</span><span class="p">.</span><span class="nx">myMetricCategory</span><span class="p">.</span><span class="nx">myMetricName</span><span class="p">.</span><span class="nx">testGetValue</span><span class="p">());</span>
+
+<span class="w">  </span><span class="c1">// 1.1) Set up Step 3.</span>
+<span class="w">  </span><span class="kd">let</span><span class="w"> </span><span class="nx">submitted</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span><span class="p">;</span>
+<span class="w">  </span><span class="nx">GleanPings</span><span class="p">.</span><span class="nx">myPing</span><span class="p">.</span><span class="nx">testBeforeNextSubmit</span><span class="p">(</span><span class="nx">reason</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">submitted</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="p">;</span>
+<span class="w">    </span><span class="c1">// 3) Assert correct value</span>
+<span class="w">    </span><span class="nx">Assert</span><span class="p">.</span><span class="nx">equal</span><span class="p">(</span><span class="nx">kExpectedReason</span><span class="p">,</span><span class="w"> </span><span class="nx">reason</span><span class="p">,</span><span class="w"> </span><span class="s2">"Reason of submitted ping must match."</span><span class="p">);</span>
+<span class="w">    </span><span class="nx">Assert</span><span class="p">.</span><span class="nx">equal</span><span class="p">(</span><span class="nx">kExpectedMetricValue</span><span class="p">,</span><span class="w"> </span><span class="nx">Glean</span><span class="p">.</span><span class="nx">myMetricCategory</span><span class="p">.</span><span class="nx">myMetricName</span><span class="p">.</span><span class="nx">testGetValue</span><span class="p">());</span>
+<span class="w">  </span><span class="p">});</span>
+
+<span class="w">  </span><span class="c1">// 2) Express behaviour that sends a ping with expected reason and contents</span>
+<span class="w">  </span><span class="c1">// ...&lt;left as an exercise to the reader&gt;...</span>
+
+<span class="w">  </span><span class="c1">// 3.1) Check that the ping actually was submitted.</span>
+<span class="w">  </span><span class="nx">Assert</span><span class="p">.</span><span class="nx">ok</span><span class="p">(</span><span class="nx">submitted</span><span class="p">,</span><span class="w"> </span><span class="s2">"Ping was submitted, callback was called."</span><span class="p">);</span>
+<span class="p">});</span>
+</pre>
+           </div>
+          </div>
+          <p>(( We acknowledge that this isn’t the most ergonomic form. Please follow <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1756637">bug 1756637</a> for updates on a better design and implementation for ping tests. ))</p>
+         </section>
+         <section id="mochitest">
+          <h2>mochitest<a class="headerlink" href="#mochitest" title="Link to this heading">?</a></h2>
+          <p><code class="docutils literal notranslate"><span class="pre">browser-chrome</span></code>-flavoured mochitests can be tested very similarly to <code class="docutils literal notranslate"><span class="pre">xpcshell</span></code>, though you do not need to request a profile or initialize FOG. <code class="docutils literal notranslate"><span class="pre">plain</span></code>-flavoured mochitests can use <a class="reference external" href="https://searchfox.org/mozilla-central/source/testing/mochitest/tests/SimpleTest/GleanTest.js"><code class="docutils literal notranslate"><span class="pre">GleanTest.js</span></code></a>. It doesn’t support all the features, only the <code class="docutils literal notranslate"><span class="pre">testResetFOG</span></code>, <code class="docutils literal notranslate"><span class="pre">testFlushAllChildren</span></code> (as <code class="docutils literal notranslate"><span class="pre">flush</span></code>), and <code class="docutils literal notranslate"><span class="pre">testGetValue</span></code> functions.</p>
+          <div class="admonition-asynchronicity admonition">
+           <p class="admonition-title">Asynchronicity</p>
+           <p>In <code class="docutils literal notranslate"><span class="pre">GleanTest.js</span></code>, test functions are all <code class="docutils literal notranslate"><span class="pre">async</span></code> meaning you need to <code class="docutils literal notranslate"><span class="pre">await</span></code> their results as they make the trip over IPC and back again.</p>
+          </div>
+          <div class="highlight-html notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="cp">&lt;!doctype html&gt;</span>
+<span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">charset</span><span class="o">=</span><span class="s">"utf-8"</span> <span class="p">/&gt;</span>
+    <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>Sample SimpleTest with GleanTest.js<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">"/tests/SimpleTest/SimpleTest.js"</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">link</span> <span class="na">rel</span><span class="o">=</span><span class="s">"stylesheet"</span> <span class="na">href</span><span class="o">=</span><span class="s">"/tests/SimpleTest/test.css"</span> <span class="p">/&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">"/tests/SimpleTest/GleanTest.js"</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+  <span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">p</span> <span class="na">id</span><span class="o">=</span><span class="s">"display"</span><span class="p">&gt;&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">id</span><span class="o">=</span><span class="s">"content"</span> <span class="na">style</span><span class="o">=</span><span class="s">"display: none"</span><span class="p">&gt;&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">pre</span> <span class="na">id</span><span class="o">=</span><span class="s">"test"</span><span class="p">&gt;&lt;/</span><span class="nt">pre</span><span class="p">&gt;</span>
+
+    <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="w">      </span><span class="nx">add_task</span><span class="p">(</span><span class="k">async</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">await</span><span class="w"> </span><span class="nx">GleanTest</span><span class="p">.</span><span class="nx">testResetFOG</span><span class="p">();</span>
+
+<span class="w">        </span><span class="c1">// Run code that sets your metric.</span>
+
+<span class="w">        </span><span class="kd">const</span><span class="w"> </span><span class="nx">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">GleanTest</span><span class="p">.</span><span class="nx">myMetricCategory</span><span class="p">.</span><span class="nx">myMetricName</span><span class="p">.</span><span class="nx">testGetValue</span><span class="p">();</span>
+<span class="w">      </span><span class="p">});</span>
+<span class="w">    </span><span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+  <span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+</pre>
+           </div>
+          </div>
+          <p>If you’re testing in <code class="docutils literal notranslate"><span class="pre">mochitest</span></code>, your instrumentation (or your test) might not be running in the parent process. This means you get to learn the IPC test APIs.</p>
+          <section id="ipc">
+           <h3>IPC<a class="headerlink" href="#ipc" title="Link to this heading">?</a></h3>
+           <p>All test APIs must be called on the main process (they’ll assert otherwise). But your instrumentation might be on any process, so how do you test it?</p>
+           <p>In this case there’s a slight addition to the Usual Test Format:</p>
+           <ol class="arabic simple">
+            <li>
+             <p>Assert no value in the metric</p></li>
+            <li>
+             <p>Express behaviour</p></li>
+            <li>
+             <p><em>Flush all pending FOG IPC operations with <code class="docutils literal notranslate"><span class="pre">await</span> <span class="pre">Services.fog.testFlushAllChildren()</span></code></em></p></li>
+            <li>
+             <p>Assert correct value in the metric.</p></li>
+           </ol>
+           <p><strong>NOTE:</strong> We learned in <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1843178">bug 1843178</a> that the list of all content processes that <code class="docutils literal notranslate"><span class="pre">Services.fog.testFlushAllChildren()</span></code> uses is very quickly updated after the end of a call to <code class="docutils literal notranslate"><span class="pre">BrowserUtils.withNewTab(...)</span></code>. If you are using <code class="docutils literal notranslate"><span class="pre">withNewTab</span></code>, you should consider calling <code class="docutils literal notranslate"><span class="pre">testFlushAllChildren()</span></code> <em>within</em> the callback.</p>
+          </section>
+         </section>
+         <section id="gtests-google-tests">
+          <h2>GTests/Google Tests<a class="headerlink" href="#gtests-google-tests" title="Link to this heading">?</a></h2>
+          <p>Please make use of the <code class="docutils literal notranslate"><span class="pre">FOGFixture</span></code> fixture when writing your tests, like:</p>
+          <div class="highlight-cpp notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="n">TEST_F</span><span class="p">(</span><span class="n">FOGFixture</span><span class="p">,</span><span class="w"> </span><span class="n">MyTestCase</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="c1">// 1) Assert no value</span>
+<span class="w">  </span><span class="n">ASSERT_EQ</span><span class="p">(</span><span class="n">mozilla</span><span class="o">::</span><span class="n">Nothing</span><span class="p">(),</span>
+<span class="w">            </span><span class="n">my_metric_category</span><span class="o">::</span><span class="n">my_metric_name</span><span class="p">.</span><span class="n">TestGetValue</span><span class="p">());</span>
+
+<span class="w">  </span><span class="c1">// 2) Express behaviour</span>
+<span class="w">  </span><span class="c1">// ...&lt;left as an exercise to the reader&gt;...</span>
+
+<span class="w">  </span><span class="c1">// 3) Assert correct value</span>
+<span class="w">  </span><span class="n">ASSERT_EQ</span><span class="p">(</span><span class="n">kValue</span><span class="p">,</span>
+<span class="w">            </span><span class="n">my_metric_category</span><span class="o">::</span><span class="n">my_metric_name</span><span class="p">.</span><span class="n">TestGetValue</span><span class="p">().</span><span class="n">unwrap</span><span class="p">().</span><span class="n">ref</span><span class="p">());</span>
+<span class="p">}</span>
+</pre>
+           </div>
+          </div>
+          <p>The fixture will take care of ensuring storage is reset between tests.</p>
+         </section>
+         <section id="rust-rusttests">
+          <h2>Rust <code class="docutils literal notranslate"><span class="pre">rusttests</span></code><a class="headerlink" href="#rust-rusttests" title="Link to this heading">?</a></h2>
+          <p>The general-purpose <a class="reference internal" href="../../../../testing-rust-code/index.html"><span class="doc std std-doc">Testing &amp; Debugging Rust Code in Firefox</span></a> is a good thing to review first.</p>
+          <p>Unfortunately, FOG requires gecko (to tell it where the profile dir is, and other things), which means we need to use the <a class="reference internal" href="../../../../testing-rust-code/index.html#gtests"><span class="std std-ref">GTest + FFI approach</span></a> where GTest is the runner and Rust is just the language the test is written in.</p>
+          <p>This means your test will look like a GTest like this:</p>
+          <div class="highlight-cpp notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="k">extern</span><span class="w"> </span><span class="s">"C"</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">Rust_MyRustTest</span><span class="p">();</span>
+<span class="n">TEST_F</span><span class="p">(</span><span class="n">FOGFixture</span><span class="p">,</span><span class="w"> </span><span class="n">MyRustTest</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">Rust_MyRustTest</span><span class="p">();</span><span class="w"> </span><span class="p">}</span>
+</pre>
+           </div>
+          </div>
+          <p>Plus a Rust test like this:</p>
+          <div class="highlight-rust notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="cp">#[no_mangle]</span>
+<span class="k">pub</span><span class="w"> </span><span class="k">extern</span><span class="w"> </span><span class="s">"C"</span><span class="w"> </span><span class="k">fn</span><span class="w"> </span><span class="nf">Rust_MyRustTest</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// 1) Assert no value</span>
+<span class="w">    </span><span class="fm">assert_eq!</span><span class="p">(</span><span class="nb">None</span><span class="p">,</span>
+<span class="w">               </span><span class="n">fog</span><span class="p">::</span><span class="n">metrics</span><span class="p">::</span><span class="n">my_metric_category</span><span class="p">::</span><span class="n">my_metric_name</span><span class="p">.</span><span class="n">test_get_value</span><span class="p">(</span><span class="nb">None</span><span class="p">));</span>
+
+<span class="w">    </span><span class="c1">// 2) Express behaviour</span>
+<span class="w">    </span><span class="c1">// ...&lt;left as an exercise to the reader&gt;...</span>
+
+<span class="w">    </span><span class="c1">// 3) Assert correct value</span>
+<span class="w">    </span><span class="fm">assert_eq!</span><span class="p">(</span><span class="nb">Some</span><span class="p">(</span><span class="n">value</span><span class="p">),</span>
+<span class="w">               </span><span class="n">fog</span><span class="p">::</span><span class="n">metrics</span><span class="p">::</span><span class="n">my_metric_category</span><span class="p">::</span><span class="n">my_metric_name</span><span class="p">.</span><span class="n">test_get_value</span><span class="p">(</span><span class="nb">None</span><span class="p">));</span>
+<span class="p">}</span>
+</pre>
+           </div>
+          </div>
+         </section>
+        </section>
+       </div>
+      </div>
+      <footer>
+       <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="glean_for_legacy_scalars.html" class="btn btn-neutral float-left" title="Using Firefox on Glean to Record Legacy Telemetry Scalars" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a> <a href="migration.html" class="btn btn-neutral float-right" title="Migrating Firefox Telemetry to Glean" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+       </div>
+       <hr>
+       <div role="contentinfo">
+        <p></p>
+       </div> Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+      </footer>
+     </div>
+    </div>
+   </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ </body>
+</html>

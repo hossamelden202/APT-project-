@@ -1,0 +1,407 @@
+<!doctype html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Adding a new Telemetry probe — Firefox Source Docs  documentation</title>
+  <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=fa44fd50">
+  <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=19f00094">
+  <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css?v=fd3f3429">
+  <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css?v=76b2166b">
+  <link rel="stylesheet" type="text/css" href="../../../../_static/custom_theme.css?v=dc5ed815">
+  <link rel="stylesheet" type="text/css" href="../../../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7">
+  <link rel="shortcut icon" href="../../../../_static/firefox.ico"><!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+  <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+  <script src="../../../../_static/documentation_options.js?v=5929fcd5"></script>
+  <script src="../../../../_static/doctools.js?v=9a2dae69"></script>
+  <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
+  <script src="../../../../_static/copybutton.js?v=30646c52"></script>
+  <script src="../../../../_static/design-tabs.js?v=36754332"></script>
+  <script src="../../../../_static/js/theme.js"></script>
+  <link rel="index" title="Index" href="../../../../genindex.html">
+  <link rel="search" title="Search" href="../../../../search.html">
+  <link rel="next" title="How to report Gecko Telemetry in engine-gecko via Glean" href="report-gecko-telemetry-in-glean.html">
+  <link rel="prev" title="Getting started" href="index.html">
+ </head>
+ <body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+   <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <div class="wy-side-scroll">
+     <div class="wy-side-nav-search">
+      <a href="../../../../index.html" class="icon icon-home"> Firefox Source Docs <img src="../../../../_static/firefox-wordmark.svg" class="logo" alt="Logo"> </a><!-- -- This code is governed by the BSD license ---->
+      <div>
+       <h3>Quick search</h3>
+       <script>
+    (function () {
+      var cx = "dd12886298f75dbef";
+      var gcse = document.createElement("script");
+      gcse.async = true;
+      gcse.src = "https://cse.google.com/cse.js?cx=" + cx;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(gcse, s);
+    })();
+  </script><gcse:search></gcse:search>
+      </div>
+     </div>
+     <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+      <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../glossary/index.html">A Glossary of Common Terms</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../overview/index.html">A Quick Guide to Mozilla Applications</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../setup/index.html">Getting Set Up To Work On The Firefox Codebase</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Working On Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../contributing/index.html">Working on Firefox</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../bug-mgmt/index.html">Bug Handling</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox User Guide</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../devtools-user/index.html">Firefox DevTools User Docs</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Source Code Documentation</span></p>
+      <ul class="current">
+       <li class="toctree-l1"><a class="reference internal" href="../../../../mots/index.html">Governance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../browser/index.html">Firefox Front-end</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../dom/index.html">DOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../editor/index.html">Editor</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../layout/index.html">Style system (CSS) &amp; Layout</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../gfx/index.html">Graphics</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../ipc/index.html">Processes, Threads and IPC</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../devtools/index.html">Firefox DevTools Contributor Docs</a></li>
+       <li class="toctree-l1 current"><a class="reference internal" href="../../../index.html">Toolkit</a>
+        <ul class="current">
+         <li class="toctree-l2"><a class="reference internal" href="../../../javascript-logging.html">JavaScript Logging</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../mozapps/extensions/addon-manager/index.html">Add-on Manager</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../backgroundtasks/index.html">Background Task Mode</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../crashes/crash-manager/index.html">Crash Manager</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../crashreporter/crashreporter/index.html">Crash Reporter</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../internal-urls.html">Internal URLs</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../search/index.html">Search Service</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../normandy/normandy/index.html">Shield Recipe Client</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../nimbus/docs/index.html">Nimbus</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../messaging-system/docs/index.html">Messaging System Schemas</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../pictureinpicture/pictureinpicture/index.html">Picture-in-Picture</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../prompts/prompts/index.html">Prompts</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../modules/subprocess/toolkit_modules/subprocess/index.html">Subprocess Module</a></li>
+         <li class="toctree-l2 current"><a class="reference internal" href="../index.html">Telemetry</a>
+          <ul class="current">
+           <li class="toctree-l3 current"><a class="reference internal" href="index.html">Getting started</a>
+            <ul class="current">
+             <li class="toctree-l4 current"><a class="current reference internal" href="#">Adding a new Telemetry probe</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="report-gecko-telemetry-in-glean.html">How to report Gecko Telemetry in engine-gecko via Glean</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="index.html#further-reading">Further Reading</a></li>
+            </ul></li>
+           <li class="toctree-l3"><a class="reference internal" href="../concepts/index.html">Concepts</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="../collection/index.html">Data collection</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="../data/index.html">Data documentation</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="../internals/index.html">Internals</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="../obsolete/index.html">Obsolete Documentation</a></li>
+          </ul></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../glean/index.html">Firefox on Glean (FOG)</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../modules/toolkit_modules/index.html">Toolkit Modules</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../content/toolkit_widgets/index.html">Toolkit Widgets</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../resistfingerprinting/resistfingerprinting/index.html">Fingerprinting Resistance</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../url-classifier/url-classifier/index.html">URL Classifier</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../extensions/webextensions/index.html">WebExtensions API Development</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../../extensions/spellcheck/index.html">Managing the built-in en-US dictionary</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../mozapps/update/docs/index.html">Application Update</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../antitracking/anti-tracking/index.html">Anti-Tracking</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../translations/index.html">Translations</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../sessionstore/index.html">Session Store</a></li>
+        </ul></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../js/index.html">SpiderMonkey</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../jsloader/index.html">JS Loader</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../mobile/android/geckoview/index.html">GeckoView</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../mobile/android/fenix/index.html">Fenix</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../mobile/android/focus-android/index.html">Focus for Android</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../dom/bindings/webidl/index.html">WebIDL</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../modules/libpref/index.html">libpref</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../networking/index.html">Networking</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../remote/index.html">Remote Protocols</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../services/index.html">Services</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../permissions/index.html">Permissions</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../uriloader/index.html">File Handling</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../widget/cocoa/index.html">Firefox on macOS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../widget/windows/index.html">Firefox on Windows</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../ml/index.html">Firefox AI Runtime</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../accessible/index.html">Accessibility</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../media/index.html">Media Playback</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../code-quality/index.html">Code quality</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../writing-rust-code/index.html">Writing Rust Code</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../rust-components/index.html">Rust Components</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../tools/profiler/index.html">Gecko Profiler</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../performance/index.html">Performance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../storage/index.html">Database bindings (SQLite, KV, …)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../xpcom/index.html">XPCOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../nspr/index.html">NSPR</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../security/nss/index.html">Network Security Services (NSS)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../content-security/index.html">Web Security Checks in Gecko</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">The Firefox Build System</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../mach/index.html">Mach</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../tools/try/index.html">Pushing to Try</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../build/buildsystem/index.html">Build System</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../taskcluster/index.html">Firefox CI and Taskgraph</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../tools/moztreedocs/index.html">Managing Documentation</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../mozbuild/vendor/index.html">Vendoring Third Party Components</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Testing &amp; Test Infrastructure</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/automated-testing/index.html">Automated Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/treeherder-try/index.html">Understanding Treeherder Results</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/sheriffed-intermittents/index.html">Sheriffed intermittent failures</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/tests-for-new-config/index.html">Turning on Firefox tests for a new configuration</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/intermittent/index.html">Avoiding intermittent tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/testing-policy/index.html">Testing Policy</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/ci-configs/index.html">Configuration Changes</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/browser-chrome/index.html">Browser chrome mochitests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/chrome-tests/index.html">Chrome Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/marionette/index.html">Marionette</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/geckodriver/index.html">geckodriver</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/test-verification/index.html">Test Verification</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/webrender/index.html">WebRender Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/mochitest-plain/index.html">Mochitest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/xpcshell/index.html">XPCShell tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/tps/index.html">TPS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../web-platform/index.html">web-platform-tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../gtest/index.html">GTest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../tools/fuzzing/index.html">Fuzzing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../tools/sanitizer/index.html">Sanitizer</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing/perfdocs/index.html">Performance Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../tools/code-coverage/index.html">Code coverage</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../testing-rust-code/index.html">Testing &amp; Debugging Rust Code</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Releases &amp; Updates</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../update-infrastructure/index.html">Mozilla Update Infrastructure</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../update-infrastructure/index.html#watershed-updates">Watershed Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../update-infrastructure/index.html#desupport-updates">Desupport Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../tools/update-verify/index.html">Update Verify</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Localization &amp; Internationalization</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../intl/index.html">Internationalization</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../l10n/index.html">Localization</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox and Python</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../mozbase/index.html">mozbase</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../python/index.html">Using third-party Python packages</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Metrics Collected in Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../../metrics/index.html">Metrics</a></li>
+      </ul>
+     </div>
+    </div>
+   </nav>
+   <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+    <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+     <i data-toggle="wy-nav-top" class="fa fa-bars"></i> <a href="../../../../index.html">Firefox Source Docs</a>
+    </nav>
+    <div class="wy-nav-content">
+     <div class="rst-content">
+      <!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+      <div role="navigation" aria-label="Page navigation">
+       <ul class="wy-breadcrumbs">
+        <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+        <li class="breadcrumb-item"><a href="../../../index.html">Toolkit</a></li>
+        <li class="breadcrumb-item"><a href="../index.html">Telemetry</a></li>
+        <li class="breadcrumb-item"><a href="index.html">Getting started</a></li>
+        <li class="breadcrumb-item active">Adding a new Telemetry probe</li>
+        <li class="wy-breadcrumbs-aside"><a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Developer+Infrastructure&amp;component=Firefox+Source+Docs%3A+Content&amp;short_desc=Documentation+issue+on+toolkit/components/telemetry/start/adding-a-new-probe&amp;comment=URL+=+https://firefox-source-docs.mozilla.org/toolkit/components/telemetry/start/adding-a-new-probe.html&amp;bug_file_loc=https://firefox-source-docs.mozilla.org/toolkit/components/telemetry/start/adding-a-new-probe.html" rel="nofollow">Report an issue</a> / <a href="../../../../_sources/toolkit/components/telemetry/start/adding-a-new-probe.rst.txt" rel="nofollow"> View page source</a></li>
+       </ul>
+       <hr>
+      </div>
+      <div role="main" class="document" itemscope itemtype="http://schema.org/Article">
+       <div itemprop="articleBody">
+        <section id="adding-a-new-telemetry-probe">
+         <h1>Adding a new Telemetry probe<a class="headerlink" href="#adding-a-new-telemetry-probe" title="Link to this heading">?</a></h1>
+         <p>In Firefox, the Telemetry system collects various measures of Firefox performance, hardware, usage and customizations and submit it to Mozilla. This article provides an overview of what is needed to add any new Telemetry data collection.</p>
+         <div class="admonition important">
+          <p class="admonition-title">Important</p>
+          <p>Every new data collection in Firefox needs a <a class="reference external" href="https://wiki.mozilla.org/Firefox/Data_Collection#Requesting_Approval">data collection review</a> from a data collection peer. Just set the feedback? flag for one of the data peers. They try to reply within a business day.</p>
+         </div>
+         <section id="what-is-your-goal">
+          <h2>What is your goal?<a class="headerlink" href="#what-is-your-goal" title="Link to this heading">?</a></h2>
+          <p>We have various <a class="reference internal" href="../collection/index.html"><span class="doc">data collection tools</span></a> available, each serving different needs. Before diving right into technical details, it is best to take a step back and consider what you need to achieve.</p>
+          <p>Your goal could be to answer product questions like “how many people use feature X?” or “what is the error rate of service Y?”. You could also be focused more on answering engineering questions, say “which web features are most used?” or “how is the performance of engine Z?”.</p>
+          <p>From there, questions you should ask are:</p>
+          <ul class="simple">
+           <li>
+            <p>What is the minimum data that can answer your questions?</p></li>
+           <li>
+            <p>How many people do you need this data from?</p></li>
+           <li>
+            <p>Is data from the pre-release channels sufficient?</p></li>
+          </ul>
+          <p>This also informs the <a class="reference external" href="https://wiki.mozilla.org/Firefox/Data_Collection">data collection review</a>, which requires a plan for how to use the data. Data collection review is required for all new data collection.</p>
+         </section>
+         <section id="data-collection-levels">
+          <h2>Data collection levels<a class="headerlink" href="#data-collection-levels" title="Link to this heading">?</a></h2>
+          <p>Most of our data collection falls into one of two levels, <em>release</em> and <em>pre-release</em>.</p>
+          <p><strong>Release data</strong> is recorded by default on all channels, users need to explicitly opt out to disable it. This has <a class="reference external" href="https://wiki.mozilla.org/Firefox/Data_Collection#Requirements">stricter constraints</a> for what data we can collect. “Most” users submit this data.</p>
+          <p><strong>Pre-release data</strong> is not recorded on release, but is collected by default on our pre-release channels (Beta and Nightly), so it can be biased.</p>
+          <p>These levels cover what is described in the <a class="reference external" href="https://www.mozilla.org/en-US/privacy/firefox/">Firefox privacy notice</a>. For other needs, there might be custom mechanisms that clearly require user opt-in and show what data is collected.</p>
+         </section>
+         <section id="rich-data-aggregate-data">
+          <h2>Rich data &amp; aggregate data<a class="headerlink" href="#rich-data-aggregate-data" title="Link to this heading">?</a></h2>
+          <p>For the recording and transmission of data, we have various data types available. We can divide these data types into two large groups.</p>
+          <p><strong>Aggregate data</strong> is aggregated on the client-side and cheap to send, process and analyze. This could e.g. be a simple count of tab opens or a histogram showing how long it takes to switch between tabs. This should be your default choice and is well supported in our analysis tools.</p>
+          <p><strong>Rich data</strong> is used when questions can not be answered from aggregate data. When we send more detailed data we can e.g. see when a specific UI interaction happened and in which context.</p>
+          <p>As a general rule, you can inform the choice of data types from your goals like this:</p>
+          <table class="docutils align-default">
+           <thead>
+            <tr class="row-odd">
+             <th class="head">
+              <p>Goals</p></th>
+             <th class="head">
+              <p>Collection type</p></th>
+             <th class="head">
+              <p>Implementation</p></th>
+            </tr>
+           </thead>
+           <tbody>
+            <tr class="row-even">
+             <td>
+              <p>On-going monitoring</p>
+              <p>Health tracking</p>
+              <p>KPI impact</p></td>
+             <td>
+              <p>Aggregate data</p></td>
+             <td>
+              <p>Histograms</p>
+              <p>Scalars</p>
+              <p>Environment data</p></td>
+            </tr>
+            <tr class="row-odd">
+             <td>
+              <p>Detailed user behavior</p>
+              <p>Funnel analysis</p>
+              <p>Diagnostics</p></td>
+             <td>
+              <p>Rich data</p></td>
+             <td>
+              <p>Event Telemetry</p>
+              <p>Detailed custom pings</p>
+              <p>Logs</p>
+              <p>Crash data</p></td>
+            </tr>
+           </tbody>
+          </table>
+          <section id="aggregate-data">
+           <h3>Aggregate data<a class="headerlink" href="#aggregate-data" title="Link to this heading">?</a></h3>
+           <p>Most of our data collection happens through <a class="reference internal" href="../collection/scalars.html"><span class="doc">scalars</span></a> and <a class="reference internal" href="../collection/histograms.html"><span class="doc">histograms</span></a>:</p>
+           <ul class="simple">
+            <li>
+             <p>Scalars allow collection of simple values, like counts, booleans and strings.</p></li>
+            <li>
+             <p>Histograms allow collection of multiple different values, but aggregate them into a number of buckets. Each bucket has a value range and a count of how many values we recorded.</p></li>
+           </ul>
+           <p>Both scalars &amp; histograms allow recording by keys. This allows for more flexible, two-level data collection.</p>
+           <p>We also collect <a class="reference internal" href="../data/environment.html"><span class="doc">environment data</span></a>. This consists of mostly scalar values that capture the “working environment” a Firefox session lives in, and includes e.g. data on hardware, OS, add-ons and some settings. Any data that is part of the “working environment”, or needs to split <a class="reference internal" href="../concepts/sessions.html"><span class="doc">subsessions</span></a>, should go into it.</p>
+          </section>
+          <section id="rich-data">
+           <h3>Rich data<a class="headerlink" href="#rich-data" title="Link to this heading">?</a></h3>
+           <p>Aggregate data can tell you that something happened, but is usually lacking details about what exactly. When more details are needed, we can collect them using other tools that submit less efficient data. This usually means that we can’t enable the data collection for all users, for cost and performance concerns.</p>
+           <p>There are multiple mechanisms to collect rich data:</p>
+           <p><strong>Stack collection</strong> helps with e.g. diagnosing hangs. Stack data is recorded into chrome hangs and threadhang stats. To diagnose where rarely used code is called from, you can use stack capturing.</p>
+           <p><a class="reference internal" href="../collection/events.html"><span class="doc">Event Telemetry</span></a> provides a way to record both when and what happened. This enables e.g. funnel analysis for usage.</p>
+           <p><a class="reference internal" href="../collection/custom-pings.html"><span class="doc">Custom pings</span></a> are used when other existing data collection does not cover your need. Submitting a custom ping enables you to submit your own JSON package that will be delivered to the Telemetry servers. However, this loses you access to existing tooling and makes it harder to join your data with other sources.</p>
+          </section>
+         </section>
+         <section id="setup-building">
+          <h2>Setup &amp; building<a class="headerlink" href="#setup-building" title="Link to this heading">?</a></h2>
+          <p>Every build of Firefox has Telemetry enabled. Local developer builds with no custom build flags will record all Telemetry data, but not send it out.</p>
+          <p>When adding any new scalar, histogram or event Firefox needs to be built. Artifact builds are currently not supported, even if code changes are limited to JavaScript.</p>
+          <p>Usually you don’t need to send out data to add new Telemetry. In the rare event you do, you need the following in your <em>.mozconfig</em>:</p>
+          <div class="highlight-default notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="n">MOZ_TELEMETRY_REPORTING</span><span class="o">=</span><span class="mi">1</span>
+<span class="n">MOZILLA_OFFICIAL</span><span class="o">=</span><span class="mi">1</span>
+</pre>
+           </div>
+          </div>
+         </section>
+         <section id="testing">
+          <h2>Testing<a class="headerlink" href="#testing" title="Link to this heading">?</a></h2>
+          <section id="local-confirmation">
+           <h3>Local confirmation<a class="headerlink" href="#local-confirmation" title="Link to this heading">?</a></h3>
+           <p>Your first step should always be to confirm your new data collection locally.</p>
+           <p>The <em>about:telemetry</em> page allows to view any data you submitted to Telemetry in the last 60 days, whether it is in existing pings or in new custom pings. You can choose which pings to display on the top-left.</p>
+           <p>If you need to confirm when - or if - pings are getting sent, you can run an instance of the <a class="reference external" href="https://github.com/mozilla/gzipServer">gzipServer</a> locally. It emulates roughly how the official Telemetry servers respond, and saves all received pings to disk for inspection.</p>
+          </section>
+          <section id="test-coverage">
+           <h3>Test coverage<a class="headerlink" href="#test-coverage" title="Link to this heading">?</a></h3>
+           <p>Any data collection that you need to base decisions on needs to have test coverage. Using JS, you can access the recorded values for your data collection. You can use the following functions:</p>
+           <ul class="simple">
+            <li>
+             <p>for scalars, <a class="reference external" href="https://searchfox.org/mozilla-central/rev/f997bd6bbfc4773e774fdb6cd010142370d186f9/toolkit/components/telemetry/core/nsITelemetry.idl#90-102">getSnapshotForScalars()</a> or <a class="reference external" href="https://searchfox.org/mozilla-central/rev/f997bd6bbfc4773e774fdb6cd010142370d186f9/toolkit/components/telemetry/core/nsITelemetry.idl#104-116">getSnapshotForKeyedScalars()</a></p></li>
+            <li>
+             <p>for histograms, <a class="reference external" href="https://searchfox.org/mozilla-central/rev/f997bd6bbfc4773e774fdb6cd010142370d186f9/toolkit/components/telemetry/core/nsITelemetry.idl#54-74">getSnapshotForHistograms()</a> or <a class="reference external" href="https://searchfox.org/mozilla-central/rev/f997bd6bbfc4773e774fdb6cd010142370d186f9/toolkit/components/telemetry/core/nsITelemetry.idl#76-88">getSnapshotForKeyedHistograms()</a></p>
+             <ul>
+              <li>
+               <p>Optionally, histogram objects have a <a class="reference external" href="https://searchfox.org/mozilla-central/rev/f997bd6bbfc4773e774fdb6cd010142370d186f9/toolkit/components/telemetry/core/nsITelemetry.idl#285-287,313-315">snapshot()</a> method.</p></li>
+             </ul></li>
+            <li>
+             <p>for events, <a class="reference external" href="https://searchfox.org/mozilla-central/rev/f997bd6bbfc4773e774fdb6cd010142370d186f9/toolkit/components/telemetry/core/nsITelemetry.idl#542-558">snapshotEvents()</a></p></li>
+           </ul>
+           <p>If you need to test that pings were correctly passed to Telemetry, you can use <a class="reference external" href="https://searchfox.org/mozilla-central/search?q=TelemetryArchiveTesting&amp;redirect=false">TelemetryArchiveTesting</a>.</p>
+          </section>
+          <section id="validation">
+           <h3>Validation<a class="headerlink" href="#validation" title="Link to this heading">?</a></h3>
+           <p>While it’s important to confirm that the data collection works on your machine, the Firefox user population is very diverse. Before basing decisions on any new data, it should be validated. This could take various forms.</p>
+           <p>For <em>new data collection</em> using existing Telemetry data types, the transport mechanism is already tested. It is sufficient to validate the incoming values. This could happen through <a class="reference external" href="https://docs.telemetry.mozilla.org/tools/stmo.html">Redash</a> or through <a class="reference external" href="https://docs.telemetry.mozilla.org/tools/spark.html">custom analysis</a>.</p>
+           <p>For <em>new custom pings</em>, you’ll want to check schema validation results, as well as that the contents look valid.</p>
+          </section>
+         </section>
+         <section id="getting-help">
+          <h2>Getting help<a class="headerlink" href="#getting-help" title="Link to this heading">?</a></h2>
+          <p>You can find all important Telemetry resources listed on <a class="reference external" href="https://telemetry.mozilla.org/">telemetry.mozilla.org</a>.</p>
+          <p>The Telemetry team is there to help with any problems. You can reach us via:</p>
+          <ul class="simple">
+           <li>
+            <p>Matrix in <a class="reference external" href="https://chat.mozilla.org/#/room/#telemetry:mozilla.org">#telemetry:mozilla.org</a></p></li>
+           <li>
+            <p>Slack in <a class="reference external" href="https://mozilla.slack.com/messages/data-help/">#data-help</a></p></li>
+           <li>
+            <p>the <a class="reference external" href="https://mail.mozilla.org/listinfo/fx-data-dev">fx-data-dev mailing list</a></p></li>
+           <li>
+            <p>flags for <a class="reference external" href="https://wiki.mozilla.org/Modules/Toolkit#Telemetry">one of the peers</a> on Bugzilla or send us an e-mail</p></li>
+          </ul>
+         </section>
+        </section>
+       </div>
+      </div>
+      <footer>
+       <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Getting started" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a> <a href="report-gecko-telemetry-in-glean.html" class="btn btn-neutral float-right" title="How to report Gecko Telemetry in engine-gecko via Glean" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+       </div>
+       <hr>
+       <div role="contentinfo">
+        <p></p>
+       </div> Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+      </footer>
+     </div>
+    </div>
+   </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ </body>
+</html>

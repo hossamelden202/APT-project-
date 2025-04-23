@@ -1,0 +1,293 @@
+<!doctype html>
+<html class="writer-html5" lang="en" data-content_root="../">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How to make a C++ class cycle collected — Firefox Source Docs  documentation</title>
+  <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50">
+  <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094">
+  <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=fd3f3429">
+  <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b">
+  <link rel="stylesheet" type="text/css" href="../_static/custom_theme.css?v=dc5ed815">
+  <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7">
+  <link rel="shortcut icon" href="../_static/firefox.ico"><!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script src="../_static/jquery.js?v=5d32c60e"></script>
+  <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+  <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+  <script src="../_static/doctools.js?v=9a2dae69"></script>
+  <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+  <script src="../_static/copybutton.js?v=30646c52"></script>
+  <script src="../_static/design-tabs.js?v=36754332"></script>
+  <script src="../_static/js/theme.js"></script>
+  <link rel="index" title="Index" href="../genindex.html">
+  <link rel="search" title="Search" href="../search.html">
+  <link rel="next" title="{fmt} in Gecko" href="fmt-in-gecko.html">
+  <link rel="prev" title="Tutorial for Writing a New XPCOM Interface" href="writing-xpcom-interface.html">
+ </head>
+ <body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+   <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <div class="wy-side-scroll">
+     <div class="wy-side-nav-search">
+      <a href="../index.html" class="icon icon-home"> Firefox Source Docs <img src="../_static/firefox-wordmark.svg" class="logo" alt="Logo"> </a><!-- -- This code is governed by the BSD license ---->
+      <div>
+       <h3>Quick search</h3>
+       <script>
+    (function () {
+      var cx = "dd12886298f75dbef";
+      var gcse = document.createElement("script");
+      gcse.async = true;
+      gcse.src = "https://cse.google.com/cse.js?cx=" + cx;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(gcse, s);
+    })();
+  </script><gcse:search></gcse:search>
+      </div>
+     </div>
+     <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+      <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../glossary/index.html">A Glossary of Common Terms</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../overview/index.html">A Quick Guide to Mozilla Applications</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../setup/index.html">Getting Set Up To Work On The Firefox Codebase</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Working On Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../contributing/index.html">Working on Firefox</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../bug-mgmt/index.html">Bug Handling</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox User Guide</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../devtools-user/index.html">Firefox DevTools User Docs</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Source Code Documentation</span></p>
+      <ul class="current">
+       <li class="toctree-l1"><a class="reference internal" href="../mots/index.html">Governance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../browser/index.html">Firefox Front-end</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../dom/index.html">DOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../editor/index.html">Editor</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../layout/index.html">Style system (CSS) &amp; Layout</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../gfx/index.html">Graphics</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../ipc/index.html">Processes, Threads and IPC</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../devtools/index.html">Firefox DevTools Contributor Docs</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../toolkit/index.html">Toolkit</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../js/index.html">SpiderMonkey</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../jsloader/index.html">JS Loader</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mobile/android/geckoview/index.html">GeckoView</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mobile/android/fenix/index.html">Fenix</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mobile/android/focus-android/index.html">Focus for Android</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../dom/bindings/webidl/index.html">WebIDL</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../modules/libpref/index.html">libpref</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../networking/index.html">Networking</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../remote/index.html">Remote Protocols</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../services/index.html">Services</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../permissions/index.html">Permissions</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../uriloader/index.html">File Handling</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../widget/cocoa/index.html">Firefox on macOS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../widget/windows/index.html">Firefox on Windows</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../toolkit/components/ml/index.html">Firefox AI Runtime</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../accessible/index.html">Accessibility</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../media/index.html">Media Playback</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../code-quality/index.html">Code quality</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../writing-rust-code/index.html">Writing Rust Code</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../rust-components/index.html">Rust Components</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/profiler/index.html">Gecko Profiler</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../performance/index.html">Performance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../storage/index.html">Database bindings (SQLite, KV, …)</a></li>
+       <li class="toctree-l1 current"><a class="reference internal" href="index.html">XPCOM</a>
+        <ul class="current">
+         <li class="toctree-l2"><a class="reference internal" href="index.html#consuming-xpcom-functionality">Consuming XPCOM functionality</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="index.html#tooling-around-xpcom">Tooling around XPCOM</a></li>
+         <li class="toctree-l2 current"><a class="reference internal" href="index.html#writing-new-xpcom-interfaces-classes">Writing new XPCOM interfaces/classes</a>
+          <ul class="current">
+           <li class="toctree-l3"><a class="reference internal" href="xpidl.html">XPIDL</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="writing-xpcom-interface.html">Tutorial for Writing a New XPCOM Interface</a></li>
+           <li class="toctree-l3 current"><a class="current reference internal" href="#">How to make a C++ class cycle collected</a>
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="#should-my-class-be-cycle-collected">Should my class be cycle collected?</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#reference-counting">Reference counting</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#cycle-collector-participant">Cycle collector participant</a></li>
+            </ul></li>
+           <li class="toctree-l3"><a class="reference internal" href="fmt-in-gecko.html"><code class="docutils literal notranslate"><span class="pre">{fmt}</span></code> in Gecko</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="fmt-in-gecko.html#user-defined-types">User-defined types</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="fmt-in-gecko.html#formatting-sequences">Formatting sequences</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="fmt-in-gecko.html#moz-log-integration"><code class="docutils literal notranslate"><span class="pre">MOZ_LOG</span></code> integration</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="fmt-in-gecko.html#ns-string-integration"><code class="docutils literal notranslate"><span class="pre">ns*String</span></code> integration</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="fmt-in-gecko.html#firefox-profiler-marker-integration">Firefox Profiler marker integration</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="fmt-in-gecko.html#useful-links">Useful links</a></li>
+          </ul></li>
+        </ul></li>
+       <li class="toctree-l1"><a class="reference internal" href="../nspr/index.html">NSPR</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../security/nss/index.html">Network Security Services (NSS)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../content-security/index.html">Web Security Checks in Gecko</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">The Firefox Build System</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../mach/index.html">Mach</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/try/index.html">Pushing to Try</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../build/buildsystem/index.html">Build System</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../taskcluster/index.html">Firefox CI and Taskgraph</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/moztreedocs/index.html">Managing Documentation</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mozbuild/vendor/index.html">Vendoring Third Party Components</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Testing &amp; Test Infrastructure</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/automated-testing/index.html">Automated Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/treeherder-try/index.html">Understanding Treeherder Results</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/sheriffed-intermittents/index.html">Sheriffed intermittent failures</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/tests-for-new-config/index.html">Turning on Firefox tests for a new configuration</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/intermittent/index.html">Avoiding intermittent tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/testing-policy/index.html">Testing Policy</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/ci-configs/index.html">Configuration Changes</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/browser-chrome/index.html">Browser chrome mochitests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/chrome-tests/index.html">Chrome Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/marionette/index.html">Marionette</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/geckodriver/index.html">geckodriver</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/test-verification/index.html">Test Verification</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/webrender/index.html">WebRender Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/mochitest-plain/index.html">Mochitest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/xpcshell/index.html">XPCShell tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/tps/index.html">TPS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../web-platform/index.html">web-platform-tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../gtest/index.html">GTest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/fuzzing/index.html">Fuzzing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/sanitizer/index.html">Sanitizer</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/perfdocs/index.html">Performance Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/code-coverage/index.html">Code coverage</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing-rust-code/index.html">Testing &amp; Debugging Rust Code</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Releases &amp; Updates</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../update-infrastructure/index.html">Mozilla Update Infrastructure</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../update-infrastructure/index.html#watershed-updates">Watershed Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../update-infrastructure/index.html#desupport-updates">Desupport Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/update-verify/index.html">Update Verify</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Localization &amp; Internationalization</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../intl/index.html">Internationalization</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../l10n/index.html">Localization</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox and Python</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../mozbase/index.html">mozbase</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../python/index.html">Using third-party Python packages</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Metrics Collected in Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../metrics/index.html">Metrics</a></li>
+      </ul>
+     </div>
+    </div>
+   </nav>
+   <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+    <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+     <i data-toggle="wy-nav-top" class="fa fa-bars"></i> <a href="../index.html">Firefox Source Docs</a>
+    </nav>
+    <div class="wy-nav-content">
+     <div class="rst-content">
+      <!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+      <div role="navigation" aria-label="Page navigation">
+       <ul class="wy-breadcrumbs">
+        <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+        <li class="breadcrumb-item"><a href="index.html">XPCOM</a></li>
+        <li class="breadcrumb-item active">How to make a C++ class cycle collected</li>
+        <li class="wy-breadcrumbs-aside"><a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Developer+Infrastructure&amp;component=Firefox+Source+Docs%3A+Content&amp;short_desc=Documentation+issue+on+xpcom/cc-macros&amp;comment=URL+=+https://firefox-source-docs.mozilla.org/xpcom/cc-macros.html&amp;bug_file_loc=https://firefox-source-docs.mozilla.org/xpcom/cc-macros.html" rel="nofollow">Report an issue</a> / <a href="../_sources/xpcom/cc-macros.rst.txt" rel="nofollow"> View page source</a></li>
+       </ul>
+       <hr>
+      </div>
+      <div role="main" class="document" itemscope itemtype="http://schema.org/Article">
+       <div itemprop="articleBody">
+        <section id="how-to-make-a-c-class-cycle-collected">
+         <h1>How to make a C++ class cycle collected<a class="headerlink" href="#how-to-make-a-c-class-cycle-collected" title="Link to this heading">?</a></h1>
+         <section id="should-my-class-be-cycle-collected">
+          <h2>Should my class be cycle collected?<a class="headerlink" href="#should-my-class-be-cycle-collected" title="Link to this heading">?</a></h2>
+          <p>First, you need to decide if your class should be cycle collected. There are three main criteria:</p>
+          <ul class="simple">
+           <li>
+            <p>It can be part of a cycle of strong references, including refcounted objects and JS. Usually, this happens when it can hold alive and be held alive by cycle collected objects or JS.</p></li>
+           <li>
+            <p>It must be refcounted.</p></li>
+           <li>
+            <p>It must be single threaded. The cycle collector can only work with objects that are used on a single thread. The main thread and DOM worker and worklet threads each have their own cycle collectors.</p></li>
+          </ul>
+          <p>If your class meets the first criteria but not the second, then whatever class uniquely owns it should be cycle collected, assuming that is refcounted, and this class should be traversed and unlinked as part of that.</p>
+          <p>The cycle collector supports both nsISupports and non-nsISupports (known as “native” in CC nomenclature) refcounting. However, we do not support native cycle collection in the presence of inheritance, if two classes related by inheritance need different CC implementations. (This is because we use QueryInterface to find the right CC implementation for an object.)</p>
+          <p>Once you’ve decided to make a class cycle collected, there are a few things you need to add to your implementation:</p>
+          <ul class="simple">
+           <li>
+            <p>Cycle collected refcounting. Special refcounting is needed so that the CC can tell when an object is created, used, or destroyed, so that it can determine if an object is potentially part of a garbage cycle.</p></li>
+           <li>
+            <p>Traversal. Once the CC has decided an object <strong>might</strong> be garbage, it needs to know what other cycle collected objects it holds strong references to. This is done with a “traverse” method.</p></li>
+           <li>
+            <p>Unlinking. Once the CC has decided that an object <strong>is</strong> garbage, it needs to break the cycles by clearing out all strong references to other cycle collected objects. This is done with an “unlink” method. This usually looks very similar to the traverse method.</p></li>
+          </ul>
+          <p>The traverse and unlink methods, along with other methods needed for cycle collection, are defined on a special inner class object, called a “participant”, for performance reasons. The existence of the participant is mostly hidden behind macros so you shouldn’t need to worry about it.</p>
+          <p>Next, we’ll go over what the declaration and definition of these parts look like. (Spoiler: there are lots of <cite>ALL_CAPS</cite> macros.) This will mostly cover the most common variants. If you need something slightly different, you should look at the location of the declaration of the macros we mention here and see if the variants already exist.</p>
+         </section>
+         <section id="reference-counting">
+          <h2>Reference counting<a class="headerlink" href="#reference-counting" title="Link to this heading">?</a></h2>
+          <section id="nsisupports">
+           <h3>nsISupports<a class="headerlink" href="#nsisupports" title="Link to this heading">?</a></h3>
+           <p>If your class inherits from nsISupports, you’ll need to add <cite>NS_DECL_CYCLE_COLLECTING_ISUPPORTS</cite> to the class declaration. This will declare the QueryInterface (QI), AddRef and Release methods you need to implement nsISupports, as well as the actual refcount field.</p>
+           <p>In the <cite>.cpp</cite> file for your class you’ll have to define the QueryInterface, AddRef and Release methods. The ins and outs of defining the QI method is out-of-scope for this document, but you’ll need to use the special cycle collection variants of the macros, like <cite>NS_INTERFACE_MAP_BEGIN_CYCLE_COLLECTION</cite>. (This is because we use the nsISupports system to define a special interface used to dynamically find the correct CC participant for the object.)</p>
+           <p>Finally, you’ll have to actually define the AddRef and Release methods for your class. If your class is called <cite>MyClass</cite>, then you’d do this with the declarations <cite>NS_IMPL_CYCLE_COLLECTING_ADDREF(MyClass)</cite> and <cite>NS_IMPL_CYCLE_COLLECTING_RELEASE(MyClass)</cite>.</p>
+          </section>
+          <section id="non-nsisupports">
+           <h3>non-nsISupports<a class="headerlink" href="#non-nsisupports" title="Link to this heading">?</a></h3>
+           <p>If your class does <strong>not</strong> inherit from nsISupports, you’ll need to add <cite>NS_INLINE_DECL_CYCLE_COLLECTING_NATIVE_REFCOUNTING</cite> to the class declaration. This will give inline definitions for the AddRef and Release methods, as well as the actual refcount field.</p>
+          </section>
+         </section>
+         <section id="cycle-collector-participant">
+          <h2>Cycle collector participant<a class="headerlink" href="#cycle-collector-participant" title="Link to this heading">?</a></h2>
+          <p>Next we need to declare and define the cycle collector participant. This is mostly boilerplate hidden behind macros, but you will need to specify which fields are to be traversed and unlinked because they are strong references to cycle collected objects.</p>
+          <section id="declaration">
+           <h3>Declaration<a class="headerlink" href="#declaration" title="Link to this heading">?</a></h3>
+           <p>First, we need to add a declaration for the participant. As before, let’s say your class is <cite>MyClass</cite>.</p>
+           <p>The basic way to declare this for an nsISupports class is <cite>NS_DECL_CYCLE_COLLECTION_CLASS(MyClass)</cite>.</p>
+           <p>If your class inherits from multiple classes that inherit from nsISupports classes, say <cite>Parent1</cite> and <cite>Parent2</cite>, then you’ll need to use <cite>NS_DECL_CYCLE_COLLECTION_CLASS_AMBIGUOUS(MyClass, Parent1)</cite> to tell the CC to cast to nsISupports via <cite>Parent1</cite>. You probably want to pick the first class it inherits from. (The cycle collector needs to be able to cast <cite>MyClass*</cite> to <cite>nsISupports*</cite>.)</p>
+           <p>Another situation you might encounter is that your nsISupports class inherits from another cycle collected class <cite>CycleCollectedParent</cite>. In that case, your participant declaration will look like <cite>NS_DECL_CYCLE_COLLECTION_CLASS_INHERITED(MyClass, CycleCollectedParent)</cite>. (This is needed so that the CC can cast from nsISupports down to <cite>MyClass</cite>.) Note that we do not support inheritance for non-nsISupports classes.</p>
+           <p>If your class is non-nsISupports, then you’ll need to use the <cite>NATIVE</cite> family of macros, like <cite>NS_DECL_CYCLE_COLLECTION_NATIVE_CLASS(MyClass)</cite>.</p>
+           <p>In addition to these modifiers, these different variations have further <cite>SCRIPT_HOLDER</cite> variations which are needed if your class holds alive JavaScript objects. This is because the tracing of JS objects held alive by this class must be declared separately from the tracing of C++ objects held alive by this class so that the garbage collector can also use the tracing. For example, <cite>NS_DECL_CYCLE_COLLECTION_SCRIPT_HOLDER_CLASS_AMBIGUOUS(MyClass, Parent1)</cite>.</p>
+           <p>There are also <cite>WRAPPERCACHE</cite> variants of the macros which you need to use if your class is wrapper cached. These are effectively a specialized form of <cite>SCRIPT_HOLDER</cite>, as a cached wrapper is a JS object held alive by the C++ object. For example, <cite>NS_DECL_CYCLE_COLLECTION_WRAPPERCACHE_CLASS_AMBIGUOUS(MyClass, Parent1)</cite>.</p>
+           <p>There is yet another variant of these macros, <cite>SKIPPABLE</cite>. This document won’t go into detail here about how this works, but the basic idea is that a class can tell the CC when it is definitely alive, which lets the CC skip it. This is a very important optimization for things like DOM elements in active documents, but a new class you are making cycle collected is likely not common enough to worry about.</p>
+          </section>
+          <section id="implementation">
+           <h3>Implementation<a class="headerlink" href="#implementation" title="Link to this heading">?</a></h3>
+           <p>Finally, you must write the actual implementation of the CC participant, in the .cpp file for your class. This will define the traverse and unlink methods, and some other random helper functions. In the simplest case, this can be done with a single macro like this: <cite>NS_IMPL_CYCLE_COLLECTION(MyClass, mField1, mField2, mField3)</cite>, where <cite>mField1</cite> and the rest are the names of the fields of your class that are strong references to cycle collected objects. There is some template magic that says how many common types like RefPtr, nsCOMPtr, and even some arrays, should be traversed and unlinked. There’s also a variant <cite>NS_IMPL_CYCLE_COLLECTION_INHERITED</cite>, which you should use when there’s a parent class that is also cycle collected, to ensure that fields of the parent class are traversed and unlinked. The name of that parent class is passed in as the second argument. If either of these work, then you are done. Your class is now cycle collected. Note that this does not work for fields that are JS objects.</p>
+           <p>However, if that doesn’t work, you’ll have to get into the details a bit more. A good place to start is by copying the definition of <cite>NS_IMPL_CYCLE_COLLECTION</cite>.</p>
+           <p>For a script holder method, you also need to define a trace method in addition to the traverse and unlink, using <cite>NS_IMPL_CYCLE_COLLECTION_TRACE_BEGIN</cite> and other similar macros. You’ll need to include all of the JS fields that your class holds alive. The trace method will be used by the GC as well as the CC, so if you miss something you can end up with use-after-free crashes. You’ll also need to call <cite>mozilla::HoldJSObjects(this);</cite> in the ctor for your class, and <cite>mozilla::DropJSObjects(this);</cite> in the dtor. This will register (and unregister) each instance of your object with the JS runtime, to ensure that it gets traced properly. This does not apply if you have a wrapper cached class that does not have any additional JS fields, as nsWrapperCache deals with all of that for you.</p>
+          </section>
+         </section>
+        </section>
+       </div>
+      </div>
+      <footer>
+       <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="writing-xpcom-interface.html" class="btn btn-neutral float-left" title="Tutorial for Writing a New XPCOM Interface" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a> <a href="fmt-in-gecko.html" class="btn btn-neutral float-right" title="{fmt} in Gecko" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+       </div>
+       <hr>
+       <div role="contentinfo">
+        <p></p>
+       </div> Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+      </footer>
+     </div>
+    </div>
+   </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ </body>
+</html>

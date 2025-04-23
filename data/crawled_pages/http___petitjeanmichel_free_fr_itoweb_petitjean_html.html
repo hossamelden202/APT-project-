@@ -1,0 +1,216 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+ <head>
+  <title>Michel PETITJEAN / The Mathematical Theory of Chirality</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta http-equiv="Content-Language" content="en-us">
+  <meta name="author" content="Michel Petitjean">
+  <meta name="copyright" content="Michel Petitjean, All Rights Reserved">
+  <meta name="robots" content="all">
+  <meta name="distribution" content="global">
+  <meta name="rating" content="general">
+  <meta name="MSSmartTagsPreventParsing" content="true">
+  <meta name="description" content="Quantitative measure of chirality and symmetry
+                   using the colored mixture model">
+  <meta name="keywords" content="chirality. symmetry. asymmetry. handedness.
+                   probability. continuous. quantitative. measure.
+                   RMS. root mean square. least squares. Procrustes. RMSD.
+                   shape coefficient. skewness.
+                   chiral index. QCM. Petitjean. similarity.
+                   coloured. colored. mixture distributions.
+                   minimal correlation. maximal correlation. most chiral triangle.
+                   Wasserstein. distance. metric. Monge Kantorovitch. transportation problem.">
+ </head>
+ <body bgcolor="#ccffff" text="#000000" link="#0000ff" vlink="#ff0000">
+  <a name="TOP"></a>
+  <h2 align="center">THE MATHEMATICAL THEORY OF CHIRALITY<br><br>
+    © Michel Petitjean<sup>*</sup>; Researcher (retired since Jan 1st, 2023), Dr., Habil.<br>
+    Member of the Executive Board of the <a href="http://isa.symmetry.hu/boards/">International Symmetry Association</a><br><br><a href="https://orcid.org/0000-0002-1745-5402">ORCID</a><br><br><a href="http://scholar.google.fr/citations?user=dpSZ9x4AAAAJ">Google Scholar profile</a><br><br>
+    Author's most recent professional address:<br>
+    INSERM ERL U1133 (BFA, CNRS UMR 8251), Université Paris Cité<br>
+    35 rue Hélène Brion, 75205 Paris Cedex 13, France.<br><br>
+    Formerly (2010-2018): MTi, INSERM UMR-S 973, Université Paris 7.<br>
+    Formerly (2007-2009): CEA/DSV/iBiTec-S/SB2SM (CNRS URA 2096), Saclay, France.<br>
+    Formerly (1987-2006): ITODYS, CNRS UMR 7086, Université Paris 7. <br><br>
+    Contact: <a href="mailto:petitjean.chiral@gmail.com">petitjean.chiral@gmail.com</a><br><br><br>
+   <center>
+    Last update 10 April 2025
+   </center><br></h2><font size="4"> <sup>*</sup> <i>I am author or coauthor of more than a hundred of scientific publications, including nearly ninety international journal papers (43% without co-author, 59% as corresponding author, 72% as either first or last author). My <a href="https://en.wikipedia.org/wiki/Erd%C5%91s_number">Erd?s number</a> is 3 (computed with the <a href="https://mathscinet.ams.org/mathscinet/freeTools.html?version=2">MR calculator of the AMS</a>). </i>
+   <hr><br>
+   <hr> The content of this page deals with chirality, symmetry, and probability theory, but most parts are readable by non specialists of these fields. A rigorous presentation is available on the papers cited in the text. The papers unavailable in open access are available in PDF format upon request to me. The theory below is not related to physical interactions between light and matter. 
+   <hr> Related topics: 
+   <ul>
+    <li><a href="./itoweb.petitjean.symmetry.html">Symmetry, Chirality, Symmetry Measures and Chirality Measures: General Definitions</a></li>
+    <li><a href="./itoweb.petitjean.skewness.html">An Asymmetry Coefficient for Multivariate Distributions</a></li>
+    <li><a href="./itoweb.petitjean.html#TEST">A Simple Dataset to Test and Compare Chirality Measures</a></li>
+    <li><a href="#PARADOX">The Random-Disorder Paradox</a></li>
+    <li><a href="#ASYMAX">Is There a Most Scalene Triangle?</a></li>
+    <li><a href="#LRCLAS">Inconsistency of the left/right classification</a></li>
+   </ul> Other topics: 
+   <ul>
+    <li><a href="./itoweb.petitjean.shape.html">Procrustes Methods, Shape Recognition, Similarity and Docking</a></li>
+    <li><a href="./itoweb.petitjean.class.html">Classification: Computing an Optimal Partition</a></li>
+    <li><a href="./itoweb.petitjean.graphs.html">Mining Data in Graph Databases</a></li>
+    <li><a href="./itoweb.petitjean.graphs.html#PARITY">The Parity Phenomenon in Large Chemical Databases</a></li>
+    <li><a href="./itoweb.petitjean.graphs.html#GMT">The Graphic Mendeleev Table</a></li>
+    <li><a href="./itoweb.petitjean.graphs.html#RD">The Radius Diameter Diagram</a></li>
+    <li><a href="./itoweb.petitjean.graphs.html#VS">Virtual Screening of 3D Chemical Data Bases</a></li>
+    <li><a href="./itoweb.petitjean.graphs.html#CHIR">[6.6]Chiralane: The chemical nomenclature challenge</a></li>
+    <li><a href="./itoweb.petitjean.graphs.html#CHIR">Molecular Symmetry and Chirality</a></li>
+    <li><a href="./itoweb.petitjean.graphs.html#CYL">Molecular shape descriptors: the cylindrical model</a></li>
+    <li><a href="./itoweb.petitjean.spheres.html">Spheres Unions and Intersections</a></li>
+    <li><a href="./itoweb.petitjean.spheres.html">Analytical Computation of van der Waals Surfaces and Volumes</a></li>
+    <li><a href="./itoweb.petitjean.freeware.html">Freewares</a></li>
+    <li><a href="https://doi.org/10.3390/sym12040616">Gamma groups</a> (<a href="https://en.wikipedia.org/wiki/Higher-dimensional_gamma_matrices">Wikipedia</a>)</li>
+   </ul>
+   <hr><br><br>
+   <h2 align="center">WHAT IS CHIRALITY ?</h2><br><br>
+    A modern <a href="./itoweb.petitjean.symmetry.html">definition of chirality</a> based on group theory exists. This modern definition is discussed <a href="./itoweb.petitjean.symmetry.html">here</a> (see references) .<br>
+    It works in non-orientable spaces and it recovers the historical definition due to Lord Kelvin, which is reproduced below:<br><br>
+    &lt;&lt; I call any geometrical figure, or group of points, <i>chiral</i>, and say that it has chirality if its image in a plane mirror, ideally realized, cannot be brought to coincide with itself. &gt;&gt;<br>
+    Lord Kelvin, <i>The Molecular Tactics of a Crystal</i>, § 22, footnote p. 27, Clarendon Press, Oxford, UK, 1894.<br>
+    (see also: Lord Kelvin, <i>Baltimore Lectures on Molecular Dynamics and the Wave Theory of Light</i>, Appendix H., § 22, footnote p. 619. C.J. Clay and Sons, Cambridge University Press Warehouse, London, UK, 1904.)<br><br>
+    Lord Kelvin's definition of chirality is in accordance with the ancient and intuitive idea that indirect symmetry is, just as direct symmetry, a dichotomous property of an euclidean set. In other words, a set IS or IS NOT chiral, and a set IS or IS NOT symmetric.<br>
+    Consider the four vertices of a square in the 3D space. It is an achiral set. Even a slight perturbation of the coordinates of the vertices could lead to a chiral figure, delimiting a tetrahedron. If we need to recognize this perturbated figure as being achiral, how could it be idealized? Moreover, any 4-tuple of points may be considered as a perturbated square or a perturbated regular tetrahedron. Does it mean that all chiral 4-tuple of points are both chiral and achiral? No. So, there is a need to quantify chirality as a "continuous" measure, and a definition of a chirality scale should be provided: a set is LESS or MORE chiral. Achirality is just a limit situation.<br><br>
+    A chiral index measuring quantitatively the amount of chirality should handle various situations in the euclidean space:<br>
+   <ul>
+    <li>Some points could have the same coordinates, then weighted points could exist.<br>
+      The weights of the points could take any non negative real value.<br></li>
+    <li>The number of points is not limited.<br>
+      "Continuous" geometric domains and homogeneous solids should be considered.<br></li>
+    <li>Chirality is sensitive to the dimension of the space: a non isoscele triangle is chiral in the plane, and is achiral in the 3D space. The chirality measure should be defined for a space having any dimension.<br></li>
+   </ul> Clearly, probability distributions constitute an adequate model meeting these requirements. A finite number of equally weighted points in the d-dimensional euclidean space is viewed as a d-dimensional distribution, and a homogeneous solid is viewed as an other distribution. Any mass or charge distribution may be handled via this model, discarding if it is discrete or continuous, weighted or not, finite or infinite.<br><br>
+    The chiral index should not depend of which particular mirror is selected to generate the mirror image, and the chiral index should be insensitive to any isometric transformation of the distribution. A practical way to look at the coincidence of a distribution with its inverted image is to perform translations and rotations of the inverted image to superpose "at best" the two distributions, and to see how similar they are. In other words, the problem of measuring chirality is just a particular instance of the problem of measuring how similar are two classes of equivalence of distributions: the set of all translated and rotated images of the original distribution, and the set of all its translated and rotated and inverted images. Thus, any probability metric measuring the distance between two distributions could be used to measure this similarity. It is why the quantitative measure of chirality is a problem related to the theory of probability metrics [<a href="#REF01">1</a>], and also to the Monge-Kantorovitch transportation problem [<a href="#REF02">2</a>], for which the cost of transporting a distribution of mass to an other one has to be minimized.<br><br>
+    What is a "continuous" measure of chirality? Intuitively, two "close" distributions are expected to have "close" chiral indices. In other words, it means that when a sequence of distributions is converging to a limit, the associated sequence of chiral indices should converge to the chiral index of the limiting distribution. Any theory dealing with a "continuous" measure of chirality should specify which kind of convergence is considered in the space of the chiral entities. <br><br>
+   <hr><br><br>
+   <h2 align="center">CHIRALITY IS NOT ONLY GEOMETRIC</h2><br>
+    Using a probability metric to evaluate the amount of chirality of a distribution does not suffice to handle situations where particles are discernable. Let us consider the eight vertices of a cube, such that each vertex is painted with a different color. Clearly, this cube cannot coincide with its inverted image, and is thus chiral, although the non colored cube is achiral. The same phenomenon arises for the bromo-chloro-fluoro-methane molecule <nobr>Br-CHF-Cl</nobr>, which contains 5 atoms. Even assuming a simplified model such that the carbon is located at the center of a regular tetrahedron delimited by the 4 different substituents, no chemist would recognize an achiral structure, because no spatial superposition of the set with its reflected image is such that all the pairs C-C, H-H, F-F, Cl-Cl, and Br-Br coincide. Now, considering the chloro-fluoro-methane <nobr>Cl-CH<sub>2</sub>-F</nobr>, the chemists would recognize an achiral structure, provided that the first hydrogen of the molecule is allowed to match the second hydrogen of the reflected molecule, and the second hydrogen of the molecule is allowed to match the first one of the reflected molecule.<br><br>
+    An other situation is encountered in physics. We assume a simplified model such that the molecule is a mixture of a negative charge distribution, a positive charge distribution, and a mass distribution. The degree of chirality of each distribution could be evaluated separately and discarding the weights (i.e. the ratios of the physical units), although the mixture has its own chirality content. This situation is not different from the previous one. When a color is located on N points, it means in fact that the distribution is concentrated on these N points, or, alternatively, that all the space has the specified color; but most points have a null weight, thus they are invisible.<br><br>
+    The adequate formal model is called the <a href="./itoweb.petitjean.shape.html#CMM">colored mixture model</a> [<a href="#REF03">3</a>] (see also the first reference cited in my web page about <a href="./itoweb.petitjean.shape.html#CMM">shape recognition</a>). A random variable X taking values in the product of the d-dimensional euclidean space by the space of the colors (assumed to be measurable) is considered. Its distribution is a mixture of d-variate distributions, each of them being attached to a color. The color may be viewed as a supplementary value on a (d+1)<sup>th</sup> pseudo axis, in a space having a numeric part and a non numeric part. It follows that probability metrics operating on the space of function distributions are not adequate. When the physical model needs to consider the probability law of a random variable taking simultaneously numerical and non numerical values, metrics operating on the space of probability laws are preferred. Extending the Wasserstein distance to colored mixtures provides a metric sensitive to colors [<a href="#REF03">3</a>], and it is why the associated chiral index has been retained. <br><br>
+   <hr><br><br><a name="DEFCHI"></a>
+   <h2 align="center">THE CHIRAL INDEX AND SOME OF ITS PROPERTIES</h2><br>
+    The chiral index CHI is defined as follows:<br><br>
+    X is a colored mixture in R<sup>d</sup><br>
+    Y is a colored mixture distributed as an inverted image of X, and submitted to a rotation R and a translation t<br>
+    W is a joint distribution of X and Y such that the marginals of X and Y in the space of colors are almost surely equal, i.e. the couple (X,Y) has a null probability when X and Y have different colors<br>
+    T is the inertia of X (or Y), and E denotes the mathematical expectation:<br><br><nobr>CHI = (d/4T) · Inf<sub>{W,R,t}</sub> E[(X-Y)'·(X-Y)]</nobr><br><br>
+    The chiral index depends only on the probability law of X, and is insensitive to isometries.<br>
+    The normalizing coefficient (d/4T) is such that the chiral index is scale independant, and takes values onto the interval [0..1].<br>
+    The value 0 indicates that X is achiral.<br>
+    The optimal translation is known to be such that X and Y should have a null expectation. <br>
+    Although the definition of the chiral index seems awkward, simpler expressions are available.<br>
+    c<sub>1</sub>, c<sub>2</sub>, ..., c<sub>d</sub> being the covariances, the chiral index is:<br><br>
+    CHI = (d/2) · ( 1 - [Sup<sub>{W,R}</sub>(c<sub>1</sub>+c<sub>2</sub>+...+c<sub>d</sub>)]/T )<br><br>
+    When X is a mixture of almost surely constant vectors, i.e., when we consider a set of points such that not two of them have the same color, the chiral index is proportional to smallest percentage of inertia of the covariance matrix of the set. L<sub>1</sub>, L<sub>2</sub>,..., L<sub>d</sub> being the eigenvalues of the covariance matrix sorted in decreasing order:<br><br>
+    CHI = d L<sub>d</sub> / (L<sub>1</sub>+L<sub>2</sub>+...+L<sub>d</sub>)<br><br>
+    In the unidimensional case (with or without colors), the chiral index depends only on the maximal correlation coefficient r between X and Y, Y being distributed as -X:<br><br>
+    CHI = ( 1 - Sup<sub>{W}</sub>r ) / 2<br><br>
+    Alternatively, if X and Y are identically distributed on the real line, the chiral index depends only on the minimal correlation r between X and Y:<br><br>
+    CHI = ( 1 + Inf<sub>{W}</sub>r ) / 2<br><br>
+    Now, we return back to the multidimensional space, and we consider the non colored situation, i.e., X is now an ordinary random vector. The chiral index is a shape coefficient of the distribution. Note that most statisticians consider that distributions such as the unidimensional gaussian, are symmetric. These latter should be better recognized as being achiral, because achirality is related to indirect symmetry, and because direct symmetry has no sense on the real line.<br><br>
+    The chiral index is a better asymmetry coefficient than the <a href="./itoweb.petitjean.skewness.html">skewness</a>, because there are asymmetric distributions having a null skewness, just as for the symmetric (i.e. achiral) distributions. This problem does not occur with the chiral index, because its properties are induced from those of a probability metric.<br><br>
+    The general colored mixture model does not handle some situations. When the total mass of a system is infinite, such as for infinite lattices, the model is not adequate. Only sequences of finite lattices could be considered. When the colored mixture model is adequate, the chiral index exists if and only if the inertia is finite and non null. E.g. the Cauchy distribution has no chiral index.<br><br>
+    The null inertia occurs if and only if all the mass is concentrated on a single point. This trivial situation should not be related to any achiral or chiral situation, because it can occur either as the limit of a sequence of chiral distributions or as the limit of a sequence of achiral distributions. <br><br>
+   <hr><br><br>
+   <h2 align="center">COMPUTATIONAL ASPECTS</h2><br>
+    The analytical calculation of the chiral index is sometimes feasible. Some examples follow [3-5,7].<br>
+   <ul>
+    <li>The chiral index of an achiral set or an achiral colored mixture, is null.<br></li>
+    <li>The chiral index of the Bernoulli distribution with parameter p=1-q, is equal to 1-1/2p when p&gt;1/2, and is equal to 1-1/2q when p&lt;1/2. It is of course null when p=q=1/2.<br></li>
+    <li>The chiral index of a set of colored points in R<sup>d</sup> such that not two of them have the same color, is equal to d·V<sub>d</sub>/T, V<sub>d</sub> being the smallest eigenvalue of the covariance matrix.<br>
+      It follows that these sets have the maximal chiral index CHI=1 when d=1, or when the covariance matrix is proportional to the identity matrix.<br>
+      This latter situation occurs when the points are the vertices of a regular planar polygon, or are the vertices of a full d-dimensional cube, regular d-octahedron, or regular d-simplex.<br></li>
+    <li>The most chiral triangle, i.e. the most chiral set of 3 non colored equally weighted points in the plane, has a chiral index equal to 1-2/5<sup>1/2</sup>. This triangle pertains to a family of triangles having a particular geometrical property (see section VII-C in ref.[<a href="#REF04">4</a>]).<br></li>
+    <li>For the non colored model and a fixed rotation, computing CHI is an instance of the Monge-Kantorovitch transportation problem. Thus, analytical results are available for continuous unidimensional distributions having an invertible distribution function (see chap.3 in ref. [<a href="#REF02">2</a>]). E.g. the chiral index of an exponential distribution is equal to 1-Pi<sup>2</sup>/12.</li>
+   </ul> When the analytical calculation is not feasible, a discretization is needed to get a numerical solution with the computer. A convergence theorem exists for the non colored model [<a href="#REF03">3</a>]: considering a sequence of distributions, the convergence in law plus the convergence of the 2-order moment ensure the convergence of the chiral index. An important consequence is that the chiral index of a parent distribution can be approximated by sampling, because the chiral index of the sample is converging to that of the parent distribution.<br><br>
+    Computing the chiral index of a set of N equally weighted points in R, colored or not, is simple (see appendix 1 in ref. [<a href="#REF05">5</a>]). Thus, computing CHI for the non colored model is quite easy on a pocket calculator: compute the correlation coefficient between the set of values sorted in inceeasing order and the set sorted in decreasing order, add 1, then divide by 2. Note that this correlation coefficient cannot be positive, and the chiral index is upper bounded by 1/2.<br><br>
+    Now, we consider N colored and weighted points in R<sup>d</sup>. When the rotation is fixed or when the optimal rotation is known, computing CHI is a linear programming problem [<a href="#REF06">6</a>]. Computing also the rotation leads to minimize a linear function under polynomial constraints: the linear constraints come from the joint density, and the non linear come from the rotation. When the joint density is fixed or known, the optimal rotation is known in R<sup>2</sup> [<a href="#REF05">5</a>], and in R<sup>3</sup> [<a href="#REF04">4</a>].<br><br>
+    When the N colored points are equally weighted, computing the optimal joint density leads to enumerate the permutations of the N points [<a href="#REF05">5</a>,<a href="#REF07">7</a>]. This is practically impossible abouve ten points with the same color. Despite this combinatorial difficulty, there are situations where the combinatoric can be drastically reduced. E.g., many chemists consider that the 3D molecular model of a conformer is also a non directed graph such that the atoms are the vertices and the edges are the chemical bonds. Atoms and bonds have their own colors. It follows that this graph induces constraints on the correspondences allowed between atoms, i.e. a carbon cannot match an oxygen, and an hydrogen of a methyl group cannot match an hydrogen of an hydroxy group. In fact, among the N! correspondences (or permutations, or joint densities), only those generated by the graph automorphisms enumeration are allowed [<a href="#REF05">5</a>]. It is why the chiral index is easily computable for many heavy molecules [<a href="#REF07">7</a>]. As an example of reduction of the combinatoric, consider N equally weighted non colored points, such that the N nodes of the graph define a single ring containing N edges: clearly, there are only 2N graph automorphisms, and the chiral index is computable even for large values of N.<br><br>
+    The colored graph model is a generalization of the colored mixture model for which constraints on the joint density are added to the constraints coming from the colors themselves.<br><br>
+    The freeware QCM computes the chiral index of a conformer, and is downloadable from the <a href="./itoweb.petitjean.freeware.html#QCM">software page</a>. <br><br>
+   <hr><br><br><a name="TEST"></a>
+   <h2 align="center">A SIMPLE DATASET TO TEST AND COMPARE <a href="./itoweb.petitjean.html#TOP">CHIRALITY MEASURES</a></h2><br>
+    Many scientists have attempted to define their own chirality measures [<a href="#REF08">8</a>]. In order to compare these measures and evaluate their degree of generality, I propose to look to what they return for the simplest chiral figure: the unidimensional set containing 3 points, so that the ratio of the lengths of the two adjacent segments is the unique parameter of this set (no color here). This parameter is noted "a", and may take any non negative real value. The chiral index is computed from the formula in appendix 1 of [<a href="#REF05">5</a>]: <br><br>
+    CHI = (1-a)<sup>2</sup> / 4(1+a+a<sup>2</sup>) <br><br>
+    E.g., for the set (-1,-1,+2), CHI=1/4, and for the set (+1,+2,+4), CHI=1/28. <br>
+    Observe the following properties of the function CHI(a):<br>
+    CHI is function of only the unique parameter of the set, CHI is continuous, CHI(1)=0 and CHI=0 only for the symmetric set, and CHI(a)=CHI(1/a) (because a and 1/a correspond to similar sets).<br>
+    For the unidimensional three points set, all these four properties are required to build a safe chirality measure.<br>
+    As proposed in [<a href="#REF09">9</a>], [<a href="#REF10">10</a>] and [<a href="#REF11">11</a>], those who would like to build their own chirality measure are invited to check if all properties above indeed stand in this very simple situation. <br><br>
+   <hr><br><br>
+   <h2 align="center">MISCELLANEOUS</h2><br>
+    Modeling chirality has required us to work with colored mixtures rather than with random vectors, and calculating the chiral index is intended to evaluate quantitatively how the distribution of a colored mixture differs from that of its inverted image.<br><br>
+    A more general problem is to evaluate quantitatively how different are the distributions of any two colored mixtures X and Y. The mixtures are assumed to share the same space of colors, and, as previously, the couple (X,Y) offers a null probability to get different colors for X and Y. The similarity between the distributions is still expressed as a Wasserstein distance:<br><br><nobr>(Inf<sub>{W,R,t}</sub>E[(X-Y)'·(X-Y)])<sup>1/2</sup></nobr><br><br>
+    When each of the two distributions is represented by a set of N colored points, the N colors being all different, and the two sets of N colors being identical, it means that there is a pairwise correspondence between the two sets of points, and the distance is called the pure rotation Procrustes distance. This name comes from a least squares method to superpose by rotation and translation two sets of N points pairwise associated [<a href="#REF03">3</a>]. The optimal translation is get by centering the sets, and the optimal rotation is known in the plane (sect. 3 in ref.[<a href="#REF05">5</a>]) and in the 3D space (appendix of ref.[<a href="#REF04">4</a>]). When all colors are identical, we have the pure rotation Procrustes algorithm without prefixed correspondence.<br><br>
+    More details about the applications of the colored mixture model: see the page about <a href="./itoweb.petitjean.shape.html">Procrustes Methods, Shape Recognition, Similarity and Docking</a> <br><br>
+    Chirality is known to be related to indirect symmetry, and has been quantified to evaluate how a set is similar to its inverted image, via an optimal superposition method. Now, how to quantify direct symmetry? In other words, how a set is similar to itself? For a finite number of equally weighted colored points, a direct symmetry index has been defined [<a href="#REF04">4</a>]. Unfortunately, when the number of points tends to be infinite, the trivial optimal superposition of the distribution on itself is unavoidable. The problem may be reformulated as a local minima problem, but this latter is much more difficult to solve.<br>
+    See also the <a href="./itoweb.petitjean.symmetry.html">general definition of symmetry measures</a> to understand why direct symmetry measures are difficult to exhibit. <br><br>
+    A transdisciplinary review of methods dealing with chirality and symmetry measures has been published [<a href="#REF08">8</a>]. <br><br>
+    Generating a symmetric figure by perturbation of a non-symmetric one is, in general, an open problem. For a finite set of colored points, there are simple conditions to get an achiral figure by averaging the set and its optimally superposed mirror image [<a href="#REF12">12</a>]. <br><br>
+    A relation between chirality and gravitation has been proposed: see the <a href="http://www.mazepath.com/uncleal/qz4.htm">parity&nbsp;E?tv?s&nbsp;experiment</a> <br><br>
+   <hr><br><a name="PARADOX"></a>
+   <center>
+    <i>Philosophy</i>: The Random-Disorder Paradox.
+   </center><br><br>
+    The relation between random and order/disorder may be enlighted by symmetry arguments. E.g., assume that N random points are generated following the uniform law over a segment. It is shown that, in this situation, more random points there are, more symmetry there is (see section 6 in [<a href="#REF08">8</a>], or [<a href="#REF09">9</a>]). Now, it is commonly thought that more symmetry there is, more order there is, meaning that more random points there are, more order there is. But it is also commonly though that more random points there are, more disorder there is. Here is the paradox... <a href="./itoweb.petitjean.html#TOP">Theory</a> <br><br><br>
+   <hr><br><a name="ASYMAX"></a>
+   <center>
+    <i>Philosophy</i>: Is there a most scalene triangle?
+   </center><br><br>
+    You know how it is difficult for the teacher to draw a scalene triangle on the blackboard: most are nearly isosceles or nearly rectangle. Thus I tried to define what could be the "most scalene" triangle. Of course there is an infinite number of criteria to do that. I retained two of them, based on the present <a href="./itoweb.petitjean.html#TOP">theory</a>: 
+   <ol>
+    <li>The least isosceles one (thus, cannot be equilateral): however it appears to be an obtuse triangle and thus may be not satisfactory. See Fig. 1 <a href="./itoweb.petitjean.skewness.html#ASYMAX">there</a>.</li>
+    <li>The least isosceles one which is not obtuse, and so not rectangle. For that, I considered the disphenoids, also called isoceles or equifacial tetrahedra. These tetrahedra have their four faces congruent to the same triangle, and it is known that this triangle cannot be obtuse. A right triangle defines a degenerated tetrahedron, which is thus achiral. An isosceles triangle defines an achiral tetrahedron, too. Thus, I proposed to retain the triangular face of the most chiral disphenoid as the required "most scalene triangle". See Fig. 2 <a href="./itoweb.petitjean.skewness.html#ASYMAX">there</a>. Planar coordinates of this triangle are explicited in [<a href="#REF13">13</a>].</li>
+   </ol> Alas, drawing these two triangles only with compass and ruler is still an open problem. <br><br><br>
+   <hr><br><a name="LRCLAS"></a>
+   <center>
+    <i>Philosophy</i>: Inconsistency of the left/right classification
+   </center><br><br>
+    Some people may think that chiral objects can be classified as either right objects or left objects. <br>
+    In general such classification is impossible. <br>
+    See a counterexample in the plane [<a href="#REF14">14</a>] (with references; also given in [<a href="#REF15">15</a>]). <br>
+    A counterexample is also given in the 3D space [see <a href="#REF08">8</a> p.274 and references cited]. <br><br><br>
+   <hr> Thank you for having read parts or all the content of <a href="#TOP">this page</a>. The main apects of the theory appear also in the PDF of my invited lectures at MaxEnt 2008 in S?o Paulo [<a href="#REF16">16</a>], and at the Workshop on Rigidity and Symmetry at the Fields Institute in 2011 [<a href="#REF17">17</a>]. A paper summarizing the main results was published in 2013 in the Proceedings of the SOR13 International Symposium [<a href="#REF10">10</a>]. If you have remarks, criticisms, suggestions, ideas, or you want to discuss about some aspects of chirality or symmetry, please email to me (<a href="mailto:petitjean.chiral@gmail.com"><i>petitjean.chiral@gmail.com</i></a>). </font>
+  <hr>
+  <br>
+  <br>
+  <h2 align="center">REFERENCES</h2>
+  <br><font color="#000000" size="4">
+   <ol>
+    <a name="REF01"></a>
+    <li>RACHEV S.T.<br><i>Probability Metrics and the Stability of Stochastic Models.</i><br>
+      Wiley, New-York 1981.<br><br></li><a name="REF02"></a>
+    <li>RACHEV S.T., R?SCHENDORF L.<br><i>Mass Transportation Problems.</i> Vol. I and II.<br>
+      Springer-Verlag, New-York 1998.<br><br></li><a name="REF03"></a>
+    <li>PETITJEAN M.<br><i>Chiral Mixtures.</i><br><a href="http://jmp.aip.org/">J. Math. Phys.</a> 2002,&nbsp;<b>43</b>[8],&nbsp;4147-4157 (DOI <a href="https://doi.org/10.1063/1.1484559">10.1063/1.1484559</a>).<br>
+      A free copy for personal use only (©<a href="http://www.aip.org/" target="_blank">AIP, American Institute of Physics</a>) is available from the HAL repository: <a href="https://hal.archives-ouvertes.fr/hal-02122882">hal-02122882</a>; copyright rules apply.<br><br></li><a name="REF04"></a>
+    <li>PETITJEAN M.<br><i>On the Root Mean Square Quantitative Chirality and Quantitative Symmetry Measures.</i><br><a href="http://jmp.aip.org/">J. Math. Phys.</a> 1999,&nbsp;<b>40</b>[9],&nbsp;4587-4595 (DOI <a href="https://doi.org/10.1063/1.532988">10.1063/1.532988</a>).<br>
+      A free copy for personal use only (©<a href="http://www.aip.org/" target="_blank">AIP, American Institute of Physics</a>) is available from the HAL repository: <a href="https://hal.archives-ouvertes.fr/hal-02122820">hal-02122820</a>; copyright rules apply.<br><br></li><a name="REF05"></a>
+    <li>PETITJEAN M.<br><i>About Second Kind Continuous Chirality Measures. 1. Planar Sets.</i><br><a href="http://www.kluweronline.com/issn/0259-9791">J. Math. Chem.</a> 1997,&nbsp;<b>22</b>[2-4],&nbsp;185-201 (DOI <a href="https://doi.org/10.1023/A:1019132116175">10.1023/A:1019132116175</a>).<br>
+      Free version for readers: <a href="https://rdcu.be/bzS0P">https://rdcu.be/bzS0P</a> (link created by <a href="https://www.springernature.com/gp/researchers/sharedit"><img src="./itoweb_SN_SharedIt.jpg" width="60"></a>; downloads, prints and copies are for <a href="https://www.springernature.com/gp/researchers/sharedit">subscribers only)<br><br></a></li><a href="https://www.springernature.com/gp/researchers/sharedit"> </a><a name="REF06"></a>
+    <li>PETITJEAN M.<br><i>Chiralité quantitative: le modèle des moindres carrés pondérés.</i><br><a href="http://www.sciencedirect.com/science/journal/13871609">Compt. Rend. Acad. Sci. Paris, série IIc</a> 2001,&nbsp;<b>4</b>[5],&nbsp;331-333 (DOI <a href="https://doi.org/10.1016/S1387-1609(01)01241-5">10.1016/S1387-1609(01)01241-5</a>).<br><br></li><a name="REF07"></a>
+    <li>PETITJEAN M.<br><i>Calcul de chiralité quantitative par la méthode des moindres carrés.</i><br><a href="http://www.sciencedirect.com/science/journal/13871609">Compt. Rend. Acad. Sci. Paris, série IIc</a> 1999,&nbsp;<b>2</b>[1],&nbsp;25-28 (DOI <a href="https://doi.org/10.1016/S1387-1609(99)80034-6">10.1016/S1387-1609(99)80034-6</a>).<br><br></li><a name="REF08"></a>
+    <li>PETITJEAN M.<br><i>Chirality and Symmetry Measures: A Transdisciplinary Review.</i><br><a href="https://www.mdpi.com/journal/entropy">Entropy</a> 2003,&nbsp;<b>5</b>[3],&nbsp;271-312 (open access paper: DOI <a href="https://doi.org/10.3390/e5030271">10.3390/e5030271</a>; Zbl <a href="http://www.zentralblatt-math.org/zmath/en/">1078.00503</a>)<br><br></li><a name="REF09"></a>
+    <li>PETITJEAN M.<br><i>Minimal Symmetry, Random and Disorder.</i><br><a href="http://journal-scs.symmetry.hu/content-pages/">Symmetry: Culture and Science</a> 2006,&nbsp;<b>17</b>[1-2],&nbsp;197-205.<br><a href="./itoweb.lecture.SF2006.pdf">Download PDF file</a> of the associated lecture at the <a href="http://symmetry.hu/symmetry-festival-2006/">Symmetry Festival 2006</a>.<br><br></li><a name="REF10"></a>
+    <li>PETITJEAN M.<br><i>The Chiral Index: Applications to Multivariate Distributions and to 3D molecular graphs.</i><br>
+      Proceedings of <a href="http://sor13.fis.unm.si">12th International Symposium on Operations Research in Slovenia, SOR'13</a>, pp.11-16,<br>
+      Dolenjske Toplice, Slovenia, 25-27 September 2013.<br><!--
+            (organized by: <a href="http://www.drustvo-informatika.si/sekcije/sor/">Slovenian Society INFORMATIKA Section for Operations Research</a>
+            and <a href="http://www.fis.unm.si/si/">Faculty of Information Studies</a>, Novo mesto, Slovenia)<br>
+            --> L. Zadnik Stirn, J. Zerovnik, J. Povh, S. Drobne, A. Lisec, Eds.<br><a href="http://www.drustvo-informatika.si">Slovenian Society Informatika (SDI)</a>, <a href="http://www.drustvo-informatika.si/sekcije/sor/">Section for Operations Research (SOR)</a>, Ljubljana, 2013.<br>
+      (the full book of the proceedings is available in open access, <a href="http://fgg-web.fgg.uni-lj.si/~/sdrobne/sor/SOR%2713%20-%20Proceedings.pdf">ISBN 978-961-6165-40-2</a>)<br>
+      Download pdf paper from the HAL repository: <a href="https://hal.archives-ouvertes.fr/hal-01952400">hal-01952400</a><br>
+      (deposited with permission from <a href="http://www.drustvo-informatika.si">Society Informatika</a>, <a href="http://www.drustvo-informatika.si/sekcije/sor/">Section for Operations Research</a>)<br><a href="./itoweb.lecture.SOR13.pdf">Download PDF file</a> of the lecture.<br><br></li><a name="REF11"></a>
+    <li>PETITJEAN M.<br><i>Extreme asymmetry and chirality. A challenging quantification.</i><br><a href="http://journal-scs.symmetry.hu/content-pages/">Symmetry: Culture and Science</a> 2020,&nbsp;<b>31</b>[4],&nbsp;439-447.<br>
+      Download PDF paper from the HAL repository: <a href="https://hal.archives-ouvertes.fr/hal-03033327">hal-03033327</a> (copy deposited with permission from <a href="http://symmetry.hu/symmetrion/" target="_blank">Symmetrion</a>).<br><br></li><a name="REF12"></a>
+    <li>PETITJEAN M.<br><i>? propos de la référence achirale.</i><br><a href="http://www.sciencedirect.com/science/journal/16310748">Compt. Rend. Chim.</a> 2006,&nbsp;<b>9</b>[10],&nbsp;1249-1251 (DOI <a href="https://doi.org/10.1016/j.crci.2006.03.003">10.1016/j.crci.2006.03.003</a>).<br><br></li><a name="REF13"></a>
+    <li>BOUISSOU C., PETITJEAN M.<br><i>Asymmetric exchanges.</i><br><a href="https://hal.archives-ouvertes.fr/hal-01782438">JIMIS 2018,<b>4</b>,1-18</a> (DOI <a href="https://doi.org/10.18713/JIMIS-230718-4-1">10.18713/JIMIS-230718-4-1</a>).<br><br></li><a name="REF14"></a>
+    <li>PETITJEAN M.<br><i>Symmetry, Antisymmetry, and Chirality: Use and Misuse of Terminology.</i><br><a href="https://www.mdpi.com/journal/symmetry">Symmetry</a> 2021,&nbsp;<b>13</b>[4],&nbsp;603 (open access paper: DOI <a href="https://doi.org/10.3390/sym13040603">10.3390/sym13040603</a><br><br></li><a name="REF15"></a>
+    <li>PETITJEAN M.<br><i>Chirality defined: The end of the even/odd paradigm.</i><br><a href="https://festival.symmetry.hu/symmetry-festival-2021/">Symmetry Festival 2021</a>, 9-12 July 2021, Sofia, Bulgaria.<br><a href="https://hal.archives-ouvertes.fr/hal-03284006">Download slides (PDF)</a> of the lecture.<br><br></li><a name="REF16"></a>
+    <li>PETITJEAN M.<br><i>An Asymmetry Coefficient for Multivariate Distributions.</i><br><a href="http://www.brastex.info/maxent2008/">MaxEnt 2008</a>, 6-11 July 2008, Boracéia, S?o Paulo.<br>
+      (28th International Workshop on Bayesian Inference and Maximum Entropy Methods in Science and Engineering)<br><a href="./itoweb.lecture.MaxEnt2008.pdf">Download PDF file</a> of the lecture.<br><br></li><a name="REF17"></a>
+    <li>PETITJEAN M.<br><i>Chirality and Symmetry Measures: Some Open Problems.</i><br><a href="http://www.fields.utoronto.ca/programs/scientific/11-12/discretegeom/wksp_symmetry/">Workshop on Rigidity and Symmetry</a>, 17-21 October 2011, The Fields Institute, Toronto. <a href="http://www.fields.utoronto.ca/programs/scientific/11-12/discretegeom/talks/october.html#rigidityandsym">Abstracts</a>.<br>
+      Download pdf file from the HAL repository: <a href="https://hal.archives-ouvertes.fr/hal-02124604">hal-02124604</a><br><br></li>
+   </ol></font>
+ </body>
+</html>

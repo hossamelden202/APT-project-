@@ -1,0 +1,345 @@
+<!doctype html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Substituting local GeckoView — Firefox Source Docs  documentation</title>
+  <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50">
+  <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094">
+  <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=fd3f3429">
+  <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b">
+  <link rel="stylesheet" type="text/css" href="../../../_static/custom_theme.css?v=dc5ed815">
+  <link rel="stylesheet" type="text/css" href="../../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7">
+  <link rel="shortcut icon" href="../../../_static/firefox.ico"><!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+  <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+  <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+  <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+  <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+  <script src="../../../_static/copybutton.js?v=30646c52"></script>
+  <script src="../../../_static/design-tabs.js?v=36754332"></script>
+  <script src="../../../_static/js/theme.js"></script>
+  <link rel="index" title="Index" href="../../../genindex.html">
+  <link rel="search" title="Search" href="../../../search.html">
+  <link rel="next" title="Sync Integration Tests" href="syncIntegrationTests.html">
+  <link rel="prev" title="Release Checklist" href="release-checklist.html">
+ </head>
+ <body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+   <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <div class="wy-side-scroll">
+     <div class="wy-side-nav-search">
+      <a href="../../../index.html" class="icon icon-home"> Firefox Source Docs <img src="../../../_static/firefox-wordmark.svg" class="logo" alt="Logo"> </a><!-- -- This code is governed by the BSD license ---->
+      <div>
+       <h3>Quick search</h3>
+       <script>
+    (function () {
+      var cx = "dd12886298f75dbef";
+      var gcse = document.createElement("script");
+      gcse.async = true;
+      gcse.src = "https://cse.google.com/cse.js?cx=" + cx;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(gcse, s);
+    })();
+  </script><gcse:search></gcse:search>
+      </div>
+     </div>
+     <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+      <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../glossary/index.html">A Glossary of Common Terms</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../overview/index.html">A Quick Guide to Mozilla Applications</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../setup/index.html">Getting Set Up To Work On The Firefox Codebase</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Working On Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../contributing/index.html">Working on Firefox</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../bug-mgmt/index.html">Bug Handling</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox User Guide</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../devtools-user/index.html">Firefox DevTools User Docs</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Source Code Documentation</span></p>
+      <ul class="current">
+       <li class="toctree-l1"><a class="reference internal" href="../../../mots/index.html">Governance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../browser/index.html">Firefox Front-end</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../dom/index.html">DOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../editor/index.html">Editor</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../layout/index.html">Style system (CSS) &amp; Layout</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../gfx/index.html">Graphics</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../ipc/index.html">Processes, Threads and IPC</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../devtools/index.html">Firefox DevTools Contributor Docs</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../toolkit/index.html">Toolkit</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../js/index.html">SpiderMonkey</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../jsloader/index.html">JS Loader</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../geckoview/index.html">GeckoView</a></li>
+       <li class="toctree-l1 current"><a class="reference internal" href="index.html">Fenix</a>
+        <ul class="current">
+         <li class="toctree-l2"><a class="reference internal" href="Acronym-dictionary.html">Acronym Dictionary</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Addressing-a-performance-regression.html">Addressing a performance regression</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Architecture-Decisions.html">Architecture Decisions</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="architecture-overview.html">Architecture Overview</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Crash-Monitoring.html">Crash Monitoring</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Creating-a-release-branch.html">Creating a release branch</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Data-Practices.html">Data practises</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Development-Test-Plan.html">Development Test Plan</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Fennec-Migration.html">Fennec Legacy: Migration</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Firebase-Cloud-Messaging-for-WebPush.html">Firebase Cloud Messaging for WebPush</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Firefox-for-Android-Team-Processes.html">Firefox for Android Team Processes</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Home.html">Home</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Implementing-Telemetry.html">Implementing Telemetry</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Implementing-a-Nimbus-Experiment.html">Implementing a Nimbus Experiment</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="List-of-fenix-threads.html">List of Fenix Threads</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Logging-Crash-Information.html">Logging Crash Information</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Metric-Feature-Tags.html">Metric Feature Tags</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Secret-settings-debug-menu-instructions.html">Debug settings menu instructions</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Telemetry-implementation%2C-reviews%2C-renewals.html">Telemetry - Implementation, Reviews, Renewals</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Telemetry-implementation%2C-reviews%2C-renewals.html#creating-glean-annotations">Creating Glean Annotations</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Telemetry-implementation%2C-reviews%2C-renewals.html#data-review">Data review</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Telemetry-implementation%2C-reviews%2C-renewals.html#renewing-existing-telemetry">Renewing existing telemetry</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Test-telemetry-pings.html">Test Telemetry Pings</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Working-with-Strings.html">Working with Strings</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="adjust.html">Adjust</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="certificates.html">Certificates</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="crash-reporting.html">Crash Reporting</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="experiments.html">Experiments</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="manual-testing.html">Manual Testing</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="metrics.html">Metrics Definitions</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="release-checklist.html">Release Checklist</a></li>
+         <li class="toctree-l2 current"><a class="current reference internal" href="#">Substituting Local GeckoView</a>
+          <ul>
+           <li class="toctree-l3"><a class="reference internal" href="#manually-publish-local-geckoview-to-local-maven">1. Manually publish local GeckoView to local Maven</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#modify-fenix-to-consume-local-gv">2. Modify Fenix to consume local GV</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#build-fenix-with-local-gv">3. Build fenix with local GV</a></li>
+          </ul></li>
+         <li class="toctree-l2"><a class="reference internal" href="syncIntegrationTests.html">Sync Integration Tests</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="telemetry.html">Telemetry</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="UI-Tests.html">UI Tests</a></li>
+        </ul></li>
+       <li class="toctree-l1"><a class="reference internal" href="../focus-android/index.html">Focus for Android</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../dom/bindings/webidl/index.html">WebIDL</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../modules/libpref/index.html">libpref</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../networking/index.html">Networking</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../remote/index.html">Remote Protocols</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../services/index.html">Services</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../permissions/index.html">Permissions</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../uriloader/index.html">File Handling</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../widget/cocoa/index.html">Firefox on macOS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../widget/windows/index.html">Firefox on Windows</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../toolkit/components/ml/index.html">Firefox AI Runtime</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../accessible/index.html">Accessibility</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../media/index.html">Media Playback</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../code-quality/index.html">Code quality</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../writing-rust-code/index.html">Writing Rust Code</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../rust-components/index.html">Rust Components</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../tools/profiler/index.html">Gecko Profiler</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../performance/index.html">Performance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../storage/index.html">Database bindings (SQLite, KV, …)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../xpcom/index.html">XPCOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../nspr/index.html">NSPR</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../security/nss/index.html">Network Security Services (NSS)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../content-security/index.html">Web Security Checks in Gecko</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">The Firefox Build System</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../mach/index.html">Mach</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../tools/try/index.html">Pushing to Try</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../build/buildsystem/index.html">Build System</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../taskcluster/index.html">Firefox CI and Taskgraph</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../tools/moztreedocs/index.html">Managing Documentation</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../mozbuild/vendor/index.html">Vendoring Third Party Components</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Testing &amp; Test Infrastructure</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/automated-testing/index.html">Automated Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/treeherder-try/index.html">Understanding Treeherder Results</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/sheriffed-intermittents/index.html">Sheriffed intermittent failures</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/tests-for-new-config/index.html">Turning on Firefox tests for a new configuration</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/intermittent/index.html">Avoiding intermittent tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/testing-policy/index.html">Testing Policy</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/ci-configs/index.html">Configuration Changes</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/browser-chrome/index.html">Browser chrome mochitests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/chrome-tests/index.html">Chrome Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/marionette/index.html">Marionette</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/geckodriver/index.html">geckodriver</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/test-verification/index.html">Test Verification</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/webrender/index.html">WebRender Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/mochitest-plain/index.html">Mochitest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/xpcshell/index.html">XPCShell tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/tps/index.html">TPS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../web-platform/index.html">web-platform-tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../gtest/index.html">GTest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../tools/fuzzing/index.html">Fuzzing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../tools/sanitizer/index.html">Sanitizer</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/perfdocs/index.html">Performance Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../tools/code-coverage/index.html">Code coverage</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing-rust-code/index.html">Testing &amp; Debugging Rust Code</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Releases &amp; Updates</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../update-infrastructure/index.html">Mozilla Update Infrastructure</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../update-infrastructure/index.html#watershed-updates">Watershed Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../update-infrastructure/index.html#desupport-updates">Desupport Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../tools/update-verify/index.html">Update Verify</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Localization &amp; Internationalization</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../intl/index.html">Internationalization</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../l10n/index.html">Localization</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox and Python</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../mozbase/index.html">mozbase</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../python/index.html">Using third-party Python packages</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Metrics Collected in Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../metrics/index.html">Metrics</a></li>
+      </ul>
+     </div>
+    </div>
+   </nav>
+   <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+    <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+     <i data-toggle="wy-nav-top" class="fa fa-bars"></i> <a href="../../../index.html">Firefox Source Docs</a>
+    </nav>
+    <div class="wy-nav-content">
+     <div class="rst-content">
+      <!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+      <div role="navigation" aria-label="Page navigation">
+       <ul class="wy-breadcrumbs">
+        <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+        <li class="breadcrumb-item"><a href="index.html">Fenix</a></li>
+        <li class="breadcrumb-item active">Substituting local GeckoView</li>
+        <li class="wy-breadcrumbs-aside"><a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Developer+Infrastructure&amp;component=Firefox+Source+Docs%3A+Content&amp;short_desc=Documentation+issue+on+mobile/android/fenix/substituting-local-gv&amp;comment=URL+=+https://firefox-source-docs.mozilla.org/mobile/android/fenix/substituting-local-gv.html&amp;bug_file_loc=https://firefox-source-docs.mozilla.org/mobile/android/fenix/substituting-local-gv.html" rel="nofollow">Report an issue</a> / <a href="../../../_sources/mobile/android/fenix/substituting-local-gv.md.txt" rel="nofollow"> View page source</a></li>
+       </ul>
+       <hr>
+      </div>
+      <div role="main" class="document" itemscope itemtype="http://schema.org/Article">
+       <div itemprop="articleBody">
+        <section id="substituting-local-geckoview">
+         <h1>Substituting local GeckoView<a class="headerlink" href="#substituting-local-geckoview" title="Link to this heading">?</a></h1>
+         <section id="manually-publish-local-geckoview-to-local-maven">
+          <h2>1. Manually publish local GeckoView to local Maven<a class="headerlink" href="#manually-publish-local-geckoview-to-local-maven" title="Link to this heading">?</a></h2>
+          <p>Publish our local GeckoView to our local maven:</p>
+          <div class="highlight-sh notranslate">
+           <div class="highlight">
+            <pre><span></span>./mach<span class="w"> </span>build<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>./mach<span class="w"> </span>gradle<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>geckoview:publishWithGeckoBinariesDebugPublicationToMavenLocal<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>exoplayer2:publishDebugPublicationToMavenLocal
+</pre>
+           </div>
+          </div>
+          <dl class="myst field-list simple">
+           <dt class="field-odd">
+            warning<span class="colon">:</span>
+           </dt>
+           <dd class="field-odd">
+            <p><strong>This needs to be run every time you make changes.</strong> :warning:</p>
+           </dd>
+          </dl>
+          <p>You need to copy the version in the logs or run:</p>
+          <div class="highlight-sh notranslate">
+           <div class="highlight">
+            <pre><span></span>./mach<span class="w"> </span>build<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>version
+</pre>
+           </div>
+          </div>
+          <p>(ex. <code class="docutils literal notranslate"><span class="pre">115.0.20230511122045-SNAPSHOT</span></code>)</p>
+         </section>
+         <section id="modify-fenix-to-consume-local-gv">
+          <h2>2. Modify Fenix to consume local GV<a class="headerlink" href="#modify-fenix-to-consume-local-gv" title="Link to this heading">?</a></h2>
+          <p>Update the build.gradle and Gecko.kt file in Fenix (see the diffs below). Remember to update the GV version with the version you found in step 2!</p>
+          <p><em>fenix/build.gradle</em></p>
+          <div class="highlight-diff notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="gh">diff --git a/fenix/build.gradle b/fenix/build.gradle</span>
+<span class="gh">index 6a635a4818..4c8cc28995 100644</span>
+<span class="gd">--- a/fenix/build.gradle</span>
+<span class="gi">+++ b/fenix/build.gradle</span>
+<span class="gu">@@ -5,6 +5,7 @@ import org.mozilla.fenix.gradle.tasks.GithubDetailsTask</span>
+<span class="w"> </span>buildscript {
+<span class="w"> </span>    // This logic is duplicated in the allprojects block: I don't know how to fix that.
+<span class="w"> </span>    repositories {
+<span class="gi">+        mavenLocal()</span>
+<span class="w"> </span>        maven {
+<span class="w"> </span>            name "Mozilla Nightly"
+<span class="w"> </span>            url "https://nightly.maven.mozilla.org/maven2"
+<span class="gu">@@ -90,6 +91,7 @@ plugins {</span>
+<span class="w"> </span>allprojects {
+<span class="w"> </span>    // This logic is duplicated in the buildscript block: I don't know how to fix that.
+<span class="w"> </span>    repositories {
+<span class="gi">+        mavenLocal()</span>
+<span class="w"> </span>        maven {
+<span class="w"> </span>            name "Mozilla Nightly"
+<span class="w"> </span>            url "https://nightly.maven.mozilla.org/maven2"
+</pre>
+           </div>
+          </div>
+          <p><em>Gecko.kt</em></p>
+          <div class="highlight-diff notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="gh">diff --git a/android-components/plugins/dependencies/src/main/java/Gecko.kt b/android-components/plugins/dependencies/src/main/java/Gecko.kt</span>
+<span class="gh">index bed3fb0161..2d3a19a96e 100644</span>
+<span class="gd">--- a/android-components/plugins/dependencies/src/main/java/Gecko.kt</span>
+<span class="gi">+++ b/android-components/plugins/dependencies/src/main/java/Gecko.kt</span>
+<span class="gu">@@ -9,7 +9,7 @@ object Gecko {</span>
+<span class="w"> </span>    /**
+<span class="w"> </span>     * GeckoView Version.
+<span class="w"> </span>     */
+<span class="gd">-    const val version = "115.0.20230511131014"</span>
+<span class="gi">+    const val version = "115.0.20230511122045-SNAPSHOT"</span>
+
+<span class="w"> </span>    /**
+<span class="w"> </span>     * GeckoView channel
+<span class="gu">@@ -23,7 +23,7 @@ object Gecko {</span>
+<span class="w"> </span>enum class GeckoChannel(
+<span class="w"> </span>    val artifactName: String,
+<span class="w"> </span>) {
+<span class="gd">-    NIGHTLY("geckoview-nightly-omni"),</span>
+<span class="gi">+    NIGHTLY("geckoview-default-omni"),</span>
+<span class="w"> </span>    BETA("geckoview-beta-omni"),
+<span class="w"> </span>    RELEASE("geckoview-omni"),
+<span class="w"> </span>}
+</pre>
+           </div>
+          </div>
+         </section>
+         <section id="build-fenix-with-local-gv">
+          <h2>3. Build fenix with local GV<a class="headerlink" href="#build-fenix-with-local-gv" title="Link to this heading">?</a></h2>
+          <p>Now sync your gradle changes and build!</p>
+          <p>An easy way to confirm you are using a local GV is switching your Android Studio project tool window to “Project” and looking in the root directory called “External Libraries” for “GeckoView”. You should see something like <code class="docutils literal notranslate"><span class="pre">Gradle:</span> <span class="pre">org.mozilla.geckoview-default-omni:115.0.20230511122045-SNAPSHOT@aar</span></code></p>
+         </section>
+        </section>
+       </div>
+      </div>
+      <footer>
+       <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="release-checklist.html" class="btn btn-neutral float-left" title="Release Checklist" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a> <a href="syncIntegrationTests.html" class="btn btn-neutral float-right" title="Sync Integration Tests" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+       </div>
+       <hr>
+       <div role="contentinfo">
+        <p></p>
+       </div> Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+      </footer>
+     </div>
+    </div>
+   </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ </body>
+</html>

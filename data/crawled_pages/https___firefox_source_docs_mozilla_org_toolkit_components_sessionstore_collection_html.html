@@ -1,0 +1,715 @@
+<!doctype html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Collecting Data — Firefox Source Docs  documentation</title>
+  <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50">
+  <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094">
+  <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=fd3f3429">
+  <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b">
+  <link rel="stylesheet" type="text/css" href="../../../_static/custom_theme.css?v=dc5ed815">
+  <link rel="stylesheet" type="text/css" href="../../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7">
+  <link rel="shortcut icon" href="../../../_static/firefox.ico"><!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+  <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+  <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+  <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+  <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+  <script src="../../../_static/copybutton.js?v=30646c52"></script>
+  <script src="../../../_static/design-tabs.js?v=36754332"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/npm/mermaid@11.2.0/dist/mermaid.esm.min.mjs"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/npm/@mermaid-js/layout-elk@0.1.4/dist/mermaid-layout-elk.esm.min.mjs"></script>
+  <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.2.0/dist/mermaid.esm.min.mjs";import elkLayouts from "https://cdn.jsdelivr.net/npm/@mermaid-js/layout-elk@0.1.4/dist/mermaid-layout-elk.esm.min.mjs";mermaid.registerLayoutLoaders(elkLayouts);mermaid.initialize({startOnLoad:false});</script>
+  <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+  <script type="module">
+import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.2.0/dist/mermaid.esm.min.mjs";
+window.addEventListener("load", () => mermaid.run());
+</script>
+  <script src="../../../_static/js/theme.js"></script>
+  <link rel="index" title="Index" href="../../../genindex.html">
+  <link rel="search" title="Search" href="../../../search.html">
+  <link rel="next" title="Restoring Data" href="restoredata.html">
+  <link rel="prev" title="Session Store" href="index.html">
+ </head>
+ <body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+   <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <div class="wy-side-scroll">
+     <div class="wy-side-nav-search">
+      <a href="../../../index.html" class="icon icon-home"> Firefox Source Docs <img src="../../../_static/firefox-wordmark.svg" class="logo" alt="Logo"> </a><!-- -- This code is governed by the BSD license ---->
+      <div>
+       <h3>Quick search</h3>
+       <script>
+    (function () {
+      var cx = "dd12886298f75dbef";
+      var gcse = document.createElement("script");
+      gcse.async = true;
+      gcse.src = "https://cse.google.com/cse.js?cx=" + cx;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(gcse, s);
+    })();
+  </script><gcse:search></gcse:search>
+      </div>
+     </div>
+     <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+      <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../glossary/index.html">A Glossary of Common Terms</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../overview/index.html">A Quick Guide to Mozilla Applications</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../setup/index.html">Getting Set Up To Work On The Firefox Codebase</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Working On Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../contributing/index.html">Working on Firefox</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../bug-mgmt/index.html">Bug Handling</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox User Guide</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../devtools-user/index.html">Firefox DevTools User Docs</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Source Code Documentation</span></p>
+      <ul class="current">
+       <li class="toctree-l1"><a class="reference internal" href="../../../mots/index.html">Governance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../browser/index.html">Firefox Front-end</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../dom/index.html">DOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../editor/index.html">Editor</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../layout/index.html">Style system (CSS) &amp; Layout</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../gfx/index.html">Graphics</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../ipc/index.html">Processes, Threads and IPC</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../devtools/index.html">Firefox DevTools Contributor Docs</a></li>
+       <li class="toctree-l1 current"><a class="reference internal" href="../../index.html">Toolkit</a>
+        <ul class="current">
+         <li class="toctree-l2"><a class="reference internal" href="../../javascript-logging.html">JavaScript Logging</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../mozapps/extensions/addon-manager/index.html">Add-on Manager</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../backgroundtasks/index.html">Background Task Mode</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../crashes/crash-manager/index.html">Crash Manager</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../crashreporter/crashreporter/index.html">Crash Reporter</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../internal-urls.html">Internal URLs</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../search/index.html">Search Service</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../normandy/normandy/index.html">Shield Recipe Client</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../nimbus/docs/index.html">Nimbus</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../messaging-system/docs/index.html">Messaging System Schemas</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../pictureinpicture/pictureinpicture/index.html">Picture-in-Picture</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../prompts/prompts/index.html">Prompts</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../modules/subprocess/toolkit_modules/subprocess/index.html">Subprocess Module</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../telemetry/index.html">Telemetry</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../glean/index.html">Firefox on Glean (FOG)</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../modules/toolkit_modules/index.html">Toolkit Modules</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../content/toolkit_widgets/index.html">Toolkit Widgets</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../resistfingerprinting/resistfingerprinting/index.html">Fingerprinting Resistance</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../url-classifier/url-classifier/index.html">URL Classifier</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../extensions/webextensions/index.html">WebExtensions API Development</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../../extensions/spellcheck/index.html">Managing the built-in en-US dictionary</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../../mozapps/update/docs/index.html">Application Update</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../antitracking/anti-tracking/index.html">Anti-Tracking</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../translations/index.html">Translations</a></li>
+         <li class="toctree-l2 current"><a class="reference internal" href="index.html">Session Store</a>
+          <ul class="current">
+           <li class="toctree-l3 current"><a class="current reference internal" href="#">Collecting Data</a>
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="#handling-document-changes">Handling Document Changes</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#collecting-data-in-the-parent-process">Collecting Data in the Parent Process</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#interacting-with-session-store-collection">Interacting With Session Store Collection</a></li>
+            </ul></li>
+           <li class="toctree-l3"><a class="reference internal" href="restoredata.html">Restoring Data</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="utils.html">Session Store Utilities</a></li>
+          </ul></li>
+        </ul></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../js/index.html">SpiderMonkey</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../jsloader/index.html">JS Loader</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../mobile/android/geckoview/index.html">GeckoView</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../mobile/android/fenix/index.html">Fenix</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../mobile/android/focus-android/index.html">Focus for Android</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../dom/bindings/webidl/index.html">WebIDL</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../modules/libpref/index.html">libpref</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../networking/index.html">Networking</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../remote/index.html">Remote Protocols</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../services/index.html">Services</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../permissions/index.html">Permissions</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../uriloader/index.html">File Handling</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../widget/cocoa/index.html">Firefox on macOS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../widget/windows/index.html">Firefox on Windows</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../ml/index.html">Firefox AI Runtime</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../accessible/index.html">Accessibility</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../media/index.html">Media Playback</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../code-quality/index.html">Code quality</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../writing-rust-code/index.html">Writing Rust Code</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../rust-components/index.html">Rust Components</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../tools/profiler/index.html">Gecko Profiler</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../performance/index.html">Performance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../storage/index.html">Database bindings (SQLite, KV, …)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../xpcom/index.html">XPCOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../nspr/index.html">NSPR</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../security/nss/index.html">Network Security Services (NSS)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../content-security/index.html">Web Security Checks in Gecko</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">The Firefox Build System</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../mach/index.html">Mach</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../tools/try/index.html">Pushing to Try</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../build/buildsystem/index.html">Build System</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../taskcluster/index.html">Firefox CI and Taskgraph</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../tools/moztreedocs/index.html">Managing Documentation</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../mozbuild/vendor/index.html">Vendoring Third Party Components</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Testing &amp; Test Infrastructure</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/automated-testing/index.html">Automated Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/treeherder-try/index.html">Understanding Treeherder Results</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/sheriffed-intermittents/index.html">Sheriffed intermittent failures</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/tests-for-new-config/index.html">Turning on Firefox tests for a new configuration</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/intermittent/index.html">Avoiding intermittent tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/testing-policy/index.html">Testing Policy</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/ci-configs/index.html">Configuration Changes</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/browser-chrome/index.html">Browser chrome mochitests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/chrome-tests/index.html">Chrome Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/marionette/index.html">Marionette</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/geckodriver/index.html">geckodriver</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/test-verification/index.html">Test Verification</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/webrender/index.html">WebRender Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/mochitest-plain/index.html">Mochitest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/xpcshell/index.html">XPCShell tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/tps/index.html">TPS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../web-platform/index.html">web-platform-tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../gtest/index.html">GTest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../tools/fuzzing/index.html">Fuzzing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../tools/sanitizer/index.html">Sanitizer</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/perfdocs/index.html">Performance Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../tools/code-coverage/index.html">Code coverage</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing-rust-code/index.html">Testing &amp; Debugging Rust Code</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Releases &amp; Updates</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../update-infrastructure/index.html">Mozilla Update Infrastructure</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../update-infrastructure/index.html#watershed-updates">Watershed Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../update-infrastructure/index.html#desupport-updates">Desupport Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../tools/update-verify/index.html">Update Verify</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Localization &amp; Internationalization</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../intl/index.html">Internationalization</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../l10n/index.html">Localization</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox and Python</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../mozbase/index.html">mozbase</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../python/index.html">Using third-party Python packages</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Metrics Collected in Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../metrics/index.html">Metrics</a></li>
+      </ul>
+     </div>
+    </div>
+   </nav>
+   <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+    <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+     <i data-toggle="wy-nav-top" class="fa fa-bars"></i> <a href="../../../index.html">Firefox Source Docs</a>
+    </nav>
+    <div class="wy-nav-content">
+     <div class="rst-content">
+      <!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+      <div role="navigation" aria-label="Page navigation">
+       <ul class="wy-breadcrumbs">
+        <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+        <li class="breadcrumb-item"><a href="../../index.html">Toolkit</a></li>
+        <li class="breadcrumb-item"><a href="index.html">Session Store</a></li>
+        <li class="breadcrumb-item active">Collecting Data</li>
+        <li class="wy-breadcrumbs-aside"><a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Developer+Infrastructure&amp;component=Firefox+Source+Docs%3A+Content&amp;short_desc=Documentation+issue+on+toolkit/components/sessionstore/collection&amp;comment=URL+=+https://firefox-source-docs.mozilla.org/toolkit/components/sessionstore/collection.html&amp;bug_file_loc=https://firefox-source-docs.mozilla.org/toolkit/components/sessionstore/collection.html" rel="nofollow">Report an issue</a> / <a href="../../../_sources/toolkit/components/sessionstore/collection.rst.txt" rel="nofollow"> View page source</a></li>
+       </ul>
+       <hr>
+      </div>
+      <div role="main" class="document" itemscope itemtype="http://schema.org/Article">
+       <div itemprop="articleBody">
+        <section id="collecting-data">
+         <span id="id1"></span>
+         <h1>Collecting Data<a class="headerlink" href="#collecting-data" title="Link to this heading">?</a></h1>
+         <p>When collecting data to be stored across sessions, two special cases need to be considered:</p>
+         <ul class="simple">
+          <li>
+           <p>Data collected in the parent process</p></li>
+          <li>
+           <p>Data collected across the content processes</p></li>
+         </ul>
+         <p>The reasons for these special cases mainly arise from where data is held. Session History and Session Storage are located in the parent process, and e.g form data or scroll position are found in the document in the content process where that document was created.</p>
+         <section id="handling-document-changes">
+          <h2>Handling Document Changes<a class="headerlink" href="#handling-document-changes" title="Link to this heading">?</a></h2>
+          <section id="detecting-changes">
+           <h3>Detecting Changes<a class="headerlink" href="#detecting-changes" title="Link to this heading">?</a></h3>
+           <p>Due to cross-process site isolation every tab is potentially split across a set of processes, with a document tree fragment in each process. The following diagram illustrates how changes in documents across different sites are detected and processed within Gecko’s session store. It shows the hierarchical relationship between the content processes and the parent process, detailing the flow of information from detecting changes in individual documents to handling these changes at the session store level.</p><span class="target" id="session-store-change-detection-diagram"></span>
+           <pre class="mermaid">        ---
+title: Session Store Change Detection
+config:
+  flowchart:
+    wrappingWidth: 400
+    curve: linear
+---
+flowchart BT
+  classDef crossorigin stroke-dasharray:5 5;
+  subgraph Gecko
+    direction TB
+    subgraph P[Parent process]
+      direction BT
+      SSP[SessionStoreParent] --&gt; BSS[BrowserSessionStore]
+      SH[SessionHistory] --&gt; SSP
+      SS[SessionStorage] --&gt; SSP
+    end
+
+    subgraph C1[Content process]
+      direction TB
+      subgraph D1[Document tree]
+          direction TB
+          a1[a.com] --&gt; b1[b.com] &amp; c1[c.com]
+          b1[b.com] --&gt; a11[a.com] &amp; b12[b.com]
+      end
+
+      SSC1[SessionStoreChild] &lt;-- "fa:fa-clock-o" --&gt; SSCL1[SessionStoreChangeListener]
+      SSCL1 &lt;--&gt; D1
+    end
+
+    subgraph C2[Content process]
+      direction TB
+      subgraph D2[Document tree]
+          direction TB
+          a2[a.com] --&gt; b2[b.com] &amp; c2[c.com]
+          b2[b.com] --&gt; a22[a.com] &amp; b22[b.com]
+      end
+
+      SSC2[SessionStoreChild] &lt;-- "fa:fa-clock-o" --&gt;  SSCL2[SessionStoreChangeListener]
+      SSCL2 &lt;--&gt; D2
+    end
+
+    subgraph C3[Content process]
+      direction TB
+      subgraph D3[Document tree]
+          direction TB
+          a3[a.com] --&gt; b3[b.com] &amp; c3[c.com]
+          b3[b.com] --&gt; a32[a.com] &amp; b32[b.com]
+      end
+
+      SSC3[SessionStoreChild] &lt;-- "fa:fa-clock-o" --&gt;  SSCL3[SessionStoreChangeListener]
+      SSCL3 &lt;--&gt; D3
+    end
+    P &lt;-- a.com ---&gt; C1
+    P &lt;-- b.com ---&gt; C2
+    P &lt;-- c.com ---&gt; C3
+
+    class a2,a22,a3,a32 crossorigin;
+    class b1,b12,b3,b32 crossorigin;
+    class c1,c2 crossorigin;
+  end
+  Gecko --&gt; Embedder
+    </pre>
+           <p>Due to the potentially distributed nature of a site, storing session store data is performed in the parent process. Collecting data from a tree of documents to store across sessions is the responsibility of the participating content processes. Because of this the format of data collected in a content process is both partial and incremental in nature, and the parent process needs to handle them as such. The data is also a snapshot of the current state, and to not perform collection too often content processes need to buffer data by collecting periodically.</p>
+           <p>The steps for collecting data are roughly as follows:</p>
+           <ol class="arabic simple">
+            <li>
+             <p>Every document tree fragment has a listener that detects any changes to a document contained in that fragment.</p></li>
+            <li>
+             <p>Every change listener has a timer which is either set or not.</p></li>
+            <li>
+             <p>When a change is detected either a timer is set, or else one is scheduled.</p></li>
+            <li>
+             <p>A note is made in which document the change happened.</p></li>
+            <li>
+             <p>When the timer fires it becomes unset and every document marked as having changes is inspected, and the changed data is collected.</p></li>
+            <li>
+             <p>Then for each document, an increment is sent to update the session store in the parent with.</p></li>
+           </ol>
+           <p>These document tree fragments are managed in Gecko by a <a class="reference external" href="https://searchfox.org/mozilla-central/source/dom/ipc/PBrowser.ipdl">PBrowser</a> IPDL actor, which in turn is managed by the <a class="reference external" href="https://searchfox.org/mozilla-central/source/dom/ipc/PContent.ipdl">PContent</a> IPDL actor. These actors facilitate communication between the content processes containing documents and the parent process running the UI.</p>
+           <p>To encapsulate the framework of session store data collection, the operations for incrementally transmitting data to put in the session store is handled by the <a class="reference external" href="https://searchfox.org/mozilla-central/source/toolkit/components/sessionstore/PSessionStore.ipdl">PSessionStore</a> IPDL actor, which is managed by the PBrowser IPDL actor.</p>
+           <p>The C++ class <a class="reference external" href="https://searchfox.org/mozilla-central/source/toolkit/components/sessionstore/SessionStoreChangeListener.h">SessionStoreChangeListener</a> registers event handlers that listen to changes in the document tree and manages the timer. The timer enables buffering changes to make sure that the cross-process communication is throttled as well as only collecting when a change has happened. The buffering period can be controlled by the pref <code class="docutils literal notranslate"><span class="pre">browser.sessionstore.interval</span></code>. The class also keeps track of documents and collects data from them, as well as sending the collected data to the parent process using PSessionStore.</p>
+          </section>
+          <section id="incremental-collection">
+           <h3>Incremental Collection<a class="headerlink" href="#incremental-collection" title="Link to this heading">?</a></h3>
+           <p>As noted in the previous section and from the <a class="reference internal" href="#session-store-change-detection-diagram"><span class="std std-ref">session store change detection diagram</span></a>, change will arrive in the parent process incrementally in fragments. Because of this the tree, mapping a set of changes to a tree of browsing contexts, needs to be built in that fashion; incrementally and in fragments.</p>
+           <p>In a situation like the following:</p>
+           <pre class="mermaid">        ---
+title: Session Store Incremental Update
+config:
+flowchart:
+  wrappingWidth: 400
+  curve: linear
+---
+flowchart BT
+  subgraph Gecko
+    direction BT
+    subgraph P[Parent process]
+      direction BT
+      BSS[BrowserSessionStore]
+      SH[SessionHistory] --&gt; BSS
+      SS[SessionStorage] --&gt; BSS
+    end
+
+    subgraph C1[Content process]
+      direction TB
+
+      subgraph D1[Document tree]
+          direction TB
+          a11[a.com] --&gt; b1[b.com] &amp; a12[a.com]
+          b1[b.com] --&gt; a13[a.com] &amp; c1[c.com]
+      end
+    end
+
+    subgraph C2[Content process]
+      direction TB
+
+      subgraph D2[Document tree]
+          direction TB
+          a21[a.com] --&gt; b2[b.com] &amp; a22[a.com]
+          b2[b.com] --&gt; a23[a.com] &amp; c2[c.com]
+      end
+    end
+
+    subgraph C3[Content process]
+      direction TB
+
+      subgraph D3[Document tree]
+          direction TB
+          a31[a.com] --&gt; b3[b.com] &amp; a32[a.com]
+          b3[b.com] --&gt; a33[a.com] &amp; c3[c.com]
+      end
+    end
+
+    C1 &amp; C2 &amp; C3 --&gt; P
+
+    classDef crossorigin stroke-dasharray:5 5;
+    class a21,a22,a23,a31,a32,a33 crossorigin;
+    class b1,b3 crossorigin;
+    class c1,c2 crossorigin;
+  end
+    </pre>
+           <p>if a user would scroll c.com and then after some time write some text in b.com, the sequence of the change data structure that should be created would be:</p>
+           <pre class="mermaid">        ---
+title: Incremental Update Data
+config:
+  flowchart:
+    wrappingWidth: 400
+    curve: linear
+---
+flowchart LR
+
+  subgraph D0[No Data]
+    direction TB
+    a11["{}"] --&gt; b1["{}"] &amp; a12["{}"]
+    b1 --&gt; a13["{}"] &amp; c1["{}"]
+  end
+
+  subgraph D1[Scroll Data]
+    direction TB
+    a21["{}"] --&gt; b2["{}"] &amp; a22["{}"]
+    b2 --&gt; a23["{}"] &amp; c2["{scroll: 42}"]
+  end
+
+  subgraph D2[Form Data]
+    direction TB
+    a31["{}"] --&gt; b3["{id: 'some text'}"] &amp; a32["{}"]
+    b3 --&gt; a33["{}"] &amp; c3["{scroll: 42}"]
+  end
+
+  D0 --&gt; D1 --&gt; D2
+    </pre>
+           <p>This would then be merged on top of the embedder’s session store data, possibly adding or changing the current state, including removing nodes. This is achieved by the embedder implementing the <code class="docutils literal notranslate"><span class="pre">nsISessionStoreFunctions.idl</span></code> interface.</p>
+          </section>
+          <section id="disabling-site-isolation">
+           <h3>Disabling site isolation<a class="headerlink" href="#disabling-site-isolation" title="Link to this heading">?</a></h3>
+           <p>In the case where site isolation is disabled the <a class="reference internal" href="#session-store-change-detection-diagram"><span class="std std-ref">session store change detection diagram</span></a> collapses to the following:</p><span class="target" id="collapsed-session-store-change-detection-diagram"></span>
+           <pre class="mermaid">        ---
+title: Session Store Change Detection
+config:
+  flowchart:
+    wrappingWidth: 400
+    curve: linear
+---
+flowchart BT
+  subgraph Gecko
+    direction TB
+    subgraph P[Parent process]
+      direction BT
+      SSP[SessionStoreParent] --&gt; BSS[BrowserSessionStore]
+      SH[SessionHistory] --&gt; SSP
+      SS[SessionStorage] --&gt; SSP
+    end
+
+    subgraph C1[Content process]
+      direction TB
+      subgraph D1[Document tree]
+          direction TB
+          a1[a.com] --&gt; b1[b.com] &amp; c1[c.com]
+          b1[b.com] --&gt; a11[a.com] &amp; b12[b.com]
+      end
+
+      SSC1[SessionStoreChild] &lt;-- "fa:fa-clock-o" --&gt; SSCL1[SessionStoreChangeListener]
+      SSCL1 &lt;--&gt; D1
+    end
+
+    subgraph C2[Content process]
+      direction TB
+      subgraph D2[Document tree]
+        direction TB
+        a2[example.com]
+      end
+
+      SSC2[SessionStoreChild] &lt;-- "fa:fa-clock-o" --&gt;  SSCL2[SessionStoreChangeListener]
+      SSCL2 &lt;--&gt; D2
+    end
+
+    subgraph C3[Content process]
+      direction TB
+      subgraph D3[Document tree]
+        direction TB
+        a3[example.org]
+      end
+
+      SSC3[SessionStoreChild] &lt;-- "fa:fa-clock-o" --&gt;  SSCL3[SessionStoreChangeListener]
+      SSCL3 &lt;--&gt; D3
+    end
+
+    P &lt;-- a.com ---&gt; C1
+    P &lt;-- "&lt;empty&gt;" ---&gt; C2
+    P &lt;-- "&lt;empty&gt;" ---&gt; C3
+  end
+  Gecko --&gt; Embedder
+    </pre>
+           <p>but nothing else actually changes in the way that session store data is collected.</p>
+          </section>
+         </section>
+         <section id="collecting-data-in-the-parent-process">
+          <h2>Collecting Data in the Parent Process<a class="headerlink" href="#collecting-data-in-the-parent-process" title="Link to this heading">?</a></h2>
+          <section id="collecting-session-storage">
+           <h3>Collecting Session Storage<a class="headerlink" href="#collecting-session-storage" title="Link to this heading">?</a></h3>
+           <p>Session Storage is accessed through the <a class="reference external" href="https://searchfox.org/mozilla-central/source/dom/storage/SessionStorageManager.h">BackgroundSessionStorageManager</a> and by calling <code class="docutils literal notranslate"><span class="pre">BackgroundSessionStorageManager::GetData</span></code>.</p>
+          </section>
+          <section id="collecting-session-history">
+           <h3>Collecting Session History<a class="headerlink" href="#collecting-session-history" title="Link to this heading">?</a></h3>
+           <p>Session history is collected by calling the <code class="docutils literal notranslate"><span class="pre">SessionHistory.collectFromParent</span></code> function in the <a class="reference external" href="https://searchfox.org/mozilla-central/source/toolkit/modules/sessionstore/SessionHistory.sys.mjs">Session History module</a>. This is the responsibility of the embedder to collect and is not pushed to the embedder.</p>
+          </section>
+         </section>
+         <section id="interacting-with-session-store-collection">
+          <span id="interacting-with-sessionstore"></span>
+          <h2>Interacting With Session Store Collection<a class="headerlink" href="#interacting-with-session-store-collection" title="Link to this heading">?</a></h2>
+          <p>To integrate with session store collection an embedder needs to implement the <a class="reference external" href="https://searchfox.org/mozilla-central/source/toolkit/components/sessionstore/nsISessionStoreFunctions.idl">nsISessionStoreFunctions</a> interface.</p>
+          <div class="highlight-webidl notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="k">interface</span> <span class="nc">nsISessionStoreFunctions</span> <span class="p">:</span> <span class="nc">nsISupports</span> <span class="p">{</span>
+  <span class="kt">void</span> <span class="nf">UpdateSessionStore</span><span class="p">(</span>
+    <span class="nc">in</span> <span class="nv">Element</span> <span class="nv">aBrowser</span><span class="p">,</span> <span class="nc">in</span> <span class="nv">BrowsingContext</span> <span class="nv">aBrowsingContext</span><span class="p">,</span>
+    <span class="nc">in</span> <span class="nv">jsval</span> <span class="nv">aPermanentKey</span><span class="p">,</span> <span class="nc">in</span> <span class="nv">uint32_t</span> <span class="nv">aEpoch</span><span class="p">,</span> <span class="nc">in</span> <span class="nv">boolean</span> <span class="nv">aCollectSHistory</span><span class="p">,</span>
+    <span class="nc">in</span> <span class="nv">jsval</span> <span class="nv">aData</span><span class="p">);</span>
+
+  <span class="kt">void</span> <span class="nf">UpdateSessionStoreForStorage</span><span class="p">(</span>
+    <span class="nc">in</span> <span class="nv">Element</span> <span class="nv">aBrowser</span><span class="p">,</span> <span class="nc">in</span> <span class="nv">BrowsingContext</span> <span class="nv">aBrowsingContext</span><span class="p">,</span>
+    <span class="nc">in</span> <span class="nv">jsval</span> <span class="nv">aPermanentKey</span><span class="p">,</span> <span class="nc">in</span> <span class="nv">uint32_t</span> <span class="nv">aEpoch</span><span class="p">,</span> <span class="nc">in</span> <span class="nv">jsval</span> <span class="nv">aData</span><span class="p">);</span>
+<span class="p">};</span>
+</pre>
+           </div>
+          </div>
+          <p>Collected changes will be sent to the embedder through one of two function calls, depending on the type of collected data.</p>
+          <p><code class="docutils literal notranslate"><span class="pre">UpdateSessionStore</span></code> is called for data collected in the content processes with the following arguments:</p>
+          <ul class="simple">
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">in</span> <span class="pre">Element</span> <span class="pre">aBrowser</span></code> is deprecated and always <code class="docutils literal notranslate"><span class="pre">null</span></code></p></li>
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">in</span> <span class="pre">BrowsingContext</span> <span class="pre">aBrowsingContext</span></code> is the root browsing context of the sub-tree where data was collected.</p></li>
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">in</span> <span class="pre">jsval</span> <span class="pre">aPermanentKey</span></code> is the current browser’s permanent key. It’s completely opaque, but unique for the browser.</p></li>
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">in</span> <span class="pre">uint32_t</span> <span class="pre">aEpoch</span></code> is the current epoch of the session store. Setting the epoch is done via <code class="docutils literal notranslate"><span class="pre">nsIFrameLoader.requestEpochUpdate</span></code>. After requesting a new epoch, the following calls to <code class="docutils literal notranslate"><span class="pre">UpdateSessionStore</span></code> will have that epoch. This can, for example, be used to filter out unwanted updates by requesting a new epoch, and after that ignore all calls to <code class="docutils literal notranslate"><span class="pre">UpdateSessionStore</span></code> that has a different epoch.</p></li>
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">in</span> <span class="pre">boolean</span> <span class="pre">aCollectSHistory</span></code> if collecting all of session history is needed.</p></li>
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">in</span> <span class="pre">jsval</span> <span class="pre">aData</span></code> is the data collected.</p></li>
+          </ul>
+          <p><code class="docutils literal notranslate"><span class="pre">UpdateSessionStoreForStorage</span></code> differs only in that it doesn’t get called with <code class="docutils literal notranslate"><span class="pre">aCollectSHistory</span></code>, and in how the data in <code class="docutils literal notranslate"><span class="pre">aData</span></code> is structured. This function will be called when session storage has been collected.</p>
+          <p>Exactly how these arguments are to be used is very much up to the embedder to decide.</p>
+          <section id="structure-of-the-collected-data">
+           <h3>Structure of the collected data<a class="headerlink" href="#structure-of-the-collected-data" title="Link to this heading">?</a></h3>
+           <p>Session store data comes in three flavors:</p>
+           <ul class="simple">
+            <li>
+             <p>Data collected from the document</p></li>
+            <li>
+             <p>Data collected from session storage</p></li>
+            <li>
+             <p>Data collected from session history</p></li>
+           </ul>
+           <p>The actual format of the data stored is not relevant insofar that its use is basically just to be complete enough to be able to restore the state of a session.</p>
+           <section id="structure-of-data-pushed-by-updatesessionstore">
+            <h4>Structure of data pushed by <code class="docutils literal notranslate"><span class="pre">UpdateSessionStore</span></code><a class="headerlink" href="#structure-of-data-pushed-by-updatesessionstore" title="Link to this heading">?</a></h4>
+            <p>In <a class="reference external" href="https://searchfox.org/mozilla-central/source/dom/chrome-webidl/SessionStoreUtils.webidl">SessionStoreUtils.webidl</a> the structure of collected data is defined as:</p>
+            <div class="highlight-webidl notranslate">
+             <div class="highlight">
+              <pre><span></span><span class="k">dictionary</span> <span class="nc">CollectedData</span>
+<span class="p">{</span>
+  <span class="kt">ByteString</span> <span class="nv">scroll</span><span class="p">;</span>
+  <span class="nc">record</span><span class="p">&lt;</span><span class="kt">DOMString</span><span class="p">,</span> <span class="nc">CollectedFormDataValue</span><span class="p">&gt;</span> <span class="nv">id</span><span class="p">;</span>
+  <span class="nc">record</span><span class="p">&lt;</span><span class="kt">DOMString</span><span class="p">,</span> <span class="nc">CollectedFormDataValue</span><span class="p">&gt;</span> <span class="nv">xpath</span><span class="p">;</span>
+  <span class="kt">DOMString</span> <span class="nv">innerHTML</span><span class="p">;</span>
+  <span class="kt">ByteString</span> <span class="nv">url</span><span class="p">;</span>
+  <span class="c1">// children contains CollectedData instances</span>
+  <span class="kt">sequence</span><span class="p">&lt;</span><span class="kt">object</span><span class="p">?&gt;</span> <span class="nv">children</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="c1">// object contains either a CollectedFileListValue or a CollectedNonMultipleSelectValue or Sequence&lt;DOMString&gt;</span>
+<span class="c1">// or a CollectedCustomElementValue</span>
+<span class="k">typedef</span> <span class="p">(</span><span class="kt">DOMString</span> <span class="k">or</span> <span class="kt">boolean</span> <span class="k">or</span> <span class="kt">object</span><span class="p">)</span> <span class="nc">CollectedFormDataValue</span><span class="p">;</span>
+
+<span class="k">dictionary</span> <span class="nc">CollectedFileListValue</span>
+<span class="p">{</span>
+  <span class="kt">DOMString</span> <span class="nv">type</span> <span class="p">=</span> <span class="s">"file"</span><span class="p">;</span>
+  <span class="k">required</span> <span class="kt">sequence</span><span class="p">&lt;</span><span class="kt">DOMString</span><span class="p">&gt;</span> <span class="nv">fileList</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="k">dictionary</span> <span class="nc">CollectedNonMultipleSelectValue</span>
+<span class="p">{</span>
+  <span class="k">required</span> <span class="kt">long</span> <span class="nv">selectedIndex</span><span class="p">;</span>
+  <span class="k">required</span> <span class="kt">DOMString</span> <span class="nv">value</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="k">dictionary</span> <span class="nc">CollectedCustomElementValue</span>
+<span class="p">{</span>
+  <span class="p">(</span><span class="nc">File</span> <span class="k">or</span> <span class="kt">USVString</span> <span class="k">or</span> <span class="nc">FormData</span><span class="p">)?</span> <span class="nv">value</span> <span class="p">=</span> <span class="kc">null</span><span class="p">;</span>
+  <span class="p">(</span><span class="nc">File</span> <span class="k">or</span> <span class="kt">USVString</span> <span class="k">or</span> <span class="nc">FormData</span><span class="p">)?</span> <span class="nv">state</span> <span class="p">=</span> <span class="kc">null</span><span class="p">;</span>
+<span class="p">};</span>
+</pre>
+             </div>
+            </div>
+            <p>The dictionary <code class="docutils literal notranslate"><span class="pre">CollectedData</span></code> includes scroll position as well as form data fields, but scroll position is collected separately. Positions are stored as string <code class="docutils literal notranslate"><span class="pre">"x,y"</span></code> of a coordinate, and the scroll data builds a tree of data for the document tree. This means that scroll data can have the following form:</p>
+            <div class="highlight-json notranslate">
+             <div class="highlight">
+              <pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">"scroll"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"scroll"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0,132"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"children"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">"scroll"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0,87"</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre>
+             </div>
+            </div>
+            <p>for a document scrolled to <code class="docutils literal notranslate"><span class="pre">0,132</span></code> containing an iframe scrolled to <code class="docutils literal notranslate"><span class="pre">0,87</span></code>.</p>
+            <p>The collected form data builds up a similar tree of data for the document tree as the scroll data. The data collected is from the different form elements and data from an editable document. The different form elements are either identified by their <code class="docutils literal notranslate"><span class="pre">id</span></code> attribute, if they have one, or an xpath expression pointing to them. These are stored in records in the properties <code class="docutils literal notranslate"><span class="pre">id</span></code> and <code class="docutils literal notranslate"><span class="pre">xpath</span></code>. Editable documents are stored in the property <code class="docutils literal notranslate"><span class="pre">innerHTML</span></code>. This means that form data can have the following form:</p>
+            <div class="highlight-json notranslate">
+             <div class="highlight">
+              <pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">"formdata"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://example.org/sessionstore.html"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"input"</span><span class="p">:</span><span class="w"> </span><span class="s2">"lorem ipsum"</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="nt">"children"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://example.org/sessionstoreframe.html"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">          </span><span class="nt">"input"</span><span class="p">:</span><span class="w"> </span><span class="s2">"dolor sit amet"</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="nt">"xpath"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">          </span><span class="nt">"/xhtml:html/xhtml:body/xhtml:select"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">"selectedIndex"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2"</span>
+<span class="w">          </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre>
+             </div>
+            </div>
+            <p><code class="docutils literal notranslate"><span class="pre">FormData</span></code> and <code class="docutils literal notranslate"><span class="pre">File</span></code> are the same data as their web exposed counterparts in <a class="reference external" href="https://searchfox.org/mozilla-central/source/dom/webidl/FormData.webidl">FormData.webidl</a> and <a class="reference external" href="https://searchfox.org/mozilla-central/source/dom/webidl/File.webidl">File.webidl</a>.</p>
+           </section>
+           <section id="structure-of-data-pushed-by-updatesessionstoreforstorage">
+            <h4>Structure of data pushed by <code class="docutils literal notranslate"><span class="pre">UpdateSessionStoreForStorage</span></code><a class="headerlink" href="#structure-of-data-pushed-by-updatesessionstoreforstorage" title="Link to this heading">?</a></h4>
+            <p>The data stored has the structure of a record of partitioned URIs mapping to a key/value record.</p>
+            <div class="highlight-json notranslate">
+             <div class="highlight">
+              <pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">"http://example.com"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"test"</span><span class="p">:</span><span class="w"> </span><span class="s2">"lorem ipsum"</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">"https://example.org^partitionKey=%28http%2Cexample.com%29"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"test"</span><span class="p">:</span><span class="w"> </span><span class="s2">"dolor sit amet"</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre>
+             </div>
+            </div>
+           </section>
+           <section id="structure-of-data-retrieved-by-sessionhistory-collectfromparent">
+            <h4>Structure of data retrieved by <code class="docutils literal notranslate"><span class="pre">SessionHistory.collectFromParent</span></code><a class="headerlink" href="#structure-of-data-retrieved-by-sessionhistory-collectfromparent" title="Link to this heading">?</a></h4>
+            <div class="highlight-json notranslate">
+             <div class="highlight">
+              <pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">"entries"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"about:home"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"New Tab"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"cacheKey"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"ID"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"docshellUUID"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{8d0d8d8f-7732-4d91-b146-f4e7baefd518}"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"resultPrincipalURI"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"principalToInherit_base64"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{\"0\":{\"0\":\"moz-nullprincipal:{c2bf9cd7-8940-4097-9dd5-2f65e5b50c78}\"}}"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"hasUserInteraction"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"triggeringPrincipal_base64"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{\"3\":{}}"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"docIdentifier"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"persist"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://elg.no/"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://elg.no/"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"cacheKey"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"ID"</span><span class="p">:</span><span class="w"> </span><span class="mi">17</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"docshellUUID"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{8d0d8d8f-7732-4d91-b146-f4e7baefd518}"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"resultPrincipalURI"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"hasUserInteraction"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"triggeringPrincipal_base64"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{\"3\":{}}"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"docIdentifier"</span><span class="p">:</span><span class="w"> </span><span class="mi">19</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"persist"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">],</span>
+<span class="w">  </span><span class="nt">"requestedIndex"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"index"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"fromIdx"</span><span class="p">:</span><span class="w"> </span><span class="mi">-1</span>
+<span class="p">}</span>
+</pre>
+             </div>
+            </div>
+           </section>
+          </section>
+         </section>
+        </section>
+       </div>
+      </div>
+      <footer>
+       <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Session Store" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a> <a href="restoredata.html" class="btn btn-neutral float-right" title="Restoring Data" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+       </div>
+       <hr>
+       <div role="contentinfo">
+        <p></p>
+       </div> Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+      </footer>
+     </div>
+    </div>
+   </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ </body>
+</html>

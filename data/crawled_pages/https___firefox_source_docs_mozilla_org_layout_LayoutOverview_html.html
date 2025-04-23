@@ -1,0 +1,491 @@
+<!doctype html>
+<html class="writer-html5" lang="en" data-content_root="../">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Layout Overview — Firefox Source Docs  documentation</title>
+  <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50">
+  <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094">
+  <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=fd3f3429">
+  <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b">
+  <link rel="stylesheet" type="text/css" href="../_static/custom_theme.css?v=dc5ed815">
+  <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7">
+  <link rel="shortcut icon" href="../_static/firefox.ico"><!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script src="../_static/jquery.js?v=5d32c60e"></script>
+  <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+  <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+  <script src="../_static/doctools.js?v=9a2dae69"></script>
+  <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+  <script src="../_static/copybutton.js?v=30646c52"></script>
+  <script src="../_static/design-tabs.js?v=36754332"></script>
+  <script src="../_static/js/theme.js"></script>
+  <link rel="index" title="Index" href="../genindex.html">
+  <link rel="search" title="Search" href="../search.html">
+  <link rel="next" title="Dynamic change handling along the rendering pipeline" href="DynamicChangeHandling.html">
+  <link rel="prev" title="Style System Overview" href="StyleSystemOverview.html">
+ </head>
+ <body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+   <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <div class="wy-side-scroll">
+     <div class="wy-side-nav-search">
+      <a href="../index.html" class="icon icon-home"> Firefox Source Docs <img src="../_static/firefox-wordmark.svg" class="logo" alt="Logo"> </a><!-- -- This code is governed by the BSD license ---->
+      <div>
+       <h3>Quick search</h3>
+       <script>
+    (function () {
+      var cx = "dd12886298f75dbef";
+      var gcse = document.createElement("script");
+      gcse.async = true;
+      gcse.src = "https://cse.google.com/cse.js?cx=" + cx;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(gcse, s);
+    })();
+  </script><gcse:search></gcse:search>
+      </div>
+     </div>
+     <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+      <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../glossary/index.html">A Glossary of Common Terms</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../overview/index.html">A Quick Guide to Mozilla Applications</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../setup/index.html">Getting Set Up To Work On The Firefox Codebase</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Working On Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../contributing/index.html">Working on Firefox</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../bug-mgmt/index.html">Bug Handling</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox User Guide</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../devtools-user/index.html">Firefox DevTools User Docs</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Source Code Documentation</span></p>
+      <ul class="current">
+       <li class="toctree-l1"><a class="reference internal" href="../mots/index.html">Governance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../browser/index.html">Firefox Front-end</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../dom/index.html">DOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../editor/index.html">Editor</a></li>
+       <li class="toctree-l1 current"><a class="reference internal" href="index.html">Style system (CSS) &amp; Layout</a>
+        <ul class="current">
+         <li class="toctree-l2"><a class="reference internal" href="StyleSystemOverview.html">Style System Overview</a></li>
+         <li class="toctree-l2 current"><a class="current reference internal" href="#">Layout Overview</a>
+          <ul>
+           <li class="toctree-l3"><a class="reference internal" href="#introduction">Introduction</a>
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="#ink-overflow-vs-scrollable-overflow">Ink Overflow vs Scrollable Overflow</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#brief-intro-to-fragmentation-or-why-we-need-frame-continuations">Brief Intro to Fragmentation (or why we need frame continuations?)</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#ib-splitting">IB-splitting</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#physical-coordinates-vs-logical-coordinates">Physical Coordinates vs Logical Coordinates</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#references">References</a></li>
+            </ul></li>
+           <li class="toctree-l3"><a class="reference internal" href="#frame-construction">Frame Construction</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#reflow">Reflow</a>
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="#where-does-reflow-start-how-do-we-avoid-reflowing-the-world-every-time">Where does reflow start? How do we avoid reflowing the world every time?</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#reflow-contract">Reflow Contract</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#compute-intrinsic-sizes">Compute intrinsic sizes</a></li>
+            </ul></li>
+           <li class="toctree-l3"><a class="reference internal" href="#painting">Painting</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#fragmentation">Fragmentation</a>
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="#continuations-in-the-frame-tree">Continuations in the Frame Tree</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#reflow-status">Reflow Status</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#dynamic-reflow-considerations">Dynamic Reflow Considerations</a></li>
+            </ul></li>
+          </ul></li>
+         <li class="toctree-l2"><a class="reference internal" href="DynamicChangeHandling.html">Dynamic change handling along the rendering pipeline</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Reftest.html">Layout Engine Visual Tests (reftest)</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="LayoutDebugger.html">Layout Debugger</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="AccessibleCaret.html">AccessibleCaret</a></li>
+        </ul></li>
+       <li class="toctree-l1"><a class="reference internal" href="../gfx/index.html">Graphics</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../ipc/index.html">Processes, Threads and IPC</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../devtools/index.html">Firefox DevTools Contributor Docs</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../toolkit/index.html">Toolkit</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../js/index.html">SpiderMonkey</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../jsloader/index.html">JS Loader</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mobile/android/geckoview/index.html">GeckoView</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mobile/android/fenix/index.html">Fenix</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mobile/android/focus-android/index.html">Focus for Android</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../dom/bindings/webidl/index.html">WebIDL</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../modules/libpref/index.html">libpref</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../networking/index.html">Networking</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../remote/index.html">Remote Protocols</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../services/index.html">Services</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../permissions/index.html">Permissions</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../uriloader/index.html">File Handling</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../widget/cocoa/index.html">Firefox on macOS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../widget/windows/index.html">Firefox on Windows</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../toolkit/components/ml/index.html">Firefox AI Runtime</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../accessible/index.html">Accessibility</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../media/index.html">Media Playback</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../code-quality/index.html">Code quality</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../writing-rust-code/index.html">Writing Rust Code</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../rust-components/index.html">Rust Components</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/profiler/index.html">Gecko Profiler</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../performance/index.html">Performance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../storage/index.html">Database bindings (SQLite, KV, …)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../xpcom/index.html">XPCOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../nspr/index.html">NSPR</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../security/nss/index.html">Network Security Services (NSS)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../content-security/index.html">Web Security Checks in Gecko</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">The Firefox Build System</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../mach/index.html">Mach</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/try/index.html">Pushing to Try</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../build/buildsystem/index.html">Build System</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../taskcluster/index.html">Firefox CI and Taskgraph</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/moztreedocs/index.html">Managing Documentation</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mozbuild/vendor/index.html">Vendoring Third Party Components</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Testing &amp; Test Infrastructure</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/automated-testing/index.html">Automated Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/treeherder-try/index.html">Understanding Treeherder Results</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/sheriffed-intermittents/index.html">Sheriffed intermittent failures</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/tests-for-new-config/index.html">Turning on Firefox tests for a new configuration</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/intermittent/index.html">Avoiding intermittent tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/testing-policy/index.html">Testing Policy</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/ci-configs/index.html">Configuration Changes</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/browser-chrome/index.html">Browser chrome mochitests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/chrome-tests/index.html">Chrome Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/marionette/index.html">Marionette</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/geckodriver/index.html">geckodriver</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/test-verification/index.html">Test Verification</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/webrender/index.html">WebRender Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/mochitest-plain/index.html">Mochitest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/xpcshell/index.html">XPCShell tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/tps/index.html">TPS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../web-platform/index.html">web-platform-tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../gtest/index.html">GTest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/fuzzing/index.html">Fuzzing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/sanitizer/index.html">Sanitizer</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/perfdocs/index.html">Performance Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/code-coverage/index.html">Code coverage</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing-rust-code/index.html">Testing &amp; Debugging Rust Code</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Releases &amp; Updates</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../update-infrastructure/index.html">Mozilla Update Infrastructure</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../update-infrastructure/index.html#watershed-updates">Watershed Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../update-infrastructure/index.html#desupport-updates">Desupport Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/update-verify/index.html">Update Verify</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Localization &amp; Internationalization</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../intl/index.html">Internationalization</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../l10n/index.html">Localization</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox and Python</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../mozbase/index.html">mozbase</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../python/index.html">Using third-party Python packages</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Metrics Collected in Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../metrics/index.html">Metrics</a></li>
+      </ul>
+     </div>
+    </div>
+   </nav>
+   <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+    <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+     <i data-toggle="wy-nav-top" class="fa fa-bars"></i> <a href="../index.html">Firefox Source Docs</a>
+    </nav>
+    <div class="wy-nav-content">
+     <div class="rst-content">
+      <!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+      <div role="navigation" aria-label="Page navigation">
+       <ul class="wy-breadcrumbs">
+        <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+        <li class="breadcrumb-item"><a href="index.html">Style system (CSS) &amp; Layout</a></li>
+        <li class="breadcrumb-item active">Layout Overview</li>
+        <li class="wy-breadcrumbs-aside"><a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Developer+Infrastructure&amp;component=Firefox+Source+Docs%3A+Content&amp;short_desc=Documentation+issue+on+layout/LayoutOverview&amp;comment=URL+=+https://firefox-source-docs.mozilla.org/layout/LayoutOverview.html&amp;bug_file_loc=https://firefox-source-docs.mozilla.org/layout/LayoutOverview.html" rel="nofollow">Report an issue</a> / <a href="../_sources/layout/LayoutOverview.md.txt" rel="nofollow"> View page source</a></li>
+       </ul>
+       <hr>
+      </div>
+      <div role="main" class="document" itemscope itemtype="http://schema.org/Article">
+       <div itemprop="articleBody">
+        <!-- -*- mode: Markdown; fill-column: 72; -*- -->
+        <section id="layout-overview">
+         <span id="id1"></span>
+         <h1>Layout Overview<a class="headerlink" href="#layout-overview" title="Link to this heading">?</a></h1>
+         <p>Last update: May 2024</p>
+         <section id="introduction">
+          <h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">?</a></h2>
+          <p>Much of the layout code deals with operations on the frame tree (or rendering tree). In the frame tree, each node represents a rectangle (or, for SVG, other shapes). The frame tree has a shape similar to the content tree, since many content nodes have one corresponding frame, though it differs in a few ways: some content nodes have more than one frame or don’t have any frames at all. When elements are <code class="docutils literal notranslate"><span class="pre">display:none</span></code> in CSS or undisplayed for certain other reasons, they won’t have any frames. When elements are broken across lines or pages, they have multiple frames; elements may also have multiple frames when multiple frames nested inside each other are needed to display a single element (for example, <code class="docutils literal notranslate"><span class="pre">&lt;table&gt;</span></code>, or <code class="docutils literal notranslate"><span class="pre">&lt;video</span> <span class="pre">controls&gt;</span></code>).</p>
+          <p>Each node in the frame tree is an instance of a class derived from <code class="docutils literal notranslate"><span class="pre">nsIFrame</span></code>. As with the content tree, there is a substantial type hierarchy, but the type hierarchy is very different: it includes types like text frames, blocks and inlines, the various parts of tables, flex and grid containers, and the various types of HTML form controls.</p>
+          <p>Frames are allocated within an arena owned by the <code class="docutils literal notranslate"><span class="pre">PresShell</span></code>. Each frame is owned by its parent, created in <code class="docutils literal notranslate"><span class="pre">nsCSSFrameConstructor</span></code> and destroyed via <code class="docutils literal notranslate"><span class="pre">nsIFrame::Destroy()</span></code>. Frames are not reference counted, and code must not hold on to pointers to frames. To mitigate potential security bugs when pointers to destroyed frames are accessed, we use <a class="reference external" href="http://robert.ocallahan.org/2010/10/mitigating-dangling-pointer-bugs-using_15.html">frame poisoning</a>, which takes two parts. When a frame is destroyed other than at the end of life of the presentation, we fill its memory with a pattern consisting of a repeated pointer to inaccessible memory, and then put the memory on a per-frame-class freelist. This means that if code accesses the memory through a dangling pointer, it will either crash quickly by dereferencing the poison pattern or it will find a valid frame.</p>
+          <p>Like the content tree, frames must be accessed only from the main thread of their processes.</p>
+          <p>The frame tree should generally not store any data that cannot be recomputed on-the-fly. While the frame tree does usually persist while a page is being displayed, frames are often destroyed and recreated in response to certain style changes such as changing <code class="docutils literal notranslate"><span class="pre">display:block</span></code> to <code class="docutils literal notranslate"><span class="pre">display:flex</span></code> on an element.</p>
+          <p>The rectangle represented by the frame is what CSS calls the element’s border box. See the illustration in <a class="reference external" href="https://www.w3.org/TR/CSS22/box.html#box-dimensions">8.1 Box dimensions</a> in CSS2 spec. This is the outside edge of the border (or the inside edge of the margin). The margin lives outside the border; and the padding lives inside the border. In addition to <code class="docutils literal notranslate"><span class="pre">nsIFrame::GetRect()</span></code>, we also have the APIs <code class="docutils literal notranslate"><span class="pre">nsIFrame::GetPaddingRect()</span></code> to get the padding box (the outside edge of the padding, or inside edge of the border) and <code class="docutils literal notranslate"><span class="pre">nsIFrame::GetContentRect()</span></code> to get the content box (the outside edge of the content, or inside edge of the padding). These APIs may produce out of date results when reflow is needed (or has not yet occurred).</p>
+          <section id="ink-overflow-vs-scrollable-overflow">
+           <h3>Ink Overflow vs Scrollable Overflow<a class="headerlink" href="#ink-overflow-vs-scrollable-overflow" title="Link to this heading">?</a></h3>
+           <p>In addition to tracking a rectangle, frames also track two overflow areas: <strong>ink overflow</strong> and <strong>scrollable overflow</strong>. These overflow areas represent the union of the area needed by the frame and by all its descendants. The ink overflow is used for painting-related optimizations: it is a rectangle covering all of the area that might be painted when the frame and all of its descendants paint. The scrollable overflow represents the area that the user should be able to scroll to to see the frame and all of its descendants. In some cases differences between the frame’s rect and its overflow happen because of descendants that stick out of the frame; in other cases they occur because of some characteristic of the frame itself. The two overflow areas are similar, but there are differences: for example, margins are part of scrollable overflow but not ink overflow, whereas text-shadows are part of ink overflow but not scrollable overflow.</p>
+           <div class="admonition seealso">
+            <p class="admonition-title">See also</p>
+            <ul class="simple">
+             <li>
+              <p><a class="reference external" href="https://drafts.csswg.org/css-overflow-3/">CSS Overflow Module Level 3</a></p></li>
+            </ul>
+           </div>
+          </section>
+          <section id="brief-intro-to-fragmentation-or-why-we-need-frame-continuations">
+           <h3>Brief Intro to Fragmentation (or why we need frame continuations?)<a class="headerlink" href="#brief-intro-to-fragmentation-or-why-we-need-frame-continuations" title="Link to this heading">?</a></h3>
+           <p>When frames are broken across lines, columns, or pages, we create multiple frames representing the multiple rectangles of the element. The first one is called the <strong>primary frame</strong>, and the rest are called its <strong>continuation frames</strong>, or just <strong>continuations</strong> (which are more likely to be destroyed and recreated during reflow). These frames are linked together as continuations: they have a doubly-linked list that can be used to traverse the continuations using <code class="docutils literal notranslate"><span class="pre">nsIFrame::GetPrevContinuation()</span></code> and <code class="docutils literal notranslate"><span class="pre">nsIFrame::GetNextContinuation()</span></code>. (Currently continuations always have the same style data, though we may at some point want to break that invariant.)</p>
+           <p>Continuations are sometimes siblings of each other (i.e. <code class="docutils literal notranslate"><span class="pre">nsIFrame::GetNextContinuation()</span></code> and <code class="docutils literal notranslate"><span class="pre">nsIFrame::GetNextSibling()</span></code> might return the same frame), and sometimes not. For example, if a paragraph contains a span which contains a link, and the link is split across lines, then the continuations of the span are siblings (since they are both children of the paragraph), but the continuations of the link are not siblings (since each continuation of the link is descended from a different continuation of the span). Traversing the entire frame tree does <strong>not</strong> require explicit traversal of any frames’ continuations-list, since all of the continuations are descendants of the element containing the break.</p>
+           <p>We also use continuations for cases (most importantly, bidi reordering, where left-to-right text and right-to-left text need to be separated into different continuations since they may not form a contiguous rectangle) where the continuations should not be rewrapped during reflow: we call these continuations <strong>fixed</strong> rather than <strong>fluid</strong>. <code class="docutils literal notranslate"><span class="pre">nsIFrame::GetNextInFlow()</span></code> and <code class="docutils literal notranslate"><span class="pre">nsIFrame::GetPrevInFlow()</span></code> traverse only the fluid continuations and do not cross fixed continuation boundaries. We’ll explan more on continuations and fragmentation in a later section <a class="reference internal" href="#layout-fragmentation"><span class="std std-ref">Fragmentation</span></a>.</p>
+          </section>
+          <section id="ib-splitting">
+           <h3>IB-splitting<a class="headerlink" href="#ib-splitting" title="Link to this heading">?</a></h3>
+           <p>If an inline frame has non-inline children, then we split the original inline frame into parts. The original inline’s children are distributed into these parts like so: The children of the original inline are grouped into runs of inline and non-inline, and runs of inline get an inline parent, while runs of non-inline get an anonymous block parent. We call this “ib-splitting” or “block-inside-inline splitting.” This splitting proceeds recursively up the frame tree until all non-inlines inside inlines are ancestors of a block frame with anonymous block wrappers in between. This splitting maintains the relative order between these child frames, and the relationship between the parts of a split inline is maintained using an ib-sibling chain. It is important to note that any wrappers created during frame construction (such as for tables) might not be included in the ib-sibling chain depending on when this wrapper creation takes place. See details in <a class="reference external" href="https://searchfox.org/mozilla-central/rev/c34cf367c29601ed56ae4ea51e20b28cd8331f9c/layout/base/nsCSSFrameConstructor.h#1864-1884"><code class="docutils literal notranslate"><span class="pre">nsCSSFrameConstructor::CreateIBSiblings()</span></code></a>.</p>
+          </section>
+          <section id="physical-coordinates-vs-logical-coordinates">
+           <h3>Physical Coordinates vs Logical Coordinates<a class="headerlink" href="#physical-coordinates-vs-logical-coordinates" title="Link to this heading">?</a></h3>
+           <p>In Western scripts, the text flows from left to right, and lines and block containers progress from top to bottom. To represent a rectangle in this writing mode, it is natural we choose the origin at the top-left corner in a space, i.e. <code class="docutils literal notranslate"><span class="pre">(left,right)</span></code> at <code class="docutils literal notranslate"><span class="pre">(0,0)</span></code>. The size of a frame (rectangle) is specified by its <code class="docutils literal notranslate"><span class="pre">(width,</span> <span class="pre">height)</span></code>. This is called the “physical coordinates.”</p>
+           <p>However, to support various international writing modes on the web, we need to generalize the concept. For example, in Chinese or Japanese vertical typesetting, the text can flow from top to bottom while the lines progress from right to left; in Mongolian script, text can flow from top to bottom while the lines progress from left to right. We define “abstract coordinate” or “logical coordinates” to unify the coordinates under different writing modes. The text flow direction is defined as “inline direction” and the direction which lines or block containers stack is defined as “block direction”. CSS defines three properties to determine a writing mode: <code class="docutils literal notranslate"><span class="pre">writing-mode</span></code>, <code class="docutils literal notranslate"><span class="pre">direction</span></code>, and <code class="docutils literal notranslate"><span class="pre">text-orientation</span></code>.</p>
+           <p>Nearly all the physical CSS properties have their logical counterparts. For example, <code class="docutils literal notranslate"><span class="pre">width</span></code> and <code class="docutils literal notranslate"><span class="pre">height</span></code> correspond to <code class="docutils literal notranslate"><span class="pre">inline-size</span></code> and <code class="docutils literal notranslate"><span class="pre">block-size</span></code>. <code class="docutils literal notranslate"><span class="pre">left</span></code>, <code class="docutils literal notranslate"><span class="pre">right</span></code>, <code class="docutils literal notranslate"><span class="pre">top</span></code>, and <code class="docutils literal notranslate"><span class="pre">bottom</span></code> correspond to <code class="docutils literal notranslate"><span class="pre">inline-start</span></code>, <code class="docutils literal notranslate"><span class="pre">inline-end</span></code>, <code class="docutils literal notranslate"><span class="pre">block-start</span></code>, and <code class="docutils literal notranslate"><span class="pre">block-end</span></code>.</p>
+           <p>In layout, we have physical types, such as <code class="docutils literal notranslate"><span class="pre">nsPoint</span></code>, <code class="docutils literal notranslate"><span class="pre">nsSize</span></code>, <code class="docutils literal notranslate"><span class="pre">nsRect</span></code>, and <code class="docutils literal notranslate"><span class="pre">nsMargin</span></code>; their logical counterparts are <code class="docutils literal notranslate"><span class="pre">LogicalPoint</span></code>, <code class="docutils literal notranslate"><span class="pre">LogicalSize</span></code>, <code class="docutils literal notranslate"><span class="pre">LogicalRect</span></code>, and <code class="docutils literal notranslate"><span class="pre">LogicalMargin</span></code>. Ideally, we should all work on logical coordinates, and convert the code that still uses physical coordinates to logical ones, except when the physical coordinates might make more sense.</p>
+           <div class="admonition seealso">
+            <p class="admonition-title">See also</p>
+            <ul class="simple">
+             <li>
+              <p><a class="reference external" href="https://drafts.csswg.org/css-writing-modes-3/">CSS Writing Modes Level 3</a></p></li>
+             <li>
+              <p><a class="reference external" href="https://drafts.csswg.org/css-logical-1/">CSS Logical Properties and Values Level 1</a></p></li>
+             <li>
+              <p><a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=writing-mode">https://bugzilla.mozilla.org/show_bug.cgi?id=writing-mode</a></p></li>
+            </ul>
+           </div>
+          </section>
+          <section id="references">
+           <h3>References<a class="headerlink" href="#references" title="Link to this heading">?</a></h3>
+           <p>Code (note that most files in base and generic have useful one line descriptions at the top that show up when browsing a directory in searchfox):</p>
+           <ul class="simple">
+            <li>
+             <p><a class="reference external" href="http://searchfox.org/mozilla-central/source/layout/base/">layout/base/</a> contains objects that coordinate everything and a bunch of other miscellaneous things</p></li>
+            <li>
+             <p><a class="reference external" href="http://searchfox.org/mozilla-central/source/layout/generic/">layout/generic/</a> contains the basic frame classes as well as support code for their reflow methods (<code class="docutils literal notranslate"><span class="pre">ReflowInput</span></code>, <code class="docutils literal notranslate"><span class="pre">ReflowOutput</span></code>, <code class="docutils literal notranslate"><span class="pre">nsReflowStatus</span></code>)</p></li>
+            <li>
+             <p><a class="reference external" href="http://searchfox.org/mozilla-central/source/layout/forms/">layout/forms/</a> contains frame classes for HTML form controls</p></li>
+            <li>
+             <p><a class="reference external" href="http://searchfox.org/mozilla-central/source/layout/tables/">layout/tables/</a> contains frame classes for CSS/HTML tables</p></li>
+            <li>
+             <p><a class="reference external" href="http://searchfox.org/mozilla-central/source/layout/mathml/">layout/mathml/</a> contains frame classes for MathML</p></li>
+            <li>
+             <p><a class="reference external" href="http://searchfox.org/mozilla-central/source/layout/svg/">layout/svg/</a> contains frame classes for SVG</p></li>
+            <li>
+             <p><a class="reference external" href="http://searchfox.org/mozilla-central/source/layout/xul/">layout/xul/</a> contains frame classes for the XUL box model and for various XUL widgets</p></li>
+           </ul>
+           <p>Bugzilla: all of the components whose names begin with “Layout” in the “Core” product.</p>
+           <p>Further documentation:</p>
+           <ul class="simple">
+            <li>
+             <p>Talk: <a class="reference external" href="https://mozilla.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=34ff8151-353a-40c4-89e3-ac3201363608">An Overview of Gecko Layout</a> (Cameron McCormack :heycam, 2018-06-13)</p></li>
+           </ul>
+          </section>
+         </section>
+         <section id="frame-construction">
+          <h2>Frame Construction<a class="headerlink" href="#frame-construction" title="Link to this heading">?</a></h2>
+          <p>Frame construction is the process of creating frames, which is handled by <a class="reference external" href="http://searchfox.org/mozilla-central/source/layout/base/nsCSSFrameConstructor.h"><code class="docutils literal notranslate"><span class="pre">nsCSSFrameConstructor</span></code></a>. This is done when styles change in ways that require frames to be created or recreated or when nodes are inserted into the document. The content tree and the frame tree don’t have quite the same shape, and the frame construction process does some of the work of creating the right shape for the frame tree. It handles the aspects of creating the right shape that don’t depend on layout information. So for example, frame construction handles the work needed to implement <a class="reference external" href="https://www.w3.org/TR/CSS22/tables.html#anonymous-boxes">table anonymous objects</a> but does not handle frames that need to be created when an element is broken across lines or pages.</p>
+          <p>The basic unit of frame construction is a run of contiguous children of a single parent element. When asked to construct frames for such a run of children, the frame constructor first determines, based on the siblings and parent of the nodes involved, where in the frame tree the new frames should be inserted. Then the frame constructor walks through the list of content nodes involved and for each one creates a temporary data structure called a <strong>frame construction item</strong>, i.e. <a class="reference external" href="https://searchfox.org/mozilla-central/rev/c34cf367c29601ed56ae4ea51e20b28cd8331f9c/layout/base/nsCSSFrameConstructor.h#1125-1130"><code class="docutils literal notranslate"><span class="pre">FrameConstructionItem</span></code></a>. The frame construction item encapsulates various information needed to create the frames for the content node: its style data, some metadata about how one would create a frame for this node based on its namespace, tag name, and styles, and some data about what sort of frame will be created. This list of frame construction items is then analyzed to see whether constructing frames based on it and inserting them at the chosen insertion point will produce a valid frame tree. If it will not, the frame constructor either fixes up the list of frame construction items so that the resulting frame tree would be valid or throws away the list of frame construction items and requests the destruction and re-creation of the frame for the parent element so that it has a chance to create a list of frame construction items that it <em>can</em> fix up. The re-creation for the parent element is called “reframing”, which is an expensive operation, and we’d love to avoid it if possible.</p>
+          <p>Once the frame constructor has a list of frame construction items and an insertion point that would lead to a valid frame tree, it goes ahead and creates frames based on those items. Creation of a non-leaf frame recursively attempts to create frames for the children of that frame’s element, so in effect frames are created in a depth-first traversal of the content tree.</p>
+          <p>The vast majority of the code in the frame constructor, therefore, falls into one of these categories:</p>
+          <ul class="simple">
+           <li>
+            <p>Code to determine the correct insertion point in the frame tree for new frames.</p></li>
+           <li>
+            <p>Code to create, for a given content node, frame construction items. This involves some searches through static data tables for metadata about the frame to be created.</p></li>
+           <li>
+            <p>Code to analyze the list of frame construction items.</p></li>
+           <li>
+            <p>Code to fix up the list of frame construction items.</p></li>
+           <li>
+            <p>Code to create frames from frame construction items.</p></li>
+          </ul>
+         </section>
+         <section id="reflow">
+          <h2>Reflow<a class="headerlink" href="#reflow" title="Link to this heading">?</a></h2>
+          <p>Reflow is the process of computing the positions and sizes of frames. (After all, frames represent rectangles, and at some point we need to figure out exactly <strong>what</strong> rectangle.) Reflow is done recursively, with each frame’s <code class="docutils literal notranslate"><span class="pre">Reflow()</span></code> method calling the <code class="docutils literal notranslate"><span class="pre">Reflow()</span></code> methods on that frame’s descendants.</p>
+          <p>In many cases, the correct results are defined by CSS specifications (particularly <a class="reference external" href="https://www.w3.org/TR/CSS22/visudet.html">CSS 2.2</a>). In some cases, the details are not defined by CSS, though in some (but not all) of those cases we are constrained by Web compatibility. When the details are defined by CSS, however, the code to compute the layout is generally structured somewhat differently from the way it is described in the CSS specifications, since the CSS specifications are generally written in terms of constraints, whereas our layout code consists of algorithms optimized for incremental recomputation.</p>
+          <section id="where-does-reflow-start-how-do-we-avoid-reflowing-the-world-every-time">
+           <h3>Where does reflow start? How do we avoid reflowing the world every time?<a class="headerlink" href="#where-does-reflow-start-how-do-we-avoid-reflowing-the-world-every-time" title="Link to this heading">?</a></h3>
+           <p>The reflow generally starts from the root of the frame tree, though some other types of frame can act as “reflow roots” and start a reflow from them (<code class="docutils literal notranslate"><span class="pre">nsTextControlFrame</span></code> is one example; see the <a class="reference external" href="https://searchfox.org/mozilla-central/search?q=symbol:E_%3CT_nsFrameState%3E_NS_FRAME_REFLOW_ROOT&amp;amp;redirect=true"><code class="docutils literal notranslate"><span class="pre">NS_FRAME_REFLOW_ROOT</span></code></a> frame state bit). Reflow roots must obey the invariant that a change inside one of their descendants never changes their rect or overflow areas (though currently scrollbars are reflow roots but don’t quite obey this invariant).</p>
+           <p>In many cases, we want to reflow a part of the frame tree, and we want this reflow to be efficient. For example, when content is added or removed from the document tree or when styles change, we want the amount of work we need to redo to be proportional to the amount of content. We also want to efficiently handle a series of changes to the same content. To do this, we maintain two bits on frames: <a class="reference external" href="https://searchfox.org/mozilla-central/rev/dbd654fa899a56a6a2e92f325c4608020e80afae/layout/generic/nsFrameStateBits.h#113-120"><code class="docutils literal notranslate"><span class="pre">NS_FRAME_IS_DIRTY</span></code></a> indicates that a frame and all of its descendants require reflow. <a class="reference external" href="https://searchfox.org/mozilla-central/rev/dbd654fa899a56a6a2e92f325c4608020e80afae/layout/generic/nsFrameStateBits.h#127-144"><code class="docutils literal notranslate"><span class="pre">NS_FRAME_HAS_DIRTY_CHILDREN</span></code></a> indicates that a frame has a descendant that is dirty or has had a descendant removed (see its comment for details). These bits allow coalescing of multiple updates; this coalescing is done in <code class="docutils literal notranslate"><span class="pre">PresShell</span></code>, which tracks the set of reflow roots that require reflow. The bits are set during calls to <a class="reference external" href="https://searchfox.org/mozilla-central/rev/dbd654fa899a56a6a2e92f325c4608020e80afae/layout/base/PresShell.h#1483-1496"><code class="docutils literal notranslate"><span class="pre">PresShell::FrameNeedsReflow</span></code></a> and are cleared during reflow.</p>
+          </section>
+          <section id="reflow-contract">
+           <h3>Reflow Contract<a class="headerlink" href="#reflow-contract" title="Link to this heading">?</a></h3>
+           <p>The layout algorithms used by many of the frame classes are those specified in CSS, which are based on the traditional document formatting model, where inline sizes (widths) are input and block sizes (heights) are output.</p>
+           <p>When an individual frame’s <code class="docutils literal notranslate"><span class="pre">Reflow()</span></code> method is called, most of the input is provided in <code class="docutils literal notranslate"><span class="pre">ReflowInput</span></code>, which is setup by the parent frame. The output is filled in into <code class="docutils literal notranslate"><span class="pre">ReflowOutput</span></code> and <code class="docutils literal notranslate"><span class="pre">nsReflowStatus</span></code>. After reflow, the caller (usually the parent) is responsible for setting the frame’s size based on the metrics reported in <code class="docutils literal notranslate"><span class="pre">ReflowOutput</span></code>. The caller is also responsible to create a continuation based on the completion status reported in <code class="docutils literal notranslate"><span class="pre">nsReflowStatus</span></code>. We will cover more on <code class="docutils literal notranslate"><span class="pre">nsReflowStatus</span></code> in a later section in <a class="reference internal" href="#reflow-status"><span class="std std-ref">Reflow Status</span></a>.</p>
+          </section>
+          <section id="compute-intrinsic-sizes">
+           <h3>Compute intrinsic sizes<a class="headerlink" href="#compute-intrinsic-sizes" title="Link to this heading">?</a></h3>
+           <p>In some cases, inline sizes need to be determined based on the content. For example, an element with <code class="docutils literal notranslate"><span class="pre">width:min-content</span></code> or <code class="docutils literal notranslate"><span class="pre">width:max-content</span></code>. This depends on two <strong>intrinsic inline sizes</strong>: the minimum intrinsic inline size (see <a class="reference external" href="https://searchfox.org/mozilla-central/search?q=nsIFrame%3A%3AGetMinISize&amp;amp;path="><code class="docutils literal notranslate"><span class="pre">nsIFrame::GetMinISize()</span></code></a>) and the preferred intrinsic inline size (see <a class="reference external" href="https://searchfox.org/mozilla-central/search?q=nsIFrame%3A%3AGetPrefISize&amp;amp;path="><code class="docutils literal notranslate"><span class="pre">nsIFrame::GetPrefISize()</span></code></a>). The concept of what these inline sizes represent is best explained by describing what they are on a paragraph containing only text: in such a paragraph the minimum intrinsic inline size is the inline size of the longest word, and the preferred intrinsic inline size is the inline size of the entire paragraph laid out on one line.</p>
+           <p>Intrinsic inline sizes are invalidated separately from the dirty bits described above. When a caller informs the pres shell that a frame needs reflow via <code class="docutils literal notranslate"><span class="pre">PresShell::FrameNeedsReflow()</span></code>, it passes one of the three options:</p>
+           <ul class="simple">
+            <li>
+             <p><code class="docutils literal notranslate"><span class="pre">None</span></code> indicates that no intrinsic inline sizes are dirty</p></li>
+            <li>
+             <p><code class="docutils literal notranslate"><span class="pre">FrameAndAncestors</span></code> indicates that intrinsic inline sizes on it and its ancestors are dirty (which happens, for example, if new children are added to it)</p></li>
+            <li>
+             <p><code class="docutils literal notranslate"><span class="pre">FrameAncestorsAndDescendants</span></code> indicates that intrinsic inline sizes on it, its ancestors, and its descendants are dirty (for example, if the font-size changes)</p></li>
+           </ul>
+          </section>
+         </section>
+         <section id="painting">
+          <h2>Painting<a class="headerlink" href="#painting" title="Link to this heading">?</a></h2>
+          <p>See <a class="reference internal" href="../gfx/RenderingOverview.html#rendering-overview"><span class="std std-ref">Rendering Overview</span></a>.</p>
+         </section>
+         <section id="fragmentation">
+          <span id="layout-fragmentation"></span>
+          <h2>Fragmentation<a class="headerlink" href="#fragmentation" title="Link to this heading">?</a></h2>
+          <p>Fragmentation (or pagination) is a concept used in printing, print-preview, and multicolumn layout.</p>
+          <section id="continuations-in-the-frame-tree">
+           <h3>Continuations in the Frame Tree<a class="headerlink" href="#continuations-in-the-frame-tree" title="Link to this heading">?</a></h3>
+           <p>To render a DOM node, represented as <code class="docutils literal notranslate"><span class="pre">nsIContent</span></code> object, Gecko creates zero or more frames (<code class="docutils literal notranslate"><span class="pre">nsIFrame</span></code> objects). Each frame represents a rectangular area usually corresponding to the node’s CSS box as described by the CSS specs. Simple elements are often representable with exactly one frame, but sometimes an element needs to be represented with more than one frame. For example, text breaking across lines:</p>
+           <div class="highlight-none notranslate">
+            <div class="highlight">
+             <pre><span></span>  xxxxxx AAAA
+  AAA xxxxxxx
+</pre>
+            </div>
+           </div>
+           <p>The A element is a single DOM node but obviously a single rectangular frame isn’t going to represent its layout precisely.</p>
+           <p>Similarly, consider text breaking across pages:</p>
+           <div class="highlight-none notranslate">
+            <div class="highlight">
+             <pre><span></span>  | BBBBBBBBBB |
+  | BBBBBBBBBB |
+  +------------+
+
+  +------------+
+  | BBBBBBBBBB |
+  | BBBBBBBBBB |
+  |            |
+</pre>
+            </div>
+           </div>
+           <p>Again, a single rectangular frame cannot represent the layout of the node. A multi-column container with multiple columns is similar.</p>
+           <p>Another case where a single DOM node is represented by multiple frames is when a text node contains bidirectional text (e.g. both Hebrew and English text). In this case, the text node and its inline ancestors are split so that each frame contains only unidirectional text.</p>
+           <p>The first frame for an element is called the <strong>primary frame</strong>. The other frames are called <strong>continuation frames</strong>. Primary frames are created by <code class="docutils literal notranslate"><span class="pre">nsCSSFrameConstructor</span></code> in response to content insertion notifications. Continuation frames are created during bidi resolution, and during reflow, when reflow detects that a content element cannot be fully laid out within the constraints assigned (e.g., when inline text will not fit within a particular width constraint, or when a block cannot be laid out within a particular height constraint).</p>
+           <p>Continuation frames created during reflow are called “fluid” continuations (or “in-flows”). Other continuation frames (currently, those created during bidi resolution), are, in contrast, “non-fluid”. The <code class="docutils literal notranslate"><span class="pre">NS_FRAME_IS_FLUID_CONTINUATION</span></code> state bit indicates whether a continuation frame is fluid or not.</p>
+           <p>The frames for an element are put in a doubly-linked list. The links are accessible via <code class="docutils literal notranslate"><span class="pre">nsIFrame::GetNextContinuation()</span></code> and <code class="docutils literal notranslate"><span class="pre">nsIFrame::GetPrevContinuation()</span></code>. If only fluid continuations are to be accessed, <code class="docutils literal notranslate"><span class="pre">nsIFrame::GetNextInFlow()</span></code> and <code class="docutils literal notranslate"><span class="pre">nsIFrame::GetPrevInFlow()</span></code> are used instead.</p>
+           <p>The following diagram shows the relationship between the original frame tree considering just primary frames, and a possible layout with breaking and continuations:</p>
+           <div class="highlight-none notranslate">
+            <div class="highlight">
+             <pre><span></span>Original frame tree       Frame tree with A broken into three parts
+    Root                      Root
+     |                      /  |  \
+     A                     A1  A2  A3
+    / \                   / |  |    |
+   B   C                 B  C1 C2   C3
+   |  /|\                |  |  | \   |
+   D E F G               D  E  F G1  G2
+</pre>
+            </div>
+           </div>
+           <p>Certain kinds of frames create multiple child frames for the same content element:</p>
+           <ul class="simple">
+            <li>
+             <p><code class="docutils literal notranslate"><span class="pre">nsPageSequenceFrame</span></code> creates multiple page children, each one associated with the entire document, separated by page breaks</p></li>
+            <li>
+             <p><code class="docutils literal notranslate"><span class="pre">nsColumnSetFrame</span></code> creates multiple block children, each one associated with the column element, separated by column breaks</p></li>
+            <li>
+             <p><code class="docutils literal notranslate"><span class="pre">nsBlockFrame</span></code> creates multiple inline children, each one associated with the same inline element, separated by line breaks, or by changes in text direction</p></li>
+            <li>
+             <p><code class="docutils literal notranslate"><span class="pre">nsTableColFrame</span></code> creates non-fluid continuations for itself if it has span=“N” and N &gt; 1</p></li>
+            <li>
+             <p>If a block frame is a multi-column container and has <code class="docutils literal notranslate"><span class="pre">column-span:all</span></code> children, it creates multiple <code class="docutils literal notranslate"><span class="pre">nsColumnSetFrame</span></code> children, which are linked together as non-fluid continuations. Similarly, if a block frame is within a multi-column formatting context and has <code class="docutils literal notranslate"><span class="pre">column-span:all</span></code> children, it is chopped into several flows, which are linked together as non-fluid continuations as well. See documentation and example frame trees in <a class="reference external" href="https://searchfox.org/mozilla-central/rev/7f8450b7a32bfbafa060c184d3a3ac9c197e814f/layout/base/nsCSSFrameConstructor.cpp#10426-10491"><code class="docutils literal notranslate"><span class="pre">nsCSSFrameConstructor::ConstructBlock()</span></code></a>.</p></li>
+           </ul>
+           <div class="admonition seealso">
+            <p class="admonition-title">See also</p>
+            <ul class="simple">
+             <li>
+              <p><a class="reference external" href="https://drafts.csswg.org/css-break-3/">CSS Fragmentation Module Level 3: Breaking the Web, one fragment at a time</a></p></li>
+            </ul>
+           </div>
+           <section id="overflow-container-continuations">
+            <h4>Overflow Container Continuations<a class="headerlink" href="#overflow-container-continuations" title="Link to this heading">?</a></h4>
+            <p>Sometimes the content of a frame needs to break across pages even though the frame itself is complete. This usually happens if an element with fixed block size has overflow that doesn’t fit on one page. In this case, the completed frame is “overflow incomplete”, and special continuations are created to hold its overflow. These continuations are called “overflow containers”. They are invisible, and are kept on a special list in their parent. See documentation in <a class="reference external" href="https://searchfox.org/mozilla-central/rev/7f8450b7a32bfbafa060c184d3a3ac9c197e814f/layout/generic/nsContainerFrame.h#294-342">nsContainerFrame.h</a> and example trees in <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=379349#c3">bug 379349 comment 3</a>.</p>
+            <p>This infrastructure was extended in <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=154892">bug 154892</a> to also manage continuations for absolutely-positioned frames.</p>
+           </section>
+           <section id="relationship-of-continuations-to-frame-tree-structure">
+            <h4>Relationship of continuations to frame tree structure<a class="headerlink" href="#relationship-of-continuations-to-frame-tree-structure" title="Link to this heading">?</a></h4>
+            <p>It is worth emphasizing two points about the relationship of the prev-continuation / next-continuation linkage to the existing frame tree structure.</p>
+            <p>First, if you want to traverse the frame tree or a subtree thereof to examine all the frames once, you do <em>not</em> want to traverse next-continuation links. All continuations are reachable by traversing the <code class="docutils literal notranslate"><span class="pre">GetNextSibling()</span></code> links from the result of <code class="docutils literal notranslate"><span class="pre">GetFirstChild()</span></code> for all child lists.</p>
+            <p>Second, the following property holds: consider two frames F1 and F2 where F1’s next-continuation is F2 and their respective parent frames are P1 and P2. Then either P1’s next continuation is P2, or P1 == P2, because P is responsible for breaking F1 and F2.</p>
+            <p>In other words, continuations are sometimes siblings of each other, and sometimes not. If their parent content was broken at the same point, then they are not siblings, since they are children of different continuations of the parent. So in the frame tree for the markup</p>
+            <div class="highlight-html notranslate">
+             <div class="highlight">
+              <pre><span></span><span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>This is <span class="p">&lt;</span><span class="nt">b</span><span class="p">&gt;&lt;</span><span class="nt">i</span><span class="p">&gt;</span>some<span class="p">&lt;</span><span class="nt">br</span><span class="p">/&gt;</span>text<span class="p">&lt;/</span><span class="nt">i</span><span class="p">&gt;&lt;/</span><span class="nt">b</span><span class="p">&gt;</span>.<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+</pre>
+             </div>
+            </div>
+            <p>the two continuations for the <code class="docutils literal notranslate"><span class="pre">&lt;b&gt;</span></code> element are siblings (unless the line break is also a page break), but the two continuations for the <code class="docutils literal notranslate"><span class="pre">&lt;i&gt;</span></code> element are not.</p>
+            <p>There is an exception to that property when F1 is a first-in-flow float placeholder. In that case F2’s parent will be the next-in-flow of F1’s containing block.</p>
+           </section>
+          </section>
+          <section id="reflow-status">
+           <h3>Reflow Status<a class="headerlink" href="#reflow-status" title="Link to this heading">?</a></h3>
+           <p>Reflow status is found in <code class="docutils literal notranslate"><span class="pre">aStatus</span></code> argument of <code class="docutils literal notranslate"><span class="pre">Reflow()</span></code>. <code class="docutils literal notranslate"><span class="pre">IsComplete()</span></code> means that we reflowed all the content and no more next-in-flows are needed. At that point there may still be next in flows, but the parent will delete them. <code class="docutils literal notranslate"><span class="pre">IsIncomplete()</span></code> means “some content did not fit in this frame”. <code class="docutils literal notranslate"><span class="pre">IsOverflowIncomplete()</span></code> means that the frame is itself complete, but some of its content didn’t fit: this triggers the creation of overflow containers for the frame’s continuations. <code class="docutils literal notranslate"><span class="pre">IsIncomplete()</span></code> and <code class="docutils literal notranslate"><span class="pre">NextInFlowNeedsReflow()</span></code> means “some content did not fit in this frame AND it must be reflowed”. These values are defined and documented in <a class="reference external" href="https://searchfox.org/mozilla-central/rev/7f8450b7a32bfbafa060c184d3a3ac9c197e814f/layout/generic/nsIFrame.h#228-250"><code class="docutils literal notranslate"><span class="pre">nsReflowStatus::Completion</span></code></a>.</p>
+          </section>
+          <section id="dynamic-reflow-considerations">
+           <h3>Dynamic Reflow Considerations<a class="headerlink" href="#dynamic-reflow-considerations" title="Link to this heading">?</a></h3>
+           <p>When we reflow a frame F with fluid continuations, two things can happen:</p>
+           <ol class="arabic simple">
+            <li>
+             <p>Some child frames do not fit in the passed-in inline size or block size constraint. These frames must be “pushed” to F’s next-in-flow. If F has no next-in-flow, we must create one under F’s parent’s next-in-flow — or if F’s parent is managing the breaking of F, then we create F’s next in flow directly under F’s parent. If F is a block, it pushes overflowing child frames to its “overflow” child list and forces F’s next in flow to be reflowed. When we reflow a block, we pull the child frames from the prev-in-flow’s overflow list into the current frame.</p></li>
+            <li>
+             <p>All child frames fit in the passed-in inline size or block size constraint. Then child frames must be “pulled” from F’s next-in-flow to fill in the available space. If F’s next-in-flow becomes empty, we may be able to delete it.</p></li>
+           </ol>
+           <p>In both of these situations we might end up with a frame F containing two child frames, one of which is a continuation of the other. This is incorrect. We might also create holes, where there are frames P1 P2 and P3, P1 has child F1 and P3 has child F2, but P2 has no F child.</p>
+           <p>A strategy for avoiding these issues is this: When pulling a frame F2 from parent P2 to prev-in-flow P1, if F2 is a breakable container, then:</p>
+           <ul class="simple">
+            <li>
+             <p>If F2 has no prev-in-flow F1 in P1, then create a new primary frame F1 in P1 for F2’s content, with F2 as its next-in-flow.</p></li>
+            <li>
+             <p>Pull children from F2 to F1 until F2 is empty or we run out of space. If F2 goes empty, pull from the next non-empty next-in-flow. Empty continuations with no next-in-flows can be deleted.</p></li>
+           </ul>
+           <p>When pushing a frame F1 from parent P1 to P2, where F1 has a next-in-flow F2 (which must be a child of P2):</p>
+           <ul class="simple">
+            <li>
+             <p>Merge F2 into F1 by moving all F2’s children into F1, then deleting F2</p></li>
+           </ul>
+           <p>For inline frames F, we have our own custom strategy that coalesces adjacent inline frames. This need not change.</p>
+           <p>We do need to implement this strategy when F is a normal in-flow block, a floating block, and eventually an absolutely positioned block.</p>
+          </section>
+         </section>
+        </section>
+       </div>
+      </div>
+      <footer>
+       <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="StyleSystemOverview.html" class="btn btn-neutral float-left" title="Style System Overview" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a> <a href="DynamicChangeHandling.html" class="btn btn-neutral float-right" title="Dynamic change handling along the rendering pipeline" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+       </div>
+       <hr>
+       <div role="contentinfo">
+        <p></p>
+       </div> Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+      </footer>
+     </div>
+    </div>
+   </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ </body>
+</html>

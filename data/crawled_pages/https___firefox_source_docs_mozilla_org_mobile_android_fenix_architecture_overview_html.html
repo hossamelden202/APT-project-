@@ -1,0 +1,486 @@
+<!doctype html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Architecture Overview — Firefox Source Docs  documentation</title>
+  <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50">
+  <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094">
+  <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=fd3f3429">
+  <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b">
+  <link rel="stylesheet" type="text/css" href="../../../_static/custom_theme.css?v=dc5ed815">
+  <link rel="stylesheet" type="text/css" href="../../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7">
+  <link rel="shortcut icon" href="../../../_static/firefox.ico"><!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+  <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+  <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+  <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+  <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+  <script src="../../../_static/copybutton.js?v=30646c52"></script>
+  <script src="../../../_static/design-tabs.js?v=36754332"></script>
+  <script src="../../../_static/js/theme.js"></script>
+  <link rel="index" title="Index" href="../../../genindex.html">
+  <link rel="search" title="Search" href="../../../search.html">
+  <link rel="next" title="Crash Monitoring" href="Crash-Monitoring.html">
+  <link rel="prev" title="Architecture Decisions" href="Architecture-Decisions.html">
+ </head>
+ <body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+   <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <div class="wy-side-scroll">
+     <div class="wy-side-nav-search">
+      <a href="../../../index.html" class="icon icon-home"> Firefox Source Docs <img src="../../../_static/firefox-wordmark.svg" class="logo" alt="Logo"> </a><!-- -- This code is governed by the BSD license ---->
+      <div>
+       <h3>Quick search</h3>
+       <script>
+    (function () {
+      var cx = "dd12886298f75dbef";
+      var gcse = document.createElement("script");
+      gcse.async = true;
+      gcse.src = "https://cse.google.com/cse.js?cx=" + cx;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(gcse, s);
+    })();
+  </script><gcse:search></gcse:search>
+      </div>
+     </div>
+     <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+      <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../glossary/index.html">A Glossary of Common Terms</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../overview/index.html">A Quick Guide to Mozilla Applications</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../setup/index.html">Getting Set Up To Work On The Firefox Codebase</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Working On Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../contributing/index.html">Working on Firefox</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../bug-mgmt/index.html">Bug Handling</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox User Guide</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../devtools-user/index.html">Firefox DevTools User Docs</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Source Code Documentation</span></p>
+      <ul class="current">
+       <li class="toctree-l1"><a class="reference internal" href="../../../mots/index.html">Governance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../browser/index.html">Firefox Front-end</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../dom/index.html">DOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../editor/index.html">Editor</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../layout/index.html">Style system (CSS) &amp; Layout</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../gfx/index.html">Graphics</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../ipc/index.html">Processes, Threads and IPC</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../devtools/index.html">Firefox DevTools Contributor Docs</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../toolkit/index.html">Toolkit</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../js/index.html">SpiderMonkey</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../jsloader/index.html">JS Loader</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../geckoview/index.html">GeckoView</a></li>
+       <li class="toctree-l1 current"><a class="reference internal" href="index.html">Fenix</a>
+        <ul class="current">
+         <li class="toctree-l2"><a class="reference internal" href="Acronym-dictionary.html">Acronym Dictionary</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Addressing-a-performance-regression.html">Addressing a performance regression</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Architecture-Decisions.html">Architecture Decisions</a></li>
+         <li class="toctree-l2 current"><a class="current reference internal" href="#">Architecture Overview</a>
+          <ul>
+           <li class="toctree-l3"><a class="reference internal" href="#unidirectional-data-flow">Unidirectional data flow</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#important-types">Important types</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#store"></a><a name="store">Store</a>
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="#overview"><strong>Overview</strong></a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#description"><strong>Description</strong></a></li>
+            </ul></li>
+           <li class="toctree-l3"><a class="reference internal" href="#state"></a><a name="state">State</a>
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="#id1"><strong>Overview</strong></a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#id2"><strong>Description</strong></a></li>
+            </ul></li>
+           <li class="toctree-l3"><a class="reference internal" href="#action"></a><a name="action">Action</a>
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="#id3"><strong>Overview</strong></a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#id4"><strong>Description</strong></a></li>
+            </ul></li>
+           <li class="toctree-l3"><a class="reference internal" href="#reducer"></a><a name="reducer">Reducer</a>
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="#id5"><strong>Overview</strong></a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#id6"><strong>Description</strong></a></li>
+            </ul></li>
+           <li class="toctree-l3"><a class="reference internal" href="#middleware"></a><a name="middleware">Middleware</a>
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="#id7"><strong>Overview</strong></a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#id8"><strong>Description</strong></a></li>
+            </ul></li>
+           <li class="toctree-l3"><a class="reference internal" href="#view"></a><a name="view">View</a>
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="#id9"><strong>Overview</strong></a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#id10"><strong>Description</strong></a></li>
+            </ul></li>
+           <li class="toctree-l3"><a class="reference internal" href="#important-notes">Important notes</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#simplified-example">Simplified Example</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#historical-architecture-components">Historical architecture components</a>
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="#known-limitations-of-historical-components-copied-from-above">Known Limitations (of historical components, copied from above)</a></li>
+            </ul></li>
+           <li class="toctree-l3"><a class="reference internal" href="#interactor"></a><a name="interactor"></a>Interactor
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="#id11">Overview</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#id12">Description</a></li>
+            </ul></li>
+           <li class="toctree-l3"><a class="reference internal" href="#controller"></a><a name="controller"></a>Controller
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="#id13">Overview</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#id14">Description</a></li>
+            </ul></li>
+          </ul></li>
+         <li class="toctree-l2"><a class="reference internal" href="Crash-Monitoring.html">Crash Monitoring</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Creating-a-release-branch.html">Creating a release branch</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Data-Practices.html">Data practises</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Development-Test-Plan.html">Development Test Plan</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Fennec-Migration.html">Fennec Legacy: Migration</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Firebase-Cloud-Messaging-for-WebPush.html">Firebase Cloud Messaging for WebPush</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Firefox-for-Android-Team-Processes.html">Firefox for Android Team Processes</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Home.html">Home</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Implementing-Telemetry.html">Implementing Telemetry</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Implementing-a-Nimbus-Experiment.html">Implementing a Nimbus Experiment</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="List-of-fenix-threads.html">List of Fenix Threads</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Logging-Crash-Information.html">Logging Crash Information</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Metric-Feature-Tags.html">Metric Feature Tags</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Secret-settings-debug-menu-instructions.html">Debug settings menu instructions</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Telemetry-implementation%2C-reviews%2C-renewals.html">Telemetry - Implementation, Reviews, Renewals</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Telemetry-implementation%2C-reviews%2C-renewals.html#creating-glean-annotations">Creating Glean Annotations</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Telemetry-implementation%2C-reviews%2C-renewals.html#data-review">Data review</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Telemetry-implementation%2C-reviews%2C-renewals.html#renewing-existing-telemetry">Renewing existing telemetry</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Test-telemetry-pings.html">Test Telemetry Pings</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="Working-with-Strings.html">Working with Strings</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="adjust.html">Adjust</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="certificates.html">Certificates</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="crash-reporting.html">Crash Reporting</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="experiments.html">Experiments</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="manual-testing.html">Manual Testing</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="metrics.html">Metrics Definitions</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="release-checklist.html">Release Checklist</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="substituting-local-gv.html">Substituting Local GeckoView</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="syncIntegrationTests.html">Sync Integration Tests</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="telemetry.html">Telemetry</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="UI-Tests.html">UI Tests</a></li>
+        </ul></li>
+       <li class="toctree-l1"><a class="reference internal" href="../focus-android/index.html">Focus for Android</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../dom/bindings/webidl/index.html">WebIDL</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../modules/libpref/index.html">libpref</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../networking/index.html">Networking</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../remote/index.html">Remote Protocols</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../services/index.html">Services</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../permissions/index.html">Permissions</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../uriloader/index.html">File Handling</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../widget/cocoa/index.html">Firefox on macOS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../widget/windows/index.html">Firefox on Windows</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../toolkit/components/ml/index.html">Firefox AI Runtime</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../accessible/index.html">Accessibility</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../media/index.html">Media Playback</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../code-quality/index.html">Code quality</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../writing-rust-code/index.html">Writing Rust Code</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../rust-components/index.html">Rust Components</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../tools/profiler/index.html">Gecko Profiler</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../performance/index.html">Performance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../storage/index.html">Database bindings (SQLite, KV, …)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../xpcom/index.html">XPCOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../nspr/index.html">NSPR</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../security/nss/index.html">Network Security Services (NSS)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../content-security/index.html">Web Security Checks in Gecko</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">The Firefox Build System</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../mach/index.html">Mach</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../tools/try/index.html">Pushing to Try</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../build/buildsystem/index.html">Build System</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../taskcluster/index.html">Firefox CI and Taskgraph</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../tools/moztreedocs/index.html">Managing Documentation</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../mozbuild/vendor/index.html">Vendoring Third Party Components</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Testing &amp; Test Infrastructure</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/automated-testing/index.html">Automated Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/treeherder-try/index.html">Understanding Treeherder Results</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/sheriffed-intermittents/index.html">Sheriffed intermittent failures</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/tests-for-new-config/index.html">Turning on Firefox tests for a new configuration</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/intermittent/index.html">Avoiding intermittent tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/testing-policy/index.html">Testing Policy</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/ci-configs/index.html">Configuration Changes</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/browser-chrome/index.html">Browser chrome mochitests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/chrome-tests/index.html">Chrome Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/marionette/index.html">Marionette</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/geckodriver/index.html">geckodriver</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/test-verification/index.html">Test Verification</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/webrender/index.html">WebRender Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/mochitest-plain/index.html">Mochitest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/xpcshell/index.html">XPCShell tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/tps/index.html">TPS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../web-platform/index.html">web-platform-tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../gtest/index.html">GTest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../tools/fuzzing/index.html">Fuzzing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../tools/sanitizer/index.html">Sanitizer</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing/perfdocs/index.html">Performance Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../tools/code-coverage/index.html">Code coverage</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../testing-rust-code/index.html">Testing &amp; Debugging Rust Code</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Releases &amp; Updates</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../update-infrastructure/index.html">Mozilla Update Infrastructure</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../update-infrastructure/index.html#watershed-updates">Watershed Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../update-infrastructure/index.html#desupport-updates">Desupport Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../tools/update-verify/index.html">Update Verify</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Localization &amp; Internationalization</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../intl/index.html">Internationalization</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../l10n/index.html">Localization</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox and Python</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../mozbase/index.html">mozbase</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../../python/index.html">Using third-party Python packages</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Metrics Collected in Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../../metrics/index.html">Metrics</a></li>
+      </ul>
+     </div>
+    </div>
+   </nav>
+   <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+    <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+     <i data-toggle="wy-nav-top" class="fa fa-bars"></i> <a href="../../../index.html">Firefox Source Docs</a>
+    </nav>
+    <div class="wy-nav-content">
+     <div class="rst-content">
+      <!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+      <div role="navigation" aria-label="Page navigation">
+       <ul class="wy-breadcrumbs">
+        <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+        <li class="breadcrumb-item"><a href="index.html">Fenix</a></li>
+        <li class="breadcrumb-item active">Architecture Overview</li>
+        <li class="wy-breadcrumbs-aside"><a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Developer+Infrastructure&amp;component=Firefox+Source+Docs%3A+Content&amp;short_desc=Documentation+issue+on+mobile/android/fenix/architecture-overview&amp;comment=URL+=+https://firefox-source-docs.mozilla.org/mobile/android/fenix/architecture-overview.html&amp;bug_file_loc=https://firefox-source-docs.mozilla.org/mobile/android/fenix/architecture-overview.html" rel="nofollow">Report an issue</a> / <a href="../../../_sources/mobile/android/fenix/architecture-overview.md.txt" rel="nofollow"> View page source</a></li>
+       </ul>
+       <hr>
+      </div>
+      <div role="main" class="document" itemscope itemtype="http://schema.org/Article">
+       <div itemprop="articleBody">
+        <section id="architecture-overview">
+         <h1>Architecture Overview<a class="headerlink" href="#architecture-overview" title="Link to this heading">?</a></h1>
+         <section id="unidirectional-data-flow">
+          <h2>Unidirectional data flow<a class="headerlink" href="#unidirectional-data-flow" title="Link to this heading">?</a></h2>
+          <p>Firefox for Android’s presentation layer architecture is based on the concept of “unidirectional data flow.” This is a popular approach in client side development, especially on the web, and is core to Redux, MVI, Elm Architecture, and Flux. Our architecture is not identical to any of these (and they are not identical to each other), but the base concepts are the same. For a basic understanding of the motivations and approach, see <a class="reference external" href="https://redux.js.org/basics/data-flow">the official Redux docs</a>. For an article on when unidirectional data flow is and is not a good approach, see <a class="reference external" href="https://medium.com/swlh/the-case-for-flux-379b7d1982c6">this</a>. These are both written from the perspective of React.js developers, but the concepts are largely the same.</p>
+          <p>Our largest deviation from these architectures is that while they each recommend one large, global store of data, we have a single store per screen and several other global stores. This carries both benefits and drawbacks, which will be covered later in this document.</p>
+         </section>
+         <section id="important-types">
+          <h2>Important types<a class="headerlink" href="#important-types" title="Link to this heading">?</a></h2>
+         </section>
+         <section id="store">
+          <h2><a name="store">Store</a><a class="headerlink" href="#store" title="Link to this heading">?</a></h2>
+          <section id="overview">
+           <h3><strong>Overview</strong><a class="headerlink" href="#overview" title="Link to this heading">?</a></h3>
+           <p>A store of State.</p>
+           <p>See <a class="reference external" href="https://searchfox.org/mozilla-central/source/mobile/android/android-components/components/lib/state/src/main/java/mozilla/components/lib/state/Store.kt">mozilla.components.lib.state.Store</a></p>
+           <p>Holds app State.</p>
+           <p>Receives <a class="reference internal" href="#action">Actions</a>, which are used to compute new State using <a class="reference internal" href="#reducer">Reducers</a> and can have <a class="reference internal" href="#middleware">Middlewares</a> attached which respond to and manipulate actions.</p>
+          </section>
+          <section id="description">
+           <h3><strong>Description</strong><a class="headerlink" href="#description" title="Link to this heading">?</a></h3>
+           <p>Maintains a <a class="reference internal" href="#state">State</a>, a <a class="reference internal" href="#reducer">Reducer</a> to compute new State, and <a class="reference internal" href="#middleware">Middleware</a>. Whenever the Store receives a new <a class="reference internal" href="#action">Action</a> via <code class="docutils literal notranslate"><span class="pre">store.dispatch(action)</span></code>, it will first pass the action through its chain of <a class="reference internal" href="#middleware">Middleware</a>. These middleware can initiate side-effects in response, or even consume or change the action. Finally, the Store computes new State using previous State and the new action in the <a class="reference internal" href="#reducer">Reducer</a>. The result is then stored as the new State, and published to all consumers of the store.</p>
+           <p>It is recommended that consumers rely as much as possible on observing State updates from the store instead of reading State directly. This ensures that the most up to date State is always used. This can prevent subtle bugs around call order, as all observers are notified of the same State change before a new change is applied.</p>
+           <p>There are several global stores like <code class="docutils literal notranslate"><span class="pre">AppStore</span></code> and <code class="docutils literal notranslate"><span class="pre">BrowserStore</span></code>, as well as Stores scoped to individual screens. Screen-based Stores can be persisted across configuration changes, but are generally created and destroyed during fragment transactions. This means that data that must be shared across Stores should be lifted to a global Store or should be passed as arguments to the new fragment.</p>
+           <p>Screen-based Stores should be created using <a class="reference external" href="https://searchfox.org/mozilla-central/source/mobile/android/fenix/app/src/main/java/org/mozilla/fenix/components/StoreProvider.kt">StoreProvider.get</a>.</p>
+          </section>
+         </section>
+         <hr class="docutils">
+         <section id="state">
+          <h2><a name="state">State</a><a class="headerlink" href="#state" title="Link to this heading">?</a></h2>
+          <section id="id1">
+           <h3><strong>Overview</strong><a class="headerlink" href="#id1" title="Link to this heading">?</a></h3>
+           <p>Description of the state of a screen or other area of the app.</p>
+           <p>See <a class="reference external" href="https://searchfox.org/mozilla-central/source/mobile/android/android-components/components/lib/state/src/main/java/mozilla/components/lib/state/State.kt">mozilla.components.lib.state.State</a></p>
+          </section>
+          <section id="id2">
+           <h3><strong>Description</strong><a class="headerlink" href="#id2" title="Link to this heading">?</a></h3>
+           <p>Simple, immutable data object that contains all of the backing data required to display a screen. This should ideally only include Kotlin/Java data types which can be easily tested, avoiding Android platform types. This is especially true of large, expensive types like <code class="docutils literal notranslate"><span class="pre">Context</span></code> or <code class="docutils literal notranslate"><span class="pre">View</span></code> which should never be included in State.</p>
+           <p>As much as possible, the State object should be an accurate, 1:1 representation of what is actually shown on the screen. That is to say, the screen should look exactly the same any time a State with the same values is emitted, regardless of any previous changes. This is not always possible as Android UI elements are very stateful, but it is a good goal to aim for.</p>
+           <p>One major benefit of rendering a screen based on a State object is its impact on testing. UI tests are notoriously difficult to build and maintain. If we are able to build a simple, reproducible <a class="reference internal" href="#view">View</a> (i.e., if we can trust that the View will render as expected), that allows us to test our UI by verifying the correctness of our State object.</p>
+           <p>This also gives us a major advantage when debugging. If the UI looks wrong, check the State object. If it’s correct, the problem is in the View. If not, check that the correct <a class="reference internal" href="#action">Action</a> was sent. If so, the problem is in the reducer. If not, check the component that sent the Action. This helps us quickly narrow down problems.</p>
+          </section>
+         </section>
+         <hr class="docutils">
+         <section id="action">
+          <h2><a name="action">Action</a><a class="headerlink" href="#action" title="Link to this heading">?</a></h2>
+          <section id="id3">
+           <h3><strong>Overview</strong><a class="headerlink" href="#id3" title="Link to this heading">?</a></h3>
+           <p>Simple description of a State change or a user interaction. Dispatched to Stores.</p>
+           <p>See <a class="reference external" href="https://searchfox.org/mozilla-central/source/mobile/android/android-components/components/lib/state/src/main/java/mozilla/components/lib/state/Action.kt">mozilla.components.lib.state.Action</a></p>
+          </section>
+          <section id="id4">
+           <h3><strong>Description</strong><a class="headerlink" href="#id4" title="Link to this heading">?</a></h3>
+           <p>Simple data object that carries information about a <a class="reference internal" href="#state">State</a> change to a <a class="reference internal" href="#store">Store</a>. An Action describes <em>something that happened</em>, and carries any data relevant to that change. For example, <code class="docutils literal notranslate"><span class="pre">HistoryFragmentAction.ChangeEmptyState(isEmpty</span> <span class="pre">=</span> <span class="pre">true)</span></code>, captures that the State of the history fragment has become empty.</p>
+          </section>
+         </section>
+         <hr class="docutils">
+         <section id="reducer">
+          <h2><a name="reducer">Reducer</a><a class="headerlink" href="#reducer" title="Link to this heading">?</a></h2>
+          <section id="id5">
+           <h3><strong>Overview</strong><a class="headerlink" href="#id5" title="Link to this heading">?</a></h3>
+           <p>Pure function used to create new <a class="reference internal" href="#state">State</a> objects.</p>
+           <p>See <a class="reference external" href="https://searchfox.org/mozilla-central/source/mobile/android/android-components/components/lib/state/src/main/java/mozilla/components/lib/state/Reducer.kt">mozilla.components.lib.state.Reducer</a></p>
+           <p>Referenced by: <a class="reference internal" href="#store">Store</a></p>
+          </section>
+          <section id="id6">
+           <h3><strong>Description</strong><a class="headerlink" href="#id6" title="Link to this heading">?</a></h3>
+           <p>A function that accepts the previous State and an <a class="reference internal" href="#action">Action</a>, then combines them in order to return the new State. It is important that all Reducers remain <a class="reference external" href="https://en.wikipedia.org/wiki/Pure_function">pure</a>. This allows us to test Reducers based only on their inputs, without requiring that we take into account the state of the rest of the app.</p>
+           <p>Note that the Reducer is always called serially, as state could be lost if it were ever executed in parallel.</p>
+          </section>
+         </section>
+         <hr class="docutils">
+         <section id="middleware">
+          <h2><a name="middleware">Middleware</a><a class="headerlink" href="#middleware" title="Link to this heading">?</a></h2>
+          <section id="id7">
+           <h3><strong>Overview</strong><a class="headerlink" href="#id7" title="Link to this heading">?</a></h3>
+           <p>A Middleware sits between the store and the reducer. It provides an extension point between dispatching an action, and the moment it reaches the reducer.</p>
+          </section>
+          <section id="id8">
+           <h3><strong>Description</strong><a class="headerlink" href="#id8" title="Link to this heading">?</a></h3>
+           <p>A Middleware responds to actions by performing side-effects, and can also be used to rewrite an Action, intercept an Action, or dispatch additional Actions.</p>
+           <p>The Store will create a chain of Middleware instances and invoke them in order. Every Middleware can decide to continue the chain or disrupt the chain. A Middleware has no knowledge of what comes before or after it in the chain.</p>
+          </section>
+         </section>
+         <hr class="docutils">
+         <section id="view">
+          <h2><a name="view">View</a><a class="headerlink" href="#view" title="Link to this heading">?</a></h2>
+          <section id="id9">
+           <h3><strong>Overview</strong><a class="headerlink" href="#id9" title="Link to this heading">?</a></h3>
+           <p>Initializes UI elements, then updates them in response to <a class="reference internal" href="#state">State</a> changes</p>
+           <p>Observes: <a class="reference internal" href="#store">Store</a></p>
+          </section>
+          <section id="id10">
+           <h3><strong>Description</strong><a class="headerlink" href="#id10" title="Link to this heading">?</a></h3>
+           <p>The view defines the mapping of State to UI. This can include XML bindings, Composables, or anything in between.</p>
+           <p>Views should be as dumb as possible, and should include little or no conditional logic outside of determining which branch of a view tree to display based on State. Ideally, each primitive value in a State object is set on some field of a UI element.</p>
+           <p>Views set listeners to UI elements, which trigger dispatches of <a class="reference internal" href="#action">Actions</a> to <a class="reference internal" href="#store">Stores</a>.</p>
+           <p>In some cases, it can be appropriate to initiate side-effects from the view when observing State updates from the Store. For example, a menu might be displayed.</p>
+          </section>
+         </section>
+         <hr class="docutils">
+         <section id="important-notes">
+          <h2>Important notes<a class="headerlink" href="#important-notes" title="Link to this heading">?</a></h2>
+          <ul class="simple">
+           <li>
+            <p>Unlike other common implementations of unidirectional data flow, which typically have one global Store of data, we maintain smaller Stores for each screen and several global Stores.</p>
+            <ul>
+             <li>
+              <p>There is often no need to maintain UI state for views that are destroyed, and this allows us to to operate within the physical hardware constraints presented by Android development, such as having more limited memory resources.</p></li>
+            </ul></li>
+           <li>
+            <p>Stores that are local to a feature or screen should usually be persisted across configuration changes in a ViewModel by using <a class="reference external" href="https://searchfox.org/mozilla-central/source/mobile/android/fenix/app/src/main/java/org/mozilla/fenix/components/StoreProvider.kt">StoreProvider.get</a>.</p></li>
+          </ul>
+         </section>
+         <hr class="docutils">
+         <section id="simplified-example">
+          <h2>Simplified Example<a class="headerlink" href="#simplified-example" title="Link to this heading">?</a></h2>
+          <p>When reading through live code trying to understand an architecture, it can be difficult to find canonical examples, and often hard to locate the most important aspects. This is a simplified example of a basic history screen that includes a list of history items and which can be opened, multi-selected, and deleted.</p>
+          <p>The following are links to the example versions of the architectural components listed above.</p>
+          <ul class="simple">
+           <li>
+            <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/mobile/android/fenix/docs/architectureexample/HistoryFragmentExample.kt">HistoryFragment</a></p></li>
+           <li>
+            <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/mobile/android/fenix/docs/architectureexample/HistoryStoreExample.kt">HistoryStore</a></p></li>
+           <li>
+            <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/mobile/android/fenix/docs/architectureexample/HistoryStoreExample.kt">HistoryState</a></p></li>
+           <li>
+            <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/mobile/android/fenix/docs/architectureexample/HistoryStoreExample.kt">HistoryReducer</a></p></li>
+           <li>
+            <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/mobile/android/fenix/docs/architectureexample/HistoryNavigationMiddlewareExample.kt">HistoryNavigationMiddleware</a></p></li>
+           <li>
+            <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/mobile/android/fenix/docs/architectureexample/HistoryStorageMiddlewareExample.kt">HistoryStorageMiddleware</a></p></li>
+           <li>
+            <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/mobile/android/fenix/docs/architectureexample/HistoryTelemetryMiddlewareExample.kt">HistoryTelemetryMiddleware</a></p></li>
+          </ul>
+         </section>
+         <hr class="docutils">
+         <section id="historical-architecture-components">
+          <h2>Historical architecture components<a class="headerlink" href="#historical-architecture-components" title="Link to this heading">?</a></h2>
+          <p>There are some out-of-date architecture components that may still be seen throughout the app. The original documentation for these components is captured below in order to preserve context, but should be removed once these components are refactored out.</p>
+          <p>For more context on when and why these components were removed, see <a class="reference external" href="https://github.com/mozilla-mobile/firefox-android/pull/1466">the RFC proposing their removal</a>.</p>
+          <section id="known-limitations-of-historical-components-copied-from-above">
+           <h3>Known Limitations (of historical components, copied from above)<a class="headerlink" href="#known-limitations-of-historical-components-copied-from-above" title="Link to this heading">?</a></h3>
+           <ul class="simple">
+            <li>
+             <p>Many <a class="reference internal" href="#interactor">Interactors</a> have only one dependency, on a single <a class="reference internal" href="#controller">Controller</a>. In these cases, they typically just forward each method call on and serve as a largely unnecessary layer. They do, however, 1) maintain consistency with the rest of the architecture, and 2) make it easier to add new Controllers in the future.</p></li>
+           </ul>
+          </section>
+         </section>
+         <hr class="docutils">
+         <section id="interactor">
+          <h2><a name="interactor"></a>Interactor<a class="headerlink" href="#interactor" title="Link to this heading">?</a></h2>
+          <section id="id11">
+           <h3>Overview<a class="headerlink" href="#id11" title="Link to this heading">?</a></h3>
+           <p>Called in response to a direct user action. Delegates to something else</p>
+           <p>Called by: <a class="reference internal" href="#view">View</a></p>
+           <p>Calls: <a class="reference internal" href="#controller">Controllers</a>, other Interactors</p>
+          </section>
+          <section id="id12">
+           <h3>Description<a class="headerlink" href="#id12" title="Link to this heading">?</a></h3>
+           <p>This is the first object called whenever the user performs an action. Typically this will result in code in the <a class="reference internal" href="#view">View</a> that looks something like <code class="docutils literal notranslate"><span class="pre">some_button.onClickListener</span> <span class="pre">{</span> <span class="pre">interactor.onSomeButtonClicked()</span> <span class="pre">}</span> </code>. It is the Interactors job to delegate this button click to whichever object should handle it.</p>
+           <p>Interactors may hold references to multiple other Interactors and Controllers, in which case they delegate specific methods to their appropriate handlers. This helps prevent bloated Controllers that both perform logic and delegate to other objects.</p>
+           <p>Sometimes an Interactor will only reference a single Controller. In these cases, the Interactor will simply forward calls to equivalent calls on the Controller. The Interactor does very little in these cases, and exists only to be consistent with the rest of the app.</p>
+           <p>Note that prior to the introduction of Controllers, Interactors handled the responsibilities of both objects. <strong>You may still find this pattern in some parts of the codebase,</strong> but it is being actively refactored out.</p>
+          </section>
+         </section>
+         <hr class="docutils">
+         <section id="controller">
+          <h2><a name="controller"></a>Controller<a class="headerlink" href="#controller" title="Link to this heading">?</a></h2>
+          <section id="id13">
+           <h3>Overview<a class="headerlink" href="#id13" title="Link to this heading">?</a></h3>
+           <p>Determines how the app should be updated whenever something happens</p>
+           <p>Called by: <a class="reference internal" href="#interactor">Interactor</a></p>
+           <p>Calls: <a class="reference internal" href="#store">Store</a>, library code (e.g., forward a back-press to Android, trigger an FxA login, navigate to a new Fragment, use an Android Components UseCase, etc)</p>
+          </section>
+          <section id="id14">
+           <h3>Description<a class="headerlink" href="#id14" title="Link to this heading">?</a></h3>
+           <p>This is where much of the business logic of the app lives. Whenever called by an Interactor, a Controller will do one of the three following things:</p>
+           <ul class="simple">
+            <li>
+             <p>Create a new <a class="reference internal" href="#action">Action</a> that describes the necessary change, and send it to the Store</p></li>
+            <li>
+             <p>Navigate to a new fragment via the NavController. Optionally include any state necessary to create this new fragment</p></li>
+            <li>
+             <p>Interact with some third party manager. Typically these will update their own internal state and then emit changes to an observer, which will be used to update our Store</p></li>
+           </ul>
+           <p>Controllers can become very complex, and should be unit tested thoroughly whenever their methods do more than delegate simple calls to other objects.</p>
+          </section>
+         </section>
+        </section>
+       </div>
+      </div>
+      <footer>
+       <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Architecture-Decisions.html" class="btn btn-neutral float-left" title="Architecture Decisions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a> <a href="Crash-Monitoring.html" class="btn btn-neutral float-right" title="Crash Monitoring" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+       </div>
+       <hr>
+       <div role="contentinfo">
+        <p></p>
+       </div> Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+      </footer>
+     </div>
+    </div>
+   </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ </body>
+</html>

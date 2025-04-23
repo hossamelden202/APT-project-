@@ -1,0 +1,826 @@
+<!doctype html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Process Model — Firefox Source Docs  documentation</title>
+  <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50">
+  <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094">
+  <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=fd3f3429">
+  <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b">
+  <link rel="stylesheet" type="text/css" href="../../_static/custom_theme.css?v=dc5ed815">
+  <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7">
+  <link rel="shortcut icon" href="../../_static/firefox.ico"><!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script src="../../_static/jquery.js?v=5d32c60e"></script>
+  <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+  <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+  <script src="../../_static/doctools.js?v=9a2dae69"></script>
+  <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+  <script src="../../_static/copybutton.js?v=30646c52"></script>
+  <script src="../../_static/design-tabs.js?v=36754332"></script>
+  <script src="../../_static/js/theme.js"></script>
+  <link rel="index" title="Index" href="../../genindex.html">
+  <link rel="search" title="Search" href="../../search.html">
+  <link rel="next" title="DOM Navigation" href="../navigation/index.html">
+  <link rel="prev" title="Main Thread Actors" href="mainthread.html">
+ </head>
+ <body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+   <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <div class="wy-side-scroll">
+     <div class="wy-side-nav-search">
+      <a href="../../index.html" class="icon icon-home"> Firefox Source Docs <img src="../../_static/firefox-wordmark.svg" class="logo" alt="Logo"> </a><!-- -- This code is governed by the BSD license ---->
+      <div>
+       <h3>Quick search</h3>
+       <script>
+    (function () {
+      var cx = "dd12886298f75dbef";
+      var gcse = document.createElement("script");
+      gcse.async = true;
+      gcse.src = "https://cse.google.com/cse.js?cx=" + cx;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(gcse, s);
+    })();
+  </script><gcse:search></gcse:search>
+      </div>
+     </div>
+     <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+      <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../glossary/index.html">A Glossary of Common Terms</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../overview/index.html">A Quick Guide to Mozilla Applications</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../setup/index.html">Getting Set Up To Work On The Firefox Codebase</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Working On Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Working on Firefox</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../bug-mgmt/index.html">Bug Handling</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox User Guide</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../devtools-user/index.html">Firefox DevTools User Docs</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Source Code Documentation</span></p>
+      <ul class="current">
+       <li class="toctree-l1"><a class="reference internal" href="../../mots/index.html">Governance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../browser/index.html">Firefox Front-end</a></li>
+       <li class="toctree-l1 current"><a class="reference internal" href="../index.html">DOM</a>
+        <ul class="current">
+         <li class="toctree-l2 current"><a class="reference internal" href="index.html">DOM IPC</a>
+          <ul class="current">
+           <li class="toctree-l3"><a class="reference internal" href="jsactors.html">JSActors</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="jsactors.html#and-more">And more</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="mainthread.html">Main Thread Actors</a></li>
+           <li class="toctree-l3 current"><a class="current reference internal" href="#">Process Model</a>
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="#diagram">Diagram</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#parent-process">Parent Process</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#content-process">Content Process</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#gecko-media-plugins-gmp-process">Gecko Media Plugins (GMP) Process</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#gpu-process">GPU Process</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#vr-process">VR Process</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#data-decoder-rdd-process">Data Decoder (RDD) Process</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#network-socket-process">Network (Socket) Process</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#fork-server">Fork Server</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#launcher-process">Launcher Process</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#ipdlunittest">IPDLUnitTest</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#utility-process">Utility Process</a></li>
+            </ul></li>
+          </ul></li>
+         <li class="toctree-l2"><a class="reference internal" href="../navigation/index.html">DOM Navigation</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../push/index.html">Push</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../scriptSecurity/index.html">Script Security</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../scriptSecurity/xray_vision.html">Xray Vision</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../workersAndStorage/index.html">DOM Workers &amp; Storage</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../webIdlBindings/index.html">Web IDL bindings</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../ioutils_migration.html">IOUtils Migration Guide</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../fedcm.html">Federated Credential Management</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../streams.html">Implementing specifications using WHATWG Streams API</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../use-counters.html">Use Counters</a></li>
+        </ul></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../editor/index.html">Editor</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../layout/index.html">Style system (CSS) &amp; Layout</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../gfx/index.html">Graphics</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../ipc/index.html">Processes, Threads and IPC</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../devtools/index.html">Firefox DevTools Contributor Docs</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../toolkit/index.html">Toolkit</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../js/index.html">SpiderMonkey</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../jsloader/index.html">JS Loader</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/geckoview/index.html">GeckoView</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/fenix/index.html">Fenix</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/focus-android/index.html">Focus for Android</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../bindings/webidl/index.html">WebIDL</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../modules/libpref/index.html">libpref</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../networking/index.html">Networking</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../remote/index.html">Remote Protocols</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../services/index.html">Services</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../permissions/index.html">Permissions</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../uriloader/index.html">File Handling</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../widget/cocoa/index.html">Firefox on macOS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../widget/windows/index.html">Firefox on Windows</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../toolkit/components/ml/index.html">Firefox AI Runtime</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../accessible/index.html">Accessibility</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../media/index.html">Media Playback</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../code-quality/index.html">Code quality</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../writing-rust-code/index.html">Writing Rust Code</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../rust-components/index.html">Rust Components</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/profiler/index.html">Gecko Profiler</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../performance/index.html">Performance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../storage/index.html">Database bindings (SQLite, KV, …)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../xpcom/index.html">XPCOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../nspr/index.html">NSPR</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../security/nss/index.html">Network Security Services (NSS)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../content-security/index.html">Web Security Checks in Gecko</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">The Firefox Build System</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mach/index.html">Mach</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/try/index.html">Pushing to Try</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../build/buildsystem/index.html">Build System</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../taskcluster/index.html">Firefox CI and Taskgraph</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/moztreedocs/index.html">Managing Documentation</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mozbuild/vendor/index.html">Vendoring Third Party Components</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Testing &amp; Test Infrastructure</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/automated-testing/index.html">Automated Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/treeherder-try/index.html">Understanding Treeherder Results</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/sheriffed-intermittents/index.html">Sheriffed intermittent failures</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/tests-for-new-config/index.html">Turning on Firefox tests for a new configuration</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/intermittent/index.html">Avoiding intermittent tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/testing-policy/index.html">Testing Policy</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/ci-configs/index.html">Configuration Changes</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/browser-chrome/index.html">Browser chrome mochitests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/chrome-tests/index.html">Chrome Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/marionette/index.html">Marionette</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/geckodriver/index.html">geckodriver</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/test-verification/index.html">Test Verification</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/webrender/index.html">WebRender Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/mochitest-plain/index.html">Mochitest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/xpcshell/index.html">XPCShell tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/tps/index.html">TPS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../web-platform/index.html">web-platform-tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../gtest/index.html">GTest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/fuzzing/index.html">Fuzzing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/sanitizer/index.html">Sanitizer</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/perfdocs/index.html">Performance Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/code-coverage/index.html">Code coverage</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing-rust-code/index.html">Testing &amp; Debugging Rust Code</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Releases &amp; Updates</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html">Mozilla Update Infrastructure</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html#watershed-updates">Watershed Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html#desupport-updates">Desupport Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/update-verify/index.html">Update Verify</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Localization &amp; Internationalization</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../intl/index.html">Internationalization</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../l10n/index.html">Localization</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox and Python</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mozbase/index.html">mozbase</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../python/index.html">Using third-party Python packages</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Metrics Collected in Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../metrics/index.html">Metrics</a></li>
+      </ul>
+     </div>
+    </div>
+   </nav>
+   <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+    <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+     <i data-toggle="wy-nav-top" class="fa fa-bars"></i> <a href="../../index.html">Firefox Source Docs</a>
+    </nav>
+    <div class="wy-nav-content">
+     <div class="rst-content">
+      <!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+      <div role="navigation" aria-label="Page navigation">
+       <ul class="wy-breadcrumbs">
+        <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+        <li class="breadcrumb-item"><a href="../index.html">DOM</a></li>
+        <li class="breadcrumb-item"><a href="index.html">DOM IPC</a></li>
+        <li class="breadcrumb-item active">Process Model</li>
+        <li class="wy-breadcrumbs-aside"><a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Developer+Infrastructure&amp;component=Firefox+Source+Docs%3A+Content&amp;short_desc=Documentation+issue+on+dom/ipc/process_model&amp;comment=URL+=+https://firefox-source-docs.mozilla.org/dom/ipc/process_model.html&amp;bug_file_loc=https://firefox-source-docs.mozilla.org/dom/ipc/process_model.html" rel="nofollow">Report an issue</a> / <a href="../../_sources/dom/ipc/process_model.rst.txt" rel="nofollow"> View page source</a></li>
+       </ul>
+       <hr>
+      </div>
+      <div role="main" class="document" itemscope itemtype="http://schema.org/Article">
+       <div itemprop="articleBody">
+        <section id="process-model">
+         <h1>Process Model<a class="headerlink" href="#process-model" title="Link to this heading">?</a></h1>
+         <p>The complete set of recognized process types is defined in <a class="reference external" href="https://searchfox.org/mozilla-central/source/xpcom/geckoprocesstypes_generator/geckoprocesstypes/__init__.py">GeckoProcessTypes</a>.</p>
+         <p>For more details on how process types are added and managed by IPC, see the process creation documentation <a class="reference internal" href="../../ipc/processes.html#gecko-processes"><span class="std std-ref">Gecko Processes</span></a>.</p>
+         <section id="diagram">
+          <h2>Diagram<a class="headerlink" href="#diagram" title="Link to this heading">?</a></h2>
+          <figure class="align-default" id="id9">
+           <div class="graphviz">
+            <img src="../../_images/graphviz-65a491a951b2a4f1862aa796ecd0a4caa87aa4e2.png" alt="digraph processtypes {
+compound=true;
+node [shape=rectangle];
+
+launcher [label=<Launcher Process>]
+parent [label=<Parent Process>]
+
+subgraph cluster_child {
+    color=lightgrey;
+    label=<Child Processes>;
+
+    subgraph cluster_content {
+        color=lightgrey;
+        label=<Content Processes>;
+
+        web [
+            color=lightgrey;
+            label=<
+                <TABLE BORDER=&quot;0&quot; CELLSPACING=&quot;5&quot; CELLPADDING=&quot;5&quot; COLOR=&quot;black&quot;>
+                    <TR><TD BORDER=&quot;0&quot; CELLPADDING=&quot;0&quot; CELLSPACING=&quot;0&quot;>Web Content</TD></TR>
+                    <TR><TD BORDER=&quot;1&quot;>Shared Web Content<BR/>(<FONT FACE=&quot;monospace&quot;>web</FONT>)</TD></TR>
+                    <TR><TD BORDER=&quot;1&quot;>Isolated Web Content<BR/>(<FONT FACE=&quot;monospace&quot;>webIsolated=$SITE</FONT>)</TD></TR>
+                    <TR><TD BORDER=&quot;1&quot;>COOP+COEP Web Content<BR/>(<FONT FACE=&quot;monospace&quot;>webCOOP+COEP=$SITE</FONT>)</TD></TR>
+                    <TR><TD BORDER=&quot;1&quot;>ServiceWorker Web Content<BR/>(<FONT FACE=&quot;monospace&quot;>webServiceWorker</FONT>)</TD></TR>
+                </TABLE>
+            >
+        ]
+
+        nonweb [
+            shape=none;
+            label=<
+                <TABLE BORDER=&quot;0&quot; CELLSPACING=&quot;5&quot; CELLPADDING=&quot;5&quot; COLOR=&quot;black&quot;>
+                    <TR><TD BORDER=&quot;1&quot;>Preallocated Content<BR/>(<FONT FACE=&quot;monospace&quot;>prealloc</FONT>)</TD></TR>
+                    <TR><TD BORDER=&quot;1&quot;>File Content<BR/>(<FONT FACE=&quot;monospace&quot;>file</FONT>)</TD></TR>
+                    <TR><TD BORDER=&quot;1&quot;>WebExtensions<BR/>(<FONT FACE=&quot;monospace&quot;>extension</FONT>)</TD></TR>
+                    <TR><TD BORDER=&quot;1&quot;>Privileged Content<BR/>(<FONT FACE=&quot;monospace&quot;>privilegedabout</FONT>)</TD></TR>
+                    <TR><TD BORDER=&quot;1&quot;>Privileged Mozilla Content<BR/>(<FONT FACE=&quot;monospace&quot;>privilegedmozilla</FONT>)</TD></TR>
+                </TABLE>
+            >
+        ]
+    }
+
+    helper [
+        color=lightgrey;
+        label=<
+            <TABLE BORDER=&quot;0&quot; CELLSPACING=&quot;5&quot; CELLPADDING=&quot;5&quot; COLOR=&quot;black&quot;>
+                <TR><TD BORDER=&quot;0&quot; CELLPADDING=&quot;0&quot; CELLSPACING=&quot;0&quot;>Helper Processes</TD></TR>
+                <TR><TD BORDER=&quot;1&quot;>Gecko Media Plugins (GMP) Process</TD></TR>
+                <TR><TD BORDER=&quot;1&quot;>GPU Process</TD></TR>
+                <TR><TD BORDER=&quot;1&quot;>VR Process</TD></TR>
+                <TR><TD BORDER=&quot;1&quot;>Data Decoder (RDD) Process</TD></TR>
+                <TR><TD BORDER=&quot;1&quot;>Network (Socket) Process</TD></TR>
+                <TR><TD BORDER=&quot;1&quot;>Utility Process</TD></TR>
+                <TR><TD BORDER=&quot;1&quot;>Fork Server</TD></TR>
+            </TABLE>
+        >
+    ]
+}
+
+subgraph { rank=same; launcher -> parent; }
+
+parent -> web [lhead=&quot;cluster_content&quot;];
+parent -> helper;
+}" class="graphviz">
+           </div>
+           <figcaption>
+            <p><span class="caption-text">Diagram of processes used by Firefox. All child processes are spawned and managed by the Parent process.</span><a class="headerlink" href="#id9" title="Link to this image">?</a></p>
+           </figcaption>
+          </figure>
+         </section>
+         <section id="parent-process">
+          <span id="id1"></span>
+          <h2>Parent Process<a class="headerlink" href="#parent-process" title="Link to this heading">?</a></h2>
+          <dl class="field-list simple">
+           <dt class="field-odd">
+            remoteType<span class="colon">:</span>
+           </dt>
+           <dd class="field-odd">
+            <p><em>null</em></p>
+           </dd>
+           <dt class="field-even">
+            other names<span class="colon">:</span>
+           </dt>
+           <dd class="field-even">
+            <p>UI Process, Main Process, Chrome Process, Browser Process, Default Process, Broker Process</p>
+           </dd>
+           <dt class="field-odd">
+            sandboxed?<span class="colon">:</span>
+           </dt>
+           <dd class="field-odd">
+            <p>no</p>
+           </dd>
+          </dl>
+          <p>The parent process is the primary process which handles the core functionality of Firefox, including its UI, profiles, process selection, navigation, and more. The parent process is responsible for launching all other child processes, and acts as a broker establishing communication between them.</p>
+          <p>All primary protocols establish a connection between the parent process and the given child process, which can then be used to establish additional connections to other processes.</p>
+          <p>As the parent process can display HTML and JS, such as the browser UI and privileged internal pages such as <code class="docutils literal notranslate"><span class="pre">about:preferences</span></code> and <code class="docutils literal notranslate"><span class="pre">about:config</span></code>, it is often treated as-if it was a content process with a <em>null</em> remote type by process selection logic. The parent process has extra protections in place to ensure it cannot load untrusted code when running in multiprocess mode. To this effect, any attempts to load web content in the parent process will lead to a browser crash, and all navigations to and from parent-process documents immediately perform full isolation, to prevent content processes from manipulating them.</p>
+         </section>
+         <section id="content-process">
+          <span id="id2"></span>
+          <h2>Content Process<a class="headerlink" href="#content-process" title="Link to this heading">?</a></h2>
+          <dl class="field-list simple">
+           <dt class="field-odd">
+            primary protocol<span class="colon">:</span>
+           </dt>
+           <dd class="field-odd">
+            <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/dom/ipc/PContent.ipdl">PContent</a></p>
+           </dd>
+           <dt class="field-even">
+            other names<span class="colon">:</span>
+           </dt>
+           <dd class="field-even">
+            <p>Renderer Process</p>
+           </dd>
+           <dt class="field-odd">
+            sandboxed?<span class="colon">:</span>
+           </dt>
+           <dd class="field-odd">
+            <p>yes (content sandbox policy)</p>
+           </dd>
+          </dl>
+          <p>Content processes are used to load web content, and are the only process type (other than the parent process) which can load and execute JS code. These processes are further subdivided into specific “remote types”, which specify the type of content loaded within them, their sandboxing behavior, and can gate access to certain privileged IPC methods.</p>
+          <p>The specific remote type and isolation behaviour used for a specific resource is currently controlled in 2 major places. When performing a document navigation, the final process to load the document in is selected by the logic in <a class="reference external" href="https://searchfox.org/mozilla-central/source/dom/ipc/ProcessIsolation.cpp">ProcessIsolation.cpp</a>. This will combine information about the specific response, such as the site and headers, with other state to select which process and other isolating actions should be taken. When selecting which process to create the initial process for a new tab in, and when selecting processes for serviceworkers and shared workers, the logic in <a class="reference external" href="https://searchfox.org/mozilla-central/source/toolkit/modules/E10SUtils.sys.mjs">E10SUtils.sys.mjs</a> is used to select a process. The logic in <code class="docutils literal notranslate"><span class="pre">E10SUtils.sys.mjs</span></code> will likely be removed and replaced with <code class="docutils literal notranslate"><span class="pre">ProcessIsolation.cpp</span></code> in the future.</p>
+          <div class="admonition note">
+           <p class="admonition-title">Note</p>
+           <p>The “Renderer” alternative name is used by Chromium for its equivalent to content processes, and is occasionally used in Gecko as well, due to the similarity in process architecture. The actual rendering &amp; compositing steps are performed in the GPU or main process.</p>
+          </div>
+          <section id="preallocated-content">
+           <h3>Preallocated Content<a class="headerlink" href="#preallocated-content" title="Link to this heading">?</a></h3>
+           <dl class="field-list simple">
+            <dt class="field-odd">
+             remoteType<span class="colon">:</span>
+            </dt>
+            <dd class="field-odd">
+             <p><code class="docutils literal notranslate"><span class="pre">prealloc</span></code></p>
+            </dd>
+            <dt class="field-even">
+             default count<span class="colon">:</span>
+            </dt>
+            <dd class="field-even">
+             <p>3 (<code class="docutils literal notranslate"><span class="pre">dom.ipc.processPrelaunch.fission.number</span></code>, or 1 if Fission is disabled)</p>
+            </dd>
+           </dl>
+           <p>To avoid the need to launch new content processes to host new content when navigating, new content processes are pre-launched and specialized when they are requested. These preallocated content processes will never load content, and must be specialized before they can be used.</p>
+           <p>The count of preallocated processes can vary depending on various factors, such as the memory available in the host system.</p>
+           <p>The <code class="docutils literal notranslate"><span class="pre">prealloc</span></code> process cannot be used to launch <code class="docutils literal notranslate"><span class="pre">file</span></code> content processes, due to their weakened OS sandbox. <code class="docutils literal notranslate"><span class="pre">extension</span></code> content processes are also currently not supported due to <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1638119">Bug 1637119</a>.</p>
+          </section>
+          <section id="file-content">
+           <h3>File Content<a class="headerlink" href="#file-content" title="Link to this heading">?</a></h3>
+           <dl class="field-list simple">
+            <dt class="field-odd">
+             remoteType<span class="colon">:</span>
+            </dt>
+            <dd class="field-odd">
+             <p><code class="docutils literal notranslate"><span class="pre">file</span></code></p>
+            </dd>
+            <dt class="field-even">
+             default count<span class="colon">:</span>
+            </dt>
+            <dd class="field-even">
+             <p>1 (<code class="docutils literal notranslate"><span class="pre">dom.ipc.processCount.file</span></code>)</p>
+            </dd>
+            <dt class="field-odd">
+             capabilities<span class="colon">:</span>
+            </dt>
+            <dd class="field-odd">
+             <p>File System Access</p>
+            </dd>
+           </dl>
+           <p>The File content process is used to load <code class="docutils literal notranslate"><span class="pre">file://</span></code> URIs, and is therefore less sandboxed than other content processes. It may also be used to load remote web content if the browser has used a legacy CAPS preference to allow that site to access local resources (see <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=995943">Bug 995943</a>)</p>
+          </section>
+          <section id="webextensions">
+           <h3>WebExtensions<a class="headerlink" href="#webextensions" title="Link to this heading">?</a></h3>
+           <dl class="field-list simple">
+            <dt class="field-odd">
+             remoteType<span class="colon">:</span>
+            </dt>
+            <dd class="field-odd">
+             <p><code class="docutils literal notranslate"><span class="pre">extension</span></code></p>
+            </dd>
+            <dt class="field-even">
+             default count<span class="colon">:</span>
+            </dt>
+            <dd class="field-even">
+             <p>1 (<code class="docutils literal notranslate"><span class="pre">dom.ipc.processCount.extension</span></code>)</p>
+            </dd>
+            <dt class="field-odd">
+             capabilities<span class="colon">:</span>
+            </dt>
+            <dd class="field-odd">
+             <p>Extension APIs, Shared Memory (SharedArrayBuffer)</p>
+            </dd>
+           </dl>
+           <p>The WebExtension content process is used to load background pages and top level WebExtension frames. This process generally has access to elevated permissions due to loading privileged extension pages with access to the full WebExtension API surface. Currently all extensions share a single content process.</p>
+           <p>Privileged extensions loaded within the extension process may also be granted access to shared memory using SharedArrayBuffer.</p>
+           <div class="admonition note">
+            <p class="admonition-title">Note</p>
+            <p><code class="docutils literal notranslate"><span class="pre">moz-extension://</span></code> subframes are currently loaded in the same process as the parent document, rather than in the <code class="docutils literal notranslate"><span class="pre">extension</span></code> content process, due to existing permissions behaviour granting content scripts the ability to access the content of extension subframes. This may change in the future.</p>
+           </div>
+          </section>
+          <section id="privileged-content">
+           <h3>Privileged Content<a class="headerlink" href="#privileged-content" title="Link to this heading">?</a></h3>
+           <dl class="field-list simple">
+            <dt class="field-odd">
+             remoteType<span class="colon">:</span>
+            </dt>
+            <dd class="field-odd">
+             <p><code class="docutils literal notranslate"><span class="pre">privilegedabout</span></code></p>
+            </dd>
+            <dt class="field-even">
+             default count<span class="colon">:</span>
+            </dt>
+            <dd class="field-even">
+             <p>1 (<code class="docutils literal notranslate"><span class="pre">dom.ipc.processCount.privilegedabout</span></code>)</p>
+            </dd>
+            <dt class="field-odd">
+             capabilities<span class="colon">:</span>
+            </dt>
+            <dd class="field-odd">
+             <p>Restricted JSWindowActor APIs</p>
+            </dd>
+           </dl>
+           <p>The <code class="docutils literal notranslate"><span class="pre">privilegedabout</span></code> content process is used to load internal pages which have privileged access to internal state. The use of the <code class="docutils literal notranslate"><span class="pre">privilegedabout</span></code> content process is requested by including both <code class="docutils literal notranslate"><span class="pre">nsIAboutModule::URI_MUST_LOAD_IN_CHILD</span></code> and <code class="docutils literal notranslate"><span class="pre">nsIAboutModule::URI_CAN_LOAD_IN_PRIVILEGEDABOUT_PROCESS</span></code> flags in the corresponding <code class="docutils literal notranslate"><span class="pre">nsIAboutModule</span></code>.</p>
+           <p>As of August 11, 2021, the following internal pages load in the privileged content process: <code class="docutils literal notranslate"><span class="pre">about:logins</span></code>, <code class="docutils literal notranslate"><span class="pre">about:loginsimportreport</span></code>, <code class="docutils literal notranslate"><span class="pre">about:privatebrowsing</span></code>, <code class="docutils literal notranslate"><span class="pre">about:home</span></code>, <code class="docutils literal notranslate"><span class="pre">about:newtab</span></code>, <code class="docutils literal notranslate"><span class="pre">about:welcome</span></code>, <code class="docutils literal notranslate"><span class="pre">about:protections</span></code>, and <code class="docutils literal notranslate"><span class="pre">about:certificate</span></code>.</p>
+           <p>Various <code class="docutils literal notranslate"><span class="pre">JSWindowActor</span></code> instances which provide special API access for these internal about pages are restricted to only be available in this content process through the <code class="docutils literal notranslate"><span class="pre">remoteTypes</span></code> attribute, which will block attempts to use them from other content processes.</p>
+          </section>
+          <section id="privileged-mozilla-content">
+           <h3>Privileged Mozilla Content<a class="headerlink" href="#privileged-mozilla-content" title="Link to this heading">?</a></h3>
+           <dl class="field-list simple">
+            <dt class="field-odd">
+             remoteType<span class="colon">:</span>
+            </dt>
+            <dd class="field-odd">
+             <p><code class="docutils literal notranslate"><span class="pre">privilegedmozilla</span></code></p>
+            </dd>
+            <dt class="field-even">
+             default count<span class="colon">:</span>
+            </dt>
+            <dd class="field-even">
+             <p>1 (<code class="docutils literal notranslate"><span class="pre">dom.ipc.processCount.privilegedmozilla</span></code>)</p>
+            </dd>
+            <dt class="field-odd">
+             domains<span class="colon">:</span>
+            </dt>
+            <dd class="field-odd">
+             <p><code class="docutils literal notranslate"><span class="pre">addons.mozilla.org</span></code> and <code class="docutils literal notranslate"><span class="pre">accounts.firefox.com</span></code> (<code class="docutils literal notranslate"><span class="pre">browser.tabs.remote.separatedMozillaDomains</span></code>)</p>
+            </dd>
+            <dt class="field-even">
+             capabilities<span class="colon">:</span>
+            </dt>
+            <dd class="field-even">
+             <p>Restricted Addon Manager APIs</p>
+            </dd>
+           </dl>
+           <p>The <code class="docutils literal notranslate"><span class="pre">privilegedmozilla</span></code> content process is used to load specific high-value Mozilla-controlled webpages which have been granted access to privileged features. To provide an extra layer of security for these sites, they are loaded in a separate process from other web content even when Fission is disabled.</p>
+           <p>This separate remote type is also used to gate access at the IPC boundary to certain high-power web APIs, such as access to the ability to interact with installed extension APIs.</p>
+          </section>
+          <section id="web-content-processes">
+           <h3>Web Content Processes<a class="headerlink" href="#web-content-processes" title="Link to this heading">?</a></h3>
+           <p>These processes all have remote types beginning with <code class="docutils literal notranslate"><span class="pre">web</span></code>, and are used to host general untrusted web content. The different variants of web content processes are used at different times, depending on the isolation strategy requested by the page and the browser’s configuration.</p>
+           <section id="shared-web-content">
+            <h4>Shared Web Content<a class="headerlink" href="#shared-web-content" title="Link to this heading">?</a></h4>
+            <dl class="field-list simple">
+             <dt class="field-odd">
+              remoteType<span class="colon">:</span>
+             </dt>
+             <dd class="field-odd">
+              <p><code class="docutils literal notranslate"><span class="pre">web</span></code></p>
+             </dd>
+             <dt class="field-even">
+              default count<span class="colon">:</span>
+             </dt>
+             <dd class="field-even">
+              <p>8 (<code class="docutils literal notranslate"><span class="pre">dom.ipc.processCount</span></code>)</p>
+             </dd>
+            </dl>
+            <p>The shared web content process is used to host content which is not isolated into one of the other web content process types. This includes almost all web content with Fission disabled, and web content which cannot be attributed to a specific origin with Fission enabled, such as user-initiated <code class="docutils literal notranslate"><span class="pre">data:</span></code> URI loads.</p>
+           </section>
+           <section id="inference-content">
+            <h4>Inference Content<a class="headerlink" href="#inference-content" title="Link to this heading">?</a></h4>
+            <dl class="field-list simple">
+             <dt class="field-odd">
+              remoteType<span class="colon">:</span>
+             </dt>
+             <dd class="field-odd">
+              <p><code class="docutils literal notranslate"><span class="pre">inference</span></code></p>
+             </dd>
+             <dt class="field-even">
+              default count<span class="colon">:</span>
+             </dt>
+             <dd class="field-even">
+              <p>1 (<code class="docutils literal notranslate"><span class="pre">dom.ipc.processCount.inference</span></code>)</p>
+             </dd>
+            </dl>
+            <p>The inference content process is used to isolate inference runtimes, currently ONNX runtime and Bergamot. This process hosts chrome workers that are running WASM runtimes along with some Javascript to perform inference tasks like translation or image-to-text.</p>
+            <p>The models can allocate large amounts of memory, which can cause the process to be killed by the OS in memory-constrained environments like Android. This separation ensures other important processes like content processes are not killed.</p>
+           </section>
+           <section id="isolated-web-content">
+            <h4>Isolated Web Content<a class="headerlink" href="#isolated-web-content" title="Link to this heading">?</a></h4>
+            <dl class="field-list simple">
+             <dt class="field-odd">
+              remoteType<span class="colon">:</span>
+             </dt>
+             <dd class="field-odd">
+              <p><code class="docutils literal notranslate"><span class="pre">webIsolated=$SITE</span></code></p>
+             </dd>
+             <dt class="field-even">
+              default count<span class="colon">:</span>
+             </dt>
+             <dd class="field-even">
+              <p>1 per-site (<code class="docutils literal notranslate"><span class="pre">dom.ipc.processCount.webIsolated</span></code>)</p>
+             </dd>
+            </dl>
+            <p>Isolated web content processes are used to host web content with Fission which can be attributed to a specific site. These processes are allocated when navigating, and will only load content from the named site. When Fission is disabled, isolated web content processes are not used.</p>
+            <p>A different <code class="docutils literal notranslate"><span class="pre">webIsolated=</span></code> remote type, and therefore a different pool of processes, is used for each site loaded, with separation also being used for different container tabs and private browsing.</p>
+           </section>
+           <section id="coop-coep-web-content">
+            <h4>COOP+COEP Web Content<a class="headerlink" href="#coop-coep-web-content" title="Link to this heading">?</a></h4>
+            <dl class="field-list simple">
+             <dt class="field-odd">
+              remoteType<span class="colon">:</span>
+             </dt>
+             <dd class="field-odd">
+              <p><code class="docutils literal notranslate"><span class="pre">webCOOP+COEP=$SITE</span></code></p>
+             </dd>
+             <dt class="field-even">
+              default count<span class="colon">:</span>
+             </dt>
+             <dd class="field-even">
+              <p>1 per-site (<code class="docutils literal notranslate"><span class="pre">dom.ipc.processCount.webCOOP+COEP</span></code>)</p>
+             </dd>
+             <dt class="field-odd">
+              capabilities<span class="colon">:</span>
+             </dt>
+             <dd class="field-odd">
+              <p>Shared Memory (SharedArrayBuffer)</p>
+             </dd>
+            </dl>
+            <p>When loading a top level document with both the <code class="docutils literal notranslate"><span class="pre">Cross-Origin-Opener-Policy</span></code> and <code class="docutils literal notranslate"><span class="pre">Cross-Origin-Embedder-Policy</span></code> headers configured correctly, the document is requesting access to Shared Memory. For security reasons, we only provide this API access to sufficiently-isolated pages, and we load them within special isolated content processes.</p>
+            <p>Like Isolated Web Content, these processes are keyed by the site loaded within them, and are also segmented based on container tabs and private browsing.</p>
+            <div class="admonition note">
+             <p class="admonition-title">Note</p>
+             <p>Another name for this process may be “Cross-Origin Isolated Web Content”, to correspond with the <code class="docutils literal notranslate"><span class="pre">window.crossOriginIsolated</span></code> attribute which is set for documents loaded with these headers set. Unfortunately that may be confused with Fission’s “Isolated Web Content” processes, as the attribute was named after the <code class="docutils literal notranslate"><span class="pre">webIsolated</span></code> remote type was already in use.</p>
+             <p>In <code class="docutils literal notranslate"><span class="pre">about:processes</span></code>, COOP+COEP Web Content processes will be listed with a “cross-origin isolated” note after the PID, like <code class="docutils literal notranslate"><span class="pre">https://example.com</span> <span class="pre">(12345,</span> <span class="pre">cross-origin</span> <span class="pre">isolated)</span></code>.</p>
+            </div>
+           </section>
+           <section id="serviceworker-web-content">
+            <h4>ServiceWorker Web Content<a class="headerlink" href="#serviceworker-web-content" title="Link to this heading">?</a></h4>
+            <dl class="field-list simple">
+             <dt class="field-odd">
+              remoteType<span class="colon">:</span>
+             </dt>
+             <dd class="field-odd">
+              <p><code class="docutils literal notranslate"><span class="pre">webServiceWorker=$SITE</span></code></p>
+             </dd>
+             <dt class="field-even">
+              default count<span class="colon">:</span>
+             </dt>
+             <dd class="field-even">
+              <p>1 per-site using ServiceWorkers</p>
+             </dd>
+            </dl>
+            <p>ServiceWorker web content processes are used to host ServiceWorkers on a per-site basis, so that ServiceWorker operations aren’t impacted by MainThread event latency whenrunning in the same process as the content for the page. ServiceWorkers are usually transitory, and will disappear if unused for a short period of time.</p>
+           </section>
+          </section>
+         </section>
+         <section id="gecko-media-plugins-gmp-process">
+          <span id="gecko-media-plugins-process"></span>
+          <h2>Gecko Media Plugins (GMP) Process<a class="headerlink" href="#gecko-media-plugins-gmp-process" title="Link to this heading">?</a></h2>
+          <dl class="field-list simple">
+           <dt class="field-odd">
+            primary protocol<span class="colon">:</span>
+           </dt>
+           <dd class="field-odd">
+            <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/dom/media/gmp/PGMP.ipdl">PGMP</a></p>
+           </dd>
+           <dt class="field-even">
+            sandboxed?<span class="colon">:</span>
+           </dt>
+           <dd class="field-even">
+            <p>yes (GMP sandbox policy)</p>
+           </dd>
+          </dl>
+          <p>The GMP process is used to sandbox third-party “Content Decryption Module” (CDM) binaries used for media playback in a sandboxed environment. This process is only launched when DRM-enabled content is loaded.</p>
+         </section>
+         <section id="gpu-process">
+          <span id="id3"></span>
+          <h2>GPU Process<a class="headerlink" href="#gpu-process" title="Link to this heading">?</a></h2>
+          <dl class="field-list simple">
+           <dt class="field-odd">
+            primary protocol<span class="colon">:</span>
+           </dt>
+           <dd class="field-odd">
+            <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/gfx/ipc/PGPU.ipdl">PGPU</a></p>
+           </dd>
+           <dt class="field-even">
+            other names<span class="colon">:</span>
+           </dt>
+           <dd class="field-even">
+            <p>Compositor Process</p>
+           </dd>
+           <dt class="field-odd">
+            sandboxed?<span class="colon">:</span>
+           </dt>
+           <dd class="field-odd">
+            <p>no (<a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1347710">bug 1347710</a> tracks sandboxing on windows)</p>
+           </dd>
+          </dl>
+          <p>The GPU process performs compositing, and is used to talk to GPU hardware in an isolated process. This helps isolate things like GPU driver crashes from impacting the entire browser, and will allow for this code to be sandboxed in the future. In addition, some components like Windows Media Foundation (WMF) are run in the GPU process when it is available.</p>
+          <p>The GPU process is not used on all platforms. Platforms which do not use it, such as macOS and some Linux configurations, will perform compositing on a background thread in the Parent Process.</p>
+         </section>
+         <section id="vr-process">
+          <span id="id4"></span>
+          <h2>VR Process<a class="headerlink" href="#vr-process" title="Link to this heading">?</a></h2>
+          <dl class="field-list simple">
+           <dt class="field-odd">
+            primary protocol<span class="colon">:</span>
+           </dt>
+           <dd class="field-odd">
+            <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/gfx/vr/ipc/PVR.ipdl">PVR</a></p>
+           </dd>
+           <dt class="field-even">
+            sandboxed?<span class="colon">:</span>
+           </dt>
+           <dd class="field-even">
+            <p>no (<a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1430043">bug 1430043</a> tracks sandboxing on windows)</p>
+           </dd>
+          </dl>
+          <p>VR headset libraries require access to specific OS level features and other requirements which we would generally like to block with the sandbox in other processes. In order to allow the GPU process to have tighter sandboxing rules, these VR libraries are loaded into the less-restricted VR process. Like the GPU process, this serves to isolate them from the rest of Firefox and reduce the impact of bugs in these libraries on the rest of the browser. The VR process is launched only after a user visits a site which uses WebVR.</p>
+         </section>
+         <section id="data-decoder-rdd-process">
+          <span id="data-decoder-process"></span>
+          <h2>Data Decoder (RDD) Process<a class="headerlink" href="#data-decoder-rdd-process" title="Link to this heading">?</a></h2>
+          <dl class="field-list simple">
+           <dt class="field-odd">
+            primary protocol<span class="colon">:</span>
+           </dt>
+           <dd class="field-odd">
+            <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/dom/media/ipc/PRDD.ipdl">PRDD</a></p>
+           </dd>
+           <dt class="field-even">
+            sandboxed?<span class="colon">:</span>
+           </dt>
+           <dd class="field-even">
+            <p>yes (RDD sandbox policy)</p>
+           </dd>
+          </dl>
+          <p>This process is used to run media data decoders within their own sandboxed process, allowing the code to be isolated from other code in Gecko. This aims to reduce the severity of potential bugs in media decoder libraries, and improve the security of the browser.</p>
+          <div class="admonition note">
+           <p class="admonition-title">Note</p>
+           <p>This process is in the process of being restructured into a generic “utility” process type for running untrusted code in a maximally secure sandbox. After these changes, the following new process types will exist, replacing the RDD process:</p>
+           <ul class="simple">
+            <li>
+             <p><code class="docutils literal notranslate"><span class="pre">Utility</span></code>: A maximally sandboxed process used to host untrusted code which does not require access to OS resources. This process will be even more sandboxed than RDD today on Windows, where the RDD process has access to Win32k.</p></li>
+            <li>
+             <p><code class="docutils literal notranslate"><span class="pre">UtilityWithWin32k</span></code>: A Windows-only process with the same sandboxing as the RDD process today. This will be used to host untrusted sandboxed code which requires access to Win32k to allow decoding directly into GPU surfaces.</p></li>
+            <li>
+             <p><code class="docutils literal notranslate"><span class="pre">GPUFallback</span></code>: A Windows-only process using the GPU process’ sandboxing policy which will be used to run Windows Media Foundation (WMF) when the GPU process itself is unavailable, allowing <code class="docutils literal notranslate"><span class="pre">UtilityWithWin32k</span></code> to re-enable Arbitrary Code Guard (ACG) on Windows.</p></li>
+           </ul>
+           <p>For more details about the planned utility process architecture changes, see <a class="reference external" href="https://docs.google.com/document/d/1WDEY5fQetK_YE5oxGxXK9BzC1A8kJP3q6F1gAPc2UGE">the planning document</a>.</p>
+          </div>
+         </section>
+         <section id="network-socket-process">
+          <span id="id5"></span>
+          <h2>Network (Socket) Process<a class="headerlink" href="#network-socket-process" title="Link to this heading">?</a></h2>
+          <dl class="field-list simple">
+           <dt class="field-odd">
+            primary protocol<span class="colon">:</span>
+           </dt>
+           <dd class="field-odd">
+            <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/netwerk/ipc/PSocketProcess.ipdl">PSocketProcess</a></p>
+           </dd>
+           <dt class="field-even">
+            sandboxed?<span class="colon">:</span>
+           </dt>
+           <dd class="field-even">
+            <p>yes (socket sandbox policy)</p>
+           </dd>
+          </dl>
+          <p>The socket process is used to separate certain networking operations from the parent process, allowing them to be performed more directly in a partially sandboxed process. The eventual goal is to move all TCP/UDP network operations into this dedicated process, and is being tracked in <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1322426">Bug 1322426</a>.</p>
+         </section>
+         <section id="fork-server">
+          <span id="id6"></span>
+          <h2>Fork Server<a class="headerlink" href="#fork-server" title="Link to this heading">?</a></h2>
+          <dl class="field-list simple">
+           <dt class="field-odd">
+            platform<span class="colon">:</span>
+           </dt>
+           <dd class="field-odd">
+            <p>Linux only</p>
+           </dd>
+           <dt class="field-even">
+            pref<span class="colon">:</span>
+           </dt>
+           <dd class="field-even">
+            <p><code class="docutils literal notranslate"><span class="pre">dom.ipc.forkserver.enable</span></code> (enabled by default in Nightly)</p>
+           </dd>
+           <dt class="field-odd">
+            primary protocol<span class="colon">:</span>
+           </dt>
+           <dd class="field-odd">
+            <p><em>none</em></p>
+           </dd>
+           <dt class="field-even">
+            sandboxed?<span class="colon">:</span>
+           </dt>
+           <dd class="field-even">
+            <p>no (processes forked by the fork server are sandboxed)</p>
+           </dd>
+          </dl>
+          <p>The fork server process is used to reduce the memory overhead and improve launch efficiency for new processes. When a new supported process is requested and the feature is enabled, the parent process will ask the fork server to <code class="docutils literal notranslate"><span class="pre">fork(2)</span></code> itself, and then begin executing. This avoids the need to re-load <code class="docutils literal notranslate"><span class="pre">libxul.so</span></code> and re-perform relocations.</p>
+          <p>The fork server must run before having initialized XPCOM or the IPC layer, and therefore uses a custom low-level IPC system called <code class="docutils literal notranslate"><span class="pre">MiniTransceiver</span></code> rather than IPDL to communicate.</p>
+         </section>
+         <section id="launcher-process">
+          <span id="id7"></span>
+          <h2>Launcher Process<a class="headerlink" href="#launcher-process" title="Link to this heading">?</a></h2>
+          <dl class="field-list simple">
+           <dt class="field-odd">
+            platform<span class="colon">:</span>
+           </dt>
+           <dd class="field-odd">
+            <p>Windows only</p>
+           </dd>
+           <dt class="field-even">
+            metabug<span class="colon">:</span>
+           </dt>
+           <dd class="field-even">
+            <p><a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1435780">Bug 1435780</a></p>
+           </dd>
+           <dt class="field-odd">
+            sandboxed?<span class="colon">:</span>
+           </dt>
+           <dd class="field-odd">
+            <p>no</p>
+           </dd>
+          </dl>
+          <p>The launcher process is used to bootstrap Firefox on Windows before launching the main Firefox process, allowing things like DLL injection blocking to initialize before the main thread even starts running, and improving stability. Unlike the other utility processes, this process is not launched by the parent process, but rather launches it.</p>
+         </section>
+         <section id="ipdlunittest">
+          <h2>IPDLUnitTest<a class="headerlink" href="#ipdlunittest" title="Link to this heading">?</a></h2>
+          <dl class="field-list simple">
+           <dt class="field-odd">
+            primary protocol<span class="colon">:</span>
+           </dt>
+           <dd class="field-odd">
+            <p>varies</p>
+           </dd>
+          </dl>
+          <p>This test-only process type is intended for use when writing IPDL unit tests. However, it is currently broken, due to these tests having never been run in CI. The type may be removed or reused when these unit tests are fixed.</p>
+         </section>
+         <section id="utility-process">
+          <span id="id8"></span>
+          <h2>Utility Process<a class="headerlink" href="#utility-process" title="Link to this heading">?</a></h2>
+          <dl class="field-list simple">
+           <dt class="field-odd">
+            primary protocol<span class="colon">:</span>
+           </dt>
+           <dd class="field-odd">
+            <p><a class="reference external" href="https://searchfox.org/mozilla-central/source/ipc/glue/PUtilityProcess.ipdl">PUtilityProcess</a></p>
+           </dd>
+           <dt class="field-even">
+            metabug<span class="colon">:</span>
+           </dt>
+           <dd class="field-even">
+            <p><a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1722051">Bug 1722051</a></p>
+           </dd>
+           <dt class="field-odd">
+            sandboxed?<span class="colon">:</span>
+           </dt>
+           <dd class="field-odd">
+            <p>yes, customizable</p>
+           </dd>
+          </dl>
+          <p>The utility process is used to provide a simple way to implement IPC actor with some more specific sandboxing properties, in case where you don’t need or want to deal with the extra complexity of adding a whole new process type but you just want to apply different sandboxing policies. Details can be found in <a class="reference internal" href="../../ipc/utility_process.html#utility-process"><span class="std std-ref">Utility Process</span></a>.</p>
+         </section>
+        </section>
+       </div>
+      </div>
+      <footer>
+       <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="mainthread.html" class="btn btn-neutral float-left" title="Main Thread Actors" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a> <a href="../navigation/index.html" class="btn btn-neutral float-right" title="DOM Navigation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+       </div>
+       <hr>
+       <div role="contentinfo">
+        <p></p>
+       </div> Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+      </footer>
+     </div>
+    </div>
+   </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ </body>
+</html>

@@ -1,0 +1,646 @@
+<!doctype html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Instrumenting Rust — Firefox Source Docs  documentation</title>
+  <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50">
+  <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094">
+  <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=fd3f3429">
+  <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b">
+  <link rel="stylesheet" type="text/css" href="../../_static/custom_theme.css?v=dc5ed815">
+  <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7">
+  <link rel="shortcut icon" href="../../_static/firefox.ico"><!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script src="../../_static/jquery.js?v=5d32c60e"></script>
+  <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+  <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+  <script src="../../_static/doctools.js?v=9a2dae69"></script>
+  <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+  <script src="../../_static/copybutton.js?v=30646c52"></script>
+  <script src="../../_static/design-tabs.js?v=36754332"></script>
+  <script src="../../_static/js/theme.js"></script>
+  <link rel="index" title="Index" href="../../genindex.html">
+  <link rel="search" title="Search" href="../../search.html">
+  <link rel="next" title="Instrumenting Android" href="instrumenting-android.html">
+  <link rel="prev" title="Instrumenting JavaScript" href="instrumenting-javascript.html">
+ </head>
+ <body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+   <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <div class="wy-side-scroll">
+     <div class="wy-side-nav-search">
+      <a href="../../index.html" class="icon icon-home"> Firefox Source Docs <img src="../../_static/firefox-wordmark.svg" class="logo" alt="Logo"> </a><!-- -- This code is governed by the BSD license ---->
+      <div>
+       <h3>Quick search</h3>
+       <script>
+    (function () {
+      var cx = "dd12886298f75dbef";
+      var gcse = document.createElement("script");
+      gcse.async = true;
+      gcse.src = "https://cse.google.com/cse.js?cx=" + cx;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(gcse, s);
+    })();
+  </script><gcse:search></gcse:search>
+      </div>
+     </div>
+     <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+      <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../glossary/index.html">A Glossary of Common Terms</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../overview/index.html">A Quick Guide to Mozilla Applications</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../setup/index.html">Getting Set Up To Work On The Firefox Codebase</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Working On Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Working on Firefox</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../bug-mgmt/index.html">Bug Handling</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox User Guide</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../devtools-user/index.html">Firefox DevTools User Docs</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Source Code Documentation</span></p>
+      <ul class="current">
+       <li class="toctree-l1"><a class="reference internal" href="../../mots/index.html">Governance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../browser/index.html">Firefox Front-end</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../dom/index.html">DOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../editor/index.html">Editor</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../layout/index.html">Style system (CSS) &amp; Layout</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../gfx/index.html">Graphics</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../ipc/index.html">Processes, Threads and IPC</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../devtools/index.html">Firefox DevTools Contributor Docs</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../toolkit/index.html">Toolkit</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../js/index.html">SpiderMonkey</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../jsloader/index.html">JS Loader</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/geckoview/index.html">GeckoView</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/fenix/index.html">Fenix</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/focus-android/index.html">Focus for Android</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../dom/bindings/webidl/index.html">WebIDL</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../modules/libpref/index.html">libpref</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../networking/index.html">Networking</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../remote/index.html">Remote Protocols</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../services/index.html">Services</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../permissions/index.html">Permissions</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../uriloader/index.html">File Handling</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../widget/cocoa/index.html">Firefox on macOS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../widget/windows/index.html">Firefox on Windows</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../toolkit/components/ml/index.html">Firefox AI Runtime</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../accessible/index.html">Accessibility</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../media/index.html">Media Playback</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../code-quality/index.html">Code quality</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../writing-rust-code/index.html">Writing Rust Code</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../rust-components/index.html">Rust Components</a></li>
+       <li class="toctree-l1 current"><a class="reference internal" href="index.html">Gecko Profiler</a>
+        <ul class="current">
+         <li class="toctree-l2"><a class="reference internal" href="code-overview.html">Profiler Code Overview</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="buffer.html">Buffers and Memory Management</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="instrumenting-javascript.html">Instrumenting JavaScript</a></li>
+         <li class="toctree-l2 current"><a class="current reference internal" href="#">Instrumenting Rust</a>
+          <ul>
+           <li class="toctree-l3"><a class="reference internal" href="#crate-to-include-as-a-dependency">Crate to Include as a Dependency</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#registering-threads">Registering Threads</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#adding-stack-frame-labels">Adding Stack Frame Labels</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#adding-markers">Adding Markers</a>
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="#examples">Examples</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#untyped-markers">Untyped Markers</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#text-markers">Text Markers</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#other-typed-markers">Other Typed Markers</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#how-to-define-new-marker-types">How to Define New Marker Types</a></li>
+            </ul></li>
+          </ul></li>
+         <li class="toctree-l2"><a class="reference internal" href="instrumenting-android.html">Instrumenting Android</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="markers-guide.html">Markers</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="memory.html">Profiling Memory</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="sandbox.html">Profiling Sandbox violations (Linux)</a></li>
+        </ul></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../performance/index.html">Performance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../storage/index.html">Database bindings (SQLite, KV, …)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../xpcom/index.html">XPCOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../nspr/index.html">NSPR</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../security/nss/index.html">Network Security Services (NSS)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../content-security/index.html">Web Security Checks in Gecko</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">The Firefox Build System</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mach/index.html">Mach</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../try/index.html">Pushing to Try</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../build/buildsystem/index.html">Build System</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../taskcluster/index.html">Firefox CI and Taskgraph</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../moztreedocs/index.html">Managing Documentation</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mozbuild/vendor/index.html">Vendoring Third Party Components</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Testing &amp; Test Infrastructure</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/automated-testing/index.html">Automated Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/treeherder-try/index.html">Understanding Treeherder Results</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/sheriffed-intermittents/index.html">Sheriffed intermittent failures</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/tests-for-new-config/index.html">Turning on Firefox tests for a new configuration</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/intermittent/index.html">Avoiding intermittent tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/testing-policy/index.html">Testing Policy</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/ci-configs/index.html">Configuration Changes</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/browser-chrome/index.html">Browser chrome mochitests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/chrome-tests/index.html">Chrome Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/marionette/index.html">Marionette</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/geckodriver/index.html">geckodriver</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/test-verification/index.html">Test Verification</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/webrender/index.html">WebRender Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/mochitest-plain/index.html">Mochitest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/xpcshell/index.html">XPCShell tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/tps/index.html">TPS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../web-platform/index.html">web-platform-tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../gtest/index.html">GTest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../fuzzing/index.html">Fuzzing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../sanitizer/index.html">Sanitizer</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/perfdocs/index.html">Performance Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../code-coverage/index.html">Code coverage</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing-rust-code/index.html">Testing &amp; Debugging Rust Code</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Releases &amp; Updates</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html">Mozilla Update Infrastructure</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html#watershed-updates">Watershed Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html#desupport-updates">Desupport Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../update-verify/index.html">Update Verify</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Localization &amp; Internationalization</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../intl/index.html">Internationalization</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../l10n/index.html">Localization</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox and Python</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mozbase/index.html">mozbase</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../python/index.html">Using third-party Python packages</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Metrics Collected in Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../metrics/index.html">Metrics</a></li>
+      </ul>
+     </div>
+    </div>
+   </nav>
+   <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+    <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+     <i data-toggle="wy-nav-top" class="fa fa-bars"></i> <a href="../../index.html">Firefox Source Docs</a>
+    </nav>
+    <div class="wy-nav-content">
+     <div class="rst-content">
+      <!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+      <div role="navigation" aria-label="Page navigation">
+       <ul class="wy-breadcrumbs">
+        <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+        <li class="breadcrumb-item"><a href="index.html">Gecko Profiler</a></li>
+        <li class="breadcrumb-item active">Instrumenting Rust</li>
+        <li class="wy-breadcrumbs-aside"><a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Developer+Infrastructure&amp;component=Firefox+Source+Docs%3A+Content&amp;short_desc=Documentation+issue+on+tools/profiler/instrumenting-rust&amp;comment=URL+=+https://firefox-source-docs.mozilla.org/tools/profiler/instrumenting-rust.html&amp;bug_file_loc=https://firefox-source-docs.mozilla.org/tools/profiler/instrumenting-rust.html" rel="nofollow">Report an issue</a> / <a href="../../_sources/tools/profiler/instrumenting-rust.rst.txt" rel="nofollow"> View page source</a></li>
+       </ul>
+       <hr>
+      </div>
+      <div role="main" class="document" itemscope itemtype="http://schema.org/Article">
+       <div itemprop="articleBody">
+        <section id="instrumenting-rust">
+         <h1>Instrumenting Rust<a class="headerlink" href="#instrumenting-rust" title="Link to this heading">?</a></h1>
+         <p>There are multiple ways to use the profiler with Rust. Native stack sampling already includes the Rust frames without special handling. There is the “Native Stacks” profiler feature (via <a class="reference external" href="about:profiling">about:profiling</a>), which enables stack walking for native code. This is most likely turned on already for every profiler presets.</p>
+         <p>In addition to that, there is a profiler Rust API to instrument the Rust code and add more information to the profile data. There are three main functionalities to use:</p>
+         <ol class="arabic simple">
+          <li>
+           <p>Register Rust threads with the profiler, so the profiler can record these threads.</p></li>
+          <li>
+           <p>Add stack frame labels to annotate and categorize a part of the stack.</p></li>
+          <li>
+           <p>Add markers to specifically mark instants in time, or durations. This can be helpful to make sense of a particular piece of the code, or record events that normally wouldn’t show up in samples.</p></li>
+         </ol>
+         <section id="crate-to-include-as-a-dependency">
+          <h2>Crate to Include as a Dependency<a class="headerlink" href="#crate-to-include-as-a-dependency" title="Link to this heading">?</a></h2>
+          <p>Profiler Rust API is located inside the <code class="docutils literal notranslate"><span class="pre">gecko-profiler</span></code> crate. This needs to be included in the project dependencies before the following functionalities can be used.</p>
+          <p>To be able to include it, a new dependency entry needs to be added to the project’s <code class="docutils literal notranslate"><span class="pre">Cargo.toml</span></code> file like this:</p>
+          <div class="highlight-toml notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="k">[dependencies]</span>
+<span class="n">gecko-profiler</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">path</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s2">"../../tools/profiler/rust-api"</span><span class="w"> </span><span class="p">}</span>
+</pre>
+           </div>
+          </div>
+          <p>Note that the relative path needs to be updated depending on the project’s location in mozilla-central.</p>
+          <p>After updating <code class="docutils literal notranslate"><span class="pre">Cargo.toml</span></code>, <code class="docutils literal notranslate"><span class="pre">cargo</span> <span class="pre">update</span> <span class="pre">-p</span> <span class="pre">gkrust-shared</span></code> needs to be executed to update the <code class="docutils literal notranslate"><span class="pre">Cargo.lock</span></code> file.</p>
+         </section>
+         <section id="registering-threads">
+          <h2>Registering Threads<a class="headerlink" href="#registering-threads" title="Link to this heading">?</a></h2>
+          <p>To be able to see the threads in the profile data, they need to be registered with the profiler. Also, they need to be unregistered when they are exiting. It’s important to give a unique name to the thread, so they can be filtered easily.</p>
+          <p>Registering and unregistering a thread is straightforward:</p>
+          <div class="highlight-rust notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="c1">// Register it with a given name.</span>
+<span class="n">gecko_profiler</span><span class="p">::</span><span class="n">register_thread</span><span class="p">(</span><span class="s">"Thread Name"</span><span class="p">);</span>
+<span class="c1">// After doing some work, and right before exiting the thread, unregister it.</span>
+<span class="n">gecko_profiler</span><span class="p">::</span><span class="n">unregister_thread</span><span class="p">();</span>
+</pre>
+           </div>
+          </div>
+          <p>For example, here’s how to register and unregister a simple thread:</p>
+          <div class="highlight-rust notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="kd">let</span><span class="w"> </span><span class="n">thread_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"New Thread"</span><span class="p">;</span>
+<span class="n">std</span><span class="p">::</span><span class="n">thread</span><span class="p">::</span><span class="n">Builder</span><span class="p">::</span><span class="n">new</span><span class="p">()</span>
+<span class="w">    </span><span class="p">.</span><span class="n">name</span><span class="p">(</span><span class="n">thread_name</span><span class="p">.</span><span class="n">into</span><span class="p">())</span>
+<span class="w">    </span><span class="p">.</span><span class="n">spawn</span><span class="p">(</span><span class="k">move</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">gecko_profiler</span><span class="p">::</span><span class="n">register_thread</span><span class="p">(</span><span class="n">thread_name</span><span class="p">);</span>
+<span class="w">        </span><span class="c1">// DO SOME WORK</span>
+<span class="w">        </span><span class="n">gecko_profiler</span><span class="p">::</span><span class="n">unregister_thread</span><span class="p">();</span>
+<span class="w">    </span><span class="p">})</span>
+<span class="w">    </span><span class="p">.</span><span class="n">unwrap</span><span class="p">();</span>
+</pre>
+           </div>
+          </div>
+          <p>Or with a thread pool:</p>
+          <div class="highlight-rust notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="kd">let</span><span class="w"> </span><span class="n">worker</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rayon</span><span class="p">::</span><span class="n">ThreadPoolBuilder</span><span class="p">::</span><span class="n">new</span><span class="p">()</span>
+<span class="w">    </span><span class="p">.</span><span class="n">thread_name</span><span class="p">(</span><span class="k">move</span><span class="w"> </span><span class="o">|</span><span class="n">idx</span><span class="o">|</span><span class="w"> </span><span class="fm">format!</span><span class="p">(</span><span class="s">"Worker#{}"</span><span class="p">,</span><span class="w"> </span><span class="n">idx</span><span class="p">))</span>
+<span class="w">    </span><span class="p">.</span><span class="n">start_handler</span><span class="p">(</span><span class="k">move</span><span class="w"> </span><span class="o">|</span><span class="n">idx</span><span class="o">|</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">gecko_profiler</span><span class="p">::</span><span class="n">register_thread</span><span class="p">(</span><span class="o">&amp;</span><span class="fm">format!</span><span class="p">(</span><span class="s">"Worker#{}"</span><span class="p">,</span><span class="w"> </span><span class="n">idx</span><span class="p">));</span>
+<span class="w">    </span><span class="p">})</span>
+<span class="w">    </span><span class="p">.</span><span class="n">exit_handler</span><span class="p">(</span><span class="o">|</span><span class="n">_idx</span><span class="o">|</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">gecko_profiler</span><span class="p">::</span><span class="n">unregister_thread</span><span class="p">();</span>
+<span class="w">    </span><span class="p">})</span>
+<span class="w">    </span><span class="p">.</span><span class="n">build</span><span class="p">();</span>
+</pre>
+           </div>
+          </div>
+          <div class="admonition note">
+           <p class="admonition-title">Note</p>
+           <p>Registering a thread only will not make it appear in the profile data. In addition, it needs to be added to the “Threads” filter in <a class="reference external" href="about:profiling">about:profiling</a>. This filter input is a comma-separated list. It matches partial names and supports the wildcard <code class="docutils literal notranslate"><span class="pre">*</span></code>.</p>
+          </div>
+         </section>
+         <section id="adding-stack-frame-labels">
+          <h2>Adding Stack Frame Labels<a class="headerlink" href="#adding-stack-frame-labels" title="Link to this heading">?</a></h2>
+          <p>Stack frame labels are useful for annotating a part of the call stack with a category. The category will appear in the various places on the Firefox Profiler analysis page like timeline, call tree tab, flame graph tab, etc.</p>
+          <p><code class="docutils literal notranslate"><span class="pre">gecko_profiler_label!</span></code> macro is used to add a new label frame. The added label frame will exist between the call of this macro and the end of the current scope.</p>
+          <p>Adding a stack frame label:</p>
+          <div class="highlight-rust notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="c1">// Marking the stack as "Layout" category, no subcategory provided.</span>
+<span class="n">gecko_profiler_label</span><span class="o">!</span><span class="p">(</span><span class="n">Layout</span><span class="p">);</span>
+<span class="c1">// Marking the stack as "JavaScript" category and "Parsing" subcategory.</span>
+<span class="n">gecko_profiler_label</span><span class="o">!</span><span class="p">(</span><span class="n">JavaScript</span><span class="p">,</span><span class="w"> </span><span class="n">Parsing</span><span class="p">);</span>
+
+<span class="c1">// Or the entire function scope can be marked with a procedural macro. This is</span>
+<span class="c1">// essentially a syntactical sugar and it expands into a function with a</span>
+<span class="c1">// gecko_profiler_label! call at the very start:</span>
+<span class="cp">#[gecko_profiler_fn_label(DOM)]</span>
+<span class="k">fn</span><span class="w"> </span><span class="nf">foo</span><span class="p">(</span><span class="n">bar</span><span class="p">:</span><span class="w"> </span><span class="kt">u32</span><span class="p">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="kt">u32</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">bar</span>
+<span class="p">}</span>
+</pre>
+           </div>
+          </div>
+          <p>See the list of all profiling categories in the <a class="reference external" href="https://searchfox.org/mozilla-central/source/mozglue/baseprofiler/build/profiling_categories.yaml">profiling_categories.yaml</a> file.</p>
+         </section>
+         <section id="adding-markers">
+          <h2>Adding Markers<a class="headerlink" href="#adding-markers" title="Link to this heading">?</a></h2>
+          <p>Markers are packets of arbitrary data that are added to a profile by the Firefox code, usually to indicate something important happening at a point in time, or during an interval of time.</p>
+          <p>Each marker has a name, a category, some common optional information (timing, backtrace, etc.), and an optional payload of a specific type (containing arbitrary data relevant to that type).</p>
+          <div class="admonition note">
+           <p class="admonition-title">Note</p>
+           <p>This guide explains Rust markers in depth. To learn more about how to add a marker in C++, JavaScript or JVM, please take a look at their documentation in <a class="reference internal" href="markers-guide.html"><span class="doc">Markers</span></a> or <a class="reference internal" href="instrumenting-javascript.html"><span class="doc">Instrumenting JavaScript</span></a>, <a class="reference internal" href="instrumenting-android.html"><span class="doc">Instrumenting Android</span></a> respectively.</p>
+          </div>
+          <section id="examples">
+           <h3>Examples<a class="headerlink" href="#examples" title="Link to this heading">?</a></h3>
+           <p>Short examples, details are below.</p>
+           <div class="highlight-rust notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="c1">// Record a simple marker with the category of Graphics, DisplayListBuilding.</span>
+<span class="n">gecko_profiler</span><span class="p">::</span><span class="n">add_untyped_marker</span><span class="p">(</span>
+<span class="w">    </span><span class="c1">// Name of the marker as a string.</span>
+<span class="w">    </span><span class="s">"Marker Name"</span><span class="p">,</span>
+<span class="w">    </span><span class="c1">// Category with an optional sub-category.</span>
+<span class="w">    </span><span class="n">gecko_profiler_category</span><span class="o">!</span><span class="p">(</span><span class="n">Graphics</span><span class="p">,</span><span class="w"> </span><span class="n">DisplayListBuilding</span><span class="p">),</span>
+<span class="w">    </span><span class="c1">// MarkerOptions that keeps options like marker timing and marker stack.</span>
+<span class="w">    </span><span class="c1">// It will be a point in type by default.</span>
+<span class="w">    </span><span class="nb">Default</span><span class="p">::</span><span class="n">default</span><span class="p">(),</span>
+<span class="p">);</span>
+</pre>
+            </div>
+           </div>
+           <div class="highlight-rust notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="c1">// Create a marker with some additional text information.</span>
+<span class="kd">let</span><span class="w"> </span><span class="n">info</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"info about this marker"</span><span class="p">;</span>
+<span class="n">gecko_profiler</span><span class="p">::</span><span class="n">add_text_marker</span><span class="p">(</span>
+<span class="w">    </span><span class="c1">// Name of the marker as a string.</span>
+<span class="w">    </span><span class="s">"Marker Name"</span><span class="p">,</span>
+<span class="w">    </span><span class="c1">// Category with an optional sub-category.</span>
+<span class="w">    </span><span class="n">gecko_profiler_category</span><span class="o">!</span><span class="p">(</span><span class="n">DOM</span><span class="p">),</span>
+<span class="w">    </span><span class="c1">// MarkerOptions that keeps options like marker timing and marker stack.</span>
+<span class="w">    </span><span class="n">MarkerOptions</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">timing</span><span class="p">:</span><span class="w"> </span><span class="nc">MarkerTiming</span><span class="p">::</span><span class="n">instant_now</span><span class="p">(),</span>
+<span class="w">        </span><span class="o">..</span><span class="nb">Default</span><span class="p">::</span><span class="n">default</span><span class="p">()</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="c1">// Additional information as a string.</span>
+<span class="w">    </span><span class="n">info</span><span class="p">,</span>
+<span class="p">);</span>
+</pre>
+            </div>
+           </div>
+           <div class="highlight-rust notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="c1">// Record a custom marker of type `ExampleNumberMarker` (see definition below).</span>
+<span class="n">gecko_profiler</span><span class="p">::</span><span class="n">add_marker</span><span class="p">(</span>
+<span class="w">    </span><span class="c1">// Name of the marker as a string.</span>
+<span class="w">    </span><span class="s">"Marker Name"</span><span class="p">,</span>
+<span class="w">    </span><span class="c1">// Category with an optional sub-category.</span>
+<span class="w">    </span><span class="n">gecko_profiler_category</span><span class="o">!</span><span class="p">(</span><span class="n">Graphics</span><span class="p">,</span><span class="w"> </span><span class="n">DisplayListBuilding</span><span class="p">),</span>
+<span class="w">    </span><span class="c1">// MarkerOptions that keeps options like marker timing and marker stack.</span>
+<span class="w">    </span><span class="nb">Default</span><span class="p">::</span><span class="n">default</span><span class="p">(),</span>
+<span class="w">    </span><span class="c1">// Marker payload.</span>
+<span class="w">    </span><span class="n">ExampleNumberMarker</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">number</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="w"> </span><span class="p">},</span>
+<span class="p">);</span>
+
+<span class="o">....</span>
+
+<span class="c1">// Marker type definition. It needs to derive Serialize, Deserialize.</span>
+<span class="cp">#[derive(Serialize, Deserialize, Debug)]</span>
+<span class="k">pub</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">ExampleNumberMarker</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">number</span><span class="p">:</span><span class="w"> </span><span class="kt">i32</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="c1">// Marker payload needs to implement the ProfilerMarker trait.</span>
+<span class="k">impl</span><span class="w"> </span><span class="n">gecko_profiler</span><span class="p">::</span><span class="n">ProfilerMarker</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">ExampleNumberMarker</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Unique marker type name.</span>
+<span class="w">    </span><span class="k">fn</span><span class="w"> </span><span class="nf">marker_type_name</span><span class="p">()</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="kp">&amp;</span><span class="o">'</span><span class="nb">static</span><span class="w"> </span><span class="kt">str</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s">"example number"</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="c1">// Data specific to this marker type, serialized to JSON for profiler.firefox.com.</span>
+<span class="w">    </span><span class="k">fn</span><span class="w"> </span><span class="nf">stream_json_marker_data</span><span class="p">(</span><span class="o">&amp;</span><span class="bp">self</span><span class="p">,</span><span class="w"> </span><span class="n">json_writer</span><span class="p">:</span><span class="w"> </span><span class="kp">&amp;</span><span class="nc">mut</span><span class="w"> </span><span class="n">gecko_profiler</span><span class="p">::</span><span class="n">JSONWriter</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">json_writer</span><span class="p">.</span><span class="n">int_property</span><span class="p">(</span><span class="s">"number"</span><span class="p">,</span><span class="w"> </span><span class="bp">self</span><span class="p">.</span><span class="n">number</span><span class="p">.</span><span class="n">into</span><span class="p">());</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="c1">// Where and how to display the marker and its data.</span>
+<span class="w">    </span><span class="k">fn</span><span class="w"> </span><span class="nf">marker_type_display</span><span class="p">()</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="nc">gecko_profiler</span><span class="p">::</span><span class="n">MarkerSchema</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">use</span><span class="w"> </span><span class="n">gecko_profiler</span><span class="p">::</span><span class="n">marker</span><span class="p">::</span><span class="n">schema</span><span class="p">::</span><span class="o">*</span><span class="p">;</span>
+<span class="w">        </span><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">schema</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">MarkerSchema</span><span class="p">::</span><span class="n">new</span><span class="p">(</span><span class="o">&amp;</span><span class="p">[</span><span class="n">Location</span><span class="p">::</span><span class="n">MarkerChart</span><span class="p">]);</span>
+<span class="w">        </span><span class="n">schema</span><span class="p">.</span><span class="n">set_chart_label</span><span class="p">(</span><span class="s">"Name: {marker.name}"</span><span class="p">);</span>
+<span class="w">        </span><span class="n">schema</span><span class="p">.</span><span class="n">add_key_label_format</span><span class="p">(</span><span class="s">"number"</span><span class="p">,</span><span class="w"> </span><span class="s">"Number"</span><span class="p">,</span><span class="w"> </span><span class="n">Format</span><span class="p">::</span><span class="n">Integer</span><span class="p">);</span>
+<span class="w">        </span><span class="n">schema</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre>
+            </div>
+           </div>
+          </section>
+          <section id="untyped-markers">
+           <h3>Untyped Markers<a class="headerlink" href="#untyped-markers" title="Link to this heading">?</a></h3>
+           <p>Untyped markers don’t carry any information apart from common marker data: Name, category, options.</p>
+           <div class="highlight-rust notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="n">gecko_profiler</span><span class="p">::</span><span class="n">add_untyped_marker</span><span class="p">(</span>
+<span class="w">    </span><span class="c1">// Name of the marker as a string.</span>
+<span class="w">    </span><span class="s">"Marker Name"</span><span class="p">,</span>
+<span class="w">    </span><span class="c1">// Category with an optional sub-category.</span>
+<span class="w">    </span><span class="n">gecko_profiler_category</span><span class="o">!</span><span class="p">(</span><span class="n">Graphics</span><span class="p">,</span><span class="w"> </span><span class="n">DisplayListBuilding</span><span class="p">),</span>
+<span class="w">    </span><span class="c1">// MarkerOptions that keeps options like marker timing and marker stack.</span>
+<span class="w">    </span><span class="n">MarkerOptions</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">timing</span><span class="p">:</span><span class="w"> </span><span class="nc">MarkerTiming</span><span class="p">::</span><span class="n">instant_now</span><span class="p">(),</span>
+<span class="w">        </span><span class="o">..</span><span class="nb">Default</span><span class="p">::</span><span class="n">default</span><span class="p">()</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="p">);</span>
+</pre>
+            </div>
+           </div>
+           <ol class="arabic">
+            <li>
+             <dl class="simple">
+              <dt>
+               Marker name
+              </dt>
+              <dd>
+               <p>The first argument is the name of this marker. This will be displayed in most places the marker is shown. It can be a literal string, or any dynamic string.</p>
+              </dd>
+             </dl></li>
+            <li>
+             <dl class="simple">
+              <dt>
+               <a class="reference external" href="https://searchfox.org/mozilla-central/source/__GENERATED__/tools/profiler/rust-api/src/gecko_bindings/profiling_categories.rs">Profiling category pair</a>
+              </dt>
+              <dd>
+               <p>A category + subcategory pair from the <a class="reference external" href="https://searchfox.org/mozilla-central/source/mozglue/baseprofiler/build/profiling_categories.yaml">the list of categories</a>. <code class="docutils literal notranslate"><span class="pre">gecko_profiler_category!</span></code> macro should be used to create a profiling category pair since it’s easier to use, e.g. <code class="docutils literal notranslate"><span class="pre">gecko_profiler_category!(JavaScript,</span> <span class="pre">Parsing)</span></code>. Second parameter can be omitted to use the default subcategory directly. <code class="docutils literal notranslate"><span class="pre">gecko_profiler_category!</span></code> macro is encouraged to use, but <code class="docutils literal notranslate"><span class="pre">ProfilingCategoryPair</span></code> enum can also be used if needed.</p>
+              </dd>
+             </dl></li>
+            <li>
+             <dl>
+              <dt>
+               <a class="reference external" href="https://searchfox.org/mozilla-central/define?q=rust_analyzer::cargo::gecko_profiler::0_1_0::options::marker::MarkerOptions">MarkerOptions</a>
+              </dt>
+              <dd>
+               <p>See the options below. It can be omitted if there are no arguments with <code class="docutils literal notranslate"><span class="pre">Default::default()</span></code>. Some options can also be omitted, <code class="docutils literal notranslate"><span class="pre">MarkerOptions</span> <span class="pre">{&lt;options&gt;,</span> <span class="pre">..Default::default()}</span></code>, with one or more of the following options types:</p>
+               <ul class="simple">
+                <li>
+                 <dl class="simple">
+                  <dt>
+                   <a class="reference external" href="https://searchfox.org/mozilla-central/define?q=rust_analyzer::cargo::gecko_profiler::0_1_0::options::marker::MarkerTiming">MarkerTiming</a>
+                  </dt>
+                  <dd>
+                   <p>This specifies an instant or interval of time. It defaults to the current instant if left unspecified. Otherwise use <code class="docutils literal notranslate"><span class="pre">MarkerTiming::instant_at(ProfilerTime)</span></code> or <code class="docutils literal notranslate"><span class="pre">MarkerTiming::interval(pt1,</span> <span class="pre">pt2)</span></code>; timestamps are usually captured with <code class="docutils literal notranslate"><span class="pre">ProfilerTime::Now()</span></code>. It is also possible to record only the start or the end of an interval, pairs of start/end markers will be matched by their name.</p>
+                  </dd>
+                 </dl></li>
+                <li>
+                 <dl class="simple">
+                  <dt>
+                   <a class="reference external" href="https://searchfox.org/mozilla-central/define?q=rust_analyzer::cargo::gecko_profiler::0_1_0::options::marker::[MarkerStack]">MarkerStack</a>
+                  </dt>
+                  <dd>
+                   <p>By default, markers do not record a “stack” (or “backtrace”). To record a stack at this point, in the most efficient manner, specify <code class="docutils literal notranslate"><span class="pre">MarkerStack::Full</span></code>. To capture a stack without native frames for reduced overhead, specify <code class="docutils literal notranslate"><span class="pre">MarkerStack::NonNative</span></code>.</p>
+                  </dd>
+                 </dl></li>
+               </ul>
+               <p><em>Note: Currently, all C++ marker options are not present in the Rust side. They will be added in the future.</em></p>
+              </dd>
+             </dl></li>
+           </ol>
+          </section>
+          <section id="text-markers">
+           <h3>Text Markers<a class="headerlink" href="#text-markers" title="Link to this heading">?</a></h3>
+           <p>Text markers are very common, they carry an extra text as a fourth argument, in addition to the marker name. Use the following macro:</p>
+           <div class="highlight-rust notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="kd">let</span><span class="w"> </span><span class="n">info</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"info about this marker"</span><span class="p">;</span>
+<span class="n">gecko_profiler</span><span class="p">::</span><span class="n">add_text_marker</span><span class="p">(</span>
+<span class="w">    </span><span class="c1">// Name of the marker as a string.</span>
+<span class="w">    </span><span class="s">"Marker Name"</span><span class="p">,</span>
+<span class="w">    </span><span class="c1">// Category with an optional sub-category.</span>
+<span class="w">    </span><span class="n">gecko_profiler_category</span><span class="o">!</span><span class="p">(</span><span class="n">DOM</span><span class="p">),</span>
+<span class="w">    </span><span class="c1">// MarkerOptions that keeps options like marker timing and marker stack.</span>
+<span class="w">    </span><span class="n">MarkerOptions</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">stack</span><span class="p">:</span><span class="w"> </span><span class="nc">MarkerStack</span><span class="p">::</span><span class="n">Full</span><span class="p">,</span>
+<span class="w">        </span><span class="o">..</span><span class="nb">Default</span><span class="p">::</span><span class="n">default</span><span class="p">()</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="c1">// Additional information as a string.</span>
+<span class="w">    </span><span class="n">info</span><span class="p">,</span>
+<span class="p">);</span>
+</pre>
+            </div>
+           </div>
+           <p>As useful as it is, using an expensive <code class="docutils literal notranslate"><span class="pre">format!</span></code> operation to generate a complex text comes with a variety of issues. It can leak potentially sensitive information such as URLs during the profile sharing step. profiler.firefox.com cannot access the information programmatically. It won’t get the formatting benefits of the built-in marker schema. Please consider using a custom marker type to separate and better present the data.</p>
+          </section>
+          <section id="other-typed-markers">
+           <h3>Other Typed Markers<a class="headerlink" href="#other-typed-markers" title="Link to this heading">?</a></h3>
+           <p>From Rust code, a marker of some type <code class="docutils literal notranslate"><span class="pre">YourMarker</span></code> (details about type definition follow) can be recorded like this:</p>
+           <div class="highlight-rust notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="n">gecko_profiler</span><span class="p">::</span><span class="n">add_marker</span><span class="p">(</span>
+<span class="w">    </span><span class="c1">// Name of the marker as a string.</span>
+<span class="w">    </span><span class="s">"Marker Name"</span><span class="p">,</span>
+<span class="w">    </span><span class="c1">// Category with an optional sub-category.</span>
+<span class="w">    </span><span class="n">gecko_profiler_category</span><span class="o">!</span><span class="p">(</span><span class="n">JavaScript</span><span class="p">),</span>
+<span class="w">    </span><span class="c1">// MarkerOptions that keeps options like marker timing and marker stack.</span>
+<span class="w">    </span><span class="nb">Default</span><span class="p">::</span><span class="n">default</span><span class="p">(),</span>
+<span class="w">    </span><span class="c1">// Marker payload.</span>
+<span class="w">    </span><span class="n">YourMarker</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">number</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="n">text</span><span class="p">:</span><span class="w"> </span><span class="s">"some string"</span><span class="p">.</span><span class="n">to_string</span><span class="p">()</span><span class="w"> </span><span class="p">},</span>
+<span class="p">);</span>
+</pre>
+            </div>
+           </div>
+           <p>After the first three common arguments (like in <code class="docutils literal notranslate"><span class="pre">gecko_profiler::add_untyped_marker</span></code>), there is a marker payload struct and it needs to be defined. Let’s take a look at how to define it.</p>
+          </section>
+          <section id="how-to-define-new-marker-types">
+           <h3>How to Define New Marker Types<a class="headerlink" href="#how-to-define-new-marker-types" title="Link to this heading">?</a></h3>
+           <p>Each marker type must be defined once and only once. The definition is a Rust <code class="docutils literal notranslate"><span class="pre">struct</span></code>, it’s constructed when recording markers of that type in Rust. Each marker struct holds the data that is required for them to show in the profiler.firefox.com. By convention, the suffix “Marker” is recommended to better distinguish them from non-profiler entities in the source.</p>
+           <p>Each marker payload must derive <code class="docutils literal notranslate"><span class="pre">serde::Serialize</span></code> and <code class="docutils literal notranslate"><span class="pre">serde::Deserialize</span></code>. They are also exported from <code class="docutils literal notranslate"><span class="pre">gecko-profiler</span></code> crate if a project doesn’t have it. Each marker payload should include its data as its fields like this:</p>
+           <div class="highlight-rust notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="cp">#[derive(Serialize, Deserialize, Debug)]</span>
+<span class="k">pub</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">YourMarker</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">number</span><span class="p">:</span><span class="w"> </span><span class="kt">i32</span><span class="p">,</span>
+<span class="w">    </span><span class="n">text</span><span class="p">:</span><span class="w"> </span><span class="nb">String</span><span class="p">,</span>
+<span class="p">}</span>
+</pre>
+            </div>
+           </div>
+           <p>Each marker struct must also implement the <a class="reference external" href="https://searchfox.org/mozilla-central/define?q=rust_analyzer::cargo::gecko_profiler::0_1_0::marker::ProfilerMarker">ProfilerMarker</a> trait.</p>
+           <section id="profilermarker-trait">
+            <h4><code class="docutils literal notranslate"><span class="pre">ProfilerMarker</span></code> trait<a class="headerlink" href="#profilermarker-trait" title="Link to this heading">?</a></h4>
+            <p><a class="reference external" href="https://searchfox.org/mozilla-central/define?q=rust_analyzer::cargo::gecko_profiler::0_1_0::marker::ProfilerMarker">ProfilerMarker</a> trait must be implemented for all marker types. Its methods are similar to C++ counterparts, please refer to <a class="reference internal" href="markers-guide.html#how-to-define-new-marker-types"><span class="std std-ref">the C++ markers guide to learn more about them</span></a>. It includes three methods that needs to be implemented:</p>
+            <ol class="arabic">
+             <li>
+              <dl>
+               <dt>
+                <code class="docutils literal notranslate"><span class="pre">marker_type_name()</span> <span class="pre">-&gt;</span> <span class="pre">&amp;'static</span> <span class="pre">str</span></code>:
+               </dt>
+               <dd>
+                <p>A marker type must have a unique name, it is used to keep track of the type of markers in the profiler storage, and to identify them uniquely on profiler.firefox.com. (It does not need to be the same as the struct’s name.)</p>
+                <p>E.g.:</p>
+                <div class="highlight-rust notranslate">
+                 <div class="highlight">
+                  <pre><span></span><span class="k">fn</span><span class="w"> </span><span class="nf">marker_type_name</span><span class="p">()</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="kp">&amp;</span><span class="o">'</span><span class="nb">static</span><span class="w"> </span><span class="kt">str</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="s">"your marker type"</span>
+<span class="p">}</span>
+</pre>
+                 </div>
+                </div>
+               </dd>
+              </dl></li>
+             <li>
+              <dl>
+               <dt>
+                <code class="docutils literal notranslate"><span class="pre">stream_json_marker_data(&amp;self,</span> <span class="pre">json_writer:</span> <span class="pre">&amp;mut</span> <span class="pre">JSONWriter)</span></code>
+               </dt>
+               <dd>
+                <p>All markers of any type have some common data: A name, a category, options like timing, etc. as previously explained.</p>
+                <p>In addition, a certain marker type may carry zero of more arbitrary pieces of information, and they are always the same for all markers of that type.</p>
+                <p>These are defined in a special static member function <code class="docutils literal notranslate"><span class="pre">stream_json_marker_data</span></code>.</p>
+                <p>It’s a member method and takes a <code class="docutils literal notranslate"><span class="pre">&amp;mut</span> <span class="pre">JSONWriter</span></code> as a parameter, it will be used to stream the data as JSON, to later be read by profiler.firefox.com. See <a class="reference external" href="https://searchfox.org/mozilla-central/define?q=rust_analyzer::cargo::gecko_profiler::0_1_0::json_writer::JSONWriter">JSONWriter object and its methods</a>.</p>
+                <p>E.g.:</p>
+                <div class="highlight-rust notranslate">
+                 <div class="highlight">
+                  <pre><span></span><span class="k">fn</span><span class="w"> </span><span class="nf">stream_json_marker_data</span><span class="p">(</span><span class="o">&amp;</span><span class="bp">self</span><span class="p">,</span><span class="w"> </span><span class="n">json_writer</span><span class="p">:</span><span class="w"> </span><span class="kp">&amp;</span><span class="nc">mut</span><span class="w"> </span><span class="n">JSONWriter</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">json_writer</span><span class="p">.</span><span class="n">int_property</span><span class="p">(</span><span class="s">"number"</span><span class="p">,</span><span class="w"> </span><span class="bp">self</span><span class="p">.</span><span class="n">number</span><span class="p">.</span><span class="n">into</span><span class="p">());</span>
+<span class="w">    </span><span class="n">json_writer</span><span class="p">.</span><span class="n">string_property</span><span class="p">(</span><span class="s">"text"</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="bp">self</span><span class="p">.</span><span class="n">text</span><span class="p">);</span>
+<span class="p">}</span>
+</pre>
+                 </div>
+                </div>
+               </dd>
+              </dl></li>
+             <li>
+              <dl>
+               <dt>
+                <code class="docutils literal notranslate"><span class="pre">marker_type_display()</span> <span class="pre">-&gt;</span> <span class="pre">schema::MarkerSchema</span></code>
+               </dt>
+               <dd>
+                <p>Now that how to stream type-specific data (from Firefox to profiler.firefox.com) is defined, it needs to be described where and how this data will be displayed on profiler.firefox.com.</p>
+                <p>The static member function <code class="docutils literal notranslate"><span class="pre">marker_type_display</span></code> returns an opaque <code class="docutils literal notranslate"><span class="pre">MarkerSchema</span></code> object, which will be forwarded to profiler.firefox.com.</p>
+                <p>See the <a class="reference external" href="https://searchfox.org/mozilla-central/define?q=T_mozilla%3A%3AMarkerSchema%3A%3ALocation">MarkerSchema::Location enumeration for the full list</a>. Also see the <a class="reference external" href="https://searchfox.org/mozilla-central/define?q=rust_analyzer::cargo::gecko_profiler::0_1_0::schema::marker::MarkerSchema">MarkerSchema struct for its possible methods</a>.</p>
+                <p>E.g.:</p>
+                <div class="highlight-rust notranslate">
+                 <div class="highlight">
+                  <pre><span></span><span class="k">fn</span><span class="w"> </span><span class="nf">marker_type_display</span><span class="p">()</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="nc">schema</span><span class="p">::</span><span class="n">MarkerSchema</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Import MarkerSchema related types for easier use.</span>
+<span class="w">    </span><span class="k">use</span><span class="w"> </span><span class="k">crate</span><span class="p">::</span><span class="n">marker</span><span class="p">::</span><span class="n">schema</span><span class="p">::</span><span class="o">*</span><span class="p">;</span>
+<span class="w">    </span><span class="c1">// Create a MarkerSchema struct with a list of locations provided.</span>
+<span class="w">    </span><span class="c1">// One or more constructor arguments determine where this marker will be displayed in</span>
+<span class="w">    </span><span class="c1">// the profiler.firefox.com UI.</span>
+<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">schema</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">MarkerSchema</span><span class="p">::</span><span class="n">new</span><span class="p">(</span><span class="o">&amp;</span><span class="p">[</span><span class="n">Location</span><span class="p">::</span><span class="n">MarkerChart</span><span class="p">]);</span>
+
+<span class="w">    </span><span class="c1">// Some labels can optionally be specified, to display certain information in different</span>
+<span class="w">    </span><span class="c1">// locations: set_chart_label, set_tooltip_label, and set_table_label``; or</span>
+<span class="w">    </span><span class="c1">// set_all_labels to define all of them the same way.</span>
+<span class="w">    </span><span class="n">schema</span><span class="p">.</span><span class="n">set_all_labels</span><span class="p">(</span><span class="s">"{marker.name} - {marker.data.number});</span>
+
+<span class="s">    // Next, define the main display of marker data, which will appear in the Marker Chart</span>
+<span class="s">    // tooltips and the Marker Table sidebar.</span>
+<span class="s">    schema.add_key_label_format("</span><span class="n">number</span><span class="s">", "</span><span class="n">Number</span><span class="s">", Format::Number);</span>
+<span class="s">    schema.add_key_label_format("</span><span class="n">text</span><span class="s">", "</span><span class="n">Text</span><span class="s">", Format::String);</span>
+<span class="s">    schema.add_static_label_value("</span><span class="n">Help</span><span class="s">", "</span><span class="n">This</span><span class="w"> </span><span class="n">is</span><span class="w"> </span><span class="n">my</span><span class="w"> </span><span class="n">own</span><span class="w"> </span><span class="n">marker</span><span class="w"> </span><span class="k">type</span><span class="s">");</span>
+
+<span class="s">    // Lastly, return the created schema.</span>
+<span class="s">    schema</span>
+<span class="s">}</span>
+</pre>
+                 </div>
+                </div>
+                <p>Note that the strings in <code class="docutils literal notranslate"><span class="pre">set_all_labels</span></code> may refer to marker data within braces:</p>
+                <ul class="simple">
+                 <li>
+                  <p><code class="docutils literal notranslate"><span class="pre">{marker.name}</span></code>: Marker name.</p></li>
+                 <li>
+                  <p><code class="docutils literal notranslate"><span class="pre">{marker.data.X}</span></code>: Type-specific data, as streamed with property name “X” from <code class="docutils literal notranslate"><span class="pre">stream_json_marker_data</span></code>.</p></li>
+                </ul>
+                <p><a class="reference internal" href="markers-guide.html#marker-type-display-schema"><span class="std std-ref">See the C++ markers guide for more details about it</span></a>.</p>
+               </dd>
+              </dl></li>
+            </ol>
+           </section>
+          </section>
+         </section>
+        </section>
+       </div>
+      </div>
+      <footer>
+       <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="instrumenting-javascript.html" class="btn btn-neutral float-left" title="Instrumenting JavaScript" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a> <a href="instrumenting-android.html" class="btn btn-neutral float-right" title="Instrumenting Android" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+       </div>
+       <hr>
+       <div role="contentinfo">
+        <p></p>
+       </div> Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+      </footer>
+     </div>
+    </div>
+   </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ </body>
+</html>

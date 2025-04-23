@@ -1,0 +1,339 @@
+<!doctype html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Refcount Tracing and Balancing — Firefox Source Docs  documentation</title>
+  <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50">
+  <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094">
+  <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=fd3f3429">
+  <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b">
+  <link rel="stylesheet" type="text/css" href="../../_static/custom_theme.css?v=dc5ed815">
+  <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7">
+  <link rel="shortcut icon" href="../../_static/firefox.ico"><!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script src="../../_static/jquery.js?v=5d32c60e"></script>
+  <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+  <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+  <script src="../../_static/doctools.js?v=9a2dae69"></script>
+  <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+  <script src="../../_static/copybutton.js?v=30646c52"></script>
+  <script src="../../_static/design-tabs.js?v=36754332"></script>
+  <script src="../../_static/js/theme.js"></script>
+  <link rel="index" title="Index" href="../../genindex.html">
+  <link rel="search" title="Search" href="../../search.html">
+ </head>
+ <body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+   <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <div class="wy-side-scroll">
+     <div class="wy-side-nav-search">
+      <a href="../../index.html" class="icon icon-home"> Firefox Source Docs <img src="../../_static/firefox-wordmark.svg" class="logo" alt="Logo"> </a><!-- -- This code is governed by the BSD license ---->
+      <div>
+       <h3>Quick search</h3>
+       <script>
+    (function () {
+      var cx = "dd12886298f75dbef";
+      var gcse = document.createElement("script");
+      gcse.async = true;
+      gcse.src = "https://cse.google.com/cse.js?cx=" + cx;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(gcse, s);
+    })();
+  </script><gcse:search></gcse:search>
+      </div>
+     </div>
+     <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+      <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../glossary/index.html">A Glossary of Common Terms</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../overview/index.html">A Quick Guide to Mozilla Applications</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../setup/index.html">Getting Set Up To Work On The Firefox Codebase</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Working On Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Working on Firefox</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../bug-mgmt/index.html">Bug Handling</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox User Guide</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../devtools-user/index.html">Firefox DevTools User Docs</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Source Code Documentation</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mots/index.html">Governance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../browser/index.html">Firefox Front-end</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../dom/index.html">DOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../editor/index.html">Editor</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../layout/index.html">Style system (CSS) &amp; Layout</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../gfx/index.html">Graphics</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../ipc/index.html">Processes, Threads and IPC</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../devtools/index.html">Firefox DevTools Contributor Docs</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../toolkit/index.html">Toolkit</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../js/index.html">SpiderMonkey</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../jsloader/index.html">JS Loader</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/geckoview/index.html">GeckoView</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/fenix/index.html">Fenix</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/focus-android/index.html">Focus for Android</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../dom/bindings/webidl/index.html">WebIDL</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../modules/libpref/index.html">libpref</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../networking/index.html">Networking</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../remote/index.html">Remote Protocols</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../services/index.html">Services</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../permissions/index.html">Permissions</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../uriloader/index.html">File Handling</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../widget/cocoa/index.html">Firefox on macOS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../widget/windows/index.html">Firefox on Windows</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../toolkit/components/ml/index.html">Firefox AI Runtime</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../accessible/index.html">Accessibility</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../media/index.html">Media Playback</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../code-quality/index.html">Code quality</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../writing-rust-code/index.html">Writing Rust Code</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../rust-components/index.html">Rust Components</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/profiler/index.html">Gecko Profiler</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../index.html">Performance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../storage/index.html">Database bindings (SQLite, KV, …)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../xpcom/index.html">XPCOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../nspr/index.html">NSPR</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../security/nss/index.html">Network Security Services (NSS)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../content-security/index.html">Web Security Checks in Gecko</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">The Firefox Build System</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mach/index.html">Mach</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/try/index.html">Pushing to Try</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../build/buildsystem/index.html">Build System</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../taskcluster/index.html">Firefox CI and Taskgraph</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/moztreedocs/index.html">Managing Documentation</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mozbuild/vendor/index.html">Vendoring Third Party Components</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Testing &amp; Test Infrastructure</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/automated-testing/index.html">Automated Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/treeherder-try/index.html">Understanding Treeherder Results</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/sheriffed-intermittents/index.html">Sheriffed intermittent failures</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/tests-for-new-config/index.html">Turning on Firefox tests for a new configuration</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/intermittent/index.html">Avoiding intermittent tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/testing-policy/index.html">Testing Policy</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/ci-configs/index.html">Configuration Changes</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/browser-chrome/index.html">Browser chrome mochitests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/chrome-tests/index.html">Chrome Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/marionette/index.html">Marionette</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/geckodriver/index.html">geckodriver</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/test-verification/index.html">Test Verification</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/webrender/index.html">WebRender Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/mochitest-plain/index.html">Mochitest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/xpcshell/index.html">XPCShell tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/tps/index.html">TPS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../web-platform/index.html">web-platform-tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../gtest/index.html">GTest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/fuzzing/index.html">Fuzzing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/sanitizer/index.html">Sanitizer</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/perfdocs/index.html">Performance Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/code-coverage/index.html">Code coverage</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing-rust-code/index.html">Testing &amp; Debugging Rust Code</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Releases &amp; Updates</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html">Mozilla Update Infrastructure</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html#watershed-updates">Watershed Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html#desupport-updates">Desupport Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/update-verify/index.html">Update Verify</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Localization &amp; Internationalization</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../intl/index.html">Internationalization</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../l10n/index.html">Localization</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox and Python</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mozbase/index.html">mozbase</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../python/index.html">Using third-party Python packages</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Metrics Collected in Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../metrics/index.html">Metrics</a></li>
+      </ul>
+     </div>
+    </div>
+   </nav>
+   <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+    <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+     <i data-toggle="wy-nav-top" class="fa fa-bars"></i> <a href="../../index.html">Firefox Source Docs</a>
+    </nav>
+    <div class="wy-nav-content">
+     <div class="rst-content">
+      <!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+      <div role="navigation" aria-label="Page navigation">
+       <ul class="wy-breadcrumbs">
+        <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+        <li class="breadcrumb-item active">Refcount Tracing and Balancing</li>
+        <li class="wy-breadcrumbs-aside"><a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Developer+Infrastructure&amp;component=Firefox+Source+Docs%3A+Content&amp;short_desc=Documentation+issue+on+performance/memory/refcount_tracing_and_balancing&amp;comment=URL+=+https://firefox-source-docs.mozilla.org/performance/memory/refcount_tracing_and_balancing.html&amp;bug_file_loc=https://firefox-source-docs.mozilla.org/performance/memory/refcount_tracing_and_balancing.html" rel="nofollow">Report an issue</a> / <a href="../../_sources/performance/memory/refcount_tracing_and_balancing.md.txt" rel="nofollow"> View page source</a></li>
+       </ul>
+       <hr>
+      </div>
+      <div role="main" class="document" itemscope itemtype="http://schema.org/Article">
+       <div itemprop="articleBody">
+        <section id="refcount-tracing-and-balancing">
+         <h1>Refcount Tracing and Balancing<a class="headerlink" href="#refcount-tracing-and-balancing" title="Link to this heading">?</a></h1>
+         <p>Refcount tracing and balancing are advanced techniques for tracking down leak of refcounted objects found with <a class="reference internal" href="bloatview.html"><span class="std std-doc">BloatView</span></a>. The first step is to run Firefox with refcount tracing enabled, which produces one or more log files. Refcount tracing logs calls to <code class="docutils literal notranslate"><span class="pre">Addref</span></code> and <code class="docutils literal notranslate"><span class="pre">Release</span></code>, preferably for a particular set of classes, including call-stacks in symbolic form (on platforms that support this). Refcount balancing is a follow-up step that analyzes the resulting log to help a developer figure out where refcounting went wrong.</p>
+         <section id="how-to-build-for-refcount-tracing">
+          <h2>How to build for refcount tracing<a class="headerlink" href="#how-to-build-for-refcount-tracing" title="Link to this heading">?</a></h2>
+          <p>Build with <code class="docutils literal notranslate"><span class="pre">--enable-debug</span></code> or <code class="docutils literal notranslate"><span class="pre">--enable-logrefcnt</span></code>.</p>
+         </section>
+         <section id="how-to-run-with-refcount-tracing-on">
+          <h2>How to run with refcount tracing on<a class="headerlink" href="#how-to-run-with-refcount-tracing-on" title="Link to this heading">?</a></h2>
+          <p>There are several environment variables that can be used.</p>
+          <p>First, you select one of three environment variables to choose what kind of logging you want. You almost certainly want <code class="docutils literal notranslate"><span class="pre">XPCOM_MEM_REFCNT_LOG</span></code>.</p>
+          <p>NOTE: Due to an issue with the sandbox on Windows (bug <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1345568">1345568</a> refcount logging currently requires the MOZ_DISABLE_CONTENT_SANDBOX environment variable to be set.</p>
+          <p><code class="docutils literal notranslate"><span class="pre">XPCOM_MEM_REFCNT_LOG</span></code></p>
+          <p>Setting this environment variable enables refcount tracing. If you set this environment variable to the name of a file, the log will be output to that file. You can also set it to 1 to log to stdout or 2 to log to stderr, but these logs are large and expensive to capture, so you probably don’t want to do that. <strong>WARNING</strong>: you should never use this without <code class="docutils literal notranslate"><span class="pre">XPCOM_MEM_LOG_CLASSES</span></code> and/or <code class="docutils literal notranslate"><span class="pre">XPCOM_MEM_LOG_OBJECTS</span></code>, because without some filtering the logging will be completely useless due to how slow the browser will run and how large the logs it produces will be.</p>
+          <p><code class="docutils literal notranslate"><span class="pre">XPCOM_MEM_COMPTR_LOG</span></code></p>
+          <p>This environment variable enables logging of additions and releases of objects into <code class="docutils literal notranslate"><span class="pre">nsCOMPtr</span></code>s. This requires C++ dynamic casts, so it is not supported on all platforms. However, having an nsCOMPtr log and using it in the creation of the balance tree allows AddRef and Release calls that we know are matched to be eliminated from the tree, so it makes it much easier to debug reference count leaks of objects that have a large amount of reference counting traffic.</p>
+          <p><code class="docutils literal notranslate"><span class="pre">XPCOM_MEM_ALLOC_LOG</span></code></p>
+          <p>For platforms that don’t have stack-crawl support, XPCOM supports logging at the call site to <code class="docutils literal notranslate"><span class="pre">AddRef</span></code>/<code class="docutils literal notranslate"><span class="pre">Release</span></code> using the usual cpp <code class="docutils literal notranslate"><span class="pre">__FILE__</span></code> and <strong>LINE</strong> number macro expansion hackery. This results in slower code, but at least you get some data about where the leaks might be occurring from.</p>
+          <p>You must also set one or two additional environment variables, <code class="docutils literal notranslate"><span class="pre">XPCOM_MEM_LOG_CLASSES</span></code> and <code class="docutils literal notranslate"><span class="pre">XPCOM_MEM_LOG_OBJECTS,</span></code> to reduce the set of objects being logged, in order to improve performance to something vaguely tolerable.</p>
+          <p><code class="docutils literal notranslate"><span class="pre">XPCOM_MEM_LOG_CLASSES</span></code></p>
+          <p>This variable should contain a comma-separated list of names which will be used to compare against the types of the objects being logged. For example:</p>
+          <div class="highlight-none notranslate">
+           <div class="highlight">
+            <pre><span></span>env XPCOM_MEM_LOG_CLASSES=nsDocShell XPCOM_MEM_REFCNT_LOG=./refcounts.log ./mach run
+</pre>
+           </div>
+          </div>
+          <p>This will log the <code class="docutils literal notranslate"><span class="pre">AddRef</span></code> and <code class="docutils literal notranslate"><span class="pre">Release</span></code> calls only for instances of <code class="docutils literal notranslate"><span class="pre">nsDocShell</span></code> while running the browser using <code class="docutils literal notranslate"><span class="pre">mach</span></code>, to a file <code class="docutils literal notranslate"><span class="pre">refcounts.log</span></code>. Note that setting <code class="docutils literal notranslate"><span class="pre">XPCOM_MEM_LOG_CLASSES</span></code> will also list the <em>serial number</em> of each object that leaked in the “bloat log” (that is, the file specified by the <code class="docutils literal notranslate"><span class="pre">XPCOM_MEM_BLOAT_LOG</span></code> variable; see <a class="reference internal" href="bloatview.html"><span class="std std-doc">the BloatView documentation</span></a> for more details). An object’s serial number is simply a unique number, starting at one, that is assigned to the object when it is allocated.</p>
+          <p>You may use an object’s serial number with the following variable to further restrict the reference count tracing:</p>
+          <div class="highlight-none notranslate">
+           <div class="highlight">
+            <pre><span></span>XPCOM_MEM_LOG_OBJECTS
+</pre>
+           </div>
+          </div>
+          <p>Set this variable to a comma-separated list of object <em>serial number</em> or ranges of <em>serial number</em>, e.g., <code class="docutils literal notranslate"><span class="pre">1,37-42,73,165</span></code> (serial numbers start from 1, not 0). When this is set, along with <code class="docutils literal notranslate"><span class="pre">XPCOM_MEM_LOG_CLASSES</span></code> and <code class="docutils literal notranslate"><span class="pre">XPCOM_MEM_REFCNT_LOG</span></code>, a stack track will be generated for <em>only</em> the specific objects that you list. For example,</p>
+          <div class="highlight-none notranslate">
+           <div class="highlight">
+            <pre><span></span>env XPCOM_MEM_LOG_CLASSES=nsDocShell XPCOM_MEM_LOG_OBJECTS=2 XPCOM_MEM_REFCNT_LOG=./refcounts.log ./mach run
+</pre>
+           </div>
+          </div>
+          <p>will log stack traces to <code class="docutils literal notranslate"><span class="pre">refcounts.log</span></code> for the 2nd <code class="docutils literal notranslate"><span class="pre">nsDocShell</span></code> object that gets allocated, and nothing else.</p>
+         </section>
+         <section id="post-processing-step-1-finding-the-leakers">
+          <h2><strong>Post-processing step 1: finding the leakers</strong><a class="headerlink" href="#post-processing-step-1-finding-the-leakers" title="Link to this heading">?</a></h2>
+          <p>First you have to figure out which objects leaked. The script <code class="docutils literal notranslate"><span class="pre">tools/rb/find_leakers.py</span></code> does this. It grovels through the log file, and figures out which objects got allocated (it knows because they were just allocated because they got <code class="docutils literal notranslate"><span class="pre">AddRef()</span></code>-ed and their refcount became 1). It adds them to a list. When it finds an object that got freed (it knows because its refcount goes to 0), it removes it from the list. Anything left over is leaked.</p>
+          <p>The scripts output looks like the following.</p>
+          <div class="highlight-none notranslate">
+           <div class="highlight">
+            <pre><span></span>0x00253ab0 (1)
+0x00253ae0 (2)
+0x00253bd0 (4)
+</pre>
+           </div>
+          </div>
+          <p>The number in parentheses indicates the order in which it was allocated, if you care. Pick one of these pointers for use with Step 2.</p>
+         </section>
+         <section id="post-processing-step-2-filtering-the-log">
+          <h2>Post-processing step 2: filtering the log<a class="headerlink" href="#post-processing-step-2-filtering-the-log" title="Link to this heading">?</a></h2>
+          <p>Once you’ve picked an object that leaked, you can use <code class="docutils literal notranslate"><span class="pre">tools/rb/filter-log.pl</span></code> to filter the log file to drop the call stack for other objects; This process reduces the size of the log file and also improves the performance.</p>
+          <div class="highlight-none notranslate">
+           <div class="highlight">
+            <pre><span></span>perl -w tools/rb/filter-log.pl --object 0x00253ab0 &lt; ./refcounts.log &gt; my-leak.log
+</pre>
+           </div>
+          </div>
+          <section id="symbolicating-stacks">
+           <h3>Symbolicating stacks<a class="headerlink" href="#symbolicating-stacks" title="Link to this heading">?</a></h3>
+           <p>The log files often lack function names, file names and line numbers. You’ll need to run a script to fix the call stack.</p>
+           <div class="highlight-none notranslate">
+            <div class="highlight">
+             <pre><span></span>python3 tools/rb/fix_stacks.py &lt; ./refcounts.log &gt; fixed_stack.log
+</pre>
+            </div>
+           </div>
+           <p>Also, it is possible to <a class="reference internal" href="../../contributing/debugging/local_symbols.html"><span class="std std-doc">locally symbolicate</span></a> logs generated on TreeHerder.</p>
+          </section>
+         </section>
+         <section id="post-processing-step-3-building-the-balance-tree">
+          <h2><strong>Post-processing step 3: building the balance tree</strong><a class="headerlink" href="#post-processing-step-3-building-the-balance-tree" title="Link to this heading">?</a></h2>
+          <p>Now that you’ve the log file fully prepared, you can build a <em>balance tree</em>. This process takes all the stack <code class="docutils literal notranslate"><span class="pre">AddRef()</span></code> and <code class="docutils literal notranslate"><span class="pre">Release()</span></code> stack traces and munges them into a call graph. Each node in the graph represents a call site. Each call site has a <em>balance factor</em>, which is positive if more <code class="docutils literal notranslate"><span class="pre">AddRef()</span></code>s than <code class="docutils literal notranslate"><span class="pre">Release()</span></code>es have happened at the site, zero if the number of <code class="docutils literal notranslate"><span class="pre">AddRef()</span></code>s and <code class="docutils literal notranslate"><span class="pre">Release()</span></code>es are equal, and negative if more <code class="docutils literal notranslate"><span class="pre">Release()</span></code>es than <code class="docutils literal notranslate"><span class="pre">AddRef()</span></code>s have happened at the site.</p>
+          <p>To build the balance tree, run <code class="docutils literal notranslate"><span class="pre">tools/rb/make-tree.pl</span></code>, specifying the object of interest. For example:</p>
+          <div class="highlight-none notranslate">
+           <div class="highlight">
+            <pre><span></span>perl -w tools/rb/make-tree.pl --object 0x00253ab0 &lt; my-leak.log
+</pre>
+           </div>
+          </div>
+          <p>This will build an indented tree that looks something like this (except probably a lot larger and leafier):</p>
+          <div class="highlight-none notranslate">
+           <div class="highlight">
+            <pre><span></span>.root: bal=1
+  main: bal=1
+    DoSomethingWithFooAndReturnItToo: bal=2
+      NS_NewFoo: bal=1
+</pre>
+           </div>
+          </div>
+          <p>Let’s pretend in our toy example that <code class="docutils literal notranslate"><span class="pre">NS_NewFoo()</span></code> is a factory method that makes a new foo and returns it. <code class="docutils literal notranslate"><span class="pre">DoSomethingWithFooAndReturnItToo()</span></code> is a method that munges the foo before returning it to <code class="docutils literal notranslate"><span class="pre">main()</span></code>, the main program.</p>
+          <p>What this little tree is telling you is that you leak <em>one refcount</em> overall on object <code class="docutils literal notranslate"><span class="pre">0x00253ab0</span></code>. But, more specifically, it shows you that:</p>
+          <ul class="simple">
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">NS_NewFoo()</span></code> “leaks” a refcount. This is probably “okay” because it’s a factory method that creates an <code class="docutils literal notranslate"><span class="pre">AddRef()</span></code>-ed object.</p></li>
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">DoSomethingWithFooAndReturnItToo()</span></code> leaks <em>two</em> refcounts. Hmm…this probably isn’t okay, especially because…</p></li>
+           <li>
+            <p><code class="docutils literal notranslate"><span class="pre">main()</span></code> is back down to leaking <em>one</em> refcount.</p></li>
+          </ul>
+          <p>So from this, we can deduce that <code class="docutils literal notranslate"><span class="pre">main()</span></code> is correctly releasing the refcount that it got on the object returned from <code class="docutils literal notranslate"><span class="pre">DoSomethingWithFooAndReturnItToo()</span></code>, so the leak <em>must</em> be somewhere in that function.</p>
+          <p>So now say we go fix the leak in <code class="docutils literal notranslate"><span class="pre">DoSomethingWithFooAndReturnItToo()</span></code>, re-run our trace, grovel through the log by hand to find the object that corresponds to <code class="docutils literal notranslate"><span class="pre">0x00253ab0</span></code> in the new run, and run <code class="docutils literal notranslate"><span class="pre">make-tree.pl</span></code>. What we’d hope to see is a tree that looks like:</p>
+          <div class="highlight-none notranslate">
+           <div class="highlight">
+            <pre><span></span>.root: bal=0
+  main: bal=0
+    DoSomethingWithFooAndReturnItToo: bal=1
+      NS_NewFoo: bal=1
+</pre>
+           </div>
+          </div>
+          <p>That is, <code class="docutils literal notranslate"><span class="pre">NS_NewFoo()</span></code> “leaks” a single reference count; this leak is “inherited” by <code class="docutils literal notranslate"><span class="pre">DoSomethingWithFooAndReturnItToo()</span></code>; but is finally balanced by a <code class="docutils literal notranslate"><span class="pre">Release()</span></code> in <code class="docutils literal notranslate"><span class="pre">main()</span></code>.</p>
+         </section>
+         <section id="hints">
+          <h2>Hints<a class="headerlink" href="#hints" title="Link to this heading">?</a></h2>
+          <p>Clearly, this is an iterative and analytical process. Here are some tricks that make it easier.</p>
+          <p><strong>Check for leaks from smart pointers.</strong> If the leak comes from a smart pointer that is logged in the XPCOM_MEM_COMPTR_LOG, then find-comptr-leakers.pl will find the exact stack for you, and you don’t have to look at trees.</p>
+          <p><strong>Ignore balanced trees</strong>. The <code class="docutils literal notranslate"><span class="pre">make-tree.pl</span></code> script accepts an option <code class="docutils literal notranslate"><span class="pre">--ignore-balanced</span></code>, which tells it <em>not</em> to bother printing out the children of a node whose balance factor is zero. This can help remove some of the clutter from an otherwise noisy tree.</p>
+          <p><strong>Ignore matched releases from smart pointers.</strong> If you’ve checked (see above) that the leak wasn’t from a smart pointer, you can ignore the references that came from smart pointers (where we can use the pointer identity of the smart pointer to match the AddRef and the Release). This requires using an XPCOM_MEM_REFCNT_LOG and an XPCOM_MEM_COMPTR_LOG that were collected at the same time. For more details, see the <a class="reference external" href="http://www-archive.mozilla.org/performance/leak-tutorial.html">old documentation</a> (which should probably be incorporated here). This is best used with <code class="docutils literal notranslate"><span class="pre">--ignore-balanced</span></code></p>
+          <p><strong>Play Mah Jongg</strong>. An unbalanced tree is not necessarily an evil thing. More likely, it indicates that one <code class="docutils literal notranslate"><span class="pre">AddRef()</span></code> is cancelled by another <code class="docutils literal notranslate"><span class="pre">Release()</span></code> somewhere else in the code. So the game is to try to match them with one another.</p>
+          <p><strong>Exclude Functions.</strong> To aid in this process, you can create an “excludes file”, that lists the name of functions that you want to exclude from the tree building process (presumably because you’ve matched them). <code class="docutils literal notranslate"><span class="pre">make-tree.pl</span></code> has an option <code class="docutils literal notranslate"><span class="pre">--exclude</span> <span class="pre">[file]</span></code>, where <code class="docutils literal notranslate"><span class="pre">[file]</span></code> is a newline-separated list of function names that will be <em>excluded</em> from consideration while building the tree. Specifically, any call stack that contains that call site will not contribute to the computation of balance factors in the tree.</p>
+         </section>
+         <section id="how-to-instrument-your-objects-for-refcount-tracing-and-balancing">
+          <h2>How to instrument your objects for refcount tracing and balancing<a class="headerlink" href="#how-to-instrument-your-objects-for-refcount-tracing-and-balancing" title="Link to this heading">?</a></h2>
+          <p>The process is the same as instrumenting them for BloatView because BloatView and refcount tracing share underlying infrastructure.</p>
+         </section>
+        </section>
+       </div>
+      </div>
+      <footer>
+       <hr>
+       <div role="contentinfo">
+        <p></p>
+       </div> Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+      </footer>
+     </div>
+    </div>
+   </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ </body>
+</html>

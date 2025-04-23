@@ -1,0 +1,393 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+ <head>
+  <title>POLYVIEW - 3D (Submission Form)</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="author" content="A. Porollo, J. Meller">
+  <meta name="keywords" content="protein visualization,
+                 protein structure visualization,
+                 protein structure modeling,
+                 protein structure analysis,
+                 protein structure image,
+                 protein animated image,
+                 molecular visualization">
+  <meta name="description" content="
+    POLYVIEW-3D generates images of protein structure models
+    both animated (for presentations and web-sites) and
+    high quality static slides (for publications).">
+  <link rel="icon" type="image/gif" href="//polyview.cchmc.org/design/logo3d.gif">
+  <link rel="stylesheet" type="text/css" href="design.css" media="screen,print">
+ </head>
+ <body onload="DocInit()">
+  <div class="noprint">
+   <div id="logo">
+    <h1><a href="https://www.biomedcentral.com/1471-2105/8/316" target="_blank" title="Original publication">POLYVIEW-3D</a></h1>
+    <h2>Versatile annotation and high quality visualization<br>
+      of macromolecular structures</h2>
+   </div><!-- CCHMC and UC logo at the top right corner -->
+   <script type="text/javascript" src="//sable.cchmc.org/logo.js"></script><!-- posted news and updates regarding the server -->
+   <script type="text/javascript" src="//sable.cchmc.org/news.js"></script><!-- Submission form processing functions -->
+   <script type="text/javascript" src="colors.js"></script>
+   <script type="text/javascript" src="form.js"></script>
+   <div id="menu">
+    <ul>
+     <li class="first"><a href="//polyview.cchmc.org/tutor/tutor_intro.html" title="Documentation and examples" target="doc">Tutorial</a></li>
+     <li><a href="//polyview.cchmc.org/polyview_faq.html" title="Frequently asked questions" target="_blank">FAQ</a></li>
+     <li><a href="//sable.cchmc.org/cgi-bin/stat.cgi?SRC=POLYVIEW" title="Usage: numbers and types of requests, geography of users" target="_blank">Statistics</a></li>
+     <li><a href="//polyview.cchmc.org/gallery.html" title="User defined image gallery" target="_blank">Gallery</a></li>
+     <li><a href="//sable.cchmc.org/acknowledge.html" title="Acknowledgements to funding, hosting and other support" target="_blank">Credits</a></li>
+     <li><a href="javascript:ShowNews('POLYVIEW-3D')" title="Announcements, updates, news">News</a></li>
+     <li><a href="//sable.cchmc.org/cgi-bin/contact_page.cgi?Server=POLYVIEW" title="Gateway to feedback" target="_blank">Contacts</a></li>
+     <li><a href="//polyview.cchmc.org/cgi-bin/feedback_stat.cgi" title="Summary of users feedback" target="_blank">Feedback</a></li>
+    </ul>
+   </div>
+   <hr>
+   <div id="banner" style="background: url(design/system/img05.jpg) no-repeat; height: 235px; margin-top: 8px">
+    <h2 class="title" style="margin: 180px 10px 0 30px;"><a href="javascript:QuickStart()">Quick Start</a></h2>
+   </div><!-- start page -->
+   <form name="ImageForm" method="post" enctype="multipart/form-data" action="//polyview.cchmc.org/cgi-bin/get_image_3d.cgi" target="_blank" onsubmit="return CheckForm()">
+    <input type="hidden" name="PDB_FTmp" value=""> <input type="hidden" name="AddInfo" value=""> <input type="hidden" name="FName" value=""> <input type="hidden" name="OrgSrc" value=""> <input type="hidden" name="ExtSource" value=""> <input type="hidden" name="Info" value="0"> <input type="hidden" name="Preview" value="0">
+    <div id="page_main">
+     <!-- start content -->
+     <div id="content">
+      <div class="post">
+       <div class="meta" title="Source of structural data: PDB deposited or custom coordinate file">
+        <div class="hide">
+         <a href="javascript:Preview()" title="Get an image preview">Preview</a>&nbsp;|&nbsp;<a href="javascript:{if (CheckForm()) document.ImageForm.submit()}" title="Submit a request">Submit</a>
+        </div>
+        <div>
+         <a href="javascript:ShowSettings('StructureSource')" title="Toggle view of the settings below"><img id="imgStructureSource" src="/design/form_open.png"></a>&nbsp;Source of Structural Data (&nbsp;<a class="help" href="//polyview.cchmc.org/tutor/tutor_part1.html" target="doc">Help</a>&nbsp;|&nbsp;<a href="//polyview.cchmc.org/cgi-bin/tutor.cgi?Exp=10" target="sample">Samples</a>&nbsp;)
+        </div>
+       </div>
+       <div id="divStructureSource" style="display: block">
+        <table>
+         <tbody>
+          <tr>
+           <td>
+            <fieldset>
+             <legend>Specify <a href="https://www.rcsb.org/" title="Protein Data Bank - repository of 3D structures" target="_blank">PDB</a> deposited macromolecular structure</legend>
+             <p><label title="4 letters ID, e.g. 1a4y">PDB ID <input type="text" name="PDBName" value="" size="5" maxlength="4" onchange="PDBcodeOnChange()" onkeyup="PDBcodeOnChange()"> </label> <label title="Available with PDB codes only" style="margin-right: 15px">considered as <select name="BioUnit"> <option value="0">Asymmetric unit </option><option value="1">Biological unit (PISA) </option></select> </label> <i>Examples: 3ert, 1ttu, 1naq</i></p>
+             <p>Get ID by keyword <input type="text" name="PDBkeywords" value="" size="30" title="Enter keyword(s) to retrieve a list of PDB IDs"> <input type="button" name="btnPDBIDLookup" value="Find" title="Find protein structures available in PDB" onclick="DataLookupOnClick('search')"></p>
+            </fieldset></td>
+          </tr>
+          <tr>
+           <td>
+            <fieldset>
+             <legend>Upload custom structure in the <a href="https://www.wwpdb.org/docs.html" target="_blank">PDB format</a></legend>
+             <p><label title="Specify coordinate file">File <input type="file" name="PDBFileName" size="40" onchange="UpdateJmolButton()" onkeyup="UpdateJmolButton()"> </label></p><i>For files containing additional annotations, such as those generated using, e.g., SPPIDER, ConSurf, or MolMovDB, specify the file/annotation type in the <b>Structure annotation</b> options</i>
+            </fieldset></td>
+          </tr>
+          <tr>
+           <td>
+            <fieldset>
+             <legend>Current data source</legend>
+             <p id="pdbfilesrc"></p>
+            </fieldset></td>
+          </tr>
+         </tbody>
+        </table>
+       </div>
+      </div>
+      <div class="post">
+       <div class="meta" title="Additional structural data: Model, Ligands, Center of view, etc.">
+        <div class="hide">
+         <a href="javascript:Preview()" title="Get an image preview">Preview</a>&nbsp;|&nbsp;<a href="javascript:{if (CheckForm()) document.ImageForm.submit()}" title="Submit a request">Submit</a>
+        </div>
+        <div>
+         <a href="javascript:ShowSettings('StructureData')" title="Toggle view of the settings below"><img id="imgStructureData" src="/design/form_close.png"></a>&nbsp;Overall Structure View (&nbsp;<a class="help" href="//polyview.cchmc.org/tutor/tutor_part2.html" target="doc">Help</a>&nbsp;|&nbsp;<a href="//polyview.cchmc.org/cgi-bin/tutor.cgi?Exp=11" target="sample">Samples</a>&nbsp;)
+        </div>
+       </div>
+       <div id="divStructureData" style="display: none">
+        <fieldset>
+         <legend>Additional information</legend>
+         <p><label style="padding-left: 5px" title="Enter the model number to render in case of multi-model PDB file"> Model number <input type="text" name="PDBModel" size="3" onchange="ModelNumOnChange()" onkeyup="ModelNumOnChange()"> </label> <input type="button" name="btnModelLookup" value="Models Lookup" title="Click to retrieve a list of models" onclick="DataLookupOnClick('models')"> <label>or superimpose all models <input type="checkbox" name="AllModels" value="1" onclick="AllModelsOnChange()"> </label></p>
+         <p><input type="button" name="btnLigandLookup" value="Ligands Lookup" title="Click to retrieve a list of ligands" onclick="DataLookupOnClick('chains')"> <label style="margin-left: 10px"> <input type="checkbox" id="piLigands" name="Ligands" value="1" checked onclick="LigandsOnChange()"> Show ligands </label> as <select id="piLigandView" name="LigandView"> <option value="sphere" selected>Spheres </option><option value="stick">Sticks </option><option value="bns">Balls and Sticks </option></select> <label style="margin-left: 10px"><input type="checkbox" name="Solvent" value="1"> Show solvent </label></p>
+        </fieldset>
+        <fieldset>
+         <legend>Initial orientation</legend>
+         <p><input type="button" name="btnJmol" id="btnJmol" value="Set orientation by Jmol" title="Set initial orientation using Jmol java applet" onclick="GetInitOrientation()"> or specify it manually: <label style="padding-left: 5px">dX&nbsp;<input type="text" name="imgInitX" style="width: 50px" value="0" maxlength="6"></label> <label style="padding-left: 5px">dY&nbsp;<input type="text" name="imgInitY" style="width: 50px" value="0" maxlength="6"></label> <label style="padding: 0 5px 0 5px">dZ&nbsp;<input type="text" name="imgInitZ" style="width: 50px" value="0" maxlength="6"></label></p>
+         <p><label> Center of view <input type="text" name="Center" size="10" title="Chain label:Residue number"> </label> <i>(e.g. A:150 or B: or :30)</i></p>
+        </fieldset>
+       </div>
+      </div>
+      <div class="post">
+       <div class="meta" title="Per chain settings: Color schemes, Backbone rendering, etc.">
+        <div class="hide">
+         <a href="javascript:Preview()" title="Get an image preview">Preview</a>&nbsp;|&nbsp;<a href="javascript:{if (CheckForm()) document.ImageForm.submit()}" title="Submit a request">Submit</a>
+        </div>
+        <div>
+         <a href="javascript:ShowSettings('ColorSettings')" title="Toggle view of the settings below"><img id="imgColorSettings" src="/design/form_close.png"></a>&nbsp;Chain Color and Rendering (&nbsp;<a class="help" href="//polyview.cchmc.org/tutor/tutor_part3.html" target="doc">Help</a>&nbsp;|&nbsp;<a href="//polyview.cchmc.org/cgi-bin/tutor.cgi?Exp=60" target="sample">Samples</a>&nbsp;)
+        </div>
+       </div>
+       <div id="divColorSettings" style="display: none">
+        <table style="width: 100%">
+         <tbody>
+          <tr>
+           <td><input type="button" name="btnChainLookup" value="Chains Lookup" title="Click to retrieve a list of chain labels" onclick="DataLookupOnClick('chains')"></td>
+           <td style="text-align: right"><i>Press the + button to customize another chain</i></td>
+          </tr>
+         </tbody>
+        </table>
+        <table id="csChains" style="margin-top: 5px; width: auto">
+        </table>
+        <table style="width: auto">
+         <tbody>
+          <tr>
+           <td>Render<br><b>remaining</b> chains</td>
+           <td><input type="hidden" name="PDBChainRest" value="1"> <label>as<br><select id="rendChainRest" name="RenderChainRest" onchange="ChainRenderOnChange(name)"> <option value="cartoon" selected>Cartoons </option><option value="wire">Wire frame </option><option value="cpk">CPK spacefill </option><option value="bns">Balls and sticks </option><option value="surface">Surface (PyMol) </option><option value="tpsurf">Transparent (PyMol) </option><option value="hide">Hidden </option></select> </label></td>
+           <td><label>colored by<br><select id="csChainRest" name="ColorSchemeChainRest" onchange="ColorSchemeOnChange('Rest')"> <option value="chain" selected>Chain </option><option value="atom">Element (CPK) </option><option value="bf">B-factor </option><option value="conservation">Conservation </option><option value="interaction">Interaction </option><option value="hydroph">Hydrophilicity </option><option value="acid">Acidity </option><option value="rainbow">Spectrum </option><option value="secstr">Secondary structure </option><option value="custom">All in same color </option></select> </label></td>
+           <td>
+            <div id="csColorChainRest" style="display: none">
+             <a href="javascript:ShowColorPicker('Rest')" name="colorpickRest" id="colorpickRest" style="text-decoration: none" title="Click the link to change color">Change</a>
+             <br><a href="javascript:ShowColorPicker('Rest')" id="csTDRest" style="padding-left: 5px; padding-right: 5px;
+                        color: #C0C0C0; font-style: italic;
+                        text-decoration: none;
+                        border: 1px solid #C0C0C0"> Sample </a>
+            </div><input type="hidden" id="csRRest" name="ColorRRest" value="0"> <input type="hidden" id="csGRest" name="ColorGRest" value="0"> <input type="hidden" id="csBRest" name="ColorBRest" value="192"></td>
+          </tr>
+         </tbody>
+        </table>
+       </div>
+      </div>
+      <div class="post">
+       <div class="meta" title="Per residue settings: Coloring, Side chain rendering, etc.">
+        <div class="hide">
+         <a href="javascript:Preview()" title="Get an image preview">Preview</a>&nbsp;|&nbsp;<a href="javascript:{if (CheckForm()) document.ImageForm.submit()}" title="Submit a request">Submit</a>
+        </div>
+        <div>
+         <a href="javascript:ShowSettings('HighlightSettings')" title="Toggle view of the settings below"><img id="imgHighlightSettings" src="/design/form_close.png"></a>&nbsp;Residue Highlighting (&nbsp;<a class="help" href="//polyview.cchmc.org/tutor/tutor_part4.html" target="doc">Help</a>&nbsp;|&nbsp;<a href="//polyview.cchmc.org/cgi-bin/tutor.cgi?Exp=50" target="sample">Samples</a>&nbsp;)
+        </div>
+       </div>
+       <div id="divHighlightSettings" style="display: none">
+        <table style="width: auto">
+         <tbody>
+          <tr>
+           <td><input type="button" name="btnResidueLookup" value="Residues Lookup" title="Click to view the numbering of residues" onclick="javascript:{var form=document.ImageForm;var act_tmp=form.action;form.action='//polyview.cchmc.org/cgi-bin/pr_picture.cgi';if(CheckForm())document.ImageForm.submit();form.action=act_tmp}"></td>
+          </tr>
+          <tr>
+           <td><label>Individual residues (<i>Example: 1:R,3,A:5-8:g,B:10-13,20:bs,23:f</i> or use the list <a href="javascript:ConvertTool();">Converter</a>):<br><input type="text" name="strHLRes" value="" style="width: 550px" title="Use link to list converter tool to process multiple residue selections"> </label></td>
+          </tr>
+          <tr>
+           <td>
+            <fieldset>
+             <legend>Protein interactions</legend> <label title="Invokes automatic protein-protein interface recognition"> <input type="checkbox" name="HLPPInt" value="1"> Residues with interchain contacts to be shown </label> <select name="HLPPIntRender" title="Specify the way to highlight interacting residues"> <option value="color">Colored in red </option><option value="sticks" selected>With side chains </option><option value="balls">As spheres </option></select>
+             <br><label title="Invokes automatic protein-ligand interface recognition"> <input type="checkbox" name="HLPLInt" value="1"> Residues in contact with ligand(s) to be shown </label> <select name="HLPLIntRender" title="Specify the way to highlight interacting residues"> <option value="color">Colored in blue </option><option value="sticks" selected>With side chains </option><option value="balls">As spheres </option></select>
+             <br><label title="Invokes automatic protein-DNA/RNA interface recognition"> <input type="checkbox" name="HLPDInt" value="1"> Residues in contact with DNA or RNA to be shown </label> <select name="HLPDIntRender" title="Specify the way to highlight interacting residues"> <option value="color">Colored in cyan </option><option value="sticks" selected>With side chains </option><option value="balls">As spheres </option></select>
+            </fieldset></td>
+          </tr>
+          <tr>
+           <td>
+            <fieldset>
+             <legend>Evolutionary profile</legend> <label> <input type="checkbox" name="HLEvol" value="1"> By conservation, </label> <label>with scores <select name="HLEvolRel"> <option value="gt">&gt; </option><option value="eq" selected>= </option><option value="lt">&lt; </option></select> </label> <select name="HLEvolScore"> <option value="9" selected>9 </option><option value="8">8 </option><option value="7">7 </option><option value="6">6 </option><option value="5">5 </option><option value="4">4 </option><option value="3">3 </option><option value="2">2 </option><option value="1">1 </option><option value="0">0 </option></select> <label>to be shown <select name="HLEvolRender"> <option value="red">Colored in red </option><option value="blue">Colored in blue </option><option value="sticks">With side chains </option><option value="balls" selected>As spheres </option></select> </label>
+             <br><i>Score 9 means conserved, 0 - variable position</i>
+            </fieldset></td>
+          </tr>
+         </tbody>
+        </table><label style="margin-left: 10px"><input type="checkbox" name="Labels" value="1"> Add labels to highlighted residues</label>
+       </div>
+      </div>
+      <div class="post">
+       <div class="meta" title="Advanced structure annotation using external resources">
+        <div class="hide">
+         <a href="javascript:Preview()" title="Get an image preview">Preview</a>&nbsp;|&nbsp;<a href="javascript:{if (CheckForm()) document.ImageForm.submit()}" title="Submit a request">Submit</a>
+        </div>
+        <div>
+         <a href="javascript:ShowSettings('AnalysisSettings')" title="Toggle view of the settings below"><img id="imgAnalysisSettings" src="/design/form_close.png"></a>&nbsp;Advanced Structure Annotation (&nbsp;<a class="help" href="//polyview.cchmc.org/tutor/tutor_part5.html" target="doc">Help</a>&nbsp;|&nbsp;<a href="//polyview.cchmc.org/cgi-bin/tutor.cgi?Exp=70" target="sample">Samples</a>&nbsp;)
+        </div>
+       </div>
+       <div id="divAnalysisSettings" style="display: none">
+        <fieldset>
+         <legend>Generate additional annotations in order to</legend>
+         <table>
+          <tbody>
+           <tr>
+            <td><!-- FPocket --> <label title="Scalable high performance pocket detection"> <input type="radio" name="ExtServer" value="fpocket" onclick="ExternalServerOnChange(value)"> Find <b>pockets</b> using </label> <a href="https://github.com/Discngine/fpocket" target="_blank" title="Scalable high performance pocket detection">FPocket</a> (<a class="help" href="//polyview.cchmc.org/cgi-bin/tutor.cgi?Exp=70" target="_blank">Demo</a>) 
+             <div id="divPocket" style="display: none">
+              <label>, render pockets <select name="pocketlimittype"> <option value="area">with area</option> <option value="volume" selected>with volume</option> <option value="all">all</option> </select> </label> <label>greater than <input name="pocketlimitvalue" value="100" style="width: 40px"> </label>
+             </div><br><!-- Pfam --> <label title="Protein Families database"> <input type="radio" name="ExtServer" value="pfam" onclick="ExternalServerOnChange(value)"> Map <b>protein domains</b> using </label> <a href="http://pfam.sanger.ac.uk/" target="_blank" title="Protein Families database">Pfam</a> (<a class="help" href="//polyview.cchmc.org/cgi-bin/tutor.cgi?Exp=71" target="_blank">Demo</a>) <br><!-- PDBTM --> <label title="PDB of Transmembrane Proteins"> <input type="radio" name="ExtServer" value="pdbtm" onclick="ExternalServerOnChange(value)"> Determine <b>TM domains</b> using </label> <a href="http://pdbtm.enzim.hu/" target="_blank" title="PDB of Transmembrane Proteins">PDBTM</a> (<a class="help" href="//polyview.cchmc.org/cgi-bin/tutor.cgi?Exp=77" target="_blank">Demo</a>) <br><!-- SCORPPION --> <label title="Atlas of protein interactions found in PDB"> <input type="radio" name="ExtServer" value="scorppion" onclick="ExternalServerOnChange(value)"> Map <b>interacting sites</b> found in </label> <a href="https://www.rcsb.org/" target="_blank" title="Protein Data Bank">PDB</a> (<a class="help" href="//polyview.cchmc.org/cgi-bin/tutor.cgi?Exp=72" target="_blank">Demo</a>) <!-- Contrast with SPPIDER --> <!--
+            <div id="divSPPIDER" style="display: none">
+              <label>
+              <input type="checkbox" name="ExtServerVsSPPIDER" value="1">
+              Contrast with
+              </label>
+              <a href="//sppider.cchmc.org/" target="_blank"
+                 title="Protein interface prediction server">SPPIDER</a>
+            </div>
+--> <br><!-- IEDB --> <label title="Known peptidic epitopes targeted by antibodies"> <input type="radio" name="ExtServer" value="iedb" onclick="ExternalServerOnChange(value)"> Identify <b>peptidic epitopes</b> using </label> <a href="http://www.iedb.org/" target="_blank" title="Immune Epitope Database">IEDB</a> (<a class="help" href="//polyview.cchmc.org/cgi-bin/tutor.cgi?Exp=78" target="_blank">Demo</a>) <br><!-- None --> <label> <input type="radio" name="ExtServer" value="none" checked onclick="ExternalServerOnChange(value)"> No annotations </label></td>
+           </tr>
+          </tbody>
+         </table>
+        </fieldset>
+        <fieldset id="fsCustomPDB">
+         <legend>Visualize annotations from external resources</legend>
+         <table>
+          <tbody>
+           <tr>
+            <td colspan="2" style="text-align: right">Download a protein structure</td>
+           </tr>
+           <tr>
+            <td><label title="Protein interface prediction, identification and analysis"> <input type="radio" name="StrSource" value="SPPIDER" onclick="PDBSourceOnChange(value)"> Interface prediction from </label> <a href="//sppider.cchmc.org/" target="_blank">SPPIDER</a> (<a class="help" href="//polyview.cchmc.org/cgi-bin/tutor.cgi?Exp=73" target="_blank">Demo</a>)</td>
+            <td><i> <a href="//polyview.cchmc.org/tutor/1ttu_A_sppider_class.pdb" target="_blank" title="PDB file with SPPIDER prediction as classification">Example 1</a> <a href="//polyview.cchmc.org/tutor/1ttu_A_sppider_regress.pdb" target="_blank" title="PDB file with SPPIDER prediction as regression">Example 2</a> </i></td>
+           </tr>
+           <tr>
+            <td><label title="Identification of functional regions in proteins"> <input type="radio" name="StrSource" value="CONSURF" onclick="PDBSourceOnChange(value)"> Functional regions from </label> <a href="http://consurf.tau.ac.il/" target="_blank">ConSurf</a> (<a class="help" href="//polyview.cchmc.org/cgi-bin/tutor.cgi?Exp=74" target="_blank">Demo</a>)</td>
+            <td><i> <a href="//polyview.cchmc.org/tutor/1ttu_A_consurf.pdb" target="_blank" title="PDB file with amino acid conservation">Example</a> </i></td>
+           </tr>
+           <tr>
+            <td><label title="Analysis and ranking of protein-protein complexes"> <input type="radio" name="StrSource" value="CAPRI" onclick="PDBSourceOnChange(value)"> Docking models in </label> <a href="http://capri.ebi.ac.uk/format.html" target="_blank">CAPRI</a> format (<a class="help" href="//polyview.cchmc.org/cgi-bin/tutor.cgi?Exp=75" target="_blank">Demo</a>) <label id="ssCAPRI" style="visibility: hidden"> overlaid with SPPIDER <input type="checkbox" name="ssCAPRIvsSPPIDER" value="1" checked> </label></td>
+            <td><i> <a href="//polyview.cchmc.org/tutor/cluspro.pdb" target="_blank" title="PDB file with ClusPro docking models">Example</a> </i></td>
+           </tr>
+           <tr>
+            <td><label title="Exploring trajectories and distortions"> <input type="radio" name="StrSource" value="ENM" onclick="PDBSourceOnChange(value)"> Trajectories and distortions </label> (e.g. <a href="http://enm.lobos.nih.gov/examples.html" target="_blank">AD-ENM</a>, <a href="http://www.molmovdb.org/" target="_blank">MolMovDB</a>) (<a class="help" href="//polyview.cchmc.org/cgi-bin/tutor.cgi?Exp=76" target="_blank">Demo</a>)</td>
+            <td><i> <a href="//polyview.cchmc.org/tutor/ad-enm.pdb" target="_blank" title="PDB file with AD-ENM normal mode analysis">Example 1</a> <a href="//polyview.cchmc.org/tutor/molmovdb.pdb" target="_blank" title="PDB file with MolMovDB morph">Example 2</a> </i></td>
+           </tr>
+           <tr>
+            <td><label> <input type="radio" name="StrSource" value="OTHER" checked onclick="PDBSourceOnChange(value)"> Other </label></td>
+           </tr>
+           <tr>
+            <td colspan="2"><i>The above options are available with custom PDB files only</i></td>
+           </tr>
+          </tbody>
+         </table>
+        </fieldset>
+       </div>
+      </div>
+      <div class="post">
+       <div class="meta" title="General settings: Image size, Zoom, Rendering program, etc.">
+        <div class="hide">
+         <a href="javascript:Preview()" title="Get an image preview">Preview</a>&nbsp;|&nbsp;<a href="javascript:{if (CheckForm()) document.ImageForm.submit()}" title="Submit a request">Submit</a>
+        </div>
+        <div>
+         <a href="javascript:ShowSettings('ImageSettings')" title="Toggle view of the settings below"><img id="imgImageSettings" src="/design/form_open.png"></a>&nbsp;Image Settings
+        </div>
+       </div>
+       <div id="divImageSettings" style="display: block">
+        <table>
+         <tbody>
+          <tr>
+           <td nowrap>
+            <fieldset>
+             <legend><b>Goal</b> (&nbsp;<a class="help" href="//polyview.cchmc.org/tutor/tutor_part6.html#docImgSetType" target="doc">Help</a>&nbsp;|&nbsp;<a href="//polyview.cchmc.org/cgi-bin/tutor.cgi?Exp=21" target="sample">Samples</a>&nbsp;)</legend>
+             <p><label>Type of request <select name="TRequest" onchange="TypeOfRequestOnChange(name)" onclick="TypeOfRequestOnChange(name)"> <option value="slide" selected>Single slide </option><option value="animation">Animation </option></select> </label></p>
+             <p><label>Rendering by <select name="Render"> <option value="PyMol" selected>PyMol </option><option value="RasMol">RasMol </option></select> </label></p>
+             <p><label>Anaglyphic stereo view <input type="checkbox" name="imgStereo" value="1"> </label></p>
+            </fieldset></td>
+           <td style="padding-left: 10px"><input type="hidden" id="csRbg" name="ColorR" value="255"> <input type="hidden" id="csGbg" name="ColorG" value="255"> <input type="hidden" id="csBbg" name="ColorB" value="255">
+            <fieldset>
+             <legend><b>General settings</b> (&nbsp;<a class="help" href="//polyview.cchmc.org/tutor/tutor_part6.html#docImgSetGeneral" target="doc">Help</a>&nbsp;|&nbsp;<a href="//polyview.cchmc.org/cgi-bin/tutor.cgi?Exp=31" target="sample">Samples</a>&nbsp;)</legend>
+             <p><label>Size&nbsp;<i>(NxN&nbsp;pixels)</i> <select name="imgSize" onchange="ImageSizeOnChange(name)" onclick="ImageSizeOnChange(name)"> <option value="50">50 </option><option value="100">100 </option><option value="150">150 </option><option value="200">200 </option><option value="250">250 </option><option value="300" selected>300 </option><option value="400">400 </option><option value="500">500 </option><option value="600">600 </option><option value="800">800 </option><option value="1000">1000 </option></select> </label></p>
+             <p><label>Zoom&nbsp;<i>(%)</i> <input type="text" name="imgScale" size="3" maxlength="3" value="100" title="Use button <Set by Jmol> in Overall structure view fieldset to set up custom zoom"> </label> <select name="imgScaleSel" onchange="javascript:document.ImageForm.imgScale.value=value" title="Use button <Set by Jmol> in Overall structure view fieldset to set up custom zoom"> <option value="100" selected>100 </option><option value="125">125 </option><option value="150">150 </option><option value="175">175 </option><option value="200">200 </option><option value="225">225 </option><option value="250">250 </option><option value="275">275 </option><option value="300">300 </option></select></p>
+             <p>Background color <a href="javascript:ShowColorPicker('bg')" id="csTDbg" style="padding-left: 5px; padding-right: 5px;
+                    color: #C0C0C0; font-style: italic;
+                    text-decoration: none;
+                    border: 1px solid #C0C0C0" title="Click the link to change color"> Sample </a> <a href="javascript:ShowColorPicker('bg')" name="colorpickbg" id="colorpickbg">Change</a> <label><input type="checkbox" name="imgBGtr" value="1" style="margin-left: 10px"> Transparent</label></p>
+            </fieldset></td>
+          </tr>
+         </tbody>
+        </table>
+       </div>
+      </div>
+      <div class="post">
+       <div class="meta" title="Rotation Angle, Axes, Delay, etc. (Available with animation requests only)">
+        <div class="hide">
+         <a href="javascript:Preview()" title="Get an image preview">Preview</a>&nbsp;|&nbsp;<a href="javascript:{if (CheckForm()) document.ImageForm.submit()}" title="Submit a request">Submit</a>
+        </div>
+        <div>
+         <a href="javascript:ShowSettings('AnimationSettings')" title="Toggle view of the settings below"><img id="imgAnimationSettings" src="/design/form_close.png"></a>&nbsp;Animation Settings (&nbsp;<a class="help" href="//polyview.cchmc.org/tutor/tutor_part7.html" target="doc">Help</a>&nbsp;|&nbsp;<a href="//polyview.cchmc.org/cgi-bin/tutor.cgi?Exp=40" target="sample">Samples</a>&nbsp;)
+        </div>
+       </div>
+       <div id="divAnimationSettings" style="display: none">
+        <i>To enable the settings below choose <b>Animation</b> request in the <b>Image Settings</b> field set</i>
+        <table style="width: auto">
+         <tbody>
+          <tr>
+           <td><label title="Delay between frames">Delay (in 1/100s) <input type="text" id="asImageDelay" name="imgDelay" size="5" maxlength="3" value="20"></label></td>
+           <td><label style="margin-left: 10px" title="Select type of animation">Animate <select id="asAnimType" name="AnimType" onchange="AnimTypeOnChange()"> <option value="rotation" selected>Rotation </option><option value="models">Models </option><option value="focus">Zoom </option></select></label></td>
+           <td><label style="margin-left: 10px" title="Generate high definition slides for download"> <input type="checkbox" id="asImageHD" name="imgHD"> High-Def slides (<i>2000x2000 pixels</i>) </label></td>
+          </tr>
+         </tbody>
+        </table>
+        <fieldset id="fsRotation" style="display: none">
+         <legend>Rotation settings</legend>
+         <p><label style="margin-right: 10px">Angle step <input type="text" id="asAngleStep" name="imgAngle" size="5" maxlength="3" value="10"> </label> Axes of rotation: <label style="margin-left: 5px">X <input type="checkbox" id="asRotAxisX" name="imgAxisX" value="x"> </label> <label style="margin-left: 5px">Y <input type="checkbox" id="asRotAxisY" name="imgAxisY" value="y" checked> </label> <label style="margin-left: 5px">Z <input type="checkbox" id="asRotAxisZ" name="imgAxisZ" value="z"> </label></p>
+         <p><label>Rocking <input type="checkbox" id="asBouncing" name="imgBounce" value="1"> </label> <label>with angle range <input type="text" id="asBounceRange" name="imgBounceRange" size="5" maxlength="3" value="90"> </label></p>
+        </fieldset>
+        <fieldset id="fsModels" style="display: none">
+         <legend>Model settings</legend>
+         <p><label>Use <select id="asFirstModels" name="aniFirstModels" onchange="NModelsOnChange()"> <option value="all" selected>All available </option><option value="first">First defined </option></select> </label> <input type="text" id="asNModels" name="aniNModels" size="5" maxlength="4" value="all"> models <input type="button" name="btnModelLookup2" value="Models Lookup" title="Click to retrieve a list of models" onclick="DataLookupOnClick('models')"></p>
+         <p><label title="Bidirectional motion with delays at ends"> <input type="checkbox" id="asHingeModels" name="aniHingeModels" value="1"> Hinge motion </label></p>
+         <p><label title="Check it to remove flashing effect for cartoon representation"> <input type="checkbox" name="cbFixSS" value="1" onclick="FixSSOnChange()"> Fix secondary structure to </label> <label><input type="radio" name="aniFixSS" value="first"> initial</label> or <label><input type="radio" name="aniFixSS" value="last"> final</label> model (<i>for PyMol only</i>)</p>
+        </fieldset>
+        <fieldset id="fsZoom" style="display: none">
+         <legend>Zoom settings</legend>
+         <p><label title="Initial scale is set up in Image settings">Final scale <select id="asFocusEnd" name="FocusEnd"> <option value="100">100 </option><option value="125">125 </option><option value="150" selected>150 </option><option value="175">175 </option><option value="200">200 </option><option value="225">225 </option><option value="250">250 </option><option value="275">275 </option><option value="300">300 </option></select> </label> <label title="Set increment within -50 .. 50 range"> using <input type="text" id="asFocusStep" name="FocusStep" size="5" maxlength="3" value="10"> increment </label></p>
+         <p><label title="Zooming in and out with delays at ends"> <input type="checkbox" id="asFocusRebound" name="FocusRebound" value="1"> Rebound </label></p>
+        </fieldset>
+       </div>
+       <p><label> <input type="text" name="EMail" value="" size="40" title="Specify address to receive a link to results"> E-mail address (<i>optional</i>) </label></p>
+       <p><input type="button" value="Submit" onclick="if (CheckForm()) document.ImageForm.submit()"> <input type="button" value="Reset" style="margin-left: 50px" onclick="document.ImageForm.reset();PDBcodeOnChange();"></p>
+      </div>
+     </div><!-- end content --> <!-- start sidebar -->
+     <div id="sidebar">
+      <ul>
+       <li>
+        <h2>Quick links</h2>
+        <p><label title="Select type of request">Type of request <select name="TRequest2" onchange="TypeOfRequestOnChange(name)" onclick="TypeOfRequestOnChange(name)"> <option value="slide" selected>Single slide </option><option value="animation">Animation </option></select> </label> <br><label>Image size&nbsp;<i>(NxN&nbsp;pixels)</i> <select name="imgSize2" onchange="ImageSizeOnChange(name)" onclick="ImageSizeOnChange(name)"> <option value="50">50 </option><option value="100">100 </option><option value="150">150 </option><option value="200">200 </option><option value="250">250 </option><option value="300" selected>300 </option><option value="400">400 </option><option value="500">500 </option><option value="600">600 </option><option value="800">800 </option><option value="1000">1000 </option></select> </label> <br>
+          Background color <a href="javascript:ShowColorPicker('bg2')" id="csTDbg2" style="padding-left: 5px; padding-right: 5px;
+                  color: #C0C0C0; font-style: italic;
+                  text-decoration: none;
+                  border: 1px solid #C0C0C0" title="Click the link to change color"> Sample </a> <a href="javascript:ShowColorPicker('bg2')" name="colorpickbg2" id="colorpickbg2">Change</a></p>
+        <p style="line-height: 200%; text-align: center"><a href="javascript:GetInitOrientation()" title="Set initial orientation of structure using Jmol java applet">View by Jmol / Set orientation</a> <br><a href="javascript:Preview()" title="Get an image preview" style="margin-right: 30px">Preview</a> <a href="javascript:{if (CheckForm()) document.ImageForm.submit()}" title="Submit a request">Submit</a> <br><a href="javascript:ConvertTool();" title="Per residue highlighting options">Residue list converter</a></p></li>
+       <li>
+        <h2>Last request</h2><iframe id="ifLastRequest" src="//sable.cchmc.org/cgi-bin/get_server_info.cgi?Info=request&amp;Server=POLYVIEW-3D" style="width: 230px; height: 280px; border: 0; margin-left: 10px" frameborder="no" scrolling="no"></iframe> <a style="float: right" href="javascript:UpdateSidebarInfo('ifLastRequest')">Refresh</a></li>
+       <li>
+        <h2>Last update</h2><iframe id="ifLastUpdate" src="//sable.cchmc.org/cgi-bin/get_server_info.cgi?Info=update&amp;Server=POLYVIEW-3D" style="width: 230px; height: 250px; border: 0; margin-left: 10px" frameborder="no"></iframe> <a style="float: right" href="javascript:ShowNews('POLYVIEW-3D')">More news</a></li>
+       <li>
+        <h2>Tips</h2>
+        <table style="margin-bottom: -10px">
+         <tbody>
+          <tr>
+           <td id="tblTipNumber" style="color: #0000FF"></td>
+           <td style="text-align: right"><label style="vertical-align: top"> <input type="checkbox" name="cbTipShow" checked onclick="TipShowOnChange()"> Tips </label></td>
+          </tr>
+         </tbody>
+        </table>
+        <p id="tblTipText" style="width:100%; height:100px"></p></li>
+       <li>
+        <h2>Geography of users</h2>
+        <p style="text-align: center; margin: 0 auto 0 auto"><a href="https://www2.clustrmaps.com/counter/maps.php?url=http://polyview.cchmc.org" id="clustrMapsLink" target="_blank"> <img src="https://www2.clustrmaps.com/counter/index2.php?url=http://polyview.cchmc.org" style="border:0px solid" alt="Locations of visitors to this page" title="Locations of visitors to this page" id="clustrMapsImg" onerror="this.onerror=null; this.src='https://clustrmaps.com/images/clustrmaps-back-soon.jpg';
+                      document.getElementById('clustrMapsLink').href='https://clustrmaps.com'"> </a></p></li>
+      </ul>
+     </div><!-- end sidebar -->
+     <div style="clear: both;">
+      &nbsp;
+     </div>
+    </div>
+   </form><!-- end page -->
+  </div><!-- no print -->
+  <div class="print">
+   <div id="logo" style="margin-top: 100px">
+    <h1>POLYVIEW-3D</h1>
+    <h2>Versatile annotation and high quality visualization<br>
+      of macromolecular structures</h2>
+   </div><!-- CCHMC and UC logo at the top right corner -->
+   <script type="text/javascript" src="//sable.cchmc.org/logo.js"></script><!-- POLYVIEW logo -->
+   <div id="banner">
+    <img src="design/system/img05.jpg" alt="POLYVIEW-3D banner">
+   </div>
+  </div><!-- print -->
+  <div id="footer">
+   <table style="width: 100%">
+    <tbody>
+     <tr>
+      <td>
+       <p class="legal">
+        <script type="text/javascript" src="//sable.cchmc.org/footer.js"></script></p></td>
+      <td style="text-align: right">
+       <p class="credit">Developed by<br><a href="//sable.cchmc.org/design/aleksey.jpg" target="_blank">A. Porollo</a><br><a href="//sable.cchmc.org/design/jarek.jpg" target="_blank">J. Meller</a></p></td>
+     </tr>
+    </tbody>
+   </table>
+  </div>
+ </body>
+</html>

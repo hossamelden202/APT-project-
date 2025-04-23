@@ -1,0 +1,255 @@
+<html>
+ <head>
+  <title> Raster3D package for photorealistic molecular graphics </title>
+  <link rel="stylesheet" href="r3d_docstyle.css" text="text/css">
+ </head>
+ <body>
+  <img src="r3d_icon.gif" alt="" align="left" vspace="10">
+  <br>
+  <h1 align="center">Raster3D V3.0</h1>
+  <br clear="all">
+   The Raster3D molecular graphics package consists of a core program <a href="render.html">render</a> and a number of ancillary programs that read atomic coordinates from PDB (Protein Data Bank) files to produce scene descriptions for input to render. Raster3D can also render images composed using other programs such as Molscript, Xfit, and coot. 
+  <div class="box">
+   <table noborder>
+    <tbody>
+     <tr valign="top">
+      <td><b>Index</b>
+       <ul>
+        <li><a href="http://www.bmsc.washington.edu/raster3d/r3d_FAQ.html">FAQ (Frequently Asked Questions)</a></li>
+        <li><a href="#general">Synopsis</a></li>
+        <li><a href="#examples">Brief examples of use</a></li>
+        <li><a href="#source">Distribution site</a></li>
+       </ul></td>
+      <td><b>&nbsp;</b>
+       <ul>
+        <li><a href="#related">Related programs</a></li>
+        <li><a href="#authors">Authors</a></li>
+        <li><a href="#cite">Citing the program</a></li>
+        <li><a href="#refs">References</a></li>
+       </ul></td>
+     </tr>
+     <tr>
+      <td></td>
+      <td></td>
+     </tr>
+     <tr valign="top">
+      <td><b>Programs in the Raster3D package</b>
+       <ul>
+        <li><a href="avs2ps.html">avs2ps</a></li>
+        <li><a href="balls.html">balls</a></li>
+        <li><a href="label3d.html">label3d</a></li>
+        <li><a href="normal3d.html">normal3d</a></li>
+        <li><a href="rastep.html">rastep</a></li>
+        <li><a href="render.html">render</a></li>
+        <li><a href="ribbon.html">ribbon</a></li>
+        <li><a href="rings3d.html">rings3d</a></li>
+        <li><a href="rods.html">rods</a></li>
+        <li><a href="stereo3d.html">stereo3d</a></li>
+       </ul><b>Filters</b>
+       <ul>
+        <li>Import molecular surface descriptions from <a href="r3d_filters.html#grasp">Grasp</a> or <a href="r3d_filters.html#msms">MSMS</a></li>
+       </ul></td>
+      <td><b>Hints for composing pictures</b>
+       <ul>
+        <li><a href="r3d_animation.html"> Animation</a></li>
+        <li><a href="r3d_hints.html#black-white"> Black &amp; White figures</a></li>
+        <li><a href="r3d_hints.html#clipping"> Clipping planes</a> and <a href="r3d_hints.html#bounding"> Bounding planes</a></li>
+        <li><a href="r3d_hints.html#colors"> Colors</a>, and a <a href="r3d_colorpicker.html"> <font color="#cc0000">C</font><font color="#ff00ff">o</font><font color="#0000cc">l</font><font color="#009900">o</font><font color="#996500">r</font> picking tool</a></li>
+        <li><a href="r3d_hints.html#composing"> Composing figures in other programs</a></li>
+        <li><a href="r3d_hints.html#matrix"> Coordinate systems</a></li>
+        <li><a href="r3dtops.html"> Labels</a> (special note: <a href="r3d_hints.html#labels"> Molscript labels</a>)</li>
+        <li><a href="r3d_hints.html#modularity"> Making your picture modular</a></li>
+        <li><a href="r3d_hints.html#shadowing"> Shadowing</a></li>
+        <li><a href="r3d_hints.html#stereo1"> Side-by-side figures and stereo pairs</a></li>
+        <li><a href="r3d_hints.html#output device"> Tailoring your image to the output device</a></li>
+        <li><a href="r3d_transparent.html"> Transparent surfaces</a></li>
+        <li><a href="r3d_examples.html"> Worked examples from the Raster3D distribution</a></li>
+       </ul></td>
+     </tr>
+     <tr>
+     </tr>
+    </tbody>
+   </table>
+  </div>
+  <h4><a name="general">SYNOPSIS</a></h4>
+  <p>Raster3D uses a fast Z-buffer algorithm to produce high quality pixel images featuring one shadowing light source, additional non-shadowing light sources, specular highlighting, transparency, and Phong shaded surfaces. Output is in the form of a pixel image with 24 bits of color information per pixel plus one matte channel.</p>
+  <p>Raster3D does not depend on graphics hardware. The rendering program currently supports output to files in AVS, JPEG, TIFF, PNG and SGI libimage format. To actually view or manipulate the images produced, you must also have installed an image viewing package (e.g. John Cristy's ImageMagick or the SGI libimage utilities). The Raster3D rendering program can be integrated with ImageMagick to expand the flexibility of output formats and interactive use.</p>
+  <p>Ancillary programs are provided for the generation of object descriptions based on atomic coordinates stored in PDB format. Although Raster3D is not intended as a general purpose ray-tracing package, nothing in the rendering process is specific to molecular graphics. Some of the algorithms used have been chosen for speed rather than generality, however. They work well for molecular graphics images, but possibly would produce odd results if used for very different types of image.</p>
+  <p>Raster3D currently supports rendering six object types: spheres, triangles, planes, smooth-ended cylinders, round-ended cylinders, and quadric surfaces. It also supports the definition of material properties (transparency, bounding planes, color, reflectivity) that apply to groups of objects within the rendered scene.</p>
+  <p>New in version 3.0: Dynamic array allocation, direct rendering of labels.</p><!--
+<h4><a name="history">HISTORY</a></h4>
+<p>
+Version 2.1 added support for additional "object types" which are
+really modifiers for characteristic properties of existing objects.
+These have since been expanded to include the specification of 
+explicit surface normals, colors, and transparency at the vertices
+of the current object.
+</p>
+
+<p>
+Version 2.2 added support for transparency.
+</p>
+
+<p>
+Version 2.3 added support for
+file indirection, additional anti-aliasing options, internal
+light sources, and a separate alpha blend (matte) channel in the rendered image. 
+There is a new shell script, <a href="stereo3d.html">stereo3d</a>
+to automatically generate a side-by-side stereo pair from a Raster3D input file.
+</p>
+
+<p>
+Version 2.4 added support for
+generalized quadric surfaces (ellipsoids, cones, etc).
+Input lines beginning with '#' are treated as comments.
+It introduced the utility program <a href="rastep.html">rastep</a>
+which generates "thermal ellipsoid" representations of atoms based on the
+Biso or Uij entries in a PDB file (ANISOU cards). The option of coloring 
+based on B values was added here and elsewhere.
+</p>
+
+<p>
+Version 2.5 added support for Z-clipping, output to a JPEG image
+file on stdout, piped output to ImageMagick for automatic conversion to
+additional image types, and file indirection of header records.
+It also upgraded support for handling labels (object types
+10,11,12) using PostScript. See 
+<a href="r3dtops.html">r3dtops</a> and <a href="label3d.html">label3d</a>
+documentation.
+</p>
+
+<p>
+Version 2.6 added support for bounding planes, and removed the
+previous limit on stacking transparent objects.  The installation process
+has been modified so that all user-configurable options are collected into
+the files <i>parameters.incl</i> and <i>Makefile.template</i>.
+</p>
+
+<p>
+<b>Version 2.7</b> changes the default output format to PNG for all programs.
+</p>
+ --->
+  <h4><a name="examples">EXAMPLES</a></h4> Using only programs included in the Raster3D distribution one can create and render space-filling models, ball-and-stick models, ribbon models, and figures composed of any combination of these. The following set of commands would produce a composite figure of an Fe-containing metalloprotein with a smoothly shaded ribbon representation of the protein and spheres drawn for the Fe atoms: 
+  <pre># 
+# Draw smooth ribbon with default color scheme 2, 
+# save description (with header records) in ribbon.r3d 
+# 
+cat protein.pdb | ribbon -d2 &gt; ribbon.r3d
+# 
+# Extract Fe atoms only, and draw as spheres. 
+# Color info is taken from colorfile. 
+# Save description (with no header records) in irons.r3d 
+# 
+grep ``FE'' protein.pdb | cat colorfile - | balls -h &gt; irons.r3d 
+# 
+# combine the two descriptions and render as AVS image file 
+# 
+cat ribbon.r3d irons.r3d | render &gt; picture.x
+</pre> One can alternatively use Molscript to produce a Raster3D input file by using the -r switch. Integrated use of Molscript/Raster3D/ImageMagick allows one to describe, render, and view 3D representations of existing Molscript figures. 
+  <pre>molscript -r &lt; infile.dat | render | display png:-
+</pre> A similar example using xv as an image viewer, and assuming that TIFF support has been built into the render program: 
+  <pre>molscript -r &lt; infile.dat | render -tiff image.tif 
+xv image.tif
+</pre> The same image rendered as a side-by-side stereo pair: 
+  <pre>molscript -r &lt; infile.dat | stereo3d -border -png stereo_pair.png
+
+</pre> The Raster3D distribution also includes a filter utility which will convert the 24-bit color AVS output stream from render into a dithered black &amp; white PostScript image: 
+  <pre>render -avs &lt; description.r3d | avs2ps &gt; picture.ps
+
+</pre>
+  <h4><a name="source">SOURCE</a></h4>
+  <dl>
+   <dt>
+    <i>via WWW: </i>
+   </dt>
+   <dd>
+    <a href="http://www.bmsc.washington.edu/raster3d/raster3d.html"> http://www.bmsc.washington.edu/raster3d/raster3d.html</a>
+   </dd>
+   <dt>
+    <i>contact: </i>
+   </dt>
+   <dd>
+    Ethan A Merritt 
+    <br>
+    Biomolecular Structure Center 
+    <br>
+    University of Washington 
+    <br>
+    merritt@u.washington.edu
+   </dd>
+  </dl>
+  <h4><a name="related">RELATED PROGRAMS </a></h4>
+  <h5>Required for full installation:</h5>
+  <dl>
+   <dt>
+    libgd
+   </dt>
+   <dd>
+    Generation of PNG and JPEG images, as well as label processing, requires prior installation of the <a href="http://libgd.org"><i>gd</i></a> graphics library. libgd itself requires other libraries, but if you have libd itself installed then you should be all set.
+   </dd>
+   <dt>
+    TIFF
+   </dt>
+   <dd>
+    In order to build in support for the direct output of TIFF image files, you must separately obtain and install a copy of the TIFF library (libtiff). However, you can only render text labels for PNG or JPEG output, so you may be better off generating PNG images and then converting them to TIFF afterward.
+   </dd>
+   <dt>
+    ImageMagick
+   </dt>
+   <dd>
+    For full functionality you should also obtain and install a copy of <a href="http://ImageMagick.org"> ImageMagick</a>
+   </dd>
+  </dl>
+  <h5>Some other programs with direct Raster3D output modes:</h5>
+  <dl>
+   <dt>
+    Coot
+   </dt>
+   <dd>
+    The contents of the current view window in a Coot session may be rendered in Raster3D using the &lt;F8&gt; hotkey. More complicated scripting from Coot is also possible. Coot web page: <a href="http://www.biop.ox.ac.uk/coot/"> http://www.biop.ox.ac.uk/coot/</a>
+   </dd>
+   <dt>
+    Molscript
+   </dt>
+   <dd>
+    Figures composed in Molscript can be rendered in Raster3D rather than being printed as PostScript images. The Molscript web page is <a href="http://www.avatar.se/molscript"> http://www.avatar.se/molscript</a>.
+   </dd>
+   <dt>
+    ORTEP and the small molecule world
+   </dt>
+   <dd>
+    ORTEX V7 (an interactive descendent of Carroll Johnson's ORTEP program) now supports Raster3D as an output mode. ORTEX runs under DOS/Windows, and is available from <a href="http://www.nuigalway.ie/cryst/ortex.html"> http://www.nuigalway.ie/cryst/ortex.html</a>. Another small molecule package running under Windows and incorporating Raster3D rendering options is WinGX, available from <a href="http://www.chem.gla.ac.uk/~louis/software"> http://www.chem.gla.ac.uk/~louis/software</a>.
+   </dd>
+   <dt>
+    VMD
+   </dt>
+   <dd>
+    Biomolecular visualization tool from the Theoretical Biophysics group at the University of Illinois, <a href="http://www.ks.uiuc.edu/Research/vmd/"> http://www.ks.uiuc.edu/Research/vmd/</a>
+   </dd>
+   <dt>
+    X3DNA
+   </dt>
+   <dd>
+    Figure generation and analysis tool for RNA and DNA structures. X3DNA Web site: <a href="http://rutchem.rutgers.edu/~xiangjun/3DNA/index.html"> http://rutchem.rutgers.edu/~xiangjun/3DNA/</a>.
+   </dd>
+   <dt>
+    Xfit/XtalView
+   </dt>
+   <dd>
+    General crystallographic model building, map fitting, and analysis program by Duncan McRee, available in both academic and commercial versions, <a href="http://www.sdsc.edu/CCMS/Packages/XTALVIEW/"> http://www.sdsc.edu/CCMS/Packages/XTALVIEW/</a>
+   </dd>
+  </dl>
+  <br>
+  <h4><a name="authors">AUTHORS </a></h4> Originally written by David J. Bacon and Wayne F. Anderson. Ancillary programs by Mark Israel, Stephen Samuel, Michael Murphy, Albert Berghuis, and Ethan A Merritt. Extensions, revisions, and modifications by Ethan A Merritt. 
+  <h4><a name="cite">CITING THE PROGRAM</a></h4> If you use the package to prepare figures for publication, <i>please</i> give proper credit to the authors; the proper citation for the most recent version of the package is Merritt &amp; Bacon (1997) as given below. 
+  <h4><a name="refs">REFERENCES</a></h4> Bacon, D.J., &amp; Anderson, W.F. (1988) ``A Fast Algorithm for Rendering Space-Filling Molecule Pictures''. (abstract of paper presented at the Seventh Annual Meeting of the Molecular Graphics Society). J. Molec. Graphics 6, 219-220. 
+  <br>
+   Kraulis, P.J. (1991) ``MOLSCRIPT: a program to produce both detailed and schematic plots of protein structures''. J. Appl. Cryst. 24, 946-950.
+  <br>
+   Merritt, E.A. &amp; Murphy, M.E.P. (1994) ``Raster3D Version 2.0 - A Program for Photorealistic Molecular Graphics''. Acta Cryst. D50, 869-873.
+  <br>
+   Merritt, E.A. &amp; Bacon, D.J. (1997) ``Raster3D Photorealistic Molecular Graphics''. Methods in Enzymology 277, 505-524.
+  <br>
+  <hr><a href="raster3d.html"> <img src="index_button.gif" align="top"> Back to top </a> <a href="http://www.bmsc.washington.edu/raster3d/raster3d.html"> <img src="r3d_icon.gif" alt="" align="top"> Raster3D homepage </a>
+ </body>
+</html>

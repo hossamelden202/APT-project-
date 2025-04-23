@@ -1,0 +1,806 @@
+<!doctype html>
+<html class="writer-html5" lang="en" data-content_root="../">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Layout Engine Visual Tests (reftest) — Firefox Source Docs  documentation</title>
+  <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50">
+  <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094">
+  <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=fd3f3429">
+  <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b">
+  <link rel="stylesheet" type="text/css" href="../_static/custom_theme.css?v=dc5ed815">
+  <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7">
+  <link rel="shortcut icon" href="../_static/firefox.ico"><!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script src="../_static/jquery.js?v=5d32c60e"></script>
+  <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+  <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+  <script src="../_static/doctools.js?v=9a2dae69"></script>
+  <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+  <script src="../_static/copybutton.js?v=30646c52"></script>
+  <script src="../_static/design-tabs.js?v=36754332"></script>
+  <script src="../_static/js/theme.js"></script>
+  <link rel="index" title="Index" href="../genindex.html">
+  <link rel="search" title="Search" href="../search.html">
+  <link rel="next" title="Layout Debugger" href="LayoutDebugger.html">
+  <link rel="prev" title="Dynamic change handling along the rendering pipeline" href="DynamicChangeHandling.html">
+ </head>
+ <body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+   <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <div class="wy-side-scroll">
+     <div class="wy-side-nav-search">
+      <a href="../index.html" class="icon icon-home"> Firefox Source Docs <img src="../_static/firefox-wordmark.svg" class="logo" alt="Logo"> </a><!-- -- This code is governed by the BSD license ---->
+      <div>
+       <h3>Quick search</h3>
+       <script>
+    (function () {
+      var cx = "dd12886298f75dbef";
+      var gcse = document.createElement("script");
+      gcse.async = true;
+      gcse.src = "https://cse.google.com/cse.js?cx=" + cx;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(gcse, s);
+    })();
+  </script><gcse:search></gcse:search>
+      </div>
+     </div>
+     <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+      <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../glossary/index.html">A Glossary of Common Terms</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../overview/index.html">A Quick Guide to Mozilla Applications</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../setup/index.html">Getting Set Up To Work On The Firefox Codebase</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Working On Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../contributing/index.html">Working on Firefox</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../bug-mgmt/index.html">Bug Handling</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox User Guide</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../devtools-user/index.html">Firefox DevTools User Docs</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Source Code Documentation</span></p>
+      <ul class="current">
+       <li class="toctree-l1"><a class="reference internal" href="../mots/index.html">Governance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../browser/index.html">Firefox Front-end</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../dom/index.html">DOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../editor/index.html">Editor</a></li>
+       <li class="toctree-l1 current"><a class="reference internal" href="index.html">Style system (CSS) &amp; Layout</a>
+        <ul class="current">
+         <li class="toctree-l2"><a class="reference internal" href="StyleSystemOverview.html">Style System Overview</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="LayoutOverview.html">Layout Overview</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="DynamicChangeHandling.html">Dynamic change handling along the rendering pipeline</a></li>
+         <li class="toctree-l2 current"><a class="current reference internal" href="#">Layout Engine Visual Tests (reftest)</a>
+          <ul>
+           <li class="toctree-l3"><a class="reference internal" href="#why-this-way">Why this way?</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#manifest-format">Manifest Format</a>
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="#inclusion-of-another-manifest">Inclusion of another manifest</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#a-test-item">A test item</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#specification-of-a-url-prefix">Specification of a url prefix</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#specification-of-defaults">Specification of defaults</a></li>
+            </ul></li>
+           <li class="toctree-l3"><a class="reference internal" href="#running-tests">Running Tests</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#testable-areas">Testable Areas</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#writing-tests">Writing Tests</a>
+            <ul>
+             <li class="toctree-l4"><a class="reference internal" href="#asynchronous-tests-class-reftest-wait">Asynchronous Tests: class=”reftest-wait”</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#invalidation-tests-mozreftestinvalidate-event">Invalidation Tests: MozReftestInvalidate Event</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#painting-tests-class-reftest-no-paint">Painting Tests: class=”reftest-no-paint”</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#display-list-tests-class-reftest-no-display-list">Display List Tests: class=”reftest-[no-]display-list”</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#opaque-layer-tests-class-reftest-opaque-layer">Opaque Layer Tests: class=”reftest-opaque-layer”</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#layerization-tests-reftest-assigned-layer-layer-name">Layerization Tests: reftest-assigned-layer=”layer-name”</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#snapshot-the-whole-window-class-reftest-snapshot-all">Snapshot The Whole Window: class=”reftest-snapshot-all”</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#avoid-triggering-flushes-class-reftest-no-flush">Avoid triggering flushes: class=”reftest-no-flush”</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#zoom-tests-reftest-zoom-float">Zoom Tests: reftest-zoom=”&lt;float&gt;”</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#setting-scrollport-size-reftest-scrollport-w-h-int">Setting Scrollport Size: reftest-scrollport-w/h=”&lt;int&gt;”</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#setting-resolution-reftest-resolution-float">Setting Resolution: reftest-resolution=”&lt;float&gt;”</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#setting-async-scroll-mode-reftest-async-scroll-attribute">Setting Async Scroll Mode: reftest-async-scroll attribute</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#setting-displayport-dimensions-reftest-displayport-x-y-w-h-int">Setting Displayport Dimensions: reftest-displayport-x/y/w/h=”&lt;int&gt;”</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#testing-async-scrolling-reftest-async-scroll-x-y-int">Testing Async Scrolling: reftest-async-scroll-x/y=”&lt;int&gt;”</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#testing-async-zooming-reftest-async-zoom-float">Testing Async Zooming: reftest-async-zoom=”&lt;float&gt;”</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#pagination-tests-class-reftest-paged">Pagination Tests: class=”reftest-paged”</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#process-crash-tests-class-reftest-expect-process-crash">Process Crash Tests: class=”reftest-expect-process-crash”</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="#skip-forcing-a-content-process-layer-tree-update-reftest-no-sync-layers-attribute">Skip Forcing A Content Process Layer-Tree Update: reftest-no-sync-layers attribute</a></li>
+            </ul></li>
+           <li class="toctree-l3"><a class="reference internal" href="#specialpowers">SpecialPowers</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="#debugging-failures">Debugging Failures</a></li>
+          </ul></li>
+         <li class="toctree-l2"><a class="reference internal" href="LayoutDebugger.html">Layout Debugger</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="AccessibleCaret.html">AccessibleCaret</a></li>
+        </ul></li>
+       <li class="toctree-l1"><a class="reference internal" href="../gfx/index.html">Graphics</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../ipc/index.html">Processes, Threads and IPC</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../devtools/index.html">Firefox DevTools Contributor Docs</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../toolkit/index.html">Toolkit</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../js/index.html">SpiderMonkey</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../jsloader/index.html">JS Loader</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mobile/android/geckoview/index.html">GeckoView</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mobile/android/fenix/index.html">Fenix</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mobile/android/focus-android/index.html">Focus for Android</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../dom/bindings/webidl/index.html">WebIDL</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../modules/libpref/index.html">libpref</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../networking/index.html">Networking</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../remote/index.html">Remote Protocols</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../services/index.html">Services</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../permissions/index.html">Permissions</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../uriloader/index.html">File Handling</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../widget/cocoa/index.html">Firefox on macOS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../widget/windows/index.html">Firefox on Windows</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../toolkit/components/ml/index.html">Firefox AI Runtime</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../accessible/index.html">Accessibility</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../media/index.html">Media Playback</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../code-quality/index.html">Code quality</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../writing-rust-code/index.html">Writing Rust Code</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../rust-components/index.html">Rust Components</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/profiler/index.html">Gecko Profiler</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../performance/index.html">Performance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../storage/index.html">Database bindings (SQLite, KV, …)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../xpcom/index.html">XPCOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../nspr/index.html">NSPR</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../security/nss/index.html">Network Security Services (NSS)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../content-security/index.html">Web Security Checks in Gecko</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">The Firefox Build System</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../mach/index.html">Mach</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/try/index.html">Pushing to Try</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../build/buildsystem/index.html">Build System</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../taskcluster/index.html">Firefox CI and Taskgraph</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/moztreedocs/index.html">Managing Documentation</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../mozbuild/vendor/index.html">Vendoring Third Party Components</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Testing &amp; Test Infrastructure</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/automated-testing/index.html">Automated Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/treeherder-try/index.html">Understanding Treeherder Results</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/sheriffed-intermittents/index.html">Sheriffed intermittent failures</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/tests-for-new-config/index.html">Turning on Firefox tests for a new configuration</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/intermittent/index.html">Avoiding intermittent tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/testing-policy/index.html">Testing Policy</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/ci-configs/index.html">Configuration Changes</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/browser-chrome/index.html">Browser chrome mochitests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/chrome-tests/index.html">Chrome Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/marionette/index.html">Marionette</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/geckodriver/index.html">geckodriver</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/test-verification/index.html">Test Verification</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/webrender/index.html">WebRender Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/mochitest-plain/index.html">Mochitest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/xpcshell/index.html">XPCShell tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/tps/index.html">TPS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../web-platform/index.html">web-platform-tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../gtest/index.html">GTest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/fuzzing/index.html">Fuzzing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/sanitizer/index.html">Sanitizer</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing/perfdocs/index.html">Performance Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/code-coverage/index.html">Code coverage</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../testing-rust-code/index.html">Testing &amp; Debugging Rust Code</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Releases &amp; Updates</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../update-infrastructure/index.html">Mozilla Update Infrastructure</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../update-infrastructure/index.html#watershed-updates">Watershed Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../update-infrastructure/index.html#desupport-updates">Desupport Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../tools/update-verify/index.html">Update Verify</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Localization &amp; Internationalization</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../intl/index.html">Internationalization</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../l10n/index.html">Localization</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox and Python</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../mozbase/index.html">mozbase</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../python/index.html">Using third-party Python packages</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Metrics Collected in Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../metrics/index.html">Metrics</a></li>
+      </ul>
+     </div>
+    </div>
+   </nav>
+   <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+    <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+     <i data-toggle="wy-nav-top" class="fa fa-bars"></i> <a href="../index.html">Firefox Source Docs</a>
+    </nav>
+    <div class="wy-nav-content">
+     <div class="rst-content">
+      <!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+      <div role="navigation" aria-label="Page navigation">
+       <ul class="wy-breadcrumbs">
+        <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+        <li class="breadcrumb-item"><a href="index.html">Style system (CSS) &amp; Layout</a></li>
+        <li class="breadcrumb-item active">Layout Engine Visual Tests (reftest)</li>
+        <li class="wy-breadcrumbs-aside"><a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Developer+Infrastructure&amp;component=Firefox+Source+Docs%3A+Content&amp;short_desc=Documentation+issue+on+layout/Reftest&amp;comment=URL+=+https://firefox-source-docs.mozilla.org/layout/Reftest.html&amp;bug_file_loc=https://firefox-source-docs.mozilla.org/layout/Reftest.html" rel="nofollow">Report an issue</a> / <a href="../_sources/layout/Reftest.rst.txt" rel="nofollow"> View page source</a></li>
+       </ul>
+       <hr>
+      </div>
+      <div role="main" class="document" itemscope itemtype="http://schema.org/Article">
+       <div itemprop="articleBody">
+        <section id="layout-engine-visual-tests-reftest">
+         <h1>Layout Engine Visual Tests (reftest)<a class="headerlink" href="#layout-engine-visual-tests-reftest" title="Link to this heading">?</a></h1>
+         <p>Layout Engine Visual Tests (reftest) L. David Baron &lt;<a class="reference external" href="mailto:dbaron%40dbaron.org">dbaron<span>@</span>dbaron<span>.</span>org</a>&gt;, Mozilla Corporation July 19, 2006</p>
+         <p>This code is designed to run tests of Mozilla’s layout engine. These tests consist of an HTML (or other format) file along with a reference in the same format. The tests are run based on a manifest file, and for each test, PASS or FAIL is reported, and UNEXPECTED is reported if the result (PASS or FAIL) was not the expected result noted in the manifest.</p>
+         <p>Images of the display of both tests are captured, and most test types involve comparing these images (e.g., test types == or !=) to determine whether the test passed. The captures of the tests are taken in a viewport that is 800 pixels wide and 1000 pixels tall, so any content outside that area will be ignored (except for any scrollbars that are displayed). Ideally, however, tests should be written so that they fit within 600x600, since we may in the future want to switch to 600x600 to match <a class="reference external" href="http://lists.w3.org/Archives/Public/www-style/2012Sep/0562.html">http://lists.w3.org/Archives/Public/www-style/2012Sep/0562.html</a> .</p>
+         <section id="why-this-way">
+          <h2>Why this way?<a class="headerlink" href="#why-this-way" title="Link to this heading">?</a></h2>
+          <p>Writing HTML tests where the reference rendering is also in HTML is harder than simply writing bits of HTML that can be regression-tested by comparing the rendering of an older build to that of a newer build (perhaps using stored reference images from the older build). However, comparing across time has major disadvantages:</p>
+          <blockquote>
+           <div>
+            <ul class="simple">
+             <li>
+              <p>Comparisons across time either require two runs for every test, or they require stored reference images appropriate for the platform and configuration (often limiting testing to a very specific configuration).</p></li>
+             <li>
+              <p>Comparisons across time may fail due to expected changes, for example, changes in the default style sheet for HTML, changes in the appearance of form controls, or changes in default preferences like default font size or default colors.</p></li>
+            </ul>
+           </div>
+          </blockquote>
+          <p>Using tests for which the pass criteria were explicitly chosen allows running tests at any time to see whether they still pass.</p>
+         </section>
+         <section id="manifest-format">
+          <h2>Manifest Format<a class="headerlink" href="#manifest-format" title="Link to this heading">?</a></h2>
+          <p>The test manifest format is a plain text file. A line starting with a <code class="docutils literal notranslate"><span class="pre">"#"</span></code> is a comment. Lines may be commented using whitespace followed by a <code class="docutils literal notranslate"><span class="pre">"#"</span></code> and the comment. Each non-blank line (after removal of comments) must be one of the following:</p>
+          <section id="inclusion-of-another-manifest">
+           <h3>Inclusion of another manifest<a class="headerlink" href="#inclusion-of-another-manifest" title="Link to this heading">?</a></h3>
+           <blockquote>
+            <div>
+             <p><code class="docutils literal notranslate"><span class="pre">&lt;skip-type&gt;*</span> <span class="pre">include</span> <span class="pre">&lt;relative_path&gt;</span></code></p>
+             <p><code class="docutils literal notranslate"><span class="pre">&lt;skip-type&gt;</span></code> is one of the skip or skip-if items (see their definitions in <code class="docutils literal notranslate"><span class="pre">&lt;failure-type&gt;</span></code> below). If any of the skip types evaluate to true (i.e. they are a plain <code class="docutils literal notranslate"><span class="pre">skip</span></code> or they are a <code class="docutils literal notranslate"><span class="pre">skip-if</span></code> with a condition that evaluates to true), then the include statement is skipped. Otherwise, reftests in the specified manifest are included in the set of reftests that are run.</p>
+            </div>
+           </blockquote>
+          </section>
+          <section id="a-test-item">
+           <h3>A test item<a class="headerlink" href="#a-test-item" title="Link to this heading">?</a></h3>
+           <blockquote>
+            <div>
+             <p><code class="docutils literal notranslate"><span class="pre">[</span> <span class="pre">&lt;failure-type&gt;</span> <span class="pre">|</span> <span class="pre">&lt;preference&gt;</span> <span class="pre">]*</span> <span class="pre">[&lt;http&gt;]</span> <span class="pre">&lt;type&gt;</span> <span class="pre">&lt;url&gt;</span> <span class="pre">&lt;url_ref&gt;</span></code></p>
+             <p>where</p>
+             <ol class="loweralpha">
+              <li>
+               <p><code class="docutils literal notranslate"><span class="pre">&lt;failure-type&gt;</span></code> (optional) is one of the following:</p>
+               <dl>
+                <dt>
+                 <code class="docutils literal notranslate"><span class="pre">fails</span></code>
+                </dt>
+                <dd>
+                 <p>The test passes if the images of the two renderings DO NOT meet the conditions specified in the <code class="docutils literal notranslate"><span class="pre">&lt;type&gt;</span></code>.</p>
+                </dd>
+                <dt>
+                 <code class="docutils literal notranslate"><span class="pre">fails-if(condition)</span></code>
+                </dt>
+                <dd>
+                 <p>If the condition is met, the test passes if the images of the two renderings DO NOT meet the conditions of <code class="docutils literal notranslate"><span class="pre">&lt;type&gt;</span></code>. If the condition is not met, the test passes if the conditions of <code class="docutils literal notranslate"><span class="pre">&lt;type&gt;</span></code> are met.</p>
+                </dd>
+                <dt>
+                 <code class="docutils literal notranslate"><span class="pre">needs-focus</span></code>
+                </dt>
+                <dd>
+                 <p>The test fails or times out if the reftest window is not focused.</p>
+                </dd>
+                <dt>
+                 <code class="docutils literal notranslate"><span class="pre">random</span></code>
+                </dt>
+                <dd>
+                 <p>The results of the test are random and therefore not to be considered in the output.</p>
+                </dd>
+                <dt>
+                 <code class="docutils literal notranslate"><span class="pre">random-if(condition)</span></code>
+                </dt>
+                <dd>
+                 <p>The results of the test are random if a given condition is met.</p>
+                </dd>
+                <dt>
+                 <code class="docutils literal notranslate"><span class="pre">silentfail</span></code>
+                </dt>
+                <dd>
+                 <p>This test may fail silently, and if that happens it should count as if the test passed. This is useful for cases where silent failure is the intended behavior (for example, in an out of memory situation in JavaScript, we stop running the script silently and immediately, in hopes of reclaiming enough memory to keep the browser functioning).</p>
+                </dd>
+                <dt>
+                 <code class="docutils literal notranslate"><span class="pre">silentfail-if(condition)</span></code>
+                </dt>
+                <dd>
+                 <p>This test may fail silently if the condition is met.</p>
+                </dd>
+                <dt>
+                 <code class="docutils literal notranslate"><span class="pre">skip</span></code>
+                </dt>
+                <dd>
+                 <p>This test should not be run. This is useful when a test fails in a catastrophic way, such as crashing or hanging the browser. Using <code class="docutils literal notranslate"><span class="pre">skip</span></code> is preferred to simply commenting out the test because we want to report the test failure at the end of the test run.</p>
+                </dd>
+                <dt>
+                 <code class="docutils literal notranslate"><span class="pre">skip-if(condition)</span></code>
+                </dt>
+                <dd>
+                 <p>If the condition is met, the test is not run. This is useful if, for example, the test crashes only on a particular platform (i.e. it allows us to get test coverage on the other platforms).</p>
+                </dd>
+                <dt>
+                 <code class="docutils literal notranslate"><span class="pre">slow</span></code>
+                </dt>
+                <dd>
+                 <p>The test may take a long time to run, so run it if slow tests are either enabled or not disabled (test manifest interpreters may choose whether or not to run such tests by default).</p>
+                </dd>
+                <dt>
+                 <code class="docutils literal notranslate"><span class="pre">slow-if(condition)</span></code>
+                </dt>
+                <dd>
+                 <p>If the condition is met, the test is treated as if <code class="docutils literal notranslate"><span class="pre">slow</span></code> had been specified. This is useful for tests which are slow only on particular platforms (e.g. a test which exercised out-of-memory behavior might be fast on a 32-bit system but inordinately slow on a 64-bit system).</p>
+                </dd>
+                <dt>
+                 <code class="docutils literal notranslate"><span class="pre">fuzzy(minDiff-maxDiff,minPixelCount-maxPixelCount)</span></code>
+                </dt>
+                <dd>
+                 <p>This allows a test to pass if the pixel value differences are between <code class="docutils literal notranslate"><span class="pre">minDiff</span></code> and <code class="docutils literal notranslate"><span class="pre">maxDiff</span></code>, inclusive, and the total number of different pixels is between <code class="docutils literal notranslate"><span class="pre">minPixelCount</span></code> and <code class="docutils literal notranslate"><span class="pre">maxPixelCount</span></code>, inclusive. It can also be used with <code class="docutils literal notranslate"><span class="pre">!=</span></code> to ensure that the difference is outside the specified interval. Note that with <code class="docutils literal notranslate"><span class="pre">!=</span></code> tests the minimum bounds of the ranges must be zero.</p>
+                 <p>Fuzzy tends to be used for two different sorts of cases. The main case is tests that are expected to be equal, but actually fail in a minor way (e.g., an antialiasing difference), and we want to ensure that the test doesn’t regress further so we don’t want to mark the test as failing. For these cases, test annotations should be the tightest bounds possible: if the behavior is entirely deterministic this means a range like <code class="docutils literal notranslate"><span class="pre">fuzzy(1-1,8-8)</span></code>, and if at all possible, the ranges should not include 0. In cases where the test only sometimes fails, this unfortunately requires using 0 in both ranges, which means that we won’t get reports of an unexpected pass if the problem is fixed (allowing us to remove the <code class="docutils literal notranslate"><span class="pre">fuzzy()</span></code> annotation and expect the test to pass from then on).</p>
+                 <p>The second case where fuzzy is used is tests that are supposed to allow some amount of variability (i.e., tests where the specification allows variability such that we can’t assert that all pixels are the same). Such tests should generally be avoided (for example, by covering up the pixels that can vary with another element), but when they are needed, the ranges in the <code class="docutils literal notranslate"><span class="pre">fuzzy()</span></code> annotation should generally include 0.</p>
+                </dd>
+                <dt>
+                 <code class="docutils literal notranslate"><span class="pre">fuzzy-if(condition,minDiff-maxDiff,minPixelCount-maxPixelCount)</span></code>
+                </dt>
+                <dd>
+                 <p>If the condition is met, the test is treated as if <code class="docutils literal notranslate"><span class="pre">fuzzy</span></code> had been specified. This is useful if there are differences on particular platforms. See <code class="docutils literal notranslate"><span class="pre">fuzzy()</span></code> above.</p>
+                </dd>
+                <dt>
+                 <code class="docutils literal notranslate"><span class="pre">require-or(cond1&amp;&amp;cond2&amp;&amp;...,fallback)</span></code>
+                </dt>
+                <dd>
+                 <p>Require some particular setup be performed or environmental condition(s) made true (eg setting debug mode) before the test is run. If any condition is unknown, unimplemented, or fails, revert to the fallback failure-type. Example: <code class="docutils literal notranslate"><span class="pre">require-or(debugMode,skip)</span></code></p>
+                </dd>
+                <dt>
+                 <code class="docutils literal notranslate"><span class="pre">asserts(count)</span></code>
+                </dt>
+                <dd>
+                 <p>Loading the test and reference is known to assert exactly <code class="docutils literal notranslate"><span class="pre">count</span></code> times. NOTE: An asserts() notation with a non-zero count or maxCount suppresses use of a cached canvas for the test with the annotation. However, if later occurrences of the same test are not annotated, they will use the cached canvas (potentially from the load that asserted). This allows repeated use of the same test or reference to be annotated correctly (which may be particularly useful when the uses are in different subdirectories that can be tested independently), but does not force them to be, nor does it force suppression of caching for a common reference when it is the test that asserts.</p>
+                </dd>
+                <dt>
+                 <code class="docutils literal notranslate"><span class="pre">asserts-if(condition,count)</span></code>
+                </dt>
+                <dd>
+                 <p>Same as above, but only if condition is true.</p>
+                </dd>
+                <dt>
+                 <code class="docutils literal notranslate"><span class="pre">asserts(minCount-maxCount)</span></code>
+                </dt>
+                <dd>
+                 <p>Loading the test and reference is known to assert between minCount and maxCount times, inclusive. NOTE: See above regarding canvas caching.</p>
+                </dd>
+                <dt>
+                 <code class="docutils literal notranslate"><span class="pre">asserts-if(condition,minCount-maxCount)</span></code>
+                </dt>
+                <dd>
+                 <p>Same as above, but only if condition is true.</p>
+                </dd>
+                <dt>
+                 <code class="docutils literal notranslate"><span class="pre">noautofuzz</span></code>
+                </dt>
+                <dd>
+                 <p>Disables the autofuzzing behaviour hard-coded in the reftest harness for specific platform configurations. The autofuzzing is intended to compensate for inherent nondeterminism that results in intermittently fuzzy results (with small amounts of fuzz) across many/all tests on a given platform. Specifying ‘noautofuzz’ on the test will disable the autofuzzing for that test and require an exact match.</p>
+                </dd>
+               </dl>
+               <p>Conditions are JavaScript expressions <em>without spaces</em> in them. They are evaluated in a sandbox in which a limited set of variables are defined. See the BuildConditionSandbox function in <code class="docutils literal notranslate"><span class="pre">layout/tools/reftest.js</span></code> for details.</p>
+               <p>Examples of using conditions:</p>
+               <div class="highlight-default notranslate">
+                <div class="highlight">
+                 <pre><span></span><span class="n">fails</span><span class="o">-</span><span class="k">if</span><span class="p">(</span><span class="n">winWidget</span><span class="p">)</span> <span class="o">==</span> <span class="n">test</span> <span class="n">reference</span>
+<span class="n">asserts</span><span class="o">-</span><span class="k">if</span><span class="p">(</span><span class="n">cocoaWidget</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span> <span class="n">load</span> <span class="n">crashtest</span>
+</pre>
+                </div>
+               </div></li>
+              <li>
+               <p><code class="docutils literal notranslate"><span class="pre">&lt;preference&gt;</span></code> (optional) is a string of the form</p>
+               <blockquote>
+                <div>
+                 <p><code class="docutils literal notranslate"><span class="pre">pref(&lt;name&gt;,&lt;value&gt;)</span></code></p>
+                 <p><code class="docutils literal notranslate"><span class="pre">test-pref(&lt;name&gt;,&lt;value&gt;)</span></code></p>
+                 <p><code class="docutils literal notranslate"><span class="pre">ref-pref(&lt;name&gt;,&lt;value&gt;)</span></code></p>
+                </div>
+               </blockquote>
+               <p>where <code class="docutils literal notranslate"><span class="pre">&lt;name&gt;</span></code> is the name of a preference setting, as seen in <a class="reference external" href="about:config">about:config</a>, and <code class="docutils literal notranslate"><span class="pre">&lt;value&gt;</span></code> is the value to which this preference should be set. <code class="docutils literal notranslate"><span class="pre">&lt;value&gt;</span></code> may be a boolean (true/false), an integer, or a quoted string <em>without spaces</em>, according to the type of the preference.</p>
+               <p>The preference will be set to the specified value prior to rendering the test and/or reference canvases (pref() applies to both, test-pref() only to the test, and ref-pref() only to the reference), and will be restored afterwards so that following tests are not affected. Note that this feature is only useful for “live” preferences that take effect immediately, without requiring a browser restart.</p></li>
+              <li>
+               <p><code class="docutils literal notranslate"><span class="pre">&lt;http&gt;</span></code>, if present, is one of the strings (sans quotes) “HTTP” or “HTTP(..)” or “HTTP(../..)” or “HTTP(../../..)”, etc. , indicating that the test should be run over an HTTP server because it requires certain HTTP headers or a particular HTTP status. (Don’t use this if your test doesn’t require this functionality, because it unnecessarily slows down the test.)</p>
+               <p>With “HTTP”, HTTP tests have the restriction that any resource an HTTP test accesses must be accessed using a relative URL, and the test and the resource must be within the directory containing the reftest manifest that describes the test (or within a descendant directory). The variants “HTTP(..)”, etc., can be used to relax this restriction by allowing resources in the parent directory, etc.</p>
+               <p>To modify the HTTP status or headers of a resource named FOO, create a sibling file named FOO^headers^ with the following contents:</p>
+               <p><code class="docutils literal notranslate"><span class="pre">[&lt;http-status&gt;]</span></code></p>
+               <p><code class="docutils literal notranslate"><span class="pre">&lt;http-header&gt;*</span></code></p>
+               <dl class="simple">
+                <dt>
+                 <code class="docutils literal notranslate"><span class="pre">&lt;http-status&gt;</span></code>
+                </dt>
+                <dd>
+                 <p>A line of the form “HTTP ###[ &lt;description&gt;]”, where ### indicates the desired HTTP status and &lt;description&gt; indicates a desired HTTP status description, if any. If this line is omitted, the default is “HTTP 200 OK”.</p>
+                </dd>
+                <dt>
+                 <code class="docutils literal notranslate"><span class="pre">&lt;http-header&gt;</span></code>
+                </dt>
+                <dd>
+                 <p>A line in standard HTTP header line format, i.e. “Field-Name: field-value”. You may not repeat the use of a Field-Name and must coalesce such headers together, and each header must be specified on a single line, but otherwise the format exactly matches that from HTTP itself.</p>
+                </dd>
+               </dl>
+               <p>HTTP tests may also incorporate SJS files. SJS files provide similar functionality to CGI scripts, in that the response they produce can be dependent on properties of the incoming request. Currently these properties are restricted to method type and headers, but eventually it should be possible to examine data in the body of the request as well when computing the generated response. An SJS file is a JavaScript file with a .sjs extension which defines a global <cite>handleRequest</cite> function (called every time that file is loaded during reftests) in this format:</p>
+               <div class="highlight-default notranslate">
+                <div class="highlight">
+                 <pre><span></span><span class="n">function</span> <span class="n">handleRequest</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">response</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="n">response</span><span class="o">.</span><span class="n">setStatusLine</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">httpVersion</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="s2">"OK"</span><span class="p">);</span>
+
+  <span class="o">//</span> <span class="n">You</span> <span class="o">*</span><span class="n">probably</span><span class="o">*</span> <span class="n">want</span> <span class="n">this</span><span class="p">,</span> <span class="ow">or</span> <span class="k">else</span> <span class="n">you</span><span class="s1">'ll get bitten if you run</span>
+  <span class="o">//</span> <span class="n">reftest</span> <span class="n">multiple</span> <span class="n">times</span> <span class="k">with</span> <span class="n">the</span> <span class="n">same</span> <span class="n">profile</span><span class="o">.</span>
+  <span class="n">response</span><span class="o">.</span><span class="n">setHeader</span><span class="p">(</span><span class="s2">"Cache-Control"</span><span class="p">,</span> <span class="s2">"no-cache"</span><span class="p">);</span>
+
+  <span class="n">response</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">"any ASCII data you want"</span><span class="p">);</span>
+
+  <span class="n">var</span> <span class="n">outputStream</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">bodyOutputStream</span><span class="p">;</span>
+  <span class="o">//</span> <span class="o">...</span><span class="n">anything</span> <span class="k">else</span> <span class="n">you</span> <span class="n">want</span> <span class="n">to</span> <span class="n">do</span><span class="p">,</span> <span class="n">synchronously</span><span class="o">...</span>
+<span class="p">}</span>
+</pre>
+                </div>
+               </div>
+               <p>For more details on exactly which functions and properties are available on request/response in handleRequest, see the nsIHttpRe(quest|sponse) definitions in <code class="docutils literal notranslate"><span class="pre">netwerk/test/httpserver/nsIHttpServer.idl</span></code>.</p>
+               <p>HTTP tests can also make use of example.org URIs in order to test cross site behaviour. “example.org/filename” will access filename in the same directly as the current reftest. (Not currently implemented for android.)</p></li>
+              <li>
+               <p><code class="docutils literal notranslate"><span class="pre">&lt;type&gt;</span></code> is one of the following:</p>
+               <dl>
+                <dt>
+                 <code class="docutils literal notranslate"><span class="pre">==</span></code>
+                </dt>
+                <dd>
+                 <p>The test passes if the images of the two renderings are the SAME.</p>
+                </dd>
+                <dt>
+                 <code class="docutils literal notranslate"><span class="pre">!=</span></code>
+                </dt>
+                <dd>
+                 <p>The test passes if the images of the two renderings are DIFFERENT.</p>
+                </dd>
+                <dt>
+                 <code class="docutils literal notranslate"><span class="pre">load</span></code>
+                </dt>
+                <dd>
+                 <p>The test passes unconditionally if the page loads. url_ref must be omitted, and the test cannot be marked as fails or random. (Used to test for crashes, hangs, assertions, and leaks.)</p>
+                </dd>
+                <dt>
+                 <code class="docutils literal notranslate"><span class="pre">script</span></code>
+                </dt>
+                <dd>
+                 <p>The loaded page records the test’s pass or failure status in a JavaScript data structure accessible through the following API.</p>
+                 <p><code class="docutils literal notranslate"><span class="pre">getTestCases()</span></code> returns an array of test result objects representing the results of the tests performed by the page.</p>
+                 <p>Each test result object has two methods:</p>
+                 <p><code class="docutils literal notranslate"><span class="pre">testPassed()</span></code> returns true if the test result object passed, otherwise it returns false.</p>
+                 <p><code class="docutils literal notranslate"><span class="pre">testDescription()</span></code> returns a string describing the test result.</p>
+                 <p><code class="docutils literal notranslate"><span class="pre">url_ref</span></code> must be omitted. The test may be marked as fails or random. (Used to test the JavaScript Engine.)</p>
+                </dd>
+                <dt>
+                 <code class="docutils literal notranslate"><span class="pre">print</span></code>
+                </dt>
+                <dd>
+                 <p>The test passes if the printouts (as PDF) of the two renderings are the SAME by applying the following comparisons:</p>
+                 <blockquote>
+                  <div>
+                   <ul class="simple">
+                    <li>
+                     <p>The number of pages generated for both printouts must match.</p></li>
+                    <li>
+                     <p>The text content of both printouts must match (rasterized text does not match real text).</p></li>
+                   </ul>
+                  </div>
+                 </blockquote>
+                 <p>You can specify a print range by setting the reftest-print-range attribute on the document element. Example:</p>
+                 <div class="highlight-default notranslate">
+                  <div class="highlight">
+                   <pre><span></span><span class="o">&lt;</span><span class="n">html</span> <span class="n">reftest</span><span class="o">-</span><span class="nb">print</span><span class="o">-</span><span class="nb">range</span><span class="o">=</span><span class="s2">"2-3"</span><span class="o">&gt;</span>
+<span class="o">...</span>
+</pre>
+                  </div>
+                 </div>
+                 <p>The following example would lead to a single page print:</p>
+                 <div class="highlight-default notranslate">
+                  <div class="highlight">
+                   <pre><span></span><span class="o">&lt;</span><span class="n">html</span> <span class="n">reftest</span><span class="o">-</span><span class="nb">print</span><span class="o">-</span><span class="nb">range</span><span class="o">=</span><span class="s2">"2-2"</span><span class="o">&gt;</span>
+<span class="o">...</span>
+</pre>
+                  </div>
+                 </div>
+                 <p>You can also print selected elements only:</p>
+                 <div class="highlight-default notranslate">
+                  <div class="highlight">
+                   <pre><span></span><span class="o">&lt;</span><span class="n">html</span> <span class="n">reftest</span><span class="o">-</span><span class="nb">print</span><span class="o">-</span><span class="nb">range</span><span class="o">=</span><span class="s2">"selection"</span><span class="o">&gt;</span>
+<span class="o">...</span>
+</pre>
+                  </div>
+                 </div>
+                 <p>Make sure to include code in your test that actually selects something.</p>
+                 <p>Future additions to the set of comparisons might include:</p>
+                 <blockquote>
+                  <div>
+                   <ul class="simple">
+                    <li>
+                     <p>Matching the paper size</p></li>
+                    <li>
+                     <p>Validating printed headers and footers</p></li>
+                    <li>
+                     <p>Testing (fuzzy) position of elements</p></li>
+                    <li>
+                     <p>Testing specific print related CSS properties</p></li>
+                   </ul>
+                  </div>
+                 </blockquote>
+                 <p>The main difference between <code class="docutils literal notranslate"><span class="pre">print</span></code> and <code class="docutils literal notranslate"><span class="pre">==/!=</span></code> reftests is that <code class="docutils literal notranslate"><span class="pre">print</span></code> makes us compare the structure of print results (by parsing the output PDF) rather than taking screenshots and comparing pixel values. This allows us to test for common printing related issues like text being rasterized when it shouldn’t. This difference in behavior is also why this is its own reftest operator, rather than a flavor of <code class="docutils literal notranslate"><span class="pre">==/!=</span></code>. It would be somewhat misleading to list these print reftests as <code class="docutils literal notranslate"><span class="pre">==/!=</span></code>, because they don’t actually check for pixel matching.</p>
+                 <p>See the chapter about Pagination Tests if you are looking for testing layout in pagination mode.</p>
+                </dd>
+               </dl></li>
+              <li>
+               <p><code class="docutils literal notranslate"><span class="pre">&lt;url&gt;</span></code> is either a relative file path or an absolute URL for the test page</p></li>
+              <li>
+               <p><code class="docutils literal notranslate"><span class="pre">&lt;url_ref&gt;</span></code> is either a relative file path or an absolute URL for the reference page</p></li>
+             </ol>
+             <p>The only difference between <code class="docutils literal notranslate"><span class="pre">&lt;url&gt;</span></code> and <code class="docutils literal notranslate"><span class="pre">&lt;url_ref&gt;</span></code> is that results of the test are reported using <code class="docutils literal notranslate"><span class="pre">&lt;url&gt;</span></code> only.</p>
+            </div>
+           </blockquote>
+          </section>
+          <section id="specification-of-a-url-prefix">
+           <h3>Specification of a url prefix<a class="headerlink" href="#specification-of-a-url-prefix" title="Link to this heading">?</a></h3>
+           <blockquote>
+            <div>
+             <p><code class="docutils literal notranslate"><span class="pre">url-prefix</span> <span class="pre">&lt;string&gt;</span></code></p>
+             <p><code class="docutils literal notranslate"><span class="pre">&lt;string&gt;</span></code> will be prepended to relative <code class="docutils literal notranslate"><span class="pre">&lt;url&gt;</span></code> and <code class="docutils literal notranslate"><span class="pre">&lt;url_ref&gt;</span></code> for all following test items in the manifest.</p>
+             <p><code class="docutils literal notranslate"><span class="pre">&lt;string&gt;</span></code> will not be prepended to the relative path when including another manifest, e.g. <code class="docutils literal notranslate"><span class="pre">include</span> <span class="pre">&lt;relative_path&gt;.</span></code></p>
+             <p><code class="docutils literal notranslate"><span class="pre">&lt;string&gt;</span></code> will not be prepended to any <code class="docutils literal notranslate"><span class="pre">&lt;url&gt;</span></code> or <code class="docutils literal notranslate"><span class="pre">&lt;url_ref&gt;</span></code> matching the pattern <code class="docutils literal notranslate"><span class="pre">/^\w+:/</span></code>. This will prevent the prefix from being applied to any absolute url containing a protocol such as <code class="docutils literal notranslate"><span class="pre">data:</span></code>, <code class="docutils literal notranslate"><span class="pre">about:</span></code>, or <code class="docutils literal notranslate"><span class="pre">http:</span></code>.</p>
+             <p>While the typical use of url-prefix is expected to be as the first line of a manifest, it is legal to use it anywhere in a manifest. Subsequent uses of url-prefix overwrite any existing values.</p>
+            </div>
+           </blockquote>
+          </section>
+          <section id="specification-of-defaults">
+           <h3>Specification of defaults<a class="headerlink" href="#specification-of-defaults" title="Link to this heading">?</a></h3>
+           <blockquote>
+            <div>
+             <p><code class="docutils literal notranslate"><span class="pre">defaults</span> <span class="pre">[&lt;failure-type&gt;</span> <span class="pre">|</span> <span class="pre">&lt;preference&gt;</span> <span class="pre">|</span> <span class="pre">&lt;http&gt;]</span></code></p>
+             <p>where <code class="docutils literal notranslate"><span class="pre">&lt;failure-type&gt;</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;preference&gt;</span></code>, and <code class="docutils literal notranslate"><span class="pre">&lt;http&gt;</span></code> are defined above.</p>
+             <p>The default settings will be used for all following test items in the manifest. Any test specific settings will override the defaults, just as later items within a line override earlier ones.</p>
+             <p>A defaults line with no settings will reset the defaults to be empty.</p>
+             <p>As with url-prefix, defaults will often be used at the start of a manifest file so that it applies to all test items, but it is legal for defaults to appear anywhere in the manifest. A subsequent defaults will reset any previous default settings and overwrite them with the new settings.</p>
+             <p>It is invalid to set non-skip defaults before an include line, just as it is invalid to specify non-skip settings directly on the include line itself. If a manifest needs to use both defaults and include, the include should appear before the defaults. If it’s important to specify the include later on in the manifest, a blank defaults line directly preceding the include can be used to reset the defaults.</p>
+            </div>
+           </blockquote>
+           <p>This test manifest format could be used by other harnesses, such as ones that do not depend on XUL, or even ones testing other layout engines.</p>
+          </section>
+         </section>
+         <section id="running-tests">
+          <h2>Running Tests<a class="headerlink" href="#running-tests" title="Link to this heading">?</a></h2>
+          <p>To run a given reftest use something like the following</p>
+          <div class="highlight-default notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="o">./</span><span class="n">mach</span> <span class="n">reftest</span> <span class="o">&lt;</span><span class="n">path</span> <span class="n">to</span> <span class="n">individual</span> <span class="n">test</span> <span class="ow">or</span> <span class="n">directory</span><span class="o">&gt;</span>
+</pre>
+           </div>
+          </div>
+          <p>As an example, if we wanted to run the reftests relevant to async scrolling, run something like the following:</p>
+          <div class="highlight-default notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="o">./</span><span class="n">mach</span> <span class="n">reftest</span> <span class="o">./</span><span class="n">layout</span><span class="o">/</span><span class="n">reftest</span><span class="o">/</span><span class="k">async</span><span class="o">-</span><span class="n">scrolling</span> <span class="o">&amp;&gt;</span> <span class="n">reftest</span><span class="o">.</span><span class="n">out</span>
+</pre>
+           </div>
+          </div>
+          <p>and then search/grep reftest.out for “UNEXPECTED”.</p>
+          <p>There are two scripts provided to convert the reftest.out to HTML. clean-reftest-output.pl converts reftest.out into simple HTML, stripping lines from the log that aren’t relevant. reftest-to-html.pl converts the output into html that makes it easier to visually check for failures. See <span class="xref std std-ref">debugging failures</span> for more details on making sense of reftest results.</p>
+         </section>
+         <section id="testable-areas">
+          <h2>Testable Areas<a class="headerlink" href="#testable-areas" title="Link to this heading">?</a></h2>
+          <p>This framework is capable of testing many areas of the layout engine. It is particularly well-suited to testing dynamic change handling (by comparison to the static end-result as a reference) and incremental layout (comparison of a script-interrupted layout to one that was not). However, it is also possible to write tests for many other things that can be described in terms of equivalence, for example:</p>
+          <blockquote>
+           <div>
+            <ul class="simple">
+             <li>
+              <p>CSS cascading could be tested by comparing the result of a complicated set of style rules that makes a word green to &lt;span style=”color:green”&gt;word&lt;/span&gt;.</p></li>
+             <li>
+              <p>&lt;canvas&gt; compositing operators could be tested by comparing the result of drawing using canvas to a block-level element with the desired color as a CSS background-color.</p></li>
+             <li>
+              <p>CSS counters could be tested by comparing the text output by counters with a page containing the text written out</p></li>
+             <li>
+              <p>complex margin collapsing could be tested by comparing the complex case to a case where the margin is written out, or where the margin space is created by an element with ‘height’ and transparent background</p></li>
+            </ul>
+           </div>
+          </blockquote>
+          <p>When it is not possible to test by equivalence, it may be possible to test by non-equivalence. For example, testing justification in cases with more than two words, or more than three different words, is difficult. However, it is simple to test that justified text is at least displayed differently from left-, center-, or right-aligned text.</p>
+         </section>
+         <section id="writing-tests">
+          <h2>Writing Tests<a class="headerlink" href="#writing-tests" title="Link to this heading">?</a></h2>
+          <p>When writing tests for this framework, it is important for the test to depend only on behaviors that are known to be correct and permanent. For example, tests should not depend on default font sizes, default margins of the body element, the default style sheet used for HTML, the default appearance of form controls, or anything else that can be avoided.</p>
+          <p>In general, the best way to achieve this is to make the test and the reference identical in as many aspects as possible. For example:</p>
+          <p>Good test markup:</p>
+          <div class="highlight-default notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="o">&lt;</span><span class="n">div</span> <span class="n">style</span><span class="o">=</span><span class="s2">"color:green"</span><span class="o">&gt;&lt;</span><span class="n">table</span><span class="o">&gt;&lt;</span><span class="n">tr</span><span class="o">&gt;&lt;</span><span class="n">td</span><span class="o">&gt;&lt;</span><span class="n">span</span><span class="o">&gt;</span><span class="n">green</span>
+<span class="o">&lt;/</span><span class="n">span</span><span class="o">&gt;&lt;/</span><span class="n">td</span><span class="o">&gt;&lt;/</span><span class="n">tr</span><span class="o">&gt;&lt;/</span><span class="n">table</span><span class="o">&gt;&lt;/</span><span class="n">div</span><span class="o">&gt;</span>
+</pre>
+           </div>
+          </div>
+          <p>Good reference markup:</p>
+          <div class="highlight-default notranslate">
+           <div class="highlight">
+            <pre><span></span><span class="o">&lt;</span><span class="n">div</span><span class="o">&gt;&lt;</span><span class="n">table</span><span class="o">&gt;&lt;</span><span class="n">tr</span><span class="o">&gt;&lt;</span><span class="n">td</span><span class="o">&gt;&lt;</span><span class="n">span</span> <span class="n">style</span><span class="o">=</span><span class="s2">"color:green"</span><span class="o">&gt;</span><span class="n">green</span>
+<span class="o">&lt;/</span><span class="n">span</span><span class="o">&gt;&lt;/</span><span class="n">td</span><span class="o">&gt;&lt;/</span><span class="n">tr</span><span class="o">&gt;&lt;/</span><span class="n">table</span><span class="o">&gt;&lt;/</span><span class="n">div</span><span class="o">&gt;</span>
+</pre>
+           </div>
+          </div>
+          <p>BAD reference markup:</p>
+          <div class="highlight-default notranslate">
+           <div class="highlight">
+            <pre><span></span>&lt;!-- 3px matches the default cellspacing and cellpadding --&gt;
+&lt;div style="color:green; padding: 3px"&gt;green
+&lt;/div&gt;
+</pre>
+           </div>
+          </div>
+          <p>BAD test markup:</p>
+          <div class="highlight-default notranslate">
+           <div class="highlight">
+            <pre><span></span>&lt;!-- span doesn't change the positioning, so skip it --&gt;
+&lt;div style="color:green"&gt;&lt;table&gt;&lt;tr&gt;&lt;td&gt;green
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;
+</pre>
+           </div>
+          </div>
+          <section id="asynchronous-tests-class-reftest-wait">
+           <h3>Asynchronous Tests: class=”reftest-wait”<a class="headerlink" href="#asynchronous-tests-class-reftest-wait" title="Link to this heading">?</a></h3>
+           <p>Normally reftest takes a snapshot of the given markup’s rendering right after the load event fires for content. If your test needs to postpone the moment the snapshot is taken, it should make sure a class ‘reftest-wait’ is on the root element by the moment the load event fires. The easiest way to do this is to put it in the markup, e.g.:</p>
+           <div class="highlight-default notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="o">&lt;</span><span class="n">html</span> <span class="n">class</span><span class="o">=</span><span class="s2">"reftest-wait"</span><span class="o">&gt;</span>
+</pre>
+            </div>
+           </div>
+           <p>When your test is ready, you should remove this class from the root element, for example using this code:</p>
+           <div class="highlight-default notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="n">document</span><span class="o">.</span><span class="n">documentElement</span><span class="o">.</span><span class="n">className</span> <span class="o">=</span> <span class="s2">""</span><span class="p">;</span>
+</pre>
+            </div>
+           </div>
+           <p>Note that in layout tests it is often enough to trigger layout using</p>
+           <div class="highlight-default notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="n">document</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">offsetWidth</span>  <span class="o">//</span> <span class="n">HTML</span> <span class="n">example</span>
+</pre>
+            </div>
+           </div>
+           <p>When possible, you should use this technique instead of making your test async.</p>
+          </section>
+          <section id="invalidation-tests-mozreftestinvalidate-event">
+           <h3>Invalidation Tests: MozReftestInvalidate Event<a class="headerlink" href="#invalidation-tests-mozreftestinvalidate-event" title="Link to this heading">?</a></h3>
+           <p>When a test (or reference) uses reftest-wait, reftest tracks invalidation via MozAfterPaint and updates the test image in the same way that a regular window would be repainted. Therefore it is possible to test invalidation-related bugs by setting up initial content and then dynamically modifying it before removing reftest-wait. However, it is important to get the timing of these dynamic modifications right so that the test doesn’t accidentally pass because a full repaint of the window was already pending. To help with this, reftest fires one MozReftestInvalidate event at the document root element for a reftest-wait test when it is safe to make changes that should test invalidation. The event bubbles up to the document and window so you can set listeners there too. For example,</p>
+           <div class="highlight-default notranslate">
+            <div class="highlight">
+             <pre><span></span><span class="n">function</span> <span class="n">doTest</span><span class="p">()</span> <span class="p">{</span>
+  <span class="n">document</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">border</span> <span class="o">=</span> <span class="s2">""</span><span class="p">;</span>
+  <span class="n">document</span><span class="o">.</span><span class="n">documentElement</span><span class="o">.</span><span class="n">removeAttribute</span><span class="p">(</span><span class="s1">'class'</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="n">document</span><span class="o">.</span><span class="n">addEventListener</span><span class="p">(</span><span class="s2">"MozReftestInvalidate"</span><span class="p">,</span> <span class="n">doTest</span><span class="p">,</span> <span class="n">false</span><span class="p">);</span>
+</pre>
+            </div>
+           </div>
+          </section>
+          <section id="painting-tests-class-reftest-no-paint">
+           <h3>Painting Tests: class=”reftest-no-paint”<a class="headerlink" href="#painting-tests-class-reftest-no-paint" title="Link to this heading">?</a></h3>
+           <p>If an element shouldn’t be painted, set the class “reftest-no-paint” on it when doing an invalidation test. Causing a repaint in your MozReftestInvalidate handler (for example, by changing the body’s background colour) will accurately test whether the element is painted.</p>
+          </section>
+          <section id="display-list-tests-class-reftest-no-display-list">
+           <h3>Display List Tests: class=”reftest-[no-]display-list”<a class="headerlink" href="#display-list-tests-class-reftest-no-display-list" title="Link to this heading">?</a></h3>
+           <p>These classes work similarly to reftest-no-paint, but check if the element has display items created or not. These classes are useful for checking the behaviour of retained display lists, where the display list is incrementally updated by changes, rather than thrown out and rebuilt from scratch.</p>
+          </section>
+          <section id="opaque-layer-tests-class-reftest-opaque-layer">
+           <h3>Opaque Layer Tests: class=”reftest-opaque-layer”<a class="headerlink" href="#opaque-layer-tests-class-reftest-opaque-layer" title="Link to this heading">?</a></h3>
+           <p>If an element should be assigned to a PaintedLayer that’s opaque, set the class “reftest-opaque-layer” on it. This checks whether the layer is opaque during the last paint of the test, and it works whether your test is an invalidation test or not. In order to pass the test, the element has to have a primary frame, and that frame’s display items must all be assigned to a single painted layer and no other layers, so it can’t be used on elements that create stacking contexts (active or inactive).</p>
+          </section>
+          <section id="layerization-tests-reftest-assigned-layer-layer-name">
+           <h3>Layerization Tests: reftest-assigned-layer=”layer-name”<a class="headerlink" href="#layerization-tests-reftest-assigned-layer-layer-name" title="Link to this heading">?</a></h3>
+           <p>If two elements should be assigned to the same PaintedLayer, choose any string value as the layer name and set the attribute reftest-assigned-layer=”yourname” on both elements. Reftest will check whether all elements with the same reftest-assigned-layer value share the same layer. It will also test whether elements with different reftest-assigned-layer values are assigned to different layers. The same restrictions as with class=”reftest-opaque-layer” apply: All elements must have a primary frame, and that frame’s display items must all be assigned to the same PaintedLayer and no other layers. If these requirements are not met, the test will fail.</p>
+          </section>
+          <section id="snapshot-the-whole-window-class-reftest-snapshot-all">
+           <h3>Snapshot The Whole Window: class=”reftest-snapshot-all”<a class="headerlink" href="#snapshot-the-whole-window-class-reftest-snapshot-all" title="Link to this heading">?</a></h3>
+           <p>In a reftest-wait test, to disable testing of invalidation and force the final snapshot to be taken of the whole window, set the “reftest-snapshot-all” class on the root element.</p>
+          </section>
+          <section id="avoid-triggering-flushes-class-reftest-no-flush">
+           <h3>Avoid triggering flushes: class=”reftest-no-flush”<a class="headerlink" href="#avoid-triggering-flushes-class-reftest-no-flush" title="Link to this heading">?</a></h3>
+           <p>The reftest harness normally triggers flushes by calling getBoundingClientRect on the root element. If the root element of the test has class=”reftest-no-flush”, it doesn’t do this.</p>
+           <p>This is useful for testing animations on the compositor thread, since the flushing will cause a main thread style update.</p>
+          </section>
+          <section id="zoom-tests-reftest-zoom-float">
+           <h3>Zoom Tests: reftest-zoom=”&lt;float&gt;”<a class="headerlink" href="#zoom-tests-reftest-zoom-float" title="Link to this heading">?</a></h3>
+           <p>When the root element of a test has a “reftest-zoom” attribute, that zoom factor is applied when rendering the test. The corresponds to the desktop “full zoom” style zoom. The reftest document will be 800 device pixels wide by 1000 device pixels high. The reftest harness assumes that the CSS pixel dimensions are 800/zoom and 1000/zoom. For best results therefore, choose zoom factors that do not require rounding when we calculate the number of appunits per device pixel; i.e. the zoom factor should divide 60, so 60/zoom is an integer.</p>
+          </section>
+          <section id="setting-scrollport-size-reftest-scrollport-w-h-int">
+           <h3>Setting Scrollport Size: reftest-scrollport-w/h=”&lt;int&gt;”<a class="headerlink" href="#setting-scrollport-size-reftest-scrollport-w-h-int" title="Link to this heading">?</a></h3>
+           <p>If either of the “reftest-scrollport-w” and “reftest-scrollport-h” attributes on the root element are non-zero, sets the scroll-position-clamping scroll-port size to the given size in CSS pixels. This does not affect the size of the snapshot that is taken.</p>
+          </section>
+          <section id="setting-resolution-reftest-resolution-float">
+           <h3>Setting Resolution: reftest-resolution=”&lt;float&gt;”<a class="headerlink" href="#setting-resolution-reftest-resolution-float" title="Link to this heading">?</a></h3>
+           <p>If the root element of a test has a “reftest-resolution” attribute, the page is rendered with the specified resolution (as if the user pinch-zoomed in to that scale). Note that the difference between reftest-async-zoom and reftest-resolution is that reftest-async-zoom only applies the scale in the compositor, while reftest-resolution causes the page to be paint at that resolution. This attribute can be used together with initial-scale in meta viewport tag, in such cases initial-scale is applied first then reftest-resolution changes the scale.</p>
+           <p>This attributes requires the pref apz.allow_zooming=true to have an effect.</p>
+          </section>
+          <section id="setting-async-scroll-mode-reftest-async-scroll-attribute">
+           <h3>Setting Async Scroll Mode: reftest-async-scroll attribute<a class="headerlink" href="#setting-async-scroll-mode-reftest-async-scroll-attribute" title="Link to this heading">?</a></h3>
+           <p>If the “reftest-async-scroll” attribute is set on the root element, we try to enable async scrolling and zooming for the document. This is unsupported in many configurations.</p>
+          </section>
+          <section id="setting-displayport-dimensions-reftest-displayport-x-y-w-h-int">
+           <h3>Setting Displayport Dimensions: reftest-displayport-x/y/w/h=”&lt;int&gt;”<a class="headerlink" href="#setting-displayport-dimensions-reftest-displayport-x-y-w-h-int" title="Link to this heading">?</a></h3>
+           <p>If any of the “reftest-displayport-x”, “reftest-displayport-y”, “reftest-displayport-w” and “reftest-displayport-h” attributes on the root element are nonzero, sets the displayport dimensions to the given bounds in CSS pixels. This does not affect the size of the snapshot that is taken.</p>
+           <p>When the “reftest-async-scroll” attribute is set on the root element, <em>all</em> elements in the document are checked for “reftest-displayport-x/y/w/h” and have displayports set on them when those attributes are present.</p>
+          </section>
+          <section id="testing-async-scrolling-reftest-async-scroll-x-y-int">
+           <h3>Testing Async Scrolling: reftest-async-scroll-x/y=”&lt;int&gt;”<a class="headerlink" href="#testing-async-scrolling-reftest-async-scroll-x-y-int" title="Link to this heading">?</a></h3>
+           <p>When the “reftest-async-scroll” attribute is set on the root element, for any element where either the “reftest-async-scroll-x” or “reftest-async-scroll-y attributes are nonzero, at the end of the test take the snapshot with the given offset (in CSS pixels) added to the async scroll offset.</p>
+          </section>
+          <section id="testing-async-zooming-reftest-async-zoom-float">
+           <h3>Testing Async Zooming: reftest-async-zoom=”&lt;float&gt;”<a class="headerlink" href="#testing-async-zooming-reftest-async-zoom-float" title="Link to this heading">?</a></h3>
+           <p>When the “reftest-async-zoom” attribute is present on the root element then at the end of the test take the snapshot with the given async zoom on top of any existing zoom. Content is not re-rendered at the new zoom level. This corresponds to the mobile style “pinch zoom” style of zoom. This is unsupported in many configurations, and any tests using this will probably want to have pref(apz.allow_zooming,true) on them.</p>
+          </section>
+          <section id="pagination-tests-class-reftest-paged">
+           <h3>Pagination Tests: class=”reftest-paged”<a class="headerlink" href="#pagination-tests-class-reftest-paged" title="Link to this heading">?</a></h3>
+           <p>Now that the patch for <a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=374050">bug 374050</a> has landed (<a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=374050">https://bugzilla.mozilla.org/show_bug.cgi?id=374050</a>), it is possible to create reftests that run in a paginated context.</p>
+           <p>The page size used is 5in wide and 3in tall (with the default half-inch margins). This is to allow tests to have less text and to make the entire test fit on the screen.</p>
+           <p>There is a layout/reftests/printing directory for pagination reftests; however, there is nothing special about this directory. You can put pagination reftests anywhere that is appropriate.</p>
+           <p>The suggested first lines for any pagination test is:</p>
+           <div class="highlight-default notranslate">
+            <div class="highlight">
+             <pre><span></span>&lt;!DOCTYPE html&gt;&lt;html class="reftest-paged"&gt;
+&lt;style&gt;html{font-size:12pt}&lt;/style&gt;
+</pre>
+            </div>
+           </div>
+           <p>The reftest-paged class on the root element triggers the reftest to switch into page mode. Fixing the font size is suggested, although not required, because the pages are a fixed size in inches. The switch to page mode happens on load if the reftest-wait class is not present; otherwise it happens immediately after firing the MozReftestInvalidate event.</p>
+           <p>The underlying layout support for this mode isn’t really complete; it doesn’t use exactly the same codepath as real print preview/print. In particular, scripting and frames are likely to cause problems; it is untested, though. That said, it should be sufficient for testing layout issues related to pagination.</p>
+          </section>
+          <section id="process-crash-tests-class-reftest-expect-process-crash">
+           <h3>Process Crash Tests: class=”reftest-expect-process-crash”<a class="headerlink" href="#process-crash-tests-class-reftest-expect-process-crash" title="Link to this heading">?</a></h3>
+           <p>If you are running a test that causes a process under Electrolysis to crash as part of a reftest, this will cause process crash minidump files to be left in the profile directory. The test infrastructure that runs the reftests will notice these minidump files and dump out information from them, and these additional error messages in the logs can end up erroneously being associated with other errors from the reftest run. They are also confusing, since the appearance of “PROCESS-CRASH” messages in the test run output can seem like a real problem, when in fact it is the expected behavior.</p>
+           <p>To indicate to the reftest framework that a test is expecting a process to crash, have the test include “reftest-expect-process-crash” as one of the root element’s classes by the time the test has finished. This will cause any minidump files that are generated while running the test to be removed and they won’t cause any error messages in the test run output.</p>
+          </section>
+          <section id="skip-forcing-a-content-process-layer-tree-update-reftest-no-sync-layers-attribute">
+           <h3>Skip Forcing A Content Process Layer-Tree Update: reftest-no-sync-layers attribute<a class="headerlink" href="#skip-forcing-a-content-process-layer-tree-update-reftest-no-sync-layers-attribute" title="Link to this heading">?</a></h3>
+           <p>Normally when an multi-process reftest test ends, we force the content process to push a layer-tree update to the compositor before taking the snapshot. Setting the “reftest-no-sync-layers” attribute on the root element skips this step, enabling testing that layer-tree updates are being correctly generated. However the test must manually wait for a MozAfterPaint event before ending.</p>
+          </section>
+         </section>
+         <section id="specialpowers">
+          <h2>SpecialPowers<a class="headerlink" href="#specialpowers" title="Link to this heading">?</a></h2>
+          <p>Some tests may require synthesized user input events or other functions that normally cannot be run from a typical script. Layout reftests have access to <cite>SpecialPowers</cite> for such cases.</p>
+          <p>Test authors have ability to access the privilegd <cite>nsIDOMWindowUtils</cite> interface using <cite>SpecialPowers.getDOMWindowUtils(window)</cite>. The interface contains many interesting abilities, including event synthesization.</p>
+         </section>
+         <section id="debugging-failures">
+          <h2>Debugging Failures<a class="headerlink" href="#debugging-failures" title="Link to this heading">?</a></h2>
+          <p>The Reftest Analyzer has been created to make debugging reftests a bit easier. If a reftest is failing, upload the log to the Reftest Analyzer to view the differences between the expected result and the actual outcome of the reftest. The Reftest Analyzer can be found at the following url:</p>
+          <p><a class="reference external" href="https://hg.mozilla.org/mozilla-central/raw-file/tip/layout/tools/reftest/reftest-analyzer.xhtml">https://hg.mozilla.org/mozilla-central/raw-file/tip/layout/tools/reftest/reftest-analyzer.xhtml</a></p>
+         </section>
+        </section>
+       </div>
+      </div>
+      <footer>
+       <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="DynamicChangeHandling.html" class="btn btn-neutral float-left" title="Dynamic change handling along the rendering pipeline" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a> <a href="LayoutDebugger.html" class="btn btn-neutral float-right" title="Layout Debugger" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+       </div>
+       <hr>
+       <div role="contentinfo">
+        <p></p>
+       </div> Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+      </footer>
+     </div>
+    </div>
+   </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ </body>
+</html>

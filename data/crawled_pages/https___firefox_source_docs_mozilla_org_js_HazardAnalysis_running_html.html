@@ -1,0 +1,393 @@
+<!doctype html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Running the Rooting Hazard Analysis — Firefox Source Docs  documentation</title>
+  <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50">
+  <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094">
+  <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=fd3f3429">
+  <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b">
+  <link rel="stylesheet" type="text/css" href="../../_static/custom_theme.css?v=dc5ed815">
+  <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7">
+  <link rel="shortcut icon" href="../../_static/firefox.ico"><!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script src="../../_static/jquery.js?v=5d32c60e"></script>
+  <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+  <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+  <script src="../../_static/doctools.js?v=9a2dae69"></script>
+  <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+  <script src="../../_static/copybutton.js?v=30646c52"></script>
+  <script src="../../_static/design-tabs.js?v=36754332"></script>
+  <script src="../../_static/js/theme.js"></script>
+  <link rel="index" title="Index" href="../../genindex.html">
+  <link rel="search" title="Search" href="../../search.html">
+  <link rel="next" title="MIR optimizations from a thousand feet" href="../MIR-optimizations/index.html">
+  <link rel="prev" title="Static Analysis for Rooting and Heap Write Hazards" href="index.html">
+ </head>
+ <body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+   <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <div class="wy-side-scroll">
+     <div class="wy-side-nav-search">
+      <a href="../../index.html" class="icon icon-home"> Firefox Source Docs <img src="../../_static/firefox-wordmark.svg" class="logo" alt="Logo"> </a><!-- -- This code is governed by the BSD license ---->
+      <div>
+       <h3>Quick search</h3>
+       <script>
+    (function () {
+      var cx = "dd12886298f75dbef";
+      var gcse = document.createElement("script");
+      gcse.async = true;
+      gcse.src = "https://cse.google.com/cse.js?cx=" + cx;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(gcse, s);
+    })();
+  </script><gcse:search></gcse:search>
+      </div>
+     </div>
+     <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+      <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../glossary/index.html">A Glossary of Common Terms</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../overview/index.html">A Quick Guide to Mozilla Applications</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../setup/index.html">Getting Set Up To Work On The Firefox Codebase</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Working On Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../contributing/index.html">Working on Firefox</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../bug-mgmt/index.html">Bug Handling</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox User Guide</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../devtools-user/index.html">Firefox DevTools User Docs</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Source Code Documentation</span></p>
+      <ul class="current">
+       <li class="toctree-l1"><a class="reference internal" href="../../mots/index.html">Governance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../browser/index.html">Firefox Front-end</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../dom/index.html">DOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../editor/index.html">Editor</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../layout/index.html">Style system (CSS) &amp; Layout</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../gfx/index.html">Graphics</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../ipc/index.html">Processes, Threads and IPC</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../devtools/index.html">Firefox DevTools Contributor Docs</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../toolkit/index.html">Toolkit</a></li>
+       <li class="toctree-l1 current"><a class="reference internal" href="../index.html">SpiderMonkey</a>
+        <ul class="current">
+         <li class="toctree-l2"><a class="reference internal" href="../build.html">Building and testing SpiderMonkey</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../test.html">Running Automated JavaScript Tests</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../hacking_tips.html">Hacking Tips</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../Debugger/index.html">Debugger API</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../SavedFrame/index.html">SavedFrame</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../feature_checklist.html">JavaScript Language Feature Checklist</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../bytecode_checklist.html">So You Want to Add a Bytecode Op</a></li>
+         <li class="toctree-l2"><a class="reference internal" href="../use_counter.html">Adding Use Counter Telemetry to the JS Engine</a></li>
+         <li class="toctree-l2 current"><a class="reference internal" href="../index.html#components-of-spidermonkey">Components of SpiderMonkey</a>
+          <ul class="current">
+           <li class="toctree-l3 current"><a class="reference internal" href="../index.html#garbage-collector">? Garbage Collector</a>
+            <ul class="current">
+             <li class="toctree-l4"><a class="reference internal" href="../gc.html">Overview</a></li>
+             <li class="toctree-l4"><a class="reference internal" href="index.html">Rooting Hazard Analysis</a></li>
+             <li class="toctree-l4 current"><a class="current reference internal" href="#">Running the Analysis</a></li>
+            </ul></li>
+           <li class="toctree-l3"><a class="reference internal" href="../index.html#js-value-and-jsobject">? JS::Value and JSObject</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="../index.html#javascript-parser">?? JavaScript Parser</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="../index.html#javascript-interpreter">?? JavaScript Interpreter</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="../index.html#javascript-jits">? JavaScript JITs</a></li>
+           <li class="toctree-l3"><a class="reference internal" href="../index.html#id1">? WebAssembly</a></li>
+          </ul></li>
+        </ul></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../jsloader/index.html">JS Loader</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/geckoview/index.html">GeckoView</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/fenix/index.html">Fenix</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mobile/android/focus-android/index.html">Focus for Android</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../dom/bindings/webidl/index.html">WebIDL</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../modules/libpref/index.html">libpref</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../networking/index.html">Networking</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../remote/index.html">Remote Protocols</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../services/index.html">Services</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../permissions/index.html">Permissions</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../uriloader/index.html">File Handling</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../widget/cocoa/index.html">Firefox on macOS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../widget/windows/index.html">Firefox on Windows</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../toolkit/components/ml/index.html">Firefox AI Runtime</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../accessible/index.html">Accessibility</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../media/index.html">Media Playback</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../code-quality/index.html">Code quality</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../writing-rust-code/index.html">Writing Rust Code</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../rust-components/index.html">Rust Components</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/profiler/index.html">Gecko Profiler</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../performance/index.html">Performance</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../storage/index.html">Database bindings (SQLite, KV, …)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../xpcom/index.html">XPCOM</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../nspr/index.html">NSPR</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../security/nss/index.html">Network Security Services (NSS)</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../content-security/index.html">Web Security Checks in Gecko</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">The Firefox Build System</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mach/index.html">Mach</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/try/index.html">Pushing to Try</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../build/buildsystem/index.html">Build System</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../taskcluster/index.html">Firefox CI and Taskgraph</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/moztreedocs/index.html">Managing Documentation</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../mozbuild/vendor/index.html">Vendoring Third Party Components</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Testing &amp; Test Infrastructure</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/automated-testing/index.html">Automated Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/treeherder-try/index.html">Understanding Treeherder Results</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/sheriffed-intermittents/index.html">Sheriffed intermittent failures</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/tests-for-new-config/index.html">Turning on Firefox tests for a new configuration</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/intermittent/index.html">Avoiding intermittent tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/testing-policy/index.html">Testing Policy</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/ci-configs/index.html">Configuration Changes</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/browser-chrome/index.html">Browser chrome mochitests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/chrome-tests/index.html">Chrome Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/marionette/index.html">Marionette</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/geckodriver/index.html">geckodriver</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/test-verification/index.html">Test Verification</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/webrender/index.html">WebRender Tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/mochitest-plain/index.html">Mochitest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/xpcshell/index.html">XPCShell tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/tps/index.html">TPS</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../web-platform/index.html">web-platform-tests</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../gtest/index.html">GTest</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/fuzzing/index.html">Fuzzing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/sanitizer/index.html">Sanitizer</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing/perfdocs/index.html">Performance Testing</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/code-coverage/index.html">Code coverage</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../testing-rust-code/index.html">Testing &amp; Debugging Rust Code</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Releases &amp; Updates</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html">Mozilla Update Infrastructure</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html#watershed-updates">Watershed Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../update-infrastructure/index.html#desupport-updates">Desupport Updates</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../tools/update-verify/index.html">Update Verify</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Localization &amp; Internationalization</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../intl/index.html">Internationalization</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../l10n/index.html">Localization</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Firefox and Python</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../mozbase/index.html">mozbase</a></li>
+       <li class="toctree-l1"><a class="reference internal" href="../../python/index.html">Using third-party Python packages</a></li>
+      </ul>
+      <p class="caption" role="heading"><span class="caption-text">Metrics Collected in Firefox</span></p>
+      <ul>
+       <li class="toctree-l1"><a class="reference internal" href="../../metrics/index.html">Metrics</a></li>
+      </ul>
+     </div>
+    </div>
+   </nav>
+   <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+    <nav class="wy-nav-top" aria-label="Mobile navigation menu">
+     <i data-toggle="wy-nav-top" class="fa fa-bars"></i> <a href="../../index.html">Firefox Source Docs</a>
+    </nav>
+    <div class="wy-nav-content">
+     <div class="rst-content">
+      <!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+   - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+      <div role="navigation" aria-label="Page navigation">
+       <ul class="wy-breadcrumbs">
+        <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+        <li class="breadcrumb-item"><a href="../index.html">SpiderMonkey</a></li>
+        <li class="breadcrumb-item active">Running the Rooting Hazard Analysis</li>
+        <li class="wy-breadcrumbs-aside"><a href="https://bugzilla.mozilla.org/enter_bug.cgi?product=Developer+Infrastructure&amp;component=Firefox+Source+Docs%3A+Content&amp;short_desc=Documentation+issue+on+js/HazardAnalysis/running&amp;comment=URL+=+https://firefox-source-docs.mozilla.org/js/HazardAnalysis/running.html&amp;bug_file_loc=https://firefox-source-docs.mozilla.org/js/HazardAnalysis/running.html" rel="nofollow">Report an issue</a> / <a href="../../_sources/js/HazardAnalysis/running.md.txt" rel="nofollow"> View page source</a></li>
+       </ul>
+       <hr>
+      </div>
+      <div role="main" class="document" itemscope itemtype="http://schema.org/Article">
+       <div itemprop="articleBody">
+        <section id="running-the-rooting-hazard-analysis">
+         <h1>Running the Rooting Hazard Analysis<a class="headerlink" href="#running-the-rooting-hazard-analysis" title="Link to this heading">?</a></h1>
+         <p>The <code class="docutils literal notranslate"><span class="pre">js/src/devtools/rootAnalysis</span></code> directory contains scripts for running Brian Hackett’s static GC rooting and thread heap write safety analyses on a JS source directory.</p>
+         <p>To run the analysis on SpiderMonkey:</p>
+         <ol class="arabic">
+          <li>
+           <p>Unset your $MOZCONFIG</p>
+           <div class="highlight-none notranslate">
+            <div class="highlight">
+             <pre><span></span> unset MOZCONFIG
+</pre>
+            </div>
+           </div></li>
+          <li>
+           <p>Install prerequisites.</p>
+           <div class="highlight-none notranslate">
+            <div class="highlight">
+             <pre><span></span> mach hazards bootstrap
+</pre>
+            </div>
+           </div></li>
+          <li>
+           <p>Build the shell to run the analysis.</p>
+           <div class="highlight-none notranslate">
+            <div class="highlight">
+             <pre><span></span> mach hazards build-shell
+</pre>
+            </div>
+           </div></li>
+          <li>
+           <p>Compile all the code to gather info.</p>
+           <div class="highlight-none notranslate">
+            <div class="highlight">
+             <pre><span></span> mach hazards gather --project=js
+</pre>
+            </div>
+           </div></li>
+          <li>
+           <p>Analyze the gathered info.</p>
+           <div class="highlight-none notranslate">
+            <div class="highlight">
+             <pre><span></span> mach hazards analyze --project=js
+</pre>
+            </div>
+           </div></li>
+         </ol>
+         <p>Output goes to <code class="docutils literal notranslate"><span class="pre">$srctop/haz-js/hazards.txt</span></code>. This will run the analysis on the js/src tree only; if you wish to analyze the full browser, use</p>
+         <div class="highlight-none notranslate">
+          <div class="highlight">
+           <pre><span></span>    --project=browser
+</pre>
+          </div>
+         </div>
+         <p>(or leave it off; <code class="docutils literal notranslate"><span class="pre">--project=browser</span></code> is the default)</p>
+         <ol class="arabic" start="6">
+          <li>
+           <p>(optional) View the resulting hazards.</p>
+           <div class="highlight-none notranslate">
+            <div class="highlight">
+             <pre><span></span> mach hazards view --project=js
+</pre>
+            </div>
+           </div></li>
+         </ol>
+         <p>After running the analysis once, you can reuse the <code class="docutils literal notranslate"><span class="pre">*.xdb</span></code> database files generated, using modified analysis scripts, by running either the <code class="docutils literal notranslate"><span class="pre">mach</span> <span class="pre">hazards</span> <span class="pre">analyze</span></code> command above, or by adding on <code class="docutils literal notranslate"><span class="pre">mach</span> <span class="pre">hazards</span> <span class="pre">analyze</span> <span class="pre">&lt;step&gt;</span></code> to run a subset of the analysis steps; <code class="docutils literal notranslate"><span class="pre">mach</span> <span class="pre">hazards</span> <span class="pre">analyze</span> <span class="pre">--</span> <span class="pre">--list</span></code> to see step names.</p>
+         <p>Also, you can pass <code class="docutils literal notranslate"><span class="pre">--</span> <span class="pre">-v</span></code> to get exact command lines to cut &amp; paste for running the various stages, which is helpful for running under a debugger.</p>
+         <section id="incremental-analyses">
+          <h2>Incremental Analyses<a class="headerlink" href="#incremental-analyses" title="Link to this heading">?</a></h2>
+          <p>Once you have an analysis, you can make code changes and rebuild with <code class="docutils literal notranslate"><span class="pre">mach</span> <span class="pre">hazards</span> <span class="pre">gather</span></code>. This will add to the existing <code class="docutils literal notranslate"><span class="pre">*.xdb</span></code> files, which will <em>usually</em> work ok, but sometimes older compilations will have left around information that will get in the way. A typical example is with lambda functions: you may get hazards reported due to lambdas that no longer exist, but the newer compile will not replace them. Although this could be fixed with some amount of effort, you’re fighting against something of a fundamental problem where the analysis is depending on certain things <em>NOT</em> happening (eg calls to the GC) and incremental compilation only adds and replaces existing information. It does not remove information unless it is replacing it with something of a matching name (and things like lambdas have autogenerated numbers in their names that vary between compiles.)</p>
+          <p>In short: for development speed, feel free to use incremental analyses but don’t trust them. If the hazard analysis starts claiming the impossible is happening, try <code class="docutils literal notranslate"><span class="pre">mach</span> <span class="pre">hazards</span> <span class="pre">clobber</span></code> and do a full rebuild.</p>
+         </section>
+         <section id="overview-of-what-is-going-on-here">
+          <h2>Overview of what is going on here<a class="headerlink" href="#overview-of-what-is-going-on-here" title="Link to this heading">?</a></h2>
+          <p>So what does this actually do?</p>
+          <ol class="arabic simple">
+           <li>
+            <p>It downloads a GCC compiler and plugin (“sixgill”) from Mozilla servers.</p></li>
+           <li>
+            <p>It runs <code class="docutils literal notranslate"><span class="pre">run_complete</span></code>, a script that builds the target codebase with the downloaded GCC, generating a few database files containing control flow graphs of the full compile, along with type information etc.</p></li>
+           <li>
+            <p>Then it runs <code class="docutils literal notranslate"><span class="pre">analyze.py</span></code>, a Python script, which runs all the scripts which actually perform the analysis – the tricky parts. (Those scripts are written in JS.)</p></li>
+          </ol>
+          <p>The easiest way to get this running is to not try to do the instrumented compilation locally. Instead, grab the relevant files from a try server push and analyze them locally.</p>
+         </section>
+         <section id="local-analysis-of-downloaded-intermediate-files">
+          <h2>Local Analysis of Downloaded Intermediate Files<a class="headerlink" href="#local-analysis-of-downloaded-intermediate-files" title="Link to this heading">?</a></h2>
+          <p>Another useful path is to let the continuous integration system do the hard work of generating the intermediate files and analyze them locally. This is particularly useful if you are working on the analysis itself.</p>
+          <ul>
+           <li>
+            <p>Do a try push with “–upload-xdbs” appended to the try: …” line.</p>
+            <div class="highlight-none notranslate">
+             <div class="highlight">
+              <pre><span></span>  mach try fuzzy -q "'haz" --upload-xdbs
+</pre>
+             </div>
+            </div></li>
+           <li>
+            <p>Create an empty directory to run the analysis.</p></li>
+           <li>
+            <p>When the try job is complete, download the resulting <code class="docutils literal notranslate"><span class="pre">src_body.xdb.bz2</span></code>, <code class="docutils literal notranslate"><span class="pre">src_comp.xdb.bz2</span></code>, and <code class="docutils literal notranslate"><span class="pre">file_source.xdb.bz2</span></code> files into your directory.</p></li>
+           <li>
+            <p>Fetch a compiler and sixgill plugin to use:</p>
+            <div class="highlight-none notranslate">
+             <div class="highlight">
+              <pre><span></span>  mach hazards bootstrap
+</pre>
+             </div>
+            </div></li>
+          </ul>
+          <p>If you are on osx, these will not be available. Instead, build sixgill manually (these directions are a little stale):</p>
+          <div class="highlight-none notranslate">
+           <div class="highlight">
+            <pre><span></span>    hg clone https://hg.mozilla.org/users/sfink_mozilla.com/sixgill
+    cd sixgill
+    CC=$HOME/.mozbuild/hazard-tools/gcc/bin/gcc ./release.sh --build # This will fail horribly.
+    make bin/xdb.so CXX=clang++
+</pre>
+           </div>
+          </div>
+          <ul>
+           <li>
+            <p>Build an optimized JS shell with ctypes. Note that this does not need to match the source you are analyzing in any way; in fact, you pretty much never need to update this once you’ve built it. (Though I reserve the right to use any new JS features implemented in Spidermonkey in the future…)</p>
+            <div class="highlight-none notranslate">
+             <div class="highlight">
+              <pre><span></span>  mach hazards build-shell
+</pre>
+             </div>
+            </div></li>
+          </ul>
+          <p>The shell will be placed by default in <code class="docutils literal notranslate"><span class="pre">$topsrcdir/obj-haz-shell</span></code>.</p>
+          <ul>
+           <li>
+            <p>Make a defaults.py file containing the following, with your own paths filled in:</p>
+            <div class="highlight-none notranslate">
+             <div class="highlight">
+              <pre><span></span>  js = "&lt;objdir&gt;/dist/bin/js"
+  sixgill_bin = "&lt;sixgill-dir&gt;/bin"
+</pre>
+             </div>
+            </div></li>
+           <li>
+            <p>For the rooting analysis, run</p>
+            <div class="highlight-none notranslate">
+             <div class="highlight">
+              <pre><span></span>  python &lt;srcdir&gt;/js/src/devtools/rootAnalysis/analyze.py gcTypes
+</pre>
+             </div>
+            </div></li>
+           <li>
+            <p>For the heap write analysis, run</p>
+            <div class="highlight-none notranslate">
+             <div class="highlight">
+              <pre><span></span>  python &lt;srcdir&gt;/js/src/devtools/rootAnalysis/analyze.py heapwrites
+</pre>
+             </div>
+            </div></li>
+          </ul>
+          <p>Also, you may wish to run with -v (aka –verbose) to see the exact commands executed that you can cut &amp; paste if needed. (I use them to run under the JS debugger when I’m working on the analysis.)</p>
+         </section>
+        </section>
+       </div>
+      </div>
+      <footer>
+       <div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Static Analysis for Rooting and Heap Write Hazards" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a> <a href="../MIR-optimizations/index.html" class="btn btn-neutral float-right" title="MIR optimizations from a thousand feet" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+       </div>
+       <hr>
+       <div role="contentinfo">
+        <p></p>
+       </div> Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+      </footer>
+     </div>
+    </div>
+   </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ </body>
+</html>

@@ -1,0 +1,57 @@
+<html lang="en">
+ <!--#include virtual="/includes/header.txt" -->
+ <head>
+  <style>
+.sidenav { width:130px; position:fixed; z-index:1; top:120px; left:10px; padding:8px 0; }
+.sidenav a { padding: 6px 8px 6px 16px; text-decoration:underline; display:block; }
+.sidenav a:hover{ color: #064597; }
+.main { margin-left:140px; padding:0px 10px; height:680px; overflow:scroll;}
+</style>
+  <script type="text/javascript" src="/js_libs/jquery.js"></script>
+  <script>document.title="Chukar"; aou="2882"</script>
+ </head>
+ <body>
+  <div id="sidenav" class="sidenav">
+   <a onclick="show(&quot;idtips&quot;)">ID Tips</a> <a onclick="show(&quot;life&quot;)">Life History</a> <a onclick="show(&quot;bbs&quot;)">BBS Map</a> <a onclick="show(&quot;cbc&quot;)">CBC Map</a> <a onclick="window.open(&quot;http://www.itis.gov/servlet/SingleRpt/SingleRpt?search_topic=TSN&amp;search_value=175908&quot;)">Taxonomy(ITIS)</a> <a onclick="show(&quot;glos&quot;)">Glossary</a> <a><img src="/id/framlst/photo_htm/Images/h2882pi.gif" alt="Image" border="0" onclick="show(&quot;pi&quot;)"> </a>
+  </div>
+  <div id="main" class="main">
+  </div>
+  <script>
+var aou='2882'
+show = function(x) {
+  var a="", y=""
+  if (x=="idtips") a="/id/framlst/Idtips/h"+aou+"id.html";
+  if (x=="life") a="/id/framlst/Lifehistory/lh"+aou+".html";
+  if (x=="bbs") a="<img src=/id/framlst/BBSMap/ra"+aou+".gif>";
+  if (x=="cbc") a="<img src=/id/framlst/CBCMap/ra"+aou+".gif>";
+  if (x=="song") a="/id/framlst/Song/h"+aou+"so.mp3";
+  if (x=="glos") a="/id/framlst/Glossary/glossary.html";
+  if (x.substring(0,1)=="p") a="<img src=/id/framlst/photo_htm/Images/h"+aou+x+".jpg>";
+  y=a
+  if (x=="idtips" | x=="life") {
+    $.get(a,function(data) {
+      y=data.replace(/.+BODY./gi,"").replace(/.+HTML.+/gi,"").replace("<hr>","")
+      document.getElementById("main").innerHTML=y
+    },'text')
+  }
+  if (x=="glos") {
+    $.get(a,function(data) {
+      i=data.indexOf("H1"); y=data.substring(i-2)
+      j=y.indexOf("<hr>"); y=y.substring(0,j-2)
+      document.getElementById("main").innerHTML=y
+    },'text')
+  }
+  if (x=="song")  new Audio(a).play()
+  
+  if (x=="bbs" | x =="cbc" | x.substring(0,1)=="p") document.getElementById("main").innerHTML=a
+}
+show("idtips")
+window.onload = function() {
+  var sn=document.getElementById("sidenav").getBoundingClientRect()
+  var h=sn.height
+  var z=document.getElementsByClassName("footer")[0].style
+  z.top=0
+}
+</script><!--#include virtual="/includes/footer.txt" -->
+ </body>
+</html>

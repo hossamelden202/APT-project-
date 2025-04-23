@@ -1,0 +1,455 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta property="og:type" content="website">
+  <meta property="og:title" name="title" content="Software MacKiev - Family Tree Maker">
+  <meta property="og:site_name" content="Family Tree Maker">
+  <meta property="og:image" content="/images/ftm/ftm19/ftm-bnr.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image" content="/images/ftm/ftm19/ftm-bnr_2x.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="1200">
+  <meta property="og:url" content="/ftm/">
+  <meta property="og:description" name="Description" content="Family Tree Maker makes it easier than ever to discover your family story, preserve your legacy and share your unique heritage. If you're new to family history, you'll appreciate how this intuitive program lets you easily grow your family tree with simple navigation, tree-building tools, and integrated Web searching. If you’re already an expert, you can dive into the more advanced features, options for managing data, and a wide variety of charts and reports. The end result is a family history that you and your family will treasure for years to come!">
+  <title>Software MacKiev - Family Tree Maker</title>
+  <link rel="stylesheet" href="/fonts/sans_pro/sans_pro.css">
+  <link rel="stylesheet" href="/fonts/myriadpro.css">
+  <link rel="stylesheet" href="/css/menu.css">
+  <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css?v=20190724130739">
+  <link rel="stylesheet" href="/css/ftm/product_style.css?v=20241121124529">
+  <link rel="stylesheet" href="/css/plugins/colorbox/colorbox.css?v=1">
+  <link href="/css/plugins/magnific-popup/magnific-popup.min.css" rel="stylesheet" type="text/css" media="screen">
+  <link rel="stylesheet" href="/css/header_with_menu.css?v=20211124130215">
+  <link rel="stylesheet" href="/css/footer_custom_styles.css?v=20211124130215">
+  <script src="/js/jquery_latest/jquery.min.js?v=20231010094016"></script>
+  <script src="/js/bootstrap/js/bootstrap.min.js?v=20190724130739"></script>
+  <script src="/js/plugins/magnific-popup/jquery.magnific-popup.min.js"></script>
+  <script src="/js/colorbox/jquery.colorbox.js"></script>
+  <script src="/js/smk.js"></script>
+  <script>
+
+
+        var keys = [37, 38, 39, 40];
+
+        function preventDefault(e) {
+            e = e || window.event;
+            if (e.preventDefault) e.preventDefault();
+            e.returnValue = false;
+        }
+
+        function keydown(e) {
+            for (var i = keys.length; i--;) {
+                if (e.keyCode === keys[i]) {
+                    preventDefault(e);
+                    return;
+                }
+            }
+        }
+
+        function wheel(e) {
+            preventDefault(e);
+        }
+
+        function disable_scroll() {
+            if (window.addEventListener) {
+                window.addEventListener('DOMMouseScroll', wheel, false);
+            }
+            window.onmousewheel = document.onmousewheel = wheel;
+            document.onkeydown = keydown;
+        }
+
+        function enable_scroll() {
+            if (window.removeEventListener) {
+                window.removeEventListener('DOMMouseScroll', wheel, false);
+            }
+            window.onmousewheel = document.onmousewheel = document.onkeydown = null;
+        }
+
+        var popupData = {
+            'main_store': {
+                'title': 'Welcome to the Software MacKiev Education Store!',
+                'link': {
+                    'type': 'href',
+                    'us': '/store_us.html?productTab=ftmbutton',
+                    intern: '/store_intern.html?productTab=ftmbutton'
+                }
+            }
+        };
+
+        $(function () {
+            function fillText(element, elementValue, info) {
+                if ($.type(info) === 'object') {
+                    var elementAttribute = info.type;
+                    element.attr(elementAttribute, info[elementValue]);
+                } else {
+                    element.html(info);
+                }
+            }
+
+            $('.popup').click(function (e) {
+                var element = $(this),
+                    elementType = element.attr('data-type'),
+                    PopUpInfo = popupData[elementType];
+                if (PopUpInfo) {
+                    $.each(PopUpInfo, function (i, v) {
+                        var PopupAttr = 'data-' + i, PopupElement = $('[' + PopupAttr + ']'), PopupValue;
+
+                        if (PopupElement) {
+
+                            $.each(PopupElement, function (item, el) {
+                                PopupElement = $(el);
+                                PopupValue = PopupElement.attr(PopupAttr);
+                                fillText(PopupElement, PopupValue, v);
+                            });
+
+                        } else {
+                            console.log('Element is not found in magnific popup!');
+                        }
+                    });
+                } else {
+                    console.log('Correct the data in popupData object by clicked ID element!');
+                }
+            });
+
+            $('.popup').magnificPopup();
+
+
+            $('.track-link').click(function () {
+                trackOutboundLink(this, this.id);
+            });
+            $('.popup-mag').magnificPopup({});
+            $('.item-block').click(function () {
+                $('#shadow').hide();
+                $('#select-wrap').hide();
+            });
+
+            $('#mailingList').click(function () {
+                $('#shadow').show();
+                var mailingBlock = $('#select-wrap');
+                var win_ava = mailingBlock.width() / 2;
+                var m_wid = ($(window).width() / 2) - win_ava;
+                mailingBlock.css('left', m_wid);
+                mailingBlock.show();
+            });
+
+            function detectMobDevice() {
+                if (navigator.userAgent.match(/Android/i)
+                    || navigator.userAgent.match(/webOS/i)
+                    || navigator.userAgent.match(/iPhone/i)
+                    || navigator.userAgent.match(/iPad/i)
+                    || navigator.userAgent.match(/iPod/i)
+                    || navigator.userAgent.match(/BlackBerry/i)
+                    || navigator.userAgent.match(/Windows Phone/i)
+                    || navigator.platform.match(/iPhone|iPod|iPad/)
+                    || !matchMedia('(hover: hover)').matches) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+
+            if (detectMobDevice() === false) {
+                $('.go_to_calendar').magnificPopup({
+                    src: '/ftm/calendar/index.html',
+                    type: 'iframe',
+                    alignTop: true,
+                    iframe: {
+                        markup: '<div class="mfp-iframe-scaler-wrapper">' + '<div class="mfp-close"></div>' + '<div class="mfp-iframe-scaler-inner">' +
+                            '<iframe class="mfp-iframe" frame allowfullscreen></iframe>' +
+                            '</div></div>',
+                    },
+                    preloader: true,
+                    overflowY: 'scroll'
+                });
+            }
+
+        });
+
+        function trackOutboundLink(el, label) {
+            _gaq.push(['_trackEvent', 'event', label, 'click']);
+            document.location = el.href;
+        }
+
+        function getUrlParameter(paramName) {
+            var searchString = window.location.search.substring(1),
+                i, val, params = searchString.split('&');
+
+            for (i = 0; i < params.length; i++) {
+                val = params[i].split('=');
+                if (val[0] == paramName) {
+                    return unescape(val[1]);
+                }
+            }
+            return null;
+        }
+
+        $(document).ready(function () {
+            var view = getUrlParameter('view');
+            if (view && view === 'modal') {
+                $('.menu-wrap').css('display', 'none');
+            } else {
+                $('.menu-wrap').css('display', 'block');
+            }
+
+        });
+    </script>
+  <meta name="google" content="notranslate">
+  <script src="/js/functions.js?v=1745326955"></script>
+ </head>
+ <body>
+  <div class="container">
+   <div class="menu-wrap">
+    <div id="header" class="header-menu">
+     <h1><a href="/index.html"><img src="/images/mackiev_top_logo_1x.png" style="width: 251px;" srcset="/images/mackiev_top_logo_1x.png 1x, /images/mackiev_top_logo_2x.png 2x" alt="mackiev.com"></a></h1>
+     <div class="menu-right">
+      <span><a href="/support.html" class="item-support">Support</a></span><span><a href="/wheretobuy.html" class="item-wtb">Where to Buy</a></span><span><a href="/store.html" class="item-store">Store</a></span>
+     </div>
+     <div class="menu-top">
+      <span><a href="/ftm/index.html" class="">Family Tree Maker</a></span><span><a href="/printshop4/index.html" class="">The Print Shop</a></span><span><a href="/kidpix/index.html" class="">KID PIX</a></span><span><a href="/world_book.html" class="">WORLD BOOK</a></span><span><a href="/3d_globe.html" class="">3D Weather Globe</a></span><span><a href="/hyperstudio/select.html" class="">HyperStudio</a></span><span><a href="/mavis/index.html" class="">Mavis Beacon</a></span><span><a href="/cluefinders/index.html" class="">ClueFinders</a></span><span><a href="/thinkinthings/index.html" class="">Edmark</a></span>
+     </div>
+    </div>
+   </div>
+   <div class="header-image">
+    <a href="#popup-mag" class="popup" data-type="main_store"> <img class="product-logo" src="/images/ftm/product_page/headerFTMLogo_1x.png" srcset="/images/ftm/product_page/headerFTMLogo_1x.png 1x, /images/ftm/product_page/headerFTMLogo_2x.png 2x" alt="FTM Logo"> <span class="image-title"> <span class="text-yellow">Order now!</span> Download, DVD or USB. </span> </a> <a href="/familytreemaker/ftm/ftm_signup.html?ext=yes" class="news modal-window" data-popup="0,0,700,745,true"> <img src="/images/ftm/product_page/Upgrades_1x.png" srcset="/images/ftm/product_page/Upgrades_1x.png 1x, /images/ftm/product_page/Upgrades_2x.png 2x" alt="Upgrades"> </a>
+   </div>
+   <ul class="product-menu" style="text-align: center;">
+    <!--________________ calendar start__________________-->
+    <li><a href="/ftm/calendar/index.html" target="_blank" class="calendar iframe go_to_calendar" style="cursor: pointer">Calendar</a></li>
+    <li class="li_dot">•</li><!--____________________end of calendar__________________-->
+    <li><a href="#section-community">Community</a></li>
+    <li class="li_dot">•</li>
+    <li><a href="/familytreemaker/ftm/ftm_signup.html?ext=yes" class="modal-window" data-popup="0,0,700,750,true">Mailing List</a></li>
+    <li class="li_dot">•</li>
+    <li><a href="/familytreemaker/ftm/ftm_feedback.html?ext=yes" class="modal-window" data-popup="0,0,730,840,true">Feedback</a></li>
+    <li class="li_dot">•</li>
+    <li><a href="/familytreemaker/ftm/ftm_feedback.html?type=betatest&amp;ext=yes" class="modal-window" data-popup="0,0,700,850,true">Beta Test</a></li>
+    <li class="li_dot">•</li>
+    <li><a href="#section-minspeq">REQUIREMENTS</a></li>
+    <li class="li_dot">•</li>
+    <li><a href="https://support.mackiev.com/" target="_blank">SUPPORT</a></li>
+    <li class="li_dot">•</li>
+    <li><a href="/familytreemaker/ftm/faq.html" class="modal-window" data-popup="0,0,700,850,true">FAQ</a></li>
+   </ul>
+  </div>
+  <noscript class="noscript">
+   You need to have JavaScript enabled in your browser to work with this page. 
+   <br>
+    Please enable JavaScript to continue.
+  </noscript>
+  <div class="section section-preview dir-center">
+   <div class="inner-container">
+    <h2>Discover Your Family Story With <span class="ftm_for_h">Family Tree Maker!</span></h2>
+    <div class="row">
+     <div class="col-xs-6 text-inner">
+      <h3>FTM 2019 for Mac and Windows</h3>
+      <p class="mt-10 mb-10">For thirty-five years Family Tree Maker® has been the world's favorite genealogy software making it easier than ever to discover your family story, preserve your legacy and share your unique heritage. If you're new to family history, you'll appreciate how this intuitive program lets you easily grow your family tree with simple navigation, tree-building tools, and integrated Web searching. If you're already an expert, you can dive into the more advanced features, options for managing data, and a wide variety of charts and reports. The end result is a family history that you and your family will treasure for years to come!</p>
+     </div>
+     <div class="col-xs-6 mt-25 image-inner" style="">
+      <a href="#popup-mag" class="popup-mag update-center track-img-buy_now" id="ftm_buy_now"> <img class="img" src="/images/ftm/product_page/intro_1x.png?v3" srcset="/images/ftm/product_page/intro_1x.png?v3 1x, /images/ftm/product_page/intro_2x.png?v3 2x" alt="buy now"> </a>
+     </div>
+    </div>
+    <div class="row">
+     <div class="col-xs-5 gift-wrapper">
+      <a href="/store/ftm/offers/gifts/collection.html"> <img src="/images/ftm/product_page/gift_collection_tile_1x.png" srcset="/images/ftm/product_page/gift_collection_tile_1x.png 1x, /images/ftm/product_page/gift_collection_tile_2x.png 2x" alt="FTM_GIFT_imgblock"> </a>
+     </div>
+     <div class="col-xs-5 mt-25 features">
+      <h3>Key product features</h3>
+      <ul>
+       <li><span>Quickly and easily build your family tree</span></li>
+       <li><span>Single click synchronization with Ancestry.com<sup>®</sup></span></li>
+       <li><span>Hints from Ancestry and FamilySearch</span></li>
+       <li><span>View family history timelines and interactive maps</span></li>
+      </ul>
+     </div>
+     <div class="col-xs-2">
+      <a href="/familytreemaker/chart/ftmver_comparison.html" class="iframe go_to_table" target="_blank"> <img src="/images/ftm/product_page/compare_tile_1x.png" srcset="/images/ftm/product_page/compare_tile_1x.png 1x, /images/ftm/product_page/compare_tile_2x.png 2x" alt="compare button"> </a>
+     </div>
+    </div>
+   </div>
+  </div>
+  <div id="features" class="section section-whats-new dir-center">
+   <div class="inner-container">
+    <h2>What’s New in <span class="ftm_for_h">FTM 2019?</span> Plenty!</h2>
+    <div class="row wtr1">
+     <div class="col-xs-12">
+      It's been thirty-five years since Family Tree Maker was born and it's only fitting that we introduced a new edition that takes this grand old brand to places its original creators could only have dreamed of. Where every change you make to your tree on your Mac or PC can be instantly and automatically viewed from any smartphone or tablet. Where you can turn back time to erase mistakes you made even a thousand changes ago. Where you can arrange for your tree to be passed on to a relative of your choice along with your Family Tree Maker license to ensure your legacy lives on. That's just a small part of the new world of Family Tree Maker.
+     </div>
+    </div>
+    <div class="row wn-inner">
+     <div class="col-xs-6 wn_item">
+      <h4 class="wn_title ">Hints in the Index</h4><img src="/mailings/images/kennedy_table_1x.png" srcset="/mailings/images/kennedy_table_1x.png 1x, /mailings/images/kennedy_table_2x.png 2x" alt="hints_picture">
+      <div class="wn_text">
+       Lots of news here starting with the ability to download an entire branch from a FamilySearch tree into FTM 2019. But the really big news is that upgrading to FTM 2019 gets users hints linked to more than SIX BILLION online FamilySearch historical records. A unique new source of records for Family Tree Maker users — for free. Sweet.
+      </div>
+     </div>
+     <div class="col-xs-6 wn_item">
+      <h4 class="wn_title pr">Profile Picture Perfection</h4><img src="/mailings/images/new_picture_cropping_1x.png" srcset="/mailings/images/new_picture_cropping_1x.png 1x, /mailings/images/new_picture_cropping_2x.png 2x" alt="profile_perfection">
+      <div class="wn_text">
+       Clean up the look of your tree with our new profile picture-cropping tool. Smart technology detects the person's face and zooms in just the right amount, then crops a perfect square so that it fits perfectly on each leaf of your tree. And best of all, the original photo is not touched.
+      </div>
+     </div>
+     <div class="col-xs-6 wn_item">
+      <h4 class="wn_title">Turn Back Time<sup class="tm">®</sup></h4><img src="/images/ftm/product_page/hourglass_1x.png?v1" srcset="/images/ftm/product_page/hourglass_1x.png?v1 1x, /images/ftm/product_page/hourglass_2x.png?v1 2x" alt="hourglass">
+      <div class="wn_text">
+       This one might just be worth the whole upgrade. FTM 2019 keeps track of every one of your last THOUSAND changes. Made a mistake three days ago but your last full backup is three weeks old? Simply roll back to just before the mistake was made with a single click. Then use the comprehensive Changes Log to restore the moves you meant to make. Problem solved.
+      </div>
+     </div>
+     <div class="col-xs-6 wn_item">
+      <h4 class="wn_title ">TreeVault<sup>®</sup> Cloud Services</h4><img src="/images/ftm/product_page/TreeVault_icon_1x.png?v4" srcset="/images/ftm/product_page/TreeVault_icon_1x.png?v4 1x,  /images/ftm/product_page/TreeVault_icon_2x.png?v4 2x" alt="TreeVault Cloud Service">
+      <div class="wn_text">
+       With TreeVault, Family Tree Maker is no longer an isolated desktop application, but rather the hub of a growing ecosystem of mobile apps and cloud services. View changes in your FTM tree in real time on your smartphone or tablet. Know what the weather was like the day your grandfather was born. Sleep better knowing that an up-to-date copy of your tree is securely tucked away in the cloud, that someday will be passed on to the next generation for you. New services will be added over time.
+      </div>
+     </div>
+     <div class="col-xs-12 wn_item albumwalk_wrapper">
+      <h4 class="wn_title">AlbumWALK<sup>®</sup> Media Player</h4><img src="/images/ftm/product_page/icon_aw_1x.png" srcset="/images/ftm/product_page/icon_aw_1x.png 1x, /images/ftm/product_page/icon_aw_2x.png 2x" alt="AlbumWALK Media Player">
+      <div class="wn_text">
+       AlbumWALK is going to change the way your family preserves the memories contained in old photo albums. Interactive talking photos with embedded SoundSpot<sup>™</sup> recordings for every person in the picture can be played back as a mini-documentary in Family Tree Maker's media center. <a href="https://www.albumwalk.com" target="_blank">Learn more...</a>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  <div class="section section-top-feature">
+   <div class="inner-container">
+    <h2><span class="ftm_for_h">Family Tree Maker</span> TOP FEATURES</h2>
+    <div class="row">
+     <div class="col-xs-6">
+      <div class="tf_item">
+       <h4>Rich Color Coding</h4><img class="rightf" src="/images/ftm/product_page/colorCodingIllustration_1x.png" srcset="/images/ftm/product_page/colorCodingIllustration_1x.png 1x, /images/ftm/product_page/colorCodingIllustration_2x.png 2x" alt="color coding">
+       <p>One of the most frequent requests from genealogists using FTM&nbsp;2017's color coding, was for "rich" color coding - not just coding the home person's ancestors but each ancestor's descendants as well. With FTM 2019, rich color coding is just one click away.</p>
+      </div>
+      <div class="tf_item">
+       <h4>Charts &amp; Reports</h4>
+       <p>View and share your discoveries with a variety of colorful family tree charts, such as pedigree, descendant, bowtie and fan charts, and create reports that provide a snapshot of your family tree and help you plan what to research next. More options and views let you display an individual's ancestors, spouses, and children together. Also, the Index of Individuals Report has been expanded with options for anniversary, birthday, contact lists, and more.</p><img src="/images/ftm/product_page/charts-reports-image_1x.png" srcset="/images/ftm/product_page/charts-reports-image_1x.png 1x, /images/ftm/product_page/charts-reports-image_2x.png 2x" alt="charts and reports">
+       <p class="desc">View charts and reports and share with friends and family.</p>
+      </div>
+      <div class="tf_item mt">
+       <h4>Put your ancestors on the map</h4>
+       <p>Access interactive street and satellite maps to view important locations in your ancestors' lives and track your family’s migration paths.</p><img src="/images/ftm/product_page/map-image_1x.png" srcset="/images/ftm/product_page/map-image_1x.png 1x, /images/ftm/product_page/map-image_2x.png 2x" alt="map">
+       <p class="desc">Trace your ancestors’ footsteps.</p>
+      </div>
+     </div>
+     <div class="col-xs-6 rightf">
+      <div class="tf_item">
+       <h4>Photo Darkroom<sup>®</sup></h4>
+       <h5>Elegantly simple editing tools.</h5>
+       <p>Powerful but easy-to-use tools that in just a few clicks can take an old photo faded beyond recognition and restore it to look like the day it was printed.</p><img src="/images/ftm/product_page/photo_darkroom_1x.png" srcset="/images/ftm/product_page/photo_darkroom_1x.png 1x, /images/ftm/product_page/photo_darkroom_2x.png 2x" alt="photo darkroom">
+      </div>
+      <div class="tf_item">
+       <h4>Organize media with ease</h4>
+       <p>Illustrate your family story with photos, historical records, and audio and video files. The easy-to-use tools in Family Tree Maker help you manage media faster than ever before, as well as add photos directly from iPhoto<sup>®</sup>, scan images directly into your tree, and even create slideshows.</p><img src="/images/ftm/product_page/media-image_1x.png?v1" srcset="/images/ftm/product_page/media-image_1x.png?v1 1x, /images/ftm/product_page/media-image_2x.png?v1 2x" alt="Store photos">
+       <p class="desc">Store photos and more right inside Family Tree Maker.</p>
+      </div>
+      <div class="tf_item">
+       <h4>Companion Guide</h4>
+       <p>This guide offers you a step-by-step tour of the program and all that you can accomplish with it. You can use the free digital PDF guide that comes with the product or order a 325-page full-color printed guide from our Gift Collection.</p><img src="/images/ftm/product_page/CGillustration_1x.png?v1" srcset="/images/ftm/product_page/CGillustration_1x.png?v1 1x, /images/ftm/product_page/CGillustration_2x.png?v1 2x" alt="CGillustration">
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  <div class="section section-product-feature">
+   <div class="bg-shadow">
+    <div class="inner-container-longer">
+     <div class="row" style="">
+      <div class="col-xs-6 includes-wrapper">
+       <h3 class="text-left mb-20" style="white-space: nowrap">Family Tree Maker includes:</h3>
+       <ul class="feature-list">
+        <li><span>Everything you need to begin your journey through your family’s history</span></li>
+        <li><span>A variety of charts and dozens of reports</span></li>
+        <li><span>Themed backgrounds, borders, and embellishments collection for printing</span></li>
+        <li><span>Locations database with more than 3 million place names for consistent data entry</span></li>
+        <li><span>Access to online street and satellite maps</span></li>
+        <li><span>Digital version of the Companion Guide</span></li>
+        <li><span>Convenient onscreen Help system</span></li>
+       </ul>
+      </div>
+      <div class="col-xs-6 includeImg">
+       <img src="/images/ftm/product_page/trees_1x.png" srcset="/images/ftm/product_page/trees_1x.png 1x, /images/ftm/product_page/trees_2x.png 2x" alt="trees">
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  <div class="section section-community" id="section-community">
+   <div class="inner-container">
+    <h2>Family Tree Maker Community</h2>
+    <div class="row">
+     <div class="col-xs-7 community-info">
+      <div class="description">
+       <a href="https://www.familytreemaker.com/community/index.html" target="_blank" class="link">The Family Tree Maker Community</a> is a collection of helpful people and resources including:
+      </div>
+      <ul class="list-item">
+       <li class="item"><a class="link" target="_blank" href="https://www.familytreemaker.com/SIG/">Family Tree Maker User Groups</a></li>
+       <li class="item"><a class="link" target="_blank" href="https://www.familytreemaker.com/society/">Genealogy Societies</a></li>
+       <li class="item">Local, regional, &amp; national <a class="link" target="_blank" href="/ftm/calendar/index.html">events</a></li>
+      </ul><a href="https://www.familytreemaker.com/community/index.html" target="_blank" class="link">Click here to learn more...</a>
+     </div>
+     <div class="col-xs-5 img-wrapper">
+      <img src="/images/ftm/product_page/ftmc_1x.png?v=1.1" srcset="/images/ftm/product_page/ftmc_1x.png?v=1.1 1x, /images/ftm/product_page/ftmc_2x.png?v=1.1 2x" alt="FTM Community">
+     </div>
+    </div>
+   </div>
+  </div>
+  <div id="section-minspeq" class="section section-minspeq">
+   <div class="inner-container">
+    <h2>Minimum System Requirements</h2>
+    <div class="row">
+     <div class="mispeq-item col-xs-6">
+      <h3>Macintosh</h3>
+      <p>OS X 10.10 or later, including macOS Sequoia 15.0, 900 MB hard disk space, 2 GB of RAM (4&nbsp;GB&nbsp;recommended), 1280 x 800 screen resolution.</p>
+     </div>
+     <div class="mispeq-item col-xs-6">
+      <h3>Windows</h3>
+      <p>Windows 7 or later, including Windows 11, 900 MB hard disk space, 2 GB of RAM (4 GB recommended), 1024 x 768 screen resolution.</p>
+     </div>
+    </div>
+   </div>
+  </div><a href="/store/ftm/offers/gifts/collection.html" class="update-center track-img-gifts" id="ftm_gifts">
+   <div class="section section-gift-collection">
+    <div class="inner-container">
+     <img class="gift_item" src="/images/ftm/product_page/gift-cc_8_logo_2_1x.png?v1" srcset="/images/ftm/product_page/gift-cc_8_logo_2_1x.png?v1 1x, /images/ftm/product_page/gift-cc_8_logo_2_2x.png?v1 2x" alt="CC8"> <img class="gift_item" src="/images/ftm/product_page/gift-Essential-Photo-Organizing_1x.png" srcset="/images/ftm/product_page/gift-Essential-Photo-Organizing_1x.png 1x, /images/ftm/product_page/gift-Essential-Photo-Organizing_2x.png 2x" alt="gift Essential Photo Organizing"> <img class="gift_item" src="/images/ftm/product_page/gift-FBC_Logo_1x.png" srcset="/images/ftm/product_page/gift-FBC_Logo_1x.png 1x, /images/ftm/product_page/gift-FBC_Logo_2x.png 2x" alt="gift FBC">
+     <p class="gift_item">GIFT Collection</p><img class="gift_item" src="/store/ftm/images/preservingphotos_book_int_1x.png" srcset="/store/ftm/images/preservingphotos_book_int_1x.png 1x, /store/ftm/images/preservingphotos_book_int_2x.png 2x" alt="Preserving Your Family Photographs"> <img class="gift_item" src="/store/ftm/images/ee_gift_1x.png" srcset="/store/ftm/images/ee_gift_1x.png 1x, /store/ftm/images/ee_gift_2x.png 2x" alt="Evidence Explained"> <img class="gift_item" src="/store/ftm/images/stntu_gift_1x.png" srcset="/store/ftm/images/stntu_gift_1x.png 1x, /store/ftm/images/stntu_gift_2x.png 2x" alt="Stories They Never Told Us"> <img class="gift_item" src="/images/ftm/product_page/gift-DNA-Testing_1x.png" srcset="/images/ftm/product_page/gift-DNA-Testing_1x.png, /images/ftm/product_page/gift-DNA-Testing_2x.png 2x" alt="gift DNA Testing"> <img class="gift_item" src="/images/ftm/product_page/gift-box_1x.png?v=1.1" srcset="/images/ftm/product_page/gift-box_1x.png?v=1.1 1x, /images/ftm/product_page/gift-box_2x.png?v=1.1 2x" alt="gift-box">
+    </div>
+   </div></a>
+  <div class="section section-faq">
+   <div class="inner-container">
+    <a href="/familytreemaker/ftm3/faq.html" class="section section-faq modal-window" data-popup="0,0,700,745,true"> <img class="gift_item" src="/images/ftm/product_page/FAQ_img_1x.png" srcset="/images/ftm/product_page/FAQ_img_1x.png 1x, /images/ftm/product_page/FAQ_img_1x.png 2x" alt="FAQ">
+     <p>This FAQ provides answers to common questions about Family Tree Maker.</p></a>
+   </div>
+  </div>
+  <div class="container" style="width: 810px;">
+   <div class="row footer">
+    <p class="col-xs-10" style="padding-left: 0;">© 2025 The Software MacKiev Company. Family Tree Maker, the Family Tree Maker tree logo, TreeVault, the TreeVault logo, FamilySync, the&nbsp;FamilySync logo, AlbumWALK, Photo Darkroom, Next of Kin, Emergency Tree, Historical Weather, and Turn Back Time are registered trademarks, and SoundSpot, Software&nbsp;MacKiev and the&nbsp;Software MacKiev logo are trademarks of The Software MacKiev Company. Ancestry, and Ancestry.com are registered trademarks of Ancestry.com Operations, Inc. FamilySearch is a trademark of Intellectual Reserve, Inc., an affiliate of FamilySearch International. Mac, the&nbsp;Mac logo, and macOS are trademarks of Apple&nbsp;Inc., registered in the&nbsp;U.S. and other countries. All other trademarks are the property of their respective owners. <br><span id="privacyLine"><a href="/privacy_policy.html" target="_blank">Privacy Policy</a> | <a href="/cookies_policy.html" target="_blank">Cookies Policy</a></span></p><a href="/" class="col-xs-2" style="padding-left: 19px;"> <img src="/images/smk_logo_x1.png" srcset="/images/smk_logo_x1.png 1x, /images/smk_logo_x2.png 2x" alt="Software MacKiev"> </a>
+   </div>
+  </div>
+  <div id="popup-mag" class="mfp-hide">
+   <h1 data-title="title">Welcome to the Software MacKiev Education Store!</h1>
+   <p>Order directly from the developer, publisher and manufacturer!</p>
+   <div class="store_link-select">
+    <p>Select the right store for where you live.</p>
+    <div class="item">
+     <h2 class="item-title">United States</h2>
+     <div class="item-image">
+      <a data-link="us" href="/store_us.html?productTab=ftmbutton"> <img src="/images/store/flag_us_1x.png" srcset="/images/store/flag_us_1x.png 1x, /images/store/flag_us_2x.png 2x" alt="United States"> </a>
+     </div>
+     <p class="item-description">For shipping to U.S. addresses plus APO and FPO shipments. Must have a U.S. credit card.</p>
+    </div>
+    <div class="item">
+     <div class="item-title">
+      All Other Countries
+     </div>
+     <div class="item-image">
+      <a data-link="intern" href="/store_intern.html?productTab=ftmbutton"> <img src="/images/store/flag_inter_1x.png" srcset="/images/store/flag_inter_1x.png 1x, /images/store/flag_inter_2x.png 2x" alt="All Other Countries"> </a>
+     </div>
+     <p class="item-description">For all other countries</p>
+    </div>
+   </div>
+  </div>
+  <script src="/js/cookie.alert.js?v=1745326955"></script>
+  <script src="/js/analytics.js?v=1745326955"></script>
+  <script src="/js/browser_support.js?v=1745326955"></script>
+ </body>
+</html>
