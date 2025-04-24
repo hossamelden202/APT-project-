@@ -30,10 +30,10 @@ public class Indexer {
       byte[] bytes = Files.readAllBytes(path);
       String html = new String(bytes, StandardCharsets.UTF_8);
             InvertedIndex docIndex = indexSingleDocument(file.getName(), html);
-            globalIndex.merge(docIndex);
+            globalIndex.merge(docIndex);saveIndex(globalIndex);
         }
 
-        saveIndex(globalIndex);
+        
         System.out.println("Indexing complete. Saved to " + INDEX_FILE);
     }
 
