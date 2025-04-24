@@ -1,0 +1,177 @@
+package Ranker;
+import indexer.InvertedIndex;
+import indexer.Posting;
+import java.util.*;
+public class ranker {
+InvertedIndex index; //change according to the process wheather you will take it from index or from query search result
+public ranker(InvertedIndex index) {
+this.index = index;
+    }
+    public void rankQuery(String query) {
+        //i dont know who make query preprocessing but i will assume that query is already preprocessed and person who did this should do same as in index
+        Map<String,Boolean> doc_phrase= new HashMap<>();
+        Map<String, Scorecomponents> docComponents = new HashMap<>();
+        String[] words=query.trim().split("\\s+");//assume any thing edit this to fit 
+        int total_docs= index.docBodies.size();
+        int total_docs_with_word=0;
+        String word;
+        int freq;
+        String docid;
+        List<String> postions;
+        Posting calc_D;
+        List<Posting>postings;
+        String postion;
+        Double TF_IDF=0.0;
+       // Double total=0.0;
+        Double w1=1.0;//weight of TF_IDF
+        Double w2=1.0;//weight of page rank
+        Double w3=1.0;//weight of phrase matching
+        Double w4=1.0;//weight of anchor matching
+        int doc_size=1;//edit this to fit
+        double idf=0.0;
+        double minPR = Double.MAX_VALUE, maxPR = Double.MIN_VALUE;
+        for(int i=0;i<words.length;i++)
+        {     word=words[i];
+            postings=index.index.get(word);
+            if(postings !=null)
+            {  
+                Map<String, Double> tfidfPerDoc = new HashMap<>();
+                double minTFIDF = Double.MAX_VALUE;
+                double maxTFIDF = Double.MIN_VALUE;
+                total_docs_with_word=postings.size();
+                if(total_docs_with_word>0)
+                {
+                    idf = Math.log((double) (total_docs +1)/(total_docs_with_word));
+                }
+                for(int j=0;j<postings.size();j++)
+                {    
+                    calc_D=postings.get(j);
+                    freq=calc_D.frequency;
+                    docid=calc_D.documentId;
+                    postions=calc_D.positions;
+                    double tf=freq;
+                    for(int k=0;k<postions.size();k++)
+                    {   
+                        postion=postions.get(k);
+                        if(postion.equals("title"))
+                        {
+                            tf+=1;
+                        }
+                        else if(postion.equals("heading"))
+                        {
+                            tf+=0.5;
+                        }
+                        
+                    }
+                    doc_size=index.doclength.getOrDefault(docid,1);
+                    if(doc_size>0)
+                    {
+                        tf= (tf/doc_size);
+                    }
+                    TF_IDF = tf * idf;
+                    tfidfPerDoc.put(docid, TF_IDF);
+                    minTFIDF = Math.min(minTFIDF, TF_IDF);
+                    maxTFIDF = Math.max(maxTFIDF, TF_IDF);
+                    double pagerank = index.pagerank.getOrDefault(docid, 1.0);
+                    minPR = Math.min(minPR, pagerank);
+                    maxPR = Math.max(maxPR, pagerank);
+
+                    double phraseMatch = phrase_matching(query, docid, doc_phrase);
+                    double anchorBoost = Anchor_matching(query, docid, word);
+                    if (calc_D.isAnchor) 
+                    anchorBoost += 3.0;
+                    docComponents.putIfAbsent(docid, new Scorecomponents());
+                    Scorecomponents comp = docComponents.get(docid);
+                    //comp.tfidf += TF_IDF;
+                    comp.pagerank = pagerank; 
+                    comp.phraseMatch += phraseMatch;
+                    comp.anchorBoost += anchorBoost;
+                }
+                for (Map.Entry<String, Double> entry : tfidfPerDoc.entrySet()) 
+                {
+                    String docid2 = entry.getKey();
+                    double normTFIDF = entry.getValue();
+                    if(maxTFIDF != minTFIDF) 
+                    { 
+                        normTFIDF = (entry.getValue() - minTFIDF) / (maxTFIDF - minTFIDF);
+                    }
+                    Scorecomponents comp = docComponents.get(docid2);
+                    comp.tfidf += normTFIDF; // Add normalized TF-IDF to the score components
+                }
+            }
+        }
+        //*************if it takes along to calc make it normalize over all words */
+        Map<String, Double> finalscores = new HashMap<>();
+        for (Map.Entry<String, Scorecomponents> entry : docComponents.entrySet()) 
+        {
+            String docid1 = entry.getKey();
+            Scorecomponents comp = entry.getValue();
+            double normTfIdf = comp.tfidf;
+            double normPR = comp.pagerank;
+            if (maxPR != minPR) 
+            {
+                normPR = (comp.pagerank - minPR) / (maxPR - minPR);
+            } 
+            //normPR = Math.log(normPR + 1);
+            double totalScore = w1 * normTfIdf + w2 * normPR + w3 * comp.phraseMatch + w4 * comp.anchorBoost;
+            System.out.printf("Doc: %-10s | TF-IDF: %.4f | PageRank: %.4f | PhraseMatch: %.2f | AnchorBoost: %.2f\n",docid1, normTfIdf, normPR, comp.phraseMatch, comp.anchorBoost);
+            finalscores.put(docid1, totalScore);
+        }
+        System.out.println("Final document scores:");
+        finalscores.entrySet().stream().sorted((e1, e2) -> Double.compare(e2.getValue(), e1.getValue())) // sort descending
+        .forEach(entry -> {
+        System.out.printf("Document: %-10s | Score: %.4f\n", entry.getKey(), entry.getValue());});
+}
+
+
+    private Double phrase_matching(String query,String docId,Map<String,Boolean> doc_phrase) 
+    {
+        // Check if the document contains the exact phrase
+        String docText = index.docBodies.get(docId);
+        if (docText != null && docText.toLowerCase().contains(query.toLowerCase())) //to work query should be preprocessed like in indexer
+        {   if(doc_phrase.get(docId) == null) 
+            {
+                doc_phrase.put(docId, true); // Mark the document as containing the phrase
+                return 5.0;
+            }
+            else
+            {
+                return 0.0; // Already counted
+            }
+        }
+        else
+        {
+            return 0.0; 
+        }
+    }
+
+
+    private Double Anchor_matching(String query,String docId,String word) 
+    {
+        List<String> anchors = index.anchors.get(docId);
+        if (anchors != null) {
+            for (String anchor : anchors) {
+                if (anchor.toLowerCase().contains(word)) {
+                    return  2.0; // boost for link match
+                }
+            }
+        }
+        return 0.0;
+    }
+
+
+    static class Scorecomponents {
+        double tfidf = 0.0;
+        double pagerank = 0.0;
+        double phraseMatch = 0.0;
+        double anchorBoost = 0.0;
+    }
+
+
+    // public static void main(String[] args) {
+    //     InvertedIndex index = new InvertedIndex();
+    //     // TODO: Load or build your index here
+    //     ranker ranker = new ranker(index);
+    //     ranker.rankQuery("best search engines");
+    // }
+}
