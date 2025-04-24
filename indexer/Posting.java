@@ -18,4 +18,21 @@ public class Posting {
         this.anchor=new ArrayList<>();
         
     }
-}
+        // Constructor with frequency and positions
+        public Posting(String documentId, int frequency, List<String> positions) {
+            this.documentId = documentId;
+            this.frequency = frequency;
+            this.positions = positions;
+            this.anchor = new ArrayList<>();
+        }
+    
+        // Constructor with frequency, positions, and isAnchor
+        public Posting(String documentId, int frequency, List<String> positions, boolean isAnchor) {
+            this.documentId = documentId;
+            this.frequency = frequency;
+            this.positions = positions;
+            this.anchor = new ArrayList<>();
+            this.isAnchor = isAnchor;
+        }
+    }
+

@@ -7,6 +7,13 @@ public class InvertedIndex {
     public String urls;
     public String paragraphs;
     public Map<String, List<String>> anchors = new HashMap<>();
+    //************************************************************************* */
+    public Map<String, String> docBodies = new HashMap<>();      // full text of documents
+    public Map<String, Integer> doclength = new HashMap<>();     // number of words per doc
+    public Map<String, Double> pagerank = new HashMap<>();       // PageRank values
+public Map<String, List<String>> outLinks = new HashMap<>();
+public Map<String, List<String>> inLinks = new HashMap<>();
+
     public InvertedIndex() {
         index = new HashMap<>();
     }

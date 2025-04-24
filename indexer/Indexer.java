@@ -32,8 +32,20 @@ public class Indexer {
             InvertedIndex docIndex = indexSingleDocument(file.getName(), html);
             globalIndex.merge(docIndex);saveIndex(globalIndex);
         }
+          
+    for (String fromDoc : globalIndex.outLinks.keySet()) {
+        for (String toDoc : globalIndex.outLinks.get(fromDoc)) {
+            globalIndex.inLinks
+                .computeIfAbsent(toDoc, k -> new ArrayList<>())
+                .add(fromDoc);
+        }
+    }
 
-        
+    computePageRank(globalIndex, 0.85, 20);
+
+    // Save to disk
+    saveIndex(globalIndex);
+
         System.out.println("Indexing complete. Saved to " + INDEX_FILE);
     }
 
@@ -67,6 +79,7 @@ if(!text.isEmpty())anchors.add(text);
 String paragraph=doc.select("p").text();
 InvertedIndex index=new InvertedIndex();
         List<String> words = Utils.tokenize(title + " " + body);
+        index.docBodies.put(docId, body);
         for (String word : words) {
             if (word.isEmpty() || stopWords.contains(word)) continue;
 
@@ -78,7 +91,47 @@ InvertedIndex index=new InvertedIndex();
             String position = Utils.detectPosition(word, title, body);
             index.add(stemmed, docId, position,url,anchors,paragraph);
         }
-
+        // Extract outgoing links
+    List<String> outLinks = new ArrayList<>();
+    doc.select("a[href]").forEach(a -> {
+        String link = a.absUrl("href");
+        if (!link.isEmpty()) outLinks.add(link);
+    });
+    index.outLinks.put(docId, outLinks);
+    index.doclength.put(docId, body.trim().split("\\s+").length);
         return index;
     }
+    private static void computePageRank(InvertedIndex index, double dampingFactor, int iterations) {
+        Map<String, Double> ranks = new HashMap<>();
+        Set<String> allDocs = index.outLinks.keySet();
+    
+        // Initialize
+        for (String doc : allDocs) {
+            ranks.put(doc, 1.0);
+        }
+    
+        for (int i = 0; i < iterations; i++) {
+            Map<String, Double> newRanks = new HashMap<>();
+    
+            for (String doc : allDocs) {
+                double rankSum = 0.0;
+                List<String> inLinks = index.inLinks.getOrDefault(doc, new ArrayList<>());
+    
+                for (String inDoc : inLinks) {
+                    int outSize = index.outLinks.getOrDefault(inDoc, new ArrayList<>()).size();
+                    if (outSize > 0) {
+                        rankSum += ranks.get(inDoc) / outSize;
+                    }
+                }
+    
+                double newRank = (1 - dampingFactor) + dampingFactor * rankSum;
+                newRanks.put(doc, newRank);
+            }
+    
+            ranks = newRanks;
+        }
+    
+        index.pagerank = ranks;
+    }
+    
 }

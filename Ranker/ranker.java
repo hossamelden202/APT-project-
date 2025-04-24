@@ -10,6 +10,7 @@ this.index = index;
     public void rankQuery(String query) {
         //i dont know who make query preprocessing but i will assume that query is already preprocessed and person who did this should do same as in index
         Map<String,Boolean> doc_phrase= new HashMap<>();
+        Map<String,Boolean> doc_phrase_anchor= new HashMap<>();
         Map<String, Scorecomponents> docComponents = new HashMap<>();
         String[] words=query.trim().split("\\s+");//assume any thing edit this to fit 
         int total_docs= index.docBodies.size();
@@ -55,11 +56,11 @@ this.index = index;
                         postion=postions.get(k);
                         if(postion.equals("title"))
                         {
-                            tf+=1;
+                            tf+=3;
                         }
                         else if(postion.equals("heading"))
                         {
-                            tf+=0.5;
+                            tf+=1;
                         }
                         
                     }
@@ -77,9 +78,10 @@ this.index = index;
                     maxPR = Math.max(maxPR, pagerank);
 
                     double phraseMatch = phrase_matching(query, docid, doc_phrase);
-                    double anchorBoost = Anchor_matching(query, docid, word);
+                    double anchorBoost = Anchor_matching_query(query, docid,doc_phrase_anchor)+Anchor_matching_word(docid, word);
+
                     if (calc_D.isAnchor) 
-                    anchorBoost += 3.0;
+                    anchorBoost += 2.0;
                     docComponents.putIfAbsent(docid, new Scorecomponents());
                     Scorecomponents comp = docComponents.get(docid);
                     //comp.tfidf += TF_IDF;
@@ -146,14 +148,42 @@ this.index = index;
     }
 
 
-    private Double Anchor_matching(String query,String docId,String word) 
+    private Double Anchor_matching_query(String query,String docId,Map<String,Boolean> doc_phrase_anchor) 
     {
         List<String> anchors = index.anchors.get(docId);
-        if (anchors != null) {
-            for (String anchor : anchors) {
-                if (anchor.toLowerCase().contains(word)) {
+        if (anchors != null) 
+        {
+            for (String anchor : anchors) 
+            {
+                if (anchor.toLowerCase().contains(query.toLowerCase())) 
+                {   
+                    if(doc_phrase_anchor.get(docId) == null) 
+                    {
+                        doc_phrase_anchor.put(docId, true); // Mark the document as containing the phrase
+                        return  5.0; // boost for link match
+                    }
+                    else
+                    {
+                        return 0.0; // Already counted
+                    }
+                } 
+            }
+        }
+        return 0.0;
+    }
+
+    
+    private Double Anchor_matching_word(String docId,String word) 
+    {
+        List<String> anchors = index.anchors.get(docId);
+        if (anchors != null) 
+        {
+            for (String anchor : anchors) 
+            {
+                if (anchor.toLowerCase().contains(word.toLowerCase())) 
+                { 
                     return  2.0; // boost for link match
-                }
+                }                
             }
         }
         return 0.0;
