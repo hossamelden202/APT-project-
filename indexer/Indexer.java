@@ -12,7 +12,7 @@ import java.nio.charset.StandardCharsets;
 public class Indexer {
     private static final String INDEX_FILE = "indexer/index.json";
     private static final String STOP_WORDS_FILE = "indexer/stopwords.txt";
-    private static final String HTML_FOLDER = "pages";
+    private static final String HTML_FOLDER = "data/crawled_pages";
 
     private static Set<String> stopWords;
     private static PorterStemmer stemmer = new PorterStemmer();
