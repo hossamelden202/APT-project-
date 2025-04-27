@@ -1,172 +1,143 @@
 package indexer;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.charset.StandardCharsets;
+
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import com.mongodb.client.MongoCollection;
+
+
+import java.util.concurrent.*;
+import java.util.*;
+import java.nio.file.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.io.*;
-import java.nio.file.*;
-import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
-import java.nio.charset.StandardCharsets;
 
 public class Indexer {
     private static final String INDEX_FILE = "indexer/index.json";
     private static final String STOP_WORDS_FILE = "indexer/stopwords.txt";
-    private static final String HTML_FOLDER = "data/crawled_pages";
-
+    private static final String HTML_FOLDER = "data/sec";
+    private static final int THREADS = Runtime.getRuntime().availableProcessors();
     private static Set<String> stopWords;
     private static PorterStemmer stemmer = new PorterStemmer();
+    private static final ConcurrentLinkedQueue<InvertedIndex> queue = new ConcurrentLinkedQueue<>();
+    private static int totalFiles = 0;
+    private static final Object progressLock = new Object();
 
     public static void main(String[] args) throws Exception {
         stopWords = Utils.loadStopWords(STOP_WORDS_FILE);
-        InvertedIndex globalIndex = loadExistingIndex();
-
+        InvertedIndex globalIndex = new InvertedIndex();
         File folder = new File(HTML_FOLDER);
-        ////
-     ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
-List<InvertedIndex> batch = Collections.synchronizedList(new ArrayList<>());
+        File[] files = folder.listFiles((dir, name) -> name.endsWith(".html"));
+        totalFiles = files.length;
+        ExecutorService executor = Executors.newFixedThreadPool(THREADS);
 
-for (File file : folder.listFiles()) {
-    if (!file.getName().endsWith(".html")) continue;
+        int[] indexedCount = {0}; // use array for mutable counter
 
-    executor.submit(() -> {
-        try {
-            System.out.println("Indexing: " + file.getName());
-            Path path = file.toPath();
-            byte[] bytes = Files.readAllBytes(path);
-            String html = new String(bytes, StandardCharsets.UTF_8);
-            InvertedIndex docIndex = indexSingleDocument(file.getName(), html);
+        for (File file : files) {
+            executor.submit(() -> {
+                try {
+                    Path path = file.toPath();
+                    byte[] bytes = Files.readAllBytes(path);
+                    String html = new String(bytes, StandardCharsets.UTF_8);
+                    
+                    InvertedIndex singleDocIndex = indexSingleDocument(file.getName(), html);
+                    queue.add(singleDocIndex);
 
-            synchronized (batch) {
-                batch.add(docIndex);
-                if (batch.size() >= 10) {
-                    saveBatch(batch);
-                    batch.clear();
+                    synchronized (progressLock) {
+                        indexedCount[0]++;
+                        double progress = (indexedCount[0] * 100.0) / totalFiles;
+                        System.out.printf("\rIndexing Progress: %.2f%%", progress);
+                    }
+                } catch (IOException e) {
+                    System.err.println("Failed to process: " + file.getName());
                 }
-            }
-
-        } catch (IOException e) {
-            System.err.println("Failed to process: " + file.getName());
+            });
         }
-    });
-}
-executor.shutdown();
-executor.awaitTermination(2, TimeUnit.HOURS);
 
-if (!batch.isEmpty()) {
-    saveBatch(batch);
-    batch.clear();
-}
+        executor.shutdown();
+        executor.awaitTermination(100, TimeUnit.HOURS);
 
-          
-          
-    
+        System.out.println("\nMerging all indices...");
+        while (!queue.isEmpty()) {
+            globalIndex.merge(queue.poll());
+        }
 
-    // Save to disk
-   
+        System.out.println("Saving to MongoDB...");
+        saveToMongo(globalIndex);
 
-        System.out.println("Indexing complete. " );
+        System.out.println("Indexing and saving complete.");
     }
 
-    private static InvertedIndex loadExistingIndex() {
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            return mapper.readValue(new File(INDEX_FILE), InvertedIndex.class);
-        } catch (IOException e) {
-            return new InvertedIndex();
-        }
-    }
+    private static void saveToMongo(InvertedIndex index) {
+        MongoCollection<org.bson.Document> collection = MongoUtil.getCollection();
+        List<org.bson.Document> docs = new ArrayList<>();
 
-    // private static void saveIndex(InvertedIndex globalIndex) {
-    //     ObjectMapper mapper = new ObjectMapper();
-    //     File f = new File(INDEX_FILE);
-    //     int retries = 3;
-    //     while (retries > 0) {
-    //         try {
-               
-    //             mapper.writerWithDefaultPrettyPrinter().writeValue(f, globalIndex);
-    //             return;
-    //         } catch (IOException e) {
-    //             retries--;
-    //             if (retries == 0) break;
-    //             try { Thread.sleep(1000); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); }
-    //         }
-    //     }
-    // }
-    private static void saveBatch(List<InvertedIndex> batch) {
-    ObjectMapper mapper = new ObjectMapper();
-    File f = new File(INDEX_FILE);
-    int retries = 3;
+        for (Map.Entry<String, List<Posting>> entry : index.index.entrySet()) {
+            String word = entry.getKey();
+            if (word.isEmpty() || stopWords.contains(word)) continue;
 
-    while (retries-- > 0) {
-        try {
-            InvertedIndex global = f.exists()
-                ? mapper.readValue(f, InvertedIndex.class)
-                : new InvertedIndex();
-
-            for (InvertedIndex doc : batch) {
-                global.merge(doc);
-            }
-
-            mapper.writerWithDefaultPrettyPrinter().writeValue(f, global);
-            return;
-        } catch (IOException e) {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException ie) {
-                Thread.currentThread().interrupt();
+            for (Posting posting : entry.getValue()) {
+                org.bson.Document doc = new org.bson.Document()
+                        .append("word", word)
+                        .append("documentId", posting.documentId)
+                        .append("frequency_head", posting.frequency_head)
+                        .append("frequency_body", posting.frequency_body)
+                        .append("positions", posting.positions)
+                        .append("url", posting.url)
+                        .append("paragraph", posting.paragraph)
+                        .append("anchor", posting.anchor)
+                        .append("isAnchor", posting.isAnchor)
+                        .append("docBodies", posting.docBodies)
+                        .append("doclength", posting.doclength)
+                        .append("pagerank", posting.pagerank)
+                        .append("outLinks", posting.outLinks)
+                        .append("inLinks", posting.inLinks);
+                docs.add(doc);
             }
         }
-    }
-}
 
+        if (!docs.isEmpty()) collection.insertMany(docs);
+    }
 
     private static InvertedIndex indexSingleDocument(String docId, String html) {
         Document doc = Jsoup.parse(html);
         Map<String, List<String>> outLinks = new HashMap<>();
-        String docBodies ;     
-        Integer doclength ; 
+        Map<String, List<String>> inLinks = new HashMap<>();
         String title = doc.title();
         String body = doc.body().text();
-        String url=doc.select("link[rel=canonical]").attr("href");
-         Map<String, List<String>> inLinks = new HashMap<>();
-
-if(url.isEmpty())url="http://"+docId;
-
-List<String> anchors=new ArrayList<>();
-doc.select("a").forEach(a->{
-String text=a.text();
-if(!text.isEmpty())anchors.add(text);
-});
-
-String paragraph=doc.select("p").text();
-InvertedIndex index=new InvertedIndex();
+        String url = doc.select("link[rel=canonical]").attr("href");
+        if (url.isEmpty()) url = "http://" + docId;
+        List<String> anchors = new ArrayList<>();
+        doc.select("a").forEach(a -> {
+            String text = a.text();
+            if (!text.isEmpty()) anchors.add(text);
+        });
+        String paragraph = doc.select("p").text();
         List<String> words = Utils.tokenize(title + " " + body);
-        docBodies=body;
-        //////////////////////
+        String docBodies = body;
+        int doclength = body.trim().split("\\s+").length;
+
         List<String> outLink = new ArrayList<>();
         doc.select("a[href]").forEach(a -> {
             String link = a.absUrl("href");
             if (!link.isEmpty()) outLink.add(link);
         });
         outLinks.put(docId, outLink);
-    
-        doclength=body.trim().split("\\s+").length;
-        
-        ////
+
         for (String fromDoc : outLinks.keySet()) {
             for (String toDoc : outLinks.get(fromDoc)) {
-                inLinks
-                    .computeIfAbsent(toDoc, k -> new ArrayList<>())
-                    .add(fromDoc);
+                inLinks.computeIfAbsent(toDoc, k -> new ArrayList<>()).add(fromDoc);
             }
         }
-        ////////
-        Map<String , Double>pagerank=computePageRank(outLinks,inLinks, 0.85, 20);
-        ///////////////
+
+        Map<String, Double> pagerank = computePageRank(outLinks, inLinks, 0.85, 20);
+
+        InvertedIndex index = new InvertedIndex();
         for (String word : words) {
             if (word.isEmpty() || stopWords.contains(word)) continue;
 
@@ -176,45 +147,30 @@ InvertedIndex index=new InvertedIndex();
             String stemmed = stemmer.toString();
 
             String position = Utils.detectPosition(word, title, body);
-            index.add(stemmed, docId, position,url,anchors,paragraph,docBodies, doclength,pagerank,outLinks,inLinks); 
-  
+            index.add(stemmed, docId, position, url, anchors, paragraph, docBodies, doclength, pagerank, outLinks, inLinks);
         }
-        // Extract outgoing links
-            
-
         return index;
     }
-    private static Map<String,Double> computePageRank( Map<String, List<String>> outLinks,Map<String, List<String>> inLinkss ,double dampingFactor, int iterations) {
+
+    private static Map<String, Double> computePageRank(Map<String, List<String>> outLinks, Map<String, List<String>> inLinks, double dampingFactor, int iterations) {
         Map<String, Double> ranks = new HashMap<>();
         Set<String> allDocs = outLinks.keySet();
-    
-        // Initialize
-        for (String doc : allDocs) {
-            ranks.put(doc, 1.0);
-        }
-    
+        for (String doc : allDocs) ranks.put(doc, 1.0);
+
         for (int i = 0; i < iterations; i++) {
             Map<String, Double> newRanks = new HashMap<>();
-    
             for (String doc : allDocs) {
                 double rankSum = 0.0;
-                List<String> inLinks = inLinkss.getOrDefault(doc, new ArrayList<>());
-    
-                for (String inDoc : inLinks) {
-                    int outSize = outLinks.getOrDefault(inDoc, new ArrayList<>()).size();
-                    if (outSize > 0) {
-                        rankSum += ranks.get(inDoc) / outSize;
+                for (String inDoc : inLinks.getOrDefault(doc, new ArrayList<>())) {
+                    int outDegree = outLinks.getOrDefault(inDoc, new ArrayList<>()).size();
+                    if (outDegree > 0) {
+                        rankSum += ranks.get(inDoc) / outDegree;
                     }
                 }
-    
-                double newRank = (1 - dampingFactor) + dampingFactor * rankSum;
-                newRanks.put(doc, newRank);
+                newRanks.put(doc, (1 - dampingFactor) + dampingFactor * rankSum);
             }
-    
             ranks = newRanks;
         }
-    
         return ranks;
     }
-    
 }

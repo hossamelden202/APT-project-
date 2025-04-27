@@ -23,7 +23,7 @@ public class Utils {
         word = word.toLowerCase();
 
         if (title.toLowerCase().contains(word)) {
-            return "title";
+            return "head";
         }
 
         String[] lines = body.split("\n");
