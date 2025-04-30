@@ -4,6 +4,7 @@ import java.util.*;
 
 
 public class Posting {
+    
     public String documentId;
     public int frequency_body;
     public int frequency_head;
@@ -18,6 +19,7 @@ public class Posting {
     public Map<String, Double> pagerank;       // PageRank values
 public Map<String, List<String>> outLinks;
 public Map<String, List<String>> inLinks;
+
     public Posting(String documentId) {
         this.documentId = documentId;
         this.frequency_body = 0;

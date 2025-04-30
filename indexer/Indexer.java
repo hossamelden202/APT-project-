@@ -20,7 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class Indexer {
     private static final String INDEX_FILE = "indexer/index.json";
     private static final String STOP_WORDS_FILE = "indexer/stopwords.txt";
-    private static final String HTML_FOLDER = "data/crawled_pages";
+    private static final String HTML_FOLDER = "data/test";
     private static final int THREADS = Runtime.getRuntime().availableProcessors();
     private static Set<String> stopWords;
     private static PorterStemmer stemmer = new PorterStemmer();
@@ -76,33 +76,56 @@ public class Indexer {
     private static void saveToMongo(InvertedIndex index) {
         MongoCollection<org.bson.Document> collection = MongoUtil.getCollection();
         List<org.bson.Document> docs = new ArrayList<>();
-
+    
         for (Map.Entry<String, List<Posting>> entry : index.index.entrySet()) {
             String word = entry.getKey();
-            if (word.isEmpty() || stopWords.contains(word)) continue;
-
-            for (Posting posting : entry.getValue()) {
-                org.bson.Document doc = new org.bson.Document()
-                        .append("word", word)
-                        .append("documentId", posting.documentId)
-                        .append("frequency_head", posting.frequency_head)
-                        .append("frequency_body", posting.frequency_body)
-                        .append("positions", posting.positions)
-                        .append("url", posting.url)
-                        .append("paragraph", posting.paragraph)
-                        .append("anchor", posting.anchor)
-                        .append("isAnchor", posting.isAnchor)
-                        .append("docBodies", posting.docBodies)
-                        .append("doclength", posting.doclength)
-                        .append("pagerank", posting.pagerank)
-                        .append("outLinks", posting.outLinks)
-                        .append("inLinks", posting.inLinks);
-                docs.add(doc);
+            if (word == null || word.isEmpty() || stopWords.contains(word)) continue;
+    
+            List<Posting> postings = entry.getValue();
+            if (postings == null) continue;
+    
+            for (Posting posting : postings) {
+                try {
+                    if (posting == null) continue;
+    
+                    String safeDocId = posting.documentId != null ? posting.documentId.replace(".", "_") : "unknown_doc";
+                    String safeUrl = posting.url != null ? posting.url.replace(".", "_") : "unknown_url";
+    
+                    org.bson.Document doc = new org.bson.Document()
+                        .append("w", word)
+                        .append("dId", safeDocId)
+                        .append("fh", posting.frequency_head)
+                        .append("fb", posting.frequency_body)
+                        
+                        .append("pos", posting.positions != null ? posting.positions : Collections.emptyList())
+                        .append("url", safeUrl)
+                        .append("p", posting.paragraph != null ? posting.paragraph : "")
+                        .append("a", posting.anchor != null ? posting.anchor : "")
+                        .append("isA", posting.isAnchor)
+                        .append("docB", posting.docBodies != null ? posting.docBodies : "")
+                        .append("docl", posting.doclength != null ? posting.doclength : 0)
+                        .append("pR", posting.pagerank != null ? posting.pagerank : 0.0);
+                        // Uncomment if needed:
+                        // .append("oL", posting.outLinks != null ? posting.outLinks : Collections.emptyList())
+                        // .append("iL", posting.inLinks != null ? posting.inLinks : Collections.emptyList());
+    
+                    docs.add(doc);
+                } catch (Exception e) {
+                    System.err.println("Skipping invalid posting due to error: " + e.getMessage());
+                    e.printStackTrace(); // Optional: detailed debugging
+                }
             }
         }
-
-        if (!docs.isEmpty()) collection.insertMany(docs);
+    
+        try {
+            if (!docs.isEmpty()) collection.insertMany(docs);
+        } catch (Exception e) {
+            System.err.println("MongoDB insertion error: " + e.getMessage());
+            e.printStackTrace(); // Optional: detailed error
+        }
     }
+    
+    
 
     private static InvertedIndex indexSingleDocument(String docId, String html) {
         Document doc = Jsoup.parse(html);
