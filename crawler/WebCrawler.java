@@ -57,7 +57,7 @@ public class WebCrawler {
         };
         
         int threadCount = 5;
-        int maxPages = 6000;
+        int maxPages = 100;
 
         new WebCrawler(seeds, threadCount, maxPages).startCrawling();
     }
