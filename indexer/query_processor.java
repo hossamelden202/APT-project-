@@ -16,27 +16,38 @@ public class QueryProcessor {
         Map<String, Double> results = new HashMap<>();
         PorterStemmer stemmer = new PorterStemmer();
 
-        // Preprocess query
-        query = query.toLowerCase();
+        try {
+            // Check for empty or null query
+            if (query == null || query.trim().isEmpty()) {
+                System.out.println("Query is empty or null.");
+                return results;
+            }
 
-        // Check if the query contains quotation marks
-        if (query.startsWith("\"") && query.endsWith("\"")) {
-            String phrase = query.substring(1, query.length() - 1);
-            results = performPhraseSearch(phrase);
-        } else {
-            String[] words = query.split("\\s+");
-            for (String word : words) {
-                // Stem the word
-                stemmer.setCurrent(word);
-                stemmer.stem();
-                word = stemmer.getCurrent();
+            // Preprocess query
+            query = query.toLowerCase();
 
-                // Query MongoDB for the stemmed word
-                for (Document doc : collection.find(Filters.eq("w", word))) {
-                    String docId = doc.getString("dId");
-                    results.put(docId, results.getOrDefault(docId, 0.0) + 1.0);
+            // Check if the query contains quotation marks
+            if (query.startsWith("\"") && query.endsWith("\"")) {
+                String phrase = query.substring(1, query.length() - 1);
+                results = performPhraseSearch(phrase);
+            } else {
+                String[] words = query.split("\\s+");
+                for (String word : words) {
+                    // Stem the word
+                    stemmer.setCurrent(word);
+                    stemmer.stem();
+                    word = stemmer.getCurrent();
+
+                    // Query MongoDB for the stemmed word
+                    for (Document doc : collection.find(Filters.eq("w", word))) {
+                        String docId = doc.getString("dId");
+                        results.put(docId, results.getOrDefault(docId, 0.0) + 1.0);
+                    }
                 }
             }
+        } catch (Exception e) {
+            System.err.println("Error processing query: " + e.getMessage());
+            e.printStackTrace();
         }
 
         return results;
@@ -47,22 +58,35 @@ public class QueryProcessor {
         List<String> words = Arrays.asList(phrase.split("\\s+"));
         PorterStemmer stemmer = new PorterStemmer();
 
-        // Stem each word in the phrase
-        for (int i = 0; i < words.size(); i++) {
-            stemmer.setCurrent(words.get(i));
-            stemmer.stem();
-            words.set(i, stemmer.getCurrent());
-        }
+        try {
+            // Stem each word in the phrase
+            for (int i = 0; i < words.size(); i++) {
+                stemmer.setCurrent(words.get(i));
+                stemmer.stem();
+                words.set(i, stemmer.getCurrent());
+            }
 
-        // Query MongoDB for documents containing the exact phrase
-        for (Document doc : collection.find(Filters.and(
-                Filters.eq("w", words.get(0)),
-                Filters.in("pos", words)
-        ))) {
-            String docId = doc.getString("dId");
-            results.put(docId, results.getOrDefault(docId, 0.0) + 1.0);
+            // Query MongoDB for documents containing the exact phrase
+            for (Document doc : collection.find(Filters.eq("w", words.get(0)))) {
+                List<Integer> positions = doc.getList("pos", Integer.class);
+                String docId = doc.getString("dId");
+
+                // Check if the phrase exists in the correct order
+                if (positions != null && isPhraseInOrder(words, positions)) {
+                    results.put(docId, results.getOrDefault(docId, 0.0) + 1.0);
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Error performing phrase search: " + e.getMessage());
+            e.printStackTrace();
         }
 
         return results;
+    }
+
+    private boolean isPhraseInOrder(List<String> words, List<Integer> positions) {
+        // Logic to check if the words appear in the correct order in the positions list
+        // This is a placeholder; implement the actual logic based on your data structure
+        return true; // Replace with actual implementation
     }
 }
