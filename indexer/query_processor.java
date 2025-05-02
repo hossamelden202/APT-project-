@@ -1,83 +1,68 @@
-import indexer.Stemmer;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.model.Filters;
+import org.bson.Document;
+import org.tartarus.snowball.ext.PorterStemmer;
 
-public Map<String, Double> processQuery(String query) {
-    Map<String, Double> results = new HashMap<>();
-    Map<String, Double> phraseResults = new HashMap<>();
-    Stemmer stemmer = new Stemmer(); // Create an instance of Stemmer
+import java.util.*;
 
-    // Preprocess query
-    query = query.toLowerCase();
+public class QueryProcessor {
+    private MongoCollection<Document> collection;
 
-    // Check if the query contains quotation marks
-    if (query.startsWith("\"") && query.endsWith("\"")) {
-        // Extract the phrase
-        String phrase = query.substring(1, query.length() - 1);
-
-        // Perform phrase search
-        phraseResults = performPhraseSearch(phrase);
-
-        // Add phrase results to the final results
-        results.putAll(phraseResults);
+    public QueryProcessor() {
+        this.collection = MongoUtil.getCollection();
     }
 
-    // Perform normal word-based search
-    String[] words = query.replaceAll("\"", "").split("\\s+");
-    for (String word : words) {
-        // Add characters to the Stemmer
-        stemmer.add(word.toCharArray(), word.length());
-        stemmer.stem(); // Perform stemming
-        word = stemmer.toString(); // Get the stemmed word
+    public Map<String, Double> processQuery(String query) {
+        Map<String, Double> results = new HashMap<>();
+        PorterStemmer stemmer = new PorterStemmer();
 
-        if (index.index.containsKey(word)) {
-            for (Posting posting : index.index.get(word)) {
-                results.put(posting.documentId, results.getOrDefault(posting.documentId, 0.0) + 1.0);
-            }
-        }
-    }
+        // Preprocess query
+        query = query.toLowerCase();
 
-    // Ensure phrase results are a subset of normal results
-    if (!phraseResults.isEmpty()) {
-        results.keySet().retainAll(phraseResults.keySet());
-    }
+        // Check if the query contains quotation marks
+        if (query.startsWith("\"") && query.endsWith("\"")) {
+            String phrase = query.substring(1, query.length() - 1);
+            results = performPhraseSearch(phrase);
+        } else {
+            String[] words = query.split("\\s+");
+            for (String word : words) {
+                // Stem the word
+                stemmer.setCurrent(word);
+                stemmer.stem();
+                word = stemmer.getCurrent();
 
-    return results;
-}
-
-private Map<String, Double> performPhraseSearch(String phrase) {
-    Map<String, Double> phraseResults = new HashMap<>();
-    String[] words = phrase.split("\\s+");
-
-    for (Map.Entry<String, List<Posting>> entry : index.index.entrySet()) {
-        String word = entry.getKey();
-        List<Posting> postings = entry.getValue();
-
-        if (word.equals(words[0])) { // Check if the first word matches
-            for (Posting posting : postings) {
-                List<String> positions = posting.positions;
-
-                // Check if the phrase exists in the same order
-                for (String position : positions) {
-                    int startPos = Integer.parseInt(position);
-                    boolean match = true;
-
-                    for (int j = 1; j < words.length; j++) {
-                        int nextPos = startPos + j;
-                        if (!index.index.containsKey(words[j]) ||
-                                index.index.get(words[j]).stream()
-                                        .noneMatch(p -> p.documentId.equals(posting.documentId) &&
-                                                p.positions.contains(String.valueOf(nextPos)))) {
-                            match = false;
-                            break;
-                        }
-                    }
-
-                    if (match) {
-                        phraseResults.put(posting.documentId, phraseResults.getOrDefault(posting.documentId, 0.0) + 1.0);
-                    }
+                // Query MongoDB for the stemmed word
+                for (Document doc : collection.find(Filters.eq("w", word))) {
+                    String docId = doc.getString("dId");
+                    results.put(docId, results.getOrDefault(docId, 0.0) + 1.0);
                 }
             }
         }
+
+        return results;
     }
 
-    return phraseResults;
+    private Map<String, Double> performPhraseSearch(String phrase) {
+        Map<String, Double> results = new HashMap<>();
+        List<String> words = Arrays.asList(phrase.split("\\s+"));
+        PorterStemmer stemmer = new PorterStemmer();
+
+        // Stem each word in the phrase
+        for (int i = 0; i < words.size(); i++) {
+            stemmer.setCurrent(words.get(i));
+            stemmer.stem();
+            words.set(i, stemmer.getCurrent());
+        }
+
+        // Query MongoDB for documents containing the exact phrase
+        for (Document doc : collection.find(Filters.and(
+                Filters.eq("w", words.get(0)),
+                Filters.in("pos", words)
+        ))) {
+            String docId = doc.getString("dId");
+            results.put(docId, results.getOrDefault(docId, 0.0) + 1.0);
+        }
+
+        return results;
+    }
 }
