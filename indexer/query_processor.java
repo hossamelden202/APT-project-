@@ -85,8 +85,27 @@ public class QueryProcessor {
     }
 
     private boolean isPhraseInOrder(List<String> words, List<Integer> positions) {
-        // Logic to check if the words appear in the correct order in the positions list
-        // This is a placeholder; implement the actual logic based on your data structure
-        return true; // Replace with actual implementation
+        for (int startPos : positions) {
+            boolean inOrder = true;
+            int currentPos = startPos;
+
+            for (int i = 1; i < words.size(); i++) {
+                String nextWord = words.get(i);
+                List<Integer> nextWordPositions = collection.find(Filters.eq("w", nextWord))
+                        .map(doc -> doc.getList("pos", Integer.class))
+                        .first();
+
+                if (nextWordPositions == null || !nextWordPositions.contains(++currentPos)) {
+                    inOrder = false;
+                    break;
+                }
+            }
+
+            if (inOrder) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
