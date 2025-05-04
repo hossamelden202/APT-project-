@@ -1,0 +1,420 @@
+<!doctype html>
+<html lang="en-GB">
+ <head>
+  <script type="text/javascript">
+    !function (T, l, y) { var S = T.location, k = "script", D = "instrumentationKey", C = "ingestionendpoint", I = "disableExceptionTracking", E = "ai.device.", b = "toLowerCase", w = "crossOrigin", N = "POST", e = "appInsightsSDK", t = y.name || "appInsights"; (y.name || T[e]) && (T[e] = t); var n = T[t] || function (d) { var g = !1, f = !1, m = { initialize: !0, queue: [], sv: "5", version: 2, config: d }; function v(e, t) { var n = {}, a = "Browser"; return n[E + "id"] = a[b](), n[E + "type"] = a, n["ai.operation.name"] = S && S.pathname || "_unknown_", n["ai.internal.sdkVersion"] = "javascript:snippet_" + (m.sv || m.version), { time: function () { var e = new Date; function t(e) { var t = "" + e; return 1 === t.length && (t = "0" + t), t } return e.getUTCFullYear() + "-" + t(1 + e.getUTCMonth()) + "-" + t(e.getUTCDate()) + "T" + t(e.getUTCHours()) + ":" + t(e.getUTCMinutes()) + ":" + t(e.getUTCSeconds()) + "." + ((e.getUTCMilliseconds() / 1e3).toFixed(3) + "").slice(2, 5) + "Z" }(), iKey: e, name: "Microsoft.ApplicationInsights." + e.replace(/-/g, "") + "." + t, sampleRate: 100, tags: n, data: { baseData: { ver: 2 } } } } var h = d.url || y.src; if (h) { function a(e) { var t, n, a, i, r, o, s, c, u, p, l; g = !0, m.queue = [], f || (f = !0, t = h, s = function () { var e = {}, t = d.connectionString; if (t) for (var n = t.split(";"), a = 0; a < n.length; a++) { var i = n[a].split("="); 2 === i.length && (e[i[0][b]()] = i[1]) } if (!e[C]) { var r = e.endpointsuffix, o = r ? e.location : null; e[C] = "https://" + (o ? o + "." : "") + "dc." + (r || "services.visualstudio.com") } return e }(), c = s[D] || d[D] || "", u = s[C], p = u ? u + "/v2/track" : d.endpointUrl, (l = []).push((n = "SDK LOAD Failure: Failed to load Application Insights SDK script (See stack for details)", a = t, i = p, (o = (r = v(c, "Exception")).data).baseType = "ExceptionData", o.baseData.exceptions = [{ typeName: "SDKLoadFailed", message: n.replace(/\./g, "-"), hasFullStack: !1, stack: n + "\nSnippet failed to load [" + a + "] -- Telemetry is disabled\nHelp Link: https://go.microsoft.com/fwlink/?linkid=2128109\nHost: " + (S && S.pathname || "_unknown_") + "\nEndpoint: " + i, parsedStack: [] }], r)), l.push(function (e, t, n, a) { var i = v(c, "Message"), r = i.data; r.baseType = "MessageData"; var o = r.baseData; return o.message = 'AI (Internal): 99 message:"' + ("SDK LOAD Failure: Failed to load Application Insights SDK script (See stack for details) (" + n + ")").replace(/\"/g, "") + '"', o.properties = { endpoint: a }, i }(0, 0, t, p)), function (e, t) { if (JSON) { var n = T.fetch; if (n && !y.useXhr) n(t, { method: N, body: JSON.stringify(e), mode: "cors" }); else if (XMLHttpRequest) { var a = new XMLHttpRequest; a.open(N, t), a.setRequestHeader("Content-type", "application/json"), a.send(JSON.stringify(e)) } } }(l, p)) } function i(e, t) { f || setTimeout(function () { !t && m.core || a() }, 500) } var e = function () { var n = l.createElement(k); n.src = h; var e = y[w]; return !e && "" !== e || "undefined" == n[w] || (n[w] = e), n.onload = i, n.onerror = a, n.onreadystatechange = function (e, t) { "loaded" !== n.readyState && "complete" !== n.readyState || i(0, t) }, n }(); y.ld < 0 ? l.getElementsByTagName("head")[0].appendChild(e) : setTimeout(function () { l.getElementsByTagName(k)[0].parentNode.appendChild(e) }, y.ld || 0) } try { m.cookie = l.cookie } catch (p) { } function t(e) { for (; e.length;)!function (t) { m[t] = function () { var e = arguments; g || m.queue.push(function () { m[t].apply(m, e) }) } }(e.pop()) } var n = "track", r = "TrackPage", o = "TrackEvent"; t([n + "Event", n + "PageView", n + "Exception", n + "Trace", n + "DependencyData", n + "Metric", n + "PageViewPerformance", "start" + r, "stop" + r, "start" + o, "stop" + o, "addTelemetryInitializer", "setAuthenticatedUserContext", "clearAuthenticatedUserContext", "flush"]), m.SeverityLevel = { Verbose: 0, Information: 1, Warning: 2, Error: 3, Critical: 4 }; var s = (d.extensionConfig || {}).ApplicationInsightsAnalytics || {}; if (!0 !== d[I] && !0 !== s[I]) { var c = "onerror"; t(["_" + c]); var u = T[c]; T[c] = function (e, t, n, a, i) { var r = u && u(e, t, n, a, i); return !0 !== r && m["_" + c]({ message: e, url: t, lineNumber: n, columnNumber: a, error: i }), r }, d.autoExceptionInstrumented = !0 } return m }(y.cfg); function a() { y.onInit && y.onInit(n) } (T[t] = n).queue && 0 === n.queue.length ? (n.queue.push(a), n.trackPageView({})) : a() }(window, document, {
+        src: "https://js.monitor.azure.com/scripts/b/ai.2.min.js", // The SDK URL Source
+        crossOrigin: "anonymous", // When supplied this will add the provided value as the cross origin attribute on the script tag
+        cfg: {
+            instrumentationKey: "a70f6edd-a582-468b-92be-f2a000b51afc"
+        }
+    });
+
+    var telemetryInitializer = (envelope) => {
+        if (envelope.baseType === 'ExceptionData') {
+            if (typeof (envelope.baseData.exceptions) === 'undefined' &&
+                envelope.baseData.message &&
+                envelope.baseData.message.indexOf('same-origin policy prevents us from getting the details of this exception') >= 0) {
+                return false;
+            }
+        }
+
+        envelope.data.PublisherCode = 'TIME';
+    };
+    appInsights.addTelemetryInitializer(telemetryInitializer);
+</script>
+  <script>
+            (function (w, d, s, l, i) {
+                w[l] = w[l] || [];
+                w[l].push({
+                    'gtm.start':
+                        new Date().getTime(),
+                    event: 'gtm.js'
+                });
+                var f = d.getElementsByTagName(s)[0],
+                    j = d.createElement(s),
+                    dl = l != 'dataLayer' ? '&l=' + l : '';
+                j.async = true;
+                j.src =
+                    'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+                f.parentNode.insertBefore(j, f);
+            })(window, document, 'script', 'dataLayer', 'GTM-MGN4C9J');
+        </script><!-- Google Tag Manager -->
+  <script>
+            window.dataLayerCDS = window.dataLayerCDS || [];
+            dataLayerCDS.push({ "publisher_code": "TIME" });
+
+            (function (w, d, s, l, i) {
+                w[l] = w[l] || []; w[l].push({
+                    'gtm.start':
+                        new Date().getTime(), event: 'gtm.js'
+                }); var f = d.getElementsByTagName(s)[0],
+                    j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+                        'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+            })(window, document, 'script', 'dataLayerCDS', 'GTM-W2BDPNVC');
+        </script><!-- End Google Tag Manager -->
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Landing</title>
+  <meta name="keywords">
+  <meta name="description"><!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="/media/favicon.ico">
+  <script type="text/javascript">
+        WebFontConfig = {
+            google: { families: ['Open+Sans:300,400,600,700,800', 'Poppins:300,400,500,600,700', 'Segoe Script:300,400,500,600,700'] }
+        };
+        (function (d) {
+            var wf = d.createElement('script'), s = d.scripts[0];
+            wf.src = '/js/webfont.js';
+            wf.async = true;
+            s.parentNode.insertBefore(wf, s);
+        })(document);
+    </script><!-- Plugins CSS File -->
+  <link rel="stylesheet" href="/vendor/bootstrap/dist/css/bootstrap.min.css?v=fXqQQ_S-0wP-KXSsTjuhDWshTnD3rlSXhrotNH3gX4E"><!-- Main CSS File -->
+  <link rel="stylesheet" href="/css/style.min.css?v=qZ8oCpbECkKZTkvI4msyiH98mpJlf010rVGtNxmiZro">
+  <link rel="stylesheet" href="/media/assets/css/checkout/theme.css">
+  <link rel="stylesheet" type="text/css" href="/vendor/fontawesome-free/css/all.min.css?v=8Xbu1tPe4hBNZFDeni_4a0GhXJnnrYR4IsgCb0I40B4">
+ </head>
+ <body>
+  <noscript>
+   <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MGN4C9J" height="0" width="0" style="display: none; visibility: hidden"></iframe>
+  </noscript>
+  <noscript>
+   <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-W2BDPNVC" height="0" width="0" style="display: none; visibility: hidden"></iframe>
+  </noscript>
+  <header class="header">
+   <div class="header-info">
+    <div class="container custom-container">
+     <div class="header-left">
+      <ul class="header-info-list">
+      </ul>
+     </div>
+     <div class="header-right mx-auto ml-sm-auto mr-sm-0">
+      <ul class="header-info-list">
+      </ul>
+     </div>
+    </div>
+   </div>
+   <div class="header-middle">
+    <div class="container custom-container">
+     <div class="row">
+     </div>
+    </div>
+   </div>
+  </header>
+  <main class="main-pre-checkout landing">
+   <section class="sub-offer">
+    <div class="col-12">
+     <section style="background: rgba(255, 255, 255, 1); margin: -90px auto 60px -15px; width: 100vw; padding: 100px 15px 70px; text-align: center !important">
+      <section style="text-align: center !important">
+       <img src="https://subscribe.timeeurope.co.uk/media/Time-logo.svg" alt="Time" title="Time" style="width: 100%; max-width: 200px; height: auto; max-height: 65px; margin: 0 auto">
+       <h1 style="margin: 15px 0 0; font-size: 1.4em; font-weight: 500; line-height: 1.4; font-family: &quot;Roboto Condensed&quot;, sans-serif !important">CHOOSE YOUR SUBSCRIPTION<br>
+        Now Includes Extra TIME Digital Special Issues* - absolutely FREE</h1><a name="Subscribe"></a>
+      </section>
+     </section>
+    </div><input type="hidden" id="PageSlug" name="PageSlug" value="">
+    <div id="offers">
+     <div class="row px-3 mx-auto justify-content-center landing-choices">
+      <input type="hidden" id="promotion-has-valid-offers" data-val="true" data-val-required="The PromotionHasValidOffers field is required." name="PromotionHasValidOffers" value="True">
+      <div class="col-12 col-md-4 d-flex mb-2 offer-choice-0">
+       <div class="text-center my-0 p-0 pb-3 w-100 landing-panel">
+        <div class="panel-heading">
+         <h2 class="landing-title m-0">Digital Access</h2>
+        </div>
+        <div class="panel-content-wrap">
+         <section class="cover-container d-flex position-relative mx-auto">
+          <section class="bundle-frame" style="max-height: 400px; max-width: 348px">
+           <img src="https://subscribe.timeeurope.co.uk/media/tablet-bg-landing.png" alt="Time Magazine" title="Time Magazine" style="width: 100%; max-height: 460px"> <img src="https://subscribe.timeeurope.co.uk/media/TIE.png" alt="Time Magazine" title="Time Magazine" style="margin-top: -113%; width: 83%; height: 95%; padding: 20px">
+          </section>
+          <section class="phone-frame" style="position: absolute; width: 39%; max-height: 246px; max-width: 166px; bottom: 12%; right: 5%">
+           <img src="https://subscribe.timeeurope.co.uk/media/phone-bg-landing.png" alt="Time Magazine" title="Time Magazine"> <img src="https://subscribe.timeeurope.co.uk/media/TIE.png" alt="Time Magazine" title="Time Magazine" style="margin-top: -130%; max-width: 67%">
+          </section>
+         </section>
+         <br>
+         <h4 style="font-size: 1.2em; margin-right: 0; margin-bottom: 20px; margin-left: 0">
+          <p style="margin-top: 34px; text-align: center; display: flex; min-height: 110px; justify-content: center; align-items: center; flex-direction: column"><span class="price" style="text-align: center; color: rgba(233, 6, 6, 1); font-size: 1.5em; display: block; margin-bottom: 10px; font-weight: normal">$39.99</span><span style="font-size: 1.2em; color: var(--bs-body-color); text-align: var(--bs-body-text-align); font-weight: normal">1 YEAR: DIGITAL EDITION ACCESS<br><br></span></p></h4><a href="/SingleItem?Item=TIE&amp;Prom=WV32DAS9" target="_blank">
+          <button class="button" name="select-offer-button">SELECT</button></a>
+        </div>
+        <div class="panel-content-wrap">
+         <section class="digital-accordion">
+          <section class="card mb-1" style="width: 100%; border: 0; margin: 0 auto; background: none">
+           <section class="collapse digital-collapse" data-parent=".digital-accordion" style="background: rgba(0, 0, 0, 1); color: rgba(255, 255, 255, 1); position: absolute; bottom: -35px; left: -15px; margin-right: -15px; padding: 30px 15px; font-size: 16px">
+            <section class="card-body">
+             <p><strong>Subscribe today and get the Time Magazine Digital Edition. You will enjoy all the following benefits: </strong></p>
+             <br>
+             <ul>
+              <li style="border-top: 1px solid rgba(34, 34, 34, 1); padding: 10px 0">Get 1 Year of Digital Access</li>
+              <li style="border-top: 1px solid rgba(34, 34, 34, 1); padding: 10px 0">Instant access to the digital magazine via our IOS app with web access for PC and android users.</li>
+              <li style="border-top: 1px solid rgba(34, 34, 34, 1); padding: 10px 0">Special features of our App to enhance your experience including audio, bookmark your favourite articles and choose text size for ease of reading.</li>
+              <li style="border-top: 1px solid rgba(34, 34, 34, 1); padding: 10px 0">EXTRA SAVINGS on the newsstand price.</li>
+              <li style="border-top: 1px solid rgba(34, 34, 34, 1); padding: 10px 0">Inside TIME e-newsletter</li>
+              <li style="border-top: 1px solid rgba(34, 34, 34, 1); padding: 10px 0">Discount at the Time Cover Store</li>
+              <li style="border-top: 1px solid rgba(34, 34, 34, 1); padding: 10px 0"><span style="color: rgba(255, 0, 0, 1)">NEW!</span> Free Time Digital Special Issues published during your subscription term.</li>
+             </ul>
+             <button data-toggle="collapse" data-target=".digital-collapse" style="padding: 10px; min-width: 100px; background: rgba(239, 239, 239, 1); border: none">Close</button>
+            </section>
+           </section>
+           <section class="card-header" style="background: none; border: 0; padding: 0; width: 100%">
+            <button style="font-size: 12px; background: rgba(223, 223, 223, 1); width: 90%; max-width: 340px; margin: -34px auto 0; padding: 15px" class="btn btn-link" data-toggle="collapse" data-target=".digital-collapse">YOUR SUBSCRIBER BENEFITS</button>
+           </section>
+          </section>
+         </section>
+        </div>
+       </div>
+      </div>
+      <div class="col-12 col-md-4 d-flex mb-2 offer-choice-1">
+       <div class="text-center my-0 p-0 pb-3 w-100 landing-panel">
+        <div class="panel-heading">
+         <h2 class="landing-title m-0">ALL ACCESS + 1 MONTH FREE</h2>
+        </div>
+        <div class="panel-content-wrap">
+         <img class="print-cover" style="max-height: 400px; margin-left: 10%" src="https://subscribe.timeeurope.co.uk/media/TIE.png" alt="Time Magazine" title="Time Magazine">
+         <section class="cover-container position-relative mx-auto">
+          <section class="bundle-frame" style="width: 50%; max-height: 400px; max-width: 348px; margin-top: -57%; margin-left: 30%">
+           <img src="https://subscribe.timeeurope.co.uk/media/tablet-bg-landing.png" alt="Time Magazine" title="Time Magazine"> <img src="https://subscribe.timeeurope.co.uk/media/TIE.png" alt="Time Magazine" title="Time Magazine" style="margin-top: -105%; max-width: 72%">
+          </section>
+          <section class="phone-frame" style="width: 30%; max-height: 300px; max-width: 348px; margin-top: -45%; margin-left: 60%; margin-bottom: 48px">
+           <img src="https://subscribe.timeeurope.co.uk/media/phone-bg-landing.png" alt="Time Magazine" title="Time Magazine">
+           <section style="position: absolute; bottom: 50%; right: 0; transform: rotate(10deg); background: rgba(216, 35, 42, 1); width: 110px; height: 110px; border-radius: 50%; color: rgba(255, 255, 255, 1); font-size: 20px; padding: 26px 0; font-weight: bold; text-align: center">
+            RRP SAVINGS
+           </section><img src="https://subscribe.timeeurope.co.uk/media/TIE.png" alt="Time Magazine" title="Time Magazine" style="margin-top: -130%; max-width: 67%">
+          </section>
+         </section>
+         <br>
+         <h4 style="font-size: 1.2em; margin-right: 0; margin-bottom: 20px; margin-left: 0">
+          <p style="margin-top: 20px; text-align: center; display: flex; min-height: 110px; justify-content: center; align-items: center; flex-direction: column"><span class="price" style="text-align: center; color: rgba(233, 6, 6, 1); font-size: 1.5em; display: block; margin-bottom: 10px; font-weight: normal">$135.00</span><span style="font-size: 1.2em; color: var(--bs-body-color); text-align: var(--bs-body-text-align); font-weight: normal">1 YEAR: PRINT &amp; DIGITAL ACCESS + 1 MONTH FREE</span></p></h4><a href="/SingleItem?Item=TIE&amp;Prom=WV46BGS9" target="_blank">
+          <button class="button" name="select-offer-button">SELECT</button></a>
+        </div>
+        <div class="panel-content-wrap">
+         <section class="print-accordion">
+          <section class="card mb-1" style="width: 100%; border: 0; margin: 0 auto; background: none">
+           <section class="collapse print-collapse" data-parent=".print-accordion" style="background: rgba(0, 0, 0, 1); color: rgba(255, 255, 255, 1); position: absolute; bottom: -35px; left: -15px; margin-right: -15px; padding: 17px 15px; font-size: 16px">
+            <section class="card-body">
+             <p><strong>Subscribe today and get the print magazine, plus the Time Magazine Digital Edition. You will enjoy all the following benefits: </strong></p>
+             <br>
+             <ul>
+              <li style="border-top: 1px solid rgba(34, 34, 34, 1); padding: 10px 0">1 Year of Print &amp; Digital Access</li>
+              <li style="border-top: 1px solid rgba(34, 34, 34, 1); padding: 10px 0">Print magazine delivered to your doorstep.</li>
+              <li style="border-top: 1px solid rgba(34, 34, 34, 1); padding: 10px 0">Instant access to the digital magazine via our IOS app with web access for PC and android users.</li>
+              <li style="border-top: 1px solid rgba(34, 34, 34, 1); padding: 10px 0">1 MONTH FREE</li>
+              <li style="border-top: 1px solid rgba(34, 34, 34, 1); padding: 10px 0">Savings on the newsstand price.</li>
+              <li style="border-top: 1px solid rgba(34, 34, 34, 1); padding: 10px 0">Inside TIME e-newsletter</li>
+              <li style="border-top: 1px solid rgba(34, 34, 34, 1); padding: 10px 0">Discount at the Time Cover Store</li>
+              <li style="border-top: 1px solid rgba(34, 34, 34, 1); padding: 10px 0"><span style="color: rgba(255, 0, 0, 1)">NEW!</span> Free Time Digital Special Issues published during your subscription term.</li>
+             </ul>
+             <button data-toggle="collapse" data-target=".print-collapse" style="padding: 10px; min-width: 100px; background: rgba(239, 239, 239, 1); border: none">Close</button>
+            </section>
+           </section>
+           <section class="card-header" style="background: none; border: 0; padding: 0; width: 100%">
+            <button style="font-size: 12px; background: rgba(223, 223, 223, 1); width: 90%; max-width: 340px; margin: -34px auto 0; padding: 15px" class="btn btn-link" data-toggle="collapse" data-target=".print-collapse">YOUR SUBSCRIBER BENEFITS</button>
+           </section>
+          </section>
+         </section>
+        </div>
+       </div>
+      </div>
+      <div class="col-12 col-md-4 d-flex mb-2 offer-choice-2">
+       <div class="text-center my-0 p-0 pb-3 w-100 landing-panel">
+        <div class="panel-heading">
+         <h2 class="landing-title m-0">All Access 3 Months</h2>
+        </div>
+        <div class="panel-content-wrap">
+         <img class="print-cover" style="max-height: 400px; margin-left: 10%" src="https://subscribe.timeeurope.co.uk/media/TIE.png" alt="Time Magazine" title="Time Magazine">
+         <section class="cover-container position-relative mx-auto">
+          <section class="bundle-frame" style="width: 50%; max-height: 400px; max-width: 348px; margin-top: -57%; margin-left: 30%">
+           <img src="https://subscribe.timeeurope.co.uk/media/tablet-bg-landing.png" alt="Time Magazine" title="Time Magazine"> <img src="https://subscribe.timeeurope.co.uk/media/TIE.png" alt="Time Magazine" title="Time Magazine" style="margin-top: -105%; max-width: 72%">
+          </section>
+          <section class="phone-frame" style="width: 30%; max-height: 300px; max-width: 348px; margin-top: -45%; margin-left: 60%; margin-bottom: 48px">
+           <img src="https://subscribe.timeeurope.co.uk/media/phone-bg-landing.png" alt="Time Magazine" title="Time Magazine">
+           <section style="position: absolute; bottom: 50%; right: 0; transform: rotate(10deg); background: rgba(216, 35, 42, 1); width: 120px; height: 120px; border-radius: 50%; color: rgba(255, 255, 255, 1); font-size: 24px; padding: 40px 0; font-weight: bold; text-align: center">
+            SAVE 50%
+           </section><img src="https://subscribe.timeeurope.co.uk/media/TIE.png" alt="Time Magazine" title="Time Magazine" style="margin-top: -130%; max-width: 67%">
+          </section>
+         </section>
+         <br>
+         <h4 style="font-size: 1.2em; margin-right: 0; margin-bottom: 20px; margin-left: 0">
+          <p style="margin-top: 20px; text-align: center; display: flex; min-height: 110px; justify-content: center; align-items: center; flex-direction: column"><span class="price" style="text-align: center; color: rgba(233, 6, 6, 1); font-size: 1.5em; display: block; margin-bottom: 10px; font-weight: normal">$16.99</span><span style="font-size: 1.2em; color: var(--bs-body-color); text-align: var(--bs-body-text-align); font-weight: normal">3 MONTHS: PRINT &amp; DIGITAL ACCESS<br>
+            THEN A FIRST FULL QUARTERLY PAYMENT</span></p></h4><a href="/SingleItem?Item=TIE&amp;Prom=WV46BHS9" target="_blank">
+          <button class="button" name="select-offer-button">SELECT</button></a>
+        </div>
+        <div class="panel-content-wrap">
+         <section class="three-month-accordion">
+          <section class="card mb-1" style="width: 100%; border: 0; margin: 0 auto; background: none">
+           <section class="collapse three-month-collapse" data-parent=".three-month-accordion" style="background: rgba(0, 0, 0, 1); color: rgba(255, 255, 255, 1); position: absolute; bottom: -35px; left: -15px; margin-right: -15px; padding: 40px 15px; font-size: 16px">
+            <section class="card-body">
+             <p><strong>Subscribe today and get the print magazine, plus the Time Magazine Digital Edition. You will enjoy all the following benefits: </strong></p>
+             <br>
+             <ul>
+              <li style="border-top: 1px solid rgba(34, 34, 34, 1); padding: 10px 0">Try 3 months of Print and Digital Access.</li>
+              <li style="border-top: 1px solid rgba(34, 34, 34, 1); padding: 10px 0">Print magazine delivered to your doorstep.</li>
+              <li style="border-top: 1px solid rgba(34, 34, 34, 1); padding: 10px 0">Instant access to the digital magazine via our IOS app with web access for PC and android users.</li>
+              <li style="border-top: 1px solid rgba(34, 34, 34, 1); padding: 10px 0">Savings on the newsstand price.</li>
+              <li style="border-top: 1px solid rgba(34, 34, 34, 1); padding: 10px 0">Inside TIME e-newsletter</li>
+              <li style="border-top: 1px solid rgba(34, 34, 34, 1); padding: 10px 0">Discount at the Time Cover Store</li>
+              <li style="border-top: 1px solid rgba(34, 34, 34, 1); padding: 10px 0"><span style="color: rgba(255, 0, 0, 1)">NEW!</span> Free Time Digital Special Issues published during your subscription term.</li>
+             </ul>
+             <button data-toggle="collapse" data-target=".three-month-collapse" style="padding: 10px; min-width: 100px; background: rgba(239, 239, 239, 1); border: none">Close</button>
+            </section>
+           </section>
+           <section class="card-header" style="background: none; border: 0; padding: 0; width: 100%">
+            <button style="font-size: 12px; background: rgba(223, 223, 223, 1); width: 90%; max-width: 340px; margin: -34px auto 0; padding: 15px" class="btn btn-link" data-toggle="collapse" data-target=".three-month-collapse">YOUR SUBSCRIBER BENEFITS</button>
+           </section>
+          </section>
+         </section>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+   </section>
+   <section class="content-section">
+    <section class="row justify-content-center align-items-center" style="width: 100%; background: rgba(239, 239, 239, 1); padding: 0 0 40px; margin-top: -80px">
+     <section class="col-10 col-md-8">
+      <p class="col-12" style="position: relative; padding-right: 15px; padding-left: 15px; flex-basis: 100%"><a class="btn btn-default" href="https://subscribe.timeeurope.co.uk/singleitem?item=TIE&amp;prom=WV46BGS9&amp;gift=Y" data-event="26" data-key="gobuskf@g" style="display: block; padding: 15px; font-size: 16px; transition: background 0.2s ease 0s; text-transform: uppercase; width: 250px; color: rgba(255, 255, 255, 1) !important; background: rgba(233, 6, 6, 1) !important; margin: 40px auto !important; border-radius: 0">GIVE TIME AS A GIFT</a></p>
+     </section>
+    </section>
+    <section class="row justify-content-center" style="margin-bottom: -57px">
+     <section class="col-10 col-md-8" style="padding: 45px 0; font-family: &quot;Roboto Condensed&quot;, sans-serif !important">
+      <h3 style="font-weight: 500; text-align: center; color: rgba(255, 0, 0, 1); text-transform: uppercase; font-size: 32px; margin-bottom: 30px !important; font-family: &quot;Roboto Condensed&quot;, sans-serif !important">JOIN OVER 17 MILLION TIME READERS WORLDWIDE</h3>
+      <p style="font-weight: 400; margin-right: 0; margin-left: 0; font-size: 22px; text-align: center; padding-bottom: 20px; border-bottom: 1px solid rgba(239, 239, 239, 1)"><font>TIME's mission is to tell the stories that matter most, to spark conversations that drive global change, and to provide context and understanding to the issues and events that define our times.<br></font></p>
+      <section style="font-size: 22px">
+       <p style="text-align: left"><font color="rgba(0, 0, 0, 0)"></font><img src="https://subscribe.timeeurope.co.uk/media/tick-icon.png" alt="check.svg" width="25" height="25" style="width: 100%; max-width: 25px; height: auto; max-height: 25px; display: inline">&nbsp;*ALL <font color="#ff0000">TIME Digital Special Issues</font> that are published in our App for iPhone and iPad during your subscription term - <strong>absolutely free!</strong> Web access is available for PC and Android users. Special issue themes for this year include Movies, Sports Legends, Notable Women and The Best of Person of the Year.<br></p>
+       <p style="text-align: left"><font color="rgba(0, 0, 0, 0)"></font><img src="https://subscribe.timeeurope.co.uk/media/tick-icon.png" alt="check.svg" width="25" height="25" style="width: 100%; max-width: 25px; height: auto; max-height: 25px; display: inline">&nbsp;<strong>Unmissable Feature editions are part of your regular subscription (and delivered in print to All Access subscribers)</strong> such as: Person of the year, TIME 100 Most Influential People, Next Generation Leaders, World's Greatest Places, Best Inventions and Woman of the Year.</p>
+       <p style="font-weight: 400; text-align: left"><img src="https://subscribe.timeeurope.co.uk/media/tick-icon.png" alt="check.svg" width="25" height="25" style="color: var(--bs-body-color); font-weight: var(--bs-body-font-weight); background-color: var(--bs-body-bg); width: 100%; max-width: 25px; max-height: 25px; display: inline"> Unparalleled access to the world's most influential people.</p>
+       <p style="font-weight: 400; text-align: left"><img src="https://subscribe.timeeurope.co.uk/media/tick-icon.png" alt="check.svg" width="25" height="25" style="color: var(--bs-body-color); font-weight: var(--bs-body-font-weight); background-color: var(--bs-body-bg); width: 100%; max-width: 25px; max-height: 25px; display: inline"> Analysis and insight on news, business, technology, climate, health, entertainment and sports.</p>
+       <p style="font-weight: 400; text-align: left"><img src="https://subscribe.timeeurope.co.uk/media/tick-icon.png" alt="check.svg" width="25" height="25" style="color: var(--bs-body-color); font-weight: var(--bs-body-font-weight); text-align: center; background-color: var(--bs-body-bg); width: 100%; max-width: 25px; max-height: 25px; display: inline"> Exclusive world renowned photography that captures the heart of the article.</p>
+       <p style="font-weight: 400; text-align: left"><img src="https://subscribe.timeeurope.co.uk/media/tick-icon.png" alt="check.svg" width="25" height="25" style="color: var(--bs-body-color); font-weight: var(--bs-body-font-weight); background-color: var(--bs-body-bg); width: 100%; max-width: 25px; max-height: 25px; display: inline"> Time Newsletters - TIME's best journalism, commentary and exclusives delivered to your inbox.</p>
+       <p style="font-weight: 400; text-align: left"><img src="https://subscribe.timeeurope.co.uk/media/tick-icon.png" alt="check.svg" width="25" height="25" style="color: var(--bs-body-color); font-weight: var(--bs-body-font-weight); text-align: left; background-color: var(--bs-body-bg); width: 100%; max-width: 25px; max-height: 25px; display: inline"> Free delivery of the magazine to your door.</p>
+       <p style="font-weight: 400; text-align: left"><img src="https://subscribe.timeeurope.co.uk/media/tick-icon.png" alt="check.svg" width="25" height="25" style="color: var(--bs-body-color); font-weight: var(--bs-body-font-weight); text-align: left; background-color: var(--bs-body-bg); width: 100%; max-width: 25px; max-height: 25px; display: inline"> Digital magazine available on app for iPhone and iPad with web access for PC and Android users.</p>
+      </section>
+      <p class="col-12" style="font-weight: 400; position: relative; padding-right: 15px; padding-left: 15px; flex-basis: 100%"><a class="btn btn-default subscribe-anchor subx_track_952" href="#Subscribe" data-event="26" data-key="gobuskf@g" style="display: block; padding: 15px; font-size: 16px; transition: background 0.2s ease 0s; text-transform: uppercase; width: 250px; color: rgba(255, 255, 255, 1) !important; background: rgba(0, 0, 0, 1) !important; margin: 40px auto !important; border-radius: 0">SUBSCRIBE</a></p>
+     </section>
+     <section class="row justify-content-center align-items-center" style="width: 100%; background: rgba(239, 239, 239, 1); padding: 60px 0">
+      <section class="col-10 col-md-8">
+       <section class="row justify-content-center align-items-center">
+        <section class="col-12 col-md-8">
+         <h3 style="margin-bottom: 30px !important; text-align: center; color: rgba(255, 0, 0, 1); text-transform: uppercase; font-size: 32px; font-weight: 500; font-family: &quot;Roboto Condensed&quot;, sans-serif !important">Give the gift of time</h3>
+        </section>
+        <section class="col-12 col-md-6 order-md-last gift-covers">
+         <img style="vertical-align: middle; border-style: none; max-width: 100%; height: auto; width: 800px; margin-bottom: 15px" src="https://subscribe.timeeurope.co.uk/media/gift-of-time-grey.png" alt="Time" title="Time">
+        </section>
+        <section class="col-12 col-md-6">
+         <p style="font-size: 20px; font-weight: 400; line-height: 1.5; text-align: left; font-family: &quot;Roboto Condensed&quot;, sans-serif !important">Treat someone special to a one year subscription to Time Magazine in print and digital. Each issue provides analysis and context through which the reader can heighten their knowledge on the latest news on a variety of important topics. Perfect for an in depth read, while commuting or on a coffee break. Every edition will be sure to engage their interest.&nbsp;</p>
+        </section>
+       </section>
+      </section>
+      <section class="col-12 col-md-8">
+       <p class="col-12" style="position: relative; padding-right: 15px; padding-left: 15px; flex-basis: 100%"><a class="btn btn-default subscribe-anchor subx_track_952" href="https://subscribe.timeeurope.co.uk/singleitem?item=TIE&amp;prom=WV46BGS9&amp;gift=Y" data-event="26" data-key="gobuskf@g" style="display: block; padding: 15px; font-size: 16px; transition: background 0.2s ease 0s; text-transform: uppercase; width: 250px; color: rgba(255, 255, 255, 1) !important; background: rgba(0, 0, 0, 1) !important; margin: 40px auto !important; border-radius: 0">GIVE TIME AS A GIFT</a></p>
+      </section>
+     </section>
+    </section>
+   </section>
+  </main>
+  <div id="ExitIntentPopupWindow" class="modal fade exit-intent" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+   <div class="modal-dialog" style="top:30%;">
+    <div class="modal-content" style="width:auto">
+     <div id="PopupContent">
+      <button type="button" style="right:0; position:absolute; margin-right: 8px;" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+      <section class="container d-flex flex-column align-items-center justify-content-center" style="position: relative; height: 95%; text-align: center; color: rgba(0, 0, 0, 1); padding: 30px 0; border: 15px solid rgba(233, 6, 6, 1); margin: 25px; width: auto !important">
+       <img src="https://subscribe.timeeurope.co.uk/media/Time-logo.svg" alt="Time" title="Time" style="width: 100%; max-width: 200px; height: auto; max-height: 65px; margin: 0 auto 15px">
+       <h3 style="font-size: 35px; margin-bottom: 15px">DON'T MISS OUT!</h3>
+       <p style="font-size: 18px; font-weight: 700; margin-bottom: 15px">TRY 3 MONTHS<br>
+        OF TIME<br>
+        IN PRINT &amp; DIGITAL<br>
+        SAVING 50%</p>
+       <button class="btn btn-default" style="font-size: 20px; letter-spacing: 2px; transition: background 0.2s ease 0s; padding: 10px; width: 90%; max-width: 220px; color: rgba(255, 255, 255, 1) !important; background: rgba(233, 6, 6, 1) !important; border-radius: 30px"><strong><a href="https://subscribe.timeeurope.co.uk/SingleItem?Item=TIE&amp;Prom=WV46BHS9" style="color: rgba(255, 255, 255, 1) !important">ORDER NOW</a></strong></button>
+      </section>
+     </div>
+    </div>
+   </div>
+  </div><input name="__RequestVerificationToken" type="hidden" value="CfDJ8JB6CP-iUBhKubPxbeUQM5YmTtBU8Pc2lIB6dhHlwv5OZvYiZlcESsqKfI6E63Pkxm8u3rXJBJq0oPrEU8bEIvLznS6wVi826WACVTuyg6ftDHIxw1hR9yAG4AS2vUF5h8d6h9Ic4i8DaP5tVA_ZSBU">
+  <script type="module">
+                $(document).ready(function () {
+                    exitIntentPopup.init({
+                        trackUrl: "/exit-intent/track",
+                        data: {
+                            journeyType: "L",
+                            page: "offer selection",
+                            messaging: "DEFAULT",
+                            landingPage: "Default",
+                            inactivityTimeout: "20",
+                            inactivityMobileOnly: "True",
+                            items: JSON.parse('[{"itemCode":"TIE","promotionCode":"WV32DAS9"},{"itemCode":"TIE","promotionCode":"WV46BGS9"},{"itemCode":"TIE","promotionCode":"WV46BHS9"}]')
+                        }
+                    });
+                });
+            </script>
+  <footer class="footer">
+   <div class="footer-menu-columns">
+    <div class="container custom-container">
+     <div class="row">
+      <div class="col-12">
+       <div class="row">
+        <div class="col-md-4">
+         <div class="widget">
+          <h4 class="widget-title">MANAGE MY ACCOUNT</h4>
+          <ul class="links">
+           <li><a target="_blank" href="https://www.subscription.co.uk/time/europe/Solo">Sign In/Register</a></li>
+          </ul>
+         </div>
+        </div>
+        <div class="col-md-4">
+         <div class="widget">
+          <h4 class="widget-title">CUSTOMER SERVICE</h4>
+          <ul class="links">
+           <li><a target="_blank" href="mailto:TIME@SUBSCRIPTION.CO.UK">Email: TIME@SUBSCRIPTION.CO.UK</a></li>
+           <li><a target="_blank" href="tel:01858438830">Phone: +44 (0) 1858 438830</a></li>
+           <li><a target="_blank" href="https://account.timeeurope.co.uk/">Help/FAQS</a></li>
+          </ul>
+         </div>
+        </div>
+        <div class="col-md-4">
+         <div class="widget">
+          <h4 class="widget-title">ABOUT US</h4>
+          <ul class="links">
+           <li><a target="_blank" href="https://time.com/privacy/privacy_policy.html?_ga=2.136760120.900850729.1654609222-1660167592.1652866398">Privacy Policy</a></li>
+           <li><a target="_blank" href="https://time.com/privacy/privacy_terms_service.html">Terms of Service</a></li>
+          </ul>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+   </div>
+   <div class="footer-middle">
+    <div class="container custom-container">
+     <div class="row">
+      <div class="col-12">
+       <p>Time is published twice a month (except monthly in January and August) by Time Magazine UK Ltd. Your first issue mails within 4-6 weeks. TIME will be delivered in the form of double issues, which count as two. Frequency is subject to change without notice.<br></p>
+      </div>
+     </div>
+    </div>
+   </div>
+   <div class="container custom-container">
+    <div class="footer-bottom">
+     <p class="footer-copyright">Time Magazine UK Limited (TMUK), Suite 1, 7th Floor, 50 Broadway, London, SW1H 0BL</p>
+     <div class="payment-icons d-flex">
+      <img src="/media/siteSealImage-90.png" alt="payment type" class="footer-payments"> <img src="/media/Visa.svg" alt="payment type" class="footer-payments"> <img src="/media/Mastercard.png" alt="payment type" class="footer-payments"> <img src="/media/PayPal.png" alt="payment type" class="footer-payments">
+     </div>
+     <div class="social-icons">
+     </div><!-- End .social-icons -->
+    </div><!-- End .footer-bottom -->
+   </div><!-- End .containr -->
+  </footer><!-- End .footer --> <!-- Plugins JS File -->
+  <script src="/vendor/jquery/dist/jquery.min.js?v=micjwh-xt9_w4qpdxr4kqWcCIKF64h9w_bxgLR-KzTg"></script>
+  <script src="/vendor/bootstrap/dist/js/bootstrap.bundle.min.js?v=L1RUviJRuhJa9qK4g2vPaC7IPZ3LgEO11x3E4eo5kJQ"></script>
+  <script src="/vendor/jquery-validation/dist/jquery.validate.min.js?v=eItLFOyfQ4d_OGzEnGchi2ZMVF8EhGgzS0k7fSOPifQ"></script>
+  <script src="/vendor/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js?v=9GycpJnliUjJDVDqP0UEu_bsm9U-3dnQUH8-3W10vkY"></script>
+  <script src="/js/plugins.min.js?v=oBiIH7JO8Gd5qQ4PwDnIPxYHITWPEdBuEXVnRZZERF0"></script><!-- Main JS File -->
+  <script src="/js/main.min.js?v=49_wgws0s2sFH9tYIZZrH-uvj7g6fHWxaaB73NCdkac"></script>
+  <script src="/js/landing.min.js?v=1aaKL0LnAvr5ayxUwBTvrKhOjgRWqWda1XKC9yMhluA"></script>
+  <script>
+        landing.init({
+            loadPromotionOffersUrl: "/promotion-offers?country=EGY&defaultOffers=True"
+        });
+    </script>
+ </body>
+</html>
