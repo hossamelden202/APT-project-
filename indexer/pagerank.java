@@ -21,7 +21,7 @@ public class pagerank {
     
     private static Map<String, List<String>> outLinks = new HashMap<>();
     private static Map<String, List<String>> inLinks = new HashMap<>();
-    private static final String HTML_FOLDER = "test_data"; // Path to the folder containing HTML files
+    private static final String HTML_FOLDER = "data_final8"; // Path to the folder containing HTML files
     private static int totalFiles = 0;
 
     public static void main(String[] args) {
@@ -38,14 +38,14 @@ public class pagerank {
         System.out.println("Inlinks: " + inLinks.size());
         System.out.println("Computing PageRank scores...");
     
-        try (PrintWriter writer = new PrintWriter("pagerank_scores.csv")) {
+        try (PrintWriter writer = new PrintWriter("pagerank_scores_data_final8.csv")) {
             writer.println("DocID,PageRank");
             for (Map.Entry<String, Double> entry : pagerankScores.entrySet()) {
                 writer.println(entry.getKey() + "," + entry.getValue());
             }
             System.out.println("PageRank scores successfully written to pagerank_scores.csv");
         } catch (IOException e) {
-            System.err.println("Error writing to pagerank_scores.csv: " + e.getMessage());
+            System.err.println("Error writing to pagerank_scores_total.csv: " + e.getMessage());
         }
     }
     

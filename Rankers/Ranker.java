@@ -7,7 +7,7 @@ InvertedIndex index; //change according to the process wheather you will take it
 public Ranker(InvertedIndex index) {
 this.index = index;
     }
-    public void rankQuery(List<String> query, String phrase) {
+    public  Map<String, Double> rankQuery(List<String> query, String phrase) {
         //i dont know who make query preprocessing but i will assume that query is already preprocessed and person who did this should do same as in index
         Map<String,Boolean> doc_phrase= new HashMap<>();
         Map<String, Scorecomponents> docComponents = new HashMap<>();
@@ -21,9 +21,11 @@ this.index = index;
         List<Posting>postings;
         Double TF_IDF=0.0;
        // Double total=0.0;
-        Double w1=1.0;//weight of TF_IDF
-        Double w2=1.0;//weight of page rank
-        Double w3=1.0;//weight of phrase matching
+        Double w1=0.5;//weight of TF_IDF
+        Double w2=0.3;//weight of page rank
+        Double w3=0.2;//weight of phrase matching
+        //i suggest this values as if want to focus on get most relevant documents then TF_IDF should be more weighted than page rank and phrase matching 
+
         Long doc_size;//edit this to fit
         int weight_head=2;
         double idf=0.0;
@@ -96,10 +98,12 @@ this.index = index;
             System.out.printf("Doc: %-10s | TF-IDF: %.4f | PageRank: %.4f | PhraseMatch: %.2f \n",docid1, normTfIdf, normPR, comp.phraseMatch);
             finalscores.put(docid1, totalScore);
         }
+
         System.out.println("Final document scores:");
         finalscores.entrySet().stream().sorted((e1, e2) -> Double.compare(e2.getValue(), e1.getValue())) // sort descending
         .forEach(entry -> {
         System.out.printf("Document: %-10s | Score: %.4f\n", entry.getKey(), entry.getValue());});
+        return finalscores; // Return the final scores for all documents
 }
 
 
