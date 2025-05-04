@@ -18,7 +18,7 @@ public class RankerTest {
             MongoCollection<Document> wordCollection = db.getCollection("documents2");
             MongoCollection<Document> metaCollection = db.getCollection("documents3");
 
-            String queryString = "car engine speed";
+            String queryString = "car";
             List<String> queryWords = Arrays.asList(queryString.split("\\s+"));
 
             InvertedIndex index = new InvertedIndex();
@@ -38,18 +38,44 @@ public class RankerTest {
 
                     Document metaDoc = metaCollection.find(Filters.eq("did", docId)).first();
                     if (metaDoc != null) {
-                        double pagerank = metaDoc.getDouble("pR");
+                        Object prValue = metaDoc.get("pR");
+                        double pagerank = 0.0;
+                        if (prValue instanceof Double) {
+                            pagerank = (Double) prValue;
+                        } else if (prValue instanceof String) {
+                            try {
+                                pagerank = Double.parseDouble((String) prValue);
+                            } catch (NumberFormatException e) {
+                                pagerank = 0.0; // fallback if string is not a valid double
+                            }
+                        } else if (prValue instanceof Integer) {
+                            pagerank = ((Integer) prValue).doubleValue();
+                        }
+
                         long docSize = metaDoc.containsKey("length") ? metaDoc.getLong("length") : 1;
                         index.pagerank.put(docId, pagerank);
                         index.doclength.put(docId, docSize);
+                        index.url.put(docId, metaDoc.getString("url"));
                     }
                 }
                 if (!postings.isEmpty()) {
                     index.index.put(queryWord, postings);
                 }
             }
+
             Ranker ranker = new Ranker(index);
-            ranker.rankQuery(queryWords,queryString);
+            Map<String, Double> result = ranker.rankQuery(queryWords, queryString);
+            for (Map.Entry<String, Double> entry : result.entrySet()) {
+                String docId = entry.getKey();
+                double score = entry.getValue();
+                String url= index.url.get(docId);
+                    System.out.println("Doc ID: " + docId);
+                    System.out.println("URL: " + url);
+                    System.out.println("Score: " + score);
+                    System.out.println("-----------------------------");
+                } 
+            }
+
+            
         }
     }
-}

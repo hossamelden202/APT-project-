@@ -2,6 +2,7 @@ package Rankers;
 import indexer.InvertedIndex;
 import indexer.Posting;
 import java.util.*;
+import java.util.stream.Collectors;
 public class Ranker {
 InvertedIndex index; //change according to the process wheather you will take it from index or from query search result
 public Ranker(InvertedIndex index) {
@@ -93,16 +94,24 @@ this.index = index;
             {
                 normPR = (comp.pagerank - minPR) / (maxPR - minPR);
             } 
-            //normPR = Math.log(normPR + 1);
             double totalScore = w1 * normTfIdf + w2 * normPR + w3 * comp.phraseMatch;
-            System.out.printf("Doc: %-10s | TF-IDF: %.4f | PageRank: %.4f | PhraseMatch: %.2f \n",docid1, normTfIdf, normPR, comp.phraseMatch);
+            //System.out.printf("Doc: %-10s | TF-IDF: %.4f | PageRank: %.4f | PhraseMatch: %.2f \n",
+               //             docid1, normTfIdf, normPR, comp.phraseMatch);
             finalscores.put(docid1, totalScore);
         }
+        
+        // Overwrite finalscores with the sorted version
+        finalscores = finalscores.entrySet()
+            .stream()
+            .sorted((e1, e2) -> Double.compare(e2.getValue(), e1.getValue())) // sort descending
+            .collect(Collectors.toMap(
+                Map.Entry::getKey,
+                Map.Entry::getValue,
+                (e1, e2) -> e1,
+                LinkedHashMap::new
+            ));
+        
 
-        System.out.println("Final document scores:");
-        finalscores.entrySet().stream().sorted((e1, e2) -> Double.compare(e2.getValue(), e1.getValue())) // sort descending
-        .forEach(entry -> {
-        System.out.printf("Document: %-10s | Score: %.4f\n", entry.getKey(), entry.getValue());});
         return finalscores; // Return the final scores for all documents
 }
 

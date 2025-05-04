@@ -2,9 +2,12 @@ package indexer;
 
 import java.util.*;
 
+import indexer.Posting;
+//import lib.indexer - Copy.doc;
+
 public class InvertedIndex {
     public Map<String, List<Posting>> index;
-    //public Map<String, List<doc>> index2;
+    public Map<String, List<doc>> index2;
     public String urls;
     public String paragraphs;
     public Map<String, List<String>> anchors = new HashMap<>();
@@ -16,16 +19,17 @@ public class InvertedIndex {
 // public Map<String, List<String>> inLinks = new HashMap<>();
 public Map<String, String> docBodies = new HashMap<>();
 public Map<String,Long> doclength = new HashMap<>(); 
-public Map<String, Double> pagerank = new HashMap<>();   
-
+public Map<String, Double> pagerank = new HashMap<>();  
+public Map<String, String> url = new HashMap<>();  
 
     public InvertedIndex() {
         index = new HashMap<>();
-        //index2 = new HashMap<>();
+        index2 = new HashMap<>();
     }
 
     public void add(String word, String docId, String position,String paragrph){
         index.putIfAbsent(word, new ArrayList<>());//unique adding (prevent overwritting)
+        // System.out.println("mine mine :"+ docId);
         List<Posting> postings = index.get(word);
       //(take null or value) 
        Optional<Posting> existing = postings.stream()
