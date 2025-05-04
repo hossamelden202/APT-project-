@@ -3,56 +3,58 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
 import org.bson.Document;
 import org.tartarus.snowball.ext.PorterStemmer;
-
+import Rankers.Ranker;
+import indexer.InvertedIndex;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class QueryProcessor {
     private final MongoCollection<Document> collection;
+    private final PorterStemmer stemmer;
+    private final InvertedIndex index;
 
-    public QueryProcessor() {
+    public QueryProcessor(InvertedIndex index) {
         this.collection = MongoUtil.getCollection();
+        this.stemmer = new PorterStemmer();
+        this.index = index;
     }
 
-    public Map<String, Double> processQuery(String query) {
-        Map<String, Double> results = new HashMap<>();
-        PorterStemmer stemmer = new PorterStemmer();
-
+    public List<Map.Entry<String, Double>> processQuery(String query) {
         try {
             // Check for empty or null query
             if (query == null || query.trim().isEmpty()) {
                 System.out.println("Query is empty or null.");
-                return results;
+                return new ArrayList<>();
             }
 
             // Preprocess query
             query = query.toLowerCase();
-
-            // Check if the query contains quotation marks
-            if (query.startsWith("\"") && query.endsWith("\"")) {
-                String phrase = query.substring(1, query.length() - 1);
-                results = performPhraseSearch(phrase);
-            } else {
-                String[] words = query.split("\\s+");
-                for (String word : words) {
-                    // Stem the word
-                    stemmer.setCurrent(word);
-                    stemmer.stem();
-                    String stemmedWord = stemmer.getCurrent();
-
-                    // Query MongoDB for the stemmed word
-                    for (Document doc : collection.find(Filters.eq("w", stemmedWord))) {
-                        String docId = doc.getString("dId");
-                        double score = doc.getString("w").equals(word) ? 1.0 : 0.5; // Exact match gets higher score
-                        results.put(docId, results.getOrDefault(docId, 0.0) + score);
-                    }
-                }
+            List<String> processedWords = new ArrayList<>();
+            String[] words = query.split("\\s+");
+            for (String word : words) {
+                stemmer.setCurrent(word);
+                stemmer.stem();
+                processedWords.add(stemmer.getCurrent());
             }
+
+            // Use Ranker to get ranked results
+            Ranker ranker = new Ranker(index);
+            String phrase = (query.startsWith("\"") && query.endsWith("\"")) ? query.substring(1, query.length() - 1) : "";
+            ranker.rankQuery(processedWords, phrase);
+
+            // The Ranker should return a sorted list of document IDs and scores
+            // For now, assume Ranker returns a Map<String, Double>
+            Map<String, Double> results = ranker.getResults();
+
+            // Sort results by score descending
+            return results.entrySet().stream()
+                    .sorted(Map.Entry.<String, Double>comparingByValue().reversed())
+                    .collect(Collectors.toList());
         } catch (Exception e) {
             System.err.println("Error processing query: " + e.getMessage());
             e.printStackTrace();
+            return new ArrayList<>();
         }
-
-        return results;
     }
 
     private Map<String, Double> performPhraseSearch(String phrase) {
