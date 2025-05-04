@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Testing Reaction Time to an Audio Signal</title>
+  <meta name="Description" content="An online test to see how quick you can react to an audio sound">
+  <link href="../style.css" rel="stylesheet">
+  <style>
+    #startBtn, #stopBtn {
+        font-size: 50px;
+        margin: 20px auto;
+        padding: 10px 40px;
+    }
+</style>
+  <script async src="https://cdn.fuseplatform.net/publift/tags/2/3070/fuse.js"></script><!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-8ENDVN0S6S"></script>
+  <script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-8ENDVN0S6S');
+</script>
+  <script>
+var author = "Robert Wood";
+var published = "April 2024";
+var url = location.href.split(location.search||location.hash||/[?#]/)[0];
+var today = new Date().toLocaleDateString(); 
+</script>
+ </head>
+ <body>
+  <!-- #BeginLibraryItem "/Library/all-header.lbi" -->
+  <div id="header">
+   <a href="https://www.topendsports.com/index.htm"><img src="https://www.topendsports.com/images/header.png" alt="TopendSports: sports, science, health, fitness and nutrition" width="400" height="60"></a><img src="https://www.topendsports.com/images/mountain-top.png" alt="mountain" width="400" height="12">
+  </div><!-- #EndLibraryItem -->
+  <div id="container">
+   <div id="content">
+    <p class="breadcrumbs"><a href="https://www.topendsports.com/index.htm">Home</a> &gt; <a href="index.htm">Fitness Testing</a> &gt; <a href="tests.htm">Tests</a> &gt; <a href="reaction-tests.htm">Reaction Time</a> &gt; Audio</p>
+    <div id="headline">
+     <a href="https://www.topendsports.com/index.htm"><img src="https://www.topendsports.com/images/homepage-circle.png" alt="Topend Sports Logo" width="71" height="71"></a>
+     <h1>Reaction to Sound</h1>
+    </div>
+    <p>This is an free online <strong>audio reaction time test</strong>. How fast can you react?</p>
+    <p>You need to respond as fast as you can after you hear the sound. Make sure you turn up the volume! First you should test the audio file. <a href="images/react.mp3">Click here</a> to hear the sound you will be waiting for.</p>
+    <p>When you are ready, click the <strong>go button</strong>. Wait for the sound. As soon as you hear the sound, click the <strong>stop button</strong> as quickly as possible. After each attempt, your best time and average will be shown.</p>
+    <p>Good luck!</p>
+    <button id="startBtn">GO</button>
+    <button id="stopBtn" style="display: none;">STOP</button>
+    <div id="results"></div>
+    <div id="stats" style="display: none;">
+     <p>Average Time: <span id="averageTime"></span> seconds</p>
+     <p>Fastest Time: <span id="fastestTime"></span> seconds</p>
+     <button id="resetBtn" style="margin-top: 20px;">Reset</button>
+    </div>
+    <audio id="audio" src="images/react.mp3"></audio>
+    <p>How did you go? Add your best score and compare to others. If you tapped your phone screen, <a href="../resources/polls/testing/reaction-audio-tap.htm">go here</a>. If you used a mouse to click, <a href="../resources/polls/testing/reaction-audio-mouse.htm">go here</a>.</p>
+    <p>Read more information <a href="reactiontest.htm">about Reaction Time</a>
+     <script>
+    const startBtn = document.getElementById('startBtn');
+    const stopBtn = document.getElementById('stopBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const resultsContainer = document.getElementById('results');
+    const statsContainer = document.getElementById('stats');
+    const averageTimeDisplay = document.getElementById('averageTime');
+    const fastestTimeDisplay = document.getElementById('fastestTime');
+    const audio = document.getElementById('audio');
+    let startTime, endTime;
+    let testCount = 0;
+    let reactionTimes = [];
+    let fastestTime = Infinity;
+    let timer;
+
+    startBtn.addEventListener('click', startTest);
+    stopBtn.addEventListener('mousedown', stopTest);
+    resetBtn.addEventListener('click', resetScript);
+
+    function startTest() {
+        startBtn.style.display = 'none';
+        stopBtn.style.display = 'block';
+        timer = setTimeout(playAudio, getRandomDelay());
+    }
+
+    function playAudio() {
+        audio.play();
+    }
+
+    audio.addEventListener('play', function() {
+        startTime = performance.now();
+    });
+
+    function stopTest() {
+    if (!startTime) {
+        // User clicked too early
+        const resultText = `Attempt ${++testCount}: Too early. Wait for the sound!`;
+        const resultElement = document.createElement('div');
+        resultElement.textContent = resultText;
+        // Clear previous results
+        resultsContainer.innerHTML = '';
+        resultsContainer.appendChild(resultElement);
+        startBtn.style.display = 'block';
+        stopBtn.style.display = 'none';
+        clearTimeout(timer); // Clear the timer if the user stops the test early
+        return;
+    }
+    endTime = performance.now();
+    const reactionTime = ((endTime - startTime) / 1000).toFixed(3);
+    reactionTimes.push(parseFloat(reactionTime));
+    fastestTime = Math.min(fastestTime, parseFloat(reactionTime));
+    const resultText = `Attempt ${++testCount}: ${reactionTime} seconds`;
+    const resultElement = document.createElement('div');
+    resultElement.textContent = resultText;
+    // Clear previous results
+    resultsContainer.innerHTML = '';
+    resultsContainer.appendChild(resultElement);
+    startBtn.style.display = 'block';
+    stopBtn.style.display = 'none';
+    calculateStats();
+    startTime = null; // Reset the timer
+    endTime = null;
+}
+
+
+    function calculateStats() {
+        const sum = reactionTimes.reduce((acc, time) => acc + time, 0);
+        const averageTime = (sum / reactionTimes.length).toFixed(3);
+        averageTimeDisplay.textContent = averageTime;
+        fastestTimeDisplay.textContent = fastestTime.toFixed(3);
+        statsContainer.style.display = 'block';
+    }
+
+    function resetScript() {
+        testCount = 0;
+        reactionTimes = [];
+        fastestTime = Infinity;
+        resultsContainer.innerHTML = '';
+        statsContainer.style.display = 'none';
+    }
+
+    function getRandomDelay() {
+        // Generate a random delay between 0.5 and 3.5 seconds
+        return Math.floor(Math.random() * 3500) + 500;
+    }
+  </script></p><!-- #BeginLibraryItem "/Library/all-sharing.lbi" -->
+    <div class="clearfix"></div>
+    <hr class="style"><!-- 71161633/desk_mrec_footer_1/desk_mrec_footer_1 -->
+    <div data-fuse="22881274197"></div>
+    <hr class="style"><!-- #EndLibraryItem -->
+    <h2>Related Pages</h2>
+    <ul>
+     <li>A list of <a href="reaction-tests.htm">reaction time tests</a></li>
+     <li><a href="reactiontest.htm">Test your reaction time</a> — a fun test of your finger reaction time.</li>
+     <li><a href="reaction-timer-screen.htm">Tap Reaction Test</a> — tap the screen as quickly as possible</li>
+     <li>Video examples of <a href="https://www.topendsports.com/videos/category/testing/reaction/">Reaction Time Tests</a></li>
+     <li><a href="https://www.topendsports.com/testing/reactionquiz.shtml?view_results" target="_top">View reaction time scores</a> — graphical results of people's reaction time scores from the above test.</li>
+     <li><a href="reactionmake.htm">Make your own</a> reaction timer with only a piece of cardboard and a pen!</li>
+     <li>Products for <a href="../fitness/products/reaction-time.htm">training reaction time</a></li>
+     <li>Sports in which <a href="../fitness/sports/reaction-time-tes.htm">reaction time is important</a>.</li>
+    </ul><!-- #BeginLibraryItem "/Library/comments.lbi" -->
+    <script src="https://www.topendsports.com/randomstuff.js"></script>
+    <div class="highlight">
+     <a href="https://www.topendsports.com/comment.htm"><img src="https://www.topendsports.com/images/letter-icon.png" width="35" height="36" alt="send us a comment" loading="lazy"></a> <em>Any comments, suggestions, or corrections? <a href="https://www.topendsports.com/comment.htm">Please let us know</a>.</em>
+    </div><!-- #EndLibraryItem -->
+   </div>
+   <div id="grouping">
+    <!-- #BeginLibraryItem "/Library/all-search.lbi" -->
+    <div id="search">
+     <h2 class="mobile-only">Search This Site</h2>
+     <script>
+  (function() {
+    var cx = 'partner-pub-2714899191075238:ysqhfm-nfoz';
+    var gcse = document.createElement('script');
+    gcse.type = 'text/javascript';
+    gcse.async = true;
+    gcse.src = 'https://cse.google.com/cse.js?cx=' + cx;
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(gcse, s);
+  })();
+  </script><gcse:searchbox-only></gcse:searchbox-only>
+    </div><!-- #EndLibraryItem --><!-- #BeginLibraryItem "/Library/all-ad-sidebar.lbi" -->
+    <div class="ad-sidebar">
+     <!-- 71161633/desk_mrec_1/desk_mrec_1 -->
+     <div data-fuse="22881274188"></div>
+    </div><!-- #EndLibraryItem --><!-- #BeginLibraryItem "/Library/testing-sidemenu.lbi" -->
+    <div class="extra">
+     <h2>Testing Extra</h2>
+     <p>We have <a href="tests/index.htm">over 400 fitness tests</a> listed, so it's not easy to choose the best one to use. You should consider the validity, reliability, costs and ease of use for each test. Use our <a href="fittest.htm">testing guide</a> to conducting, recording, and interpreting fitness tests. Any questions, <a href="../comment.htm">please ask</a> or <a href="../search.htm">search</a> for your answer.</p>
+    </div><!-- #EndLibraryItem --><!-- #BeginLibraryItem "/Library/all-sidebar.lbi" -->
+    <div class="extra">
+     <h2>Latest Pages</h2>
+     <ul>
+      <li><a href="https://www.topendsports.com/sport/illegal/index.htm">Illegal Sports</a></li>
+      <li><a href="https://www.topendsports.com/events/worldcupsoccer/hosts/2026/teams.htm">World Cup Qualifiers</a></li>
+      <li><a href="https://www.topendsports.com/testing/future-ai.htm">AI-Powered Fitness Testing</a></li>
+      <li><a href="https://www.topendsports.com/testing/tests/glucose-continuous-monitoring.htm">Continuous Glucose Monitoring in Athletes</a></li>
+     </ul>
+     <h2><img src="../sport/golf/images/cartoon-putter-ai.jpg" width="150" height="123" alt="golf player putting">Upcoming Events</h2>
+     <ul>
+      <li><a href="https://www.topendsports.com/events/golf-majors/masters/index.htm">Golf Masters</a></li>
+      <li><a href="https://www.topendsports.com/events/soccer/fa-cup/index.htm">FA Cup final</a></li>
+      <li><a href="https://www.topendsports.com/sport/soccer/list-league-uefa.htm">UEFA Champions League Final</a></li>
+      <li><a href="https://www.topendsports.com/events/calendar-2025.htm">2025 Major Events Calendar</a></li>
+     </ul>
+     <h2>Popular Pages</h2>
+     <ul>
+      <li><a href="https://www.topendsports.com/sport/soccer/list-player-of-the-year-ballondor.htm">Ballon d'Or Winners</a></li>
+      <li><a href="https://www.topendsports.com/events/soccer/fa-cup/winners.htm">FA Cup Winners</a></li>
+      <li><a href="https://www.topendsports.com/events/super-bowl/winners-list.htm">Super Bowl Winners</a></li>
+      <li><a href="https://www.topendsports.com/events/worldcupsoccer/winners.htm">World Cup Winners</a></li>
+     </ul>
+     <h2>Latest Sports Added</h2>
+     <ul>
+      <li><a href="https://www.topendsports.com/sport/list/fives-squash.htm">Squash Fives</a></li>
+      <li><a href="https://www.topendsports.com/sport/unusual/carjitsu.htm">Carjitsu</a></li>
+      <li><a href="https://www.topendsports.com/sport/list/diving-death.htm">D?ds Diving</a></li>
+      <li><a href="https://www.topendsports.com/sport/list/totem-tennis.htm">Totem Tennis (Swingball)</a></li>
+     </ul>
+    </div><!-- #EndLibraryItem -->
+   </div><!--end of grouping-->
+   <div class="clearfix"></div>
+  </div><!--end of container--><!-- #BeginLibraryItem "/Library/all-citation.lbi" -->
+  <div id="citation">
+   <p>
+    <script> 
+var md = new Date()	
+var months = new Array ("January","February","March","April","May","June","July","August","September","October","November","December")
+document.write(" <strong>CITE THIS PAGE:</strong> "+ author + ", &quot;" + document.title + ".&quot; Topend Sports Website, first published "+ published + ", "+ url + ", Accessed " + md.getDate()+" " + months[md.getMonth()]	+ " " + md.getFullYear());
+</script> &nbsp;? <a href="https://www.topendsports.com/citations.htm">How to Cite</a></p>
+  </div><!-- #EndLibraryItem --><!-- #BeginLibraryItem "/Library/all-footer-ad.lbi" -->
+  <div id="footer-ad">
+   <!-- 71161633/desk_footer/desk_footer -->
+   <div data-fuse="22881274200"></div>
+  </div><!-- #EndLibraryItem --><!-- #BeginLibraryItem "/Library/all-footer.lbi" -->
+  <div id="footer">
+   <div class="footer-wrap">
+    <div class="footerbox">
+     <p><strong>PAGES</strong></p>
+     <p><a href="https://www.topendsports.com/index.htm">home</a><br><a href="https://www.topendsports.com/search.htm">search</a><br><a href="https://www.topendsports.com/sitemap.htm">sitemap</a><br><a href="https://www.topendsports.com/resources/storefront.htm">store</a></p>
+    </div>
+    <div class="footerbox">
+     <p><strong>SOCIAL</strong> <strong>MEDIA</strong></p>
+     <p><a href="https://www.topendsports.com/newsletter/index.htm">newsletter</a><br><a href="https://www.facebook.com/topendsports" target="_blank">facebook</a><br><a href="https://www.instagram.com/topendsports/" target="_blank">Instagram</a><br><a href="https://twitter.com/topendsports" target="_blank">X (twitter)</a></p>
+    </div>
+    <div class="footerbox">
+     <p><strong>SECURITY</strong></p>
+     <p><a href="https://www.topendsports.com/privacy.htm" rel="nofollow">privacy policy</a><br><a href="https://www.topendsports.com/disclaimer.htm" rel="nofollow">disclaimer</a><br><a href="https://www.topendsports.com/copyright.htm">copyright</a></p>
+    </div>
+    <div class="footerbox">
+     <p><strong>ABOUT</strong></p>
+     <p><a href="https://www.topendsports.com/comment.htm">contact</a><br><a href="https://www.topendsports.com/aboutrob.htm">author info</a><br><a href="https://www.topendsports.com/advertising.htm">advertising</a></p>
+    </div>
+   </div>
+   <div class="clearfix"></div>
+   <p><a href="https://www.topendsports.com/index.htm"><img src="https://www.topendsports.com/images/footer-logo.png" width="66" height="60" alt="Topend Sports Logo" loading="lazy"><br></a>©1997-2025 Topend Sports <br>
+    <script>
+		var md = new Date(document.lastModified)
+var months = new Array ("January","February","March","April","May","June","July",
+		"August","September","October","November","December")
+document.write("Page last modified: "+ md.getDate()+" " + months[md.getMonth()]
+		+ " " + md.getFullYear());
+        </script></p>
+  </div><!-- #EndLibraryItem -->
+ </body>
+</html>
