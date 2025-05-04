@@ -44,8 +44,8 @@ public class Indexer {
         int[] indexedCount = {0};
         System.out.println("Total files: " + totalFiles);
         System.out.println("Reading PageRank scores...");
-        pagerank p1 =new pagerank();
-        pagerankScores = p1.calc_rank();
+        //pagerank p1 =new pagerank();
+       // pagerankScores = p1.calc_rank();
         // for(int i=0; i<750; i++)
         // {
         //     String docId = (String) pagerankScores.keySet().toArray()[i];
@@ -183,7 +183,8 @@ public class Indexer {
         String title = doc.title();
         String body = doc.body().text();
         String url = doc.select("link[rel=canonical]").attr("href");
-        if (url.isEmpty()) url = "http://" + docId;
+        if (url.isEmpty()) 
+        url = "http://" + docId;
         String paragraph = doc.select("p").text();
 
         List<String> words = Utils.tokenize(title + " " + body);

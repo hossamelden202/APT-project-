@@ -2,6 +2,7 @@ package indexer;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -20,59 +21,61 @@ public class pagerank {
     
     private static Map<String, List<String>> outLinks = new HashMap<>();
     private static Map<String, List<String>> inLinks = new HashMap<>();
-    private static final String HTML_FOLDER = "data/total";
+    private static final String HTML_FOLDER = "test_data"; // Path to the folder containing HTML files
     private static int totalFiles = 0;
-   public  Map<String, Double> calc_rank()
-   {
-    File folder = new File(HTML_FOLDER);
-    File[] files = folder.listFiles((dir, name) -> name.endsWith(".html"));
-    if (files == null) return null ;
-    totalFiles = files.length;
-    System.out.println("Total files: " + totalFiles);
-    Map<String, Double> pagerankScores=read_file(files);
-    System.out.println("Outlinks: " + outLinks.size());
-    System.out.println("Inlinks: " + inLinks.size());
-    System.out.println("Computing PageRank scores...");
-    // for(int i = 0; i < totalFiles; i++) {
-    //     String docId = (String) pagerankScores.keySet().toArray()[i];
-    //     System.out.println("Doc ID: " + docId + ", PageRank: " + pagerankScores.get(docId));
-    //     System.out.println("Outlinks: " + outLinks.get(docId));
-    //     System.out.println("Inlinks: " + inLinks.get(docId));
-    // }
-    System.out.println("PageRank scores computed successfully.");
-    return pagerankScores;
-    // for(int i=0; i<5000; i++){
-    //     String docId = (String) pagerankScores.keySet().toArray()[i];
-    //     System.out.println("Doc ID: " + docId + ", PageRank Score: " + pagerankScores.get(docId));
-    // }
-}
 
-private  static Map<String, Double> computePageRanks(
+    public static void main(String[] args) {
+        File folder = new File(HTML_FOLDER);
+        File[] txtFiles = folder.listFiles((dir, name) -> name.endsWith(".txt"));
+        if (txtFiles == null) return;
+    
+        totalFiles = txtFiles.length;
+        System.out.println("Total .txt files: " + totalFiles);
+    
+        Map<String, Double> pagerankScores = readFile(txtFiles);
+    
+        System.out.println("Outlinks: " + outLinks.size());
+        System.out.println("Inlinks: " + inLinks.size());
+        System.out.println("Computing PageRank scores...");
+    
+        try (PrintWriter writer = new PrintWriter("pagerank_scores.csv")) {
+            writer.println("DocID,PageRank");
+            for (Map.Entry<String, Double> entry : pagerankScores.entrySet()) {
+                writer.println(entry.getKey() + "," + entry.getValue());
+            }
+            System.out.println("PageRank scores successfully written to pagerank_scores.csv");
+        } catch (IOException e) {
+            System.err.println("Error writing to pagerank_scores.csv: " + e.getMessage());
+        }
+    }
+    
+
+    private static Map<String, Double> computePageRanks(
         Map<String, List<String>> outLinks,
         Map<String, List<String>> inLinks,
         double dampingFactor,
         int iterations
-    ) 
-    {
+    ) {
         Set<String> allDocs = new HashSet<>();
         allDocs.addAll(outLinks.keySet());
         allDocs.addAll(inLinks.keySet());
-    
+
+        int N = allDocs.size();
         Map<String, Double> ranks = new HashMap<>();
         for (String doc : allDocs) {
-            ranks.put(doc, 1.0);
+            ranks.put(doc, 1.0 / N);  // Initialize to 1/N
         }
-    
+
         for (int i = 0; i < iterations; i++) {
             Map<String, Double> newRanks = new HashMap<>();
             double danglingSum = 0.0;
-    
+
             for (String doc : allDocs) {
                 if (outLinks.getOrDefault(doc, new ArrayList<>()).isEmpty()) {
                     danglingSum += ranks.getOrDefault(doc, 0.0);
                 }
             }
-    
+
             for (String doc : allDocs) {
                 double rankSum = 0.0;
                 for (String inDoc : inLinks.getOrDefault(doc, new ArrayList<>())) {
@@ -81,58 +84,109 @@ private  static Map<String, Double> computePageRanks(
                         rankSum += ranks.getOrDefault(inDoc, 0.0) / outDegree;
                     }
                 }
-                double danglingContribution = dampingFactor * danglingSum / allDocs.size();
-                newRanks.put(doc, (1 - dampingFactor) + dampingFactor * rankSum + danglingContribution);
+                double danglingContribution = dampingFactor * danglingSum / N;
+                double newRank = (1 - dampingFactor) / N + dampingFactor * rankSum + danglingContribution;
+                newRanks.put(doc, newRank);
             }
+
             ranks = newRanks;
         }
-        
+
         return ranks;
     }
-private static Map<String, Double> read_file(File[] files) {
-    if (files == null || files.length == 0) {
-        System.out.println("No files found in the directory.");
-        return null;
-    }
 
-    // 1. Collect valid document IDs from file names
-    Set<String> validDocIds = Arrays.stream(files)
-        .map(f -> f.getName().replaceAll("\\.html$", ""))
-        .collect(Collectors.toSet());
-
-    for (File file : files) {
-        try {
-            Path path = file.toPath();
-            byte[] bytes = Files.readAllBytes(path);
-            String html = new String(bytes, StandardCharsets.UTF_8);
-            String docId = file.getName().replaceAll("\\.html$", "");
-            Document doc = Jsoup.parse(html);
-
-            List<String> outLinkList = new ArrayList<>();
-
-            for (org.jsoup.nodes.Element a : doc.select("a[href]")) {
-                String link = a.attr("href").trim();
-
-                // Handle local links only
-                if (link.endsWith(".html")) {
-                    String linkedDocId = link.replaceAll("\\.html$", "");
-
-                    if (validDocIds.contains(linkedDocId)) {
-                        outLinkList.add(linkedDocId);
-                        inLinks.computeIfAbsent(linkedDocId, k -> new ArrayList<>()).add(docId);
-                    }
-                }
-            }
-            outLinks.put(docId, outLinkList);
-        } catch (IOException e) {
-            System.err.println("Failed to extract links from: " + file.getName());
+    private static Map<String, Double> readFile(File[] txtFiles) {
+        if (txtFiles == null || txtFiles.length == 0) {
+            System.out.println("No .txt files found in the directory.");
+            return null;
         }
+    
+        Set<String> validDocIds = new HashSet<>();
+        int downloadCount = 0; // Counter for downloaded pages
+    
+        for (File txtFile : txtFiles) {
+            try {
+                List<String> lines = Files.readAllLines(txtFile.toPath(), StandardCharsets.UTF_8);
+                if (lines.isEmpty()) continue;
+    
+                String rawLink = lines.get(0).trim(); // URL from the .txt file
+                String docId = normalizeLink(rawLink);
+                File htmlFile = new File(txtFile.getParent(), docId + ".html");
+    
+                String html;
+    
+                if (!htmlFile.exists()) {
+                    System.out.println("Downloading HTML for: " + rawLink);
+                    try {
+                        Document downloaded = Jsoup.connect(rawLink).get();
+                        html = downloaded.html();
+    
+                        // Save downloaded HTML
+                        Files.writeString(htmlFile.toPath(), html, StandardCharsets.UTF_8);
+                        downloadCount++; // Increment download counter
+                    } catch (IOException e) {
+                        System.err.println("Failed to download: " + rawLink + " — " + e.getMessage());
+                        continue;
+                    }
+                } else {
+                    html = Files.readString(htmlFile.toPath(), StandardCharsets.UTF_8);
+                }
+    
+                validDocIds.add(docId);
+                Document doc = Jsoup.parse(html);
+    
+                List<String> outLinkList = new ArrayList<>();
+                for (org.jsoup.nodes.Element a : doc.select("a[href]")) {
+                    String href = a.attr("href").trim();
+                    String linkedDocId = normalizeLink(href.replaceAll("\\.html$", "")); // Normalize and strip .html
+    
+                    outLinkList.add(linkedDocId);
+                    inLinks.computeIfAbsent(linkedDocId, k -> new ArrayList<>()).add(docId);
+                }
+    
+                outLinks.put(docId, outLinkList);
+    
+            } catch (IOException e) {
+                System.err.println("Error reading " + txtFile.getName() + ": " + e.getMessage());
+            }
+        }
+    
+        System.out.println("Downloaded pages: " + downloadCount);
+        System.out.println("Normalized Document IDs:");
+        validDocIds.forEach(System.out::println);
+    
+        Map<String, Double> pagerankScores = computePageRanks(outLinks, inLinks, 0.85, 20);
+        pagerankScores.keySet().retainAll(validDocIds); // Only keep valid pages
+    
+        // Re-normalize PageRank to sum to 1 over only valid pages
+        double total = pagerankScores.values().stream().mapToDouble(Double::doubleValue).sum();
+        Map<String, Double> normalizedRanks = new HashMap<>();
+        for (Map.Entry<String, Double> entry : pagerankScores.entrySet()) {
+            double normalized = entry.getValue() / total;
+            // Optionally scale for readability:
+            // normalized *= 100000;
+            normalizedRanks.put(entry.getKey(), normalized);
+        }
+    
+        return normalizedRanks;
     }
-    Map<String, Double> pagerankScores = computePageRanks(outLinks, inLinks, 0.85, 20);
-    // After PageRank calculation is done:
-    pagerankScores.keySet().retainAll(validDocIds);
-    return pagerankScores;
+    
+    
 
-}
+    private static String normalizeLink(String link) {
+        // Remove "http://" or "https://"
+        link = link.replaceAll("https?://", "");
 
+        // Handle cases like "http___" and replace "___" with "_"
+        link = link.replaceAll("^_+", ""); // Remove any leading underscores (if there's any)
+        link = link.replaceAll("___", "_"); // Replace '___' with a single underscore
+
+        // Remove file extensions like .html or any other unwanted characters
+        link = link.replaceAll("\\.html$", "");
+
+        // Replace any remaining non-alphanumeric characters with "_"
+        link = link.replaceAll("[^a-zA-Z0-9_]", "_");
+
+        return link;
+    }
 }

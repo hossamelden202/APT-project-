@@ -7,13 +7,13 @@ InvertedIndex index; //change according to the process wheather you will take it
 public Ranker(InvertedIndex index) {
 this.index = index;
     }
-    public void rankQuery(String query) {
+    public void rankQuery(List<String> query, String phrase) {
         //i dont know who make query preprocessing but i will assume that query is already preprocessed and person who did this should do same as in index
         Map<String,Boolean> doc_phrase= new HashMap<>();
         Map<String, Scorecomponents> docComponents = new HashMap<>();
-        String[] words=query.trim().split("\\s+");//assume any thing edit this to fit 
-        int total_docs= 6000;
+        String[] words = query.toArray(new String[0]);  // Convert List to array        int total_docs= 6000;
         int total_docs_with_word=0;
+        int total_docs=6000;
         String word;
         int freq;
         String docid;
@@ -59,7 +59,7 @@ this.index = index;
                     double pagerank = index.pagerank.getOrDefault(docid, 1.0);
                     minPR = Math.min(minPR, pagerank);
                     maxPR = Math.max(maxPR, pagerank);
-                    double phraseMatch = phrase_matching(query, docid, doc_phrase);
+                    double phraseMatch = phrase_matching(phrase, docid, doc_phrase);
                     docComponents.putIfAbsent(docid, new Scorecomponents());
                     Scorecomponents comp = docComponents.get(docid);
                     //comp.tfidf += TF_IDF;
