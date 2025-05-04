@@ -9,16 +9,18 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class QueryProcessor {
-    private final MongoCollection<Document> collection;
-    private final PorterStemmer stemmer;
-    private final InvertedIndex index;
+    private final MongoCollection<Document> collection; // initialize mongo collection
+    private final PorterStemmer stemmer;  // steamming words for root form
+    private final InvertedIndex index; // inverted index to store the words and their positions
 
+
+    // constructor
     public QueryProcessor(InvertedIndex index) {
         this.collection = MongoUtil.getCollection();
         this.stemmer = new PorterStemmer();
         this.index = index;
     }
-
+  // Processes a user query and retrieves ranked results
     public List<Map.Entry<String, Double>> processQuery(String query) {
         try {
             // Check for empty or null query
@@ -49,7 +51,7 @@ public class QueryProcessor {
             // Sort results by score descending
             return results.entrySet().stream()
                     .sorted(Map.Entry.<String, Double>comparingByValue().reversed())
-                    .collect(Collectors.toList());
+                    .collect(Collectors.toList());   // returns a sorted list of document IDs and scores
         } catch (Exception e) {
             System.err.println("Error processing query: " + e.getMessage());
             e.printStackTrace();
@@ -57,6 +59,7 @@ public class QueryProcessor {
         }
     }
 
+    // Performs a phrase search in the MongoDB collection (search for specific phrase )
     private Map<String, Double> performPhraseSearch(String phrase) {
         Map<String, Double> results = new HashMap<>();
         List<String> words = Arrays.asList(phrase.split("\\s+"));
