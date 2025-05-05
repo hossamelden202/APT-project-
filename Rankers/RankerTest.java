@@ -6,6 +6,9 @@ import org.bson.Document;
 import indexer.InvertedIndex;
 import indexer.Posting;
 import java.util.*;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class RankerTest {
 
@@ -65,16 +68,34 @@ public class RankerTest {
 
             Ranker ranker = new Ranker(index);
             Map<String, Double> result = ranker.rankQuery(queryWords, queryString);
-            for (Map.Entry<String, Double> entry : result.entrySet()) {
-                String docId = entry.getKey();
-                double score = entry.getValue();
-                String url= index.url.get(docId);
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter("htmlpages.txt"))) 
+            {
+                for (Map.Entry<String, Double> entry : result.entrySet()) {
+                    String docId = entry.getKey();
+                    double score = entry.getValue();
+                    String url = index.url.get(docId);
+                    
                     System.out.println("Doc ID: " + docId);
                     System.out.println("URL: " + url);
                     System.out.println("Score: " + score);
                     System.out.println("-----------------------------");
-                } 
+
+                    writer.write("Doc ID: " + docId);
+                    writer.newLine();
+                    writer.write("URL: " + url);
+                    writer.newLine();
+                    writer.write("Score: " + score);
+                    writer.newLine();
+                    writer.write("-----------------------------");
+                    writer.newLine();
+                }
+                System.out.println("Results written to htmlpages.txt");
+            } catch (IOException e) {
+                System.err.println("Error writing to file: " + e.getMessage());
             }
+        } catch (Exception e) {
+            System.err.println("Error connecting to MongoDB: " + e.getMessage());
+        }
 
             
         }
