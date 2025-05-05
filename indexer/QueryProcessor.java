@@ -40,8 +40,8 @@ public class QueryProcessor {
             }
 
             // Connect to collections
-            MongoCollection<Document> wordCollection = MongoUtil.getCollection("documents2");
-            MongoCollection<Document> metaCollection = MongoUtil.getCollection("documents3");
+            MongoCollection<Document> wordCollection = MongoUtil.getCollection();
+            MongoCollection<Document> metaCollection = MongoUtil.getCollection2();
 
             // Build the index
             index.index = new HashMap<>();
@@ -62,7 +62,20 @@ public class QueryProcessor {
                     // Get metadata for the document
                     Document metaDoc = metaCollection.find(Filters.eq("did", docId)).first();
                     if (metaDoc != null) {
-                        double pagerank = metaDoc.getDouble("pR");
+                        Object prValue = metaDoc.get("pR");
+                        double pagerank = 0.0;
+                        if (prValue instanceof Double) {
+                            pagerank = (Double) prValue;
+                        } else if (prValue instanceof String) {
+                            try {
+                                pagerank = Double.parseDouble((String) prValue);
+                            } catch (NumberFormatException e) {
+                                pagerank = 0.0; // fallback if string is not a valid double
+                            }
+                        } else if (prValue instanceof Integer) {
+                            pagerank = ((Integer) prValue).doubleValue();
+                        }
+
                         long docSize = metaDoc.containsKey("length") ? metaDoc.getLong("length") : 1;
                         index.pagerank.put(docId, pagerank);
                         index.doclength.put(docId, docSize);
@@ -81,7 +94,16 @@ public class QueryProcessor {
 
             Ranker ranker = new Ranker(index);
             Map<String, Double> resultMap = ranker.rankQuery(processedWords, phrase);
-
+            for (Map.Entry<String, Double> entry : resultMap.entrySet()) {
+                String docId = entry.getKey();
+                double score = entry.getValue();
+                String url = index.url.get(docId);
+                
+                System.out.println("Doc ID: " + docId);
+                System.out.println("URL: " + url);
+                System.out.println("Score: " + score);
+                System.out.println("-----------------------------");
+            }
             // Sort results by score in descending order
             finalResults = resultMap.entrySet().stream()
                     .sorted(Map.Entry.<String, Double>comparingByValue().reversed())
@@ -93,5 +115,10 @@ public class QueryProcessor {
         }
 
         return finalResults;
+    }
+
+    public static void main(String[] args) {
+        QueryProcessor processor = new QueryProcessor();
+        processor.processQuery("car"); // Replace with dynamic input if needed
     }
 }
