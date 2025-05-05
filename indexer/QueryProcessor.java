@@ -62,8 +62,8 @@ public class QueryProcessor {
             }
 
             // Connect to collections
-            MongoCollection<Document> wordCollection = MongoUtil.getCollection();
-            MongoCollection<Document> metaCollection = MongoUtil.getCollection2();
+            MongoCollection<Document> wordCollection = MongoUtil.getCollection(); // stores word data doucement ids , frequencies , paragraghes
+            MongoCollection<Document> metaCollection = MongoUtil.getCollection2(); // stores metadata page rank document lenghth urls
 
             // Build the index
             index.index = new HashMap<>();
