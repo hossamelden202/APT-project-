@@ -4,6 +4,9 @@ import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import org.bson.Document;
 import com.mongodb.client.model.Filters;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 import Rankers.Ranker;
@@ -11,10 +14,28 @@ import Rankers.Ranker;
 public class QueryProcessor {
     private final PorterStemmer stemmer;
     private final InvertedIndex index;
+    private final Set<String> stopWords;
 
     public QueryProcessor() {
         this.stemmer = new PorterStemmer();
         this.index = new InvertedIndex();
+        this.stopWords = loadStopWords("indexer/stopwords.txt"); // Adjust path if needed
+    }
+
+    private Set<String> loadStopWords(String filePath) {
+        Set<String> stopWords = new HashSet<>();
+        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] words = line.split(",");
+                for (String word : words) {
+                    stopWords.add(word.trim().toLowerCase());
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("Error loading stop words: " + e.getMessage());
+        }
+        return stopWords;
     }
 
     public List<Map.Entry<String, Double>> processQuery(String query) {
@@ -26,11 +47,12 @@ public class QueryProcessor {
                 return finalResults;
             }
 
-            // Preprocess query: lowercase + stemming
+            // Preprocess query: lowercase + stemming + stop word filtering
             query = query.toLowerCase();
             List<String> processedWords = new ArrayList<>();
             String[] words = query.split("\\s+");
             for (String word : words) {
+                if (stopWords.contains(word)) continue; // Skip stop words
                 stemmer.reset();
                 for (char c : word.toCharArray()) {
                     stemmer.add(c);
@@ -98,7 +120,7 @@ public class QueryProcessor {
                 String docId = entry.getKey();
                 double score = entry.getValue();
                 String url = index.url.get(docId);
-                
+
                 System.out.println("Doc ID: " + docId);
                 System.out.println("URL: " + url);
                 System.out.println("Score: " + score);
