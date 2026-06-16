@@ -70,7 +70,7 @@ public class QueryProcessor {
 
             for (String stemmedWord : processedWords) {
                 List<Posting> postings = new ArrayList<>();
-                FindIterable<Document> wordDocs = wordCollection.find(Filters.eq("w", stemmedWord));
+                FindIterable<Document> wordDocs = wordCollection.find(Filters.eq("w", stemmedWord)).limit(400);
 
                 for (Document doc : wordDocs) {
                     String docId = doc.getString("dId");
@@ -139,8 +139,8 @@ public class QueryProcessor {
         return finalResults;
     }
 
-    public static void main(String[] args) {
-        QueryProcessor processor = new QueryProcessor();
-        processor.processQuery("car"); // Replace with dynamic input if needed
-    }
+public static void main(String[] args) {
+    QueryProcessor processor = new QueryProcessor();
+    processor.processQuery(args.length > 0 ? args[0] : "");
+}
 }
