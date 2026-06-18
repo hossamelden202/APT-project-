@@ -8,7 +8,7 @@ import com.mongodb.client.MongoCollection;
 import org.bson.Document;
 
 public class MongoUtil {
-    private static final String CONNECTION_STRING = "mongodb+srv://hossammohamed04:hossammohamed04@cluster0.icdzc2j.mongodb.net/?appName=Cluster0";
+    private static final String CONNECTION_STRING = "you wonot need it any more ";
     private static final String DATABASE_NAME = "indexerdb";
     private static final String COLLECTION_NAME = "documents2";
         private static final String COLLECTION_NAME2 = "documents3";

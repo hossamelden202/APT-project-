@@ -4,8 +4,8 @@ const bodyParser = require('body-parser');
 const { spawn } = require('child_process');
 const path = require('path');
 const { MongoClient } = require('mongodb');
-
-const MONGO_URI = "mongodb://hossammohamed04:OFz3mQnyfbBFemPC@ac-nhliflv-shard-00-00.icdzc2j.mongodb.net:27017,ac-nhliflv-shard-00-01.icdzc2j.mongodb.net:27017,ac-nhliflv-shard-00-02.icdzc2j.mongodb.net:27017/?ssl=true&replicaSet=atlas-wrksbv-shard-0&authSource=admin&retryWrites=true&w=majority&appName=Cluster0";
+require('dotenv').config();
+const MONGO_URI = process.env.MONGO_URI;
 const mongoClient = new MongoClient(MONGO_URI);
 let snippetCollection = null;
 let wordCollection = null;

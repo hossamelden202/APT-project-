@@ -13,7 +13,7 @@ import java.io.IOException;
 public class RankerTest {
 
     public static void main(String[] args) {
-        String connection = "mongodb+srv://hossammohamed04:hossammohamed04@cluster0.icdzc2j.mongodb.net/?appName=Cluster0";
+        String connection ="you wonot need it any more ";
 
         try (MongoClient mongoClient = MongoClients.create(connection)) {
             MongoDatabase db = mongoClient.getDatabase("indexerdb");
