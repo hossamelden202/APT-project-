@@ -29,7 +29,7 @@ app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 const resultCache = new Map();
 const suggestCache = new Map();
 
-const PROJECT_ROOT = path.join(__dirname, '..');
+const PROJECT_ROOT = process.env.PROJECT_ROOT || path.join(__dirname, '..');
 const LIB_DIR = path.join(PROJECT_ROOT, 'lib');
 const CLASSPATH = [
     PROJECT_ROOT,
