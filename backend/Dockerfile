@@ -1,5 +1,6 @@
 FROM node:20-slim
 RUN apt-get update && apt-get install -y openjdk-17-jre-headless && rm -rf /var/lib/apt/lists/*
+RUN java -version
 WORKDIR /app
 COPY package*.json ./
 RUN npm install --omit=dev
