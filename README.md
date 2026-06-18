@@ -6,7 +6,7 @@ A full-stack search engine built from scratch. Crawls the web, indexes documents
 
 https://apt-project-kappa.vercel.app/
 
-> See [video.webm](video.webm) for a full walkthrough of the system.
+> See [video.mkv](video.mkv) for a full walkthrough of the system.
 
 ---
 
