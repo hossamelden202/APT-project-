@@ -10,19 +10,6 @@ https://apt-project-kappa.vercel.app/
 
 ---
 
-## Architecture
-
-```
-Browser (React/Vite)
-       │
-       ▼
-Node.js Express API  ──► Java QueryProcessor ──► MongoDB Atlas
-       │                        │
-       │                  Inverted Index
-       │                  TF-IDF + PageRank
-       │
-       └──► MongoDB Atlas (snippets)
-```
 
 ### Components
 
