@@ -1,313 +1,220 @@
-# APT Search Engine
+# Patronus Charm — Search Engine
 
-A complete, production-ready search engine with a clean, minimal frontend and Java-based backend.
+A full-stack search engine built from scratch. Crawls the web, indexes documents using an inverted index with TF-IDF and PageRank ranking, and serves results through a REST API to a React frontend.
 
-## Features
+## Demo
 
-- **Clean Frontend**: Minimalist white background with dark text, no external JS dependencies
-- **Fast Search**: TF-IDF and PageRank-based ranking algorithm
-- **Web Crawler**: Multi-threaded crawler for indexing web pages
-- **MongoDB Integration**: Stores indexed documents and search metadata
-- **REST API**: Easy integration with custom clients
-- **Pagination**: Browse through large result sets
-- **Configuration UI**: Switch between different backend endpoints
+https://your-vercel-url.vercel.app
 
-## Quick Start
-
-### Option 1: Using Quick Start Script
-
-**macOS/Linux:**
-```bash
-chmod +x quickstart.sh
-./quickstart.sh
-```
-
-**Windows:**
-```bash
-quickstart.bat
-```
-
-Then open: `http://localhost:3000`
-
-### Option 2: Manual Setup
-
-**Frontend:**
-```bash
-cd frontend
-python3 -m http.server 3000
-# Open http://localhost:3000
-```
-
-**Backend (optional, for live search):**
-```bash
-cd backend
-npm install
-npm start
-# Backend runs on http://localhost:8080
-```
-
-## Documentation
-
-- **[Complete Setup Guide](SETUP_GUIDE.md)** - Detailed setup and troubleshooting
-- **[Frontend README](frontend/README.md)** - Frontend architecture and features
-- **[Backend README](backend/README.md)** - API documentation and deployment
-
-## Project Structure
-
-```
-APT-project-/
-├── frontend/              React-free search UI
-│   ├── index.html        Main page
-│   ├── styles.css        Minimal styling
-│   ├── app.js            Search logic
-│   └── README.md         Frontend docs
-├── backend/              Express API server
-│   ├── server.js         REST API
-│   ├── package.json      Dependencies
-│   └── README.md         Backend docs
-├── indexer/              Java search engine
-│   ├── QueryProcessor.java
-│   ├── InvertedIndex.java
-│   └── Ranker.java
-├── crawler/              Web crawler
-├── Rankers/              Ranking algorithms
-├── data/                 Indexed documents
-└── SETUP_GUIDE.md        Complete setup guide
-```
-
-## Technology Stack
-
-| Component | Technology |
-|-----------|-----------|
-| **Frontend** | HTML5, CSS3, Vanilla JavaScript |
-| **Backend** | Node.js, Express.js |
-| **Search** | Java 11+, MongoDB |
-| **Ranking** | TF-IDF, PageRank |
-| **Crawling** | Multi-threaded Java |
-
-## Features Overview
-
-### Frontend
-- Responsive, mobile-friendly design
-- Real-time search with loading states
-- Pagination (10 results per page)
-- Configurable API endpoint
-- No external JavaScript frameworks
-
-### Backend
-- REST API wrapper around Java search engine
-- Result caching for performance
-- Health check endpoint
-- CORS support
-- Graceful error handling
-
-### Search Engine
-- Inverted index data structure
-- Stop word filtering
-- Porter stemming
-- Phrase matching
-- Page ranking algorithm
-
-### Web Crawler
-- Multi-threaded crawling
-- robots.txt respect
-- URL frontier management
-- Duplicate detection
-
-## API Endpoints
-
-### Search
-```
-POST /api/search
-{
-    "query": "search terms"
-}
-```
-
-Returns ranked results with score, title, URL, and snippet.
-
-### Health Check
-```
-GET /api/health
-```
-
-Returns server status.
-
-## Configuration
-
-### Change API Endpoint
-1. Open frontend in browser
-2. Look for "API Endpoint:" field at top
-3. Enter your backend URL
-4. Click search
-
-### Frontend Customization
-- **Logo**: Edit `frontend/index.html`
-- **Colors**: Edit `frontend/styles.css`
-- **Results per page**: Edit `frontend/app.js`
-
-## Usage
-
-### Basic Search
-Simply type a search query and press Enter or click Search.
-
-### Advanced Search
-- Multiple terms: `term1 term2` (AND logic)
-- Exact phrase: `"exact phrase"`
-- Browse results: Use pagination buttons
-
-### Using with Custom Backend
-Update the API endpoint to point to your backend service.
-
-## Performance
-
-- **Frontend Load**: ~100ms (static HTML/CSS/JS)
-- **First Search**: 500ms - 2s (Java process startup)
-- **Cached Search**: ~50ms
-- **Page Navigation**: Instant
-
-## Deployment
-
-### Frontend
-Deploy to any static hosting:
-- GitHub Pages
-- Netlify
-- Vercel
-- AWS S3
-
-### Backend
-Deploy Node.js server to:
-- Heroku
-- AWS EC2
-- DigitalOcean
-- Any Node.js host
-
-See [SETUP_GUIDE.md](SETUP_GUIDE.md) for detailed deployment instructions.
-
-## Development
-
-### Prerequisites
-- Node.js 14+ (for backend)
-- Java 11+ (for search engine)
-- MongoDB (for indexing)
-- Python 3 (for frontend server)
-
-### Development Workflow
-```bash
-# Terminal 1: Frontend
-cd frontend && python3 -m http.server 3000
-
-# Terminal 2: Backend
-cd backend && npm start
-
-# Terminal 3: Java backend (if needed)
-cd indexer && java QueryProcessor
-```
-
-### Running Tests
-```bash
-# Backend tests
-cd backend && npm test
-
-# Java tests
-cd Rankers && javac RankerTest.java && java RankerTest
-```
-
-## Troubleshooting
-
-### Frontend shows "Unable to reach search backend"
-1. Verify backend is running: `curl http://localhost:8080/api/health`
-2. Check API endpoint URL is correct
-3. Ensure MongoDB is running (for Java backend)
-4. Check browser console (F12) for errors
-
-### Backend won't start
-1. Verify Node.js installed: `node --version`
-2. Install dependencies: `cd backend && npm install`
-3. Check port 8080 not in use: `lsof -i :8080`
-
-### No search results
-1. Verify documents are indexed in MongoDB
-2. Check Java backend logs
-3. Try different search terms
-4. Verify MongoDB connection
-
-See [SETUP_GUIDE.md](SETUP_GUIDE.md) for comprehensive troubleshooting.
-
-## Performance Optimization
-
-1. **Caching**: Backend caches repeated queries
-2. **Indexing**: MongoDB indexes are crucial
-3. **Pagination**: Only load 10 results per page
-4. **Minimalism**: Frontend uses no external libraries
-
-## Security
-
-- CORS enabled (configure for production)
-- Input validation on queries
-- MongoDB connection security
-- HTTPS recommended for production
-
-## Roadmap
-
-Future enhancements:
-- [ ] Advanced search filters
-- [ ] Search suggestions/autocomplete
-- [ ] Search analytics
-- [ ] Custom ranking weights
-- [ ] Export results
-- [ ] Dark mode
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
-
-## Known Issues
-
-- Java process startup adds 500ms-2s latency on first search
-- MongoDB must be running for live search
-- CORS needs configuration for cross-domain use
-
-## FAQ
-
-**Q: Do I need Java to use the frontend?**
-A: No, frontend works standalone with mock results for testing.
-
-**Q: Can I index my own documents?**
-A: Yes, use the crawler and indexer in `crawler/` and `indexer/` directories.
-
-**Q: How is search ranking determined?**
-A: Combination of TF-IDF (term frequency), PageRank, and phrase matching.
-
-**Q: Can I deploy this to production?**
-A: Yes, see SETUP_GUIDE.md for deployment instructions.
-
-**Q: Does it support filters and facets?**
-A: Basic support available, can be extended.
-
-## License
-
-[License information if applicable]
-
-## Support
-
-For issues or questions:
-1. Check [SETUP_GUIDE.md](SETUP_GUIDE.md)
-2. Review specific component README files
-3. Check browser console (F12) for errors
-4. Check backend logs
-5. Review error messages carefully
-
-## Contact
-
-[Contact information if applicable]
+> See [video.webm](video.webm) for a full walkthrough of the system.
 
 ---
 
-**Version**: 1.0.0  
-**Last Updated**: June 2026  
-**Status**: Stable
+## Architecture
+
+```
+Browser (React/Vite)
+       │
+       ▼
+Node.js Express API  ──► Java QueryProcessor ──► MongoDB Atlas
+       │                        │
+       │                  Inverted Index
+       │                  TF-IDF + PageRank
+       │
+       └──► MongoDB Atlas (snippets)
+```
+
+### Components
+
+| Component | Stack | Role |
+|-----------|-------|------|
+| Frontend | React 18, Vite, Tailwind CSS | Search UI, results, pagination, dark mode |
+| Backend | Node.js, Express | REST API, caches results, fetches snippets |
+| Search Engine | Java, Jsoup | Query processing, ranking, MongoDB queries |
+| Indexer | Java, MongoDB | Parses HTML, builds inverted index |
+| Crawler | Java | Multi-threaded web crawler |
+| Database | MongoDB Atlas | Stores index, document metadata, PageRank |
+
+---
+
+## Frontend
+
+Built with React + Vite + Tailwind CSS. Deployed on Vercel.
+
+**Features:**
+- Real-time search with loading states
+- Autocomplete suggestions from the actual index
+- Search timer showing query duration
+- Dark mode with localStorage persistence
+- Pagination (10 results per page)
+- Result cards with title, URL, snippet, and score
+
+**Structure:**
+```
+frontend/
+├── src/
+│   ├── components/
+│   │   ├── SearchBox.jsx       input + suggestions dropdown
+│   │   ├── ResultsList.jsx     result cards
+│   │   ├── Pagination.jsx      prev/next controls
+│   │   └── DarkToggle.jsx      theme toggle
+│   ├── pages/
+│   │   └── Home.jsx            main page, holds all state
+│   ├── App.jsx                 React Router setup
+│   └── main.jsx                entry point
+├── vite.config.js              dev proxy to backend
+└── tailwind.config.js
+```
+
+**Running locally:**
+```bash
+cd frontend
+npm install
+npm run dev        # http://localhost:3000
+```
+
+---
+
+## Backend
+
+Node.js Express server. Deployed on Railway.
+
+**Endpoints:**
+
+| Method | Path | Description |
+|--------|------|-------------|
+| POST | `/api/search` | Run a search query |
+| GET | `/api/suggest?q=term` | Autocomplete suggestions |
+| GET | `/api/health` | Health check |
+
+**Search request:**
+```json
+POST /api/search
+{ "query": "car racing" }
+```
+
+**Search response:**
+```json
+{
+  "query": "car racing",
+  "results": [
+    {
+      "docId": "www_topendsports_com_sport_list_car_racing_sports_htm",
+      "title": "www.topendsports.com/sport/list/car-racing-sports.htm",
+      "url": "https://www.topendsports.com/sport/list/car-racing-sports.htm",
+      "snippet": "...preview text from document...",
+      "score": 1.5
+    }
+  ],
+  "cached": false
+}
+```
+
+The backend spawns a Java `QueryProcessor` process per query, parses its stdout, then enriches results with snippets fetched from MongoDB.
+
+**Running locally:**
+```bash
+cd backend
+npm install
+npm start          # http://localhost:8080
+```
+
+---
+
+## Search Engine (Java)
+
+The core search engine is written in Java and lives in `indexer/` and `Rankers/`.
+
+**Indexing pipeline:**
+1. Crawler fetches HTML pages into `data/crawled_pages/`
+2. Indexer parses HTML with Jsoup, tokenizes, removes stop words, applies Porter stemming
+3. Builds an inverted index: `word → [(docId, freq_title, freq_body, paragraph)]`
+4. Saves index to MongoDB `documents2` collection
+5. Saves document metadata (URL, length, PageRank) to `documents3`
+
+**Query processing:**
+1. `QueryProcessor` receives query string as CLI argument
+2. Preprocesses: lowercase → stop word removal → stemming
+3. Fetches matching postings from MongoDB
+4. Passes to `Ranker` which scores using TF-IDF + PageRank
+5. Prints results to stdout in `Doc ID / URL / Score` format
+
+**Ranking factors:**
+- TF-IDF (term frequency in title weighted higher than body)
+- PageRank score from pre-computed CSV
+- Phrase matching bonus for exact phrase queries
+
+**Recompiling (only if source changes):**
+```bash
+cd ~/APT-project-
+javac -cp ".:lib/*" indexer/*.java Rankers/*.java
+```
+
+---
+
+## Database (MongoDB Atlas)
+
+Two collections in `indexerdb`:
+
+**`documents2`** — inverted index entries:
+```
+{ w: "stemmed_word", dId: "doc_id", fh: 1, fb: 3, p: "snippet text..." }
+```
+
+**`documents3`** — document metadata:
+```
+{ did: "doc_id", url: "https://...", length: 341, pR: "0.00123" }
+```
+
+---
+
+## Deployment
+
+### Frontend → Vercel
+
+1. Push repo to GitHub
+2. Import project on [vercel.com](https://vercel.com)
+3. Root directory: `frontend`
+4. Framework preset: Vite
+5. Add environment variable: `VITE_API_URL=https://your-railway-url.up.railway.app`
+6. Deploy
+
+### Backend → Railway
+
+1. Import repo on [railway.app](https://railway.app)
+2. Root directory: `backend`
+3. Railway auto-detects `railway.toml` and uses the Dockerfile
+4. Add environment variable: `PROJECT_ROOT=/app`
+5. Deploy
+
+The `backend/Dockerfile` installs Node 20 + OpenJDK 17. The compiled `.class` files and `lib/` jars are included in `backend/` for Railway to find them.
+
+---
+
+## Local Development
+
+Prerequisites: Node.js 20+, Java 17+, MongoDB (or Atlas connection)
+
+```bash
+# Terminal 1 — backend
+cd backend && npm install && npm start
+
+# Terminal 2 — frontend
+cd frontend && npm install && npm run dev
+```
+
+Open `http://localhost:3000`. The Vite dev server proxies `/api/*` to `http://localhost:8080`.
+
+---
+
+## Tech Stack
+
+- **Frontend**: React 18, Vite, Tailwind CSS, React Router
+- **Backend**: Node.js, Express, MongoDB Node driver
+- **Search**: Java 17, Jsoup, Porter Stemmer
+- **Database**: MongoDB Atlas
+- **Deployment**: Vercel (frontend), Railway (backend)
+
+---
+
+Built by **HossamElden Mohamed** — [GitHub](https://github.com/hossamelden202) · [LinkedIn](https://www.linkedin.com/in/hossam-elden-mohamed/)
