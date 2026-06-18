@@ -26,7 +26,7 @@ export default function SearchBox({ onSearch }) {
 
     timerRef.current = setTimeout(async () => {
       try {
-        const res = await fetch(`/api/suggest?q=${encodeURIComponent(val.trim())}`)
+        const res = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/suggest?q=${encodeURIComponent(val.trim())}`)
         const data = await res.json()
         setSuggestions(data.suggestions || [])
         setShowSuggestions((data.suggestions || []).length > 0)
