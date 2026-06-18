@@ -209,3 +209,13 @@ app.listen(PORT, () => {
     console.log(`Project root: ${PROJECT_ROOT}`);
     console.log(`Classpath: ${CLASSPATH}`);
 });
+
+app.get('/api/debug', (req, res) => {
+    const { execSync } = require('child_process');
+    try {
+        const java = execSync('which java 2>/dev/null || echo notfound').toString().trim();
+        res.json({ java, PATH: process.env.PATH, cwd: process.cwd(), dirname: __dirname });
+    } catch (e) {
+        res.json({ error: e.message, PATH: process.env.PATH });
+    }
+});
