@@ -4,7 +4,7 @@ A full-stack search engine built from scratch. Crawls the web, indexes documents
 
 ## Demo
 
-https://your-vercel-url.vercel.app
+https://apt-project-kappa.vercel.app/
 
 > See [video.webm](video.webm) for a full walkthrough of the system.
 
