@@ -6,7 +6,10 @@ export default defineConfig({
   server: {
     port: 3000,
     proxy: {
-      '/api': 'http://localhost:8080'  // proxy to backend so no CORS issues in dev
+      '/api': {
+        target: 'https://apt-project-production-a00b.up.railway.app',
+        changeOrigin: true,
+      }
     }
   }
 })
