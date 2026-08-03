@@ -7,7 +7,7 @@ const path = require('path');
 const { MongoClient } = require('mongodb');
 require('dotenv').config();
 
-// Pure JS JRE Downloader/Extractor module (no /bin/sh required!)
+// Pure JS JRE Downloader/Extractor module (no /bin/sh required)
 const { ensureJre } = require('./scripts/get-jre');
 
 const MONGO_URI = process.env.MONGO_URI;
@@ -19,9 +19,9 @@ mongoClient.connect().then(() => {
     const db = mongoClient.db('indexerdb');
     snippetCollection = db.collection('documents2');
     wordCollection = db.collection('documents2');
-    console.log('🍃 Node connected to MongoDB for snippets');
+    console.log('Node connected to MongoDB for snippets');
 }).catch(err => {
-    console.error('❌ Node MongoDB connection failed:', err.message);
+    console.error('Node MongoDB connection failed:', err.message);
 });
 
 const app = express();
@@ -55,7 +55,7 @@ function javaBin() {
 
 function executeJavaSearch(query) {
     return new Promise((resolve, reject) => {
-        console.log('⚡ Spawning Java QueryProcessor for query:', query);
+        console.log('Spawning Java QueryProcessor for query:', query);
 
         // Directly spawn the java executable file path (does NOT use /bin/sh)
         const javaProcess = spawn(javaBin(), [
@@ -223,18 +223,18 @@ app.use((err, req, res, next) => {
     res.status(500).json({ error: 'Internal Server Error', message: err.message });
 });
 
-// Boot sequence: Ensure JRE is installed first, then start listening!
+// Boot sequence: Ensure JRE is installed first, then start listening
 (async () => {
     try {
         await ensureJre();
         app.listen(PORT, () => {
-            console.log(`🚀 APT Search Backend running on http://localhost:${PORT}`);
-            console.log(`📂 Project root: ${PROJECT_ROOT}`);
-            console.log(`📚 Classpath: ${CLASSPATH}`);
-            console.log(`☕ Java binary: ${javaBin()}`);
+            console.log(`APT Search Backend running on http://localhost:${PORT}`);
+            console.log(`Project root: ${PROJECT_ROOT}`);
+            console.log(`Classpath: ${CLASSPATH}`);
+            console.log(`Java binary: ${javaBin()}`);
         });
     } catch (err) {
-        console.error('🔥 Server boot failed during JRE preparation:', err);
+        console.error('Server boot failed during JRE preparation:', err);
         process.exit(1);
     }
 })();
