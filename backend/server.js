@@ -7,8 +7,7 @@ const path = require('path');
 const { MongoClient } = require('mongodb');
 require('dotenv').config();
 
-// Pure JS JRE Downloader/Extractor module (no /bin/sh required)
-const { ensureJre } = require('./scripts/get-jre');
+const { ensureJre, JRE_JAVA } = require('./scripts/get-jre');
 
 const MONGO_URI = process.env.MONGO_URI;
 const mongoClient = new MongoClient(MONGO_URI);
@@ -34,12 +33,12 @@ app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 const resultCache = new Map();
 const suggestCache = new Map();
 
-const PROJECT_ROOT = process.env.PROJECT_ROOT || __dirname;
-const LIB_DIR = path.join(PROJECT_ROOT, 'lib');
-const JRE_JAVA = path.join(PROJECT_ROOT, 'jre', 'bin', 'java');
+// Base all internal execution paths on current script directory (__dirname)
+const BASE_DIR = __dirname;
+const LIB_DIR = path.join(BASE_DIR, 'lib');
 
 const CLASSPATH = [
-    PROJECT_ROOT,
+    BASE_DIR,
     `${LIB_DIR}/mongodb-driver-sync-3.12.14.jar`,
     `${LIB_DIR}/mongodb-driver-core-3.12.14.jar`,
     `${LIB_DIR}/bson-3.12.14.jar`,
@@ -50,22 +49,28 @@ const CLASSPATH = [
 ].join(':');
 
 function javaBin() {
-    const customJava = path.join(PROJECT_ROOT, 'jre', 'bin', 'java');
-    if (fs.existsSync(customJava)) {
-        return customJava;
+    if (fs.existsSync(JRE_JAVA)) {
+        return JRE_JAVA;
     }
-    throw new Error(`Java binary not found at ${customJava}`);
+    throw new Error(`Java binary not found at ${JRE_JAVA}`);
 }
+
 function executeJavaSearch(query) {
     return new Promise((resolve, reject) => {
-        console.log('Spawning Java QueryProcessor for query:', query);
+        let binaryPath;
+        try {
+            binaryPath = javaBin();
+        } catch (err) {
+            return reject(err);
+        }
 
-        // Directly spawn the java executable file path (does NOT use /bin/sh)
-        const javaProcess = spawn(javaBin(), [
+        console.log('Spawning Java QueryProcessor from:', binaryPath);
+
+        const javaProcess = spawn(binaryPath, [
             '-cp', CLASSPATH,
             'indexer.QueryProcessor',
             query
-        ], { cwd: PROJECT_ROOT });
+        ], { cwd: BASE_DIR });
 
         let output = '';
         let errorOutput = '';
@@ -204,14 +209,21 @@ app.get('/api/health', (req, res) => {
     res.json({ status: 'ok', message: 'APT Search Backend running', timestamp: new Date().toISOString() });
 });
 
-// Refactored to eliminate execSync shell dependencies in distroless environments
 app.get('/api/debug', (req, res) => {
+    let resolvedJava = 'Not found';
+    try {
+        resolvedJava = javaBin();
+    } catch (e) {
+        resolvedJava = e.message;
+    }
+
     res.json({
-        javaBin: javaBin(),
+        javaBin: resolvedJava,
         jreExists: fs.existsSync(JRE_JAVA),
         PATH: process.env.PATH,
         cwd: process.cwd(),
-        dirname: __dirname
+        dirname: __dirname,
+        baseDir: BASE_DIR
     });
 });
 
@@ -226,13 +238,12 @@ app.use((err, req, res, next) => {
     res.status(500).json({ error: 'Internal Server Error', message: err.message });
 });
 
-// Boot sequence: Ensure JRE is installed first, then start listening
 (async () => {
     try {
         await ensureJre();
         app.listen(PORT, () => {
             console.log(`APT Search Backend running on http://localhost:${PORT}`);
-            console.log(`Project root: ${PROJECT_ROOT}`);
+            console.log(`Base directory: ${BASE_DIR}`);
             console.log(`Classpath: ${CLASSPATH}`);
             console.log(`Java binary: ${javaBin()}`);
         });

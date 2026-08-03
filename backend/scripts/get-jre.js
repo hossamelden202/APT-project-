@@ -7,8 +7,8 @@ const fs = require('fs');
 const path = require('path');
 const zlib = require('zlib');
 
-const PROJECT_ROOT = path.join(__dirname, '..');
-const JRE_DIR = path.join(PROJECT_ROOT, 'jre');
+// Always resolve paths relative to this script directory (/workspace/app/backend)
+const JRE_DIR = path.join(__dirname, '..', 'jre');
 const JRE_JAVA = path.join(JRE_DIR, 'bin', 'java');
 const JRE_URL = 'https://api.adoptium.net/v3/binary/latest/17/ga/linux/x64/jre/hotspot/normal/eclipse';
 
@@ -32,7 +32,6 @@ function fetchBuffer(url, redirects = 0) {
   });
 }
 
-// Pure JS POSIX tar parser (Unpacks tar archives without external libraries or system commands)
 function extractTar(tarBuffer, targetDir, stripComponents = 1) {
   let offset = 0;
 
@@ -40,42 +39,34 @@ function extractTar(tarBuffer, targetDir, stripComponents = 1) {
     const header = tarBuffer.subarray(offset, offset + 512);
     offset += 512;
 
-    // Check for end of archive block
     if (header.every(b => b === 0)) break;
 
-    // Extract filename and ustar prefix
     let rawName = header.toString('utf8', 0, 100).replace(/\0.*/, '');
     const prefix = header.toString('utf8', 345, 500).replace(/\0.*/, '');
     if (prefix) rawName = path.join(prefix, rawName);
 
-    // Read file size (octal) & type flag
     const sizeStr = header.toString('utf8', 124, 136).replace(/\0.*/, '').trim();
     const size = parseInt(sizeStr, 8) || 0;
     const typeflag = String.fromCharCode(header[156]);
 
-    // Strip top-level directory
     const parts = rawName.split('/').filter(Boolean);
     if (parts.length > stripComponents) {
       const relPath = parts.slice(stripComponents).join(path.sep);
       const fullPath = path.join(targetDir, relPath);
 
       if (typeflag === '5' || rawName.endsWith('/')) {
-        // Directory
         fs.mkdirSync(fullPath, { recursive: true });
       } else if (typeflag === '0' || typeflag === '\0' || typeflag === '') {
-        // Regular File
         const fileData = tarBuffer.subarray(offset, offset + size);
         fs.mkdirSync(path.dirname(fullPath), { recursive: true });
         fs.writeFileSync(fullPath, fileData);
         
-        // Grant execute permissions for binaries
         if (relPath.startsWith('bin' + path.sep) || relPath.endsWith('java')) {
           try { fs.chmodSync(fullPath, 0o755); } catch (_) {}
         }
       }
     }
 
-    // Move offset to next 512-byte block boundary
     offset += Math.ceil(size / 512) * 512;
   }
 }
@@ -109,7 +100,7 @@ async function ensureJre() {
   }
 }
 
-module.exports = { ensureJre };
+module.exports = { ensureJre, JRE_JAVA };
 
 if (require.main === module) {
   ensureJre().catch(() => process.exit(1));
