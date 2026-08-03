@@ -1,14 +1,13 @@
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const { spawn } = require('child_process');
+const { spawn, execSync } = require('child_process');
+const fs = require('fs');
 const path = require('path');
 const { MongoClient } = require('mongodb');
 require('dotenv').config();
+
 const MONGO_URI = process.env.MONGO_URI;
-const JAVA_BIN = fs.existsSync(path.join(PROJECT_ROOT, 'jre', 'bin', 'java'))
-    ? path.join(PROJECT_ROOT, 'jre', 'bin', 'java')
-    : 'java';
 const mongoClient = new MongoClient(MONGO_URI);
 let snippetCollection = null;
 let wordCollection = null;
@@ -16,7 +15,7 @@ let wordCollection = null;
 mongoClient.connect().then(() => {
     const db = mongoClient.db('indexerdb');
     snippetCollection = db.collection('documents2');
-    wordCollection = db.collection('documents2'); // words are also in documents2 under field "w"
+    wordCollection = db.collection('documents2');
     console.log('Node connected to MongoDB for snippets');
 }).catch(err => {
     console.error('Node MongoDB connection failed:', err.message);
@@ -34,6 +33,8 @@ const suggestCache = new Map();
 
 const PROJECT_ROOT = process.env.PROJECT_ROOT || path.join(__dirname, '..');
 const LIB_DIR = path.join(PROJECT_ROOT, 'lib');
+const JRE_JAVA = path.join(PROJECT_ROOT, 'jre', 'bin', 'java');
+
 const CLASSPATH = [
     PROJECT_ROOT,
     `${LIB_DIR}/mongodb-driver-sync-3.12.14.jar`,
@@ -45,11 +46,22 @@ const CLASSPATH = [
     `${LIB_DIR}/jsoup-1.19.1.jar`,
 ].join(':');
 
+// downloaded once at startup instead of build, build container kept timing out unpacking it
+function ensureJre() {
+    if (fs.existsSync(JRE_JAVA)) return;
+    console.log('JRE not found, downloading at startup...');
+    execSync('node scripts/get-jre.js', { cwd: PROJECT_ROOT, stdio: 'inherit' });
+}
+
+function javaBin() {
+    return fs.existsSync(JRE_JAVA) ? JRE_JAVA : 'java';
+}
+
 function executeJavaSearch(query) {
     return new Promise((resolve, reject) => {
         console.log('Spawning Java QueryProcessor for query:', query);
 
-        const javaProcess = spawn(JAVA_BIN, [
+        const javaProcess = spawn(javaBin(), [
             '-cp', CLASSPATH,
             'indexer.QueryProcessor',
             query
@@ -128,7 +140,6 @@ function parseJavaOutput(output) {
     return results.slice(0, 50);
 }
 
-// POST /api/search
 app.post('/api/search', async (req, res) => {
     const { query } = req.body;
 
@@ -166,7 +177,6 @@ app.post('/api/search', async (req, res) => {
     }
 });
 
-// GET /api/suggest?q=car  — returns up to 8 matching words from the index
 app.get('/api/suggest', async (req, res) => {
     const q = (req.query.q || '').trim().toLowerCase();
 
@@ -181,7 +191,6 @@ app.get('/api/suggest', async (req, res) => {
             .limit(50)
             .toArray();
 
-        // deduplicate words and return top 8
         const words = [...new Set(docs.map(d => d.w).filter(Boolean))].slice(0, 8);
         suggestCache.set(q, words);
         res.json({ suggestions: words });
@@ -191,9 +200,17 @@ app.get('/api/suggest', async (req, res) => {
     }
 });
 
-// GET /api/health
 app.get('/api/health', (req, res) => {
     res.json({ status: 'ok', message: 'APT Search Backend running', timestamp: new Date().toISOString() });
+});
+
+app.get('/api/debug', (req, res) => {
+    try {
+        const java = execSync('which java 2>/dev/null || echo notfound').toString().trim();
+        res.json({ java, javaBin: javaBin(), jreExists: fs.existsSync(JRE_JAVA), PATH: process.env.PATH, cwd: process.cwd(), dirname: __dirname });
+    } catch (e) {
+        res.json({ error: e.message, PATH: process.env.PATH });
+    }
 });
 
 app.get('/', (req, res) => {
@@ -207,18 +224,11 @@ app.use((err, req, res, next) => {
     res.status(500).json({ error: 'Internal Server Error', message: err.message });
 });
 
+ensureJre();
+
 app.listen(PORT, () => {
     console.log(`APT Search Backend running on http://localhost:${PORT}`);
     console.log(`Project root: ${PROJECT_ROOT}`);
     console.log(`Classpath: ${CLASSPATH}`);
-});
-
-app.get('/api/debug', (req, res) => {
-    const { execSync } = require('child_process');
-    try {
-        const java = execSync('which java 2>/dev/null || echo notfound').toString().trim();
-        res.json({ java, PATH: process.env.PATH, cwd: process.cwd(), dirname: __dirname });
-    } catch (e) {
-        res.json({ error: e.message, PATH: process.env.PATH });
-    }
+    console.log(`Java binary: ${javaBin()}`);
 });
