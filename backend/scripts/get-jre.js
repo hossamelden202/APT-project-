@@ -1,16 +1,28 @@
 // scripts/get-jre.js
-// Downloads and unpacks OpenJDK 17 using standard Node.js built-in modules.
-// No npm packages required. No /bin/sh required.
+// Auto-detects glibc vs musl (Alpine) containers to fetch the correct JRE architecture.
 
 const https = require('https');
 const fs = require('fs');
 const path = require('path');
 const zlib = require('zlib');
 
-// Always resolve paths relative to this script directory (/workspace/app/backend)
 const JRE_DIR = path.join(__dirname, '..', 'jre');
 const JRE_JAVA = path.join(JRE_DIR, 'bin', 'java');
-const JRE_URL = 'https://api.adoptium.net/v3/binary/latest/17/ga/linux/x64/jre/hotspot/normal/eclipse';
+
+function getAdoptiumUrl() {
+  // Check if running in Alpine/musl container environment
+  const isAlpine = fs.existsSync('/etc/alpine-release') || 
+                   fs.existsSync('/lib/ld-musl-x86_64.so.1') || 
+                   fs.existsSync('/lib/ld-musl-aarch64.so.1');
+
+  if (isAlpine) {
+    console.log('Detected Alpine/musl container environment.');
+    return 'https://api.adoptium.net/v3/binary/latest/17/ga/alpine-linux/x64/jre/hotspot/normal/eclipse';
+  }
+
+  console.log('Detected standard glibc Linux container environment.');
+  return 'https://api.adoptium.net/v3/binary/latest/17/ga/linux/x64/jre/hotspot/normal/eclipse';
+}
 
 function fetchBuffer(url, redirects = 0) {
   return new Promise((resolve, reject) => {
@@ -61,7 +73,8 @@ function extractTar(tarBuffer, targetDir, stripComponents = 1) {
         fs.mkdirSync(path.dirname(fullPath), { recursive: true });
         fs.writeFileSync(fullPath, fileData);
         
-        if (relPath.startsWith('bin' + path.sep) || relPath.endsWith('java')) {
+        // Ensure execution permissions on binary executables
+        if (relPath.startsWith('bin' + path.sep) || relPath.includes('/bin/')) {
           try { fs.chmodSync(fullPath, 0o755); } catch (_) {}
         }
       }
@@ -73,29 +86,37 @@ function extractTar(tarBuffer, targetDir, stripComponents = 1) {
 
 async function ensureJre() {
   if (fs.existsSync(JRE_JAVA)) {
+    try {
+      fs.chmodSync(JRE_JAVA, 0o755);
+    } catch (_) {}
     console.log('JRE already present at', JRE_JAVA);
     return;
   }
 
-  console.log('JRE not found. Downloading OpenJDK 17 in pure Node mode...');
-  
-  if (!fs.existsSync(JRE_DIR)) {
-    fs.mkdirSync(JRE_DIR, { recursive: true });
+  // If a previous incompatible JRE installation existed, clean it up
+  if (fs.existsSync(JRE_DIR)) {
+    fs.rmSync(JRE_DIR, { recursive: true, force: true });
   }
+  fs.mkdirSync(JRE_DIR, { recursive: true });
+
+  const downloadUrl = getAdoptiumUrl();
+  console.log('Downloading JRE from:', downloadUrl);
 
   try {
-    console.log('Downloading JRE archive...');
-    const compressedBuffer = await fetchBuffer(JRE_URL);
-
-    console.log('Decompressing gunzip...');
+    const compressedBuffer = await fetchBuffer(downloadUrl);
+    console.log('Decompressing archive...');
     const decompressedTar = zlib.gunzipSync(compressedBuffer);
 
-    console.log('Unpacking tar entries into ./jre...');
+    console.log('Extracting JRE into ./jre...');
     extractTar(decompressedTar, JRE_DIR, 1);
 
-    console.log('JRE successfully installed at:', JRE_DIR);
+    if (fs.existsSync(JRE_JAVA)) {
+      fs.chmodSync(JRE_JAVA, 0o755);
+    }
+
+    console.log('JRE installation complete at:', JRE_DIR);
   } catch (err) {
-    console.error('Failed to download/extract JRE:', err.message);
+    console.error('Failed to prepare JRE:', err.message);
     throw err;
   }
 }

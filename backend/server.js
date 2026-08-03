@@ -33,7 +33,6 @@ app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 const resultCache = new Map();
 const suggestCache = new Map();
 
-// Base all internal execution paths on current script directory (__dirname)
 const BASE_DIR = __dirname;
 const LIB_DIR = path.join(BASE_DIR, 'lib');
 
@@ -50,6 +49,9 @@ const CLASSPATH = [
 
 function javaBin() {
     if (fs.existsSync(JRE_JAVA)) {
+        try {
+            fs.chmodSync(JRE_JAVA, 0o755);
+        } catch (_) {}
         return JRE_JAVA;
     }
     throw new Error(`Java binary not found at ${JRE_JAVA}`);
