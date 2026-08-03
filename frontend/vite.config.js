@@ -7,7 +7,7 @@ export default defineConfig({
     port: 3000,
     proxy: {
       '/api': {
-        target: 'https://apt-project-production-a00b.up.railway.app',
+        target: 'https://apt-project.pxxlspace.cv',
         changeOrigin: true,
       }
     }
