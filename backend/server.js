@@ -1,11 +1,14 @@
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const { spawn, execSync } = require('child_process');
+const { spawn } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 const { MongoClient } = require('mongodb');
 require('dotenv').config();
+
+// Pure JS JRE Downloader/Extractor module (no /bin/sh required!)
+const { ensureJre } = require('./scripts/get-jre');
 
 const MONGO_URI = process.env.MONGO_URI;
 const mongoClient = new MongoClient(MONGO_URI);
@@ -16,9 +19,9 @@ mongoClient.connect().then(() => {
     const db = mongoClient.db('indexerdb');
     snippetCollection = db.collection('documents2');
     wordCollection = db.collection('documents2');
-    console.log('Node connected to MongoDB for snippets');
+    console.log('🍃 Node connected to MongoDB for snippets');
 }).catch(err => {
-    console.error('Node MongoDB connection failed:', err.message);
+    console.error('❌ Node MongoDB connection failed:', err.message);
 });
 
 const app = express();
@@ -46,21 +49,15 @@ const CLASSPATH = [
     `${LIB_DIR}/jsoup-1.19.1.jar`,
 ].join(':');
 
-// downloaded once at startup instead of build, build container kept timing out unpacking it
-function ensureJre() {
-    if (fs.existsSync(JRE_JAVA)) return;
-    console.log('JRE not found, downloading at startup...');
-    execSync('node scripts/get-jre.js', { cwd: PROJECT_ROOT, stdio: 'inherit' });
-}
-
 function javaBin() {
     return fs.existsSync(JRE_JAVA) ? JRE_JAVA : 'java';
 }
 
 function executeJavaSearch(query) {
     return new Promise((resolve, reject) => {
-        console.log('Spawning Java QueryProcessor for query:', query);
+        console.log('⚡ Spawning Java QueryProcessor for query:', query);
 
+        // Directly spawn the java executable file path (does NOT use /bin/sh)
         const javaProcess = spawn(javaBin(), [
             '-cp', CLASSPATH,
             'indexer.QueryProcessor',
@@ -96,7 +93,7 @@ function executeJavaSearch(query) {
         });
 
         javaProcess.on('error', (err) => {
-            reject(new Error('Failed to spawn Java: ' + err.message + '. Is java installed?'));
+            reject(new Error('Failed to spawn Java binary directly: ' + err.message));
         });
     });
 }
@@ -204,13 +201,15 @@ app.get('/api/health', (req, res) => {
     res.json({ status: 'ok', message: 'APT Search Backend running', timestamp: new Date().toISOString() });
 });
 
+// Refactored to eliminate execSync shell dependencies in distroless environments
 app.get('/api/debug', (req, res) => {
-    try {
-        const java = execSync('which java 2>/dev/null || echo notfound').toString().trim();
-        res.json({ java, javaBin: javaBin(), jreExists: fs.existsSync(JRE_JAVA), PATH: process.env.PATH, cwd: process.cwd(), dirname: __dirname });
-    } catch (e) {
-        res.json({ error: e.message, PATH: process.env.PATH });
-    }
+    res.json({
+        javaBin: javaBin(),
+        jreExists: fs.existsSync(JRE_JAVA),
+        PATH: process.env.PATH,
+        cwd: process.cwd(),
+        dirname: __dirname
+    });
 });
 
 app.get('/', (req, res) => {
@@ -224,11 +223,18 @@ app.use((err, req, res, next) => {
     res.status(500).json({ error: 'Internal Server Error', message: err.message });
 });
 
-ensureJre();
-
-app.listen(PORT, () => {
-    console.log(`APT Search Backend running on http://localhost:${PORT}`);
-    console.log(`Project root: ${PROJECT_ROOT}`);
-    console.log(`Classpath: ${CLASSPATH}`);
-    console.log(`Java binary: ${javaBin()}`);
-});
+// Boot sequence: Ensure JRE is installed first, then start listening!
+(async () => {
+    try {
+        await ensureJre();
+        app.listen(PORT, () => {
+            console.log(`🚀 APT Search Backend running on http://localhost:${PORT}`);
+            console.log(`📂 Project root: ${PROJECT_ROOT}`);
+            console.log(`📚 Classpath: ${CLASSPATH}`);
+            console.log(`☕ Java binary: ${javaBin()}`);
+        });
+    } catch (err) {
+        console.error('🔥 Server boot failed during JRE preparation:', err);
+        process.exit(1);
+    }
+})();
