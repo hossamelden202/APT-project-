@@ -6,6 +6,9 @@ const path = require('path');
 const { MongoClient } = require('mongodb');
 require('dotenv').config();
 const MONGO_URI = process.env.MONGO_URI;
+const JAVA_BIN = fs.existsSync(path.join(PROJECT_ROOT, 'jre', 'bin', 'java'))
+    ? path.join(PROJECT_ROOT, 'jre', 'bin', 'java')
+    : 'java';
 const mongoClient = new MongoClient(MONGO_URI);
 let snippetCollection = null;
 let wordCollection = null;
@@ -46,7 +49,7 @@ function executeJavaSearch(query) {
     return new Promise((resolve, reject) => {
         console.log('Spawning Java QueryProcessor for query:', query);
 
-        const javaProcess = spawn('java', [
+        const javaProcess = spawn(JAVA_BIN, [
             '-cp', CLASSPATH,
             'indexer.QueryProcessor',
             query
