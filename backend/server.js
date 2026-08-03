@@ -34,7 +34,7 @@ app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 const resultCache = new Map();
 const suggestCache = new Map();
 
-const PROJECT_ROOT = process.env.PROJECT_ROOT || path.join(__dirname, '..');
+const PROJECT_ROOT = process.env.PROJECT_ROOT || __dirname;
 const LIB_DIR = path.join(PROJECT_ROOT, 'lib');
 const JRE_JAVA = path.join(PROJECT_ROOT, 'jre', 'bin', 'java');
 
@@ -50,9 +50,12 @@ const CLASSPATH = [
 ].join(':');
 
 function javaBin() {
-    return fs.existsSync(JRE_JAVA) ? JRE_JAVA : 'java';
+    const customJava = path.join(PROJECT_ROOT, 'jre', 'bin', 'java');
+    if (fs.existsSync(customJava)) {
+        return customJava;
+    }
+    throw new Error(`Java binary not found at ${customJava}`);
 }
-
 function executeJavaSearch(query) {
     return new Promise((resolve, reject) => {
         console.log('Spawning Java QueryProcessor for query:', query);
